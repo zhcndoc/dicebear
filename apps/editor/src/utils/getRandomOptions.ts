@@ -3,7 +3,7 @@ import getRandomBoolean from '@/utils/getRandomBoolean';
 import getRandomNumber from '@/utils/getRandomNumber';
 
 export default function getRandomOptions(
-  configStyleOptions: ConfigStyleOptions
+  configStyleOptions: ConfigStyleOptions,
 ): SelectedStyleOptions {
   const result: SelectedStyleOptions = {};
 
@@ -18,7 +18,8 @@ export default function getRandomOptions(
     const values = styleOption.values;
 
     if (getRandomBoolean(styleOption.probability)) {
-      const possibleValues = values.filter((v) => v);
+      const possibleValues = values.filter((v) => v && v !== 'transparent');
+
       result[key] =
         possibleValues[getRandomNumber(0, possibleValues.length - 1)];
     } else {

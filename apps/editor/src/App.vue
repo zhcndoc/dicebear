@@ -19,15 +19,18 @@ const preview = ref<HTMLDivElement>();
 const { height: headerHeight } = useElementSize(header);
 const { height: previewHeight } = useElementSize(preview);
 
-const navOffsetTop = computed(
-  () => headerHeight.value + previewHeight.value + 8
-);
+const navOffsetTop = computed(() => {
+  return headerHeight.value + previewHeight.value + 8;
+});
 
-const backgroundColor = computed(() =>
-  tinycolor(`#${store.selectedStyleOptions.backgroundColor}`)
-    .darken(10)
-    .toHexString()
-);
+const backgroundColor = computed(() => {
+  const color =
+    store.selectedStyleOptions.backgroundColor == 'transparent'
+      ? '#ffffff'
+      : `#${store.selectedStyleOptions.backgroundColor}`;
+
+  return tinycolor(color).darken(10).toHexString();
+});
 
 watchEffect(() => (document.documentElement.lang = i18n.locale.value));
 </script>
@@ -56,10 +59,15 @@ watchEffect(() => (document.documentElement.lang = i18n.locale.value));
   min-height: 100%;
 
   background: v-bind('backgroundColor');
-  background-image: linear-gradient(white, white),
+  background-image:
+    linear-gradient(white, white),
     linear-gradient(v-bind('backgroundColor'), v-bind('backgroundColor'));
-  background-position: center center, left top;
-  background-size: 960px 100%, 100% 100%;
+  background-position:
+    center center,
+    left top;
+  background-size:
+    960px 100%,
+    100% 100%;
   background-repeat: no-repeat;
 
   &-header,

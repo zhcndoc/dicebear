@@ -68,7 +68,7 @@ const changeOptionsWithOverride = useDebounceFn(
     };
   },
   50,
-  { maxWait: 50 }
+  { maxWait: 50 },
 );
 </script>
 
@@ -138,6 +138,27 @@ const changeOptionsWithOverride = useDebounceFn(
     &-component {
       border-radius: 12px;
       overflow: hidden;
+      background-image:
+        repeating-linear-gradient(
+          45deg,
+          #e5e7eb 25%,
+          transparent 25%,
+          transparent 75%,
+          #e5e7eb 75%,
+          #e5e7eb
+        ),
+        repeating-linear-gradient(
+          45deg,
+          #e5e7eb 25%,
+          #ffffff 25%,
+          #ffffff 75%,
+          #e5e7eb 75%,
+          #e5e7eb
+        );
+      background-position:
+        0 0,
+        10px 10px;
+      background-size: 20px 20px;
     }
 
     &::after {
