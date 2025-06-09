@@ -58,6 +58,16 @@ const svg = avatar.toString();
 Each avatar style comes with several options. You can find them on the details
 page of each [avatar style](/styles/).
 
+::: tip
+
+If you’d like to integrate the library into a framework, check out our guides
+for [React](/guides/use-the-library-with-react/),
+[React Native](/guides/use-the-library-with-react-native/),
+[Vue](/guides/use-the-library-with-vue/) or
+[Svelte](/guides/use-the-library-with-svelte/).
+
+:::
+
 :::info
 
 We provide a large number of avatar styles from different artists. The avatar
