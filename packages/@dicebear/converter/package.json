@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@resvg/resvg-js": "^2.6.2",
-    "exiftool-vendored": "^28.2.1",
+    "exiftool-vendored": "^30.2.0",
     "sharp": "^0.33.5",
     "tmp-promise": "^3.0.3"
   },
