@@ -13,7 +13,7 @@ The easiest way to host the HTTP API yourself is to use the docker image. You
 can find the image on [Docker Hub](https://hub.docker.com/r/dicebear/api).
 
 ```
-docker run --tmpfs /run --tmpfs /tmp -p 3000:3000 -i -t dicebear/api:2
+docker run --tmpfs /run --tmpfs /tmp -p 3000:3000 -i -t dicebear/api:3
 ```
 
 Or you can use `docker-compose.yml` to configure the HTTP API and start it with
@@ -22,7 +22,7 @@ Or you can use `docker-compose.yml` to configure the HTTP API and start it with
 ```
 services:
   dicebear:
-    image: dicebear/api:2
+    image: dicebear/api:3
     restart: always
     ports:
       - '3000:3000'
