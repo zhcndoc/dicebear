@@ -1,13 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-25 -25 100 100" version="1.1">
-  <desc>Unnamed by Unknown, used under Unknown / Remix of the original.</desc>
-  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <metadata xmlns="http://www.w3.org/2000/svg"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
     <rdf:RDF>
       <rdf:Description>
-        <dc:title>Unnamed</dc:title>
-        <dc:creator>Unknown</dc:creator>
-        <dc:source></dc:source>
-        <dc:rights>Unknown</dc:rights>
-        <dc:description>Remix of the original</dc:description>
+        <dc:title>Title</dc:title>
+        <dc:creator>Creator</dc:creator>
+        <dc:source xsi:type="dcterms:URI">https://www.dicebear.com</dc:source>
+        <dcterms:license xsi:type="dcterms:URI">https://www.dicebear.com/licenses</dcterms:license>
+        <dc:rights>Remix of „Title” (https://www.dicebear.com) by „DiceBear”</dc:rights>
       </rdf:Description>
     </rdf:RDF>
   </metadata>

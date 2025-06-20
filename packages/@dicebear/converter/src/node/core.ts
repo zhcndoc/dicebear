@@ -10,7 +10,7 @@ import type {
 } from '../types.js';
 import { promises as fs } from 'node:fs';
 import { getMimeType } from '../utils/mime-type.js';
-import { ensureSize } from '../utils/svg.js';
+import { ensureSize, getMetadata } from '../utils/svg.js';
 import * as tmp from 'tmp-promise';
 import { renderAsync } from '@resvg/resvg-js';
 import sharp from 'sharp';
@@ -116,40 +116,34 @@ async function toBuffer(
 // https://www.iptc.org/std/photometadata/specification/IPTC-PhotoMetadata
 // https://developers.google.com/search/docs/appearance/structured-data/image-license-metadata
 function getExif(svg: string): Exif {
+  const metadata = getMetadata(svg);
+
   const exif: Exif = {};
 
-  const sourceName = svg.match(/<dc:title[^>]*>([^<]*)<\/dc:title>/s);
-  const sourceUrl = svg.match(/<dc:source[^>]*>([^<]*)<\/dc:source>/s);
-  const creatorName = svg.match(/<dc:creator[^>]*>([^<]*)<\/dc:creator>/s);
-  const licenseUrl = svg.match(
-    /<dcterms:license[^>]*>([^<]*)<\/dcterms:license>/s,
-  );
-  const copyright = svg.match(/<dc:rights[^>]*>(.*?)<\/dc:rights>/s);
-
-  if (sourceName) {
-    exif['IPTC:ObjectName'] = sourceName[1];
-    exif['XMP-dc:Title'] = sourceName[1];
+  if (metadata.title) {
+    exif['IPTC:ObjectName'] = metadata.title;
+    exif['XMP-dc:Title'] = metadata.title;
   }
 
-  if (sourceUrl) {
-    exif['XMP-plus:LicensorURL'] = sourceUrl[1];
+  if (metadata.source) {
+    exif['XMP-plus:LicensorURL'] = metadata.source;
   }
 
-  if (creatorName) {
-    exif['IPTC:By-line'] = creatorName[1];
-    exif['XMP-dc:Creator'] = creatorName[1];
+  if (metadata.creator) {
+    exif['IPTC:By-line'] = metadata.creator;
+    exif['XMP-dc:Creator'] = metadata.creator;
 
-    exif['IPTC:Credit'] = creatorName[1];
-    exif['XMP-photoshop:Credit'] = creatorName[1];
+    exif['IPTC:Credit'] = metadata.creator;
+    exif['XMP-photoshop:Credit'] = metadata.creator;
   }
 
-  if (licenseUrl) {
-    exif['XMP-xmpRights:WebStatement'] = licenseUrl[1];
+  if (metadata.license) {
+    exif['XMP-xmpRights:WebStatement'] = metadata.license;
   }
 
-  if (copyright) {
-    exif['IPTC:CopyrightNotice'] = copyright[1];
-    exif['XMP-dc:Rights'] = copyright[1];
+  if (metadata.copyright) {
+    exif['IPTC:CopyrightNotice'] = metadata.copyright;
+    exif['XMP-dc:Rights'] = metadata.copyright;
   }
 
   return exif;

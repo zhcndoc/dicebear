@@ -21,3 +21,11 @@ export interface Options {
   fonts?: string[];
   includeExif?: boolean;
 }
+
+export interface Metadata {
+  title?: string;
+  source?: string;
+  creator?: string;
+  license?: string;
+  copyright?: string;
+}

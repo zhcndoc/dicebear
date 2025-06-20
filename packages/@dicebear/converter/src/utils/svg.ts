@@ -1,3 +1,6 @@
+import { XMLParser } from 'fast-xml-parser';
+import { Metadata } from '../types';
+
 export function ensureSize(svg: string, defaultSize: number = 512) {
   let size = defaultSize;
 
@@ -24,4 +27,19 @@ export function ensureSize(svg: string, defaultSize: number = 512) {
   });
 
   return { svg, size };
+}
+
+export function getMetadata(svg: string): Metadata {
+  const parser = new XMLParser();
+  const xml = parser.parse(svg);
+
+  const rdfDescription = xml.svg.metadata?.['rdf:RDF']?.['rdf:Description'];
+
+  return {
+    title: rdfDescription?.['dc:title'],
+    source: rdfDescription?.['dc:source'],
+    creator: rdfDescription?.['dc:creator'],
+    license: rdfDescription?.['dcterms:license'],
+    copyright: rdfDescription?.['dc:rights'],
+  };
 }
