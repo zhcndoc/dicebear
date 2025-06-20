@@ -35,7 +35,7 @@ export const toAvif: ToAvif = (avatar: Avatar, options: Options = {}) => {
 function toFormat(
   avatar: Avatar,
   format: 'png' | 'jpeg' | 'webp' | 'avif',
-  options: Options
+  options: Options,
 ): Result {
   const svg = typeof avatar === 'string' ? avatar : avatar.toString();
 
@@ -52,7 +52,7 @@ async function toDataUri(
   svg: string,
   format: 'svg' | 'png' | 'jpeg' | 'webp' | 'avif',
   exif: Exif,
-  options: Options
+  options: Options,
 ): Promise<string> {
   if (format === 'svg') {
     return `data:${getMimeType(format)};utf8,${encodeURIComponent(svg)}`;
@@ -67,7 +67,7 @@ async function toArrayBuffer(
   rawSvg: string,
   format: 'png' | 'jpeg' | 'webp' | 'avif',
   exif: Exif,
-  options: Options
+  options: Options,
 ): Promise<ArrayBufferLike> {
   return (await toBuffer(rawSvg, format, exif, options)).buffer;
 }
@@ -76,7 +76,7 @@ async function toBuffer(
   rawSvg: string,
   format: 'png' | 'jpeg' | 'webp' | 'avif',
   exif: Exif,
-  options: Options
+  options: Options,
 ): Promise<Buffer> {
   const hasFonts = Array.isArray(options.fonts);
 
@@ -118,11 +118,11 @@ async function toBuffer(
 function getExif(svg: string): Exif {
   const exif: Exif = {};
 
-  const sourceName = svg.match(/<dc:title[^>]*>(.*?)<\/dc:title>/s);
-  const sourceUrl = svg.match(/<dc:source[^>]*>(.*?)<\/dc:source>/s);
-  const creatorName = svg.match(/<dc:creator[^>]*>(.*?)<\/dc:creator>/s);
+  const sourceName = svg.match(/<dc:title[^>]*>([^<]*)<\/dc:title>/s);
+  const sourceUrl = svg.match(/<dc:source[^>]*>([^<]*)<\/dc:source>/s);
+  const creatorName = svg.match(/<dc:creator[^>]*>([^<]*)<\/dc:creator>/s);
   const licenseUrl = svg.match(
-    /<dcterms:license[^>]*>(.*?)<\/dcterms:license>/s
+    /<dcterms:license[^>]*>([^<]*)<\/dcterms:license>/s,
   );
   const copyright = svg.match(/<dc:rights[^>]*>(.*?)<\/dc:rights>/s);
 
