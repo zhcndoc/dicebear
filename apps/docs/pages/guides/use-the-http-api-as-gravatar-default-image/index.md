@@ -59,7 +59,7 @@ const emailHash = encodeURIComponent('00000000000000000000000000000000');
 const options = `seed=${emailHash}`;
 const defaultImage = encodeURIComponent(
   `https://api.dicebear.com/9.x/lorelei/png?${options}` // [!code --]
-  `https://api.dicebear.com/9.x/lorelei/png/${encodeURIComponent(options)}` // [!code ++]
+  `https://api.dicebear.com/9.x/lorelei/png/${encodeURIComponent(options)}`, // [!code ++]
 );
 
 const gravatarImage = `https://www.gravatar.com/avatar/${emailHash}?d=${defaultImage}`;

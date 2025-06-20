@@ -6,9 +6,7 @@
  */
 
 export interface Options {
-  base?: (
-    | 'standard'
-  )[];
+  base?: 'standard'[];
   mouth?: (
     | 'surprised'
     | 'laughing'
@@ -19,12 +17,7 @@ export interface Options {
     | 'frown'
     | 'smirk'
   )[];
-  eyebrows?: (
-    | 'up'
-    | 'down'
-    | 'eyelashesUp'
-    | 'eyelashesDown'
-  )[];
+  eyebrows?: ('up' | 'down' | 'eyelashesUp' | 'eyelashesDown')[];
   hair?: (
     | 'fonze'
     | 'mrT'
@@ -36,41 +29,15 @@ export interface Options {
     | 'pixie'
   )[];
   hairProbability?: number;
-  eyes?: (
-    | 'eyes'
-    | 'round'
-    | 'eyesShadow'
-    | 'smiling'
-    | 'smilingShadow'
-  )[];
-  nose?: (
-    | 'curve'
-    | 'pointed'
-    | 'tound'
-  )[];
-  ears?: (
-    | 'attached'
-    | 'detached'
-  )[];
-  shirt?: (
-    | 'open'
-    | 'crew'
-    | 'collared'
-  )[];
-  earrings?: (
-    | 'hoop'
-    | 'stud'
-  )[];
+  eyes?: ('eyes' | 'round' | 'eyesShadow' | 'smiling' | 'smilingShadow')[];
+  nose?: ('curve' | 'pointed' | 'tound')[];
+  ears?: ('attached' | 'detached')[];
+  shirt?: ('open' | 'crew' | 'collared')[];
+  earrings?: ('hoop' | 'stud')[];
   earringsProbability?: number;
-  glasses?: (
-    | 'round'
-    | 'square'
-  )[];
+  glasses?: ('round' | 'square')[];
   glassesProbability?: number;
-  facialHair?: (
-    | 'beard'
-    | 'scruff'
-  )[];
+  facialHair?: ('beard' | 'scruff')[];
   facialHairProbability?: number;
   baseColor?: string[];
   earringColor?: string[];
@@ -90,7 +57,7 @@ export type ComponentGroup = Record<string, ComponentGroupItem>;
 export type ComponentGroupCollection = Record<string, ComponentGroup>;
 export type ComponentGroupItem = (
   components: ComponentPickCollection,
-  colors: ColorPickCollection
+  colors: ColorPickCollection,
 ) => string;
 export type ComponentPickCollection = Record<string, ComponentPick>;
 export type ComponentPick =

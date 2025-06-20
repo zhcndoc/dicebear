@@ -26,11 +26,11 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
   const fontSize = options.fontSize ?? 50;
   const fontWeight = options.fontWeight ?? 400;
   const textColor = convertColor(
-    prng.pick(options.textColor ?? []) ?? 'ffffff'
+    prng.pick(options.textColor ?? []) ?? 'ffffff',
   );
   const initials = (getInitials(prng.seed.trim()) as string).slice(
     0,
-    options.chars ?? 2
+    options.chars ?? 2,
   );
 
   // prettier-ignore

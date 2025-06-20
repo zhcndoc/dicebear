@@ -23,7 +23,7 @@ export function addBackground(
   primaryColor: string,
   secondaryColor: string,
   type: BackgroundType,
-  rotation: number
+  rotation: number,
 ) {
   let { width, height, x, y } = getViewBox(result);
 
@@ -63,7 +63,7 @@ export function addScale(result: StyleCreateResult, scale: number) {
 export function addTranslate(
   result: StyleCreateResult,
   x?: number,
-  y?: number
+  y?: number,
 ) {
   let viewBox = getViewBox(result);
 
@@ -124,6 +124,6 @@ export function randomizeIds(result: StyleCreateResult): string {
       ids[m2] = ids[m2] || prng.string(8);
 
       return `${m1}${ids[m2]}${m3}`;
-    }
+    },
   );
 }

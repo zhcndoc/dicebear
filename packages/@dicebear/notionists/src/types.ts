@@ -6,9 +6,7 @@
  */
 
 export interface Options {
-  base?: (
-    | 'variant01'
-  )[];
+  base?: 'variant01'[];
   body?: (
     | 'variant25'
     | 'variant24'
@@ -220,11 +218,7 @@ export interface Options {
     | 'handPhone'
   )[];
   gestureProbability?: number;
-  bodyIcon?: (
-    | 'electric'
-    | 'saturn'
-    | 'galaxy'
-  )[];
+  bodyIcon?: ('electric' | 'saturn' | 'galaxy')[];
   bodyIconProbability?: number;
 }
 
@@ -234,7 +228,7 @@ export type ComponentGroup = Record<string, ComponentGroupItem>;
 export type ComponentGroupCollection = Record<string, ComponentGroup>;
 export type ComponentGroupItem = (
   components: ComponentPickCollection,
-  colors: ColorPickCollection
+  colors: ColorPickCollection,
 ) => string;
 export type ComponentPickCollection = Record<string, ComponentPick>;
 export type ComponentPick =

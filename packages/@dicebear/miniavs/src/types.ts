@@ -6,15 +6,8 @@
  */
 
 export interface Options {
-  head?: (
-    | 'normal'
-    | 'wide'
-    | 'thin'
-  )[];
-  body?: (
-    | 'tShirt'
-    | 'golf'
-  )[];
+  head?: ('normal' | 'wide' | 'thin')[];
+  body?: ('tShirt' | 'golf')[];
   hair?: (
     | 'balndess'
     | 'slaughter'
@@ -26,29 +19,13 @@ export interface Options {
     | 'classic02'
     | 'classic01'
   )[];
-  mouth?: (
-    | 'default'
-    | 'missingTooth'
-  )[];
-  eyes?: (
-    | 'normal'
-    | 'confident'
-    | 'happy'
-  )[];
-  glasses?: (
-    | 'normal'
-  )[];
+  mouth?: ('default' | 'missingTooth')[];
+  eyes?: ('normal' | 'confident' | 'happy')[];
+  glasses?: 'normal'[];
   glassesProbability?: number;
-  mustache?: (
-    | 'pencilThinBeard'
-    | 'pencilThin'
-    | 'horshoe'
-    | 'freddy'
-  )[];
+  mustache?: ('pencilThinBeard' | 'pencilThin' | 'horshoe' | 'freddy')[];
   mustacheProbability?: number;
-  blushes?: (
-    | 'default'
-  )[];
+  blushes?: 'default'[];
   blushesProbability?: number;
   skinColor?: string[];
   hairColor?: string[];
@@ -61,7 +38,7 @@ export type ComponentGroup = Record<string, ComponentGroupItem>;
 export type ComponentGroupCollection = Record<string, ComponentGroup>;
 export type ComponentGroupItem = (
   components: ComponentPickCollection,
-  colors: ColorPickCollection
+  colors: ColorPickCollection,
 ) => string;
 export type ComponentPickCollection = Record<string, ComponentPick>;
 export type ComponentPick =

@@ -15,7 +15,7 @@ export function loadAvatarStyle(avatarStyle: string): Promise<Style<any>> {
 export function getAvatarApiUrl(
   avatarStyle: string,
   options: Record<string, unknown> = {},
-  format: string = 'svg'
+  format: string = 'svg',
 ): string {
   const qs = Object.entries(options)
     .map(([k, v]) => {
@@ -46,7 +46,7 @@ export function getAvatarApiUrl(
 
 export function getAvatarApiCommand(
   avatarStyle: string,
-  options: Record<string, unknown> = {}
+  options: Record<string, unknown> = {},
 ): string {
   const args = Object.entries(options)
     .map(([k, v]) => {
@@ -75,7 +75,7 @@ export function getAvatarApiCommand(
 
 export function getAvatarPropertyPreviewOptions(
   propertyName: string,
-  propertyValue: unknown
+  propertyValue: unknown,
 ): Record<string, unknown> {
   if (propertyName === 'seed') {
     return {

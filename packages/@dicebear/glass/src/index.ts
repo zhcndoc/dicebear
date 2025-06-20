@@ -43,7 +43,7 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
     attributes: {
       viewBox: '0 0 100 100',
       fill: 'none',
-      'shape-rendering': 'auto'
+      'shape-rendering': 'auto',
     },
     body: `<g style="mix-blend-mode:screen" opacity="0.6" filter="url(#dicebearGlass-a)"><g transform="translate(-25 -25)">${components.shape2?.value(components, colors) ?? ''}</g></g><g style="mix-blend-mode:screen" opacity="0.6" filter="url(#dicebearGlass-b)"><g transform="translate(-25 -25)">${components.shape1?.value(components, colors) ?? ''}</g></g><defs><filter id="dicebearGlass-a" x="-57" y="-57" width="214" height="214" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="16" result="effect1_foregroundBlur_25_7"/></filter><filter id="dicebearGlass-b" x="-57" y="-57" width="214" height="214" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="16" result="effect1_foregroundBlur_25_7"/></filter></defs>`,
     extra: () => ({
@@ -52,14 +52,14 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
           acc[key] = value?.name;
           return acc;
         },
-        {}
+        {},
       ),
       ...Object.entries(colors).reduce<Record<string, string>>(
         (acc, [key, value]) => {
           acc[`${key}Color`] = value;
           return acc;
         },
-        {}
+        {},
       ),
     }),
   };

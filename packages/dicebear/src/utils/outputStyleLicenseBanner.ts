@@ -29,7 +29,7 @@ export function outputStyleLicenseBanner(name: string, style: Style<any>) {
 
   if (style.meta?.license) {
     banner.push(
-      `License: ${style.meta.license.name} - ${style.meta.license.url}`
+      `License: ${style.meta.license.name} - ${style.meta.license.url}`,
     );
   }
 

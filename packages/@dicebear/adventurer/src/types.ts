@@ -6,9 +6,7 @@
  */
 
 export interface Options {
-  base?: (
-    | 'default'
-  )[];
+  base?: 'default'[];
   eyes?: (
     | 'variant26'
     | 'variant25'
@@ -86,12 +84,7 @@ export interface Options {
     | 'variant02'
     | 'variant01'
   )[];
-  features?: (
-    | 'mustache'
-    | 'blush'
-    | 'birthmark'
-    | 'freckles'
-  )[];
+  features?: ('mustache' | 'blush' | 'birthmark' | 'freckles')[];
   featuresProbability?: number;
   glasses?: (
     | 'variant01'
@@ -168,7 +161,7 @@ export type ComponentGroup = Record<string, ComponentGroupItem>;
 export type ComponentGroupCollection = Record<string, ComponentGroup>;
 export type ComponentGroupItem = (
   components: ComponentPickCollection,
-  colors: ColorPickCollection
+  colors: ColorPickCollection,
 ) => string;
 export type ComponentPickCollection = Record<string, ComponentPick>;
 export type ComponentPick =

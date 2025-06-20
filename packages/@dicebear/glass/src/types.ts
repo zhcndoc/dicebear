@@ -6,29 +6,11 @@
  */
 
 export interface Options {
-  shape2?: (
-    | 'g'
-    | 'r'
-    | 'a'
-    | 'd'
-    | 'i'
-    | 'e'
-    | 'n'
-    | 't'
-  )[];
+  shape2?: ('g' | 'r' | 'a' | 'd' | 'i' | 'e' | 'n' | 't')[];
   shape2Rotation?: number[];
   shape2OffsetX?: number[];
   shape2OffsetY?: number[];
-  shape1?: (
-    | 'g'
-    | 'r'
-    | 'a'
-    | 'd'
-    | 'i'
-    | 'e'
-    | 'n'
-    | 't'
-  )[];
+  shape1?: ('g' | 'r' | 'a' | 'd' | 'i' | 'e' | 'n' | 't')[];
   shape1Rotation?: number[];
   shape1OffsetX?: number[];
   shape1OffsetY?: number[];
@@ -41,15 +23,15 @@ export type ComponentGroup = Record<string, ComponentGroupItem>;
 export type ComponentGroupCollection = Record<string, ComponentGroup>;
 export type ComponentGroupItem = (
   components: ComponentPickCollection,
-  colors: ColorPickCollection
+  colors: ColorPickCollection,
 ) => string;
 export type ComponentPickCollection = Record<string, ComponentPick>;
 export type ComponentPick =
   | {
       name: string;
       value: ComponentGroupItem;
-      rotation: number | undefined,
-      offsetX: number | undefined,
-      offsetY: number | undefined,
+      rotation: number | undefined;
+      offsetX: number | undefined;
+      offsetY: number | undefined;
     }
   | undefined;

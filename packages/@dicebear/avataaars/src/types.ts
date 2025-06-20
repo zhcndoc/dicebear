@@ -6,13 +6,8 @@
  */
 
 export interface Options {
-  style?: (
-    | 'circle'
-    | 'default'
-  )[];
-  base?: (
-    | 'default'
-  )[];
+  style?: ('circle' | 'default')[];
+  base?: 'default'[];
   clothing?: (
     | 'blazerAndShirt'
     | 'blazerAndSweater'
@@ -38,9 +33,7 @@ export interface Options {
     | 'twinkle'
     | 'vomit'
   )[];
-  nose?: (
-    | 'default'
-  )[];
+  nose?: 'default'[];
   eyes?: (
     | 'closed'
     | 'cry'
@@ -152,7 +145,7 @@ export type ComponentGroup = Record<string, ComponentGroupItem>;
 export type ComponentGroupCollection = Record<string, ComponentGroup>;
 export type ComponentGroupItem = (
   components: ComponentPickCollection,
-  colors: ColorPickCollection
+  colors: ColorPickCollection,
 ) => string;
 export type ComponentPickCollection = Record<string, ComponentPick>;
 export type ComponentPick =

@@ -19,7 +19,7 @@ import { writeFile } from './writeFile.js';
 export function addStyleCommand(
   cli: yargs.Argv<{}>,
   name: string,
-  style: Style<any>
+  style: Style<any>,
 ) {
   const schema = getStyleCommandSchema(style);
 
@@ -34,7 +34,7 @@ export function addStyleCommand(
     handler: async (argv) => {
       const bar = new cliProgress.SingleBar(
         {},
-        cliProgress.Presets.shades_classic
+        cliProgress.Presets.shades_classic,
       );
 
       const validated = validateInputBySchema(argv, schema);
@@ -63,7 +63,7 @@ export function addStyleCommand(
           const fileName = path.resolve(
             process.cwd(),
             outputPath,
-            `${name}-${i}.${format}`
+            `${name}-${i}.${format}`,
           );
 
           const avatar = createAvatar(
@@ -73,7 +73,7 @@ export function addStyleCommand(
               : {
                   ...validated,
                   seed: createRandomSeed(),
-                }
+                },
           );
 
           switch (format) {
@@ -84,7 +84,7 @@ export function addStyleCommand(
             case 'png':
               await writeFile(
                 fileName,
-                await toPng(avatar.toString(), { includeExif }).toArrayBuffer()
+                await toPng(avatar.toString(), { includeExif }).toArrayBuffer(),
               );
               break;
 
@@ -92,28 +92,34 @@ export function addStyleCommand(
             case 'jpeg':
               await writeFile(
                 fileName,
-                await toJpeg(avatar.toString(), { includeExif }).toArrayBuffer()
+                await toJpeg(avatar.toString(), {
+                  includeExif,
+                }).toArrayBuffer(),
               );
               break;
 
             case 'webp':
               await writeFile(
                 fileName,
-                await toWebp(avatar.toString(), { includeExif }).toArrayBuffer()
+                await toWebp(avatar.toString(), {
+                  includeExif,
+                }).toArrayBuffer(),
               );
               break;
 
             case 'avif':
               await writeFile(
                 fileName,
-                await toAvif(avatar.toString(), { includeExif }).toArrayBuffer()
+                await toAvif(avatar.toString(), {
+                  includeExif,
+                }).toArrayBuffer(),
               );
               break;
 
             case 'json':
               await writeFile(
                 fileName,
-                JSON.stringify(avatar.toJson(), null, 2)
+                JSON.stringify(avatar.toJson(), null, 2),
               );
               break;
           }
@@ -122,7 +128,7 @@ export function addStyleCommand(
             const jsonFileName = path.resolve(
               process.cwd(),
               outputPath,
-              `${name}-${i}.json`
+              `${name}-${i}.json`,
             );
 
             await fs.writeJSON(jsonFileName, avatar.toJson(), { spaces: 2 });

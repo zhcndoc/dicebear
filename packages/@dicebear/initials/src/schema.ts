@@ -34,9 +34,7 @@ export const schema: StyleSchema = {
         type: 'string',
         pattern: '^(transparent|[a-fA-F0-9]{6})$',
       },
-      default: [
-        'ffffff'
-      ],
+      default: ['ffffff'],
     },
     fontFamily: {
       type: 'array',

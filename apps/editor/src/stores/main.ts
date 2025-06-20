@@ -13,7 +13,7 @@ import { useLocalStorage, useStorage } from '@vueuse/core';
 const useMainStore = defineStore('main', () => {
   const selectedStyleName = useLocalStorage(
     'editor_style',
-    Object.keys(styleCollection)[0]
+    Object.keys(styleCollection)[0],
   );
 
   const selectedStyleOptionsCollection =
@@ -25,8 +25,8 @@ const useMainStore = defineStore('main', () => {
 
           return acc;
         },
-        {}
-      )
+        {},
+      ),
     );
 
   const selectedStyleOptions = computed({
@@ -39,7 +39,7 @@ const useMainStore = defineStore('main', () => {
   const selectedStyleCombinations = computed(() => {
     return getAvatarCombinations(
       selectedStyleName.value,
-      selectedStyleOptionsCollection.value[selectedStyleName.value]
+      selectedStyleOptionsCollection.value[selectedStyleName.value],
     );
   });
 
@@ -68,7 +68,7 @@ const useMainStore = defineStore('main', () => {
   const selectedStylePreview = computed(() => {
     return createAvatar(
       selectedStyleName.value,
-      selectedStyleOptionsCollection.value[selectedStyleName.value]
+      selectedStyleOptionsCollection.value[selectedStyleName.value],
     );
   });
 
@@ -76,7 +76,7 @@ const useMainStore = defineStore('main', () => {
 
   watch(
     () => selectedTab.value,
-    () => window.scrollTo({ top: 0 })
+    () => window.scrollTo({ top: 0 }),
   );
 
   return {

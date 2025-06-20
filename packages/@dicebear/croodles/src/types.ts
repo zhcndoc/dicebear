@@ -86,12 +86,7 @@ export interface Options {
     | 'variant02'
     | 'variant01'
   )[];
-  mustache?: (
-    | 'variant04'
-    | 'variant03'
-    | 'variant02'
-    | 'variant01'
-  )[];
+  mustache?: ('variant04' | 'variant03' | 'variant02' | 'variant01')[];
   mustacheProbability?: number;
   eyes?: (
     | 'variant16'
@@ -121,7 +116,7 @@ export type ComponentGroup = Record<string, ComponentGroupItem>;
 export type ComponentGroupCollection = Record<string, ComponentGroup>;
 export type ComponentGroupItem = (
   components: ComponentPickCollection,
-  colors: ColorPickCollection
+  colors: ColorPickCollection,
 ) => string;
 export type ComponentPickCollection = Record<string, ComponentPick>;
 export type ComponentPick =

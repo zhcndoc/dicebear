@@ -107,10 +107,7 @@ export interface Options {
     | 'moustache9'
   )[];
   facialHairProbability?: number;
-  mask?: (
-    | 'medicalMask'
-    | 'respirator'
-  )[];
+  mask?: ('medicalMask' | 'respirator')[];
   maskProbability?: number;
   accessories?: (
     | 'eyepatch'
@@ -134,7 +131,7 @@ export type ComponentGroup = Record<string, ComponentGroupItem>;
 export type ComponentGroupCollection = Record<string, ComponentGroup>;
 export type ComponentGroupItem = (
   components: ComponentPickCollection,
-  colors: ColorPickCollection
+  colors: ColorPickCollection,
 ) => string;
 export type ComponentPickCollection = Record<string, ComponentPick>;
 export type ComponentPick =

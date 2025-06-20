@@ -46,7 +46,7 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
     attributes: {
       viewBox: '0 0 762 762',
       fill: 'none',
-      'shape-rendering': 'auto'
+      'shape-rendering': 'auto',
     },
     body: `${components.base?.value(components, colors) ?? ''}<g transform="translate(-161 -83)">${components.eyes?.value(components, colors) ?? ''}</g><g transform="translate(-161 -83)">${components.eyebrows?.value(components, colors) ?? ''}</g><g transform="translate(-161 -83)">${components.mouth?.value(components, colors) ?? ''}</g><g transform="translate(-161 -83)">${components.features?.value(components, colors) ?? ''}</g><g transform="translate(-161 -83)">${components.glasses?.value(components, colors) ?? ''}</g><g transform="translate(-161 -83)">${components.hair?.value(components, colors) ?? ''}</g><g transform="translate(-161 -83)">${components.earrings?.value(components, colors) ?? ''}</g>`,
     extra: () => ({
@@ -55,14 +55,14 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
           acc[key] = value?.name;
           return acc;
         },
-        {}
+        {},
       ),
       ...Object.entries(colors).reduce<Record<string, string>>(
         (acc, [key, value]) => {
           acc[`${key}Color`] = value;
           return acc;
         },
-        {}
+        {},
       ),
     }),
   };

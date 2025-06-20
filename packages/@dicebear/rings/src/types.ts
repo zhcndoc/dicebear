@@ -6,44 +6,17 @@
  */
 
 export interface Options {
-  ring?: (
-    | 'container'
-  )[];
+  ring?: 'container'[];
   ringRotation?: number[];
-  ringOne?: (
-    | 'half'
-    | 'quarter'
-    | 'eighth'
-    | 'full'
-  )[];
+  ringOne?: ('half' | 'quarter' | 'eighth' | 'full')[];
   ringOneRotation?: number[];
-  ringTwo?: (
-    | 'eighth'
-    | 'quarter'
-    | 'half'
-    | 'full'
-  )[];
+  ringTwo?: ('eighth' | 'quarter' | 'half' | 'full')[];
   ringTwoRotation?: number[];
-  ringThree?: (
-    | 'eighth'
-    | 'quarter'
-    | 'half'
-    | 'full'
-  )[];
+  ringThree?: ('eighth' | 'quarter' | 'half' | 'full')[];
   ringThreeRotation?: number[];
-  ringFour?: (
-    | 'eighth'
-    | 'quarter'
-    | 'half'
-    | 'full'
-  )[];
+  ringFour?: ('eighth' | 'quarter' | 'half' | 'full')[];
   ringFourRotation?: number[];
-  ringFive?: (
-    | 'eighth'
-    | 'quarter'
-    | 'half'
-    | 'full'
-  )[];
+  ringFive?: ('eighth' | 'quarter' | 'half' | 'full')[];
   ringFiveRotation?: number[];
   ringColor?: string[];
 }
@@ -54,15 +27,15 @@ export type ComponentGroup = Record<string, ComponentGroupItem>;
 export type ComponentGroupCollection = Record<string, ComponentGroup>;
 export type ComponentGroupItem = (
   components: ComponentPickCollection,
-  colors: ColorPickCollection
+  colors: ColorPickCollection,
 ) => string;
 export type ComponentPickCollection = Record<string, ComponentPick>;
 export type ComponentPick =
   | {
       name: string;
       value: ComponentGroupItem;
-      rotation: number | undefined,
-      offsetX: number | undefined,
-      offsetY: number | undefined,
+      rotation: number | undefined;
+      offsetX: number | undefined;
+      offsetY: number | undefined;
     }
   | undefined;

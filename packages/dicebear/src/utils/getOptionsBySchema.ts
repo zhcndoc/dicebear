@@ -23,7 +23,7 @@ export function getOptionsBySchema(schema: JSONSchema7) {
 
       if (property.enum) {
         option.choices.push(
-          ...property.enum.filter((v) => typeof v === 'string')
+          ...property.enum.filter((v) => typeof v === 'string'),
         );
       }
 
@@ -33,7 +33,7 @@ export function getOptionsBySchema(schema: JSONSchema7) {
         property.items.enum
       ) {
         option.choices.push(
-          ...property.items.enum.filter((v) => typeof v === 'string')
+          ...property.items.enum.filter((v) => typeof v === 'string'),
         );
       }
 

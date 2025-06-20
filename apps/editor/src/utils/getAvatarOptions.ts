@@ -4,7 +4,7 @@ import styleCollection from '@/config/styles';
 
 export default function getAvatarOptions(
   styleName: string,
-  options: SelectedStyleOptions
+  options: SelectedStyleOptions,
 ): Record<string, unknown> {
   const result: StyleOptions<any> = {
     size: 512,

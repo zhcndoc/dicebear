@@ -44,7 +44,7 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
     attributes: {
       viewBox: '0 0 24 24',
       fill: 'none',
-      'shape-rendering': 'auto'
+      'shape-rendering': 'auto',
     },
     body: `<g transform="translate(4 4)">${components.icon?.value(components, colors) ?? ''}</g>`,
     extra: () => ({
@@ -53,14 +53,14 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
           acc[key] = value?.name;
           return acc;
         },
-        {}
+        {},
       ),
       ...Object.entries(colors).reduce<Record<string, string>>(
         (acc, [key, value]) => {
           acc[`${key}Color`] = value;
           return acc;
         },
-        {}
+        {},
       ),
     }),
   };

@@ -7,7 +7,7 @@ export function convertColor(color: string): string {
 export function getBackgroundColors(
   prng: Prng,
   backgroundColor: string[],
-  backgroundType: 'solid' | 'gradientLinear'
+  backgroundType: 'solid' | 'gradientLinear',
 ): { primary: string; secondary: string } {
   let shuffledBackgroundColors = prng.shuffle(backgroundColor);
 
@@ -18,7 +18,10 @@ export function getBackgroundColors(
 
     // A function call should in any case make an identical number of calls to the PRNG.
     prng.next();
-  } else if (backgroundColor.length == 2 && backgroundType == 'gradientLinear') {
+  } else if (
+    backgroundColor.length == 2 &&
+    backgroundType == 'gradientLinear'
+  ) {
     // If the background is to be a colour gradient and exactly two background
     // colours have been specified, do not sort them randomly. In this case, we
     // assume that the order of the background colours was chosen on purpose.

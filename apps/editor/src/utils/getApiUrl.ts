@@ -5,7 +5,7 @@ import getAvatarOptions from '@/utils/getAvatarOptions';
 export default function getApiUrl(
   styleName: string,
   options: SelectedStyleOptions,
-  format: string = 'svg'
+  format: string = 'svg',
 ) {
   const qs = Object.entries(getAvatarOptions(styleName, options))
     .map(([k, v]) => {

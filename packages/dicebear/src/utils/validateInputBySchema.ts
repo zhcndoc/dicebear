@@ -4,7 +4,7 @@ import { ArgumentsCamelCase } from 'yargs';
 
 export function validateInputBySchema(
   input: ArgumentsCamelCase<unknown>,
-  schema: JSONSchema7
+  schema: JSONSchema7,
 ) {
   const validator = new Ajv({
     strict: false,

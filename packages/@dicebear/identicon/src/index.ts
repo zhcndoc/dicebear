@@ -43,7 +43,7 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
     attributes: {
       viewBox: '0 0 5 5',
       fill: 'none',
-      'shape-rendering': 'crispEdges'
+      'shape-rendering': 'crispEdges',
     },
     body: `${components.row1?.value(components, colors) ?? ''}${components.row2?.value(components, colors) ?? ''}${components.row3?.value(components, colors) ?? ''}${components.row4?.value(components, colors) ?? ''}${components.row5?.value(components, colors) ?? ''}`,
     extra: () => ({
@@ -52,14 +52,14 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
           acc[key] = value?.name;
           return acc;
         },
-        {}
+        {},
       ),
       ...Object.entries(colors).reduce<Record<string, string>>(
         (acc, [key, value]) => {
           acc[`${key}Color`] = value;
           return acc;
         },
-        {}
+        {},
       ),
     }),
   };

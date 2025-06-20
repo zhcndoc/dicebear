@@ -1,5 +1,5 @@
 export function getMimeType(
-  format: 'svg' | 'png' | 'jpeg' | 'webp' | 'avif'
+  format: 'svg' | 'png' | 'jpeg' | 'webp' | 'avif',
 ): string {
   switch (format) {
     case 'svg':

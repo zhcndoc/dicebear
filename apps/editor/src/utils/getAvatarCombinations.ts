@@ -8,13 +8,13 @@ import { createAvatar } from './createAvatar';
 
 export default function getAvatarCombinations(
   styleName: string,
-  selectedStyleOptions: SelectedStyleOptions
+  selectedStyleOptions: SelectedStyleOptions,
 ): SelectedStyleCombinations {
   const combinations: SelectedStyleCombinations = {};
 
   const currentAvatar = createAvatar(
     styleName,
-    selectedStyleOptions
+    selectedStyleOptions,
   ).toString();
 
   const configStyleOptions = availableStyles[styleName].options;

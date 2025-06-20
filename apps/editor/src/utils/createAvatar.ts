@@ -6,10 +6,10 @@ import availableStyles from '@/config/styles';
 
 export function createAvatar(
   styleName: string,
-  options: SelectedStyleOptions
+  options: SelectedStyleOptions,
 ): Result {
   return createAvatarCore(
     availableStyles[styleName].style,
-    getAvatarOptions(styleName, options)
+    getAvatarOptions(styleName, options),
   );
 }

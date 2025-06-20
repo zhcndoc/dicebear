@@ -46,7 +46,7 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
     attributes: {
       viewBox: '0 0 100 100',
       fill: 'none',
-      'shape-rendering': 'auto'
+      'shape-rendering': 'auto',
     },
     body: `<g transform="matrix(1.2 0 0 1.2 -10 -10)">${components.shape1?.value(components, colors) ?? ''}</g><g transform="matrix(.8 0 0 .8 10 10)">${components.shape2?.value(components, colors) ?? ''}</g><g transform="matrix(.4 0 0 .4 30 30)">${components.shape3?.value(components, colors) ?? ''}</g>`,
     extra: () => ({
@@ -55,14 +55,14 @@ export const create: StyleCreate<Options> = ({ prng, options }) => {
           acc[key] = value?.name;
           return acc;
         },
-        {}
+        {},
       ),
       ...Object.entries(colors).reduce<Record<string, string>>(
         (acc, [key, value]) => {
           acc[`${key}Color`] = value;
           return acc;
         },
-        {}
+        {},
       ),
     }),
   };

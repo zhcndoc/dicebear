@@ -16,7 +16,7 @@ export default defineStore('playground', () => {
 
   let defaultAvatarStyleName = camelCase(
     new URL(window.location.href).searchParams.get('style') ??
-      availableAvatarStyles[0]
+      availableAvatarStyles[0],
   );
 
   if (false === availableAvatarStyles.includes(defaultAvatarStyleName)) {

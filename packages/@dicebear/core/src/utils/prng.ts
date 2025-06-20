@@ -63,16 +63,16 @@ export function create(seed: string = ''): Prng {
       const workingArray = [...arr];
 
       for (let i = workingArray.length - 1; i > 0; i--) {
-          const j = internalPrng.integer(0, i);
+        const j = internalPrng.integer(0, i);
 
-          [workingArray[i], workingArray[j]] = [workingArray[j], workingArray[i]];
+        [workingArray[i], workingArray[j]] = [workingArray[j], workingArray[i]];
       }
 
       return workingArray;
     },
     string(
       length: number,
-      characters: string = 'abcdefghijklmnopqrstuvwxyz1234567890'
+      characters: string = 'abcdefghijklmnopqrstuvwxyz1234567890',
     ): string {
       // Each method call should call the `next` function only once.
       // Therefore, we use a separate instance of the PRNG here.

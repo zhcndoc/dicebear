@@ -8,120 +8,103 @@
 import type { StyleSchema } from '@dicebear/core';
 
 export const schema: StyleSchema = {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "properties": {
-    "backgroundColor": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
+  $schema: 'http://json-schema.org/draft-07/schema#',
+  properties: {
+    backgroundColor: {
+      type: 'array',
+      items: {
+        type: 'string',
+        pattern: '^(transparent|[a-fA-F0-9]{6})$',
       },
-      "default": [
-        "ffa6e6",
-        "619eff",
-        "29e051"
-      ]
+      default: ['ffa6e6', '619eff', '29e051'],
     },
-    "facialHair": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": [
-          "default"
-        ]
+    facialHair: {
+      type: 'array',
+      items: {
+        type: 'string',
+        enum: ['default'],
       },
-      "default": [
-        "default"
-      ]
+      default: ['default'],
     },
-    "facialHairProbability": {
-      "type": "integer",
-      "minimum": 0,
-      "maximum": 100,
-      "default": 20
+    facialHairProbability: {
+      type: 'integer',
+      minimum: 0,
+      maximum: 100,
+      default: 20,
     },
-    "hair": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": [
-          "plain",
-          "wavy",
-          "shortCurls",
-          "parting",
-          "spiky",
-          "roundBob",
-          "longCurls",
-          "buns",
-          "bangs",
-          "fluffy",
-          "flatTop",
-          "shaggy"
-        ]
+    hair: {
+      type: 'array',
+      items: {
+        type: 'string',
+        enum: [
+          'plain',
+          'wavy',
+          'shortCurls',
+          'parting',
+          'spiky',
+          'roundBob',
+          'longCurls',
+          'buns',
+          'bangs',
+          'fluffy',
+          'flatTop',
+          'shaggy',
+        ],
       },
-      "default": [
-        "plain",
-        "wavy",
-        "shortCurls",
-        "parting",
-        "spiky",
-        "roundBob",
-        "longCurls",
-        "buns",
-        "bangs",
-        "fluffy",
-        "flatTop",
-        "shaggy"
-      ]
+      default: [
+        'plain',
+        'wavy',
+        'shortCurls',
+        'parting',
+        'spiky',
+        'roundBob',
+        'longCurls',
+        'buns',
+        'bangs',
+        'fluffy',
+        'flatTop',
+        'shaggy',
+      ],
     },
-    "hairColor": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
+    hairColor: {
+      type: 'array',
+      items: {
+        type: 'string',
+        pattern: '^(transparent|[a-fA-F0-9]{6})$',
       },
-      "default": [
-        "000000",
-        "ff543d",
-        "fff500",
-        "1d5dff",
-        "ffffff"
-      ]
+      default: ['000000', 'ff543d', 'fff500', '1d5dff', 'ffffff'],
     },
-    "mood": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": [
-          "happy",
-          "angry",
-          "neutral",
-          "superHappy",
-          "sad",
-          "hopeful",
-          "confused"
-        ]
+    mood: {
+      type: 'array',
+      items: {
+        type: 'string',
+        enum: [
+          'happy',
+          'angry',
+          'neutral',
+          'superHappy',
+          'sad',
+          'hopeful',
+          'confused',
+        ],
       },
-      "default": [
-        "happy",
-        "angry",
-        "neutral",
-        "superHappy",
-        "sad",
-        "hopeful",
-        "confused"
-      ]
+      default: [
+        'happy',
+        'angry',
+        'neutral',
+        'superHappy',
+        'sad',
+        'hopeful',
+        'confused',
+      ],
     },
-    "skinColor": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "pattern": "^(transparent|[a-fA-F0-9]{6})$"
+    skinColor: {
+      type: 'array',
+      items: {
+        type: 'string',
+        pattern: '^(transparent|[a-fA-F0-9]{6})$',
       },
-      "default": [
-        "ffd6c0",
-        "c26450"
-      ]
-    }
-  }
+      default: ['ffd6c0', 'c26450'],
+    },
+  },
 };

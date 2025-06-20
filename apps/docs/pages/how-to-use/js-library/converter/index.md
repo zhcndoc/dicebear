@@ -7,8 +7,8 @@ description: >
 # Converter
 
 Sometimes you need the avatar in a different format than SVG. For this we have
-created a package called `@dicebear/converter` which can convert the avatar to PNG
-and JPEG.
+created a package called `@dicebear/converter` which can convert the avatar to
+PNG and JPEG.
 
 ## Installation
 

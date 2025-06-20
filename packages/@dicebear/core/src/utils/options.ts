@@ -29,7 +29,7 @@ export function defaults(schema: StyleSchema): SchemaDefaults {
 
 export function merge<O extends {}>(
   style: Style<O>,
-  options: StyleOptions<O>
+  options: StyleOptions<O>,
 ): StyleOptions<O> {
   let result: StyleOptions<O> = {
     ...(defaults(schema) as StyleOptions<O>),

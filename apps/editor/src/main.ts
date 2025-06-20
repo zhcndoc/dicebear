@@ -42,7 +42,7 @@ app.use(
     locale: navigator.language.split('-')[0],
     fallbackLocale: 'en',
     messages,
-  })
+  }),
 );
 app.use(PrimeVue, {
   theme: {
