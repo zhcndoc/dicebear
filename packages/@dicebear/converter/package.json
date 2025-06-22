@@ -39,14 +39,13 @@
     "@resvg/resvg-js": "^2.6.2",
     "exiftool-vendored": "^30.2.0",
     "fast-xml-parser": "^5.2.5",
-    "sharp": "^0.33.5",
+    "sharp": "^0.34.2",
     "tmp-promise": "^3.0.3"
   },
   "devDependencies": {
-    "@tsconfig/recommended": "^1.0.7",
-    "@types/sharp": "^0.32.0",
-    "del-cli": "^5.1.0",
-    "typescript": "^5.6.2",
+    "@tsconfig/recommended": "^1.0.10",
+    "del-cli": "^6.0.0",
+    "typescript": "^5.8.3",
     "uvu": "^0.5.6"
   },
   "engines": {
