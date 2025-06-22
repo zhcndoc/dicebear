@@ -4,7 +4,7 @@ import { useData } from 'vitepress';
 import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue';
 import randomItem from 'random-item';
 import nameList from '@shared/utils/name-list';
-import { paramCase } from 'change-case';
+import { kebabCase } from 'change-case';
 import Prando from 'prando';
 import randomInt from 'random-int';
 
@@ -37,7 +37,7 @@ watchEffect(() => {
 });
 
 function createAvatar() {
-  const avatarStyle = paramCase(prng.nextArrayItem(avatarStyleList.value));
+  const avatarStyle = kebabCase(prng.nextArrayItem(avatarStyleList.value));
   const seed = encodeURIComponent(prng.nextArrayItem(nameList as string[]));
 
   return {

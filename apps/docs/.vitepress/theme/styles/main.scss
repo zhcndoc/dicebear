@@ -1,4 +1,4 @@
-@import 'vars';
+@use './vars.scss' as *;
 
 .vp-code-light {
   display: none !important;

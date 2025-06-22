@@ -1,5 +1,5 @@
 import * as path from 'node:path';
-import { defineConfigWithTheme, HeadConfig } from 'vitepress';
+import { defineConfig, HeadConfig } from 'vitepress';
 import { ThemeOptions } from '@shared/types';
 import sidebarDocs from './config/sidebarDocs';
 import sidebarPlayground from './config/sidebarPlayground';
@@ -7,7 +7,7 @@ import sidebarStyles from './config/sidebarStyles';
 import avatarStyles from './config/avatarStyles';
 import vuetify from 'vite-plugin-vuetify';
 
-export default defineConfigWithTheme<ThemeOptions>({
+export default defineConfig<ThemeOptions>({
   title: 'DiceBear',
   description:
     'With DiceBear you can create awesome avatars for your project in no time.',

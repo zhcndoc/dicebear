@@ -6,7 +6,7 @@ import { JSONSchema7 } from 'json-schema';
 import { useAvatarStyleSchema } from '@shared/composables/avatar';
 import { storeToRefs } from 'pinia';
 import SidebarAvatarOption from './SidebarAvatarOption.vue';
-import { paramCase } from 'change-case';
+import { kebabCase } from 'change-case';
 
 const store = useStore();
 const { avatarStyleName } = storeToRefs(store);
@@ -49,7 +49,7 @@ const properties = computed(() => {
         <v-btn
           block
           variant="tonal"
-          :href="`/styles/${paramCase(store.avatarStyleName)}#options`"
+          :href="`/styles/${kebabCase(store.avatarStyleName)}#options`"
           >More options</v-btn
         >
       </v-col>

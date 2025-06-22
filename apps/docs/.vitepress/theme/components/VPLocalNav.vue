@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useData } from 'vitepress';
-import { useSidebar } from 'vitepress/theme';
+import { useLayout } from 'vitepress/theme';
 // @ts-ignore
 import VPIconAlignLeft from 'vitepress/dist/client/theme-default/components/icons/VPIconAlignLeft.vue';
 
@@ -13,7 +13,7 @@ defineEmits<{
 }>();
 
 const { theme, frontmatter } = useData();
-const { hasSidebar } = useSidebar();
+const { hasSidebar } = useLayout();
 
 function scrollToTop() {
   window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -54,7 +54,9 @@ function scrollToTop() {
   padding-top: var(--vp-layout-top-height, 0px);
   width: 100%;
   background-color: var(--vp-local-nav-bg-color);
-  transition: border-color 0.5s, background-color 0.5s;
+  transition:
+    border-color 0.5s,
+    background-color 0.5s;
 }
 
 @media (min-width: 960px) {

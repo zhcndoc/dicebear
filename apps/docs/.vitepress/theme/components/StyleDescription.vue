@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { useData } from 'vitepress';
 import { ThemeOptions } from '@shared/types';
-import { paramCase } from 'change-case';
+import { kebabCase } from 'change-case';
 
 const { theme } = useData<ThemeOptions>();
 const props = defineProps<{
@@ -14,11 +14,11 @@ const style = computed(() => {
 });
 
 const playgroundUrl = computed(() => {
-  return `/playground?style=${paramCase(props.styleName)}`;
+  return `/playground?style=${kebabCase(props.styleName)}`;
 });
 
 const editorUrl = computed(() => {
-  return `https://editor.dicebear.com/?style=${paramCase(props.styleName)}`;
+  return `https://editor.dicebear.com/?style=${kebabCase(props.styleName)}`;
 });
 </script>
 

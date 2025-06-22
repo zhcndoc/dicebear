@@ -1,6 +1,6 @@
 import { Style } from '@dicebear/core';
 import * as collection from '@dicebear/collection/async';
-import { paramCase } from 'change-case';
+import { kebabCase } from 'change-case';
 
 export function loadAvatarStyle(avatarStyle: string): Promise<Style<any>> {
   // @ts-ignore
@@ -39,7 +39,7 @@ export function getAvatarApiUrl(
     })
     .join('&');
 
-  return `https://api.dicebear.com/9.x/${paramCase(avatarStyle)}/${format}${
+  return `https://api.dicebear.com/9.x/${kebabCase(avatarStyle)}/${format}${
     qs ? `?${qs}` : ''
   }`;
 }

@@ -6,7 +6,6 @@ import SidebarBefore from './components/SidebarBefore.vue';
 import { watchEffect } from 'vue';
 import { useData } from 'vitepress';
 import { useTheme } from 'vuetify';
-import './styles/tailwind.css';
 import './styles/main.scss';
 import HomeImage from './components/HomeImage.vue';
 import { onMounted, nextTick } from 'vue';

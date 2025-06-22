@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { paramCase } from 'change-case';
+import { kebabCase } from 'change-case';
 import Code from '@shared/components/Code.vue';
 import { computed, ref } from 'vue';
 import { VTabs, VTab, VWindow, VWindowItem } from 'vuetify/components';
@@ -11,12 +11,12 @@ const props = defineProps<{
 const tab = ref<'http-api' | 'js-library' | 'cli'>();
 
 const exampleHttpApiUrl = computed(() => {
-  return `https://api.dicebear.com/9.x/${paramCase(props.styleName)}/svg`;
+  return `https://api.dicebear.com/9.x/${kebabCase(props.styleName)}/svg`;
 });
 
 const exampleHttpApiImgTag = computed(() => {
   return `<img
-  src="https://api.dicebear.com/9.x/${paramCase(props.styleName)}/svg"
+  src="https://api.dicebear.com/9.x/${kebabCase(props.styleName)}/svg"
   alt="avatar"
 />`;
 });

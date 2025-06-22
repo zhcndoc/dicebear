@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import { useData } from 'vitepress';
 import { ThemeOptions } from '@shared/types';
 import Code from '@shared/components/Code.vue';
-import { paramCase } from 'change-case';
+import { kebabCase } from 'change-case';
 
 const { theme } = useData<ThemeOptions>();
 
@@ -16,12 +16,12 @@ const style = computed(() => {
 });
 
 const exampleHttpApiUrl = computed(() => {
-  return `https://api.dicebear.com/9.x/${paramCase(props.styleName)}/svg`;
+  return `https://api.dicebear.com/9.x/${kebabCase(props.styleName)}/svg`;
 });
 
 const schemaJsonHttpApiUrl = computed(() => {
-  return `https://api.dicebear.com/9.x/${paramCase(
-    props.styleName
+  return `https://api.dicebear.com/9.x/${kebabCase(
+    props.styleName,
   )}/schema.json`;
 });
 
@@ -30,7 +30,7 @@ const exampleCollectionImport = computed(() => {
 });
 
 const examplePackageImport = computed(() => {
-  return `import * as style from '@dicebear/${paramCase(props.styleName)}';`;
+  return `import * as style from '@dicebear/${kebabCase(props.styleName)}';`;
 });
 
 const exampleCliCommand = computed(() => {

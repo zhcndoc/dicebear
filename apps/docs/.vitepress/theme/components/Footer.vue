@@ -1,14 +1,14 @@
 <script setup lang="ts">
 // @ts-ignore
 import VPLink from 'vitepress/dist/client/theme-default/components/VPLink.vue';
-import { useSidebar } from 'vitepress/theme';
+import { useLayout } from 'vitepress/theme';
 import { useData, withBase } from 'vitepress';
 import { computed } from 'vue';
 import type { StyleMeta } from '@dicebear/core';
 import type { ThemeOptions } from '@shared/types';
 
 const { theme } = useData<ThemeOptions>();
-const { hasSidebar } = useSidebar();
+const { hasSidebar } = useLayout();
 
 const styles = computed(() => {
   const result: StyleMeta[] = [];

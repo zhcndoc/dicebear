@@ -3,7 +3,7 @@
 import VPLink from 'vitepress/dist/client/theme-default/components/VPLink.vue';
 import { useData } from 'vitepress';
 import { ThemeOptions } from '@shared/types';
-import { paramCase } from 'change-case';
+import { kebabCase } from 'change-case';
 
 const { theme } = useData<ThemeOptions>();
 const styles = theme.value.avatarStyles;
@@ -18,7 +18,7 @@ const styles = theme.value.avatarStyles;
     <thead>
       <tr>
         <th colspan="2" align="left">
-          <VPLink :href="`/styles/${paramCase(styleName)}/`">{{
+          <VPLink :href="`/styles/${kebabCase(styleName)}/`">{{
             styleName
           }}</VPLink>
         </th>
