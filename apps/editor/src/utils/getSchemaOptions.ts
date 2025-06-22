@@ -1,26 +1,91 @@
-import {
-  red,
-  orange,
-  yellow,
-  emerald,
-  sky,
-  violet,
-  pink,
-  gray,
-} from 'tailwindcss/colors';
 import type { JSONSchema7, JSONSchema7Definition } from 'json-schema';
 import type { ConfigStyleOptions } from '@/types';
 
 const defaultBackgroundColors = [
-  ...[red[100], red[200], red[300], red[400], red[500]],
-  ...[orange[100], orange[200], orange[300], orange[400], orange[500]],
-  ...[yellow[100], yellow[200], yellow[300], yellow[400], yellow[500]],
-  ...[emerald[100], emerald[200], emerald[300], emerald[400], emerald[500]],
-  ...[sky[100], sky[200], sky[300], sky[400], sky[500]],
-  ...[violet[100], violet[200], violet[300], violet[400], violet[500]],
-  ...[pink[100], pink[200], pink[300], pink[400], pink[500]],
-  ...[gray[100], gray[200], gray[300], gray[400], gray[500]],
-].map((color) => color.replace('#', ''));
+  // https://oklch-palette.vercel.app/#76,0.12,0,100
+  'fff1f5',
+  'ffdde6',
+  'ffc8d8',
+  'ffb3c9',
+  'fc9ebb',
+
+  // https://oklch-palette.vercel.app/#76,0.12,30,100
+  'fff2ef',
+  'ffdfd9',
+  'ffcbc2',
+  'ffb7ab',
+  'ffa293',
+
+  // https://oklch-palette.vercel.app/#76,0.12,60,100
+  'fff3e9',
+  'ffe1c9',
+  'ffcfa8',
+  'ffbc84',
+  'f5ac6f',
+
+  // https://oklch-palette.vercel.app/#76,0.12,90,100
+  'fff5d9',
+  'ffe5a0',
+  'f7d67c',
+  'e9c96e',
+  'dbbb60',
+
+  // https://oklch-palette.vercel.app/#76,0.12,120,100
+  'edffb9',
+  'ddf399',
+  'cfe58c',
+  'c2d77e',
+  'b5ca71',
+
+  // https://oklch-palette.vercel.app/#76,0.12,150,100
+  'dfffe4',
+  'aefebe',
+  'a0efb1',
+  'a0efb1',
+  '85d496',
+
+  // https://oklch-palette.vercel.app/#76,0.12,180,100
+  'd8fff6',
+  '91ffea',
+  '77f3dc',
+  '68e5cf',
+  '59d7c1',
+
+  // https://oklch-palette.vercel.app/#76,0.12,210,100
+  'e2faff',
+  'b6f4ff',
+  '80ecff',
+  '5fe0f6',
+  '4fd3e8',
+
+  // https://oklch-palette.vercel.app/#76,0.12,240,100
+  'ecf7ff',
+  'd1ebff',
+  'b5e0ff',
+  '97d4ff',
+  '77c8ff',
+
+  // https://oklch-palette.vercel.app/#76,0.12,270,100
+  'f1f5ff',
+  'dee7ff',
+  'cbd9ff',
+  'b8caff',
+  'a5bcff',
+
+  // https://oklch-palette.vercel.app/#76,0.12,300,100
+  'f7f3ff',
+  'ebe2ff',
+  'e0d0ff',
+  'd5bfff',
+  'caadfe',
+
+  // https://oklch-palette.vercel.app/#76,0.12,330,100
+  'fff0fd',
+  'ffdafa',
+  'ffc2f9',
+  'f7b0f0',
+  'f7b0f0',
+];
 
 export default function getSchemaOptions(
   schema: JSONSchema7,
