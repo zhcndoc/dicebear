@@ -3,7 +3,7 @@ import path from 'node:path';
 
 export async function writeFile(
   filePath: string,
-  content: string | ArrayBuffer,
+  content: string | ArrayBufferLike,
 ) {
   if (fs.existsSync(filePath)) {
     throw new Error(`File already exists at ${filePath}`);
