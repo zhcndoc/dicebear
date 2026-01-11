@@ -85,8 +85,7 @@
   }
 }
 
-img[src^="https://api.dicebear.com/"]:not(.next, .prev)
-{
+img[src^='https://api.dicebear.com/']:not(.next, .prev) {
   background: repeating-conic-gradient(
       var(--avatar-background-color-1) 0% 25%,
       var(--avatar-background-color-2) 0% 50%

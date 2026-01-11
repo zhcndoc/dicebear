@@ -206,9 +206,10 @@ const avatar = createAvatar(lorelei, {
 
 :::
 
-Read more about the use in [react](/guides/use-the-library-with-react/),
-[vue](/guides/use-the-library-with-vue/),
-[svelte](/guides/use-the-library-with-svelte/), etc. in our guides.
+Read more about the use in [Angular](/guides/use-the-library-with-angular/),
+[React](/guides/use-the-library-with-react/),
+[Vue](/guides/use-the-library-with-vue/),
+[Svelte](/guides/use-the-library-with-svelte/), etc. in our guides.
 
 ## Open Source
 

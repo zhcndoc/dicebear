@@ -60,6 +60,10 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         link: '/guides/use-the-library-without-esm/',
       },
       {
+        text: 'Use the library with Angular',
+        link: '/guides/use-the-library-with-angular/',
+      },
+      {
         text: 'Use the library with React',
         link: '/guides/use-the-library-with-react/',
       },

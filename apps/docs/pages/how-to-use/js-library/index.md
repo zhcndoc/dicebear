@@ -61,7 +61,8 @@ page of each [avatar style](/styles/).
 ::: tip
 
 If you’d like to integrate the library into a framework, check out our guides
-for [React](/guides/use-the-library-with-react/),
+for [Angular](/guides/use-the-library-with-angular/),
+[React](/guides/use-the-library-with-react/),
 [React Native](/guides/use-the-library-with-react-native/),
 [Vue](/guides/use-the-library-with-vue/) or
 [Svelte](/guides/use-the-library-with-svelte/).
