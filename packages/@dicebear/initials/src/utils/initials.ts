@@ -1,6 +1,15 @@
 // @see https://www.regular-expressions.info/unicode.html
 export function getInitials(seed: string, discardAtSymbol = true): string {
-  const input = discardAtSymbol ? seed.replace(/@.*/, '') : seed;
+  let input = seed;
+
+  // Optionally discard everything after `@`-symbol
+  if (discardAtSymbol) {
+    input = seed.replace(/@.*/, '');
+  }
+
+  // Remove common apostrophes
+  input = input.replace(/[`´‘’'ʼ]/g, '');
+
   const matches = input.match(/(\p{L}[\p{L}\p{M}]*)/gu);
 
   if (!matches) {

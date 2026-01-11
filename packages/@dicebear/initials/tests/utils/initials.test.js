@@ -20,6 +20,13 @@ const data = [
   // U+0061 U+0300
   ['àaa', 'ÀA'],
   ['àaa àaa', 'ÀÀ'],
+  // Apostrophes
+  ["O'Connor", 'OC'],
+  ["OʼConnor", 'OC'],
+  ["John O'Connor", 'JO'],
+  ["John OʼConnor", 'JO'],
+  ["John O`Connor", 'JO'],
+  ["John O´Connor", 'JO'],
 ];
 
 for (const [input, expected] of data) {
