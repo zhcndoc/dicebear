@@ -64,7 +64,7 @@ possible - easy, super fast and a lot of fun!
 
 ## Many different avatar styles!
 
-You can choose from 30 different avatar styles by fantastic artists. Here is
+You can choose from 30+ different avatar styles by fantastic artists. Here is
 just a small sample.
 
 <p class="why-dicebear-preview">

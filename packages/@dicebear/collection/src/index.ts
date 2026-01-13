@@ -28,6 +28,7 @@ import * as pixelArtNeutral from '@dicebear/pixel-art-neutral';
 import * as rings from '@dicebear/rings';
 import * as shapes from '@dicebear/shapes';
 import * as thumbs from '@dicebear/thumbs';
+import * as toonHead from '@dicebear/toon-head';
 
 export {
   adventurer,
@@ -60,4 +61,5 @@ export {
   rings,
   shapes,
   thumbs,
+  toonHead,
 };

@@ -67,5 +67,7 @@
   "documentation": "Documentation",
   "documentationLink": "https://www.dicebear.com/docs",
   "licenses": "Licenses",
-  "mood": "Mood"
+  "mood": "Mood",
+  "rearHair": "Rear Hair",
+  "clothes": "Clothes"
 }

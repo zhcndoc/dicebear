@@ -95,6 +95,10 @@ const availableStyles: ConfigStyleCollection = {
     style: collection.pixelArtNeutral,
     options: getSchemaOptions(collection.pixelArtNeutral.schema ?? {}),
   },
+  toonHead: {
+    style: collection.toonHead,
+    options: getSchemaOptions(collection.toonHead.schema ?? {}),
+  },
 };
 
 export default availableStyles;
