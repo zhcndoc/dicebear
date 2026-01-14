@@ -1,6 +1,6 @@
 {
   "name": "dicebear",
-  "version": "9.3.0-alpha.0",
+  "version": "9.3.0-alpha.1",
   "private": false,
   "description": "CLI for DiceBear - An avatar library for designers and developers",
   "homepage": "https://github.com/dicebear/dicebear",
@@ -25,9 +25,9 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@dicebear/collection": "9.3.0-alpha.0",
-    "@dicebear/converter": "9.3.0-alpha.0",
-    "@dicebear/core": "9.3.0-alpha.0",
+    "@dicebear/collection": "9.3.0-alpha.1",
+    "@dicebear/converter": "9.3.0-alpha.1",
+    "@dicebear/core": "9.3.0-alpha.1",
     "ajv": "^8.17.1",
     "chalk": "^5.4.1",
     "chalk-template": "^1.1.0",
