@@ -12,6 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/dicebear/dicebear.git"
   },
+  "license": "MIT",
   "type": "module",
   "main": "./lib/index.js",
   "exports": "./lib/index.js",
