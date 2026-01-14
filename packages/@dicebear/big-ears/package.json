@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/big-ears",
-  "version": "9.3.0-alpha.1",
+  "version": "9.3.0-alpha.2",
   "description": "Avatar style for DiceBear",
   "keywords": [
     "dicebear"
@@ -28,7 +28,7 @@
     "test": "uvu tests"
   },
   "devDependencies": {
-    "@dicebear/core": "9.3.0-alpha.1",
+    "@dicebear/core": "9.3.0-alpha.2",
     "@tsconfig/recommended": "^1.0.10",
     "del-cli": "^6.0.0",
     "typescript": "^5.8.3",
