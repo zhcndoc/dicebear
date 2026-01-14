@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/lorelei-neutral",
-  "version": "9.2.4",
+  "version": "9.3.0-alpha.0",
   "description": "Avatar style for DiceBear",
   "keywords": [
     "dicebear"
@@ -28,7 +28,7 @@
     "test": "uvu tests"
   },
   "devDependencies": {
-    "@dicebear/core": "9.2.4",
+    "@dicebear/core": "9.3.0-alpha.0",
     "@tsconfig/recommended": "^1.0.10",
     "del-cli": "^6.0.0",
     "typescript": "^5.8.3",
