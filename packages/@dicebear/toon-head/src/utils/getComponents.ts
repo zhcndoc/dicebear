@@ -9,14 +9,11 @@ import type { Options, ComponentPickCollection } from '../types.js';
 import { pickComponent } from './pickComponent.js';
 
 type Props = {
-  prng: Prng;
-  options: Options;
-};
+  prng: Prng,
+  options: Options
+}
 
-export function getComponents({
-  prng,
-  options,
-}: Props): ComponentPickCollection {
+export function getComponents({ prng, options }: Props): ComponentPickCollection {
   const rearHairComponent = pickComponent({
     prng,
     group: 'rearHair',
@@ -64,16 +61,14 @@ export function getComponents({
   });
 
   return {
-    rearHair: prng.bool(options.hairProbability)
-      ? rearHairComponent
-      : undefined,
-    body: bodyComponent,
-    head: headComponent,
-    clothes: clothesComponent,
-    mouth: mouthComponent,
-    beard: prng.bool(options.beardProbability) ? beardComponent : undefined,
-    eyes: eyesComponent,
-    eyebrows: eyebrowsComponent,
-    hair: prng.bool(options.hairProbability) ? hairComponent : undefined,
-  };
-}
+    'rearHair': prng.bool(options.rearHairProbability) ? rearHairComponent : undefined,
+    'body': bodyComponent,
+    'head': headComponent,
+    'clothes': clothesComponent,
+    'mouth': mouthComponent,
+    'beard': prng.bool(options.beardProbability) ? beardComponent : undefined,
+    'eyes': eyesComponent,
+    'eyebrows': eyebrowsComponent,
+    'hair': prng.bool(options.hairProbability) ? hairComponent : undefined,
+  }
+};

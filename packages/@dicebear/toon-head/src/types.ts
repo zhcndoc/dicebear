@@ -11,6 +11,7 @@ export interface Options {
     | 'shoulderHigh'
     | 'neckHigh'
   )[];
+  rearHairProbability?: number;
   body?: (
     | 'body'
   )[];

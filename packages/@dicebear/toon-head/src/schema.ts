@@ -162,7 +162,7 @@ export const schema: StyleSchema = {
       "type": "integer",
       "minimum": 0,
       "maximum": 100,
-      "default": 95
+      "default": 100
     },
     "head": {
       "type": "array",
@@ -213,6 +213,12 @@ export const schema: StyleSchema = {
         "shoulderHigh",
         "neckHigh"
       ]
+    },
+    "rearHairProbability": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 50
     },
     "skinColor": {
       "type": "array",
