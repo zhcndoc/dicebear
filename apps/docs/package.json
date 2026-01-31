@@ -17,7 +17,7 @@
     "@types/json-schema": "^7.0.15",
     "@types/lodash": "^4.17.18",
     "@types/node": "^24.0.3",
-    "@vueuse/core": "^13.4.0",
+    "@vueuse/core": "^14.2.0",
     "canvas-confetti": "^1.9.3",
     "change-case": "^5.4.4",
     "copy-to-clipboard": "^3.3.3",
