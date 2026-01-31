@@ -30,9 +30,9 @@
   },
   "devDependencies": {
     "@dicebear/core": "9.3.1",
-    "@tsconfig/recommended": "^1.0.2",
+    "@tsconfig/recommended": "^1.0.13",
     "del-cli": "^5.0.0",
-    "typescript": "^5.1.6",
+    "typescript": "^5.9.3",
     "uvu": "^0.5.6"
   },
   "peerDependencies": {

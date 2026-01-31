@@ -74,15 +74,15 @@
   },
   "devDependencies": {
     "@dicebear/core": "9.3.1",
-    "@rollup/plugin-commonjs": "^28.0.6",
-    "@rollup/plugin-node-resolve": "^16.0.1",
-    "@tsconfig/recommended": "^1.0.10",
+    "@rollup/plugin-commonjs": "^28.0.9",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@tsconfig/recommended": "^1.0.13",
     "del-cli": "^6.0.0",
-    "rollup": "^4.44.0",
-    "tmp": "^0.2.3",
-    "typescript": "^5.8.3",
+    "rollup": "^4.57.1",
+    "tmp": "^0.2.5",
+    "typescript": "^5.9.3",
     "uvu": "^0.5.6",
-    "webpack": "^5.99.9"
+    "webpack": "^5.104.1"
   },
   "peerDependencies": {
     "@dicebear/core": "^9.0.0"

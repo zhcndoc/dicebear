@@ -2,31 +2,16 @@ import { createApp, defineAsyncComponent } from 'vue';
 import { createPinia } from 'pinia';
 import { createI18n } from 'vue-i18n';
 import messages from '@intlify/unplugin-vue-i18n/messages';
-import { definePreset } from '@primevue/themes';
+import { definePreset } from '@primeuix/themes';
 import Loader from './Loader.vue';
 
 import './assets/reset.scss';
 import 'primeicons/primeicons.css';
 
 import PrimeVue from 'primevue/config';
-import Aura from '@primevue/themes/aura';
+import Aura from '@primeuix/themes/aura';
 
-const Theme = definePreset(Aura, {
-  components: {
-    button: {
-      colorScheme: {
-        light: {
-          secondary: {
-            hoverBackground: '{surface.0}',
-            activeBackground: '{surface.0}',
-            hoverBorderColor: '{surface.0}',
-            activeBorderColor: '{surface.0}',
-          },
-        },
-      },
-    },
-  },
-});
+const Theme = definePreset(Aura, {});
 
 const AsyncApp = defineAsyncComponent({
   loader: () => import('./App.vue'),
