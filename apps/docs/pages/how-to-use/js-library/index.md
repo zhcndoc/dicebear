@@ -8,9 +8,9 @@ description: >
 
 The library is written in [TypeScript](https://www.typescriptlang.org/) /
 [JavaScript](https://developer.mozilla.org/en-US/Web/JavaScript) and can be used
-in the browser and also in [Node.js](https://nodejs.org/en/). In other
-environments you may be interested in the [HTTP API](/how-to-use/http-api/) or
-the [CLI](/how-to-use/cli/).
+in the browser and also in [Node.js](https://nodejs.org/en/) (version 18 or
+higher). In other environments you may be interested in the
+[HTTP API](/how-to-use/http-api/) or the [CLI](/how-to-use/cli/).
 
 The library is a pure
 [ESM package](https://developer.mozilla.org/en-US/Web/JavaScript/Guide/Modules).
@@ -60,7 +60,7 @@ page of each [avatar style](/styles/).
 
 ::: tip
 
-If you’d like to integrate the library into a framework, check out our guides
+If you'd like to integrate the library into a framework, check out our guides
 for [Angular](/guides/use-the-library-with-angular/),
 [React](/guides/use-the-library-with-react/),
 [React Native](/guides/use-the-library-with-react-native/),
@@ -77,6 +77,22 @@ themselves. For a quick overview we have created an
 [license overview](/licenses/) for you.
 
 :::
+
+## Deterministic avatars
+
+The `seed` option is the key to generating deterministic avatars. The same seed
+will always produce the same avatar, making it perfect for user profiles:
+
+```js
+import { createAvatar } from '@dicebear/core';
+import { lorelei } from '@dicebear/collection';
+
+// These will always produce the same avatar
+const avatar1 = createAvatar(lorelei, { seed: 'user-123' });
+const avatar2 = createAvatar(lorelei, { seed: 'user-123' });
+
+avatar1.toString() === avatar2.toString(); // true
+```
 
 ## Methods
 
@@ -121,32 +137,157 @@ const svg = avatar.toString(); // [!code focus]
 **Return type:** `{ svg: string, extra: Record<string, unknown> }`
 
 Returns a JSON with the SVG and additional information, such as the actual
-options used.
+options used. The `extra` object contains the resolved options and any
+style-specific metadata.
 
 ```js
 import { createAvatar } from '@dicebear/core';
 import { lorelei } from '@dicebear/collection';
 
 const avatar = createAvatar(lorelei, {
-  // ... options
+  seed: 'John Doe',
+  // ... other options
 });
 
 const json = avatar.toJson(); // [!code focus]
+
+// Example output:
+// {
+//   svg: '<svg>...</svg>',
+//   extra: {
+//     // resolved options and style-specific data
+//   }
+// }
 ```
 
 ### `.toDataUri()`
 
-**Return type:** `Promise<string>`
+**Return type:** `string`
 
 Returns the avatar as [data uri](https://en.wikipedia.org/wiki/Data_URI_scheme).
+This is useful for embedding the avatar directly in HTML or CSS.
 
 ```js
 import { createAvatar } from '@dicebear/core';
 import { lorelei } from '@dicebear/collection';
 
 const avatar = createAvatar(lorelei, {
-  // ... options
+  seed: 'John Doe',
+  // ... other options
 });
 
 const dataUri = avatar.toDataUri(); // [!code focus]
+
+// Use in HTML
+// <img src={dataUri} alt="Avatar" />
 ```
+
+## Core options
+
+These options are available for all avatar styles:
+
+| Option               | Type       | Default      | Description                                      |
+| -------------------- | ---------- | ------------ | ------------------------------------------------ |
+| `seed`               | `string`   | _random_     | Seed for deterministic generation                |
+| `flip`               | `boolean`  | `false`      | Flip the avatar horizontally                     |
+| `rotate`             | `number`   | `0`          | Rotate the avatar (0-360 degrees)                |
+| `scale`              | `number`   | `100`        | Scale the avatar (0-200 percent)                 |
+| `radius`             | `number`   | `0`          | Border radius (0-50 percent)                     |
+| `size`               | `number`   | _undefined_  | Fixed size in pixels                             |
+| `backgroundColor`    | `string[]` | _undefined_  | Background colors (hex without #, or "transparent") |
+| `backgroundType`     | `string[]` | `['solid']`  | Background type: "solid" or "gradientLinear"     |
+| `backgroundRotation` | `number[]` | `[0, 360]`   | Gradient rotation range (-360 to 360)            |
+| `translateX`         | `number`   | `0`          | Horizontal translation (-100 to 100 percent)     |
+| `translateY`         | `number`   | `0`          | Vertical translation (-100 to 100 percent)       |
+| `clip`               | `boolean`  | `true`       | Clip content to the avatar boundary              |
+| `randomizeIds`       | `boolean`  | `false`      | Randomize SVG element IDs (useful for multiple avatars) |
+
+## Examples
+
+### Avatar with custom background
+
+```js
+import { createAvatar } from '@dicebear/core';
+import { lorelei } from '@dicebear/collection';
+
+const avatar = createAvatar(lorelei, {
+  seed: 'John Doe',
+  backgroundColor: ['b6e3f4', 'c0aede', 'd1d4f9'],
+  // ... other options
+});
+```
+
+### Fixed size avatar
+
+```js
+import { createAvatar } from '@dicebear/core';
+import { bottts } from '@dicebear/collection';
+
+const avatar = createAvatar(bottts, {
+  seed: 'robot-42',
+  size: 128,
+  radius: 50, // circular avatar
+  // ... other options
+});
+```
+
+### Avatar with transformations
+
+```js
+import { createAvatar } from '@dicebear/core';
+import { avataaars } from '@dicebear/collection';
+
+const avatar = createAvatar(avataaars, {
+  seed: 'Jane Doe',
+  flip: true,
+  rotate: 10,
+  scale: 90,
+  translateY: 5,
+  // ... other options
+});
+```
+
+### Multiple avatars on the same page
+
+When rendering multiple avatars on the same page, use `randomizeIds` to prevent
+SVG ID conflicts:
+
+```js
+import { createAvatar } from '@dicebear/core';
+import { lorelei } from '@dicebear/collection';
+
+const users = ['alice', 'bob', 'charlie'];
+
+const avatars = users.map((user) =>
+  createAvatar(lorelei, {
+    seed: user,
+    randomizeIds: true,
+    // ... other options
+  }).toString()
+);
+```
+
+## TypeScript
+
+The library is fully typed. You can import types for better IDE support:
+
+```ts
+import { createAvatar } from '@dicebear/core';
+import { lorelei } from '@dicebear/collection';
+import type { Options } from '@dicebear/core';
+
+const options: Options = {
+  seed: 'John Doe',
+  backgroundColor: ['b6e3f4'],
+  // ... other options
+};
+
+const avatar = createAvatar(lorelei, options);
+```
+
+Each style also exports its own options type for style-specific options.
+
+## Convert to other formats
+
+Need PNG, JPEG, or other formats? Check out the
+[Converter](/how-to-use/js-library/converter/) package.

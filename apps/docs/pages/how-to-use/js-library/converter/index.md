@@ -8,7 +8,7 @@ description: >
 
 Sometimes you need the avatar in a different format than SVG. For this we have
 created a package called `@dicebear/converter` which can convert the avatar to
-PNG and JPEG.
+PNG, JPEG, WebP, and AVIF.
 
 ## Installation
 
@@ -39,10 +39,21 @@ const avatar = createAvatar(lorelei, {
   // ... other options
 });
 
-const png = toPng(avatar, {
-  // ... options
-});
+const png = toPng(avatar);
+const dataUri = await png.toDataUri();
 ```
+
+## Supported formats
+
+| Format | Function   | Browser | Node.js | Notes                                    |
+| ------ | ---------- | ------- | ------- | ---------------------------------------- |
+| PNG    | `toPng`    | Yes     | Yes     | Full support                             |
+| JPEG   | `toJpeg`   | Yes     | Yes     | Full support                             |
+| WebP   | `toWebp`   | Yes*    | Yes     | Unsupported browsers fall back to PNG    |
+| AVIF   | `toAvif`   | Yes*    | Yes     | Unsupported browsers fall back to PNG    |
+
+\* WebP is supported in all modern browsers. AVIF support varies - check
+[caniuse.com](https://caniuse.com/avif) for current browser compatibility.
 
 ## Methods
 
@@ -57,11 +68,11 @@ type `object`. See [options](#options) for more information.
 
 <!-- prettier-ignore -->
 ```js
-import { toJpeg } from '@dicebear/converter';
+import { toPng } from '@dicebear/converter';
 
 const svg = '<svg>...</svg>';
 
-const png = toJpeg(svg, {
+const png = toPng(svg, {
   // ... options
 });
 ```
@@ -91,7 +102,7 @@ const jpeg = toJpeg(svg, {
 **Return type:** Object with [.toDataUri()](#todatauri) and
 [.toArrayBuffer()](#toarraybuffer) methods.
 
-Converts the avatar from SVG to WEBP. Expects an SVG `string` or an `object`
+Converts the avatar from SVG to WebP. Expects an SVG `string` or an `object`
 with `toString` method as first argument. Expects an optional `options` argument
 of type `object`. See [options](#options) for more information.
 
@@ -101,7 +112,7 @@ import { toWebp } from '@dicebear/converter';
 
 const svg = '<svg>...</svg>';
 
-const png = toWebp(svg, {
+const webp = toWebp(svg, {
   // ... options
 });
 ```
@@ -109,10 +120,10 @@ const png = toWebp(svg, {
 ::: warning Limited browser support
 
 This function uses an HTML canvas element in the browser and is dependent on the
-browser being able to export the canvas as a WebP. If the browser does not
-support WebP, PNG is usually used as a fallback. See
-[mdn web docs](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob)
-for more information.
+browser being able to export the canvas as WebP. If the browser does not support
+WebP, PNG is used as a fallback. See
+[MDN web docs](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob)
+for browser compatibility.
 
 :::
 
@@ -127,11 +138,11 @@ of type `object`. See [options](#options) for more information.
 
 <!-- prettier-ignore -->
 ```js
-import { toWebp } from '@dicebear/converter';
+import { toAvif } from '@dicebear/converter';
 
 const svg = '<svg>...</svg>';
 
-const png = toWebp(svg, {
+const avif = toAvif(svg, {
   // ... options
 });
 ```
@@ -139,10 +150,10 @@ const png = toWebp(svg, {
 ::: warning Limited browser support
 
 This function uses an HTML canvas element in the browser and is dependent on the
-browser being able to export the canvas as a AVIF. If the browser does not
-support AVIF, PNG is usually used as a fallback. See
-[mdn web docs](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob)
-for more information.
+browser being able to export the canvas as AVIF. If the browser does not support
+AVIF, PNG is used as a fallback. See
+[MDN web docs](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob)
+for browser compatibility.
 
 :::
 
@@ -150,7 +161,8 @@ for more information.
 
 **Return type:** `Promise<string>`
 
-Returns the avatar as [data uri](https://en.wikipedia.org/wiki/Data_URI_scheme).
+Returns the image as a [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
+This is useful for embedding the image directly in HTML or CSS.
 
 ```js
 import { toPng } from '@dicebear/converter';
@@ -160,16 +172,18 @@ const svg = '<svg>...</svg>';
 const png = toPng(svg, {
   // ... options
 });
-
 const dataUri = await png.toDataUri(); // [!code focus]
+
+// Use in HTML: <img src={dataUri} alt="Avatar" />
 ```
 
 ### `.toArrayBuffer()`
 
 **Return type:** `Promise<ArrayBuffer>`
 
-Converts the avatar to an
-[ArrayBuffer](https://developer.mozilla.org/en-US/Web/JavaScript/Reference/Global_Objects/ArrayBuffer).
+Converts the image to an
+[ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer).
+This is useful for saving files or sending binary data.
 
 ```js
 import { toPng } from '@dicebear/converter';
@@ -179,11 +193,15 @@ const svg = '<svg>...</svg>';
 const png = toPng(svg, {
   // ... options
 });
-
-const dataUri = await png.toArrayBuffer(); // [!code focus]
+const buffer = await png.toArrayBuffer(); // [!code focus]
 ```
 
 ## Options
+
+| Option        | Type       | Default | Environment | Description                          |
+| ------------- | ---------- | ------- | ----------- | ------------------------------------ |
+| `fonts`       | `string[]` | `[]`    | Node.js     | Paths to custom font files           |
+| `includeExif` | `boolean`  | `false` | Node.js     | Include metadata in output image     |
 
 ### fonts <Badge type="warning" text="Node.js only" />
 
@@ -192,7 +210,16 @@ const dataUri = await png.toArrayBuffer(); // [!code focus]
 **Default:** `[]`
 
 An array of paths to font files which should be used to render the avatar. If
-not set, the system fonts will be used.
+not set, the system fonts will be used. This is particularly useful for the
+[initials](/styles/initials/) style or other styles that render text.
+
+```js
+import { toPng } from '@dicebear/converter';
+
+const png = toPng(svg, {
+  fonts: ['/path/to/custom-font.ttf'],
+});
+```
 
 ### includeExif <Badge type="warning" text="Node.js only" />
 
@@ -201,13 +228,149 @@ not set, the system fonts will be used.
 **Default:** `false`
 
 If set to `true`, the converter will try to read the metadata from the SVG and
-add it to the PNG or JPEG. This is useful if you want to add license information
-to the image.
+add it to the output image as Exif metadata. This is useful for preserving
+license and attribution information.
+
+The following metadata is extracted and embedded:
+
+- **Title** - Avatar style title
+- **Source** - Source URL
+- **Creator** - Artist/creator name
+- **License** - License information
+- **Copyright** - Copyright notice
+
+```js
+import { toPng } from '@dicebear/converter';
+
+const png = toPng(svg, {
+  includeExif: true,
+});
+```
 
 ::: warning
 
-This uses an `exiftool` singleton which needs to be exited manually. See the
-[documentation](https://www.npmjs.com/package/exiftool-vendored#usage) for more
-information.
+This uses an `exiftool` singleton which needs to be exited manually when your
+application terminates. See the
+[exiftool-vendored documentation](https://www.npmjs.com/package/exiftool-vendored)
+for more information.
+
+```js
+import { exiftool } from 'exiftool-vendored';
+
+// When your application exits:
+await exiftool.end();
+```
 
 :::
+
+## Examples
+
+### Convert DiceBear avatar to PNG
+
+```js
+import { createAvatar } from '@dicebear/core';
+import { lorelei } from '@dicebear/collection';
+import { toPng } from '@dicebear/converter';
+
+const avatar = createAvatar(lorelei, {
+  seed: 'John Doe',
+  backgroundColor: ['b6e3f4'],
+});
+
+const png = toPng(avatar);
+const dataUri = await png.toDataUri();
+
+// Use in browser
+document.querySelector('img').src = dataUri;
+```
+
+### Save avatar to file (Node.js)
+
+```js
+import { createAvatar } from '@dicebear/core';
+import { bottts } from '@dicebear/collection';
+import { toPng } from '@dicebear/converter';
+import { writeFile } from 'node:fs/promises';
+
+const avatar = createAvatar(bottts, {
+  seed: 'robot-42',
+});
+
+const png = toPng(avatar);
+const buffer = await png.toArrayBuffer();
+
+await writeFile('avatar.png', Buffer.from(buffer));
+```
+
+### Convert with Exif metadata (Node.js)
+
+```js
+import { createAvatar } from '@dicebear/core';
+import { lorelei } from '@dicebear/collection';
+import { toPng } from '@dicebear/converter';
+import { exiftool } from 'exiftool-vendored';
+import { writeFile } from 'node:fs/promises';
+
+const avatar = createAvatar(lorelei, {
+  seed: 'John Doe',
+});
+
+const png = toPng(avatar, {
+  includeExif: true,
+});
+
+const buffer = await png.toArrayBuffer();
+await writeFile('avatar.png', Buffer.from(buffer));
+
+// Important: Close exiftool when done
+await exiftool.end();
+```
+
+### Use with custom fonts (Node.js)
+
+```js
+import { createAvatar } from '@dicebear/core';
+import { initials } from '@dicebear/collection';
+import { toPng } from '@dicebear/converter';
+
+const avatar = createAvatar(initials, {
+  seed: 'John Doe',
+});
+
+const png = toPng(avatar, {
+  fonts: ['/path/to/Roboto-Bold.ttf'],
+});
+
+const dataUri = await png.toDataUri();
+```
+
+### Convert any SVG (without DiceBear)
+
+```js
+import { toPng } from '@dicebear/converter';
+
+const svg = `
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="40" fill="red" />
+  </svg>
+`;
+
+const png = toPng(svg);
+const dataUri = await png.toDataUri();
+```
+
+## TypeScript
+
+The library is fully typed:
+
+```ts
+import { toPng, toJpeg, toWebp, toAvif } from '@dicebear/converter';
+import type { Options, Result } from '@dicebear/converter';
+
+const options: Options = {
+  includeExif: true,
+};
+
+const result: Result = toPng(svg, options);
+const buffer: ArrayBuffer = await result.toArrayBuffer();
+```
