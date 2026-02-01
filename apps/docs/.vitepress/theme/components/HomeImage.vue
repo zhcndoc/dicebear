@@ -58,8 +58,17 @@ function updateAvatar() {
     }
 
     lastAvatarIndex.value = index;
-    avatarList.value[index] = nextAvatar.value;
-    nextAvatar.value = createAvatar();
+
+    const update = () => {
+      avatarList.value[index] = nextAvatar.value;
+      nextAvatar.value = createAvatar();
+    };
+
+    if (document.startViewTransition) {
+      document.startViewTransition(update);
+    } else {
+      update();
+    }
 
     updateAvatar();
   }, 1000);
@@ -80,14 +89,11 @@ onUnmounted(() => clearTimeout(avatarTimeout.value));
       class="col"
       :style="{ order: key * 2 }"
     >
-      <Transition>
-        <img
-          :key="avatar.src"
-          :src="avatar.src"
-          :style="{ background: avatar.gradient }"
-          class="image"
-        />
-      </Transition>
+      <img
+        :src="avatar.src"
+        :style="{ background: avatar.gradient }"
+        class="image"
+      />
     </div>
   </div>
 </template>
@@ -107,6 +113,7 @@ onUnmounted(() => clearTimeout(avatarTimeout.value));
   mask-size: 100% 100%;
   margin: -12px;
   align-content: center;
+  view-transition-name: home-avatars;
 }
 
 .col {
@@ -139,21 +146,13 @@ onUnmounted(() => clearTimeout(avatarTimeout.value));
 
 .image {
   display: block;
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  bottom: 6px;
-  left: 6px;
   border-radius: 10px;
 }
+</style>
 
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 0.75s ease;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
+<style>
+::view-transition-old(home-avatars),
+::view-transition-new(home-avatars) {
+  animation-duration: 0.75s;
 }
 </style>
