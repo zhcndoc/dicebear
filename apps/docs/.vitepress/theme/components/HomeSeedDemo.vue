@@ -31,19 +31,6 @@ watch(seed, () => {
     isTyping.value = false;
   }, 300);
 });
-
-const placeholders = [
-  'Type your seed here',
-//  'user@email.com',
-//  'user-123',
-//  'ProjectX',
-];
-
-const currentPlaceholder = ref(0);
-
-setInterval(() => {
-  currentPlaceholder.value = (currentPlaceholder.value + 1) % placeholders.length;
-}, 3000);
 </script>
 
 <template>
@@ -71,7 +58,7 @@ setInterval(() => {
                 v-model="seed"
                 type="text"
                 class="seed-demo-input"
-                :placeholder="placeholders[currentPlaceholder]"
+                placeholder="Type your seed here"
               />
             </div>
           </div>
