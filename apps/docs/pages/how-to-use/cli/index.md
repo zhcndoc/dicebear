@@ -246,6 +246,7 @@ Commands:
   dicebear rings [outputPath]              Generate "rings" avatar(s)
   dicebear shapes [outputPath]             Generate "shapes" avatar(s)
   dicebear thumbs [outputPath]             Generate "thumbs" avatar(s)
+  dicebear toonHead [outputPath]           Generate "toonHead" avatar(s)
 
 Options:
   --version  Show version number                                       [boolean]

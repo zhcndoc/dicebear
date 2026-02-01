@@ -175,7 +175,6 @@ export default App;
 
 ```vue [vue]
 <script setup>
-import { onMounted, ref } from 'vue';
 import { createAvatar } from '@dicebear/core';
 import { lorelei } from '@dicebear/collection';
 

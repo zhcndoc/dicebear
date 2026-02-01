@@ -123,7 +123,7 @@ difference that you are working on an existing avatar style.
 
 ## Contribute to a package
 
-You want to contribute to a package, like `@avatars/core` or the official CLI?
+You want to contribute to a package, like `@dicebear/core` or the official CLI?
 All packages are written in [TypeScript](https://www.typescriptlang.org/) and
 you can find them in the `packages` folder.
 
@@ -143,29 +143,6 @@ calling the CLI script directly as follows:
 ```
 node packages/dicebear/bin/index.js <COMMAND>
 ```
-
-### Branching and committing
-
-Once you are happy with the changes, create a branch so you can commit the
-changes.
-
-```
-git checkout -b <YOUR_BRANCH>
-```
-
-Afterwards you have to add your changes to the stage and commit them.
-
-```
-git add .
-git commit -m "Change: <YOUR_CHANGES>"
-git push origin <YOUR_BRANCH>
-```
-
-### Creating a Pull Request
-
-Follow
-[these instructions](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
-to create a Pull Request.
 
 ### Branching and committing
 

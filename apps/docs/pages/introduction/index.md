@@ -55,5 +55,5 @@ set and combined to create a character / avatar.
 
 [XorShift32](https://en.wikipedia.org/wiki/Xorshift) is used as the algorithm
 for the [PRNG](https://en.wikipedia.org/wiki/Pseudorandom_number_generator). It
-is important to note that the PNGR **does not** attempt to be
+is important to note that the PRNG **does not** attempt to be
 [cryptographically secure](https://en.wikipedia.org/wiki/Cryptographically-secure_pseudorandom_number_generator).
