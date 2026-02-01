@@ -7,7 +7,6 @@ import { watchEffect } from 'vue';
 import { useData } from 'vitepress';
 import { useTheme } from 'vuetify';
 import './styles/main.scss';
-import HomeImage from './components/HomeImage.vue';
 import { onMounted, nextTick } from 'vue';
 
 const { Layout } = DefaultTheme;
@@ -37,11 +36,6 @@ onMounted(() => {
       </template>
       <template #layout-bottom>
         <Footer />
-      </template>
-      <template #home-hero-image>
-        <ClientOnly>
-          <HomeImage />
-        </ClientOnly>
       </template>
     </Layout>
   </div>
