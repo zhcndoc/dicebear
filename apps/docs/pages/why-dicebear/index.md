@@ -4,6 +4,7 @@ description: >
   DiceBear is the perfect alternative to boring avatars with JS-Library,
   HTTP-API and Command-line API.
 aside: false
+layout: doc
 ---
 
 <script setup>
