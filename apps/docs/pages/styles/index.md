@@ -14,22 +14,24 @@ const { theme } = useData();
 const styleCount = computed(() => Object.keys(theme.value.avatarStyles).length);
 </script>
 
-<div class="styles-hero">
-  <h1 class="styles-title">Styles Overview</h1>
-  <p class="styles-description">
-    From abstract patterns to lovingly designed characters. Every style is crafted by talented artists and ready to use in your projects.
-  </p>
+<div class="styles-page">
+  <div class="styles-hero">
+    <h1 class="styles-title">Styles Overview</h1>
+    <p class="styles-description">
+      From abstract patterns to lovingly designed characters. Every style is crafted by talented artists and ready to use in your projects.
+    </p>
+  </div>
+
+  <StyleList />
 </div>
 
-<StyleList />
-
 <style>
-.styles-hero {
+.styles-page .styles-hero {
   text-align: center;
   padding: 40px 0 20px;
 }
 
-.styles-title {
+.styles-page .styles-title {
   font-size: 42px;
   font-weight: 700;
   color: var(--vp-c-text-1);
@@ -41,7 +43,7 @@ const styleCount = computed(() => Object.keys(theme.value.avatarStyles).length);
   background-clip: text;
 }
 
-.styles-description {
+.styles-page .styles-description {
   font-size: 18px;
   color: var(--vp-c-text-2);
   margin: 0 auto !important;
@@ -50,15 +52,15 @@ const styleCount = computed(() => Object.keys(theme.value.avatarStyles).length);
 }
 
 @media (max-width: 640px) {
-  .styles-hero {
+  .styles-page .styles-hero {
     padding: 24px 0 16px;
   }
 
-  .styles-title {
+  .styles-page .styles-title {
     font-size: 32px;
   }
 
-  .styles-description {
+  .styles-page .styles-description {
     font-size: 16px;
   }
 }
