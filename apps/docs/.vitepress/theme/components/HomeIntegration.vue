@@ -82,7 +82,7 @@ const activeTab = ref<'api' | 'library' | 'cli'>('api');
           </div>
 
           <!-- HTTP API Example -->
-          <pre v-if="activeTab === 'api'" class="code-content"><code><span class="code-comment">&lt;!-- Just use an image tag! --&gt;</span>
+          <pre v-show="activeTab === 'api'" class="code-content"><code><span class="code-comment">&lt;!-- Just use an image tag! --&gt;</span>
 <span class="code-tag">&lt;img</span>
   <span class="code-attr">src</span>=<span class="code-string">"https://api.dicebear.com/9.x/lorelei/svg?seed=Felix"</span>
   <span class="code-attr">alt</span>=<span class="code-string">"Avatar"</span>
@@ -95,7 +95,7 @@ const activeTab = ref<'api' | 'library' | 'cli'>('api');
 <span class="code-tag">/&gt;</span></code></pre>
 
           <!-- JS Library Example -->
-          <pre v-else-if="activeTab === 'library'" class="code-content"><code><span class="code-keyword">import</span> { createAvatar } <span class="code-keyword">from</span> <span class="code-string">'@dicebear/core'</span>;
+          <pre v-show="activeTab === 'library'" class="code-content"><code><span class="code-keyword">import</span> { createAvatar } <span class="code-keyword">from</span> <span class="code-string">'@dicebear/core'</span>;
 <span class="code-keyword">import</span> { lorelei } <span class="code-keyword">from</span> <span class="code-string">'@dicebear/collection'</span>;
 
 <span class="code-keyword">const</span> avatar = <span class="code-function">createAvatar</span>(lorelei, {
@@ -111,7 +111,7 @@ const activeTab = ref<'api' | 'library' | 'cli'>('api');
 <span class="code-keyword">const</span> dataUri = avatar.<span class="code-function">toDataUri</span>();</code></pre>
 
           <!-- CLI Example -->
-          <pre v-else class="code-content"><code><span class="code-comment"># Install globally</span>
+          <pre v-show="activeTab === 'cli'" class="code-content"><code><span class="code-comment"># Install globally</span>
 <span class="code-function">npm</span> install -g dicebear
 
 <span class="code-comment"># Generate a single avatar</span>
@@ -351,10 +351,6 @@ const activeTab = ref<'api' | 'library' | 'cli'>('api');
   .integration-container {
     grid-template-columns: 1fr;
     gap: 48px;
-  }
-
-  .integration-code {
-    order: -1;
   }
 }
 
