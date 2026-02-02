@@ -105,11 +105,6 @@ onUnmounted(() => {
     </div>
 
     <div class="hero-content">
-      <div class="hero-logo">
-        <img src="/logo.svg" alt="DiceBear" class="hero-logo-light" />
-        <img src="/logo-dark.svg" alt="DiceBear" class="hero-logo-dark" />
-      </div>
-
       <h1 class="hero-title">
         <span class="hero-title-main">Unique Avatars</span>
         <span class="hero-title-dynamic">{{ displayedText }}<span class="cursor">|</span></span>
@@ -117,7 +112,7 @@ onUnmounted(() => {
 
       <p class="hero-description">
         Generate beautiful, deterministic avatars from any seed.
-        30+ styles crafted by talented artists. Free API, JavaScript library, and CLI.
+        30+&nbsp;styles crafted by talented artists. Free&nbsp;API, JavaScript&nbsp;library, and CLI.
       </p>
 
       <div class="hero-actions">
@@ -275,32 +270,6 @@ onUnmounted(() => {
   height: 16px;
 }
 
-.hero-logo {
-  margin-bottom: 60px;
-}
-
-.hero-logo img {
-  height: 40px;
-  width: auto;
-}
-
-.hero-logo-light {
-  margin: 0 auto;
-}
-
-.hero-logo-dark {
-  display: none;
-}
-
-.dark .hero-logo-light {
-  display: none;
-}
-
-.dark .hero-logo-dark {
-  display: block;
-  margin: 0 auto;
-}
-
 .hero-title {
   margin: 0 0 24px;
   line-height: 1.1;
@@ -403,9 +372,14 @@ onUnmounted(() => {
   align-items: center;
   gap: 32px;
   padding: 20px 40px;
-  background: var(--vp-c-bg-soft);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-radius: 16px;
-  border: 1px solid var(--vp-c-border);
+}
+
+.dark .hero-stats {
+  background: rgba(0, 0, 0, 0.08);
 }
 
 .hero-stat {
@@ -425,6 +399,7 @@ onUnmounted(() => {
   font-size: 13px;
   color: var(--vp-c-text-3);
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .hero-stat-divider {
