@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, reactive, watch } from 'vue';
+import { ref, computed, reactive, watch, onMounted } from 'vue';
 import { ThemeOptions } from '@shared/types';
 import { useData } from 'vitepress';
 import { kebabCase, camelCase } from 'change-case';
@@ -25,6 +25,7 @@ const tabs = ['api', 'js', 'cli'] as const;
 const activeTabIndex = computed(() => tabs.indexOf(activeTab.value));
 const loadingAvatars = reactive<Record<string, boolean>>({});
 const mainAvatarLoading = ref(true);
+const isMounted = ref(false);
 
 const avatarStyleList = computed(() => Object.keys(theme.value.avatarStyles));
 
@@ -140,6 +141,12 @@ function selectStyle(index: number) {
   activeStyleIndex.value = index;
 }
 
+// Initialize loading states on mount
+onMounted(() => {
+  resetLoadingStates();
+  isMounted.value = true;
+});
+
 // Watch for seed changes from input (debounced effect)
 let seedTimeout: ReturnType<typeof setTimeout> | null = null;
 watch(seed, () => {
@@ -188,6 +195,7 @@ function copyCode(tab: string, code: string) {
               <div class="preview-avatar-wrapper">
                 <div v-if="mainAvatarLoading" class="preview-avatar-skeleton"></div>
                 <img
+                  v-if="isMounted"
                   :src="mainAvatar.src"
                   alt="Main avatar preview"
                   class="preview-avatar"
@@ -212,6 +220,7 @@ function copyCode(tab: string, code: string) {
               >
                 <div v-if="loadingAvatars[avatar.style] !== false" class="avatar-skeleton"></div>
                 <img
+                  v-if="isMounted"
                   :src="avatar.src"
                   :alt="avatar.style"
                   :class="{ loading: loadingAvatars[avatar.style] !== false }"
