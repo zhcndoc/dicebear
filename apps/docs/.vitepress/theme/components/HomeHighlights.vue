@@ -1,4 +1,11 @@
 <script setup lang="ts">
+import UiHeadline from './UiHeadline.vue';
+import UiDescription from './UiDescription.vue';
+import UiBadge from './UiBadge.vue';
+import UiContainer from './UiContainer.vue';
+import UiSection from './UiSection.vue';
+import UiIconBox from './UiIconBox.vue';
+import UiCard from './UiCard.vue';
 import {
   mdiPalette,
   mdiTargetAccount,
@@ -7,180 +14,196 @@ import {
   mdiTune,
   mdiPackageVariant,
 } from '@mdi/js';
+import { useVisibility } from '../composables/useVisibility';
+
+const isVisible = useVisibility('.highlights', { threshold: 0.15 });
 
 const highlights = [
   {
     icon: mdiPalette,
     title: '30+ Avatar Styles',
     description: 'Carefully crafted styles from talented artists. Characters, abstract, pixel art, and more.',
+    color: '#a855f7',
   },
   {
     icon: mdiTargetAccount,
     title: 'Deterministic',
     description: 'Same seed always generates the same avatar. Perfect for user profiles and consistent identities.',
+    color: '#1689cc',
   },
   {
     icon: mdiGithub,
     title: '100% Open Source',
     description: 'MIT licensed core, transparent development. Contribute, fork, or self-host with confidence.',
+    color: '#64748b',
   },
   {
     icon: mdiLightningBolt,
     title: 'Lightning Fast',
     description: 'Global CDN delivers avatars in milliseconds. Optimized SVGs keep your pages fast.',
+    color: '#f59e0b',
   },
   {
     icon: mdiTune,
     title: 'Fully Customizable',
     description: 'Colors, accessories, backgrounds, and more. Fine-tune every detail to match your brand.',
+    color: '#22c55e',
   },
   {
     icon: mdiPackageVariant,
     title: 'Multiple Formats',
     description: 'Export as SVG, PNG, JPEG, WebP, or AVIF. Use our API or JavaScript library.',
+    color: '#ec4899',
   },
 ];
 </script>
 
 <template>
-  <section class="highlights">
-    <div class="highlights-container">
+  <UiSection class="highlights" :class="{ visible: isVisible }" divider>
+    <UiContainer class="highlights-container">
       <div class="highlights-header">
-        <span class="highlights-badge">Why DiceBear?</span>
-        <h2 class="highlights-title">Built for Developers, Loved by Users</h2>
-        <p class="highlights-description">
+        <UiBadge>Why DiceBear?</UiBadge>
+        <UiHeadline>Built for <span class="highlight">Developers</span>, Loved by Users</UiHeadline>
+        <UiDescription>
           Everything you need to create beautiful, unique avatars for your applications.
-        </p>
+        </UiDescription>
       </div>
 
       <div class="highlights-grid">
-        <div
+        <UiCard
           v-for="(highlight, index) in highlights"
           :key="index"
+          variant="default"
+          padding="lg"
+          radius="md"
+          hoverable
           class="highlight-card"
+          :style="{ '--accent-color': highlight.color, animationDelay: `${index * 0.1}s` }"
         >
-          <div class="highlight-icon">
+          <UiIconBox size="lg" :color="highlight.color" glow class="highlight-icon-wrapper">
             <svg viewBox="0 0 24 24"><path :d="highlight.icon" fill="currentColor" /></svg>
-          </div>
+          </UiIconBox>
           <h3 class="highlight-title">{{ highlight.title }}</h3>
           <p class="highlight-description">{{ highlight.description }}</p>
-        </div>
+          <div class="highlight-line"></div>
+        </UiCard>
       </div>
+    </UiContainer>
+
+    <!-- Decorative background elements -->
+    <div class="highlights-bg">
+      <div class="bg-grid"></div>
     </div>
-  </section>
+  </UiSection>
 </template>
 
 <style scoped>
-.highlights {
-  padding: 80px 24px;
-  background: var(--vp-c-bg);
+.highlights-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--vp-c-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--vp-c-border) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.3;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent);
 }
 
 .highlights-container {
-  max-width: 1100px;
-  margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 .highlights-header {
   text-align: center;
-  margin-bottom: 56px;
+  margin-bottom: 64px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.highlights-badge {
-  display: inline-block;
-  padding: 6px 14px;
-  background: var(--vp-c-brand-soft);
-  color: var(--vp-c-brand-1);
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 16px;
+.highlights.visible .highlights-header {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.highlights-title {
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--vp-c-text-1);
-  margin: 0 0 16px;
-}
 
-.highlights-description {
-  font-size: 18px;
-  color: var(--vp-c-text-2);
-  margin: 0;
-  max-width: 500px;
-  margin: 0 auto;
-}
+
 
 .highlights-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
+  gap: 24px;
 }
 
 .highlight-card {
-  padding: 28px;
-  background: var(--vp-c-bg-soft);
-  border-radius: 12px;
+  opacity: 0;
+  transform: translateY(30px);
 }
 
-.highlight-icon {
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--vp-c-brand-soft);
-  border-radius: 10px;
-  margin-bottom: 20px;
+.highlights.visible .highlight-card {
+  animation: card-reveal 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-.highlight-icon svg {
-  width: 24px;
-  height: 24px;
-  color: var(--vp-c-brand-1);
+@keyframes card-reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.highlight-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent-color);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.highlight-card:hover .highlight-line {
+  transform: scaleX(1);
+}
+
+.highlight-icon-wrapper {
+  margin-bottom: 24px;
 }
 
 .highlight-title {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 700;
   color: var(--vp-c-text-1);
-  margin: 0 0 10px;
+  margin: 0 0 12px;
 }
 
 .highlight-description {
   font-size: 15px;
   color: var(--vp-c-text-2);
   margin: 0;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
   .highlights-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 640px) {
-  .highlights {
-    padding: 60px 16px;
-  }
-
-  .highlights-title {
-    font-size: 24px;
-  }
-
-  .highlights-description {
-    font-size: 16px;
-  }
-
   .highlights-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .highlight-card {
-    padding: 24px;
+    gap: 16px;
   }
 }
 </style>

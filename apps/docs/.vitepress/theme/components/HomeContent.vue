@@ -3,7 +3,8 @@ import HomeHero from './HomeHero.vue';
 import HomeSeedDemo from './HomeSeedDemo.vue';
 import HomeStyleShowcase from './HomeStyleShowcase.vue';
 import HomeHighlights from './HomeHighlights.vue';
-import HomeIntegration from './HomeIntegration.vue';
+import HomeEditor from './HomeEditor.vue';
+import HomeCreateStyle from './HomeCreateStyle.vue';
 import HomeOpenSource from './HomeOpenSource.vue';
 import HomeCTA from './HomeCTA.vue';
 </script>
@@ -14,7 +15,8 @@ import HomeCTA from './HomeCTA.vue';
     <HomeSeedDemo />
     <HomeStyleShowcase />
     <HomeHighlights />
-    <HomeIntegration />
+    <HomeEditor />
+    <HomeCreateStyle />
     <HomeOpenSource />
     <HomeCTA />
   </div>

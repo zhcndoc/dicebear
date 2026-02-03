@@ -1,121 +1,123 @@
 <script setup lang="ts">
 import {
-  mdiGithub,
   mdiStar,
   mdiAccountGroup,
-  mdiViewGrid,
+  mdiPalette,
+  mdiGithub,
+  mdiHeart,
 } from '@mdi/js';
+import UiButton from './UiButton.vue';
+import UiHeadline from './UiHeadline.vue';
+import UiDescription from './UiDescription.vue';
+import UiContainer from './UiContainer.vue';
+import UiSection from './UiSection.vue';
+import UiIconBox from './UiIconBox.vue';
+import { useVisibility } from '../composables/useVisibility';
+
+const isVisible = useVisibility('.opensource');
+
+const stats = [
+  { icon: mdiStar, value: '8k+', label: 'GitHub Stars' },
+  { icon: mdiAccountGroup, value: '10+', label: 'Contributors' },
+  { icon: mdiPalette, value: '30+', label: 'Avatar Styles' },
+];
 </script>
 
 <template>
-  <section class="opensource">
-    <div class="opensource-container">
-      <div class="opensource-icon">
-        <svg viewBox="0 0 24 24"><path :d="mdiGithub" fill="currentColor" /></svg>
-      </div>
+  <UiSection class="opensource" :class="{ visible: isVisible }" background="soft" divider>
+    <div class="opensource-bg">
+      <div class="bg-pattern"></div>
+    </div>
 
-      <h2 class="opensource-title">Free and Open Source. Forever.</h2>
+    <UiContainer size="narrow" class="opensource-container">
+      <UiHeadline>Free and <span class="highlight">Open Source</span>. Forever.</UiHeadline>
 
-      <p class="opensource-description">
+      <UiDescription class="opensource-description">
         DiceBear is built in the open. Our core library is MIT licensed, and we believe
         in transparent development. Star us on GitHub, contribute code, or simply use it
         with confidence knowing the source is always available.
-      </p>
+      </UiDescription>
 
       <div class="opensource-stats">
-        <div class="opensource-stat">
-          <span class="stat-icon">
-            <svg viewBox="0 0 24 24"><path :d="mdiStar" fill="currentColor" /></svg>
-          </span>
-          <span class="stat-value">8k+</span>
-          <span class="stat-label">GitHub Stars</span>
-        </div>
-        <div class="opensource-stat">
-          <span class="stat-icon">
-            <svg viewBox="0 0 24 24"><path :d="mdiAccountGroup" fill="currentColor" /></svg>
-          </span>
-          <span class="stat-value">10+</span>
-          <span class="stat-label">Contributors</span>
-        </div>
-        <div class="opensource-stat">
-          <span class="stat-icon">
-            <svg viewBox="0 0 24 24"><path :d="mdiViewGrid" fill="currentColor" /></svg>
-          </span>
-          <span class="stat-value">30+</span>
-          <span class="stat-label">Avatar Styles</span>
+        <div
+          v-for="(stat, index) in stats"
+          :key="index"
+          class="opensource-stat"
+          :style="{ animationDelay: `${index * 0.15}s` }"
+        >
+          <UiIconBox size="md">
+            <svg viewBox="0 0 24 24"><path :d="stat.icon" fill="currentColor" /></svg>
+          </UiIconBox>
+          <span class="stat-value">{{ stat.value }}</span>
+          <span class="stat-label">{{ stat.label }}</span>
         </div>
       </div>
 
       <div class="opensource-actions">
-        <a
+        <UiButton
           href="https://github.com/dicebear/dicebear"
-          target="_blank"
-          rel="noopener"
-          class="opensource-button primary"
+          variant="github"
+          :external="true"
         >
           <svg viewBox="0 0 24 24"><path :d="mdiGithub" fill="currentColor" /></svg>
-          View on GitHub
-        </a>
-        <a
+          Star on GitHub
+        </UiButton>
+        <UiButton
           href="/guides/contribute-to-the-library/"
-          class="opensource-button secondary"
+          variant="secondary"
+          class="opensource-contribute"
         >
+          <svg viewBox="0 0 24 24"><path :d="mdiHeart" fill="currentColor" /></svg>
           Contribute
-        </a>
+        </UiButton>
       </div>
-    </div>
-  </section>
+    </UiContainer>
+  </UiSection>
 </template>
 
 <style scoped>
 .opensource {
-  padding: 80px 24px;
-  background: linear-gradient(135deg, var(--vp-c-bg-soft) 0%, var(--vp-c-bg) 50%, var(--vp-c-bg-soft) 100%);
   text-align: center;
 }
 
+.opensource-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.bg-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 1px 1px, var(--vp-c-border) 1px, transparent 0);
+  background-size: 40px 40px;
+  opacity: 0.5;
+  mask-image: radial-gradient(ellipse 70% 50% at 50% 50%, black, transparent);
+  -webkit-mask-image: radial-gradient(ellipse 70% 50% at 50% 50%, black, transparent);
+}
+
 .opensource-container {
-  max-width: 700px;
-  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.opensource-icon {
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--vp-c-bg);
-  border-radius: 20px;
-  box-shadow: var(--vp-shadow-2);
-}
-
-.opensource-icon svg {
-  width: 40px;
-  height: 40px;
-  color: var(--vp-c-text-1);
-}
-
-.opensource-title {
-  font-size: 36px;
-  font-weight: 700;
-  color: var(--vp-c-text-1);
-  margin: 0 0 20px;
-  line-height: 1.2;
+.opensource.visible .opensource-container {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .opensource-description {
-  font-size: 18px;
-  color: var(--vp-c-text-2);
-  margin: 0 0 48px;
-  line-height: 1.7;
+  margin-bottom: 64px;
+  max-width: 600px;
 }
 
 .opensource-stats {
   display: flex;
   justify-content: center;
-  gap: 48px;
+  gap: 56px;
   margin-bottom: 48px;
 }
 
@@ -123,32 +125,37 @@ import {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+  opacity: 0;
+  transform: translateY(20px);
 }
 
-.stat-icon {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.opensource.visible .opensource-stat {
+  animation: stat-appear 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-.stat-icon svg {
-  width: 24px;
-  height: 24px;
-  color: var(--vp-c-brand-1);
+@keyframes stat-appear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.opensource-stat :deep(.ui-icon-box) {
+  margin-bottom: 8px;
 }
 
 .stat-value {
-  font-size: 32px;
-  font-weight: 700;
+  font-size: 36px;
+  font-weight: 800;
   color: var(--vp-c-text-1);
+  letter-spacing: -0.02em;
 }
 
 .stat-label {
   font-size: 14px;
   color: var(--vp-c-text-2);
+  font-weight: 500;
 }
 
 .opensource-actions {
@@ -157,70 +164,23 @@ import {
   gap: 16px;
 }
 
-.opensource-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 28px;
-  border-radius: 8px;
-  font-weight: 500;
-  font-size: 16px;
-  text-decoration: none;
-  transition: all 0.2s ease;
+.opensource-actions :deep(.ui-button svg) {
+  width: 22px;
+  height: 22px;
 }
 
-.opensource-button::after {
-  display: none !important;
+.opensource-contribute :deep(svg) {
+  color: #ec4899;
 }
 
-.opensource-button svg {
-  width: 20px;
-  height: 20px;
-}
-
-.opensource-button.primary {
-  background: var(--vp-c-text-1);
-  color: var(--vp-c-bg);
-}
-
-.opensource-button.primary:hover {
-  opacity: 0.9;
-}
-
-.opensource-button.secondary {
-  background: transparent;
-  border: 2px solid var(--vp-c-border);
-  color: var(--vp-c-text-1);
-}
-
-.opensource-button.secondary:hover {
-  border-color: var(--vp-c-text-1);
-}
-
-@media (max-width: 640px) {
-  .opensource {
-    padding: 60px 16px;
-  }
-
-  .opensource-title {
-    font-size: 28px;
-  }
-
-  .opensource-description {
-    font-size: 16px;
-  }
-
+@media (max-width: 768px) {
   .opensource-stats {
     flex-direction: column;
-    gap: 24px;
+    gap: 32px;
   }
 
   .opensource-actions {
     flex-direction: column;
-  }
-
-  .opensource-button {
-    justify-content: center;
   }
 }
 </style>

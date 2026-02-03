@@ -4,10 +4,18 @@ import { ThemeOptions } from '@shared/types';
 import { useData } from 'vitepress';
 import { kebabCase } from 'change-case';
 import Prando from 'prando';
-import { mdiArrowRight } from '@mdi/js';
+import { mdiArrowRight, mdiArrowLeft } from '@mdi/js';
+import UiButton from './UiButton.vue';
+import UiHeadline from './UiHeadline.vue';
+import UiDescription from './UiDescription.vue';
+import UiBadge from './UiBadge.vue';
+import UiContainer from './UiContainer.vue';
+import UiSection from './UiSection.vue';
+import { useVisibility } from '../composables/useVisibility';
 
 const { theme } = useData<ThemeOptions>();
 
+const isVisible = useVisibility('.style-showcase');
 const avatarStyleList = computed(() => Object.keys(theme.value.avatarStyles));
 
 const seeds = ['Felix', 'Aneka', 'Milo', 'Luna', 'Max', 'Sophie', 'Leo', 'Emma', 'Noah', 'Aria', 'Zoe', 'Oscar'];
@@ -21,7 +29,7 @@ const showcaseAvatars = computed(() => {
     avatars.push({
       style: kebabCase(style),
       seed,
-      src: `https://api.dicebear.com/9.x/${kebabCase(style)}/svg?seed=${seed}&size=100`
+      src: `https://api.dicebear.com/9.x/${kebabCase(style)}/svg?seed=${seed}&size=120`
     });
   }
 
@@ -31,15 +39,18 @@ const showcaseAvatars = computed(() => {
 const scrollPosition = ref(0);
 let animationFrame: number;
 let isPaused = false;
+let scrollDirection = 1;
 
 function animate() {
   if (!isPaused) {
-    scrollPosition.value += 0.4;
-    // Reset seamlessly - we duplicate the avatars so it loops
-    const itemWidth = 108; // 92px avatar + 16px gap
+    scrollPosition.value += 0.5 * scrollDirection;
+    const itemWidth = 140;
     const totalWidth = showcaseAvatars.value.length * itemWidth;
     if (scrollPosition.value >= totalWidth) {
       scrollPosition.value = 0;
+    }
+    if (scrollPosition.value < 0) {
+      scrollPosition.value = totalWidth;
     }
   }
   animationFrame = requestAnimationFrame(animate);
@@ -53,6 +64,14 @@ function resumeAnimation() {
   isPaused = false;
 }
 
+function scrollLeft() {
+  scrollPosition.value -= 300;
+}
+
+function scrollRight() {
+  scrollPosition.value += 300;
+}
+
 onMounted(() => {
   animationFrame = requestAnimationFrame(animate);
 });
@@ -63,111 +82,163 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section class="style-showcase">
-    <div class="style-showcase-header">
-      <span class="style-showcase-badge">Explore the Collection</span>
-      <h2 class="style-showcase-title">30+ Unique Avatar Styles</h2>
-      <p class="style-showcase-description">
+  <UiSection class="style-showcase" :class="{ visible: isVisible }" background="soft" no-padding divider divider-bottom>
+    <UiContainer class="style-showcase-header">
+      <UiBadge>Explore the Collection</UiBadge>
+      <UiHeadline><span class="highlight">30+</span> Unique Avatar Styles</UiHeadline>
+      <UiDescription class="style-showcase-description">
         From cute characters to abstract patterns, pixel art to professional illustrations.
-        Every style crafted by talented artists.
-      </p>
-    </div>
+        Every style crafted by talented artists and designers.
+      </UiDescription>
+    </UiContainer>
 
-    <div
-      class="style-showcase-scroll"
-      @mouseenter="pauseAnimation"
-      @mouseleave="resumeAnimation"
-      @touchstart="pauseAnimation"
-      @touchend="resumeAnimation"
-    >
-      <div
-        class="style-showcase-track"
-        :style="{ transform: `translateX(-${scrollPosition}px)` }"
-      >
-        <a
-          v-for="(avatar, index) in [...showcaseAvatars, ...showcaseAvatars]"
-          :key="`${avatar.style}-${index}`"
-          :href="`/styles/${avatar.style}/`"
-          class="style-showcase-item"
+    <div class="style-showcase-outer">
+      <button class="scroll-btn scroll-btn-left" @click="scrollLeft" aria-label="Scroll left">
+        <svg viewBox="0 0 24 24"><path :d="mdiArrowLeft" fill="currentColor" /></svg>
+      </button>
+
+      <div class="style-showcase-wrapper">
+        <div
+          class="style-showcase-scroll"
+          @mouseenter="pauseAnimation"
+          @mouseleave="resumeAnimation"
+          @touchstart="pauseAnimation"
+          @touchend="resumeAnimation"
         >
-          <div class="style-showcase-avatar">
-            <img :src="avatar.src" :alt="`${avatar.style} style`" loading="lazy" />
+          <div
+            class="style-showcase-track"
+            :style="{ transform: `translateX(-${scrollPosition}px)` }"
+          >
+            <a
+              v-for="(avatar, index) in [...showcaseAvatars, ...showcaseAvatars]"
+              :key="`${avatar.style}-${index}`"
+              :href="`/styles/${avatar.style}/`"
+              class="style-showcase-item"
+            >
+              <div class="style-showcase-avatar">
+                <img :src="avatar.src" :alt="`${avatar.style} style`" loading="lazy" />
+                <div class="avatar-glow"></div>
+              </div>
+              <span class="style-showcase-label">{{ avatar.style }}</span>
+            </a>
           </div>
-          <span class="style-showcase-label">{{ avatar.style }}</span>
-        </a>
+        </div>
       </div>
+
+      <button class="scroll-btn scroll-btn-right" @click="scrollRight" aria-label="Scroll right">
+        <svg viewBox="0 0 24 24"><path :d="mdiArrowRight" fill="currentColor" /></svg>
+      </button>
     </div>
 
-    <div class="style-showcase-cta">
-      <a href="/styles/" class="style-showcase-button">
+
+    <UiContainer class="style-showcase-cta">
+      <UiButton href="/styles/">
         Browse All Styles
         <svg viewBox="0 0 24 24"><path :d="mdiArrowRight" fill="currentColor" /></svg>
-      </a>
-    </div>
-  </section>
+      </UiButton>
+    </UiContainer>
+  </UiSection>
 </template>
 
 <style scoped>
-.style-showcase {
-  padding: 80px 0;
-  overflow: hidden;
-  background: var(--vp-c-bg-soft);
-}
-
 .style-showcase-header {
   text-align: center;
   padding: 0 24px;
-  margin-bottom: 48px;
+  margin-bottom: 56px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.style-showcase-badge {
-  display: inline-block;
-  padding: 6px 14px;
-  background: var(--vp-c-brand-soft);
-  color: var(--vp-c-brand-1);
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 16px;
+.style-showcase.visible .style-showcase-header {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.style-showcase-title {
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--vp-c-text-1);
-  margin: 0 0 16px;
-}
+
 
 .style-showcase-description {
-  font-size: 18px;
+  max-width: 550px;
+}
+
+.style-showcase-outer {
+  position: relative;
+  padding: 0 60px;
+}
+
+.style-showcase-wrapper {
+  overflow-x: clip;
+  overflow-y: visible;
+  mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+}
+
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--vp-c-bg);
+  border: 2px solid var(--vp-c-border);
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+  box-shadow: var(--vp-shadow-2);
+}
+
+.scroll-btn:hover {
+  border-color: var(--vp-c-brand-1);
+  background: var(--vp-c-brand-soft);
+}
+
+.scroll-btn svg {
+  width: 20px;
+  height: 20px;
   color: var(--vp-c-text-2);
-  margin: 0 auto;
-  max-width: 500px;
-  line-height: 1.6;
+  transition: color 0.2s ease;
+}
+
+.scroll-btn:hover svg {
+  color: var(--vp-c-brand-1);
+}
+
+.scroll-btn-left {
+  left: 24px;
+}
+
+.scroll-btn-right {
+  right: 24px;
 }
 
 .style-showcase-scroll {
-  overflow: hidden;
-  padding: 12px 0;
+  overflow: visible;
+  padding: 30px 0;
+  margin: -30px 0;
 }
 
 .style-showcase-track {
   display: flex;
-  gap: 16px;
+  gap: 24px;
   width: max-content;
+  transition: transform 0.1s linear;
 }
 
 .style-showcase-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   text-decoration: none;
-  transition: transform 0.2s ease;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .style-showcase-item:hover {
-  transform: translateY(-6px);
+  transform: translateY(-10px) scale(1.05);
 }
 
 .style-showcase-item::after {
@@ -175,17 +246,32 @@ onUnmounted(() => {
 }
 
 .style-showcase-avatar {
-  width: 92px;
-  height: 92px;
-  border-radius: 16px;
+  width: 116px;
+  height: 116px;
+  border-radius: 24px;
   overflow: hidden;
-  background: var(--vp-c-bg);
-  box-shadow: var(--vp-shadow-2);
-  transition: box-shadow 0.2s ease;
+  background: var(--vp-c-bg-soft);
+  box-shadow: var(--vp-shadow-3);
+  transition: all 0.3s ease;
+  position: relative;
 }
 
 .style-showcase-item:hover .style-showcase-avatar {
-  box-shadow: var(--vp-shadow-4);
+  box-shadow:
+    var(--vp-shadow-5),
+    0 0 40px -10px var(--vp-c-brand-1);
+}
+
+.avatar-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(22, 137, 204, 0.2));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.style-showcase-item:hover .avatar-glow {
+  opacity: 1;
 }
 
 .style-showcase-avatar img {
@@ -195,73 +281,48 @@ onUnmounted(() => {
 }
 
 .style-showcase-label {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--vp-c-text-3);
   font-weight: 500;
-  max-width: 92px;
+  max-width: 116px;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: color 0.3s ease;
+}
+
+.style-showcase-item:hover .style-showcase-label {
+  color: var(--vp-c-brand-1);
 }
 
 .style-showcase-cta {
   text-align: center;
-  margin-top: 48px;
+  margin-top: 40px;
 }
 
-.style-showcase-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  background: var(--vp-c-brand-3);
-  color: var(--vp-c-white);
-  border-radius: 8px;
-  font-weight: 500;
-  font-size: 16px;
-  text-decoration: none;
-  transition: background 0.2s ease;
-}
-
-.style-showcase-button:hover {
-  background: var(--vp-c-brand-2);
-}
-
-.style-showcase-button::after {
-  display: none !important;
-}
-
-.style-showcase-button svg {
-  width: 18px;
-  height: 18px;
-}
-
-@media (max-width: 640px) {
-  .style-showcase {
-    padding: 60px 0;
+@media (max-width: 768px) {
+  .style-showcase-outer {
+    padding: 0;
   }
 
-  .style-showcase-title {
-    font-size: 24px;
-  }
-
-  .style-showcase-description {
-    font-size: 16px;
+  .scroll-btn {
+    display: none;
   }
 
   .style-showcase-avatar {
-    width: 72px;
-    height: 72px;
-  }
-
-  .style-showcase-label {
-    max-width: 72px;
-    font-size: 11px;
+    width: 88px;
+    height: 88px;
+    border-radius: 18px;
   }
 
   .style-showcase-track {
-    gap: 12px;
+    gap: 16px;
+  }
+
+  .style-showcase-label {
+    max-width: 88px;
+    font-size: 11px;
   }
 }
 </style>
