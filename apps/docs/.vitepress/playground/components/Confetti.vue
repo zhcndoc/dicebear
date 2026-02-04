@@ -1,33 +1,35 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
+import confetti from 'canvas-confetti';
 
 const canvas = ref<HTMLCanvasElement>();
+const instance = computed(() => {
+  return canvas.value
+    ? confetti.create(canvas.value, {
+        resize: true,
+        disableForReducedMotion: true,
+      })
+    : undefined;
+});
 
-onMounted(async () => {
-  if (!canvas.value) return;
+watchEffect(() => {
+  if (instance.value) {
+    instance.value({
+      particleCount: 35,
+      angle: 60,
+      spread: 40,
+      startVelocity: 35,
+      origin: { x: -0.1, y: 0.8 },
+    });
 
-  const { default: confetti } = await import('canvas-confetti');
-
-  const instance = confetti.create(canvas.value, {
-    resize: true,
-    disableForReducedMotion: true,
-  });
-
-  instance({
-    particleCount: 35,
-    angle: 60,
-    spread: 40,
-    startVelocity: 35,
-    origin: { x: -0.1, y: 0.8 },
-  });
-
-  instance({
-    particleCount: 35,
-    angle: 120,
-    spread: 40,
-    startVelocity: 35,
-    origin: { x: 1.1, y: 0.8 },
-  });
+    instance.value({
+      particleCount: 35,
+      angle: 120,
+      spread: 40,
+      startVelocity: 35,
+      origin: { x: 1.1, y: 0.8 },
+    });
+  }
 });
 </script>
 

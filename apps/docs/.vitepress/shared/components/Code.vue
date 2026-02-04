@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue';
+import 'highlight.js/styles/base16/material-palenight.css';
+import hljs from 'highlight.js/lib/core';
+import javascript from 'highlight.js/lib/languages/javascript';
+import xml from 'highlight.js/lib/languages/xml';
 import copy from 'copy-to-clipboard';
 
 const props = defineProps<{
@@ -32,24 +36,15 @@ onBeforeUnmount(() => {
 });
 
 onMounted(async () => {
-  if (!props.lang) return;
-
-  const [{ default: hljs }, { default: javascript }, { default: xml }] =
-    await Promise.all([
-      import('highlight.js/lib/core'),
-      import('highlight.js/lib/languages/javascript'),
-      import('highlight.js/lib/languages/xml'),
-      // @ts-expect-error CSS module has no types
-      import('highlight.js/styles/base16/material-palenight.css'),
-    ]);
-
   hljs.getLanguage('js') || hljs.registerLanguage('js', javascript);
   hljs.getLanguage('html') || hljs.registerLanguage('html', xml);
 
-  codeHtml.value =
-    hljs.highlight(props.code, {
-      language: props.lang,
-    }).value ?? '';
+  if (props.lang) {
+    codeHtml.value =
+      hljs.highlight(props.code, {
+        language: props.lang,
+      }).value ?? '';
+  }
 });
 </script>
 

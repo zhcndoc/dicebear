@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { mdiClose, mdiContentCopy } from '@mdi/js';
-import { computed, ref } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 import copy from 'copy-to-clipboard';
+import { createAvatar } from '@dicebear/core';
 import useStore from '@playground/store';
-import { getAvatarApiUrl } from '@shared/utils/avatar';
+import { loadAvatarStyle } from '@shared/utils/avatar';
 import Avatar from '@shared/components/Avatar.vue';
 import LicenseText from './LicenseText.vue';
 import Confetti from './Confetti.vue';
@@ -24,11 +25,13 @@ const options = computed(() => {
 });
 
 async function onClick() {
-  const url = getAvatarApiUrl(store.avatarStyleName, { ...options.value, size: 512 }, 'svg');
-  const response = await fetch(url);
-  const svg = await response.text();
+  const avatarStyle = await loadAvatarStyle(store.avatarStyleName);
+  const avatar = createAvatar(avatarStyle, {
+    ...options.value,
+    size: 512,
+  });
 
-  const successful = copy(svg);
+  const successful = copy(avatar.toString());
 
   text.value = successful
     ? 'Your avatar was successfully copied! 🎉'

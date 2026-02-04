@@ -5,7 +5,6 @@
   },
   "type": "module",
   "scripts": {
-    "prebuild": "npx tsx scripts/extract-avatar-styles.ts",
     "dev": "vitepress dev .",
     "build": "vitepress build .",
     "preview": "vitepress preview ."

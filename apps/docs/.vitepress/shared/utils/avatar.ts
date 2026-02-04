@@ -1,4 +1,16 @@
+import { Style } from '@dicebear/core';
+import * as collection from '@dicebear/collection/async';
 import { kebabCase } from 'change-case';
+
+export function loadAvatarStyle(avatarStyle: string): Promise<Style<any>> {
+  // @ts-ignore
+  if (typeof collection[avatarStyle] === 'undefined') {
+    throw new Error(`Avatar style "${avatarStyle}" not found.`);
+  }
+
+  // @ts-ignore
+  return collection[avatarStyle]();
+}
 
 export function getAvatarApiUrl(
   avatarStyle: string,
