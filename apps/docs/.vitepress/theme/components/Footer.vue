@@ -40,7 +40,7 @@ const styles = computed(() => {
 <template>
   <div class="container" :class="{ 'has-sidebar': hasSidebar }">
     <div class="sponsor">
-      <p>Sponsored by</p>
+      <p>CDN Sponsored by</p>
       <a
         href="https://bunny.net/"
         target="_blank"

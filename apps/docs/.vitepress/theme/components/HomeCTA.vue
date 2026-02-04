@@ -21,7 +21,7 @@ import UiCard from './UiCard.vue';
 import { useVisibility } from '../composables/useVisibility';
 
 const { theme } = useData<ThemeOptions>();
-const isVisible = useVisibility('.cta');
+const isVisible = useVisibility('.cta', { once: false, threshold: 0.1 });
 
 const avatarStyleList = computed(() => Object.keys(theme.value.avatarStyles));
 
@@ -150,6 +150,11 @@ const links = {
   border-radius: 16px;
   overflow: hidden;
   animation: float-gentle 6s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.cta.visible .cta-bg-avatar {
+  animation-play-state: running;
 }
 
 @keyframes float-gentle {

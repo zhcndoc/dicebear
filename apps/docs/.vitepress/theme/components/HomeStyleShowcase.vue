@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { ThemeOptions } from '@shared/types';
 import { useData } from 'vitepress';
 import { kebabCase } from 'change-case';
@@ -15,7 +15,7 @@ import { useVisibility } from '../composables/useVisibility';
 
 const { theme } = useData<ThemeOptions>();
 
-const isVisible = useVisibility('.style-showcase');
+const isVisible = useVisibility('.style-showcase', { once: false, threshold: 0.1 });
 const avatarStyleList = computed(() => Object.keys(theme.value.avatarStyles));
 
 const seeds = ['Felix', 'Aneka', 'Milo', 'Luna', 'Max', 'Sophie', 'Leo', 'Emma', 'Noah', 'Aria', 'Zoe', 'Oscar'];
@@ -37,11 +37,15 @@ const showcaseAvatars = computed(() => {
 });
 
 const scrollPosition = ref(0);
-let animationFrame: number;
+let animationFrame: number | null = null;
 let isPaused = false;
 let scrollDirection = 1;
 
 function animate() {
+  if (!isVisible.value) {
+    animationFrame = null;
+    return;
+  }
   if (!isPaused) {
     scrollPosition.value += 0.5 * scrollDirection;
     const itemWidth = 140;
@@ -54,6 +58,12 @@ function animate() {
     }
   }
   animationFrame = requestAnimationFrame(animate);
+}
+
+function startAnimation() {
+  if (animationFrame === null && isVisible.value) {
+    animationFrame = requestAnimationFrame(animate);
+  }
 }
 
 function pauseAnimation() {
@@ -72,12 +82,22 @@ function scrollRight() {
   scrollPosition.value += 300;
 }
 
+watch(isVisible, (visible) => {
+  if (visible) {
+    startAnimation();
+  }
+});
+
 onMounted(() => {
-  animationFrame = requestAnimationFrame(animate);
+  if (isVisible.value) {
+    startAnimation();
+  }
 });
 
 onUnmounted(() => {
-  cancelAnimationFrame(animationFrame);
+  if (animationFrame !== null) {
+    cancelAnimationFrame(animationFrame);
+  }
 });
 </script>
 
@@ -225,7 +245,8 @@ onUnmounted(() => {
   display: flex;
   gap: 24px;
   width: max-content;
-  transition: transform 0.1s linear;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .style-showcase-item {

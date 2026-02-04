@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, reactive, watch, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import { ThemeOptions } from '@shared/types';
 import { useData } from 'vitepress';
 import { kebabCase, camelCase } from 'change-case';
@@ -23,9 +23,6 @@ const activeStyleIndex = ref(0);
 const activeTab = ref<'api' | 'js' | 'cli'>('api');
 const tabs = ['api', 'js', 'cli'] as const;
 const activeTabIndex = computed(() => tabs.indexOf(activeTab.value));
-const loadingAvatars = reactive<Record<string, boolean>>({});
-const mainAvatarLoading = ref(true);
-const isMounted = ref(false);
 
 const avatarStyleList = computed(() => Object.keys(theme.value.avatarStyles));
 
@@ -108,14 +105,6 @@ const docsLinkLabel = computed(() => {
   }
 });
 
-function onMainAvatarLoad() {
-  mainAvatarLoading.value = false;
-}
-
-function onAvatarLoad(style: string) {
-  loadingAvatars[style] = false;
-}
-
 function getAvatarKey(style: string) {
   return `${style}-${seed.value}`;
 }
@@ -129,32 +118,9 @@ function randomSeed() {
   seed.value = result;
 }
 
-function resetLoadingStates() {
-  mainAvatarLoading.value = true;
-  avatarStyleList.value.forEach(style => {
-    loadingAvatars[kebabCase(style)] = true;
-  });
-}
-
 function selectStyle(index: number) {
-  mainAvatarLoading.value = true;
   activeStyleIndex.value = index;
 }
-
-// Initialize loading states on mount
-onMounted(() => {
-  resetLoadingStates();
-  isMounted.value = true;
-});
-
-// Watch for seed changes from input (debounced effect)
-let seedTimeout: ReturnType<typeof setTimeout> | null = null;
-watch(seed, () => {
-  if (seedTimeout) clearTimeout(seedTimeout);
-  seedTimeout = setTimeout(() => {
-    resetLoadingStates();
-  }, 50);
-});
 
 function copyCode(tab: string, code: string) {
   navigator.clipboard.writeText(code);
@@ -193,14 +159,10 @@ function copyCode(tab: string, code: string) {
           <UiCard flex class="preview-card">
             <div class="preview-main">
               <div class="preview-avatar-wrapper">
-                <div v-if="mainAvatarLoading" class="preview-avatar-skeleton"></div>
                 <img
-                  v-if="isMounted"
                   :src="mainAvatar.src"
                   alt="Main avatar preview"
                   class="preview-avatar"
-                  :class="{ loading: mainAvatarLoading }"
-                  @load="onMainAvatarLoad"
                 />
               </div>
               <div class="preview-info">
@@ -218,14 +180,7 @@ function copyCode(tab: string, code: string) {
                 :class="{ active: index === activeStyleIndex }"
                 @click="selectStyle(index)"
               >
-                <div v-if="loadingAvatars[avatar.style] !== false" class="avatar-skeleton"></div>
-                <img
-                  v-if="isMounted"
-                  :src="avatar.src"
-                  :alt="avatar.style"
-                  :class="{ loading: loadingAvatars[avatar.style] !== false }"
-                  @load="onAvatarLoad(avatar.style)"
-                />
+                <img :src="avatar.src" :alt="avatar.style" />
               </button>
             </div>
           </UiCard>
@@ -525,53 +480,6 @@ function copyCode(tab: string, code: string) {
 .preview-style-btn.active {
   border-color: var(--vp-c-brand-1);
   box-shadow: 0 0 0 4px var(--vp-c-brand-soft);
-}
-
-/* Avatar Loading States */
-.preview-avatar-wrapper {
-  position: relative;
-}
-
-.preview-avatar-skeleton {
-  position: absolute;
-  inset: 0;
-  width: 140px;
-  height: 140px;
-  border-radius: 20px;
-  background: linear-gradient(90deg, var(--vp-c-bg-soft) 25%, var(--vp-c-bg) 50%, var(--vp-c-bg-soft) 75%);
-  background-size: 200% 100%;
-  animation: skeleton-loading 1.5s infinite;
-}
-
-.preview-avatar.loading {
-  opacity: 0;
-}
-
-.preview-style-btn {
-  position: relative;
-}
-
-.avatar-skeleton {
-  position: absolute;
-  inset: 0;
-  border-radius: 12px;
-  background: linear-gradient(90deg, var(--vp-c-bg-soft) 25%, var(--vp-c-bg) 50%, var(--vp-c-bg-soft) 75%);
-  background-size: 200% 100%;
-  animation: skeleton-loading 1.5s infinite;
-  z-index: 1;
-}
-
-.preview-style-btn img.loading {
-  opacity: 0;
-}
-
-@keyframes skeleton-loading {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
 }
 
 /* Control Card */
@@ -891,11 +799,6 @@ function copyCode(tab: string, code: string) {
 
 
   .preview-avatar {
-    width: 120px;
-    height: 120px;
-  }
-
-  .preview-avatar-skeleton {
     width: 120px;
     height: 120px;
   }

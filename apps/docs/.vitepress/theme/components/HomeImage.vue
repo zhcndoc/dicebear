@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ThemeOptions } from '@shared/types';
 import { useData } from 'vitepress';
-import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import randomItem from 'random-item';
 import nameList from '@shared/utils/name-list';
 import { kebabCase } from 'change-case';
 import Prando from 'prando';
 import randomInt from 'random-int';
+import { useVisibility } from '../composables/useVisibility';
 
 const GRADIENTS = [
   // MIT License - Copyright (c) 2017 Webkul
@@ -24,17 +25,20 @@ const prng = new Prando(123);
 
 const { theme } = useData<ThemeOptions>();
 const avatarStyleList = computed(() => Object.keys(theme.value.avatarStyles));
-const avatarList = ref(Array.from({ length: 26 }, () => createAvatar()));
-const avatarTimeout = ref();
+const avatarList = ref(Array.from({ length: 18 }, () => createAvatar()));
+const avatarTimeout = ref<ReturnType<typeof setTimeout>>();
+
+const isVisible = useVisibility('.wrapper', { once: false, threshold: 0.1 });
 
 const lastAvatarIndex = ref(0);
 const nextAvatar = ref(createAvatar());
 
-watchEffect(() => {
-  // Preload image
-  const image = new Image();
-  image.src = nextAvatar.value.src;
-});
+watch([nextAvatar, isVisible], ([avatar, visible]) => {
+  if (visible) {
+    const image = new Image();
+    image.src = avatar.src;
+  }
+}, { immediate: true });
 
 function createAvatar() {
   const avatarStyle = kebabCase(prng.nextArrayItem(avatarStyleList.value));
@@ -46,27 +50,35 @@ function createAvatar() {
   };
 }
 
+const excludedIndices = [0, 3, 4, 8, 12, 13, 17];
+
 function updateAvatar() {
   avatarTimeout.value = setTimeout(() => {
-    let index = 0;
+    if (isVisible.value) {
+      let index = 0;
 
-    while (
-      lastAvatarIndex.value === index ||
-      [0, 4, 5, 10, 15, 20, 21, 25].includes(index)
-    ) {
-      index = randomInt(0, 25);
+      while (
+        lastAvatarIndex.value === index ||
+        excludedIndices.includes(index)
+      ) {
+        index = randomInt(0, 17);
+      }
+
+      lastAvatarIndex.value = index;
+      avatarList.value[index] = nextAvatar.value;
+      nextAvatar.value = createAvatar();
     }
 
-    lastAvatarIndex.value = index;
-    avatarList.value[index] = nextAvatar.value;
-    nextAvatar.value = createAvatar();
-
     updateAvatar();
-  }, 1000);
+  }, 1500);
 }
 
 onMounted(() => updateAvatar());
-onUnmounted(() => clearTimeout(avatarTimeout.value));
+onUnmounted(() => {
+  if (avatarTimeout.value) {
+    clearTimeout(avatarTimeout.value);
+  }
+});
 </script>
 
 <template>
@@ -86,6 +98,7 @@ onUnmounted(() => clearTimeout(avatarTimeout.value));
           :src="avatar.src"
           :style="{ background: avatar.gradient }"
           class="image"
+          loading="lazy"
         />
       </Transition>
     </div>
@@ -112,29 +125,25 @@ onUnmounted(() => clearTimeout(avatarTimeout.value));
 .col {
   position: relative;
   flex: 0 0 auto;
-  width: calc(100% / 5);
+  width: calc(100% / 4);
   aspect-ratio: 1/1;
   padding: 6px;
 }
 
-.col:nth-child(n + 7) {
-  width: calc(100% / 6);
-}
-
-.col:nth-child(n + 13) {
+.col:nth-child(n + 6) {
   width: calc(100% / 5);
 }
 
-.col:nth-child(n + 17) {
-  width: calc(100% / 6);
+.col:nth-child(n + 11) {
+  width: calc(100% / 4);
 }
 
-.col:nth-child(n + 23) {
+.col:nth-child(n + 15) {
   width: calc(100% / 5);
 }
 
 .col-logo {
-  order: 25;
+  order: 17;
 }
 
 .image {

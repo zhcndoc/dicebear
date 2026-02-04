@@ -1,24 +1,40 @@
 <script setup lang="ts">
-import HomeHero from './HomeHero.vue';
-import HomeSeedDemo from './HomeSeedDemo.vue';
-import HomeStyleShowcase from './HomeStyleShowcase.vue';
-import HomeHighlights from './HomeHighlights.vue';
-import HomeEditor from './HomeEditor.vue';
-import HomeCreateStyle from './HomeCreateStyle.vue';
-import HomeOpenSource from './HomeOpenSource.vue';
-import HomeCTA from './HomeCTA.vue';
+import { defineAsyncComponent } from 'vue';
+
+const HomeHero = defineAsyncComponent(() => import('./HomeHero.vue'));
+const HomeSeedDemo = defineAsyncComponent(() => import('./HomeSeedDemo.vue'));
+const HomeStyleShowcase = defineAsyncComponent(() => import('./HomeStyleShowcase.vue'));
+const HomeHighlights = defineAsyncComponent(() => import('./HomeHighlights.vue'));
+const HomeEditor = defineAsyncComponent(() => import('./HomeEditor.vue'));
+const HomeCreateStyle = defineAsyncComponent(() => import('./HomeCreateStyle.vue'));
+const HomeOpenSource = defineAsyncComponent(() => import('./HomeOpenSource.vue'));
+const HomeCTA = defineAsyncComponent(() => import('./HomeCTA.vue'));
 </script>
 
 <template>
   <div class="home-content">
     <HomeHero />
-    <HomeSeedDemo />
-    <HomeStyleShowcase />
-    <HomeHighlights />
-    <HomeEditor />
-    <HomeCreateStyle />
-    <HomeOpenSource />
-    <HomeCTA />
+    <Suspense>
+      <HomeSeedDemo />
+    </Suspense>
+    <Suspense>
+      <HomeStyleShowcase />
+    </Suspense>
+    <Suspense>
+      <HomeHighlights />
+    </Suspense>
+    <Suspense>
+      <HomeEditor />
+    </Suspense>
+    <Suspense>
+      <HomeCreateStyle />
+    </Suspense>
+    <Suspense>
+      <HomeOpenSource />
+    </Suspense>
+    <Suspense>
+      <HomeCTA />
+    </Suspense>
   </div>
 </template>
 

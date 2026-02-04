@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { ThemeOptions } from '@shared/types';
 import { useData } from 'vitepress';
 import { kebabCase } from 'change-case';
 import Prando from 'prando';
 import { mdiPlay, mdiArrowRight, mdiChevronDown } from '@mdi/js';
 import UiButton from './UiButton.vue';
+import { useVisibility } from '../composables/useVisibility';
 
 const { theme } = useData<ThemeOptions>();
+
+const isVisible = useVisibility('.hero', { once: false, threshold: 0.1 });
 
 const prng = new Prando(777);
 const avatarStyleList = computed(() => Object.keys(theme.value.avatarStyles));
@@ -17,7 +20,7 @@ const mouseX = ref(0.5);
 const mouseY = ref(0.5);
 const targetMouseX = ref(0.5);
 const targetMouseY = ref(0.5);
-let animationFrameId: number;
+let animationFrameId: number | null = null;
 
 // Responsive grid size
 const screenSize = ref<'mobile' | 'tablet' | 'desktop'>('desktop');
@@ -42,7 +45,7 @@ const floatingAvatars = computed(() => {
   const gridConfig = {
     mobile: { cols: 5, rows: 5 },
     tablet: { cols: 6, rows: 5 },
-    desktop: { cols: 8, rows: 6 },
+    desktop: { cols: 7, rows: 6 },
   };
 
   const { cols, rows } = gridConfig[screenSize.value];
@@ -117,12 +120,21 @@ function handleMouseMove(e: MouseEvent) {
   targetMouseY.value = (e.clientY - rect.top) / rect.height;
 }
 
-// Smooth lerp animation for parallax
 function animateParallax() {
+  if (!isVisible.value) {
+    animationFrameId = null;
+    return;
+  }
   const lerp = 0.08;
   mouseX.value += (targetMouseX.value - mouseX.value) * lerp;
   mouseY.value += (targetMouseY.value - mouseY.value) * lerp;
   animationFrameId = requestAnimationFrame(animateParallax);
+}
+
+function startParallax() {
+  if (animationFrameId === null) {
+    animationFrameId = requestAnimationFrame(animateParallax);
+  }
 }
 
 function scrollToContent() {
@@ -132,17 +144,27 @@ function scrollToContent() {
   }
 }
 
+watch(isVisible, (visible) => {
+  if (visible) {
+    startParallax();
+  }
+});
+
 onMounted(() => {
   updateScreenSize();
   window.addEventListener('resize', updateScreenSize);
   typeWriter();
-  animateParallax();
+  if (isVisible.value) {
+    startParallax();
+  }
 });
 
 onUnmounted(() => {
   window.removeEventListener('resize', updateScreenSize);
   clearTimeout(typewriterTimeout);
-  cancelAnimationFrame(animationFrameId);
+  if (animationFrameId !== null) {
+    cancelAnimationFrame(animationFrameId);
+  }
 });
 </script>
 
@@ -291,6 +313,8 @@ onUnmounted(() => {
   border-radius: 16px;
   overflow: hidden;
   will-change: transform;
+  transform: translateZ(0);
+  contain: layout style paint;
 }
 
 .floating-avatar img {
