@@ -24,8 +24,12 @@ defineProps<{
 
 <style scoped>
 .ui-card {
-  border: 1px solid var(--vp-c-border);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .ui-card {
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 /* Variants */
@@ -91,16 +95,11 @@ defineProps<{
 
 .ui-card.hoverable:hover {
   transform: translateY(-8px);
-  border-color: transparent;
-  box-shadow:
-    0 20px 40px -12px rgba(0, 0, 0, 0.15),
-    0 0 0 1px var(--vp-c-border);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
 }
 
 .dark .ui-card.hoverable:hover {
-  box-shadow:
-    0 20px 40px -12px rgba(0, 0, 0, 0.4),
-    0 0 0 1px var(--vp-c-border);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.4);
 }
 
 /* Responsive */

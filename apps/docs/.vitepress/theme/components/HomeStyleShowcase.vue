@@ -102,7 +102,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <UiSection class="style-showcase" :class="{ visible: isVisible }" background="soft" no-padding divider divider-bottom>
+  <UiSection class="style-showcase" :class="{ visible: isVisible }" background="soft" no-padding divider>
     <UiContainer class="style-showcase-header">
       <UiBadge>Explore the Collection</UiBadge>
       <UiHeadline><span class="highlight">30+</span> Unique Avatar Styles</UiHeadline>

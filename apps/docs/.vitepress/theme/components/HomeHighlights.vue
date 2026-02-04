@@ -9,11 +9,11 @@ import UiCard from './UiCard.vue';
 import {
   mdiPalette,
   mdiTargetAccount,
-  mdiGithub,
   mdiLightningBolt,
   mdiTune,
   mdiPackageVariant,
 } from '@mdi/js';
+import { siGithub } from 'simple-icons';
 import { useVisibility } from '../composables/useVisibility';
 
 const isVisible = useVisibility('.highlights', { threshold: 0.15 });
@@ -32,10 +32,10 @@ const highlights = [
     color: '#1689cc',
   },
   {
-    icon: mdiGithub,
+    icon: siGithub.path,
     title: '100% Open Source',
     description: 'MIT licensed core, transparent development. Contribute, fork, or self-host with confidence.',
-    color: '#64748b',
+    color: `#${siGithub.hex}`,
   },
   {
     icon: mdiLightningBolt,
@@ -59,7 +59,7 @@ const highlights = [
 </script>
 
 <template>
-  <UiSection class="highlights" :class="{ visible: isVisible }" divider>
+  <UiSection class="highlights" :class="{ visible: isVisible }" background="soft" divider>
     <UiContainer class="highlights-container">
       <div class="highlights-header">
         <UiBadge>Why DiceBear?</UiBadge>
@@ -90,33 +90,10 @@ const highlights = [
       </div>
     </UiContainer>
 
-    <!-- Decorative background elements -->
-    <div class="highlights-bg">
-      <div class="bg-grid"></div>
-    </div>
   </UiSection>
 </template>
 
 <style scoped>
-.highlights-bg {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.bg-grid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(var(--vp-c-border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--vp-c-border) 1px, transparent 1px);
-  background-size: 60px 60px;
-  opacity: 0.3;
-  mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent);
-  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent);
-}
-
 .highlights-container {
   position: relative;
   z-index: 1;

@@ -204,7 +204,7 @@ onUnmounted(() => {
 
       <p class="hero-description">
         Generate beautiful, unique avatars from any string.
-        <span class="hero-highlight" style="white-space: nowrap">30+ styles</span>&nbsp;crafted by talented designers.
+        <span class="hero-highlight" style="white-space: nowrap">30+ styles</span>&nbsp;crafted by talented artists.
         Free&nbsp;API, JavaScript&nbsp;library &amp; CLI.
       </p>
 

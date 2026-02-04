@@ -8,10 +8,10 @@ import {
   mdiPlay,
   mdiBookOpenPageVariant,
   mdiViewGrid,
-  mdiGithub,
   mdiPencil,
   mdiArrowRight,
 } from '@mdi/js';
+import { siGithub } from 'simple-icons';
 import UiButton from './UiButton.vue';
 import UiHeadline from './UiHeadline.vue';
 import UiDescription from './UiDescription.vue';
@@ -54,7 +54,7 @@ const links = {
     { icon: mdiViewGrid, label: 'All Styles', href: '/styles/' },
   ],
   resources: [
-    { icon: mdiGithub, label: 'GitHub', href: 'https://github.com/dicebear/dicebear', external: true },
+    { icon: siGithub.path, label: 'GitHub', href: 'https://github.com/dicebear/dicebear', external: true },
     { icon: mdiPencil, label: 'Editor', href: 'https://editor.dicebear.com', external: true },
   ],
 };

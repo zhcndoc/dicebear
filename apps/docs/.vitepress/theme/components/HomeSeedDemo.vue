@@ -10,7 +10,6 @@ import UiDescription from './UiDescription.vue';
 import UiBadge from './UiBadge.vue';
 import UiContainer from './UiContainer.vue';
 import UiSection from './UiSection.vue';
-import UiIconBox from './UiIconBox.vue';
 import UiCard from './UiCard.vue';
 import { useVisibility } from '../composables/useVisibility';
 
@@ -160,7 +159,6 @@ function copyCode(tab: string, code: string) {
 <template>
   <UiSection class="seed-demo" :class="{ visible: isVisible }">
     <div class="seed-demo-bg">
-      <div class="seed-demo-grid"></div>
       <div class="seed-demo-glow"></div>
     </div>
 
@@ -310,35 +308,6 @@ function copyCode(tab: string, code: string) {
         </div>
       </div>
 
-      <div class="seed-demo-features">
-        <div class="feature-item">
-          <UiIconBox size="md">
-            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" fill="currentColor" /></svg>
-          </UiIconBox>
-          <div class="feature-text">
-            <strong>No storage needed</strong>
-            <span>Generate on-the-fly</span>
-          </div>
-        </div>
-        <div class="feature-item">
-          <UiIconBox size="md">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor" /></svg>
-          </UiIconBox>
-          <div class="feature-text">
-            <strong>100% consistent</strong>
-            <span>Across all platforms</span>
-          </div>
-        </div>
-        <div class="feature-item">
-          <UiIconBox size="md">
-            <svg viewBox="0 0 24 24"><path d="M13 2.05v2.02c3.95.49 7 3.85 7 7.93 0 3.21-1.92 6-4.72 7.28L13 17v5h5l-1.22-1.22C19.91 19.07 22 15.76 22 12c0-5.18-3.95-9.45-9-9.95zM11 2.05c-5.05.5-9 4.77-9 9.95 0 3.76 2.09 7.07 5.22 8.78L6 22h5v-5l-2.28 2.28C6.92 18 5 15.21 5 12c0-4.08 3.05-7.44 7-7.93V2.05z" fill="currentColor" /></svg>
-          </UiIconBox>
-          <div class="feature-text">
-            <strong>Always reproducible</strong>
-            <span>Same input, same output</span>
-          </div>
-        </div>
-      </div>
     </UiContainer>
   </UiSection>
 </template>
@@ -348,18 +317,6 @@ function copyCode(tab: string, code: string) {
   position: absolute;
   inset: 0;
   pointer-events: none;
-}
-
-.seed-demo-grid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(var(--vp-c-border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--vp-c-border) 1px, transparent 1px);
-  background-size: 40px 40px;
-  opacity: 0.3;
-  mask-image: radial-gradient(ellipse 70% 50% at 50% 50%, black, transparent);
-  -webkit-mask-image: radial-gradient(ellipse 70% 50% at 50% 50%, black, transparent);
 }
 
 .seed-demo-glow {
@@ -413,7 +370,6 @@ function copyCode(tab: string, code: string) {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 32px;
-  margin-bottom: 64px;
   align-items: stretch;
 }
 
@@ -483,12 +439,16 @@ function copyCode(tab: string, code: string) {
   aspect-ratio: 1;
   width: 100%;
   padding: 0;
-  border: 2px solid transparent;
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: 14px;
   background: var(--vp-c-bg);
   cursor: pointer;
   transition: all 0.2s ease;
   overflow: hidden;
+}
+
+.dark .preview-style-btn {
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 .preview-style-btn img {
@@ -498,13 +458,17 @@ function copyCode(tab: string, code: string) {
 }
 
 .preview-style-btn:hover {
-  border-color: var(--vp-c-border);
   transform: translateY(-2px);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+.dark .preview-style-btn:hover {
+  border-color: var(--vp-c-border);
 }
 
 .preview-style-btn.active {
   border-color: var(--vp-c-brand-1);
-  box-shadow: 0 0 0 4px var(--vp-c-brand-soft);
+  box-shadow: 0 0 0 2px var(--vp-c-brand-soft);
 }
 
 /* Control Card */
@@ -534,7 +498,7 @@ function copyCode(tab: string, code: string) {
   font-size: 16px;
   font-family: var(--vp-font-family-mono);
   background: var(--vp-c-bg);
-  border: 2px solid var(--vp-c-border);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   color: var(--vp-c-text-1);
   outline: none;
@@ -542,9 +506,13 @@ function copyCode(tab: string, code: string) {
   min-width: 0;
 }
 
+.dark .seed-input {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
 .seed-input:focus {
   border-color: var(--vp-c-brand-1);
-  box-shadow: 0 0 0 4px var(--vp-c-brand-soft);
+  box-shadow: 0 0 0 3px var(--vp-c-brand-soft);
 }
 
 .seed-input::placeholder {
@@ -558,16 +526,20 @@ function copyCode(tab: string, code: string) {
   align-items: center;
   justify-content: center;
   background: var(--vp-c-bg);
-  border: 2px solid var(--vp-c-border);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
   flex-shrink: 0;
 }
 
+.dark .seed-random-btn {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
 .seed-random-btn:hover {
-  border-color: var(--vp-c-brand-1);
   background: var(--vp-c-brand-soft);
+  border-color: transparent;
 }
 
 .seed-random-btn:active {
@@ -648,7 +620,6 @@ function copyCode(tab: string, code: string) {
   align-items: flex-start;
   gap: 10px;
   background: var(--vp-c-bg);
-  border: 1px solid var(--vp-c-border);
   border-radius: 12px;
   padding: 14px 16px;
   min-height: 60px;
@@ -760,37 +731,6 @@ function copyCode(tab: string, code: string) {
   transform: translateX(4px);
 }
 
-/* Features */
-.seed-demo-features {
-  display: flex;
-  justify-content: center;
-  gap: 48px;
-  padding-top: 32px;
-  border-top: 1px solid var(--vp-c-border);
-}
-
-.feature-item {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.feature-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.feature-text strong {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--vp-c-text-1);
-}
-
-.feature-text span {
-  font-size: 13px;
-  color: var(--vp-c-text-3);
-}
 
 /* Responsive */
 @media (max-width: 900px) {
@@ -799,11 +739,6 @@ function copyCode(tab: string, code: string) {
     gap: 24px;
   }
 
-  .seed-demo-features {
-    flex-direction: column;
-    gap: 20px;
-    align-items: flex-start;
-  }
 
   .seed-demo-title {
     font-size: 32px;
@@ -841,13 +776,6 @@ function copyCode(tab: string, code: string) {
     border-radius: 10px;
   }
 
-  .seed-demo-features {
-    padding: 24px;
-    background: var(--vp-c-bg-soft);
-    border-radius: 16px;
-    border: 1px solid var(--vp-c-border);
-    margin-top: -32px;
-  }
 
   .code-tabs {
     flex-wrap: wrap;

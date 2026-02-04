@@ -46,18 +46,27 @@ defineProps<{
 .ui-button.primary {
   background: linear-gradient(135deg, var(--vp-c-brand-1) 0%, var(--vp-c-brand-2) 100%);
   color: white;
-  box-shadow: 0 4px 20px rgba(22, 137, 204, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.dark .ui-button.primary {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .ui-button.primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(22, 137, 204, 0.5);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.dark .ui-button.primary:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
 }
 
 /* Secondary variant */
 .ui-button.secondary {
   background: var(--vp-c-bg);
   color: var(--vp-c-text-1);
+  padding: 14px 30px;
   border: 2px solid var(--vp-c-border);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
@@ -77,20 +86,25 @@ defineProps<{
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
 }
 
-.ui-button.secondary:hover :deep(svg) {
-  transform: translateX(4px);
-}
 
 /* GitHub variant */
 .ui-button.github {
   background: var(--vp-c-text-1);
   color: var(--vp-c-bg);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.dark .ui-button.github {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .ui-button.github:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.dark .ui-button.github:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
 }
 
 @media (max-width: 768px) {

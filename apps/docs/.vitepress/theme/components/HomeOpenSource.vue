@@ -3,9 +3,9 @@ import {
   mdiStar,
   mdiAccountGroup,
   mdiPalette,
-  mdiGithub,
   mdiHeart,
 } from '@mdi/js';
+import { siGithub } from 'simple-icons';
 import UiButton from './UiButton.vue';
 import UiHeadline from './UiHeadline.vue';
 import UiDescription from './UiDescription.vue';
@@ -25,10 +25,6 @@ const stats = [
 
 <template>
   <UiSection class="opensource" :class="{ visible: isVisible }" background="soft" divider>
-    <div class="opensource-bg">
-      <div class="bg-pattern"></div>
-    </div>
-
     <UiContainer size="narrow" class="opensource-container">
       <UiHeadline>Free and <span class="highlight">Open Source</span>. Forever.</UiHeadline>
 
@@ -59,7 +55,7 @@ const stats = [
           variant="github"
           :external="true"
         >
-          <svg viewBox="0 0 24 24"><path :d="mdiGithub" fill="currentColor" /></svg>
+          <svg viewBox="0 0 24 24"><path :d="siGithub.path" fill="currentColor" /></svg>
           Star on GitHub
         </UiButton>
         <UiButton
@@ -78,22 +74,6 @@ const stats = [
 <style scoped>
 .opensource {
   text-align: center;
-}
-
-.opensource-bg {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.bg-pattern {
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle at 1px 1px, var(--vp-c-border) 1px, transparent 0);
-  background-size: 40px 40px;
-  opacity: 0.5;
-  mask-image: radial-gradient(ellipse 70% 50% at 50% 50%, black, transparent);
-  -webkit-mask-image: radial-gradient(ellipse 70% 50% at 50% 50%, black, transparent);
 }
 
 .opensource-container {

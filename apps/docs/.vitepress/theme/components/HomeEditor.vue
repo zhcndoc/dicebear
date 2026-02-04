@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref, computed } from 'vue';
 import {
   mdiGestureTap,
   mdiPalette,
@@ -17,18 +18,94 @@ import { useVisibility } from '../composables/useVisibility';
 
 const isVisible = useVisibility('.editor-section');
 
-// Background colors matching the editor screenshot
+// Tab configuration
+const tabs = ['Background', 'Hair', 'Eyes', 'Nose', 'Mouth'];
+const activeTab = ref(0);
+
+// Current avatar options
+const currentOptions = ref({
+  backgroundColor: 'ffd5dc',
+  hair: '',
+  eyes: '',
+  nose: '',
+  mouth: '',
+});
+
+// Background colors
 const bgColors = [
-  '#ffd5dc', '#f8bbd9', '#e1bee7', '#d1c4e9',
-  '#c5cae9', '#bbdefb', '#b2ebf2', '#b2dfdb',
-  '#c8e6c9', '#dcedc8', '#f0f4c3', '#fff9c4',
+  'ffd5dc', 'f8bbd9', 'e1bee7', 'd1c4e9',
+  'c5cae9', 'bbdefb', 'b2ebf2', 'b2dfdb',
+  'c8e6c9', 'dcedc8',
 ];
 
-// Generate showcase avatars with different background colors
-const showcaseAvatars = bgColors.slice(0, 10).map((bg, i) => ({
-  src: `https://api.dicebear.com/9.x/lorelei/svg?seed=editorUser&backgroundColor=${bg.replace('#', '')}`,
-  bg,
-}));
+// Variants for each category
+const variants = {
+  hair: ['variant01', 'variant02', 'variant03', 'variant04', 'variant05', 'variant06', 'variant07', 'variant08', 'variant09', 'variant10'],
+  eyes: ['variant01', 'variant02', 'variant03', 'variant04', 'variant05', 'variant06', 'variant07', 'variant08', 'variant09', 'variant10'],
+  nose: ['variant01', 'variant02', 'variant03', 'variant04', 'variant05', 'variant06'],
+  mouth: ['happy01', 'happy02', 'happy03', 'happy04', 'happy05', 'happy06', 'happy07', 'happy08', 'happy09', 'happy10'],
+};
+
+// Darken a hex color by a percentage
+function darkenColor(hex: string, percent: number): string {
+  const num = parseInt(hex, 16);
+  const r = Math.max(0, Math.floor((num >> 16) * (1 - percent)));
+  const g = Math.max(0, Math.floor(((num >> 8) & 0x00ff) * (1 - percent)));
+  const b = Math.max(0, Math.floor((num & 0x0000ff) * (1 - percent)));
+  return ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
+}
+
+// Canvas background (slightly darker than avatar background)
+const canvasBackground = computed(() => `#${darkenColor(currentOptions.value.backgroundColor, 0.15)}`);
+
+// Build avatar URL from options
+function buildAvatarUrl(options: typeof currentOptions.value) {
+  const params = new URLSearchParams();
+  params.set('seed', 'editorUser');
+  if (options.backgroundColor) params.set('backgroundColor', options.backgroundColor);
+  if (options.hair) params.set('hair', options.hair);
+  if (options.eyes) params.set('eyes', options.eyes);
+  if (options.nose) params.set('nose', options.nose);
+  if (options.mouth) params.set('mouth', options.mouth);
+  return `https://api.dicebear.com/9.x/lorelei/svg?${params.toString()}`;
+}
+
+// Main avatar URL
+const mainAvatarUrl = computed(() => buildAvatarUrl(currentOptions.value));
+
+// Panel items based on active tab
+const panelItems = computed(() => {
+  const tab = tabs[activeTab.value].toLowerCase();
+
+  if (tab === 'background') {
+    return bgColors.map(color => ({
+      id: color,
+      src: buildAvatarUrl({ ...currentOptions.value, backgroundColor: color }),
+      selected: currentOptions.value.backgroundColor === color,
+    }));
+  }
+
+  const key = tab as keyof typeof variants;
+  const variantList = variants[key] || [];
+
+  return variantList.map(variant => ({
+    id: variant,
+    src: buildAvatarUrl({ ...currentOptions.value, [key]: variant }),
+    selected: currentOptions.value[key] === variant,
+  }));
+});
+
+// Handle item selection
+function selectItem(id: string) {
+  const tab = tabs[activeTab.value].toLowerCase();
+
+  if (tab === 'background') {
+    currentOptions.value.backgroundColor = id;
+  } else {
+    const key = tab as keyof typeof currentOptions.value;
+    currentOptions.value[key] = currentOptions.value[key] === id ? '' : id;
+  }
+}
 
 const features = [
   {
@@ -47,8 +124,6 @@ const features = [
     description: 'Save your avatar and use it anywhere you like.',
   },
 ];
-
-const tabs = ['Style', 'Background', 'Hair', 'Eyes', 'Nose', 'Mouth'];
 </script>
 
 <template>
@@ -57,12 +132,11 @@ const tabs = ['Style', 'Background', 'Hair', 'Eyes', 'Nose', 'Mouth'];
       <div class="editor-preview">
         <UiWindow variant="light" title="DiceBear Editor">
           <!-- Main avatar preview -->
-          <div class="editor-canvas">
-            <div class="avatar-preview">
+          <div class="editor-canvas" :style="{ backgroundColor: canvasBackground }">
+            <div class="avatar-preview" :style="{ backgroundColor: `#${currentOptions.backgroundColor}` }">
               <img
-                src="https://api.dicebear.com/9.x/lorelei/svg?seed=editorUser&backgroundColor=ffd5dc"
+                :src="mainAvatarUrl"
                 alt="Avatar Preview"
-                loading="lazy"
               />
             </div>
           </div>
@@ -70,34 +144,36 @@ const tabs = ['Style', 'Background', 'Hair', 'Eyes', 'Nose', 'Mouth'];
           <!-- Bottom panel with tabs and options -->
           <div class="editor-panel">
             <div class="panel-tabs">
-              <span
+              <button
                 v-for="(tab, index) in tabs"
                 :key="tab"
-                :class="['panel-tab', { active: index === 1 }]"
+                :class="['panel-tab', { active: index === activeTab }]"
+                @click="activeTab = index"
               >
                 {{ tab }}
-              </span>
+              </button>
             </div>
             <div class="panel-grid">
-              <div
-                v-for="(avatar, index) in showcaseAvatars"
-                :key="index"
-                :class="['panel-avatar', { selected: index === 0 }]"
+              <button
+                v-for="(item, index) in panelItems"
+                :key="`${activeTab}-${item.id}`"
+                :class="['panel-avatar', { selected: item.selected }]"
                 :style="{ animationDelay: `${index * 0.05}s` }"
+                @click="selectItem(item.id)"
               >
-                <img :src="avatar.src" :alt="`Variant ${index + 1}`" loading="lazy" />
-              </div>
+                <img :src="item.src" :alt="`Variant ${index + 1}`" />
+              </button>
             </div>
           </div>
         </UiWindow>
       </div>
 
       <div class="editor-content">
-        <UiBadge variant="brand">Avatar Editor</UiBadge>
-        <UiHeadline class="editor-title-text">Create Your <span class="highlight">Perfect</span> Avatar</UiHeadline>
+        <UiBadge variant="brand">Visual Editor</UiBadge>
+        <UiHeadline class="editor-title-text">Design Avatars <span class="highlight">Without Code</span></UiHeadline>
         <UiDescription class="editor-description">
-          Design your unique avatar with our easy-to-use visual editor.
-          No technical skills needed - just pick and click to customize every detail.
+          No developer? No problem! Our visual editor lets anyone create custom avatars
+          without writing a single line of code. Just pick, click, and download.
         </UiDescription>
 
         <div class="editor-features">
@@ -130,6 +206,8 @@ const tabs = ['Style', 'Background', 'Hair', 'Eyes', 'Nose', 'Mouth'];
 
 <style scoped>
 .editor-container {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: 80px;
@@ -155,7 +233,7 @@ const tabs = ['Style', 'Background', 'Hair', 'Eyes', 'Nose', 'Mouth'];
   justify-content: center;
   padding: 32px;
   min-height: 200px;
-  background: #f0b6f3;
+  transition: background-color 0.3s ease;
 }
 
 .avatar-preview {
@@ -165,6 +243,7 @@ const tabs = ['Style', 'Background', 'Hair', 'Eyes', 'Nose', 'Mouth'];
   border-radius: 24px;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
 }
 
 .avatar-preview img {
@@ -195,7 +274,15 @@ const tabs = ['Style', 'Background', 'Hair', 'Eyes', 'Nose', 'Mouth'];
   color: var(--vp-c-text-2);
   white-space: nowrap;
   border-radius: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
   transition: all 0.2s ease;
+}
+
+.panel-tab:hover {
+  color: var(--vp-c-text-1);
+  background: var(--vp-c-bg-soft);
 }
 
 .panel-tab.active {
@@ -215,10 +302,23 @@ const tabs = ['Style', 'Background', 'Hair', 'Eyes', 'Nose', 'Mouth'];
   overflow: hidden;
   opacity: 0;
   transform: scale(0.9);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.panel-avatar:hover {
+  transform: scale(1.05);
 }
 
 .panel-avatar.selected {
   box-shadow: 0 0 0 3px var(--vp-c-brand-1);
+}
+
+.panel-avatar.selected:hover {
+  transform: scale(1);
 }
 
 .editor-section.visible .panel-avatar {

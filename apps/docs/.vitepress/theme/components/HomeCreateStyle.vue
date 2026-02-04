@@ -30,12 +30,13 @@ const steps = [
 <template>
   <UiSection class="create-style-section" :class="{ visible: isVisible }" divider>
     <div class="create-style-bg">
+      <div class="bg-grid"></div>
       <div class="bg-gradient"></div>
     </div>
 
     <UiContainer class="create-style-container">
       <div class="create-style-header">
-        <UiBadge variant="green">For Designers</UiBadge>
+        <UiBadge variant="green">For Artists</UiBadge>
         <UiHeadline>Create Your Own Style <span class="highlight">with Figma</span></UiHeadline>
         <UiDescription class="create-style-description">
           Design your avatar style visually in Figma. Our plugin handles the
@@ -143,6 +144,20 @@ const steps = [
   position: absolute;
   inset: 0;
   pointer-events: none;
+  overflow: hidden;
+}
+
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--vp-c-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--vp-c-border) 1px, transparent 1px);
+  background-size: 60px 60px;
+  background-repeat: repeat !important;
+  opacity: 0.3;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent);
 }
 
 .bg-gradient {
