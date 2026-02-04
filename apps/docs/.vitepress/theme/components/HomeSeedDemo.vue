@@ -16,6 +16,31 @@ import { useVisibility } from '../composables/useVisibility';
 
 const { theme } = useData<ThemeOptions>();
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function escapeJsString(str: string): string {
+  return str
+    .replace(/\\/g, '\\\\')
+    .replace(/'/g, "\\'")
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '\\r');
+}
+
+function escapeShellArg(str: string): string {
+  return str
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
+    .replace(/\$/g, '\\$')
+    .replace(/`/g, '\\`');
+}
+
 const seed = ref('Felix');
 const isVisible = useVisibility('.seed-demo');
 const copiedTab = ref<string | null>(null);
@@ -42,12 +67,12 @@ const allAvatars = computed(() =>
 
 // Syntax highlighted code examples
 const apiExampleHtml = computed(() => {
-  const seedVal = seed.value || 'DiceBear';
+  const seedVal = escapeHtml(encodeURIComponent(seed.value || 'DiceBear'));
   return `<span class="hl-url">https://api.dicebear.com/9.x/${currentStyle.value}/svg</span><span class="hl-param">?seed=</span><span class="hl-string">${seedVal}</span>`;
 });
 
 const jsExampleHtml = computed(() => {
-  const seedVal = seed.value || 'DiceBear';
+  const seedVal = escapeHtml(escapeJsString(seed.value || 'DiceBear'));
   return `<span class="hl-keyword">import</span> { <span class="hl-variable">createAvatar</span> } <span class="hl-keyword">from</span> <span class="hl-string">'@dicebear/core'</span>;
 <span class="hl-keyword">import</span> <span class="hl-operator">*</span> <span class="hl-keyword">as</span> <span class="hl-variable">${currentStyleCamel.value}</span> <span class="hl-keyword">from</span> <span class="hl-string">'@dicebear/${currentStyle.value}'</span>;
 
@@ -57,13 +82,13 @@ const jsExampleHtml = computed(() => {
 });
 
 const cliExampleHtml = computed(() => {
-  const seedVal = seed.value || 'DiceBear';
+  const seedVal = escapeHtml(escapeShellArg(seed.value || 'DiceBear'));
   return `<span class="hl-command">npx</span> <span class="hl-argument">dicebear</span> <span class="hl-variable">${currentStyle.value}</span> <span class="hl-flag">--seed</span> <span class="hl-string">"${seedVal}"</span>`;
 });
 
 // Plain text for copy
 const apiExample = computed(() =>
-  `https://api.dicebear.com/9.x/${currentStyle.value}/svg?seed=${seed.value || 'DiceBear'}`
+  `https://api.dicebear.com/9.x/${currentStyle.value}/svg?seed=${encodeURIComponent(seed.value || 'DiceBear')}`
 );
 
 const jsExample = computed(() =>
@@ -71,12 +96,12 @@ const jsExample = computed(() =>
 import * as ${currentStyleCamel.value} from '@dicebear/${currentStyle.value}';
 
 const avatar = createAvatar(${currentStyleCamel.value}, {
-  seed: '${seed.value || 'DiceBear'}'
+  seed: '${escapeJsString(seed.value || 'DiceBear')}'
 });`
 );
 
 const cliExample = computed(() =>
-  `npx dicebear ${currentStyle.value} --seed "${seed.value || 'DiceBear'}"`
+  `npx dicebear ${currentStyle.value} --seed "${escapeShellArg(seed.value || 'DiceBear')}"`
 );
 
 const docsLink = computed(() => {
