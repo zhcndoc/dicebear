@@ -1,11 +1,11 @@
 import { capitalCase, kebabCase } from 'change-case';
-import * as collection from '@dicebear/collection';
 import { DefaultTheme } from 'vitepress';
+import avatarStyles from './avatarStyles';
 
 const sidebar: DefaultTheme.SidebarItem[] = [
   {
     text: 'Styles',
-    items: Object.keys(collection).map((styleName) => ({
+    items: Object.keys(avatarStyles).map((styleName) => ({
       text: capitalCase(styleName),
       link: `/styles/${kebabCase(styleName)}/`,
     })),

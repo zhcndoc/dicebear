@@ -9,8 +9,7 @@ import {
 } from '@mdi/js';
 import { computed, mergeProps, ref } from 'vue';
 import useStore from '@playground/store';
-import { getAvatarApiUrl, loadAvatarStyle } from '@shared/utils/avatar';
-import { createAvatar } from '@dicebear/core';
+import { getAvatarApiUrl } from '@shared/utils/avatar';
 import Avatar from '@shared/components/Avatar.vue';
 import LicenseText from './LicenseText.vue';
 import Confetti from './Confetti.vue';
