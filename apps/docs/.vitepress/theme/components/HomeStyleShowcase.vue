@@ -41,15 +41,49 @@ let animationFrame: number | null = null;
 let isPaused = false;
 let scrollDirection = 1;
 
+// Smooth scroll animation state
+let isManualScrolling = false;
+let scrollStartPosition = 0;
+let scrollTargetPosition = 0;
+let scrollStartTime = 0;
+const scrollDuration = 400; // ms
+
+function easeOutCubic(t: number): number {
+  return 1 - Math.pow(1 - t, 3);
+}
+
+function getTotalWidth() {
+  const itemWidth = 140;
+  return showcaseAvatars.value.length * itemWidth;
+}
+
 function animate() {
   if (!isVisible.value) {
     animationFrame = null;
     return;
   }
-  if (!isPaused) {
+
+  if (isManualScrolling) {
+    const elapsed = Date.now() - scrollStartTime;
+    const progress = Math.min(elapsed / scrollDuration, 1);
+    const easedProgress = easeOutCubic(progress);
+
+    scrollPosition.value = scrollStartPosition + (scrollTargetPosition - scrollStartPosition) * easedProgress;
+
+    if (progress >= 1) {
+      isManualScrolling = false;
+      // Normalize position after manual scroll
+      const totalWidth = getTotalWidth();
+      if (scrollPosition.value >= totalWidth) {
+        scrollPosition.value = scrollPosition.value % totalWidth;
+      }
+      if (scrollPosition.value < 0) {
+        scrollPosition.value = totalWidth + (scrollPosition.value % totalWidth);
+      }
+    }
+  } else if (!isPaused) {
     scrollPosition.value += 0.5 * scrollDirection;
-    const itemWidth = 140;
-    const totalWidth = showcaseAvatars.value.length * itemWidth;
+    const totalWidth = getTotalWidth();
     if (scrollPosition.value >= totalWidth) {
       scrollPosition.value = 0;
     }
@@ -74,12 +108,19 @@ function resumeAnimation() {
   isPaused = false;
 }
 
+function smoothScroll(delta: number) {
+  scrollStartPosition = scrollPosition.value;
+  scrollTargetPosition = scrollPosition.value + delta;
+  scrollStartTime = Date.now();
+  isManualScrolling = true;
+}
+
 function scrollLeft() {
-  scrollPosition.value -= 300;
+  smoothScroll(-300);
 }
 
 function scrollRight() {
-  scrollPosition.value += 300;
+  smoothScroll(300);
 }
 
 watch(isVisible, (visible) => {
