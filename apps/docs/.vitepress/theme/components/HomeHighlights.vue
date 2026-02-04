@@ -60,6 +60,9 @@ const highlights = [
 
 <template>
   <UiSection class="highlights" :class="{ visible: isVisible }" background="soft" divider>
+    <div class="highlights-bg">
+      <div class="bg-gradient"></div>
+    </div>
     <UiContainer class="highlights-container">
       <div class="highlights-header">
         <UiBadge>Why DiceBear?</UiBadge>
@@ -94,6 +97,27 @@ const highlights = [
 </template>
 
 <style scoped>
+.highlights-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.highlights-bg .bg-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 50% 50% at 0% 0%, color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent), transparent),
+    radial-gradient(ellipse 50% 50% at 100% 100%, color-mix(in srgb, var(--vp-c-purple-1) 6%, transparent), transparent);
+}
+
+.dark .highlights-bg .bg-gradient {
+  background:
+    radial-gradient(ellipse 50% 50% at 0% 0%, color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent), transparent),
+    radial-gradient(ellipse 50% 50% at 100% 100%, color-mix(in srgb, var(--vp-c-purple-1) 6%, transparent), transparent);
+}
+
 .highlights-container {
   position: relative;
   z-index: 1;

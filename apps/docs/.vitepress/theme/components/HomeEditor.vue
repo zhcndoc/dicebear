@@ -128,6 +128,10 @@ const features = [
 
 <template>
   <UiSection class="editor-section" :class="{ visible: isVisible }" background="soft" divider>
+    <div class="editor-bg">
+      <div class="bg-gradient"></div>
+      <div class="bg-dots"></div>
+    </div>
     <UiContainer class="editor-container">
       <div class="editor-preview">
         <UiWindow variant="light" title="DiceBear Editor">
@@ -205,6 +209,34 @@ const features = [
 </template>
 
 <style scoped>
+.editor-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.editor-bg .bg-gradient {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 60% at 100% 50%, color-mix(in srgb, var(--vp-c-green-1) 6%, transparent), transparent);
+}
+
+.dark .editor-bg .bg-gradient {
+  background: radial-gradient(ellipse 60% 60% at 100% 50%, color-mix(in srgb, var(--vp-c-green-1) 6%, transparent), transparent);
+}
+
+.editor-bg .bg-dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, var(--vp-c-text-3) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-repeat: repeat !important;
+  opacity: 0.12;
+  mask-image: radial-gradient(ellipse 50% 50% at 0% 50%, black, transparent);
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 0% 50%, black, transparent);
+}
+
 .editor-container {
   position: relative;
   z-index: 1;

@@ -25,6 +25,9 @@ const stats = [
 
 <template>
   <UiSection class="opensource" :class="{ visible: isVisible }" background="soft" divider>
+    <div class="opensource-bg">
+      <div class="bg-gradient"></div>
+    </div>
     <UiContainer size="narrow" class="opensource-container">
       <UiHeadline>Free and <span class="highlight">Open Source</span>. Forever.</UiHeadline>
 
@@ -72,6 +75,27 @@ const stats = [
 </template>
 
 <style scoped>
+.opensource-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.opensource-bg .bg-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 50% 80% at 50% 0%, color-mix(in srgb, var(--vp-c-yellow-1) 5%, transparent), transparent),
+    radial-gradient(ellipse 50% 80% at 50% 100%, color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent), transparent);
+}
+
+.dark .opensource-bg .bg-gradient {
+  background:
+    radial-gradient(ellipse 50% 80% at 50% 0%, color-mix(in srgb, var(--vp-c-yellow-1) 5%, transparent), transparent),
+    radial-gradient(ellipse 50% 80% at 50% 100%, color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent), transparent);
+}
+
 .opensource {
   text-align: center;
 }

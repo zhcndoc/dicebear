@@ -72,6 +72,10 @@ const useCases = [
 
 <template>
   <UiSection class="use-cases" :class="{ visible: isVisible }" divider>
+    <div class="use-cases-bg">
+      <div class="bg-gradient-top"></div>
+      <div class="bg-gradient-bottom"></div>
+    </div>
     <UiContainer class="use-cases-container">
       <div class="use-cases-header">
         <UiBadge>Use Cases</UiBadge>
@@ -118,6 +122,39 @@ const useCases = [
 </template>
 
 <style scoped>
+.use-cases-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.use-cases-bg .bg-gradient-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: radial-gradient(ellipse 100% 100% at 20% 0%, color-mix(in srgb, var(--vp-c-indigo-1) 7%, transparent), transparent);
+}
+
+.use-cases-bg .bg-gradient-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: radial-gradient(ellipse 100% 100% at 80% 100%, color-mix(in srgb, var(--vp-c-purple-1) 7%, transparent), transparent);
+}
+
+.dark .use-cases-bg .bg-gradient-top {
+  background: radial-gradient(ellipse 100% 100% at 20% 0%, color-mix(in srgb, var(--vp-c-indigo-1) 7%, transparent), transparent);
+}
+
+.dark .use-cases-bg .bg-gradient-bottom {
+  background: radial-gradient(ellipse 100% 100% at 80% 100%, color-mix(in srgb, var(--vp-c-purple-1) 7%, transparent), transparent);
+}
+
 .use-cases-container {
   position: relative;
   z-index: 1;

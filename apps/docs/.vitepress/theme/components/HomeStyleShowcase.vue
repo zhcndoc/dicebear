@@ -103,6 +103,9 @@ onUnmounted(() => {
 
 <template>
   <UiSection class="style-showcase" :class="{ visible: isVisible }" background="soft" no-padding divider>
+    <div class="style-showcase-bg">
+      <div class="bg-gradient"></div>
+    </div>
     <UiContainer class="style-showcase-header">
       <UiBadge>Explore the Collection</UiBadge>
       <UiHeadline><span class="highlight">30+</span> Unique Avatar Styles</UiHeadline>
@@ -161,7 +164,30 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+.style-showcase-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.style-showcase-bg .bg-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 0% 50%, color-mix(in srgb, var(--vp-c-purple-1) 6%, transparent), transparent),
+    radial-gradient(ellipse 60% 80% at 100% 50%, color-mix(in srgb, var(--vp-c-indigo-1) 5%, transparent), transparent);
+}
+
+.dark .style-showcase-bg .bg-gradient {
+  background:
+    radial-gradient(ellipse 60% 80% at 0% 50%, color-mix(in srgb, var(--vp-c-purple-1) 6%, transparent), transparent),
+    radial-gradient(ellipse 60% 80% at 100% 50%, color-mix(in srgb, var(--vp-c-indigo-1) 5%, transparent), transparent);
+}
+
 .style-showcase-header {
+  position: relative;
+  z-index: 1;
   text-align: center;
   padding: 0 24px;
   margin-bottom: 56px;

@@ -157,7 +157,7 @@ function copyCode(tab: string, code: string) {
 </script>
 
 <template>
-  <UiSection class="seed-demo" :class="{ visible: isVisible }">
+  <UiSection class="seed-demo" :class="{ visible: isVisible }" divider>
     <div class="seed-demo-bg">
       <div class="seed-demo-glow"></div>
     </div>
@@ -317,20 +317,21 @@ function copyCode(tab: string, code: string) {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  overflow: hidden;
 }
 
 .seed-demo-glow {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 800px;
-  height: 600px;
-  background: radial-gradient(ellipse, rgba(22, 137, 204, 0.08) 0%, transparent 70%);
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 30%, color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent), transparent),
+    radial-gradient(ellipse 80% 50% at 80% 70%, color-mix(in srgb, var(--vp-c-green-1) 6%, transparent), transparent);
 }
 
 .dark .seed-demo-glow {
-  background: radial-gradient(ellipse, rgba(22, 137, 204, 0.12) 0%, transparent 70%);
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 30%, color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent), transparent),
+    radial-gradient(ellipse 80% 50% at 80% 70%, color-mix(in srgb, var(--vp-c-green-1) 6%, transparent), transparent);
 }
 
 .seed-demo-container {

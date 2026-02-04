@@ -20,6 +20,10 @@ const frameworks = [
 
 <template>
   <UiSection class="home-frameworks" :class="{ visible: isVisible }" divider>
+    <div class="home-frameworks-bg">
+      <div class="bg-dots"></div>
+      <div class="bg-gradient"></div>
+    </div>
     <UiContainer size="narrow" class="home-frameworks-container">
       <div class="home-frameworks-header">
         <UiBadge>Framework Support</UiBadge>
@@ -49,7 +53,37 @@ const frameworks = [
 </template>
 
 <style scoped>
+.home-frameworks-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.home-frameworks-bg .bg-dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, var(--vp-c-text-3) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-repeat: repeat !important;
+  opacity: 0.2;
+  mask-image: radial-gradient(ellipse 70% 50% at 50% 50%, black, transparent);
+  -webkit-mask-image: radial-gradient(ellipse 70% 50% at 50% 50%, black, transparent);
+}
+
+.home-frameworks-bg .bg-gradient {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent), transparent);
+}
+
+.dark .home-frameworks-bg .bg-gradient {
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent), transparent);
+}
+
 .home-frameworks-container {
+  position: relative;
+  z-index: 1;
   text-align: center;
   opacity: 0;
   transform: translateY(30px);
