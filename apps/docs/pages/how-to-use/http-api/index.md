@@ -1,11 +1,12 @@
 ---
 description: >
-  Our HTTP API is probably the easiest way to use DiceBear. Learn how to create
-  avatars for your project using the HTTP API. It's free!
+  Free avatar API and profile picture API by DiceBear. Generate random user
+  avatars and user placeholder images with a simple URL. No authentication
+  required.
 ---
 
 <script setup>
-import BrowserPreview from '@theme/components/BrowserPreview.vue';
+import BrowserPreview from '@theme/components/ui/UiBrowserPreview.vue';
 </script>
 
 # HTTP-API

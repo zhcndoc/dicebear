@@ -1,4 +1,5 @@
 @use './vars.scss' as *;
+@use './ark-ui.scss';
 
 .vp-code-light {
   display: none !important;
@@ -10,18 +11,6 @@
 
 .VPButton {
   font-weight: 500 !important;
-}
-
-.v-field__prepend-inner,
-.v-field__append-inner {
-  padding: 0 6px 0 0;
-  display: flex;
-  align-items: center;
-}
-
-.v-field--variant-filled {
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
 }
 
 .VPButton,

@@ -1,18 +1,89 @@
 import * as path from 'node:path';
 import { defineConfig, HeadConfig } from 'vitepress';
-import { ThemeOptions } from '@shared/types';
+import { ThemeOptions } from '@theme/types';
 import sidebarDocs from './config/sidebarDocs';
 import sidebarPlayground from './config/sidebarPlayground';
 import sidebarStyles from './config/sidebarStyles';
 import avatarStyles from './config/avatarStyles';
-import vuetify from 'vite-plugin-vuetify';
+
+function formatStars(count: number): string {
+  if (count >= 1000) {
+    const k = Math.round((count / 1000) * 10) / 10;
+    return `${k}k+`;
+  }
+  return `${count}+`;
+}
+
+async function fetchGitHubStars(
+  repos: string[],
+): Promise<Record<string, string>> {
+  const result: Record<string, string> = {};
+
+  await Promise.all(
+    repos.map(async (repo) => {
+      try {
+        const res = await fetch(`https://api.github.com/repos/${repo}`);
+        if (res.ok) {
+          const data = await res.json();
+          result[repo] = formatStars(data.stargazers_count);
+        }
+      } catch {
+        // Ignore fetch errors, fallback handled in components
+      }
+    }),
+  );
+
+  return result;
+}
+
+const githubStars = await fetchGitHubStars([
+  'dicebear/dicebear',
+  'nusu/avvvatars',
+  'dmester/jdenticon',
+  'multiavatar/Multiavatar',
+  'boringdesigners/boring-avatars',
+]);
 
 export default defineConfig<ThemeOptions>({
   title: 'DiceBear',
   description:
-    'With DiceBear you can create awesome avatars for your project in no time.',
+    'DiceBear is a free, open source avatar generator with 30+ styles. Create unique avatars for your project in no time.',
   head: [
     ['link', { rel: 'icon', href: '/favicon.ico' }],
+    ['meta', { property: 'og:site_name', content: 'DiceBear' }],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { name: 'twitter:card', content: 'summary' }],
+    [
+      'script',
+      { type: 'application/ld+json' },
+      JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'DiceBear',
+        url: 'https://www.dicebear.com',
+        description:
+          'DiceBear is a free, open source avatar generator and avatar library. Create unique avatars, profile pictures, and user placeholder images with 30+ styles.',
+      }),
+    ],
+    [
+      'script',
+      { type: 'application/ld+json' },
+      JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: 'DiceBear',
+        applicationCategory: 'DeveloperApplication',
+        operatingSystem: 'Any',
+        url: 'https://www.dicebear.com',
+        description:
+          'Open source avatar generator and avatar library with 30+ styles. Free avatar API, JavaScript library, and CLI.',
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD',
+        },
+      }),
+    ],
     [
       'script',
       { type: 'text/javascript' },
@@ -51,41 +122,46 @@ export default defineConfig<ThemeOptions>({
         .replace('index.md', '')
         .replace(/\.md$/, '');
 
-      result.push([
-        'link',
-        { rel: 'canonical', href: `https://www.dicebear.com/${canonicalPath}` },
-      ]);
+      const canonicalUrl = `https://www.dicebear.com/${canonicalPath}`;
+
+      result.push(['link', { rel: 'canonical', href: canonicalUrl }]);
+
+      const pageTitle =
+        ctx.pageData.frontmatter.title || ctx.pageData.title || 'DiceBear';
+      const pageDescription =
+        ctx.pageData.frontmatter.description ||
+        ctx.pageData.description ||
+        'DiceBear is a free, open source avatar generator and avatar library with 30+ styles.';
+
+      result.push(
+        ['meta', { property: 'og:title', content: pageTitle }],
+        ['meta', { property: 'og:description', content: pageDescription }],
+        ['meta', { property: 'og:url', content: canonicalUrl }],
+        ['meta', { name: 'twitter:title', content: pageTitle }],
+        ['meta', { name: 'twitter:description', content: pageDescription }],
+      );
     }
 
     return result;
   },
   vite: {
-    plugins: [
-      vuetify({
-        styles: { configFile: __dirname + '/theme/styles/vuetify.scss' },
-      }),
-    ],
     ssr: {
-      noExternal: ['vuetify', 'vue-countup-v3'],
+      noExternal: ['vue-countup-v3', '@ark-ui/vue'],
     },
     resolve: {
       alias: {
-        '@playground': path.resolve(__dirname, 'playground'),
-        '@shared': path.resolve(__dirname, 'shared'),
-        // Temporary fix for Safari / Select scrolling on mobile
-        'body-scroll-lock': path.resolve(
-          __dirname,
-          'shared/utils/body-scroll-lock.ts',
-        ),
+        '@playground': path.resolve(__dirname, 'theme/components/playground'),
+        '@theme': path.resolve(__dirname, 'theme'),
         './components/VPLocalNav.vue': path.resolve(
           __dirname,
-          'theme/components/VPLocalNav.vue',
+          'theme/components/layout/VPLocalNav.vue',
         ),
       },
     },
   },
   themeConfig: {
     avatarStyles,
+    githubStars,
     siteTitle: '',
     logo: {
       dark: '/logo-dark.svg',

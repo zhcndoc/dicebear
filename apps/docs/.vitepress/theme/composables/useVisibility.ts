@@ -1,4 +1,11 @@
-import { ref, onMounted, onUnmounted, type Ref } from 'vue';
+import {
+  ref,
+  isRef,
+  onMounted,
+  onUnmounted,
+  type Ref,
+  type ComponentPublicInstance,
+} from 'vue';
 
 export interface UseVisibilityOptions {
   threshold?: number;
@@ -7,17 +14,31 @@ export interface UseVisibilityOptions {
 }
 
 export function useVisibility(
-  selector: string | (() => Element | null),
-  options: UseVisibilityOptions = {}
+  target:
+    | string
+    | Ref<ComponentPublicInstance | Element | null | undefined>
+    | (() => Element | null),
+  options: UseVisibilityOptions = {},
 ): Ref<boolean> {
   const { threshold = 0.2, rootMargin = '0px', once = true } = options;
   const isVisible = ref(false);
   let observer: IntersectionObserver | null = null;
 
   onMounted(() => {
-    const element = typeof selector === 'function'
-      ? selector()
-      : document.querySelector(selector);
+    let element: Element | null = null;
+
+    if (typeof target === 'string') {
+      element = document.querySelector(target);
+    } else if (isRef(target)) {
+      const val = target.value;
+      if (val instanceof Element) {
+        element = val;
+      } else if (val && '$el' in val) {
+        element = val.$el;
+      }
+    } else {
+      element = target();
+    }
 
     if (!element) return;
 
@@ -34,7 +55,7 @@ export function useVisibility(
           }
         });
       },
-      { threshold, rootMargin }
+      { threshold, rootMargin },
     );
 
     observer.observe(element);

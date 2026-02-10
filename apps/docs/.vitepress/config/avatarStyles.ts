@@ -1,5 +1,5 @@
 import * as collection from '@dicebear/collection';
-import { AvatarStyles } from '@shared/types';
+import { AvatarStyles } from '@theme/types';
 
 const avatarStyles: AvatarStyles = {};
 

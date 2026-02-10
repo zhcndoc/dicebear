@@ -45,12 +45,12 @@ const dataUri = await png.toDataUri();
 
 ## Supported formats
 
-| Format | Function   | Browser | Node.js | Notes                                    |
-| ------ | ---------- | ------- | ------- | ---------------------------------------- |
-| PNG    | `toPng`    | Yes     | Yes     | Full support                             |
-| JPEG   | `toJpeg`   | Yes     | Yes     | Full support                             |
-| WebP   | `toWebp`   | Yes*    | Yes     | Unsupported browsers fall back to PNG    |
-| AVIF   | `toAvif`   | Yes*    | Yes     | Unsupported browsers fall back to PNG    |
+| Format | Function | Browser | Node.js | Notes                                 |
+| ------ | -------- | ------- | ------- | ------------------------------------- |
+| PNG    | `toPng`  | Yes     | Yes     | Full support                          |
+| JPEG   | `toJpeg` | Yes     | Yes     | Full support                          |
+| WebP   | `toWebp` | Yes\*   | Yes     | Unsupported browsers fall back to PNG |
+| AVIF   | `toAvif` | Yes\*   | Yes     | Unsupported browsers fall back to PNG |
 
 \* WebP is supported in all modern browsers. AVIF support varies - check
 [caniuse.com](https://caniuse.com/avif) for current browser compatibility.
@@ -161,8 +161,9 @@ for browser compatibility.
 
 **Return type:** `Promise<string>`
 
-Returns the image as a [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
-This is useful for embedding the image directly in HTML or CSS.
+Returns the image as a
+[data URI](https://en.wikipedia.org/wiki/Data_URI_scheme). This is useful for
+embedding the image directly in HTML or CSS.
 
 ```js
 import { toPng } from '@dicebear/converter';
@@ -198,10 +199,10 @@ const buffer = await png.toArrayBuffer(); // [!code focus]
 
 ## Options
 
-| Option        | Type       | Default | Environment | Description                          |
-| ------------- | ---------- | ------- | ----------- | ------------------------------------ |
-| `fonts`       | `string[]` | `[]`    | Node.js     | Paths to custom font files           |
-| `includeExif` | `boolean`  | `false` | Node.js     | Include metadata in output image     |
+| Option        | Type       | Default | Environment | Description                      |
+| ------------- | ---------- | ------- | ----------- | -------------------------------- |
+| `fonts`       | `string[]` | `[]`    | Node.js     | Paths to custom font files       |
+| `includeExif` | `boolean`  | `false` | Node.js     | Include metadata in output image |
 
 ### fonts <Badge type="warning" text="Node.js only" />
 

@@ -12,8 +12,8 @@ import { avataaars } from '@dicebear/collection';
   selector: 'app-avatar',
   standalone: true,
   template: `
-    <img [src]="avatarUrl" alt="User Avatar" width="120" height="120">
-  `
+    <img [src]="avatarUrl" alt="User Avatar" width="120" height="120" />
+  `,
 })
 export class AvatarComponent implements OnInit {
   avatarUrl: string = '';

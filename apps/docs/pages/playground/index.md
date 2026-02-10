@@ -5,7 +5,8 @@ aside: false
 sidebarMenuLabel: Options
 
 description: >
-  Configure your custom avatar and see how you can use it in your project.
+  Free online avatar maker and avatar generator. Design custom profile pictures,
+  preview avatar styles, and get integration code for your project.
 ---
 
 <script setup lang="ts">

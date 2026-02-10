@@ -3,13 +3,14 @@ layout: page
 title: DiceBear - Open Source Avatar Library
 titleTemplate: false
 description: >
-  Create unique, deterministic avatars for your profiles, apps, and websites.
-  30+ styles, free HTTP API, and JavaScript library. 100% open source.
+  Free avatar generator with 30+ styles. Create unique avatars and profile
+  pictures for your apps with our avatar API, JavaScript library, and avatar
+  maker. Open source.
 aside: false
 ---
 
 <script setup>
-import HomeContent from '@theme/components/HomeContent.vue';
+import HomeContent from '@theme/components/pages/HomeContent.vue';
 </script>
 
 <HomeContent />

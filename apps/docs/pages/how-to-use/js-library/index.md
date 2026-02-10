@@ -1,7 +1,8 @@
 ---
 description: >
-  Learn how to use the DiceBear JavaScript library in your project to create
-  avatars. Works in the browser and in Node.js!
+  Use the DiceBear avatar library for JavaScript to build an avatar generator in
+  your app. Create profile pictures and random user avatars in browser and
+  Node.js.
 ---
 
 # JS-Library
@@ -186,21 +187,21 @@ const dataUri = avatar.toDataUri(); // [!code focus]
 
 These options are available for all avatar styles:
 
-| Option               | Type       | Default      | Description                                      |
-| -------------------- | ---------- | ------------ | ------------------------------------------------ |
-| `seed`               | `string`   | _random_     | Seed for deterministic generation                |
-| `flip`               | `boolean`  | `false`      | Flip the avatar horizontally                     |
-| `rotate`             | `number`   | `0`          | Rotate the avatar (0-360 degrees)                |
-| `scale`              | `number`   | `100`        | Scale the avatar (0-200 percent)                 |
-| `radius`             | `number`   | `0`          | Border radius (0-50 percent)                     |
-| `size`               | `number`   | _undefined_  | Fixed size in pixels                             |
-| `backgroundColor`    | `string[]` | _undefined_  | Background colors (hex without #, or "transparent") |
-| `backgroundType`     | `string[]` | `['solid']`  | Background type: "solid" or "gradientLinear"     |
-| `backgroundRotation` | `number[]` | `[0, 360]`   | Gradient rotation range (-360 to 360)            |
-| `translateX`         | `number`   | `0`          | Horizontal translation (-100 to 100 percent)     |
-| `translateY`         | `number`   | `0`          | Vertical translation (-100 to 100 percent)       |
-| `clip`               | `boolean`  | `true`       | Clip content to the avatar boundary              |
-| `randomizeIds`       | `boolean`  | `false`      | Randomize SVG element IDs (useful for multiple avatars) |
+| Option               | Type       | Default     | Description                                             |
+| -------------------- | ---------- | ----------- | ------------------------------------------------------- |
+| `seed`               | `string`   | _random_    | Seed for deterministic generation                       |
+| `flip`               | `boolean`  | `false`     | Flip the avatar horizontally                            |
+| `rotate`             | `number`   | `0`         | Rotate the avatar (0-360 degrees)                       |
+| `scale`              | `number`   | `100`       | Scale the avatar (0-200 percent)                        |
+| `radius`             | `number`   | `0`         | Border radius (0-50 percent)                            |
+| `size`               | `number`   | _undefined_ | Fixed size in pixels                                    |
+| `backgroundColor`    | `string[]` | _undefined_ | Background colors (hex without #, or "transparent")     |
+| `backgroundType`     | `string[]` | `['solid']` | Background type: "solid" or "gradientLinear"            |
+| `backgroundRotation` | `number[]` | `[0, 360]`  | Gradient rotation range (-360 to 360)                   |
+| `translateX`         | `number`   | `0`         | Horizontal translation (-100 to 100 percent)            |
+| `translateY`         | `number`   | `0`         | Vertical translation (-100 to 100 percent)              |
+| `clip`               | `boolean`  | `true`      | Clip content to the avatar boundary                     |
+| `randomizeIds`       | `boolean`  | `false`     | Randomize SVG element IDs (useful for multiple avatars) |
 
 ## Examples
 
@@ -263,7 +264,7 @@ const avatars = users.map((user) =>
     seed: user,
     randomizeIds: true,
     // ... other options
-  }).toString()
+  }).toString(),
 );
 ```
 

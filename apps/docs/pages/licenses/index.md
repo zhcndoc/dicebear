@@ -6,7 +6,7 @@ description: Get an overview of the licenses used at DiceBear.
 ---
 
 <script setup lang="ts">
-import Licenses from '@theme/components/Licenses.vue';
+import Licenses from '@theme/components/pages/Licenses.vue';
 </script>
 
 # Licenses

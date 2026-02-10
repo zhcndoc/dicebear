@@ -1,7 +1,8 @@
 ---
 description: >
-  See how you can create avatars with the DiceBear CLI. It's free and supports
-  all official avatar styles.
+  Generate avatars in bulk with the DiceBear CLI. Free command-line avatar
+  generator for creating profile pictures and user placeholder images. All
+  styles supported.
 ---
 
 # CLI
@@ -93,15 +94,15 @@ batches of avatars is optimized for performance.
 
 You can create avatars in various formats using the `--format` option:
 
-| Format | Description                 |
-| ------ | --------------------------- |
+| Format | Description                        |
+| ------ | ---------------------------------- |
 | `svg`  | Scalable Vector Graphics (default) |
-| `png`  | PNG image                   |
-| `jpg`  | JPEG image                  |
-| `jpeg` | JPEG image (alias for jpg)  |
-| `webp` | WebP image                  |
-| `avif` | AVIF image                  |
-| `json` | JSON with avatar metadata   |
+| `png`  | PNG image                          |
+| `jpg`  | JPEG image                         |
+| `jpeg` | JPEG image (alias for jpg)         |
+| `webp` | WebP image                         |
+| `avif` | AVIF image                         |
+| `json` | JSON with avatar metadata          |
 
 Example:
 
