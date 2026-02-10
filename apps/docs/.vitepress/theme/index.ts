@@ -26,6 +26,22 @@ export default {
         document.documentElement.lang = lang;
         document.documentElement.dir = dir;
       });
+
+      if (typeof window !== 'undefined') {
+        window.addEventListener('click', (e) => {
+          const link = (e.target as HTMLElement)?.closest('a');
+
+          if (link && link.hostname) {
+            if (link.hostname !== window.location.hostname) {
+
+              if (typeof umami !== 'undefined') {
+                umami.track('Outbound Link', { url: link.href });
+                console.log('Tracked outbound link:', link.href);
+              }
+            }
+          }
+        });
+      }
     });
   },
 };
