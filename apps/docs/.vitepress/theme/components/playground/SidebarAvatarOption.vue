@@ -78,7 +78,7 @@ const displayValue = computed(() => {
         <Select.Trigger class="sidebar-avatar-option-trigger">
           <span class="sidebar-avatar-option-trigger-text">{{ displayValue || 'Select...' }}</span>
           <button
-            v-if="currentValue.length > 0"
+            v-if="multiple && currentValue.length > 0"
             class="sidebar-avatar-option-clear"
             @click.stop.prevent="onValueChange([])"
             type="button"
