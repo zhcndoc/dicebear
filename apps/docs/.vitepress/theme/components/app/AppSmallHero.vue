@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, useSlots, computed } from 'vue';
 import { Play, ArrowRight } from 'lucide-vue-next';
 import { UiAvatar, UiButton, UiHeadline, UiDescription, UiBadge, UiContainer, UiSection } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
@@ -7,17 +7,8 @@ import { useVisibility } from '../../composables/useVisibility';
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef, { threshold: 0.1 });
 
-const avatarExamples = [
-  { style: 'adventurer-neutral', seed: 'Luna' },
-  { style: 'lorelei', seed: 'Max' },
-  { style: 'pixel-art', seed: 'Sophie' },
-  { style: 'bottts', seed: 'Felix' },
-  { style: 'thumbs', seed: 'Emma' },
-  { style: 'shapes', seed: 'Leo' },
-].map((item) => ({
-  ...item,
-  href: `/styles/${item.style}/`,
-}));
+const slots = useSlots();
+const hasAside = computed(() => !!slots.aside);
 </script>
 
 <template>
@@ -25,35 +16,31 @@ const avatarExamples = [
     <template #background>
       <div class="app-small-hero-gradient"></div>
     </template>
-    <UiContainer size="narrow" class="app-small-hero-container">
-      <UiBadge>Why DiceBear?</UiBadge>
-      <UiHeadline tag="h1">Avatars That <strong>Stand Out</strong></UiHeadline>
-      <UiDescription class="app-small-hero-description">
-        DiceBear is an avatar generator and avatar library that creates unique profile pictures in no time. Whether you need geometric shapes,
-        cute characters, or pixel art &mdash; our avatar maker with 30+ styles brings your projects to life.
-      </UiDescription>
+    <UiContainer :size="hasAside ? 'wide' : 'narrow'" class="app-small-hero-container" :class="{ 'app-small-hero-container--has-aside': hasAside }">
+      <div :class="{ 'app-small-hero-layout': hasAside }">
+        <div>
+          <UiBadge>Why DiceBear?</UiBadge>
+          <UiHeadline tag="h1">Avatars That <strong>Stand Out</strong></UiHeadline>
+          <UiDescription class="app-small-hero-description">
+            DiceBear is an avatar generator and avatar library that creates unique profile pictures in no time. Whether you need geometric shapes,
+            cute characters, or pixel art &mdash; our avatar maker with 30+ styles brings your projects to life.
+          </UiDescription>
 
-      <div class="app-small-hero-actions">
-        <UiButton href="/playground/" class="app-small-hero-action-btn">
-          <Play :size="20" />
-          Try Playground
-        </UiButton>
-        <UiButton href="/styles/" variant="secondary" class="app-small-hero-action-btn">
-          Browse Styles
-          <ArrowRight :size="20" class="app-small-hero-arrow-icon" />
-        </UiButton>
-      </div>
+          <div class="app-small-hero-actions">
+            <UiButton href="/playground/" class="app-small-hero-action-btn">
+              <Play :size="20" />
+              Try Playground
+            </UiButton>
+            <UiButton href="/styles/" variant="secondary" class="app-small-hero-action-btn">
+              Browse Styles
+              <ArrowRight :size="20" class="app-small-hero-arrow-icon" />
+            </UiButton>
+          </div>
+        </div>
 
-      <div class="app-small-hero-avatars">
-        <a
-          v-for="(avatar, index) in avatarExamples"
-          :key="avatar.style"
-          :href="avatar.href"
-          class="app-small-hero-avatar"
-          :style="{ animationDelay: `${index * 0.1}s` }"
-        >
-          <UiAvatar :style-name="avatar.style" :style-options="{ seed: avatar.seed, size: 80 }" :alt="avatar.style" />
-        </a>
+        <div v-if="hasAside" class="app-small-hero-aside">
+          <slot name="aside" />
+        </div>
       </div>
     </UiContainer>
   </UiSection>
@@ -77,6 +64,36 @@ const avatarExamples = [
       opacity: 1;
       transform: translateY(0);
     }
+
+    &--has-aside {
+      text-align: left;
+
+      .app-small-hero-description {
+        margin-inline: 0;
+      }
+
+      .app-small-hero-actions {
+        justify-content: flex-start;
+      }
+
+      .app-small-hero-avatars {
+        justify-content: flex-start;
+      }
+    }
+  }
+
+  &-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 48px;
+  }
+
+  &-aside {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
   }
 
   &-description {
@@ -88,7 +105,6 @@ const avatarExamples = [
     display: flex;
     justify-content: center;
     gap: 16px;
-    margin-bottom: 56px;
   }
 
   &-avatars {
@@ -137,6 +153,26 @@ const avatarExamples = [
 
 @media (max-width: 768px) {
   .app-small-hero {
+    &-layout {
+      grid-template-columns: 1fr;
+    }
+
+    &-container--has-aside {
+      text-align: center;
+
+      .app-small-hero-description {
+        margin-inline: auto;
+      }
+
+      .app-small-hero-actions {
+        justify-content: center;
+      }
+
+      .app-small-hero-avatars {
+        justify-content: center;
+      }
+    }
+
     &-actions {
       flex-direction: column;
       align-items: center;

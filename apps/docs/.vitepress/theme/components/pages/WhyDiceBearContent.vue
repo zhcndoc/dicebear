@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppSmallHero from '../app/AppSmallHero.vue';
+import AppHeroAsideUserList from '../app/AppHeroAsideUserList.vue';
 import AppHighlights from '../app/AppHighlights.vue';
 import AppIntegration from '../app/AppIntegration.vue';
 import AppCDN from '../app/AppCDN.vue';
@@ -10,7 +11,11 @@ import AppCTA from '../app/AppCTA.vue';
 </script>
 
 <template>
-  <AppSmallHero />
+  <AppSmallHero>
+    <template #aside>
+      <AppHeroAsideUserList />
+    </template>
+  </AppSmallHero>
   <AppHighlights badge="Features" headline="Everything You <strong>Need</strong>" />
   <AppIntegration />
   <AppCDN />
