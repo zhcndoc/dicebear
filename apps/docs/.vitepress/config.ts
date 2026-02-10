@@ -112,6 +112,14 @@ export default defineConfig<ThemeOptions>({
         async: '',
       },
     ],
+    [
+      'script',
+      {
+        defer: '',
+        src: 'https://hi.dicebear.com/script.js',
+        'data-website-id': '69953f4f-b70c-4534-8ccb-370f4e9da028',
+      },
+    ],
   ],
   srcDir: path.join(__dirname, '..', 'pages'),
   transformHead: (ctx) => {
