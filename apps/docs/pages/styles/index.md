@@ -19,7 +19,7 @@ const styleCount = computed(() => Object.keys(theme.value.avatarStyles).length);
 <div class="styles-page">
   <div class="styles-hero">
     <UiHeadline tag="h1" class="styles-title">
-      <span class="highlight">Styles</span> Overview
+      <strong>Styles</strong> Overview
     </UiHeadline>
     <UiDescription>
       Browse our avatar library — from abstract patterns to lovingly designed characters. Every style is crafted by talented artists and ready to use as profile pictures in your projects.
