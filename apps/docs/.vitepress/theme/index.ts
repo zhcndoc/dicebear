@@ -36,7 +36,6 @@ export default {
 
               if (typeof umami !== 'undefined') {
                 umami.track('Outbound Link', { url: link.href });
-                console.log('Tracked outbound link:', link.href);
               }
             }
           }
