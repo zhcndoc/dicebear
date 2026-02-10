@@ -1,5 +1,11 @@
+<script setup lang="ts">
+defineProps<{
+  align?: 'center' | 'left';
+}>();
+</script>
+
 <template>
-  <p class="ui-description">
+  <p :class="['ui-description', align === 'left' && 'ui-description-left']">
     <slot />
   </p>
 </template>
@@ -12,6 +18,12 @@
   max-width: 540px;
   line-height: 1.7;
   text-wrap: pretty;
+
+  &-left {
+    margin-left: 0;
+    margin-right: auto;
+    text-align: left;
+  }
 
   @media (max-width: 640px) {
     font-size: 17px;

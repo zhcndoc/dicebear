@@ -2,11 +2,12 @@
 defineProps<{
   tag?: 'h1' | 'h2' | 'h3';
   highlightColor?: 'brand' | 'bunny';
+  align?: 'center' | 'left';
 }>();
 </script>
 
 <template>
-  <component :is="tag || 'h2'" :class="['ui-headline', `ui-headline-highlight-${highlightColor || 'brand'}`]">
+  <component :is="tag || 'h2'" :class="['ui-headline', `ui-headline-highlight-${highlightColor || 'brand'}`, align === 'left' && 'ui-headline-left']">
     <slot />
   </component>
 </template>
@@ -18,6 +19,12 @@ defineProps<{
   color: var(--vp-c-text-1);
   margin: 0 auto 24px;
   max-width: 700px;
+
+  &-left {
+    margin-left: 0;
+    margin-right: auto;
+    text-align: left;
+  }
   line-height: 1.2;
   letter-spacing: -0.03em;
   text-wrap: balance;
