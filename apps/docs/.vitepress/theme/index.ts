@@ -35,7 +35,7 @@ export default {
             if (link.hostname !== window.location.hostname) {
 
               if (typeof umami !== 'undefined') {
-                umami.track('Outbound Link', { url: link.href });
+                umami.track('Outbound Link', { url: link.hostname });
               }
             }
           }
