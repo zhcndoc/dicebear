@@ -538,6 +538,13 @@ onUnmounted(() => {
     min-height: auto;
     padding: 100px 16px 80px;
 
+    &-title {
+      &-line,
+      &-dynamic {
+        font-size: clamp(36px, 8vw, 48px);
+      }
+    }
+
     &-description {
       font-size: 17px;
     }
