@@ -19,7 +19,9 @@ defineProps<{
       <slot name="badge-icon" />
       {{ badge }}
     </UiBadge>
-    <UiHeadline :tag="tag" :highlightColor="headlineHighlightColor" v-html="headline" />
+    <UiHeadline :tag="tag" :highlightColor="headlineHighlightColor">
+      <span v-html="headline" />
+    </UiHeadline>
     <UiDescription v-if="description">{{ description }}</UiDescription>
     <slot name="after-description" />
   </div>
