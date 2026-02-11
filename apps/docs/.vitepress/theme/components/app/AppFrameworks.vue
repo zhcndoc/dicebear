@@ -21,7 +21,7 @@ const frameworks = [
       <div class="app-frameworks-dots"></div>
       <div class="app-frameworks-gradient"></div>
     </template>
-    <UiContainer size="narrow" class="app-frameworks-container">
+    <UiContainer class="app-frameworks-container">
       <UiSectionHeader
         badge="Framework Support"
         headline="Works with Your <strong>Favorite</strong> Framework"

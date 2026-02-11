@@ -23,7 +23,7 @@ const stats = [
     <template #background>
       <div class="app-open-source-gradient"></div>
     </template>
-    <UiContainer size="narrow" class="app-open-source-container">
+    <UiContainer class="app-open-source-container">
       <UiHeadline>Free and <strong>Open Source</strong>.<br />Forever.</UiHeadline>
 
       <UiDescription class="app-open-source-description">

@@ -16,7 +16,7 @@ const hasAside = computed(() => !!slots.aside);
     <template #background>
       <div class="app-small-hero-gradient"></div>
     </template>
-    <UiContainer :size="hasAside ? 'wide' : 'narrow'" class="app-small-hero-container" :class="{ 'app-small-hero-container--has-aside': hasAside }">
+    <UiContainer class="app-small-hero-container" :class="{ 'app-small-hero-container--has-aside': hasAside }">
       <div :class="{ 'app-small-hero-layout': hasAside }">
         <div>
           <UiBadge>Why DiceBear?</UiBadge>
@@ -84,9 +84,16 @@ const hasAside = computed(() => !!slots.aside);
 
   &-layout {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(12, 1fr);
     align-items: center;
-    gap: 48px;
+
+    > :first-child {
+      grid-column: 1 / 7;
+    }
+
+    > :last-child {
+      grid-column: 8 / 13;
+    }
   }
 
   &-aside {
@@ -155,6 +162,12 @@ const hasAside = computed(() => !!slots.aside);
   .app-small-hero {
     &-layout {
       grid-template-columns: 1fr;
+      gap: 48px;
+
+      > :first-child,
+      > :last-child {
+        grid-column: auto;
+      }
     }
 
     &-container--has-aside {

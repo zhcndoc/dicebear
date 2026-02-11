@@ -1,11 +1,5 @@
-<script setup lang="ts">
-defineProps<{
-  size?: 'default' | 'narrow' | 'wide';
-}>();
-</script>
-
 <template>
-  <div class="ui-container" :class="size && `ui-container-${size}`">
+  <div class="ui-container">
     <slot />
   </div>
 </template>
@@ -15,13 +9,5 @@ defineProps<{
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
-
-  &-narrow {
-    max-width: 800px;
-  }
-
-  &-wide {
-    max-width: 1400px;
-  }
 }
 </style>

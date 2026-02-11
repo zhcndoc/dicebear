@@ -53,7 +53,7 @@ const bgAvatars = computed(() => {
         <UiAvatar :style-name="avatar.style" :style-options="{ seed: avatar.seed, size: 80 }" :alt="avatar.style" />
       </div>
     </template>
-    <UiContainer size="narrow" class="app-cta-container">
+    <UiContainer class="app-cta-container">
       <UiHeadline>Ready to create <strong>amazing</strong> avatars?</UiHeadline>
       <UiDescription class="app-cta-description">
         Start building with our free avatar generator today. Create profile pictures, forever free.
