@@ -5,7 +5,7 @@ import { UiAvatar, UiCode } from '../ui';
 import { getAvatarApiUrl, getAvatarApiCommand } from '@theme/utils/avatar';
 import PlaygroundDialog from './PlaygroundDialog.vue';
 import PlaygroundActionButton from './PlaygroundActionButton.vue';
-import LicenseAlert from './LicenseAlert.vue';
+import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
 import { Dialog } from '@ark-ui/vue/dialog';
 import { Tabs } from '@ark-ui/vue/tabs';
@@ -49,20 +49,20 @@ const exampleCli = computed(() =>
   </PlaygroundActionButton>
 
   <PlaygroundDialog v-model:open="open" max-width="800px">
-    <div class="button-how-to-use-header">
+    <div class="playground-button-how-to-use-header">
       <UiAvatar
         :style-name="store.avatarStyleName"
         :style-options="options"
         :size="64"
       />
-      <div class="button-how-to-use-header-text">
-        <Dialog.Title class="button-how-to-use-header-title">How to use</Dialog.Title>
-        <p class="button-how-to-use-header-subtitle">Let's see how you can use this avatar in your project.</p>
+      <div class="playground-button-how-to-use-header-text">
+        <Dialog.Title class="playground-button-how-to-use-header-title">How to use</Dialog.Title>
+        <p class="playground-button-how-to-use-header-subtitle">Let's see how you can use this avatar in your project.</p>
       </div>
     </div>
 
-    <div class="button-how-to-use-text">
-      <div class="button-how-to-use-tabs-card">
+    <div class="playground-button-how-to-use-text">
+      <div class="playground-button-how-to-use-tabs-card">
         <Tabs.Root v-model="tab">
           <Tabs.List>
             <Tabs.Trigger value="http-api">HTTP-API</Tabs.Trigger>
@@ -70,7 +70,7 @@ const exampleCli = computed(() =>
             <Tabs.Trigger value="cli">CLI</Tabs.Trigger>
           </Tabs.List>
 
-          <Tabs.Content value="http-api">
+          <Tabs.Content value="http-api" class="playground-button-how-to-use-tab-content">
             <p>Use this URL to request this avatar style via our HTTP API.</p>
             <UiCode :code="exampleHttpApi" />
             <p>You can use the URL directly as image source.</p>
@@ -80,7 +80,7 @@ const exampleCli = computed(() =>
               information.
             </p>
           </Tabs.Content>
-          <Tabs.Content value="js-library">
+          <Tabs.Content value="js-library" class="playground-button-how-to-use-tab-content">
             <p>First install the required packages via npm:</p>
             <UiCode
               code="npm install @dicebear/core @dicebear/collection --save"
@@ -92,7 +92,7 @@ const exampleCli = computed(() =>
               information.
             </p>
           </Tabs.Content>
-          <Tabs.Content value="cli">
+          <Tabs.Content value="cli" class="playground-button-how-to-use-tab-content">
             <p>First install the CLI package via npm:</p>
             <UiCode code="npm install --global dicebear" />
             <p>Then you can create this avatar as follows:</p>
@@ -104,13 +104,13 @@ const exampleCli = computed(() =>
         </Tabs.Root>
       </div>
 
-      <LicenseAlert :style-name="store.avatarStyleName" />
+      <PlaygroundLicenseAlert :style-name="store.avatarStyleName" />
     </div>
   </PlaygroundDialog>
 </template>
 
 <style scoped lang="scss">
-.button-how-to-use {
+.playground-button-how-to-use {
   &-header {
     display: flex;
     align-items: center;
@@ -151,6 +151,16 @@ const exampleCli = computed(() =>
     border: 1px solid var(--vp-c-border);
     border-radius: 8px;
     overflow: hidden;
+  }
+
+  &-tab-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    p {
+      margin: 0;
+    }
   }
 
   &-cli-warning {

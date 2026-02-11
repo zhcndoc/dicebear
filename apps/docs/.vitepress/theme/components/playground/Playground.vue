@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import ClientOnly from '@theme/components/layout/ClientOnly.vue';
-import Loader from './Loader.vue';
-import Preview from './Preview.vue';
+import LayoutClientOnly from '@theme/components/layout/LayoutClientOnly.vue';
+import PlaygroundLoader from './PlaygroundLoader.vue';
+import PlaygroundPreview from './PlaygroundPreview.vue';
 import nameList from '@theme/utils/name-list';
 
 const names = [...nameList].sort(() => 0.5 - Math.random()).slice(0, 20);
 </script>
 
 <template>
-  <ClientOnly>
+  <LayoutClientOnly>
     <template #default>
       <form autoComplete="off" @submit.prevent>
         <div class="playground">
-          <Preview v-for="name in names" :name="name" />
+          <PlaygroundPreview v-for="name in names" :name="name" />
         </div>
       </form>
     </template>
     <template #fallback>
-      <Loader />
+      <PlaygroundLoader />
     </template>
-  </ClientOnly>
+  </LayoutClientOnly>
 </template>
 
 <style scoped lang="scss">

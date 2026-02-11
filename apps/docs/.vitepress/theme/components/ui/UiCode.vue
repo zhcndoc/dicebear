@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
-import 'highlight.js/styles/base16/material-palenight.css';
+import { onBeforeUnmount, onMounted, ref, watch, computed } from 'vue';
 import hljs from 'highlight.js/lib/core';
 import javascript from 'highlight.js/lib/languages/javascript';
 import xml from 'highlight.js/lib/languages/xml';
-import copy from 'copy-to-clipboard';
+import { Copy, Check } from 'lucide-vue-next';
 
 const props = defineProps<{
   lang?: string;
@@ -14,6 +13,8 @@ const props = defineProps<{
 const codeHtml = ref(props.code);
 const copied = ref(false);
 let timeout: any = null;
+
+const isMultiline = computed(() => props.code.includes('\n'));
 
 function updateCodeHtml() {
   if (props.lang && hljs.getLanguage(props.lang)) {
@@ -27,7 +28,7 @@ function updateCodeHtml() {
 }
 
 function onCopy() {
-  copy(props.code);
+  navigator.clipboard.writeText(props.code);
 
   copied.value = true;
 
@@ -57,137 +58,70 @@ watch(() => props.code, updateCodeHtml);
 </script>
 
 <template>
-  <div :class="['ui-code', `ui-code-language-${lang}`]">
-    <span
-      :class="['ui-code-copy', copied ? 'ui-code-copied' : null]"
-      @click.prevent="onCopy"
-    ></span>
-    <pre><code v-html="codeHtml" /></pre>
+  <div class="ui-code">
+    <pre v-if="isMultiline" class="ui-code-text" v-html="codeHtml"></pre>
+    <pre v-else class="ui-code-text" v-html="codeHtml"></pre>
+    <button class="ui-code-copy" @click="onCopy" :title="copied ? 'Copied!' : 'Copy'">
+      <Check v-if="copied" :size="14" />
+      <Copy v-else :size="14" />
+    </button>
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .ui-code {
   position: relative;
-  margin: 16px 0;
-  background-color: var(--vp-code-block-bg);
-  overflow-x: auto;
-  transition: background-color 0.5s;
-  border-radius: 6px;
+  background: var(--vp-c-bg-soft);
+  border-radius: 12px;
+  padding: 14px 16px;
 
-  + .ui-code {
-    margin-top: -8px;
-  }
-
-  pre,
-  code {
-    text-align: left;
-    white-space: pre;
-    word-spacing: normal;
-    word-break: normal;
-    word-wrap: normal;
-    -moz-tab-size: 4;
-    -o-tab-size: 4;
-    tab-size: 4;
-    -webkit-hyphens: none;
-    -moz-hyphens: none;
-    -ms-hyphens: none;
-    hyphens: none;
-  }
-
-  pre {
-    position: relative;
-    z-index: 1;
+  &-text {
+    font-size: 13px;
+    font-family: var(--vp-font-family-mono);
+    color: var(--vp-c-text-1);
+    line-height: 1.6;
     margin: 0;
-    padding: 16px 0;
-    background: transparent;
+    padding-right: 32px;
+    white-space: pre;
     overflow-x: auto;
   }
 
-  code {
-    display: block;
-    padding: 0 24px;
-    width: fit-content;
-    line-height: var(--vp-code-line-height);
-    font-size: var(--vp-code-font-size);
-    color: var(--vp-code-block-color);
-    transition: color 0.5s;
-  }
-
-  .ui-code-copy {
+  &-copy {
     position: absolute;
-    top: 8px;
-    right: 8px;
-    z-index: 2;
-    display: block;
-    justify-content: center;
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    display: flex;
     align-items: center;
-    border-radius: 4px;
-    width: 40px;
-    height: 40px;
-    background-color: var(--vp-code-block-bg);
-    opacity: 0;
+    justify-content: center;
+    background: var(--vp-c-bg);
+    border: 1px solid var(--vp-c-border);
+    border-radius: 6px;
     cursor: pointer;
-    background-image: var(--vp-icon-copy);
-    background-position: 50%;
-    background-size: 20px;
-    background-repeat: no-repeat;
-    transition: opacity 0.25s;
-  }
+    transition: all 0.2s ease;
+    color: var(--vp-c-text-3);
 
-  &:hover > .ui-code-copy {
-    opacity: 1;
-  }
-
-  > .ui-code-copy:hover {
-    background-color: var(--vp-code-copy-code-hover-bg);
-  }
-
-  > .ui-code-copy.ui-code-copied,
-  > .ui-code-copy:hover.ui-code-copied {
-    border-radius: 0 4px 4px 0;
-    background-color: var(--vp-code-copy-code-hover-bg);
-    background-image: var(--vp-icon-copied);
-  }
-
-  > span.ui-code-copy.ui-code-copied::before,
-  > span.ui-code-copy:hover.ui-code-copied::before {
-    position: relative;
-    left: -65px;
-    display: block;
-    border-radius: 4px 0 0 4px;
-    padding-top: 8px;
-    width: 64px;
-    height: 40px;
-    text-align: center;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--vp-code-copy-code-active-text);
-    background-color: var(--vp-code-copy-code-hover-bg);
-    white-space: nowrap;
-    content: 'Copied';
-  }
-
-  &::before {
-    position: absolute;
-    top: 6px;
-    right: 12px;
-    z-index: 2;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--vp-c-text-dark-3);
-    transition: color 0.5s, opacity 0.5s;
-  }
-
-  &:hover::before {
-    opacity: 0;
-  }
-
-  &.ui-code-language-html::before {
-    content: 'html';
-  }
-  &.ui-code-language-js::before {
-    content: 'js';
+    &:hover {
+      background: var(--vp-c-brand-soft);
+      color: var(--vp-c-brand-1);
+      border-color: transparent;
+    }
   }
 }
+</style>
+
+<style>
+.ui-code-text .hljs-keyword { color: var(--vp-c-purple-1); }
+.ui-code-text .hljs-string { color: var(--vp-c-green-1); }
+.ui-code-text .hljs-title { color: var(--vp-c-yellow-1); }
+.ui-code-text .hljs-attr { color: var(--vp-c-indigo-1); }
+.ui-code-text .hljs-name { color: var(--vp-c-brand-1); }
+.ui-code-text .hljs-tag { color: var(--vp-c-text-2); }
+.ui-code-text .hljs-number { color: var(--vp-c-green-1); }
+.ui-code-text .hljs-literal { color: var(--vp-c-brand-1); }
+.ui-code-text .hljs-built_in { color: var(--vp-c-yellow-1); }
+.ui-code-text .hljs-params { color: var(--vp-c-text-1); }
+.ui-code-text .hljs-comment { color: var(--vp-c-text-3); }
+.ui-code-text .hljs-meta { color: var(--vp-c-text-3); }
 </style>

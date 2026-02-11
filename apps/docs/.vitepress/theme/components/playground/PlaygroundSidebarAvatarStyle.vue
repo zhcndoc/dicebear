@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import useStore from '@theme/stores/playground';
-import LicenseText from './LicenseText.vue';
+import PlaygroundLicenseText from './PlaygroundLicenseText.vue';
 import { capitalCase } from 'change-case';
 import { useData } from 'vitepress';
 import { ThemeOptions } from '@theme/types';
@@ -32,9 +32,9 @@ function onValueChange(value: string[]) {
 
 <template>
   <div>
-    <label class="sidebar-avatar-style-label" for="avatarStyle">
+    <label class="playground-sidebar-avatar-style-label" for="avatarStyle">
       Avatar Style
-      <span class="sidebar-avatar-style-badge">30+</span>
+      <span class="playground-sidebar-avatar-style-badge">30+</span>
     </label>
     <Select.Root
       :collection="collection"
@@ -45,12 +45,12 @@ function onValueChange(value: string[]) {
       unmount-on-exit
     >
       <Select.Control>
-        <Select.Trigger class="sidebar-avatar-style-trigger">
+        <Select.Trigger class="playground-sidebar-avatar-style-trigger">
           <UiAvatar
             :size="32"
             :styleName="store.avatarStyleName"
             :style-options="{ seed: 'JD' }"
-            class="sidebar-avatar-style-trigger-avatar"
+            class="playground-sidebar-avatar-style-trigger-avatar"
           />
           <Select.ValueText :placeholder="'Select a style'" />
           <Select.Indicator>
@@ -61,19 +61,19 @@ function onValueChange(value: string[]) {
 
       <Teleport to="body">
         <Select.Positioner>
-          <Select.Content class="sidebar-avatar-style-content">
+          <Select.Content class="playground-sidebar-avatar-style-content">
             <Select.List>
               <Select.Item
                 v-for="item in collection.items"
                 :key="item.value"
                 :item="item"
-                class="sidebar-avatar-style-item"
+                class="playground-sidebar-avatar-style-item"
               >
                 <UiAvatar
                   :size="32"
                   :style-name="item.value"
                   :style-options="{ seed: 'JD' }"
-                  class="sidebar-avatar-style-item-avatar"
+                  class="playground-sidebar-avatar-style-item-avatar"
                 />
                 <Select.ItemText>{{ item.label }}</Select.ItemText>
               </Select.Item>
@@ -83,16 +83,16 @@ function onValueChange(value: string[]) {
       </Teleport>
     </Select.Root>
 
-    <div class="sidebar-avatar-style-license">
-      <div class="sidebar-avatar-style-license-text">
-        <LicenseText />
+    <div class="playground-sidebar-avatar-style-license">
+      <div class="playground-sidebar-avatar-style-license-text">
+        <PlaygroundLicenseText />
       </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.sidebar-avatar-style {
+.playground-sidebar-avatar-style {
   &-label {
     display: flex;
     align-items: center;

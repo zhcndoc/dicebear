@@ -162,7 +162,7 @@ export default defineConfig<ThemeOptions>({
         '@theme': path.resolve(__dirname, 'theme'),
         './components/VPLocalNav.vue': path.resolve(
           __dirname,
-          'theme/components/layout/VPLocalNav.vue',
+          'theme/components/layout/LayoutVPLocalNav.vue',
         ),
       },
     },

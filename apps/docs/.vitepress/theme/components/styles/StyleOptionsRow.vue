@@ -322,10 +322,6 @@ const headerId = computed(() => {
     margin-bottom: 16px;
   }
 
-  &-code {
-    margin: 0 !important;
-  }
-
   &-card {
     margin-top: 16px;
     border: 1px solid var(--vp-c-border);

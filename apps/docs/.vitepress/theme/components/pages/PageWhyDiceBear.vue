@@ -18,8 +18,8 @@ import AppCTA from '../app/AppCTA.vue';
   </AppSmallHero>
   <AppHighlights badge="Features" headline="Everything You <strong>Need</strong>" />
   <AppIntegration />
-  <AppCDN />
   <AppFrameworks />
+  <AppCDN />
   <AppComparison />
   <AppOpenSourceCards />
   <AppCTA />

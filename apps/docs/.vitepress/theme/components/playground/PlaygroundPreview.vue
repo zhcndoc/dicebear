@@ -2,9 +2,9 @@
 import { ref, unref, computed } from 'vue';
 import { UiAvatar } from '../ui';
 import useStore from '@theme/stores/playground';
-import ButtonDownload from './ButtonDownload.vue';
-import ButtonCopy from './ButtonCopy.vue';
-import ButtonHowToUse from './ButtonHowToUse.vue';
+import PlaygroundButtonDownload from './PlaygroundButtonDownload.vue';
+import PlaygroundButtonCopy from './PlaygroundButtonCopy.vue';
+import PlaygroundButtonHowToUse from './PlaygroundButtonHowToUse.vue';
 
 const props = defineProps<{
   name: string;
@@ -29,8 +29,8 @@ const onInputFocus = (e: FocusEvent) => {
 </script>
 
 <template>
-  <div class="preview">
-    <div class="preview-avatar">
+  <div class="playground-preview">
+    <div class="playground-preview-avatar">
       <UiAvatar
         :size="96"
         :radius="10"
@@ -43,19 +43,19 @@ const onInputFocus = (e: FocusEvent) => {
       v-model="seed"
       type="text"
       placeholder="Enter a seed"
-      class="preview-input"
+      class="playground-preview-input"
       @focus="onInputFocus"
     />
-    <div class="preview-actions">
-      <div class="preview-action"><ButtonDownload :seed="seed" /></div>
-      <div class="preview-action"><ButtonCopy :seed="seed" /></div>
-      <div class="preview-action"><ButtonHowToUse :seed="seed" /></div>
+    <div class="playground-preview-actions">
+      <div class="playground-preview-action"><PlaygroundButtonDownload :seed="seed" /></div>
+      <div class="playground-preview-action"><PlaygroundButtonCopy :seed="seed" /></div>
+      <div class="playground-preview-action"><PlaygroundButtonHowToUse :seed="seed" /></div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.preview {
+.playground-preview {
   background: var(--vp-c-bg-soft);
   border-radius: 12px;
   padding: 20px 16px 16px;

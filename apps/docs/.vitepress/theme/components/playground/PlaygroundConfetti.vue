@@ -57,11 +57,11 @@ onMounted(async () => {
 </script>
 
 <template>
-  <canvas ref="canvas" class="confetti"></canvas>
+  <canvas ref="canvas" class="playground-confetti"></canvas>
 </template>
 
 <style scoped>
-.confetti {
+.playground-confetti {
   position: absolute;
   top: 0;
   right: 0;

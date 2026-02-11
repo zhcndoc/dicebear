@@ -19,7 +19,7 @@ const stats = [
 </script>
 
 <template>
-  <UiSection ref="sectionRef" :class="{ visible: isVisible }" background="soft" divider center>
+  <UiSection ref="sectionRef" :class="{ visible: isVisible }" divider center>
     <template #background>
       <div class="app-open-source-gradient"></div>
     </template>

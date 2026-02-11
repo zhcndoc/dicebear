@@ -130,7 +130,7 @@ function getCellValue(row: ComparisonRow, key: keyof ComparisonRow): CellValue {
 </script>
 
 <template>
-  <UiSection ref="sectionRef" :class="{ visible: isVisible }" background="soft" divider>
+  <UiSection ref="sectionRef" :class="{ visible: isVisible }" divider>
     <template #background>
       <div class="app-comparison-gradient"></div>
     </template>
@@ -197,8 +197,8 @@ function getCellValue(row: ComparisonRow, key: keyof ComparisonRow): CellValue {
 .app-comparison {
   &-gradient {
     background:
-      radial-gradient(ellipse 50% 50% at 100% 0%, color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent), transparent),
-      radial-gradient(ellipse 50% 50% at 0% 100%, color-mix(in srgb, var(--vp-c-purple-1) 6%, transparent), transparent);
+      radial-gradient(ellipse 50% 50% at 50% 0%, color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent), transparent),
+      radial-gradient(ellipse 50% 50% at 50% 100%, color-mix(in srgb, var(--vp-c-purple-1) 6%, transparent), transparent);
   }
 
   &-header {

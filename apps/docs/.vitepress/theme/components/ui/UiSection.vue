@@ -1,6 +1,5 @@
 <script setup lang="ts">
 defineProps<{
-  background?: 'default' | 'soft';
   divider?: boolean;
   center?: boolean;
 }>();
@@ -10,7 +9,6 @@ defineProps<{
   <section
     class="ui-section"
     :class="{
-      'ui-section-bg-soft': background === 'soft',
       'ui-section-has-divider': divider,
       'ui-section-text-center': center,
     }"
@@ -29,10 +27,6 @@ defineProps<{
   padding: 100px 24px;
   position: relative;
   overflow: hidden;
-
-  &-bg-soft {
-    background: var(--vp-c-bg-soft);
-  }
 
   &-has-divider::before {
     content: '';

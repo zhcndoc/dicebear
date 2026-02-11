@@ -62,10 +62,10 @@ const svg = computedAsync(() => {
     50% / 12px 12px;
   line-height: 0;
   overflow: hidden;
-}
 
-.ui-avatar img {
-  height: 100%;
-  width: 100%;
+  img {
+    height: 100%;
+    width: 100%;
+  }
 }
 </style>

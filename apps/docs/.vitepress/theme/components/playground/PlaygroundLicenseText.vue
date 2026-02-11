@@ -15,7 +15,7 @@ const avatarStyleLink = computed(
 </script>
 
 <template>
-  <p class="license-text">
+  <p class="playground-license-text">
     <template v-if="avatarStyleMeta?.creator !== 'DiceBear'">
       The avatar style
     </template>
@@ -59,7 +59,7 @@ const avatarStyleLink = computed(
 </template>
 
 <style scoped lang="scss">
-.license-text {
+.playground-license-text {
   a {
     font-weight: 500;
     color: var(--vp-c-brand-1);

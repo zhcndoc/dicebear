@@ -5,10 +5,10 @@ import copy from 'copy-to-clipboard';
 import { createAvatar } from '@dicebear/core';
 import { loadAvatarStyle } from '@theme/utils/avatar';
 import { UiAvatar } from '../ui';
-import Confetti from './Confetti.vue';
+import PlaygroundConfetti from './PlaygroundConfetti.vue';
 import PlaygroundDialog from './PlaygroundDialog.vue';
 import PlaygroundActionButton from './PlaygroundActionButton.vue';
-import LicenseAlert from './LicenseAlert.vue';
+import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
 import { Dialog } from '@ark-ui/vue/dialog';
 
@@ -43,7 +43,7 @@ async function onClick() {
   </PlaygroundActionButton>
 
   <PlaygroundDialog v-model:open="open">
-    <Confetti :key="confettiKey" />
+    <PlaygroundConfetti :key="confettiKey" />
     <div class="dialog-preview">
       <UiAvatar
         :style-name="store.avatarStyleName"
@@ -54,7 +54,7 @@ async function onClick() {
     <Dialog.Title class="dialog-title">{{ text }}</Dialog.Title>
     <div class="dialog-subtitle">Please note the license below before using.</div>
     <div class="dialog-text">
-      <LicenseAlert :style-name="store.avatarStyleName" />
+      <PlaygroundLicenseAlert :style-name="store.avatarStyleName" />
     </div>
   </PlaygroundDialog>
 </template>

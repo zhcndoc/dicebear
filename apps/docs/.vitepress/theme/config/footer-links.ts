@@ -12,17 +12,9 @@ export const productLinks: FooterLink[] = [
 
 export const resourceLinks: FooterLink[] = [
   { label: 'Documentation', href: '/introduction/' },
+  { label: 'JS Library', href: '/how-to-use/js-library/' },
   { label: 'HTTP API', href: '/how-to-use/http-api/' },
-  {
-    label: 'GitHub',
-    href: 'https://github.com/dicebear/dicebear',
-    external: true,
-  },
-  {
-    label: 'Figma',
-    href: 'https://www.figma.com/@dicebear_com',
-    external: true,
-  },
+  { label: 'CLI', href: '/how-to-use/cli/' },
 ];
 
 export const legalLinks: FooterLink[] = [

@@ -10,7 +10,7 @@ aside: false
 ---
 
 <script setup>
-import HomeContent from '@theme/components/pages/HomeContent.vue';
+import PageHome from '@theme/components/pages/PageHome.vue';
 </script>
 
-<HomeContent />
+<PageHome />

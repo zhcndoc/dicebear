@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import UiAlert from '@theme/components/ui/UiAlert.vue';
-import LicenseText from './LicenseText.vue';
+import PlaygroundLicenseText from './PlaygroundLicenseText.vue';
 
 defineProps<{
   styleName: string;
@@ -12,6 +12,6 @@ defineProps<{
     <strong>
       Please note the following license before using the avatar:
     </strong>
-    <LicenseText :style="styleName" />
+    <PlaygroundLicenseText :style="styleName" />
   </UiAlert>
 </template>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useRoute } from 'vitepress';
 import { computed, ref, watch } from 'vue';
-import PlaygroundSidebar from '@playground/Sidebar.vue';
-import ClientOnly from './ClientOnly.vue';
+import PlaygroundSidebar from '@playground/PlaygroundSidebar.vue';
+import LayoutClientOnly from './LayoutClientOnly.vue';
 
 const route = useRoute();
 
@@ -22,17 +22,17 @@ watch(
 
 <template>
   <div ref="marker"></div>
-  <div v-if="isPlayground" class="sidebar-before">
-    <ClientOnly>
+  <div v-if="isPlayground" class="layout-sidebar-before">
+    <LayoutClientOnly>
       <form autoComplete="off" @submit.prevent>
         <PlaygroundSidebar />
       </form>
-    </ClientOnly>
+    </LayoutClientOnly>
   </div>
 </template>
 
 <style>
-.sidebar-before + * {
+.layout-sidebar-before + * {
   display: none;
 }
 </style>

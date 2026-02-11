@@ -6,7 +6,7 @@ import { siGithub, siFigma } from 'simple-icons';
 import { UiIcon } from '../ui';
 import type { StyleMeta } from '@dicebear/core';
 import type { ThemeOptions } from '@theme/types';
-import { productLinks, resourceLinks, legalLinks } from '../../config/footer-links';
+import { productLinks as exploreLinks, resourceLinks, legalLinks } from '../../config/footer-links';
 
 const { theme } = useData<ThemeOptions>();
 const { hasSidebar } = useLayout();
@@ -39,36 +39,36 @@ const styles = computed(() => {
 </script>
 
 <template>
-  <footer class="footer" :class="{ 'footer-has-sidebar': hasSidebar }">
-    <div class="footer-divider"></div>
+  <footer class="layout-footer" :class="{ 'layout-footer-has-sidebar': hasSidebar }">
+    <div class="layout-footer-divider"></div>
 
-    <div class="footer-main">
-      <div class="footer-container">
+    <div class="layout-footer-main">
+      <div class="layout-footer-container">
         <!-- Brand column -->
-        <div class="footer-brand">
-          <a href="/" class="footer-logo">
+        <div class="layout-footer-brand">
+          <a href="/" class="layout-footer-logo">
             <img
-              class="footer-logo-light"
+              class="layout-footer-logo-light"
               :src="withBase('/logo.svg')"
               alt="DiceBear"
             />
             <img
-              class="footer-logo-dark"
+              class="layout-footer-logo-dark"
               :src="withBase('/logo-dark.svg')"
               alt="DiceBear"
             />
           </a>
-          <p class="footer-tagline">
+          <p class="layout-footer-tagline">
             Open source avatar generator and avatar library for designers and developers.
           </p>
 
           <!-- Social links -->
-          <div class="footer-social">
+          <div class="layout-footer-social">
             <a
               href="https://github.com/dicebear/dicebear"
               target="_blank"
               rel="noopener"
-              class="footer-social-link"
+              class="layout-footer-social-link"
             >
               <UiIcon :path="siGithub.path" />
             </a>
@@ -76,7 +76,7 @@ const styles = computed(() => {
               href="https://www.figma.com/@dicebear_com"
               target="_blank"
               rel="noopener"
-              class="footer-social-link"
+              class="layout-footer-social-link"
             >
               <UiIcon :path="siFigma.path" />
             </a>
@@ -84,16 +84,16 @@ const styles = computed(() => {
         </div>
 
         <!-- Link columns -->
-        <div class="footer-links">
-          <div class="footer-column">
-            <h3 class="footer-column-title">Explore</h3>
-            <ul class="footer-column-list">
-              <li v-for="link in productLinks" :key="link.label">
+        <div class="layout-footer-links">
+          <div class="layout-footer-column">
+            <h3 class="layout-footer-column-title">Explore</h3>
+            <ul class="layout-footer-column-list">
+              <li v-for="link in exploreLinks" :key="link.label">
                 <a
                   :href="link.href"
                   :target="link.external ? '_blank' : undefined"
                   :rel="link.external ? 'noopener noreferrer' : undefined"
-                  class="footer-link"
+                  class="layout-footer-link"
                 >
                   {{ link.label }}
                 </a>
@@ -101,15 +101,15 @@ const styles = computed(() => {
             </ul>
           </div>
 
-          <div class="footer-column">
-            <h3 class="footer-column-title">Resources</h3>
-            <ul class="footer-column-list">
+          <div class="layout-footer-column">
+            <h3 class="layout-footer-column-title">Resources</h3>
+            <ul class="layout-footer-column-list">
               <li v-for="link in resourceLinks" :key="link.label">
                 <a
                   :href="link.href"
                   :target="link.external ? '_blank' : undefined"
                   :rel="link.external ? 'noopener noreferrer' : undefined"
-                  class="footer-link"
+                  class="layout-footer-link"
                 >
                   {{ link.label }}
                 </a>
@@ -117,15 +117,15 @@ const styles = computed(() => {
             </ul>
           </div>
 
-          <div class="footer-column">
-            <h3 class="footer-column-title">Legal</h3>
-            <ul class="footer-column-list">
+          <div class="layout-footer-column">
+            <h3 class="layout-footer-column-title">Legal</h3>
+            <ul class="layout-footer-column-list">
               <li v-for="link in legalLinks" :key="link.label">
                 <a
                   :href="link.href"
                   :target="link.external ? '_blank' : undefined"
                   :rel="link.external ? 'noopener noreferrer' : undefined"
-                  class="footer-link"
+                  class="layout-footer-link"
                 >
                   {{ link.label }}
                 </a>
@@ -137,23 +137,23 @@ const styles = computed(() => {
     </div>
 
     <!-- Sponsor -->
-    <div class="footer-sponsor">
-      <div class="footer-container">
-        <div class="footer-sponsor-inner">
-          <span class="footer-sponsor-label">CDN sponsored by</span>
+    <div class="layout-footer-sponsor">
+      <div class="layout-footer-container">
+        <div class="layout-footer-sponsor-inner">
+          <span class="layout-footer-sponsor-label">CDN sponsored by</span>
           <a
             href="https://bunny.net/"
             target="_blank"
             rel="noopener"
-            class="footer-sponsor-logo"
+            class="layout-footer-sponsor-logo"
           >
             <img
-              class="footer-sponsor-logo-light"
+              class="layout-footer-sponsor-logo-light"
               :src="withBase('/sponsors/bunny-light.svg')"
               alt="bunny.net"
             />
             <img
-              class="footer-sponsor-logo-dark"
+              class="layout-footer-sponsor-logo-dark"
               :src="withBase('/sponsors/bunny-dark.svg')"
               alt="bunny.net"
             />
@@ -163,16 +163,16 @@ const styles = computed(() => {
     </div>
 
     <!-- Bottom bar -->
-    <div class="footer-bottom">
-      <div class="footer-container">
-        <div class="footer-bottom-inner">
-          <p class="footer-attributions">
+    <div class="layout-footer-bottom">
+      <div class="layout-footer-container">
+        <div class="layout-footer-bottom-inner">
+          <p class="layout-footer-attributions">
             <template v-for="(style, index) in styles" :key="style.source">
-              <a class="footer-attribution-link" :href="style.source" target="_blank" rel="noopener">{{
+              <a class="layout-footer-attribution-link" :href="style.source" target="_blank" rel="noopener">{{
                 style.title
               }}</a>
               by {{ style.creator }} /
-              <a class="footer-attribution-link" :href="style.license?.url" target="_blank" rel="noopener">{{
+              <a class="layout-footer-attribution-link" :href="style.license?.url" target="_blank" rel="noopener">{{
                 style.license?.name
               }}</a><template v-if="index < styles.length - 1">. </template>
             </template>
@@ -186,27 +186,21 @@ const styles = computed(() => {
 
 <style lang="scss">
 :root {
-  --footer-logo-light-display: inline-block;
-  --footer-logo-dark-display: none;
-  --footer-sponsor-logo-light-display: none;
-  --footer-sponsor-logo-dark-display: inline-block;
+  --layout-footer-logo-light-display: inline-block;
+  --layout-footer-logo-dark-display: none;
+  --layout-footer-sponsor-logo-light-display: none;
+  --layout-footer-sponsor-logo-dark-display: inline-block;
 }
 .dark {
-  --footer-logo-light-display: none;
-  --footer-logo-dark-display: inline-block;
-  --footer-sponsor-logo-light-display: inline-block;
-  --footer-sponsor-logo-dark-display: none;
-}
-.footer-sponsor-logo-light {
-  display: var(--footer-sponsor-logo-light-display);
-}
-.footer-sponsor-logo-dark {
-  display: var(--footer-sponsor-logo-dark-display);
+  --layout-footer-logo-light-display: none;
+  --layout-footer-logo-dark-display: inline-block;
+  --layout-footer-sponsor-logo-light-display: inline-block;
+  --layout-footer-sponsor-logo-dark-display: none;
 }
 </style>
 
 <style lang="scss" scoped>
-.footer {
+.layout-footer {
   position: relative;
   background: var(--vp-c-bg);
 
@@ -221,7 +215,7 @@ const styles = computed(() => {
     padding: 0 32px;
 
     @media (min-width: 960px) {
-      .footer-has-sidebar & {
+      .layout-footer-has-sidebar & {
         padding-left: calc(var(--vp-sidebar-width) + 32px);
       }
     }
@@ -231,7 +225,7 @@ const styles = computed(() => {
   &-main {
     padding: 64px 0 48px;
 
-    .footer-container {
+    .layout-footer-container {
       display: flex;
       gap: 64px;
     }
@@ -252,11 +246,11 @@ const styles = computed(() => {
     }
 
     &-light {
-      display: var(--footer-logo-light-display);
+      display: var(--layout-footer-logo-light-display);
     }
 
     &-dark {
-      display: var(--footer-logo-dark-display);
+      display: var(--layout-footer-logo-dark-display);
     }
   }
 
@@ -360,6 +354,14 @@ const styles = computed(() => {
       img {
         height: 52px;
       }
+
+      &-light {
+        display: var(--layout-footer-sponsor-logo-light-display);
+      }
+
+      &-dark {
+        display: var(--layout-footer-sponsor-logo-dark-display);
+      }
     }
   }
 
@@ -415,32 +417,32 @@ const styles = computed(() => {
 
   // Responsive: with sidebar (sidebar adds ~300px)
   @media (min-width: 960px) {
-    &-has-sidebar .footer-main .footer-container {
+    &-has-sidebar .layout-footer-main .layout-footer-container {
       flex-direction: column;
       gap: 40px;
     }
 
-    &-has-sidebar .footer-brand {
+    &-has-sidebar .layout-footer-brand {
       max-width: 100%;
     }
 
-    &-has-sidebar .footer-links {
+    &-has-sidebar .layout-footer-links {
       justify-content: flex-start;
       gap: 40px;
     }
   }
 
   @media (min-width: 1340px) {
-    &-has-sidebar .footer-main .footer-container {
+    &-has-sidebar .layout-footer-main .layout-footer-container {
       flex-direction: row;
       gap: 64px;
     }
 
-    &-has-sidebar .footer-brand {
+    &-has-sidebar .layout-footer-brand {
       max-width: 260px;
     }
 
-    &-has-sidebar .footer-links {
+    &-has-sidebar .layout-footer-links {
       justify-content: flex-end;
       gap: 64px;
     }
@@ -448,27 +450,27 @@ const styles = computed(() => {
 
   // Responsive: without sidebar
   @media (max-width: 768px) {
-    .footer-main .footer-container {
+    .layout-footer-main .layout-footer-container {
       flex-direction: column;
       gap: 40px;
     }
 
-    .footer-brand {
+    .layout-footer-brand {
       max-width: 100%;
     }
 
-    .footer-links {
+    .layout-footer-links {
       justify-content: flex-start;
       gap: 40px;
     }
 
-    .footer-copyright {
+    .layout-footer-copyright {
       flex-wrap: wrap;
     }
   }
 
   @media (max-width: 480px) {
-    .footer-links {
+    .layout-footer-links {
       flex-direction: column;
       gap: 32px;
     }

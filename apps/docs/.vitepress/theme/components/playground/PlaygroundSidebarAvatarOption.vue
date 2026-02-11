@@ -64,7 +64,7 @@ const displayValue = computed(() => {
 
 <template>
   <template v-if="options.length > 1 && !isLimited">
-    <label class="sidebar-avatar-option-label">{{ label }}</label>
+    <label class="playground-sidebar-avatar-option-label">{{ label }}</label>
     <Select.Root
       :collection="collection"
       :multiple="multiple"
@@ -75,11 +75,11 @@ const displayValue = computed(() => {
       unmount-on-exit
     >
       <Select.Control>
-        <Select.Trigger class="sidebar-avatar-option-trigger">
-          <span class="sidebar-avatar-option-trigger-text">{{ displayValue || 'Select...' }}</span>
+        <Select.Trigger class="playground-sidebar-avatar-option-trigger">
+          <span class="playground-sidebar-avatar-option-trigger-text">{{ displayValue || 'Select...' }}</span>
           <button
             v-if="multiple && currentValue.length > 0"
-            class="sidebar-avatar-option-clear"
+            class="playground-sidebar-avatar-option-clear"
             @click.stop.prevent="onValueChange([])"
             type="button"
           >
@@ -93,18 +93,18 @@ const displayValue = computed(() => {
 
       <Teleport to="body">
         <Select.Positioner>
-          <Select.Content class="sidebar-avatar-option-content">
+          <Select.Content class="playground-sidebar-avatar-option-content">
             <Select.List>
               <Select.Item
                 v-for="item in collection.items"
                 :key="item.value"
                 :item="item"
-                class="sidebar-avatar-option-item"
+                class="playground-sidebar-avatar-option-item"
               >
-                <Select.ItemIndicator v-if="multiple" class="sidebar-avatar-option-check">
+                <Select.ItemIndicator v-if="multiple" class="playground-sidebar-avatar-option-check">
                   <Check :size="14" />
                 </Select.ItemIndicator>
-                <span v-if="multiple" class="sidebar-avatar-option-check-placeholder"></span>
+                <span v-if="multiple" class="playground-sidebar-avatar-option-check-placeholder"></span>
                 <Select.ItemText>{{ item.label }}</Select.ItemText>
                 <UiAvatar
                   v-if="!field.toString().match(/Probability$/)"
@@ -116,7 +116,7 @@ const displayValue = computed(() => {
                       item.rawValue
                     )
                   "
-                  class="sidebar-avatar-option-avatar"
+                  class="playground-sidebar-avatar-option-avatar"
                   mode="library"
                 />
               </Select.Item>
@@ -125,12 +125,12 @@ const displayValue = computed(() => {
         </Select.Positioner>
       </Teleport>
     </Select.Root>
-    <p v-if="hint" class="sidebar-avatar-option-hint">{{ hint }}</p>
+    <p v-if="hint" class="playground-sidebar-avatar-option-hint">{{ hint }}</p>
   </template>
 </template>
 
 <style scoped lang="scss">
-.sidebar-avatar-option {
+.playground-sidebar-avatar-option {
   &-label {
     display: block;
     font-size: 14px;
@@ -208,11 +208,11 @@ const displayValue = computed(() => {
       color: var(--vp-c-brand-1);
     }
 
-    &[data-state='checked'] .sidebar-avatar-option-check-placeholder {
+    &[data-state='checked'] .playground-sidebar-avatar-option-check-placeholder {
       display: none;
     }
 
-    &:not([data-state='checked']) .sidebar-avatar-option-check {
+    &:not([data-state='checked']) .playground-sidebar-avatar-option-check {
       display: none;
     }
   }

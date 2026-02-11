@@ -2,9 +2,9 @@
 import { Download } from 'lucide-vue-next';
 import { getAvatarApiUrl } from '@theme/utils/avatar';
 import { UiAvatar } from '../ui';
-import Confetti from './Confetti.vue';
+import PlaygroundConfetti from './PlaygroundConfetti.vue';
 import PlaygroundDialog from './PlaygroundDialog.vue';
-import LicenseAlert from './LicenseAlert.vue';
+import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
 import { Tooltip } from '@ark-ui/vue/tooltip';
 import { Menu } from '@ark-ui/vue/menu';
@@ -50,7 +50,7 @@ async function downloadBinary(format: string) {
     <Tooltip.Root>
       <Tooltip.Trigger as-child>
         <div>
-          <Menu.Trigger class="button-download">
+          <Menu.Trigger class="playground-button-download">
             <Download :size="16" />
           </Menu.Trigger>
         </div>
@@ -75,7 +75,7 @@ async function downloadBinary(format: string) {
   </Menu.Root>
 
   <PlaygroundDialog v-model:open="open">
-    <Confetti :key="confettiKey" />
+    <PlaygroundConfetti :key="confettiKey" />
     <div class="dialog-preview">
       <UiAvatar
         :style-name="store.avatarStyleName"
@@ -88,13 +88,13 @@ async function downloadBinary(format: string) {
     </div>
     <div class="dialog-subtitle">Please note the license below before using.</div>
     <div class="dialog-text">
-      <LicenseAlert :style-name="store.avatarStyleName" />
+      <PlaygroundLicenseAlert :style-name="store.avatarStyleName" />
     </div>
   </PlaygroundDialog>
 </template>
 
 <style scoped lang="scss">
-.button-download {
+.playground-button-download {
   display: flex;
   align-items: center;
   justify-content: center;

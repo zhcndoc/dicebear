@@ -21,27 +21,27 @@ function scrollToTop() {
 </script>
 
 <template>
-  <div v-if="hasSidebar" class="vp-local-nav">
+  <div v-if="hasSidebar" class="layout-vp-local-nav">
     <button
-      class="vp-local-nav-menu"
+      class="layout-vp-local-nav-menu"
       :aria-expanded="open"
       aria-controls="VPSidebarNav"
       @click="$emit('open-menu')"
     >
-      <VPIconAlignLeft class="vp-local-nav-menu-icon" />
-      <span class="vp-local-nav-menu-text">
+      <VPIconAlignLeft class="layout-vp-local-nav-menu-icon" />
+      <span class="layout-vp-local-nav-menu-text">
         {{ frontmatter.sidebarMenuLabel || theme.sidebarMenuLabel || 'Menu' }}
       </span>
     </button>
 
-    <a class="vp-local-nav-top-link" href="#" @click="scrollToTop">
+    <a class="layout-vp-local-nav-top-link" href="#" @click="scrollToTop">
       {{ theme.returnToTopLabel || 'Return to top' }}
     </a>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.vp-local-nav {
+.layout-vp-local-nav {
   position: sticky;
   top: 0;
   /*rtl:ignore*/

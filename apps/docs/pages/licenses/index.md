@@ -6,7 +6,7 @@ description: Get an overview of the licenses used at DiceBear.
 ---
 
 <script setup lang="ts">
-import Licenses from '@theme/components/pages/Licenses.vue';
+import PageLicenses from '@theme/components/pages/PageLicenses.vue';
 </script>
 
 # Licenses
@@ -14,4 +14,4 @@ import Licenses from '@theme/components/pages/Licenses.vue';
 While our code is MIT licensed, the avatar styles are licensed under different
 licenses that the artists can choose themselves.
 
-<Licenses />
+<PageLicenses />

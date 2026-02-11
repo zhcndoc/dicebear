@@ -138,7 +138,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <UiSection ref="sectionRef" :class="{ visible: isVisible }" background="soft" no-padding divider>
+  <UiSection ref="sectionRef" :class="{ visible: isVisible }" no-padding divider>
     <template #background>
       <div class="app-style-showcase-gradient"></div>
     </template>

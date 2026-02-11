@@ -1,14 +1,14 @@
 <template>
-  <div class="loader">
-    <div class="loader-body">
-      <div class="loader-spinner" />
-      <div class="loader-text">Please wait...</div>
+  <div class="playground-loader">
+    <div class="playground-loader-body">
+      <div class="playground-loader-spinner" />
+      <div class="playground-loader-text">Please wait...</div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.loader {
+.playground-loader {
   flex-grow: 1;
   display: flex;
   align-items: center;
@@ -28,7 +28,7 @@
     border-radius: 50%;
     border: 3px solid transparent;
     border-top-color: var(--vp-c-brand-1);
-    animation: loader 1.1s infinite linear;
+    animation: playground-loader 1.1s infinite linear;
   }
 
   &-text {
@@ -37,7 +37,7 @@
   }
 }
 
-@keyframes loader {
+@keyframes playground-loader {
   0% {
     transform: rotate(0deg);
   }

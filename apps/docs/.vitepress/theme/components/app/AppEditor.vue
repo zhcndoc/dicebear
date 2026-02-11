@@ -115,7 +115,7 @@ const features = [
 </script>
 
 <template>
-  <UiSection ref="sectionRef" :class="{ visible: isVisible }" background="soft" divider>
+  <UiSection ref="sectionRef" :class="{ visible: isVisible }" divider>
     <template #background>
       <div class="app-editor-gradient"></div>
       <div class="app-editor-dots"></div>

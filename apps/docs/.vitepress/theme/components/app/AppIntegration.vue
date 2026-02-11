@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Globe, Code, Terminal, Copy, Check } from 'lucide-vue-next';
-import { UiContainer, UiSection, UiSectionHeader, UiCard, UiIconBox } from '../ui';
+import { Globe, Code, Terminal } from 'lucide-vue-next';
+import { UiContainer, UiSection, UiSectionHeader, UiCard, UiIconBox, UiCode } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
-import { useCopyToClipboard } from '../../composables/useCopyToClipboard';
 
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
-const { copy: copyCode, isCopied } = useCopyToClipboard();
 
 const plainCode = {
   js: `import { createAvatar } from '@dicebear/core';
@@ -50,18 +48,7 @@ const svg = createAvatar(lorelei, {
               </a>
             </div>
 
-            <div class="app-integration-code-block app-integration-code-block-multi">
-              <pre class="app-integration-code-text"><span class="hl-keyword">import</span> { <span class="hl-variable">createAvatar</span> } <span class="hl-keyword">from</span> <span class="hl-string">'@dicebear/core'</span>;
-<span class="hl-keyword">import</span> { <span class="hl-variable">lorelei</span> } <span class="hl-keyword">from</span> <span class="hl-string">'@dicebear/collection'</span>;
-
-<span class="hl-keyword">const</span> <span class="hl-variable">svg</span> <span class="hl-operator">=</span> <span class="hl-function">createAvatar</span>(<span class="hl-variable">lorelei</span>, {
-  <span class="hl-property">seed</span>: <span class="hl-string">'Mia'</span>,
-}).<span class="hl-function">toString</span>();</pre>
-              <button class="app-integration-copy-btn" @click="copyCode('js', plainCode.js)" :title="isCopied('js') ? 'Copied!' : 'Copy'">
-                <Check v-if="isCopied('js')" />
-                <Copy v-else />
-              </button>
-            </div>
+            <UiCode :code="plainCode.js" lang="js" class="app-integration-code-block" />
           </div>
         </UiCard>
       </div>
@@ -78,13 +65,7 @@ const svg = createAvatar(lorelei, {
               <p class="app-integration-description">Free avatar API for profile pictures. Handles millions of requests daily via global CDN.</p>
             </div>
 
-            <div class="app-integration-code-block">
-              <code class="app-integration-code-text"><span class="hl-url">https://api.dicebear.com/9.x/lorelei/svg</span><span class="hl-operator">?</span><span class="hl-flag">seed</span><span class="hl-operator">=</span><span class="hl-string">Mia</span></code>
-              <button class="app-integration-copy-btn" @click="copyCode('api', plainCode.api)" :title="isCopied('api') ? 'Copied!' : 'Copy'">
-                <Check v-if="isCopied('api')" />
-                <Copy v-else />
-              </button>
-            </div>
+            <UiCode :code="plainCode.api" class="app-integration-code-block" />
 
             <a href="/how-to-use/http-api/" class="app-integration-link">
               API Documentation &rarr;
@@ -102,13 +83,7 @@ const svg = createAvatar(lorelei, {
               <p class="app-integration-description">Generate avatars from the command line. Perfect for scripts and automation.</p>
             </div>
 
-            <div class="app-integration-code-block app-integration-code-block-multi">
-              <pre class="app-integration-code-text"><span class="hl-command">npx</span> <span class="hl-variable">dicebear</span> <span class="hl-variable">lorelei</span> <span class="hl-flag">--seed</span> <span class="hl-string">"Mia"</span> <span class="hl-flag">--format</span> <span class="hl-string">svg</span></pre>
-              <button class="app-integration-copy-btn" @click="copyCode('cli', plainCode.cli)" :title="isCopied('cli') ? 'Copied!' : 'Copy'">
-                <Check v-if="isCopied('cli')" />
-                <Copy v-else />
-              </button>
-            </div>
+            <UiCode :code="plainCode.cli" class="app-integration-code-block" />
 
             <a href="/how-to-use/cli/" class="app-integration-link">
               CLI Documentation &rarr;
@@ -153,21 +128,6 @@ const svg = createAvatar(lorelei, {
     .visible & {
       animation: app-integration-card-reveal 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
-  }
-
-  /* Syntax highlighting */
-  &-code-text {
-    .hl-keyword { color: var(--vp-c-purple-1); }
-    .hl-string { color: var(--vp-c-green-1); }
-    .hl-variable { color: var(--vp-c-brand-1); }
-    .hl-function { color: var(--vp-c-yellow-1); }
-    .hl-property { color: var(--vp-c-indigo-1); }
-    .hl-operator { color: var(--vp-c-text-2); }
-    .hl-url { color: var(--vp-c-text-1); }
-    .hl-param { color: var(--vp-c-text-2); }
-    .hl-command { color: var(--vp-c-purple-1); }
-    .hl-argument { color: var(--vp-c-brand-1); }
-    .hl-flag { color: var(--vp-c-yellow-1); }
   }
 
   /* Featured JS Library card */
@@ -228,66 +188,10 @@ const svg = createAvatar(lorelei, {
     line-height: 1.6;
   }
 
-  /* Code blocks */
   &-code-block {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    background: var(--vp-c-bg-soft);
-    border-radius: 12px;
-    padding: 14px 16px;
     flex: 1;
     margin-bottom: 20px;
     min-height: 48px;
-
-    &-multi {
-      align-items: flex-start;
-    }
-  }
-
-  &-code-text {
-    flex: 1;
-    font-size: 13px;
-    font-family: var(--vp-font-family-mono);
-    color: var(--vp-c-text-1);
-    word-break: break-all;
-    line-height: 1.6;
-    margin: 0;
-    white-space: pre-wrap;
-  }
-
-  pre#{&}-code-text {
-    white-space: pre;
-    overflow-x: auto;
-  }
-
-  /* Copy button */
-  &-copy-btn {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--vp-c-bg);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-
-    &:hover {
-      background: var(--vp-c-brand-soft);
-
-      svg {
-        color: var(--vp-c-brand-1);
-      }
-    }
-
-    svg {
-      width: 16px;
-      height: 16px;
-      color: var(--vp-c-text-2);
-    }
   }
 
   &-link {

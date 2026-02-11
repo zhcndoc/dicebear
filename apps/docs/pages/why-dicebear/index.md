@@ -9,7 +9,7 @@ aside: false
 ---
 
 <script setup>
-import WhyDiceBearContent from '@theme/components/pages/WhyDiceBearContent.vue';
+import PageWhyDiceBear from '@theme/components/pages/PageWhyDiceBear.vue';
 </script>
 
-<WhyDiceBearContent />
+<PageWhyDiceBear />

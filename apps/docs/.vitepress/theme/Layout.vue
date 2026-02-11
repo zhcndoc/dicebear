@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import DefaultTheme from 'vitepress/theme';
-import Footer from './components/layout/Footer.vue';
-import SidebarBefore from './components/layout/SidebarBefore.vue';
+import LayoutFooter from './components/layout/LayoutFooter.vue';
+import LayoutSidebarBefore from './components/layout/LayoutSidebarBefore.vue';
 import './styles/main.scss';
 
 const { Layout } = DefaultTheme;
@@ -10,10 +10,10 @@ const { Layout } = DefaultTheme;
 <template>
   <Layout>
     <template #sidebar-nav-before>
-      <SidebarBefore />
+      <LayoutSidebarBefore />
     </template>
     <template #layout-bottom>
-      <Footer />
+      <LayoutFooter />
     </template>
   </Layout>
 </template>
