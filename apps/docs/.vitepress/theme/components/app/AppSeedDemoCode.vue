@@ -87,6 +87,7 @@ const docsLinkLabel = computed(() => {
   display: flex;
   flex-direction: column;
   border-left: 1px solid var(--vp-c-border);
+  min-width: 0;
 
   &-wrapper {
     padding: 16px;
@@ -94,6 +95,7 @@ const docsLinkLabel = computed(() => {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    min-width: 0;
   }
 
   &-tabs {
@@ -144,6 +146,7 @@ const docsLinkLabel = computed(() => {
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-width: 0;
   }
 
   &-block {
