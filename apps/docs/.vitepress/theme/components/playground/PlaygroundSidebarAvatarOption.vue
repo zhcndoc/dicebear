@@ -11,6 +11,7 @@ import { ChevronDown, Check, X } from 'lucide-vue-next';
 const props = defineProps<{
   field: string | number;
   schema: JSONSchema7;
+  schemaProperties?: Record<string, unknown>;
 }>();
 
 const store = useStore();
@@ -113,7 +114,8 @@ const displayValue = computed(() => {
                   :style-options="
                     getAvatarPropertyPreviewOptions(
                       field.toString(),
-                      item.rawValue
+                      item.rawValue,
+                      props.schemaProperties
                     )
                   "
                   class="playground-sidebar-avatar-option-avatar"

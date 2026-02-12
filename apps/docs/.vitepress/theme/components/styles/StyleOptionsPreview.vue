@@ -15,41 +15,65 @@ const props = defineProps({
     value: {
         required: true,
     },
+    schemaProperties: {
+        type: Object,
+    },
 });
 
 const options = computed(() =>
-    getAvatarPropertyPreviewOptions(props.name, props.value)
+    getAvatarPropertyPreviewOptions(props.name, props.value, props.schemaProperties)
 );
+
+function selectLabel(event: MouseEvent) {
+    const range = document.createRange();
+    range.selectNodeContents(event.currentTarget as Node);
+    const sel = window.getSelection();
+    sel?.removeAllRanges();
+    sel?.addRange(range);
+}
 </script>
 
 <template>
     <div class="style-options-preview">
-        <UiAvatar
-            :size="name === 'size' ? parseInt(value as any) : 64"
-            :styleName="styleName"
-            :styleOptions="options"
-            class="style-options-preview-avatar"
-        />
-        <code>{{ value }}</code>
+        <div class="style-options-preview-avatar-wrapper">
+            <UiAvatar
+                :size="name === 'size' ? parseInt(value as any) : 96"
+                :styleName="styleName"
+                :styleOptions="options"
+                class="style-options-preview-avatar"
+            />
+        </div>
+        <code class="style-options-preview-label" @click="selectLabel">{{ value }}</code>
     </div>
-    <div class="style-options-preview-invisible-char">,</div>
 </template>
 
 <style scoped lang="scss">
 .style-options-preview {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 9px;
+    box-shadow: 1px 0 0 var(--vp-c-border),
+                0 1px 0 var(--vp-c-border);
+
+    &-avatar-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        min-height: 128px;
+    }
 
     &-avatar {
-        margin-bottom: 12px;
         user-select: none;
     }
 
-    &-invisible-char {
-        opacity: 0;
+    &-label {
+        display: block;
+        text-align: center;
+        padding: 8px 4px;
+        border-top: 1px solid var(--vp-c-border);
+        font-size: 12px;
+        line-height: 1;
+        cursor: pointer;
     }
 }
 </style>

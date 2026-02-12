@@ -78,6 +78,7 @@ export function getAvatarApiCommand(
 export function getAvatarPropertyPreviewOptions(
   propertyName: string,
   propertyValue: unknown,
+  schemaProperties?: Record<string, unknown>,
 ): Record<string, unknown> {
   if (propertyName === 'seed') {
     return {
@@ -102,9 +103,14 @@ export function getAvatarPropertyPreviewOptions(
 
   if (propertyName.match(/Color$/)) {
     const probabilityName = propertyName.replace(/Color$/, 'Probability');
+    const disabledProbabilities = getDisabledProbabilities(
+      probabilityName,
+      schemaProperties,
+    );
 
     return {
       seed: 'JD',
+      ...disabledProbabilities,
       [probabilityName]: 100,
       [propertyName]: [propertyValue],
     };
@@ -128,10 +134,37 @@ export function getAvatarPropertyPreviewOptions(
     };
   }
 
+  const ownProbability = `${propertyName}Probability`;
+  const disabledProbabilities = getDisabledProbabilities(
+    ownProbability,
+    schemaProperties,
+  );
+
   return {
     seed: 'JD',
-    [`${propertyName}Probability`]: 100,
+    ...disabledProbabilities,
+    [ownProbability]: 100,
     [propertyName]:
       typeof propertyValue === 'string' ? [propertyValue] : propertyValue,
   };
+}
+
+function getDisabledProbabilities(
+  excludeKey: string,
+  schemaProperties?: Record<string, unknown>,
+): Record<string, number> {
+  if (!schemaProperties) return {};
+
+  const result: Record<string, number> = {};
+
+  for (const [key, value] of Object.entries(schemaProperties)) {
+    if (key.endsWith('Probability') && key !== excludeKey) {
+      const def = (value as Record<string, unknown>)?.default;
+      if (def !== 100) {
+        result[key] = 0;
+      }
+    }
+  }
+
+  return result;
 }

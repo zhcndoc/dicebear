@@ -43,7 +43,7 @@ const properties = computed(() => {
         v-for="(property, field) in properties"
         :key="field"
       >
-        <PlaygroundSidebarAvatarOption :field="field" :schema="property" />
+        <PlaygroundSidebarAvatarOption :field="field" :schema="property" :schema-properties="schema?.properties" />
       </div>
       <div class="playground-sidebar-item">
         <a

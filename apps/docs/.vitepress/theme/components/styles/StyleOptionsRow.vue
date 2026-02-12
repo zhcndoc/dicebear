@@ -165,6 +165,8 @@ const exampleCli = computed(() => {
   return `dicebear ${props.styleName} --${props.name} ${value}`;
 });
 
+const schemaProperties = computed(() => props.style.schema?.properties);
+
 const headerId = computed(() => {
   return `options-${props.name.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
 });
@@ -252,7 +254,7 @@ const headerId = computed(() => {
         <Tabs.Trigger value="default" v-if="defaultValue !== undefined">Default</Tabs.Trigger>
       </Tabs.List>
 
-      <Tabs.Content value="examples" v-if="examples !== undefined">
+      <Tabs.Content value="examples" v-if="examples !== undefined" class="style-options-row-preview-tab-content">
         <div class="style-options-row-preview">
           <StyleOptionsPreview
             v-for="(val, key) in examples"
@@ -260,10 +262,11 @@ const headerId = computed(() => {
             :style-name="styleName"
             :name="name"
             :value="val"
+            :schema-properties="schemaProperties"
           />
         </div>
       </Tabs.Content>
-      <Tabs.Content value="values" v-if="possibleValues.length > 0">
+      <Tabs.Content value="values" v-if="possibleValues.length > 0" class="style-options-row-preview-tab-content">
         <div class="style-options-row-preview">
           <StyleOptionsPreview
             v-for="(val, key) in possibleValues"
@@ -271,10 +274,11 @@ const headerId = computed(() => {
             :style-name="styleName"
             :name="name"
             :value="val"
+            :schema-properties="schemaProperties"
           />
         </div>
       </Tabs.Content>
-      <Tabs.Content value="default" v-if="defaultValue !== undefined">
+      <Tabs.Content value="default" v-if="defaultValue !== undefined" class="style-options-row-preview-tab-content">
         <div class="style-options-row-preview">
           <StyleOptionsPreview
             v-if="Array.isArray(defaultValue)"
@@ -283,12 +287,14 @@ const headerId = computed(() => {
             :style-name="styleName"
             :name="name"
             :value="val"
+            :schema-properties="schemaProperties"
           />
           <StyleOptionsPreview
             v-else
             :style-name="styleName"
             :name="name"
             :value="defaultValue"
+            :schema-properties="schemaProperties"
           />
         </div>
       </Tabs.Content>
@@ -330,10 +336,16 @@ const headerId = computed(() => {
   }
 
   &-preview {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0 -9px -9px;
-    align-items: start;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+
+    &-tab-content {
+      padding: 0;
+    }
+
+    @media (max-width: 640px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 }
 </style>
