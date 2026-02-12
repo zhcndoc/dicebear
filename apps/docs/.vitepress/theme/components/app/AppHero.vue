@@ -17,7 +17,8 @@ const isVisible = useVisibility('.app-hero', { once: false, threshold: 0.1 });
 const prng = new Prando(777);
 const avatarStyleList = computed(() => Object.keys(theme.value.avatarStyles));
 
-const { mouseX, mouseY, handleMouseMove } = useParallax(isVisible);
+const heroRef = ref<HTMLElement>();
+const { setContainer, handleMouseMove } = useParallax(isVisible);
 
 // Responsive grid size
 const screenSize = ref<'mobile' | 'tablet' | 'desktop'>('desktop');
@@ -89,6 +90,9 @@ function scrollToContent() {
 onMounted(() => {
   updateScreenSize();
   window.addEventListener('resize', updateScreenSize);
+  if (heroRef.value) {
+    setContainer(heroRef.value);
+  }
 });
 
 onUnmounted(() => {
@@ -97,7 +101,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section class="app-hero" @mousemove="handleMouseMove">
+  <section ref="heroRef" class="app-hero" :class="{ 'app-hero--paused': !isVisible }" @mousemove="handleMouseMove">
     <!-- Animated gradient background -->
     <div class="app-hero-gradient"></div>
 
@@ -114,7 +118,7 @@ onUnmounted(() => {
           height: `${avatar.size}px`,
           animationDelay: `${avatar.delay}s`,
           animationDuration: `${avatar.duration}s`,
-          transform: `translate(${(mouseX - 0.5) * 30 * avatar.parallaxFactor}px, ${(mouseY - 0.5) * 30 * avatar.parallaxFactor}px)`,
+          '--parallax-factor': avatar.parallaxFactor,
         }"
       >
         <UiAvatar :style-name="avatar.style" :style-options="{ seed: avatar.seed, size: 80 }" :alt="avatar.style" />
@@ -193,7 +197,7 @@ onUnmounted(() => {
   --app-hero-orb-1-bg: rgba(14, 165, 233, 0.25);
   --app-hero-orb-2-bg: rgba(124, 58, 237, 0.2);
   --app-hero-orb-3-bg: rgba(52, 211, 153, 0.15);
-  --app-hero-stats-bg: rgba(255, 255, 255, 0.6);
+  --app-hero-stats-bg: rgba(255, 255, 255, 0.85);
   --app-hero-stats-border: rgba(255, 255, 255, 0.3);
 }
 .dark {
@@ -204,7 +208,7 @@ onUnmounted(() => {
   --app-hero-orb-1-bg: rgba(14, 165, 233, 0.18);
   --app-hero-orb-2-bg: rgba(124, 58, 237, 0.15);
   --app-hero-orb-3-bg: rgba(52, 211, 153, 0.1);
-  --app-hero-stats-bg: rgba(30, 30, 30, 0.6);
+  --app-hero-stats-bg: rgba(30, 30, 30, 0.88);
   --app-hero-stats-border: rgba(255, 255, 255, 0.1);
 }
 </style>
@@ -218,6 +222,17 @@ onUnmounted(() => {
   justify-content: center;
   padding: 80px 24px;
   overflow: hidden;
+
+  &--paused {
+    .app-hero-gradient,
+    .app-hero-orb,
+    .app-hero-cursor,
+    .app-hero-btn-shine,
+    .app-hero-scroll,
+    .app-hero-title-text {
+      animation-play-state: paused;
+    }
+  }
 
   &:hover .app-hero-bg {
     opacity: 0.2;
@@ -246,8 +261,11 @@ onUnmounted(() => {
     border-radius: 16px;
     overflow: hidden;
     will-change: transform;
-    transform: translateZ(0);
     contain: layout style paint;
+    transform: translate(
+      calc((var(--parallax-x, 0.5) - 0.5) * 30px * var(--parallax-factor, 1)),
+      calc((var(--parallax-y, 0.5) - 0.5) * 30px * var(--parallax-factor, 1))
+    );
 
     img {
       width: 100%;
@@ -263,6 +281,8 @@ onUnmounted(() => {
     filter: blur(120px);
     pointer-events: none;
     animation: app-hero-orb-float 20s ease-in-out infinite;
+    will-change: transform;
+    contain: strict;
 
     &-1 {
       width: 600px;
@@ -380,7 +400,7 @@ onUnmounted(() => {
   &-btn-shine {
     position: absolute;
     top: 0;
-    left: -100%;
+    left: 0;
     width: 100%;
     height: 100%;
     background: linear-gradient(
@@ -390,6 +410,7 @@ onUnmounted(() => {
       transparent
     );
     animation: app-hero-shine 3s ease-in-out infinite;
+    will-change: transform;
   }
 
   &-stats {
@@ -398,8 +419,6 @@ onUnmounted(() => {
     gap: 40px;
     padding: 24px 48px;
     background: var(--app-hero-stats-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
     border-radius: 20px;
     border: 1px solid var(--app-hero-stats-border);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
@@ -517,10 +536,10 @@ onUnmounted(() => {
 
 @keyframes app-hero-shine {
   0%, 100% {
-    left: -100%;
+    transform: translateX(-200%);
   }
   50% {
-    left: 100%;
+    transform: translateX(200%);
   }
 }
 

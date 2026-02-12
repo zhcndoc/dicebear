@@ -1,16 +1,21 @@
-import { ref, watch, onMounted, onUnmounted, type Ref } from 'vue';
+import { watch, onMounted, onUnmounted, type Ref } from 'vue';
 
 export function useParallax(isVisible: Ref<boolean>) {
-  const mouseX = ref(0.5);
-  const mouseY = ref(0.5);
-  const targetMouseX = ref(0.5);
-  const targetMouseY = ref(0.5);
+  let containerEl: HTMLElement | null = null;
+  let targetMouseX = 0.5;
+  let targetMouseY = 0.5;
+  let currentX = 0.5;
+  let currentY = 0.5;
   let animationFrameId: number | null = null;
+
+  function setContainer(el: HTMLElement) {
+    containerEl = el;
+  }
 
   function handleMouseMove(e: MouseEvent) {
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    targetMouseX.value = (e.clientX - rect.left) / rect.width;
-    targetMouseY.value = (e.clientY - rect.top) / rect.height;
+    targetMouseX = (e.clientX - rect.left) / rect.width;
+    targetMouseY = (e.clientY - rect.top) / rect.height;
   }
 
   function animate() {
@@ -19,8 +24,14 @@ export function useParallax(isVisible: Ref<boolean>) {
       return;
     }
     const lerp = 0.08;
-    mouseX.value += (targetMouseX.value - mouseX.value) * lerp;
-    mouseY.value += (targetMouseY.value - mouseY.value) * lerp;
+    currentX += (targetMouseX - currentX) * lerp;
+    currentY += (targetMouseY - currentY) * lerp;
+
+    if (containerEl) {
+      containerEl.style.setProperty('--parallax-x', String(currentX));
+      containerEl.style.setProperty('--parallax-y', String(currentY));
+    }
+
     animationFrameId = requestAnimationFrame(animate);
   }
 
@@ -44,5 +55,5 @@ export function useParallax(isVisible: Ref<boolean>) {
     }
   });
 
-  return { mouseX, mouseY, handleMouseMove };
+  return { setContainer, handleMouseMove };
 }

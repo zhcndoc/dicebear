@@ -80,9 +80,7 @@ const users = [
     padding: 12px 16px;
     border-radius: 16px;
     background:
-      linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.4) 100%);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+      linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.7) 100%);
     border: 1px solid rgba(255, 255, 255, 0.6);
     box-shadow:
       0 4px 16px rgba(0, 0, 0, 0.06),
@@ -166,7 +164,7 @@ const users = [
 
 .dark .app-hero-aside-user-list-card {
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+    linear-gradient(135deg, rgba(40, 40, 45, 0.92) 0%, rgba(35, 35, 40, 0.88) 100%);
   border-color: rgba(255, 255, 255, 0.1);
   box-shadow:
     0 4px 16px rgba(0, 0, 0, 0.25),

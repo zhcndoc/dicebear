@@ -31,7 +31,8 @@ const showcaseAvatars = computed(() => {
   return avatars;
 });
 
-const scrollPosition = ref(0);
+const trackRef = ref<HTMLElement>();
+let scrollPosition = 0;
 let animationFrame: number | null = null;
 let isPaused = false;
 let scrollDirection = 1;
@@ -52,6 +53,12 @@ function getTotalWidth() {
   return showcaseAvatars.value.length * itemWidth;
 }
 
+function updateTrackTransform() {
+  if (trackRef.value) {
+    trackRef.value.style.transform = `translateX(-${scrollPosition}px)`;
+  }
+}
+
 function animate() {
   if (!isVisible.value) {
     animationFrame = null;
@@ -63,29 +70,30 @@ function animate() {
     const progress = Math.min(elapsed / scrollDuration, 1);
     const easedProgress = easeOutCubic(progress);
 
-    scrollPosition.value = scrollStartPosition + (scrollTargetPosition - scrollStartPosition) * easedProgress;
+    scrollPosition = scrollStartPosition + (scrollTargetPosition - scrollStartPosition) * easedProgress;
 
     if (progress >= 1) {
       isManualScrolling = false;
       // Normalize position after manual scroll
       const totalWidth = getTotalWidth();
-      if (scrollPosition.value >= totalWidth) {
-        scrollPosition.value = scrollPosition.value % totalWidth;
+      if (scrollPosition >= totalWidth) {
+        scrollPosition = scrollPosition % totalWidth;
       }
-      if (scrollPosition.value < 0) {
-        scrollPosition.value = totalWidth + (scrollPosition.value % totalWidth);
+      if (scrollPosition < 0) {
+        scrollPosition = totalWidth + (scrollPosition % totalWidth);
       }
     }
   } else if (!isPaused) {
-    scrollPosition.value += 0.5 * scrollDirection;
+    scrollPosition += 0.5 * scrollDirection;
     const totalWidth = getTotalWidth();
-    if (scrollPosition.value >= totalWidth) {
-      scrollPosition.value = 0;
+    if (scrollPosition >= totalWidth) {
+      scrollPosition = 0;
     }
-    if (scrollPosition.value < 0) {
-      scrollPosition.value = totalWidth;
+    if (scrollPosition < 0) {
+      scrollPosition = totalWidth;
     }
   }
+  updateTrackTransform();
   animationFrame = requestAnimationFrame(animate);
 }
 
@@ -104,8 +112,8 @@ function resumeAnimation() {
 }
 
 function smoothScroll(delta: number) {
-  scrollStartPosition = scrollPosition.value;
-  scrollTargetPosition = scrollPosition.value + delta;
+  scrollStartPosition = scrollPosition;
+  scrollTargetPosition = scrollPosition + delta;
   scrollStartTime = Date.now();
   isManualScrolling = true;
 }
@@ -164,8 +172,8 @@ onUnmounted(() => {
           @touchend="resumeAnimation"
         >
           <div
+            ref="trackRef"
             class="app-style-showcase-track"
-            :style="{ transform: `translateX(-${scrollPosition}px)` }"
           >
             <a
               v-for="(avatar, index) in [...showcaseAvatars, ...showcaseAvatars]"
