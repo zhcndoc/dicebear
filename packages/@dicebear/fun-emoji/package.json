@@ -31,7 +31,7 @@
   "devDependencies": {
     "@dicebear/core": "9.3.1",
     "@tsconfig/recommended": "^1.0.13",
-    "del-cli": "^6.0.0",
+    "del-cli": "^7.0.0",
     "typescript": "^5.9.3",
     "uvu": "^0.5.6"
   },
