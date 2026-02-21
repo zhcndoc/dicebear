@@ -135,6 +135,10 @@ export default defineConfig<ThemeOptions>({
 
       result.push(['link', { rel: 'canonical', href: canonicalUrl }]);
 
+      if (canonicalPath.startsWith('legal/site-notice')) {
+        result.push(['meta', { name: 'robots', content: 'noindex, nofollow' }]);
+      }
+
       const pageTitle =
         ctx.pageData.frontmatter.title || ctx.pageData.title || 'DiceBear';
       const pageDescription =
