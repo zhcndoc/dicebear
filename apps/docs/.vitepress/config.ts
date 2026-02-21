@@ -5,6 +5,7 @@ import sidebarDocs from './config/sidebarDocs';
 import sidebarPlayground from './config/sidebarPlayground';
 import sidebarStyles from './config/sidebarStyles';
 import avatarStyles from './config/avatarStyles';
+import { siBluesky, siFigma } from 'simple-icons';
 
 function formatStars(count: number): string {
   if (count >= 1000) {
@@ -200,6 +201,14 @@ export default defineConfig<ThemeOptions>({
     outline: [2, 2],
     socialLinks: [
       { icon: 'github', link: 'https://github.com/dicebear/dicebear' },
+      {
+        icon: { svg: `<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="${siFigma.path}"/></svg>` },
+        link: 'https://www.figma.com/@dicebear_com',
+      },
+      {
+        icon: { svg: `<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="${siBluesky.path}"/></svg>` },
+        link: 'https://bsky.app/profile/dicebear.bsky.social',
+      },
     ],
     editLink: {
       pattern:
