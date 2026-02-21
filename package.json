@@ -21,6 +21,6 @@
     "prettier": "^3.8.1"
   },
   "overrides": {
-    "tar": "^7.5.7"
+    "minimatch": ">=10.2.1"
   }
 }
