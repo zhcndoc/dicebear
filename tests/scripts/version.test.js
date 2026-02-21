@@ -4,7 +4,7 @@ import {
   isValidVersion,
   updatePackageJson,
   collectWorkspaceNames,
-} from "../lib/version.mjs";
+} from "../../scripts/lib/version.mjs";
 
 // --- isValidVersion ---
 

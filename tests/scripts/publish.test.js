@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { shouldPublish } from "../lib/publish.mjs";
+import { shouldPublish } from "../../scripts/lib/publish.mjs";
 
 test("shouldPublish skips private packages", () => {
   const result = shouldPublish({ name: "@dicebear/editor", version: "1.0.0", private: true }, null);

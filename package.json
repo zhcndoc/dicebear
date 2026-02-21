@@ -12,7 +12,7 @@
   "scripts": {
     "build": "turbo run build",
     "test": "turbo run test",
-    "test:scripts": "node --test 'scripts/tests/*.test.js'",
+    "test:scripts": "node --test 'tests/**/*.test.js'",
     "prepare-publish": "node scripts/version.mjs",
     "prettier": "prettier --write \"{packages,apps}/**/*.{js,ts,json,md}\""
   },

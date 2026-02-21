@@ -33,7 +33,7 @@
     "prebuild": "del-cli lib",
     "build": "tsc",
     "prepublishOnly": "npm run build",
-    "test": "node --test 'tests/**/*.test.js'"
+    "test": "node --test"
   },
   "dependencies": {
     "@resvg/resvg-js": "^2.6.2",
