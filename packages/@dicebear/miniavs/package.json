@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/miniavs",
-  "version": "9.3.1",
+  "version": "9.3.2",
   "description": "Avatar style for DiceBear",
   "keywords": [
     "dicebear"
@@ -29,7 +29,7 @@
     "test": "node --test 'tests/**/*.test.js'"
   },
   "devDependencies": {
-    "@dicebear/core": "9.3.1",
+    "@dicebear/core": "9.3.2",
     "@tsconfig/recommended": "^1.0.13",
     "del-cli": "^7.0.0",
     "typescript": "^5.9.3"
