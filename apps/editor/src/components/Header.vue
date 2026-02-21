@@ -13,12 +13,12 @@ const show = ref(false);
 const { isFullscreen, enter } = useFullscreen();
 
 const styleMeta = computed(
-  () => availableStyles[store.selectedStyleName].style.meta
+  () => availableStyles[store.selectedStyleName].style.meta,
 );
 
 function onShuffle() {
   store.selectedStyleOptions = getRandomOptions(
-    availableStyles[store.selectedStyleName].options
+    availableStyles[store.selectedStyleName].options,
   );
 }
 
@@ -28,7 +28,7 @@ async function onDownload() {
   const apiUrl = getApiUrl(
     store.selectedStyleName,
     store.selectedStyleOptions,
-    'png'
+    'png',
   );
 
   const response = await fetch(apiUrl);
