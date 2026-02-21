@@ -67,7 +67,8 @@ const styles = computed(() => {
             <a
               href="https://github.com/dicebear/dicebear"
               target="_blank"
-              rel="noopener"
+              rel="me noopener"
+              aria-label="GitHub"
               class="layout-footer-social-link"
             >
               <UiIcon :path="siGithub.path" />
@@ -75,7 +76,8 @@ const styles = computed(() => {
             <a
               href="https://www.figma.com/@dicebear_com"
               target="_blank"
-              rel="noopener"
+              rel="me noopener"
+              aria-label="Figma"
               class="layout-footer-social-link"
             >
               <UiIcon :path="siFigma.path" />
@@ -83,7 +85,8 @@ const styles = computed(() => {
             <a
               href="https://bsky.app/profile/dicebear.bsky.social"
               target="_blank"
-              rel="noopener"
+              rel="me noopener"
+              aria-label="Bluesky"
               class="layout-footer-social-link"
             >
               <UiIcon :path="siBluesky.path" />
