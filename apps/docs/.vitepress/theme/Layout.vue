@@ -38,9 +38,3 @@ const sponsors = [
     </template>
   </Layout>
 </template>
-
-<style lang="scss">
-.VPDocAsideOutline.has-outline ~ .layout-aside-sponsors {
-  margin-top: 32px;
-}
-</style>

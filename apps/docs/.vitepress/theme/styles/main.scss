@@ -75,6 +75,28 @@
   }
 }
 
+.VPDocAsideOutline.has-outline ~ .layout-aside-sponsors {
+  margin-top: 32px;
+}
+
+.VPDoc .aside-container {
+  position: sticky !important;
+  top: calc(
+    var(--vp-nav-height) + var(--vp-layout-top-height, 0px) +
+      var(--vp-doc-top-height, 0px) + 48px
+  );
+  padding-top: 0 !important;
+  height: auto !important;
+  max-height: calc(
+    100vh - var(--vp-nav-height) - var(--vp-layout-top-height, 0px) -
+      var(--vp-doc-top-height, 0px) - 48px
+  );
+}
+
+.VPDoc .aside-content {
+  min-height: 0 !important;
+}
+
 img[src^='https://api.dicebear.com/']:not(.next, .prev) {
   background: repeating-conic-gradient(
       var(--avatar-background-color-1) 0% 25%,
