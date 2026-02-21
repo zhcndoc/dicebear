@@ -31,6 +31,7 @@ const sponsors = [
     <template #aside-outline-after>
       <div class="layout-aside-sponsors">
         <VPDocAsideSponsors :data="sponsors" />
+        <span class="layout-aside-sponsors-ad">Advertisement</span>
       </div>
     </template>
     <template #layout-bottom>

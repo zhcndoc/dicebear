@@ -148,11 +148,10 @@ const styles = computed(() => {
     <div class="layout-footer-sponsor">
       <div class="layout-footer-container">
         <div class="layout-footer-sponsor-inner">
-          <span class="layout-footer-sponsor-label">CDN sponsored by</span>
           <a
             href="https://bunny.net/"
             target="_blank"
-            rel="noopener"
+            rel="noopener sponsored"
             class="layout-footer-sponsor-logo"
           >
             <img
@@ -166,6 +165,7 @@ const styles = computed(() => {
               alt="bunny.net"
             />
           </a>
+          <span class="layout-footer-sponsor-meta">CDN sponsored by bunny.net · Advertisement</span>
         </div>
       </div>
     </div>
@@ -340,24 +340,29 @@ const styles = computed(() => {
 
   // Sponsor
   &-sponsor {
-    padding: 24px 0;
+    padding: 14px 0;
     border-top: 1px solid var(--vp-c-divider);
+
+    .layout-footer-container {
+      display: flex;
+      justify-content: center;
+    }
 
     &-inner {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 16px;
-    }
-
-    &-label {
-      font-size: 13px;
-      color: var(--vp-c-text-3);
+      gap: 6px;
     }
 
     &-logo {
       display: inline-flex;
       align-items: center;
+      line-height: 0;
+
+      &::after {
+        display: none !important;
+      }
 
       img {
         height: 52px;
@@ -370,6 +375,11 @@ const styles = computed(() => {
       &-dark {
         display: var(--layout-footer-sponsor-logo-dark-display);
       }
+    }
+
+    &-meta {
+      font-size: 11px;
+      color: var(--vp-c-text-3);
     }
   }
 

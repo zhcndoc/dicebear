@@ -34,7 +34,7 @@ const stats = [
           <div class="app-cdn-card-layout">
             <div class="app-cdn-card-info">
               <div class="app-cdn-sponsor">
-                <a href="https://bunny.net" class="app-cdn-logo-link" target="_blank" rel="noopener">
+                <a href="https://bunny.net/" class="app-cdn-logo-link" target="_blank" rel="noopener sponsored">
                   <img src="/sponsors/bunny-dark.svg" alt="bunny.net" class="app-cdn-logo app-cdn-logo-light" />
                   <img src="/sponsors/bunny-light.svg" alt="bunny.net" class="app-cdn-logo app-cdn-logo-dark" />
                 </a>
@@ -43,9 +43,10 @@ const stats = [
                   This allows us to serve avatars globally with low latency
                   &mdash; completely free of charge for you.
                 </p>
-                <a href="https://bunny.net" class="app-cdn-link" target="_blank" rel="noopener">
+                <a href="https://bunny.net/" class="app-cdn-link" target="_blank" rel="noopener sponsored">
                   Visit bunny.net &rarr;
                 </a>
+                <span class="app-cdn-ad">Advertisement</span>
               </div>
             </div>
 
@@ -167,6 +168,11 @@ const stats = [
     &:hover {
       color: var(--vp-c-brand-2);
     }
+  }
+
+  &-ad {
+    font-size: 12px;
+    color: var(--vp-c-text-3);
   }
 
   &-stats {

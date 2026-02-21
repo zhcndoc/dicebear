@@ -69,7 +69,9 @@ const metaList = computed(() => {
         </a>
       </li>
       <li>
-        <a href="https://bunny.net" target="_blank"> bunny.net (Sponsor) </a>
+        CDN Sponsored by
+        <a href="https://bunny.net/" target="_blank" rel="noopener sponsored">bunny.net</a>
+        (Advertisement)
       </li>
     </ul>
     <div class="footer-header" v-if="metaList.length > 0">

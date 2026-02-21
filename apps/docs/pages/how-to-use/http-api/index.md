@@ -11,11 +11,7 @@ import BrowserPreview from '@theme/components/ui/UiBrowserPreview.vue';
 
 # HTTP-API
 
-Our HTTP API is probably the easiest way to use DiceBear. Thanks to our sponsor
-[bunny.net](https://bunny.net/) it is lightning fast worldwide. You can use our
-official instance or run your own. Yes, the
-[API is also OpenSource](https://github.com/dicebear/api)!
-
+Our HTTP API is probably the easiest way to use DiceBear.
 ## Usage
 
 Use the following address and replace `<styleName>` with your preferred avatar
