@@ -26,8 +26,8 @@ jobs:
       - name: Cleanup languages
         run: find apps/editor/src/messages -type f ! -name 'en.json' -exec rm -f {} +
 
-      - name: Build with VitePress
-        run: npm run build -- --ignore "@dicebear/@(cli|docs)"
+      - name: Build editor
+        run: npx turbo run build --filter='@dicebear/editor...'
 
       - name: Deploy to Bunny.net
         uses: ayeressian/bunnycdn-storage-deploy@v2.2.2

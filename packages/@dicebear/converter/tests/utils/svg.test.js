@@ -1,8 +1,8 @@
 import { promises as fs } from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { test } from 'uvu';
-import { equal } from 'uvu/assert';
+import { test } from 'node:test';
+import { deepStrictEqual as equal } from 'node:assert/strict';
 import { ensureSize, getMetadata } from '../../lib/utils/svg.js';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
@@ -51,5 +51,3 @@ test(`Metadata parsing`, async () => {
     }
   )
 });
-
-test.run();

@@ -1,7 +1,7 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { test } from 'uvu';
-import { match } from 'uvu/assert';
+import { test } from 'node:test';
+import { match } from 'node:assert/strict';
 import webpack from 'webpack';
 import { dirSync } from 'tmp';
 
@@ -37,5 +37,3 @@ test(`Tree shaking with webpack`, async () => {
     match(module, /@dicebear\/(core|converter|identicon|collection)/);
   }
 });
-
-test.run();

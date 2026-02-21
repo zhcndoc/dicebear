@@ -1,7 +1,7 @@
 import * as color from '../../lib/utils/color.js';
 import { create as createPrng } from '../../lib/utils/prng.js';
-import { test } from 'uvu';
-import { equal } from 'uvu/assert';
+import { test } from 'node:test';
+import { deepStrictEqual as equal } from 'node:assert/strict';
 
 test('Convert color', () => {
   equal(color.convertColor('000'), '#000');
@@ -202,5 +202,3 @@ test('Multiple background colors', () => {
     }
   );
 });
-
-test.run();

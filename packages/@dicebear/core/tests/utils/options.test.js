@@ -1,6 +1,6 @@
 import { merge, defaults } from '../../lib/utils/options.js';
-import { test } from 'uvu';
-import { equal } from 'uvu/assert';
+import { test } from 'node:test';
+import { deepStrictEqual as equal } from 'node:assert/strict';
 
 test('Defaults should be returned in options.', () => {
   const options = merge(
@@ -34,5 +34,3 @@ test('All standards must be returned unless undefined.', () => {
     }
   );
 });
-
-test.run();

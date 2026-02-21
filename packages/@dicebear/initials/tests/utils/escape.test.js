@@ -1,6 +1,6 @@
 import { escapeXml } from '../../lib/utils/escape.js';
-import { test } from 'uvu';
-import { equal } from 'uvu/assert';
+import { test } from 'node:test';
+import { deepStrictEqual as equal } from 'node:assert/strict';
 
 test('XML must be escaped.', () => {
   equal(
@@ -8,5 +8,3 @@ test('XML must be escaped.', () => {
     `&lt;script type=&quot;text/javascript&quot;&gt;alert(&apos;Bad code&apos;)&gt;&lt;/script&gt;`
   );
 });
-
-test.run();

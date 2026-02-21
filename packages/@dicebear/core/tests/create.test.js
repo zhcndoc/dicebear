@@ -2,8 +2,8 @@ import { createAvatar } from '../lib/index.js';
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
-import { test } from 'uvu';
-import { equal } from 'uvu/assert';
+import { test } from 'node:test';
+import { deepStrictEqual as equal } from 'node:assert/strict';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
@@ -83,5 +83,3 @@ data.forEach((options, key) => {
     equal(JSON.parse(JSON.stringify(createAvatar(style, options).toJson())), json);
   });
 });
-
-test.run();

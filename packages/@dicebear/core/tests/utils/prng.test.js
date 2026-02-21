@@ -1,6 +1,6 @@
 import { create as createPrng } from '../../lib/utils/prng.js';
-import { test } from 'uvu';
-import { equal } from 'uvu/assert';
+import { test } from 'node:test';
+import { deepStrictEqual as equal } from 'node:assert/strict';
 
 test('Balanced PRNG', () => {
   const prng = createPrng();
@@ -87,5 +87,3 @@ test('Predictable PRNG booleans', () => {
   equal(prng.bool(0), false);
   equal(prng.bool(0), false);
 });
-
-test.run();

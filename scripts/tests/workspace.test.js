@@ -1,0 +1,29 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { resolve } from "node:path";
+import { resolveWorkspacePackages } from "../lib/workspace.mjs";
+
+const ROOT = resolve(import.meta.dirname, "../..");
+const results = resolveWorkspacePackages(ROOT);
+
+test("resolveWorkspacePackages finds @dicebear/core", () => {
+  assert.ok(results.some((p) => p.includes("packages/@dicebear/core/package.json")));
+});
+
+test("resolveWorkspacePackages finds @dicebear/converter", () => {
+  assert.ok(results.some((p) => p.includes("packages/@dicebear/converter/package.json")));
+});
+
+test("resolveWorkspacePackages finds the CLI package (dicebear)", () => {
+  assert.ok(results.some((p) => p.includes("packages/dicebear/package.json")));
+});
+
+test("resolveWorkspacePackages does not include root package.json", () => {
+  const rootPkgJson = resolve(ROOT, "package.json");
+  assert.ok(!results.includes(rootPkgJson));
+});
+
+test("resolveWorkspacePackages finds all app packages", () => {
+  assert.ok(results.some((p) => p.includes("apps/editor/package.json")));
+  assert.ok(results.some((p) => p.includes("apps/docs/package.json")));
+});

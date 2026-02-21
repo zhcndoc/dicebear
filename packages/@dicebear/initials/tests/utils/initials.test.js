@@ -1,6 +1,6 @@
 import { getInitials } from '../../lib/utils/initials.js';
-import { test } from 'uvu';
-import { equal } from 'uvu/assert';
+import { test } from 'node:test';
+import { deepStrictEqual as equal } from 'node:assert/strict';
 
 const data = [
   ['John Doe', 'JD'],
@@ -34,5 +34,3 @@ for (const [input, expected] of data) {
     equal(getInitials(input), expected);
   });
 }
-
-test.run();

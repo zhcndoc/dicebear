@@ -1,6 +1,7 @@
 {
   "name": "root",
   "private": true,
+  "packageManager": "npm@11.6.2",
   "workspaces": {
     "packages": [
       "packages/dicebear",
@@ -9,13 +10,14 @@
     ]
   },
   "scripts": {
-    "build": "lerna run build",
-    "test": "lerna run test",
-    "prepare-publish": "lerna version --force-publish --exact",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "test:scripts": "node --test 'scripts/tests/*.test.js'",
+    "prepare-publish": "node scripts/version.mjs",
     "prettier": "prettier --write \"{packages,apps}/**/*.{js,ts,json,md}\""
   },
   "devDependencies": {
-    "lerna": "^9.0.3",
+    "turbo": "^2.5.0",
     "prettier": "^3.8.1"
   },
   "overrides": {

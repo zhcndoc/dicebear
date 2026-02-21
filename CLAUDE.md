@@ -8,7 +8,7 @@ DiceBear is an avatar library for designers and developers. It generates determi
 
 ## Monorepo Structure
 
-This is a Lerna-managed monorepo with npm workspaces:
+This is a Turborepo-managed monorepo with npm workspaces:
 
 - **`packages/dicebear/`** - CLI tool (`dicebear` npm package)
 - **`packages/@dicebear/core/`** - Core avatar creation engine
@@ -22,9 +22,14 @@ This is a Lerna-managed monorepo with npm workspaces:
 
 ```bash
 # Root level (builds all packages)
-npm run build          # lerna run build
-npm run test           # lerna run test
+npm run build          # turbo run build
+npm run test           # turbo run test
 npm run prettier       # format all code
+
+# Filtered builds
+npx turbo run build --filter='!@dicebear/docs' --filter='!@dicebear/editor'  # CI: skip apps
+npx turbo run build --filter='@dicebear/docs...'    # docs + all dependencies
+npx turbo run build --filter='@dicebear/editor...'  # editor + all dependencies
 
 # Docs app (apps/docs/)
 npm run dev            # vitepress dev server
@@ -81,6 +86,6 @@ Each style in `packages/@dicebear/` follows the same pattern:
 ## Publishing
 
 Releases are triggered by Git tags (`v*`). The workflow:
-1. `npm run prepare-publish` - bumps versions with Lerna
-2. Create and push a Git tag
-3. GitHub Actions publishes to npm with OIDC authentication
+1. `node scripts/version.mjs <version>` - bumps versions in all packages, commits and tags
+2. Push commit and tag to remote
+3. GitHub Actions publishes to npm via `node scripts/publish.mjs <dist-tag>`

@@ -1,5 +1,5 @@
 # Cache and log files
-lerna-debug.log
+.turbo
 .DS_Store
 yarn-error.log
 

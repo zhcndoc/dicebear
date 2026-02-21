@@ -1,7 +1,7 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { test } from 'uvu';
-import { equal, match } from 'uvu/assert';
+import { test } from 'node:test';
+import { deepStrictEqual as equal, match } from 'node:assert/strict';
 import { rollup } from 'rollup';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
@@ -25,5 +25,3 @@ test(`Tree shaking with rollup`, async () => {
     match(module, /@dicebear\/(core|converter|identicon|collection)/);
   }
 });
-
-test.run();

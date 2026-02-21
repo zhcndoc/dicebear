@@ -37,7 +37,7 @@
     "prebuild": "del-cli lib",
     "build": "tsc",
     "prepublishOnly": "npm run build",
-    "test": "uvu tests -i fixtures"
+    "test": "node --test 'tests/**/*.test.js'"
   },
   "dependencies": {
     "@dicebear/adventurer": "9.3.1",
@@ -81,7 +81,6 @@
     "rollup": "^4.57.1",
     "tmp": "^0.2.5",
     "typescript": "^5.9.3",
-    "uvu": "^0.5.6",
     "webpack": "^5.104.1"
   },
   "peerDependencies": {

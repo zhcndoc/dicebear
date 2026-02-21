@@ -28,7 +28,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - run: npm ci
-      - run: npm run build -- --ignore "@dicebear/@(docs|editor)"
+      - run: npx turbo run build --filter='!@dicebear/docs' --filter='!@dicebear/editor'
 
       - name: Determine dist tag
         shell: bash
@@ -44,5 +44,4 @@ jobs:
             fi
           fi
 
-      - run: |
-          ./node_modules/.bin/lerna publish from-package --dist-tag "$DIST_TAG" --ignore-scripts --yes
+      - run: node scripts/publish.mjs "$DIST_TAG"

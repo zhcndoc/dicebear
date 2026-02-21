@@ -28,7 +28,7 @@ jobs:
         run: ./apps/docs/scripts/download-legal-pages.sh
 
       - name: Build with VitePress
-        run: npm run build -- --ignore "@dicebear/@(cli|editor)"
+        run: npx turbo run build --filter='@dicebear/docs...'
 
       - name: Deploy to Bunny.net
         uses: ayeressian/bunnycdn-storage-deploy@v2.2.2
