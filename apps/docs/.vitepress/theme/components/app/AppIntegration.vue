@@ -162,6 +162,10 @@ const svg = createAvatar(lorelei, {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 24px;
+
+    > * {
+      min-width: 0;
+    }
   }
 
   &-card {

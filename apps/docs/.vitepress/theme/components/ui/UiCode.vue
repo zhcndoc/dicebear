@@ -74,6 +74,7 @@ watch(() => props.code, updateCodeHtml);
   background: var(--vp-c-bg-soft);
   border-radius: 12px;
   padding: 14px 16px;
+  overflow: hidden;
 
   &-text {
     font-size: 13px;
