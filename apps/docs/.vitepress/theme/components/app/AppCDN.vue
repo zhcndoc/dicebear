@@ -102,7 +102,7 @@ const stats = [
     background:
       radial-gradient(
         ellipse 60% 70% at 50% 0%,
-        color-mix(in srgb, #ffaa49 6%, transparent),
+        color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent),
         transparent
       ),
       radial-gradient(
@@ -113,8 +113,8 @@ const stats = [
   }
 
   &-header {
-    --hl-from: #ffaa49;
-    --hl-to: #f85e23;
+    --hl-from: var(--vp-c-brand-3);
+    --hl-to: var(--vp-c-brand-1);
     opacity: 0;
     transform: translateY(30px);
     transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
@@ -223,7 +223,7 @@ const stats = [
   &-stat-icon {
     width: 20px;
     height: 20px;
-    color: #ffaa49;
+    color: var(--vp-c-brand-1);
     flex-shrink: 0;
   }
 
