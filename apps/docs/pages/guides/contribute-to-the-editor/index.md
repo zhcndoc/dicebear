@@ -1,17 +1,17 @@
-# Contribute to the documentation
+# Contribute to the editor
 
-For the documentation we use [VitePress](https://vitepress.vuejs.org/). A static
-website generator powered by [Vue](https://vuejs.org/). You can find the source
-files in the [dicebear/dicebear](https://github.com/dicebear/dicebear)
-repository in the `apps/docs` folder. You will also find a link to the source
-file of the respective page in the documentation below each page.
+The editor at [editor.dicebear.com](https://editor.dicebear.com) is built with
+[Vue 3](https://vuejs.org/), [Vite](https://vitejs.dev/) and
+[PrimeVue](https://primevue.org/). You can find the source files in the
+[dicebear/dicebear](https://github.com/dicebear/dicebear) repository in the
+`apps/editor` folder.
 
 ## Requirements
 
 - A GitHub account
 - Git installed (Learn how to install Git
   [here](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git))
-- [Node.js](https://nodejs.dev/en/) and
+- [Node.js](https://nodejs.dev/en/) (>= 20) and
   [Npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
   installed
 
@@ -47,14 +47,20 @@ file of the respective page in the documentation below each page.
 
 ## Verifying your changes
 
-You can start the documentation locally on your computer with the following
-command to check your changes:
+You can start the editor locally on your computer with the following command to
+check your changes:
 
 ```
-npm run dev --workspace @dicebear/docs
+npm run dev --workspace @dicebear/editor
 ```
 
 Open `http://localhost:5173/` in your browser to see your changes.
+
+You can also run the linter to check for code style issues:
+
+```
+npm run lint --workspace @dicebear/editor
+```
 
 ## Branching and committing
 
@@ -82,12 +88,13 @@ to create a Pull Request.
 ## Deployment (maintainers only)
 
 ::: info
-Only maintainers with write access to the repository can deploy the website.
-This section is documented here for completeness.
+Only maintainers with write access to the repository can deploy the editor. This
+section is documented here for completeness.
 :::
 
-The website ([dicebear.com](https://www.dicebear.com)) is deployed manually via
-a GitHub Actions workflow. It can be triggered from the "Actions" tab on GitHub:
+The editor ([editor.dicebear.com](https://editor.dicebear.com)) is deployed
+manually via a GitHub Actions workflow. It can be triggered from the "Actions"
+tab on GitHub:
 
-- [Deploy Website](https://github.com/dicebear/dicebear/actions/workflows/deploy-website.yml)
-  — Builds the VitePress documentation site and deploys it to the CDN.
+- [Deploy Editor](https://github.com/dicebear/dicebear/actions/workflows/deploy-editor.yml)
+  — Builds the editor app and deploys it to the CDN.
