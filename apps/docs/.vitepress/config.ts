@@ -45,6 +45,52 @@ const githubStars = await fetchGitHubStars([
   'boringdesigners/boring-avatars',
 ]);
 
+const isProduction = process.env.NODE_ENV === 'production';
+
+const thirdPartyScripts: HeadConfig[] = isProduction
+  ? [
+      [
+        'script',
+        { type: 'text/javascript' },
+        `
+      var _iub = _iub || [];
+      _iub.csConfiguration = {"siteId":3488029,"cookiePolicyId":57216581,"lang":"en","storage":{"useSiteId":true}};
+    `,
+      ],
+      [
+        'script',
+        {
+          type: 'text/javascript',
+          src: 'https://cs.iubenda.com/autoblocking/3488029.js',
+        },
+      ],
+      [
+        'script',
+        {
+          type: 'text/javascript',
+          src: '//cdn.iubenda.com/cs/gpp/stub.js',
+        },
+      ],
+      [
+        'script',
+        {
+          type: 'text/javascript',
+          src: '//cdn.iubenda.com/cs/iubenda_cs.js',
+          charset: 'UTF-8',
+          async: '',
+        },
+      ],
+      [
+        'script',
+        {
+          defer: '',
+          src: 'https://hi.dicebear.com/script.js',
+          'data-website-id': '69953f4f-b70c-4534-8ccb-370f4e9da028',
+        },
+      ],
+    ]
+  : [];
+
 export default defineConfig<ThemeOptions>({
   title: 'DiceBear',
   description:
@@ -85,42 +131,7 @@ export default defineConfig<ThemeOptions>({
         },
       }),
     ],
-    [
-      'script',
-      { type: 'text/javascript' },
-      `
-      var _iub = _iub || [];
-      _iub.csConfiguration = {"siteId":3488029,"cookiePolicyId":57216581,"lang":"en","storage":{"useSiteId":true}};
-    `,
-    ],
-    [
-      'script',
-      {
-        type: 'text/javascript',
-        src: 'https://cs.iubenda.com/autoblocking/3488029.js',
-      },
-    ],
-    [
-      'script',
-      { type: 'text/javascript', src: '//cdn.iubenda.com/cs/gpp/stub.js' },
-    ],
-    [
-      'script',
-      {
-        type: 'text/javascript',
-        src: '//cdn.iubenda.com/cs/iubenda_cs.js',
-        charset: 'UTF-8',
-        async: '',
-      },
-    ],
-    [
-      'script',
-      {
-        defer: '',
-        src: 'https://hi.dicebear.com/script.js',
-        'data-website-id': '69953f4f-b70c-4534-8ccb-370f4e9da028',
-      },
-    ],
+    ...thirdPartyScripts,
   ],
   srcDir: path.join(__dirname, '..', 'pages'),
   transformHead: (ctx) => {
