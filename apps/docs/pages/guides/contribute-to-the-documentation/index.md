@@ -78,3 +78,20 @@ git push origin <YOUR_BRANCH>
 Follow
 [these instructions](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
 to create a Pull Request.
+
+## Deployment (maintainers only)
+
+::: info  
+Only maintainers with write access to the repository can deploy the website and
+editor. This section is documented here for completeness.  
+:::
+
+The website ([dicebear.com](https://www.dicebear.com)) and the editor
+([editor.dicebear.com](https://editor.dicebear.com)) are deployed manually via
+GitHub Actions workflows. They can be triggered from the "Actions" tab on
+GitHub:
+
+- [Deploy Website](https://github.com/dicebear/dicebear/actions/workflows/deploy-website.yml)
+  — Builds the VitePress documentation site and deploys it to the CDN.
+- [Deploy Editor](https://github.com/dicebear/dicebear/actions/workflows/deploy-editor.yml)
+  — Builds the editor app and deploys it to the CDN.

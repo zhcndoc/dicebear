@@ -166,3 +166,43 @@ git push origin <YOUR_BRANCH>
 Follow
 [these instructions](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
 to create a Pull Request.
+
+## Releasing new versions (maintainers only)
+
+::: info  
+Only maintainers with write access to the repository can release new versions.
+This section is documented here for completeness.  
+:::
+
+Releases are triggered by Git tags. The version script updates all package
+versions across the monorepo, creates a commit and a Git tag:
+
+```
+node scripts/version.mjs <version>
+```
+
+The version must be a valid [semver](https://semver.org/) version (e.g. `9.1.0`
+or `9.2.0-alpha.1`). The script will:
+
+1. Update the version in all `package.json` files across the workspace
+2. Update internal workspace dependency references
+3. Sync `package-lock.json`
+4. Create a Git commit and tag (e.g. `v9.1.0`)
+
+Afterwards, push the commit and tag to the remote:
+
+```
+git push && git push --tags
+```
+
+The Git tag triggers the
+[Publish](https://github.com/dicebear/dicebear/actions/workflows/publish.yml)
+GitHub Actions workflow, which:
+
+1. Runs the test suite on Node 20, 22, 24, and 25
+2. Builds all packages
+3. Determines the npm dist-tag:
+   - Tags containing `alpha`, `beta`, or `rc` are published as `next`
+   - All other tags are published as `latest` (configurable via the `.dist-tag`
+     file)
+4. Publishes all changed packages to npm
