@@ -3,6 +3,9 @@ name: Deploy Website
 on:
   workflow_dispatch: {}
 
+permissions:
+  contents: read
+
 jobs:
   test:
     uses: dicebear/dicebear/.github/workflows/test.yml@9.x
@@ -31,7 +34,7 @@ jobs:
         run: npx turbo run build --filter='@dicebear/docs...'
 
       - name: Deploy to Bunny.net
-        uses: ayeressian/bunnycdn-storage-deploy@v2.2.2
+        uses: ayeressian/bunnycdn-storage-deploy@d4f074248f3d52f0b019bf79a8537030cbd54864 # v2.4.3
         with:
           source: 'apps/docs/.vitepress/dist'
           destination: ''

@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { execSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import { shouldPublish } from "./lib/publish.mjs";
 import { resolveWorkspacePackages } from "./lib/workspace.mjs";
 
@@ -23,8 +23,9 @@ for (const pkgPath of packageJsonPaths) {
   // Check registry version
   let registryVersion;
   try {
-    registryVersion = execSync(`npm view "${pkg.name}" version 2>/dev/null`, {
+    registryVersion = execFileSync("npm", ["view", pkg.name, "version"], {
       encoding: "utf-8",
+      stdio: ["pipe", "pipe", "ignore"],
     }).trim();
   } catch {
     // Package not yet on registry
@@ -41,7 +42,7 @@ for (const pkgPath of packageJsonPaths) {
 
   const pkgDir = join(pkgPath, "..");
   console.log(`  publish: ${pkg.name}@${pkg.version} (tag: ${distTag})`);
-  execSync(`npm publish --tag "${distTag}" --ignore-scripts`, {
+  execFileSync("npm", ["publish", "--tag", distTag, "--ignore-scripts"], {
     cwd: pkgDir,
     stdio: "inherit",
   });
