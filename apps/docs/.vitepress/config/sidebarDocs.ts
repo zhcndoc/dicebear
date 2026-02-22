@@ -40,6 +40,10 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         link: '/guides/contribute-to-the-editor/',
       },
       {
+        text: 'Contribute to the API',
+        link: '/guides/contribute-to-the-api/',
+      },
+      {
         text: 'Contribute to the library',
         link: '/guides/contribute-to-the-library/',
       },
