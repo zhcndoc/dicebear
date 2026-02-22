@@ -1,31 +1,105 @@
 # How to use the library with Angular?
 
-To use the [JS-Library](/how-to-use/js-library/) with Angular, we convert the
-SVG to a data URI and use it as the `src`.
+You can use DiceBear with Angular either via the
+[JS-Library](/how-to-use/js-library/) or the
+[HTTP-API](/how-to-use/http-api/).
 
-```typescript
-import { Component, OnInit } from '@angular/core';
+## With the JS library
+
+::: code-group
+
+```typescript [Angular 17+]
+import { Component, input, computed } from '@angular/core';
 import { createAvatar } from '@dicebear/core';
-import { avataaars } from '@dicebear/collection';
+import { lorelei } from '@dicebear/collection';
+
+@Component({
+  selector: 'app-avatar',
+  template: `<img [src]="avatarUrl()" alt="Avatar" />`,
+})
+export class AvatarComponent {
+  seed = input('John Doe');
+
+  avatarUrl = computed(() =>
+    createAvatar(lorelei, {
+      seed: this.seed(),
+      size: 128,
+      // ... other options
+    }).toDataUri()
+  );
+}
+```
+
+```typescript [Angular 16 and earlier]
+import { Component, Input, OnChanges } from '@angular/core';
+import { createAvatar } from '@dicebear/core';
+import { lorelei } from '@dicebear/collection';
 
 @Component({
   selector: 'app-avatar',
   standalone: true,
-  template: `
-    <img [src]="avatarUrl" alt="User Avatar" width="120" height="120" />
-  `,
+  template: `<img [src]="avatarUrl" alt="Avatar" />`,
 })
-export class AvatarComponent implements OnInit {
+export class AvatarComponent implements OnChanges {
+  @Input() seed: string = 'John Doe';
   avatarUrl: string = '';
 
-  ngOnInit() {
-    const avatar = createAvatar(avataaars, {
+  ngOnChanges() {
+    this.avatarUrl = createAvatar(lorelei, {
+      seed: this.seed,
       size: 128,
       // ... other options
-    });
-
-    // Returns a string like "data:image/svg+xml;utf8,..."
-    this.avatarUrl = avatar.toDataUri();
+    }).toDataUri();
   }
 }
 ```
+
+:::
+
+## With the HTTP API
+
+::: code-group
+
+```typescript [Angular 17+]
+import { Component, input, computed } from '@angular/core';
+
+@Component({
+  selector: 'app-avatar',
+  template: `<img [src]="avatarUrl()" alt="Avatar" />`,
+})
+export class AvatarComponent {
+  seed = input('John Doe');
+
+  avatarUrl = computed(() => {
+    const url = new URL('https://api.dicebear.com/9.x/lorelei/svg');
+    url.searchParams.set('seed', this.seed());
+    url.searchParams.set('size', '128');
+    // ... other options
+    return url.href;
+  });
+}
+```
+
+```typescript [Angular 16 and earlier]
+import { Component, Input, OnChanges } from '@angular/core';
+
+@Component({
+  selector: 'app-avatar',
+  standalone: true,
+  template: `<img [src]="avatarUrl" alt="Avatar" />`,
+})
+export class AvatarComponent implements OnChanges {
+  @Input() seed: string = 'John Doe';
+  avatarUrl: string = '';
+
+  ngOnChanges() {
+    const url = new URL('https://api.dicebear.com/9.x/lorelei/svg');
+    url.searchParams.set('seed', this.seed);
+    url.searchParams.set('size', '128');
+    // ... other options
+    this.avatarUrl = url.href;
+  }
+}
+```
+
+:::

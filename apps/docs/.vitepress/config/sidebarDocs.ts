@@ -21,75 +21,90 @@ const sidebar: DefaultTheme.SidebarItem[] = [
     ],
   },
   {
-    text: 'Guides',
+    text: 'Frameworks',
     items: [
       {
-        text: 'Programmatically access all available options of an avatar style',
-        link: '/guides/access-all-available-options/',
-      },
-      {
-        text: 'Host the HTTP API yourself',
-        link: '/guides/host-the-http-api-yourself/',
-      },
-      {
-        text: 'Contribute to the documentation',
-        link: '/guides/contribute-to-the-documentation/',
-      },
-      {
-        text: 'Contribute to the editor',
-        link: '/guides/contribute-to-the-editor/',
-      },
-      {
-        text: 'Contribute to the API',
-        link: '/guides/contribute-to-the-api/',
-      },
-      {
-        text: 'Contribute to the library',
-        link: '/guides/contribute-to-the-library/',
-      },
-      {
-        text: 'Create an avatar style from Scratch',
-        link: '/guides/create-an-avatar-style-from-scratch/',
-      },
-      {
-        text: 'Create an avatar style with Figma',
-        link: '/guides/create-an-avatar-style-with-figma/',
-      },
-      {
-        text: 'Use the HTTP-API as Gravatar default image',
-        link: '/guides/use-the-http-api-as-gravatar-default-image/',
-      },
-      {
-        text: 'Use the library without tree shaking',
-        link: '/guides/use-the-library-without-tree-shaking/',
-      },
-      {
-        text: 'Use the library without ESM',
-        link: '/guides/use-the-library-without-esm/',
-      },
-      {
-        text: 'Use the library with Angular',
+        text: 'Angular',
         link: '/guides/use-the-library-with-angular/',
       },
       {
-        text: 'Use the library with React',
+        text: 'React',
         link: '/guides/use-the-library-with-react/',
       },
       {
-        text: 'Use the library with React Native',
+        text: 'React Native',
         link: '/guides/use-the-library-with-react-native/',
       },
       {
-        text: 'Use the library with Svelte',
+        text: 'Svelte',
         link: '/guides/use-the-library-with-svelte/',
       },
       {
-        text: 'Use the library with Vue',
+        text: 'Vue',
         link: '/guides/use-the-library-with-vue/',
       },
+    ],
+  },
+  {
+    text: 'Create Avatar Styles',
+    items: [
       {
-        text: 'How many unique avatars are possible per avatar style?',
+        text: 'With Figma',
+        link: '/guides/create-an-avatar-style-with-figma/',
+      },
+      {
+        text: 'From Scratch',
+        link: '/guides/create-an-avatar-style-from-scratch/',
+      },
+    ],
+  },
+  {
+    text: 'Guides',
+    items: [
+      {
+        text: 'Access Style Options',
+        link: '/guides/access-all-available-options/',
+      },
+      {
+        text: 'Self-host the HTTP-API',
+        link: '/guides/host-the-http-api-yourself/',
+      },
+      {
+        text: 'Gravatar Default Image',
+        link: '/guides/use-the-http-api-as-gravatar-default-image/',
+      },
+      {
+        text: 'Without Tree Shaking',
+        link: '/guides/use-the-library-without-tree-shaking/',
+      },
+      {
+        text: 'Without ESM',
+        link: '/guides/use-the-library-without-esm/',
+      },
+      {
+        text: 'Unique Avatar Count',
         link: '/guides/how-many-unique-avatars/',
+      },
+    ],
+  },
+  {
+    text: 'Contributing',
+    items: [
+      {
+        text: 'Documentation',
+        link: '/guides/contribute-to-the-documentation/',
+      },
+      {
+        text: 'Editor',
+        link: '/guides/contribute-to-the-editor/',
+      },
+      {
+        text: 'API',
+        link: '/guides/contribute-to-the-api/',
+      },
+      {
+        text: 'Library',
+        link: '/guides/contribute-to-the-library/',
       },
     ],
   },
