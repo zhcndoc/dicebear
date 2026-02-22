@@ -24,7 +24,7 @@ defineProps<{
 
 <style lang="scss" scoped>
 .ui-section {
-  padding: 100px 24px;
+  padding: 100px 0;
   position: relative;
   overflow: hidden;
 
@@ -55,7 +55,7 @@ defineProps<{
   }
 
   @media (max-width: 640px) {
-    padding: 80px 16px;
+    padding: 80px 0;
 
     &-no-padding {
       padding-left: 0;
