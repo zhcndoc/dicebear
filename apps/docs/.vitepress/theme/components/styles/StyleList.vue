@@ -214,6 +214,10 @@ const {
       background: var(--vp-c-brand-1);
       border-color: var(--vp-c-brand-1);
       color: white;
+
+      &:hover {
+        color: white;
+      }
     }
   }
 
