@@ -74,11 +74,11 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         link: '/guides/use-the-http-api-as-gravatar-default-image/',
       },
       {
-        text: 'Without Tree Shaking',
+        text: 'Use without Tree Shaking',
         link: '/guides/use-the-library-without-tree-shaking/',
       },
       {
-        text: 'Without ESM',
+        text: 'Use without ESM',
         link: '/guides/use-the-library-without-esm/',
       },
       {
