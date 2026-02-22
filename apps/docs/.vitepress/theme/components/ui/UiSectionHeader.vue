@@ -7,7 +7,6 @@ defineProps<{
   badge?: string;
   badgeVariant?: 'brand' | 'green' | 'orange';
   headline: string;
-  headlineHighlightColor?: 'brand' | 'bunny';
   description?: string;
   tag?: 'h1' | 'h2' | 'h3';
 }>();
@@ -19,7 +18,7 @@ defineProps<{
       <slot name="badge-icon" />
       {{ badge }}
     </UiBadge>
-    <UiHeadline :tag="tag" :highlightColor="headlineHighlightColor">
+    <UiHeadline :tag="tag">
       <span v-html="headline" />
     </UiHeadline>
     <UiDescription v-if="description">{{ description }}</UiDescription>

@@ -23,10 +23,8 @@ const stats = [
       <UiSectionHeader
         class="app-cdn-header"
         badge="Content Delivery Network"
-        badge-variant="orange"
-        headline="Sponsored by <strong>bunny.net</strong>"
-        headline-highlight-color="bunny"
-        description="Our HTTP-API is served through bunny.net's global CDN — fast, reliable, and free for everyone to use."
+        headline="Lightning fast, <strong>globally delivered</strong>"
+        description="Our HTTP-API is powered by a global CDN — delivering avatars with low latency, high reliability, and completely free of charge."
       />
 
       <div class="app-cdn-content">
@@ -34,16 +32,34 @@ const stats = [
           <div class="app-cdn-card-layout">
             <div class="app-cdn-card-info">
               <div class="app-cdn-sponsor">
-                <a href="https://bunny.net/" class="app-cdn-logo-link" target="_blank" rel="noopener sponsored">
-                  <img src="/sponsors/bunny-dark.svg" alt="bunny.net" class="app-cdn-logo app-cdn-logo-light" />
-                  <img src="/sponsors/bunny-light.svg" alt="bunny.net" class="app-cdn-logo app-cdn-logo-dark" />
+                <a
+                  href="https://bunny.net/"
+                  class="app-cdn-logo-link"
+                  target="_blank"
+                  rel="noopener sponsored"
+                >
+                  <img
+                    src="/sponsors/bunny-dark.svg"
+                    alt="bunny.net"
+                    class="app-cdn-logo app-cdn-logo-light"
+                  />
+                  <img
+                    src="/sponsors/bunny-light.svg"
+                    alt="bunny.net"
+                    class="app-cdn-logo app-cdn-logo-dark"
+                  />
                 </a>
                 <p class="app-cdn-description">
                   bunny.net sponsors the CDN infrastructure for our HTTP-API.
                   This allows us to serve avatars globally with low latency
                   &mdash; completely free of charge for you.
                 </p>
-                <a href="https://bunny.net/" class="app-cdn-link" target="_blank" rel="noopener sponsored">
+                <a
+                  href="https://bunny.net/"
+                  class="app-cdn-link"
+                  target="_blank"
+                  rel="noopener sponsored"
+                >
                   Visit bunny.net &rarr;
                 </a>
                 <span class="app-cdn-ad">Advertisement</span>
@@ -84,13 +100,21 @@ const stats = [
 .app-cdn {
   &-gradient {
     background:
-      radial-gradient(ellipse 60% 70% at 50% 0%, color-mix(in srgb, #FFAA49 6%, transparent), transparent),
-      radial-gradient(ellipse 60% 70% at 50% 100%, color-mix(in srgb, var(--vp-c-brand-1) 4%, transparent), transparent);
+      radial-gradient(
+        ellipse 60% 70% at 50% 0%,
+        color-mix(in srgb, #ffaa49 6%, transparent),
+        transparent
+      ),
+      radial-gradient(
+        ellipse 60% 70% at 50% 100%,
+        color-mix(in srgb, var(--vp-c-brand-1) 4%, transparent),
+        transparent
+      );
   }
 
   &-header {
-    --hl-from: #FFAA49;
-    --hl-to: #F85E23;
+    --hl-from: #ffaa49;
+    --hl-to: #f85e23;
     opacity: 0;
     transform: translateY(30px);
     transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
@@ -199,7 +223,7 @@ const stats = [
   &-stat-icon {
     width: 20px;
     height: 20px;
-    color: #FFAA49;
+    color: #ffaa49;
     flex-shrink: 0;
   }
 

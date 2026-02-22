@@ -1,13 +1,19 @@
 <script setup lang="ts">
 defineProps<{
   tag?: 'h1' | 'h2' | 'h3';
-  highlightColor?: 'brand' | 'bunny';
   align?: 'center' | 'left';
 }>();
 </script>
 
 <template>
-  <component :is="tag || 'h2'" :class="['ui-headline', `ui-headline-highlight-${highlightColor || 'brand'}`, align === 'left' && 'ui-headline-left']">
+  <component
+    :is="tag || 'h2'"
+    :class="[
+      'ui-headline',
+      `ui-headline-highlight-brand`,
+      align === 'left' && 'ui-headline-left',
+    ]"
+  >
     <slot />
   </component>
 </template>
@@ -43,11 +49,6 @@ defineProps<{
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-  }
-
-  &-highlight-bunny {
-    --hl-from: #FFAA49;
-    --hl-to: #F85E23;
   }
 }
 </style>
