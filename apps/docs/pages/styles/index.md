@@ -1,22 +1,24 @@
 ---
+layout: page
 description: >
   Browse 30+ avatar styles for the DiceBear avatar generator. From abstract
   patterns to character designs — find the perfect style for profile pictures
   and user avatars.
 aside: false
+sidebar: false
 ---
 
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useData } from 'vitepress';
 import StyleList from "@theme/components/styles/StyleList.vue";
-import { UiHeadline, UiDescription } from "@theme/components/ui";
+import { UiContainer, UiHeadline, UiDescription } from "@theme/components/ui";
 
 const { theme } = useData();
 const styleCount = computed(() => Object.keys(theme.value.avatarStyles).length);
 </script>
 
-<div class="styles-page">
+<UiContainer class="styles-page">
   <div class="styles-hero">
     <UiHeadline tag="h1" class="styles-title">
       <strong>Styles</strong> Overview
@@ -27,11 +29,11 @@ const styleCount = computed(() => Object.keys(theme.value.avatarStyles).length);
   </div>
 
   <StyleList />
-</div>
+</UiContainer>
 
 <style>
 .styles-page .styles-hero {
   text-align: center;
-  padding: 40px 0 20px;
+  padding: 80px 0 48px;
 }
 </style>
