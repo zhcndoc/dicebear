@@ -135,7 +135,7 @@ onUnmounted(() => {
       </h1>
 
       <p class="app-hero-description">
-        Open source avatar generator with
+        DiceBear is an open source avatar generator with
         <span class="app-hero-highlight" style="white-space: nowrap">30+ styles</span>&nbsp;crafted by talented artists.
         Create profile pictures via avatar&nbsp;API, JavaScript&nbsp;library &amp; CLI.
       </p>

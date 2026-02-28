@@ -59,7 +59,7 @@ const styles = computed(() => {
             />
           </a>
           <p class="layout-footer-tagline">
-            Open source avatar generator and avatar library for designers and developers.
+            Open source avatar library for designers and developers.
           </p>
 
           <!-- Social links -->
