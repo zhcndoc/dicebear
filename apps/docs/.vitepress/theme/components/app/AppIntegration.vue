@@ -42,7 +42,7 @@ const svg = createAvatar(lorelei, {
                 <Code />
               </UiIconBox>
               <h3 class="app-integration-title">JS Library</h3>
-              <p class="app-integration-description">No data sent externally. Full control over your avatar generator with a simple API.</p>
+              <p class="app-integration-description">No data sent externally. Full control over your avatar creation with a simple API.</p>
               <a href="/how-to-use/js-library/" class="app-integration-link">
                 Library Documentation &rarr;
               </a>

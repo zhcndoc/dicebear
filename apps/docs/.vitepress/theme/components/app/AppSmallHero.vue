@@ -22,7 +22,7 @@ const hasAside = computed(() => !!slots.aside);
           <UiBadge>Why DiceBear?</UiBadge>
           <UiHeadline tag="h1">Avatars That <strong>Stand Out</strong></UiHeadline>
           <UiDescription class="app-small-hero-description">
-            DiceBear is an avatar generator and avatar library that creates unique profile pictures in no time. Whether you need geometric shapes,
+            DiceBear is an avatar generator that creates unique profile pictures in no time. Whether you need geometric shapes,
             cute characters, or pixel art &mdash; our avatar maker with 30+ styles brings your projects to life.
           </UiDescription>
 

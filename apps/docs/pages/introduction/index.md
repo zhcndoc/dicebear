@@ -1,7 +1,7 @@
 ---
 title: What is DiceBear?
 description: >
-  DiceBear is an open source avatar library and avatar generator. Create random
+  DiceBear is an open source avatar generator. Create random
   user avatars and user placeholder images via avatar API, JS library, or CLI.
 ---
 

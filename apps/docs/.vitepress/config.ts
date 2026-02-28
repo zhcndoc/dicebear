@@ -123,7 +123,7 @@ export default defineConfig<ThemeOptions>({
         operatingSystem: 'Any',
         url: 'https://www.dicebear.com',
         description:
-          'Open source avatar generator and avatar library with 30+ styles. Free avatar API, JavaScript library, and CLI.',
+          'Open source avatar library with 30+ styles. Free avatar API, JavaScript library, and CLI.',
         offers: {
           '@type': 'Offer',
           price: '0',

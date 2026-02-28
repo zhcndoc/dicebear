@@ -1,8 +1,7 @@
 ---
 description: >
-  Use the DiceBear avatar library for JavaScript to build an avatar generator in
-  your app. Create profile pictures and random user avatars in browser and
-  Node.js.
+  Use the DiceBear avatar library for JavaScript to create avatars in your app.
+  Generate profile pictures and random user avatars in browser and Node.js.
 ---
 
 # JS-Library

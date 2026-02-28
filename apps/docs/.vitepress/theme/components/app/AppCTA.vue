@@ -56,7 +56,7 @@ const bgAvatars = computed(() => {
     <UiContainer class="app-cta-container">
       <UiHeadline>Ready to create <strong>amazing</strong> avatars?</UiHeadline>
       <UiDescription class="app-cta-description">
-        Start building with our free avatar generator today. Create profile pictures, forever free.
+        Start creating avatars with DiceBear today. Create profile pictures, forever free.
       </UiDescription>
 
       <div class="app-cta-actions">
