@@ -59,19 +59,32 @@ const sidebar: DefaultTheme.SidebarItem[] = [
     ],
   },
   {
-    text: 'Guides',
+    text: 'Use Cases',
+    items: [
+      {
+        text: 'Avatar Placeholder',
+        link: '/guides/use-as-avatar-placeholder/',
+      },
+      {
+        text: 'Gravatar Default Image',
+        link: '/guides/use-the-http-api-as-gravatar-default-image/',
+      },
+      {
+        text: 'Self-host the HTTP-API',
+        link: '/guides/host-the-http-api-yourself/',
+      },
+    ],
+  },
+  {
+    text: 'Advanced',
     items: [
       {
         text: 'Access Style Options',
         link: '/guides/access-all-available-options/',
       },
       {
-        text: 'Self-host the HTTP-API',
-        link: '/guides/host-the-http-api-yourself/',
-      },
-      {
-        text: 'Gravatar Default Image',
-        link: '/guides/use-the-http-api-as-gravatar-default-image/',
+        text: 'Unique Avatar Count',
+        link: '/guides/how-many-unique-avatars/',
       },
       {
         text: 'Use without Tree Shaking',
@@ -80,10 +93,6 @@ const sidebar: DefaultTheme.SidebarItem[] = [
       {
         text: 'Use without ESM',
         link: '/guides/use-the-library-without-esm/',
-      },
-      {
-        text: 'Unique Avatar Count',
-        link: '/guides/how-many-unique-avatars/',
       },
     ],
   },

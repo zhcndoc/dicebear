@@ -1,9 +1,10 @@
 ---
 layout: page
+title: Avatar Styles – Browse 30+ Avatar Designs | DiceBear
 description: >
-  Browse 30+ avatar styles for the DiceBear avatar generator. From abstract
-  patterns to character designs — find the perfect style for profile pictures
-  and user avatars.
+  Browse 30+ styles and generate avatars with the DiceBear avatar library. From
+  abstract patterns to character designs — the perfect avatar generator for
+  profile pictures and user avatars.
 aside: false
 sidebar: false
 ---

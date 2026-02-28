@@ -1,6 +1,7 @@
 ---
+title: Dylan – Avatar Style | DiceBear
 description: >
-  Create Dylan avatars with the DiceBear avatar generator. Generate unique
+  Create Dylan avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.
 ---
 
@@ -13,6 +14,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Dylan
+
+Dylan is an illustrated vector avatar style featuring expressive characters
+with a modern, artistic aesthetic. Generate unique, customizable SVG profile
+icons for creative projects and platforms.
 
 <StylePreview styleName="dylan" />
 

@@ -1,6 +1,7 @@
 ---
+title: Notionists Neutral – Avatar Style | DiceBear
 description: >
-  Create Notionists Neutral avatars with the DiceBear avatar generator. Generate
+  Create Notionists Neutral avatars with the DiceBear avatar library. Generate
   unique profile pictures using our free avatar API or JavaScript avatar
   library.
 ---
@@ -14,6 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Notionists Neutral
+
+Notionists Neutral is the gender-neutral variant of the Notionists vector
+avatar style, delivering abstract, professional customizable profile icons for
+inclusive platforms.
 
 <StylePreview styleName="notionistsNeutral" />
 

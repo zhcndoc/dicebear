@@ -1,4 +1,16 @@
-# How to use the library with Vue?
+---
+title: Vue Avatar Library – DiceBear Integration
+description: >
+  Add DiceBear SVG avatars to Vue 3 projects via the JavaScript avatar library
+  or avatar API. Includes TypeScript support.
+---
+
+# Vue Avatar Library – Using DiceBear with Vue
+
+DiceBear pairs well with Vue's reactivity model. Wrap avatar generation in a
+`computed` property to keep profile pictures in sync with reactive data — via
+the JS library for full control, or the HTTP API for a lightweight,
+dependency-free approach.
 
 You can use DiceBear with Vue either via the
 [JS-Library](/how-to-use/js-library/) or the

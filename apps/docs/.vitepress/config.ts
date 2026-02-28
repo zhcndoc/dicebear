@@ -94,7 +94,7 @@ const thirdPartyScripts: HeadConfig[] = isProduction
 export default defineConfig<ThemeOptions>({
   title: 'DiceBear',
   description:
-    'DiceBear is a free, open source avatar generator with 30+ styles. Create unique avatars for your project in no time.',
+    'DiceBear is a free, open source avatar library and avatar API with 30+ SVG styles. Generate profile pictures and user placeholder images for any project.',
   head: [
     ['link', { rel: 'icon', href: '/favicon.ico' }],
     ['meta', { property: 'og:site_name', content: 'DiceBear' }],
@@ -109,7 +109,7 @@ export default defineConfig<ThemeOptions>({
         name: 'DiceBear',
         url: 'https://www.dicebear.com',
         description:
-          'DiceBear is a free, open source avatar generator and avatar library. Create unique avatars, profile pictures, and user placeholder images with 30+ styles.',
+          'DiceBear is a free, open source avatar library and Avatar API. Generate unique, deterministic SVG avatars and profile pictures with 30+ styles — privacy-focused and self-hostable.',
       }),
     ],
     [
@@ -123,7 +123,7 @@ export default defineConfig<ThemeOptions>({
         operatingSystem: 'Any',
         url: 'https://www.dicebear.com',
         description:
-          'Open source avatar library with 30+ styles. Free avatar API, JavaScript library, and CLI.',
+          'Privacy-focused, open source SVG avatar library with 30+ styles. Free Avatar API, JavaScript library, and CLI for generating deterministic profile pictures and user placeholder images.',
         offers: {
           '@type': 'Offer',
           price: '0',
@@ -155,7 +155,7 @@ export default defineConfig<ThemeOptions>({
       const pageDescription =
         ctx.pageData.frontmatter.description ||
         ctx.pageData.description ||
-        'DiceBear is a free, open source avatar generator and avatar library with 30+ styles.';
+        'DiceBear is a free, open source avatar library and Avatar API with 30+ SVG styles.';
 
       result.push(
         ['meta', { property: 'og:title', content: pageTitle }],

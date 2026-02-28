@@ -1,4 +1,11 @@
-# Use the HTTP-API as Gravatar default image
+---
+title: DiceBear as Gravatar Default Avatar
+description: >
+  Use DiceBear's avatar API as a privacy-focused Gravatar fallback image. Simple
+  URL-based integration with no authentication required.
+---
+
+# DiceBear as Gravatar Default Avatar
 
 You can use the HTTP API of DiceBear as Gravatar default image. But before that,
 let's take a look at the conditions for Gravatar default images:
@@ -8,10 +15,10 @@ let's take a look at the conditions for Gravatar default images:
 >    images are passed through a security scan to avoid malicious content.
 > 2. ✅ MUST be accessible via HTTP or HTTPS on the standard ports, 80 and 443,
 >    respectively.
-> 3. ⚠️ MUST have a recognizable image extension (jpg, jpeg, gif, png)
+> 3. ⚠️ MUST have a recognizable image extension (jpg, jpeg, gif, png, heic)
 > 4. ⚠️ MUST NOT include a querystring (if it does, it will be ignored)
 
-> Source: https://de.gravatar.com/site/implement/images/
+> Source: https://docs.gravatar.com/sdk/images/#default-image
 
 Since Gravatar does not support SVG, we have to use the PNG endpoint.
 

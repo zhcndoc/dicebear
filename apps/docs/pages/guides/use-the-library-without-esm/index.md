@@ -1,3 +1,10 @@
+---
+title: Use DiceBear Without ESM | DiceBear
+description: >
+  Learn how to use DiceBear in environments without ESM support by using the
+  asynchronous import() function.
+---
+
 # How to use the library without ESM?
 
 The library is a pure

@@ -1,4 +1,16 @@
-# How to use the library with Angular?
+---
+title: Angular Avatar Library – DiceBear Integration
+description: >
+  Integrate DiceBear SVG profile pictures into Angular applications via the
+  JavaScript avatar library or avatar API.
+---
+
+# Angular Avatar Library – Using DiceBear with Angular
+
+DiceBear can be integrated into Angular components using Signals (Angular 17+)
+or the `OnChanges` lifecycle hook. Use the JavaScript library for client-side
+SVG avatar generation, or the HTTP API as a simple `<img>` source with no
+additional dependencies.
 
 You can use DiceBear with Angular either via the
 [JS-Library](/how-to-use/js-library/) or the

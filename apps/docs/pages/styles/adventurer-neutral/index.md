@@ -1,6 +1,7 @@
 ---
+title: Adventurer Neutral – Avatar Style | DiceBear
 description: >
-  Create Adventurer Neutral avatars with the DiceBear avatar generator. Generate
+  Create Adventurer Neutral avatars with the DiceBear avatar library. Generate
   unique profile pictures using our free avatar API or JavaScript avatar
   library.
 ---
@@ -14,6 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Adventurer Neutral
+
+Adventurer Neutral is the gender-neutral variant of the Adventurer vector
+avatar style. It generates abstract, character-based customizable profile icons
+suitable for any audience.
 
 <StylePreview styleName="adventurerNeutral" />
 

@@ -1,3 +1,10 @@
+---
+title: Contribute to the Library | DiceBear
+description: >
+  Learn how to contribute an avatar style, improve an existing one, or
+  contribute to the DiceBear core packages.
+---
+
 # Contribute to the library
 
 There are several ways you can contribute to this project. You can contribute an

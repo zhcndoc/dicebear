@@ -1,6 +1,7 @@
 ---
+title: Thumbs – Avatar Style | DiceBear
 description: >
-  Create Thumbs avatars with the DiceBear avatar generator. Generate unique
+  Create Thumbs avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.
 ---
 
@@ -13,6 +14,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Thumbs
+
+Thumbs is a playful vector avatar style featuring stylized thumb characters
+with simple, expressive faces. Generate charming, customizable SVG profile
+icons with a fun, approachable aesthetic.
 
 <StylePreview styleName="thumbs" />
 

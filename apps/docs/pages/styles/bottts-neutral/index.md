@@ -1,6 +1,7 @@
 ---
+title: Bottts Neutral – Avatar Style | DiceBear
 description: >
-  Create Bottts Neutral avatars with the DiceBear avatar generator. Generate
+  Create Bottts Neutral avatars with the DiceBear avatar library. Generate
   unique profile pictures using our free avatar API or JavaScript avatar
   library.
 ---
@@ -14,6 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Bottts Neutral
+
+Bottts Neutral is a minimalist robot-inspired vector avatar style with clean
+geometric shapes. Generate simple, distinct customizable profile icons ideal
+for API services and tech platforms.
 
 <StylePreview styleName="botttsNeutral" />
 

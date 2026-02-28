@@ -1,10 +1,11 @@
 ---
 layout: page
-title: DiceBear - Avatars That Stand Out
+title: Why DiceBear? | Privacy-Focused SVG Avatar API & Library
 titleTemplate: false
 description: >
-  Why choose DiceBear as your avatar generator? Open source avatar library with
-  free avatar API, profile picture generator, and 30+ styles for any project.
+  Choose DiceBear as your open source avatar library: free avatar API, 30+ SVG
+  styles, privacy-focused, deterministic seed-based generation, and
+  self-hostable for full data control.
 aside: false
 ---
 

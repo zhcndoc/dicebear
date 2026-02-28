@@ -1,6 +1,7 @@
 ---
+title: Big Ears – Avatar Style | DiceBear
 description: >
-  Create Big Ears avatars with the DiceBear avatar generator. Generate unique
+  Create Big Ears avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.
 ---
 
@@ -13,6 +14,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Big Ears
+
+Big Ears is a playful illustrated vector avatar style featuring cartoon
+characters with characteristically large ears. Generate cheerful, customizable
+profile icons for apps and communities.
 
 <StylePreview styleName="bigEars" />
 

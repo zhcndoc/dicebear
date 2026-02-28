@@ -1,6 +1,7 @@
 ---
+title: Glass – Avatar Style | DiceBear
 description: >
-  Create Glass avatars with the DiceBear avatar generator. Generate unique
+  Create Glass avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.
 ---
 
@@ -13,6 +14,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Glass
+
+Glass is an abstract vector avatar style featuring translucent, geometric
+glass-effect shapes. Generate modern, design-forward customizable profile icons
+for apps with a premium aesthetic.
 
 <StylePreview styleName="glass" />
 

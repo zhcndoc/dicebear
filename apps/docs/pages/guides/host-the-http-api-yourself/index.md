@@ -1,4 +1,11 @@
-# Host the HTTP API yourself
+---
+title: Self-Hosted Avatar API – Host DiceBear Yourself
+description: >
+  Self-host the DiceBear avatar API for privacy-by-design and commercial use.
+  Docker and Node.js deployment options available.
+---
+
+# Self-Hosted Avatar API – Host DiceBear Yourself
 
 In this guide, we will show you how to host the HTTP API yourself. This is not
 necessary for most users, but it can be useful in some cases.
@@ -49,122 +56,36 @@ npm start
 
 The HTTP API supports the following environment variables:
 
-### PORT
+| Variable | Default | Description |
+| --- | --- | --- |
+| `PORT` | `3000` | Port to listen on. |
+| `HOST` | `0.0.0.0` | Host to bind to (all IPv4 addresses by default). |
+| `LOGGER` | `0` | Enable request logger (1 = on, 0 = off). |
+| `PNG` | `1` | Enable the PNG endpoint (1 = on, 0 = off). |
+| `PNG_SIZE_MIN` | `1` | Minimum allowed PNG size in px. |
+| `PNG_SIZE_MAX` | `128` | Maximum allowed PNG size in px. |
+| `PNG_SIZE_DEFAULT` | `128` | Default PNG size in px. |
+| `PNG_EXIF` | `1` | Enable EXIF metadata for PNG (1 = on, 0 = off). Requires Perl and procps. |
+| `JPEG` | `1` | Enable the JPEG endpoint (1 = on, 0 = off). |
+| `JPEG_SIZE_MIN` | `1` | Minimum allowed JPEG size in px. |
+| `JPEG_SIZE_MAX` | `128` | Maximum allowed JPEG size in px. |
+| `JPEG_SIZE_DEFAULT` | `128` | Default JPEG size in px. |
+| `JPEG_EXIF` | `1` | Enable EXIF metadata for JPEG (1 = on, 0 = off). Requires Perl and procps. |
+| `WEBP` | `1` | Enable the WebP endpoint (1 = on, 0 = off). |
+| `WEBP_SIZE_MIN` | `1` | Minimum allowed WebP size in px. |
+| `WEBP_SIZE_MAX` | `128` | Maximum allowed WebP size in px. |
+| `WEBP_SIZE_DEFAULT` | `128` | Default WebP size in px. |
+| `WEBP_EXIF` | `1` | Enable EXIF metadata for WebP (1 = on, 0 = off). Requires Perl and procps. |
+| `AVIF` | `1` | Enable the AVIF endpoint (1 = on, 0 = off). |
+| `AVIF_SIZE_MIN` | `1` | Minimum allowed AVIF size in px. |
+| `AVIF_SIZE_MAX` | `128` | Maximum allowed AVIF size in px. |
+| `AVIF_SIZE_DEFAULT` | `128` | Default AVIF size in px. |
+| `AVIF_EXIF` | `1` | Enable EXIF metadata for AVIF (1 = on, 0 = off). Requires Perl and procps. |
+| `VERSIONS` | `5,6,7,8,9` | Comma-separated list of supported DiceBear major versions. |
+| `CACHE_CONTROL_AVATARS` | `31536000` | Cache duration for avatar responses in seconds (1 year). |
+| `WORKERS` | `1` | Number of Node.js worker threads. |
 
-The port on which the HTTP API should listen. Defaults to `3000`.
-
-### HOST
-
-The host on which the HTTP API should listen. Defaults to `0.0.0.0` (all IPv4
-addresses). See
-https://fastify.dev/docs/latest/Reference/Server#listentextresolver
-
-### LOGGER
-
-Enable the logger. Defaults to `0` (false).
-
-### PNG
-
-Enable the PNG endpoint. Defaults to `1` (true).
-
-### PNG_SIZE_MIN
-
-The minimum size for the PNG endpoint. Defaults to `1`.
-
-### PNG_SIZE_MAX
-
-The maximum size for the PNG endpoint. Defaults to `128`.
-
-### PNG_SIZE_DEFAULT
-
-The default size for the PNG endpoint. Defaults to `128`.
-
-### PNG_EXIF
-
-Enable EXIF data for the PNG endpoint. Defaults to `1` (true).
-
-#### Requirements
-
-- Perl (https://www.npmjs.com/package/exiftool-vendored#installation)
-- procps
-  (https://www.npmjs.com/package/exiftool-vendored#this-package-requires-procps)
-
-### JPEG
-
-Enable the JPEG endpoint. Defaults to `1` (true).
-
-### JPEG_SIZE_MIN
-
-The minimum size for the JPEG endpoint. Defaults to `1`.
-
-### JPEG_SIZE_MAX
-
-The maximum size for the JPEG endpoint. Defaults to `128`.
-
-### JPEG_SIZE_DEFAULT
-
-The default size for the JPEG endpoint. Defaults to `128`.
-
-### JPEG_EXIF
-
-Enable EXIF data for the JPEG endpoint. Defaults to `1` (true).
-
-### WEBP
-
-Enable the WebP endpoint. Defaults to `1` (true).
-
-### WEBP_SIZE_MIN
-
-The minimum size for the WebP endpoint. Defaults to `1`.
-
-### WEBP_SIZE_MAX
-
-The maximum size for the WebP endpoint. Defaults to `128`.
-
-### WEBP_SIZE_DEFAULT
-
-The default size for the WebP endpoint. Defaults to `128`.
-
-### WEBP_EXIF
-
-Enable EXIF data for the WebP endpoint. Defaults to `1` (true).
-
-### AVIF
-
-Enable the AVIF endpoint. Defaults to `1` (true).
-
-### AVIF_SIZE_MIN
-
-The minimum size for the AVIF endpoint. Defaults to `1`.
-
-### AVIF_SIZE_MAX
-
-The maximum size for the AVIF endpoint. Defaults to `128`.
-
-### AVIF_SIZE_DEFAULT
-
-The default size for the AVIF endpoint. Defaults to `128`.
-
-### AVIF_EXIF
-
-Enable EXIF data for the AVIF endpoint. Defaults to `1` (true).
-
-#### Requirements
-
-- Perl (https://www.npmjs.com/package/exiftool-vendored#installation)
-- procps
-  (https://www.npmjs.com/package/exiftool-vendored#this-package-requires-procps)
-
-### VERSIONS
-
-Comma separated specification of desired DiceBear Major versions. Default to
-`5,6,7,8,9`.
-
-### CACHE_CONTROL_AVATARS
-
-Cache duration for the avatars endpoint in seconds. Defaults to `31536000` (1
-year).
-
-### WORKERS
-
-The number of node worker threads to use. Defaults to `1`.
+:::info EXIF metadata
+The `*_EXIF` variables require [Perl](https://www.npmjs.com/package/exiftool-vendored#installation)
+and [procps](https://www.npmjs.com/package/exiftool-vendored#this-package-requires-procps) to be installed.
+:::

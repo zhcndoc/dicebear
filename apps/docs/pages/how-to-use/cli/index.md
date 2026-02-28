@@ -1,4 +1,5 @@
 ---
+title: CLI – Generate Avatars from the Command Line | DiceBear
 description: >
   Generate avatars in bulk with the DiceBear CLI. Free command-line avatar
   generator for creating profile pictures and user placeholder images. All

@@ -1,6 +1,7 @@
 ---
+title: Avataaars – Avatar Style | DiceBear
 description: >
-  Create Avataaars avatars with the DiceBear avatar generator. Generate unique
+  Create Avataaars avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.
 ---
 
@@ -13,6 +14,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Avataaars
+
+Avataaars is a popular cartoon vector avatar style with a wide range of
+customizable facial features, hairstyles, and clothing options. Generate
+distinctive SVG profile icons for user accounts and social applications.
 
 <StylePreview styleName="avataaars" />
 

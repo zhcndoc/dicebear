@@ -1,3 +1,10 @@
+---
+title: Use DiceBear Without Tree Shaking | DiceBear
+description: >
+  Learn how to use DiceBear without a tree-shaking bundler by importing
+  individual avatar style packages instead of the full collection.
+---
+
 # Use the library without tree shaking
 
 The examples in this documentation assume that you are using a bundler with a

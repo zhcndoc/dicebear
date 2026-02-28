@@ -1,6 +1,7 @@
 ---
+title: Lorelei Neutral – Avatar Style | DiceBear
 description: >
-  Create Lorelei Neutral avatars with the DiceBear avatar generator. Generate
+  Create Lorelei Neutral avatars with the DiceBear avatar library. Generate
   unique profile pictures using our free avatar API or JavaScript avatar
   library.
 ---
@@ -14,6 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Lorelei Neutral
+
+Lorelei Neutral is the gender-neutral variant of the Lorelei vector avatar
+style, providing abstract character-based customizable profile icons for
+inclusive platforms.
 
 <StylePreview styleName="loreleiNeutral" />
 

@@ -1,3 +1,10 @@
+---
+title: How Many Unique Avatars Are Possible? | DiceBear
+description: >
+  Find out how many unique avatar combinations are possible for each DiceBear
+  avatar style with the default configuration.
+---
+
 # How many unique avatars are possible per avatar style?
 
 The number of unique avatars possible depends heavily on the configuration.

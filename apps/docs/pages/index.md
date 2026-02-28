@@ -1,11 +1,11 @@
 ---
 layout: page
-title: DiceBear - Open Source Avatar Library
+title: DiceBear | Library to Generate Avatars & SVG API
 titleTemplate: false
 description: >
-  Free avatar library with 30+ styles. Create unique avatars and profile
-  pictures for your apps with our avatar API, JavaScript library, and avatar
-  maker. Open source.
+  DiceBear is a privacy-focused library to generate avatars for your projects.
+  Use our avatar API as a powerful avatar generator for user profiles, apps, and
+  placeholder images — with 30+ SVG styles. Deterministic and self-hostable.
 aside: false
 ---
 

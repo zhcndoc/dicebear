@@ -1,6 +1,7 @@
 ---
+title: Notionists – Avatar Style | DiceBear
 description: >
-  Create Notionists avatars with the DiceBear avatar generator. Generate unique
+  Create Notionists avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.
 ---
 
@@ -13,6 +14,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Notionists
+
+Notionists is a clean, illustrative vector avatar style with a minimal,
+professional aesthetic. Generate polished, customizable SVG profile icons well
+suited for productivity tools and enterprise applications.
 
 <StylePreview styleName="notionists" />
 

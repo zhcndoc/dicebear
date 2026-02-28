@@ -1,3 +1,10 @@
+---
+title: Contribute to the Documentation | DiceBear
+description: >
+  Find out how to set up the DiceBear documentation locally with VitePress and
+  contribute improvements via a pull request.
+---
+
 # Contribute to the documentation
 
 For the documentation we use [VitePress](https://vitepress.vuejs.org/). A static

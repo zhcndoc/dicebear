@@ -1,3 +1,10 @@
+---
+title: Create an Avatar Style with Figma | DiceBear
+description: >
+  Step-by-step guide to creating a custom DiceBear avatar style using the
+  DiceBear Figma Exporter plugin.
+---
+
 # Create an avatar style with Figma
 
 Our [Figma plugin](https://www.figma.com/community/plugin/1005765655729342787)

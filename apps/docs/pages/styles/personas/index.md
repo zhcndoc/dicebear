@@ -1,6 +1,7 @@
 ---
+title: Personas – Avatar Style | DiceBear
 description: >
-  Create Personas avatars with the DiceBear avatar generator. Generate unique
+  Create Personas avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.
 ---
 
@@ -13,6 +14,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Personas
+
+Personas is a modern illustrated vector avatar style with diverse, detailed
+character designs. Generate representative, customizable SVG profile icons that
+reflect a broad range of identities and appearances.
 
 <StylePreview styleName="personas" />
 

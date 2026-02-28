@@ -1,6 +1,7 @@
 ---
+title: ToonHead – Avatar Style | DiceBear
 description: >
-  Create Toon Head avatars with the DiceBear avatar generator. Generate unique
+  Create ToonHead avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.
 ---
 
@@ -12,7 +13,11 @@ import StyleUsage from "@theme/components/styles/StyleUsage.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
-# ToonHead
+# Toon Head
+
+Toon Head is an illustrated vector avatar style featuring detailed character
+portraits with diverse skin tones, hairstyles, and expressive faces. Generate
+lifelike, customizable SVG profile icons in a modern animated-series aesthetic.
 
 <StylePreview styleName="toonHead" />
 

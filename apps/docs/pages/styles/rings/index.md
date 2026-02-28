@@ -1,6 +1,7 @@
 ---
+title: Rings – Avatar Style | DiceBear
 description: >
-  Create Rings avatars with the DiceBear avatar generator. Generate unique
+  Create Rings avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.
 ---
 
@@ -13,6 +14,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Rings
+
+Rings is a geometric abstract vector avatar style featuring interlocking ring
+patterns. Generate unique, algorithmic customizable profile icons with a clean,
+modern design suitable for any application.
 
 <StylePreview styleName="rings" />
 

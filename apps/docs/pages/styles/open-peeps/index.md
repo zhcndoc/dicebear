@@ -1,6 +1,7 @@
 ---
+title: Open Peeps – Avatar Style | DiceBear
 description: >
-  Create Open Peeps avatars with the DiceBear avatar generator. Generate unique
+  Create Open Peeps avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.
 ---
 
@@ -13,6 +14,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Open Peeps
+
+Open Peeps is a hand-drawn illustration vector avatar style featuring diverse
+human figures with mix-and-match components. Generate inclusive, expressive
+customizable SVG profile icons for community platforms and social apps.
 
 <StylePreview styleName="openPeeps" />
 

@@ -1,6 +1,7 @@
 ---
+title: Fun Emoji – Avatar Style | DiceBear
 description: >
-  Create Fun Emoji avatars with the DiceBear avatar generator. Generate unique
+  Create Fun Emoji avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.
 ---
 
@@ -13,6 +14,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Fun Emoji
+
+Fun Emoji is a vector avatar style based on colorful, expressive emoji
+characters. Generate playful, instantly recognizable customizable profile icons
+for chat apps, social networks, and messaging platforms.
 
 <StylePreview styleName="funEmoji" />
 

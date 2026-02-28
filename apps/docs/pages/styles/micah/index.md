@@ -1,6 +1,7 @@
 ---
+title: Micah – Avatar Style | DiceBear
 description: >
-  Create Micah avatars with the DiceBear avatar generator. Generate unique
+  Create Micah avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.
 ---
 
@@ -13,6 +14,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Micah
+
+Micah is a vibrant illustrated vector avatar style with flat-design characters
+and bold color combinations. Generate striking, customizable SVG profile icons
+for modern web and mobile applications.
 
 <StylePreview styleName="micah" />
 

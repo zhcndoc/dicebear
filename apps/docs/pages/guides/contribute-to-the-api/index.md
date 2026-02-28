@@ -1,3 +1,10 @@
+---
+title: Contribute to the HTTP API | DiceBear
+description: >
+  Find out how to set up the DiceBear HTTP API locally and contribute to the
+  Fastify-based server at api.dicebear.com.
+---
+
 # Contribute to the API
 
 The HTTP API at [api.dicebear.com](https://api.dicebear.com) is built with

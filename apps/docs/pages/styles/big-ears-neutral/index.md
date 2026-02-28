@@ -1,6 +1,7 @@
 ---
+title: Big Ears Neutral – Avatar Style | DiceBear
 description: >
-  Create Big Ears Neutral avatars with the DiceBear avatar generator. Generate
+  Create Big Ears Neutral avatars with the DiceBear avatar library. Generate
   unique profile pictures using our free avatar API or JavaScript avatar
   library.
 ---
@@ -14,6 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Big Ears Neutral
+
+Big Ears Neutral is the gender-neutral variant of the Big Ears vector avatar
+style, delivering abstract character designs perfect for inclusive user profile
+icons.
 
 <StylePreview styleName="bigEarsNeutral" />
 

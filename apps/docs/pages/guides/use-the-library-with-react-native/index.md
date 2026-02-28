@@ -1,4 +1,15 @@
-# How to use the library with React Native?
+---
+title: React Native Avatar Library – DiceBear
+description: >
+  Generate SVG user avatars in React Native using DiceBear. Integrate the
+  JavaScript avatar library or avatar API into your mobile app.
+---
+
+# React Native Avatar Library – Using DiceBear with React Native
+
+DiceBear can be used in React Native via the JavaScript library with an SVG
+renderer, or via the HTTP API's PNG format using the built-in `Image`
+component — no SVG library required for the API approach.
 
 You can use DiceBear with [React Native](https://reactnative.dev/) either via
 the [JS-Library](/how-to-use/js-library/) or the

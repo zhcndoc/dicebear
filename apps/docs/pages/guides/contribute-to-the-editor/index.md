@@ -1,3 +1,10 @@
+---
+title: Contribute to the Editor | DiceBear
+description: >
+  Find out how to set up the DiceBear editor locally and contribute to the
+  Vue 3 web application at editor.dicebear.com.
+---
+
 # Contribute to the editor
 
 The editor at [editor.dicebear.com](https://editor.dicebear.com) is built with

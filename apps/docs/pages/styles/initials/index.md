@@ -1,7 +1,8 @@
 ---
+title: Initials – Avatar Placeholder API | DiceBear
 description: >
-  Create Initials avatars with the DiceBear avatar generator. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Generate SVG initials avatars with DiceBear — a free avatar placeholder API
+  and JavaScript library for user profile pictures.
 ---
 
 <script setup lang="ts">
@@ -13,6 +14,11 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Initials
+
+Initials is a text-based vector avatar style that generates profile icons from
+one or two characters. A classic avatar placeholder approach — deterministic,
+readable, and ideal for systems where users haven't yet uploaded a profile
+picture.
 
 <StylePreview styleName="initials" />
 

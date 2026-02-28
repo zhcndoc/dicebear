@@ -1,6 +1,7 @@
 ---
+title: Pixel Art – Avatar Style | DiceBear
 description: >
-  Create Pixel Art avatars with the DiceBear avatar generator. Generate unique
+  Create Pixel Art avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.
 ---
 
@@ -13,6 +14,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Pixel Art
+
+Pixel Art is a retro-styled vector avatar style that renders characters in a
+classic 8-bit pixel aesthetic. Generate nostalgic, customizable SVG profile
+icons popular in gaming communities and developer tools.
 
 <StylePreview styleName="pixelArt" />
 

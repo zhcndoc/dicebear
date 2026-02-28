@@ -1,6 +1,7 @@
 ---
+title: Lorelei – Avatar Style | DiceBear
 description: >
-  Create Lorelei avatars with the DiceBear avatar generator. Generate unique
+  Create Lorelei avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.
 ---
 
@@ -13,6 +14,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Lorelei
+
+Lorelei is an elegant illustrated vector avatar style featuring expressive
+characters with detailed hair and facial features. Generate refined,
+customizable SVG profile icons for social applications and user accounts.
 
 <StylePreview styleName="lorelei" />
 

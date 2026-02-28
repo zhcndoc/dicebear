@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Lock } from 'lucide-vue-next';
+
 defineProps<{
   url: string;
 }>();
@@ -7,88 +9,85 @@ defineProps<{
 <template>
   <div class="ui-browser-preview">
     <div class="ui-browser-preview-header">
-      <div class="ui-browser-preview-header-buttons">
-        <div class="ui-browser-preview-header-buttons-red" />
-        <div class="ui-browser-preview-header-buttons-yellow" />
-        <div class="ui-browser-preview-header-buttons-green" />
+      <div class="ui-browser-preview-dots">
+        <span class="ui-browser-preview-dot ui-browser-preview-dot-red"></span>
+        <span class="ui-browser-preview-dot ui-browser-preview-dot-yellow"></span>
+        <span class="ui-browser-preview-dot ui-browser-preview-dot-green"></span>
       </div>
-      <div class="ui-browser-preview-header-url">
-        <a :href="url" target="_blank" rel="noopener">{{ url }}</a>
-      </div>
+      <a :href="url" target="_blank" rel="noopener" class="ui-browser-preview-url">
+        <Lock class="ui-browser-preview-url-lock" :size="12" />
+        <span class="ui-browser-preview-url-text">{{ url }}</span>
+      </a>
     </div>
     <div class="ui-browser-preview-body">
       <a :href="url" target="_blank" rel="noopener" class="ui-browser-preview-body-anchor">
-        <img :src="url" width="94" heigt="94" alt="preview" loading="lazy" />
+        <img :src="url" width="94" height="94" alt="preview" loading="lazy" />
       </a>
     </div>
   </div>
 </template>
 
-<style>
-:root {
-  --browser-preview-color: #e7e7e7;
-}
-
-.dark {
-  --browser-preview-color: #3b3b3b;
-}
-</style>
-
 <style lang="scss" scoped>
 .ui-browser-preview {
-  background: var(--browser-preview-color);
-  padding: 12px 8px 8px;
-  border-radius: 6px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-divider);
   margin: 16px 0;
 
   &-header {
-    align-items: center;
     display: flex;
-    padding-bottom: 12px;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--vp-c-bg-soft);
+    border-bottom: 1px solid var(--vp-c-divider);
+  }
 
-    &-buttons {
-      white-space: nowrap;
-      margin: 0 8px;
+  &-dots {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
 
-      &-red,
-      &-yellow,
-      &-green {
-        border-radius: 50%;
-        display: inline-block;
-        height: 12px;
-        width: 12px;
-        margin-right: 6px;
-      }
+  &-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
 
-      &-red {
-        background: #f25f58;
-      }
+    &-red { background: #ff5f57; }
+    &-yellow { background: #febc2e; }
+    &-green { background: #28c840; }
+  }
 
-      &-yellow {
-        background: #fbbe3c;
-      }
+  &-url {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    min-width: 0;
+    text-decoration: none;
 
-      &-green {
-        background: #58cb42;
-      }
+    &::after {
+      display: none !important;
     }
 
-    &-url {
-      background-color: var(--vp-c-bg);
-      border-radius: 6px;
-      flex: 1 0;
-      font-size: 12px;
-      overflow: auto;
-      padding: 5px 10px;
+    &-lock {
+      flex-shrink: 0;
+      color: var(--vp-c-text-3);
+    }
+
+    &-text {
+      font-size: 13px;
+      color: var(--vp-c-text-2);
+      overflow: hidden;
+      text-overflow: ellipsis;
       white-space: nowrap;
-      line-height: 1.6;
     }
   }
 
   &-body {
-    background-color: var(--vp-c-bg);
-    border-radius: 6px;
-    padding: 16px;
+    padding: 24px;
 
     &-anchor {
       display: inline-block;

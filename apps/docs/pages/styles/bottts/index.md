@@ -1,6 +1,7 @@
 ---
+title: Bottts – Avatar Style | DiceBear
 description: >
-  Create Bottts avatars with the DiceBear avatar generator. Generate unique
+  Create Bottts avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.
 ---
 
@@ -13,6 +14,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Bottts
+
+Bottts is a robot-themed vector avatar style featuring colorful, modular robot
+characters with customizable parts. A classic choice for generating fun,
+technical profile icons in developer tools and apps.
 
 <StylePreview styleName="bottts" />
 

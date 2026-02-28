@@ -1,6 +1,7 @@
 ---
+title: Shapes – Avatar Style | DiceBear
 description: >
-  Create Shapes avatars with the DiceBear avatar generator. Generate unique
+  Create Shapes avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.
 ---
 
@@ -13,6 +14,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Shapes
+
+Shapes is an abstract vector avatar style composed of layered geometric forms.
+Generate minimal, distinctive customizable SVG profile icons — ideal as avatar
+placeholders or abstract user identifiers.
 
 <StylePreview styleName="shapes" />
 

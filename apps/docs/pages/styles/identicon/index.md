@@ -1,7 +1,8 @@
 ---
+title: Identicon – SVG Identicon API | DiceBear
 description: >
-  Create Identicon avatars with the DiceBear avatar generator. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Generate deterministic Identicon avatars with DiceBear — a free, open source
+  SVG identicon API and avatar library for user profile pictures.
 ---
 
 <script setup lang="ts">
@@ -13,6 +14,11 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Identicon
+
+Identicon generates deterministic geometric pattern avatars — a popular
+approach for user identification in developer tools and version control
+systems. Each SVG identicon is uniquely derived from its seed, making it a
+reliable choice for technical profile icons and the identicon API use case.
 
 <StylePreview styleName="identicon" />
 

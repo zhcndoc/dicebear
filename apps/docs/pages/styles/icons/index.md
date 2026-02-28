@@ -1,6 +1,7 @@
 ---
+title: Icons – Avatar Style | DiceBear
 description: >
-  Create Icons avatars with the DiceBear avatar generator. Generate unique
+  Create Icons avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.
 ---
 
@@ -13,6 +14,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Icons
+
+Icons is a geometric vector avatar style built from simple, recognizable icon
+shapes. Generate clean, scalable customizable profile icons ideal for
+dashboards, admin panels, and enterprise tools.
 
 <StylePreview styleName="icons" />
 

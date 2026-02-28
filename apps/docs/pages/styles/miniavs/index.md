@@ -1,6 +1,7 @@
 ---
+title: Miniavs – Avatar Style | DiceBear
 description: >
-  Create Miniavs avatars with the DiceBear avatar generator. Generate unique
+  Create Miniavs avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.
 ---
 
@@ -13,6 +14,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Miniavs
+
+Miniavs is a compact illustrated vector avatar style featuring small, detailed
+characters with a charming aesthetic. Generate distinctive, customizable
+profile icons for apps where compact display sizes are common.
 
 <StylePreview styleName="miniavs" />
 

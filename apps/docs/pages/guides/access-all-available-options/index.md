@@ -1,3 +1,10 @@
+---
+title: Access All Available Style Options Programmatically | DiceBear
+description: >
+  Learn how to programmatically access all available options of a DiceBear
+  avatar style using the JSON schema exposed by each style package.
+---
+
 # How to programmatically access all available options of an avatar style?
 
 Each official avatar style provides a [JSON schema](https://json-schema.org/)

@@ -1,10 +1,11 @@
 ---
+title: JavaScript Avatar Library – Browser & Node.js
 description: >
-  Use the DiceBear avatar library for JavaScript to create avatars in your app.
-  Generate profile pictures and random user avatars in browser and Node.js.
+  Use the DiceBear JavaScript avatar library to generate SVG profile pictures in
+  the browser (vanilla JS), React, Vue, Angular, Svelte, and Node.js. TypeScript support included.
 ---
 
-# JS-Library
+# JavaScript Avatar Library
 
 The library is written in [TypeScript](https://www.typescriptlang.org/) /
 [JavaScript](https://developer.mozilla.org/en-US/Web/JavaScript) and can be used

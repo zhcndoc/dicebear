@@ -1,4 +1,16 @@
-# How to use the library with Svelte?
+---
+title: Svelte Avatar Library – DiceBear Integration
+description: >
+  Use DiceBear to generate SVG profile pictures in Svelte via the JavaScript
+  avatar library or avatar API.
+---
+
+# Svelte Avatar Library – Using DiceBear with Svelte
+
+DiceBear works with both Svelte 4 and Svelte 5. Use `$derived` (Svelte 5) or
+reactive statements (Svelte 4) to keep SVG profile pictures in sync with prop
+changes — via the JS library for client-side generation or the HTTP API for a
+zero-dependency approach.
 
 You can use DiceBear with Svelte either via the
 [JS-Library](/how-to-use/js-library/) or the

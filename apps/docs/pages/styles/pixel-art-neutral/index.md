@@ -1,6 +1,7 @@
 ---
+title: Pixel Art Neutral – Avatar Style | DiceBear
 description: >
-  Create Pixel Art Neutral avatars with the DiceBear avatar generator. Generate
+  Create Pixel Art Neutral avatars with the DiceBear avatar library. Generate
   unique profile pictures using our free avatar API or JavaScript avatar
   library.
 ---
@@ -14,6 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Pixel Art Neutral
+
+Pixel Art Neutral is the gender-neutral variant of the Pixel Art vector avatar
+style, offering abstract pixel-based customizable profile icons in a retro
+aesthetic.
 
 <StylePreview styleName="pixelArtNeutral" />
 
