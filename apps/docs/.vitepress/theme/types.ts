@@ -8,9 +8,16 @@ export type AvatarStyle = {
 
 export type AvatarStyles = Record<string, AvatarStyle>;
 
+export type LegalLinks = {
+  privacyPolicy?: string;
+  cookiePolicy?: string;
+  siteNotice?: string;
+};
+
 export type ThemeOptions = {
   avatarStyles: AvatarStyles;
   githubStars: Record<string, string>;
+  legalLinks?: LegalLinks;
 } & DefaultTheme.Config;
 
 export type PlaygroundStoreStyle = string;

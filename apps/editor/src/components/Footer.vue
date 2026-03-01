@@ -4,6 +4,11 @@ import type { Style, StyleMeta } from '@dicebear/core';
 import { computed } from 'vue';
 import availableStyles from '@/config/styles';
 import { useI18n } from 'vue-i18n';
+import {
+  privacyPolicyUrl,
+  cookiePolicyUrl,
+  siteNoticeUrl,
+} from '@/config/legal';
 
 const props = defineProps<{
   tab: string;
@@ -53,18 +58,18 @@ const metaList = computed(() => {
           {{ t('documentation') }}
         </a>
       </li>
-      <li>
-        <a :href="t('privacyPolicyLink')" target="_blank">
+      <li v-if="privacyPolicyUrl">
+        <a :href="privacyPolicyUrl" target="_blank">
           {{ t('privacyPolicy') }}
         </a>
       </li>
-      <li>
-        <a :href="t('cookiePolicyLink')" target="_blank">
+      <li v-if="cookiePolicyUrl">
+        <a :href="cookiePolicyUrl" target="_blank">
           {{ t('cookiePolicy') }}
         </a>
       </li>
-      <li>
-        <a :href="t('siteNoticeLink')" target="_blank">
+      <li v-if="siteNoticeUrl">
+        <a :href="siteNoticeUrl" target="_blank">
           {{ t('siteNotice') }}
         </a>
       </li>

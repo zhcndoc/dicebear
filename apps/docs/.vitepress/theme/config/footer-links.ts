@@ -17,17 +17,4 @@ export const resourceLinks: FooterLink[] = [
   { label: 'CLI', href: '/how-to-use/cli/' },
 ];
 
-export const legalLinks: FooterLink[] = [
-  { label: 'Licenses', href: '/licenses/' },
-  {
-    label: 'Privacy Policy',
-    href: 'https://www.iubenda.com/privacy-policy/57216581/full-legal',
-    external: true,
-  },
-  {
-    label: 'Cookie Policy',
-    href: 'https://www.iubenda.com/privacy-policy/57216581/cookie-policy',
-    external: true,
-  },
-  { label: 'Site Notice', href: '/legal/site-notice/' },
-];
+export const legalLinks: FooterLink[] = [{ label: 'Licenses', href: '/licenses/' }];

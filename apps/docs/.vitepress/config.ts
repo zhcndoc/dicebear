@@ -1,6 +1,10 @@
 import * as path from 'node:path';
 import { defineConfig, HeadConfig } from 'vitepress';
+import { loadEnv } from 'vite';
 import { ThemeOptions } from '@theme/types';
+
+const env = loadEnv('', process.cwd(), '');
+
 import sidebarDocs from './config/sidebarDocs';
 import sidebarPlayground from './config/sidebarPlayground';
 import sidebarStyles from './config/sidebarStyles';
@@ -186,6 +190,11 @@ export default defineConfig<ThemeOptions>({
   themeConfig: {
     avatarStyles,
     githubStars,
+    legalLinks: {
+      privacyPolicy: env.VITE_PRIVACY_POLICY_URL || undefined,
+      cookiePolicy: env.VITE_COOKIE_POLICY_URL || undefined,
+      siteNotice: env.VITE_SITE_NOTICE_URL || undefined,
+    },
     siteTitle: '',
     logo: {
       dark: '/logo-dark.svg',
