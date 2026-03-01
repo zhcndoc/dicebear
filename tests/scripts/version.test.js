@@ -32,7 +32,7 @@ test("updatePackageJson sets version to new value", () => {
 
 test("updatePackageJson updates internal dependencies", () => {
   const raw = JSON.stringify({
-    name: "@dicebear/collection",
+    name: "@dicebear/converter",
     version: "1.0.0",
     dependencies: { "@dicebear/core": "1.0.0", "external-lib": "^3.0.0" },
   }, null, "  ") + "\n";
@@ -44,7 +44,7 @@ test("updatePackageJson updates internal dependencies", () => {
 
 test("updatePackageJson updates internal devDependencies", () => {
   const raw = JSON.stringify({
-    name: "@dicebear/collection",
+    name: "@dicebear/core",
     version: "1.0.0",
     devDependencies: { "@dicebear/core": "1.0.0" },
   }, null, "  ") + "\n";
@@ -68,7 +68,7 @@ test("updatePackageJson leaves wildcard dependencies unchanged", () => {
 
 test("updatePackageJson leaves peerDependencies ranges untouched", () => {
   const raw = JSON.stringify({
-    name: "@dicebear/avataaars",
+    name: "@dicebear/converter",
     version: "1.0.0",
     peerDependencies: { "@dicebear/core": ">=1.0.0" },
   }, null, "  ") + "\n";
