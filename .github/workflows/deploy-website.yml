@@ -11,6 +11,7 @@ jobs:
     uses: dicebear/dicebear/.github/workflows/test.yml@9.x
   deploy:
     needs: test
+    environment: website
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
