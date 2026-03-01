@@ -12,12 +12,11 @@ const { theme } = useData<ThemeOptions>();
 const { hasSidebar } = useLayout();
 
 const legalLinks = computed(() => {
-  const { privacyPolicy, cookiePolicy, siteNotice } = theme.value.legalLinks ?? {};
   return [
     ...staticLegalLinks,
-    ...(privacyPolicy ? [{ label: 'Privacy Policy', href: privacyPolicy, external: true }] : []),
-    ...(cookiePolicy ? [{ label: 'Cookie Policy', href: cookiePolicy, external: true }] : []),
-    ...(siteNotice ? [{ label: 'Site Notice', href: siteNotice, external: !siteNotice.startsWith('/') }] : []),
+    ...(import.meta.env.VITE_PRIVACY_POLICY_URL ? [{ label: 'Privacy Policy', href: import.meta.env.VITE_PRIVACY_POLICY_URL, external: !import.meta.env.VITE_PRIVACY_POLICY_URL.startsWith('/') }] : []),
+    ...(import.meta.env.VITE_COOKIE_POLICY_URL ? [{ label: 'Cookie Policy', href: import.meta.env.VITE_COOKIE_POLICY_URL, external: !import.meta.env.VITE_COOKIE_POLICY_URL.startsWith('/') }] : []),
+    ...(import.meta.env.VITE_SITE_NOTICE_URL ? [{ label: 'Site Notice', href: import.meta.env.VITE_SITE_NOTICE_URL, external: !import.meta.env.VITE_SITE_NOTICE_URL.startsWith('/') }] : []),
   ];
 });
 
