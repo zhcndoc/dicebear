@@ -170,11 +170,6 @@ export default defineConfig<ThemeOptions>({
     return result;
   },
   vite: {
-    define: {
-      __LEGAL_PRIVACY_POLICY_URL__: JSON.stringify(process.env.VITE_PRIVACY_POLICY_URL ?? ''),
-      __LEGAL_COOKIE_POLICY_URL__: JSON.stringify(process.env.VITE_COOKIE_POLICY_URL ?? ''),
-      __LEGAL_SITE_NOTICE_URL__: JSON.stringify(process.env.VITE_SITE_NOTICE_URL ?? ''),
-    },
     ssr: {
       noExternal: ['vue-countup-v3', '@ark-ui/vue'],
     },

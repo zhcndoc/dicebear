@@ -17,4 +17,18 @@ export const resourceLinks: FooterLink[] = [
   { label: 'CLI', href: '/how-to-use/cli/' },
 ];
 
-export const legalLinks: FooterLink[] = [{ label: 'Licenses', href: '/licenses/' }];
+const legalLinks: FooterLink[] = [{ label: 'Licenses', href: '/licenses/' }];
+
+if (import.meta.env.VITE_PRIVACY_POLICY_URL) {
+  legalLinks.push({ label: 'Privacy Policy', href: import.meta.env.VITE_PRIVACY_POLICY_URL, external: !import.meta.env.VITE_PRIVACY_POLICY_URL.startsWith('/') });
+}
+
+if (import.meta.env.VITE_COOKIE_POLICY_URL) {
+  legalLinks.push({ label: 'Cookie Policy', href: import.meta.env.VITE_COOKIE_POLICY_URL, external: !import.meta.env.VITE_COOKIE_POLICY_URL.startsWith('/') });
+}
+
+if (import.meta.env.VITE_SITE_NOTICE_URL) {
+  legalLinks.push({ label: 'Site Notice', href: import.meta.env.VITE_SITE_NOTICE_URL, external: !import.meta.env.VITE_SITE_NOTICE_URL.startsWith('/') });
+}
+
+export { legalLinks };

@@ -6,17 +6,10 @@ import { siGithub, siFigma, siBluesky } from 'simple-icons';
 import { UiIcon } from '../ui';
 import type { StyleMeta } from '@dicebear/core';
 import type { ThemeOptions } from '@theme/types';
-import { productLinks as exploreLinks, resourceLinks, legalLinks as staticLegalLinks } from '../../config/footer-links';
+import { productLinks as exploreLinks, resourceLinks, legalLinks } from '../../config/footer-links';
 
 const { theme } = useData<ThemeOptions>();
 const { hasSidebar } = useLayout();
-
-const legalLinks = computed(() => [
-  ...staticLegalLinks,
-  ...(__LEGAL_PRIVACY_POLICY_URL__ ? [{ label: 'Privacy Policy', href: __LEGAL_PRIVACY_POLICY_URL__, external: !__LEGAL_PRIVACY_POLICY_URL__.startsWith('/') }] : []),
-  ...(__LEGAL_COOKIE_POLICY_URL__ ? [{ label: 'Cookie Policy', href: __LEGAL_COOKIE_POLICY_URL__, external: !__LEGAL_COOKIE_POLICY_URL__.startsWith('/') }] : []),
-  ...(__LEGAL_SITE_NOTICE_URL__ ? [{ label: 'Site Notice', href: __LEGAL_SITE_NOTICE_URL__, external: !__LEGAL_SITE_NOTICE_URL__.startsWith('/') }] : []),
-]);
 
 const styles = computed(() => {
   const result: StyleMeta[] = [];
