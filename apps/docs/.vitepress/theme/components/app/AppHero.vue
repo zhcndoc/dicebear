@@ -137,7 +137,7 @@ onUnmounted(() => {
       <p class="app-hero-description">
         DiceBear is a privacy-focused, open source avatar library with
         <span class="app-hero-highlight" style="white-space: nowrap">30+ SVG styles</span>&nbsp;crafted by talented artists.
-        Generate deterministic profile pictures via Avatar&nbsp;API, JavaScript&nbsp;library &amp; CLI.
+        Generate deterministic profile pictures via API, JS&nbsp;library &amp; CLI.
       </p>
 
       <div class="app-hero-actions">
