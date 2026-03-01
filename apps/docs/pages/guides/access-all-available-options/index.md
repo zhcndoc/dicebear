@@ -29,4 +29,4 @@ Also for this documentation and the CLI, we are parsing this JSON schema to show
 all the available options.
 
 Example:
-https://github.com/dicebear/dicebear/blob/main/packages/dicebear/src/utils/getOptionsBySchema.ts
+https://github.com/dicebear/dicebear/blob/main/src/js/cli/src/utils/getOptionsBySchema.ts

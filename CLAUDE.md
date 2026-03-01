@@ -10,11 +10,9 @@ DiceBear is an avatar library for designers and developers. It generates determi
 
 This is a Turborepo-managed monorepo with npm workspaces:
 
-- **`packages/dicebear/`** - CLI tool (`dicebear` npm package)
-- **`packages/@dicebear/core/`** - Core avatar creation engine
-- **`packages/@dicebear/collection/`** - Aggregates all avatar styles into one import
-- **`packages/@dicebear/converter/`** - SVG to PNG/JPEG conversion
-- **`packages/@dicebear/[style]/`** - 34 individual avatar style packages (adventurer, avataaars, bottts, etc.)
+- **`src/js/core/`** - Core avatar creation engine (`@dicebear/core`)
+- **`src/js/converter/`** - SVG to PNG/JPEG conversion (`@dicebear/converter`, JS-only due to Next.js dual-export constraints)
+- **`src/js/cli/`** - CLI tool (`dicebear` npm package)
 - **`apps/docs/`** - VitePress documentation site with Vuetify
 - **`apps/editor/`** - Vue 3 interactive avatar editor with PrimeVue
 
@@ -43,16 +41,15 @@ npm run lint           # eslint with auto-fix
 
 ## Testing
 
-Tests use `uvu` as the test runner:
+Tests use Node's built-in test runner (`node --test`):
 
 ```bash
 # Run all tests from root
 npm run test
 
 # Run tests for a specific package
-cd packages/@dicebear/core && npm test
-cd packages/@dicebear/collection && npm test
-cd packages/@dicebear/converter && npm test
+cd src/js/core && npm test
+cd src/js/converter && npm test
 ```
 
 ## Architecture
@@ -64,13 +61,6 @@ cd packages/@dicebear/converter && npm test
 3. Styles implement a `create(context)` method that returns SVG components
 4. The core handles transformations (scale, flip, rotate, translate), backgrounds, and sizing
 5. Result object provides `.toString()`, `.toJson()`, `.toDataUri()` methods
-
-### Style Package Structure
-
-Each style in `packages/@dicebear/` follows the same pattern:
-- Has peer dependency on `@dicebear/core`
-- Exports a style object with `meta`, `schema`, and `create` function
-- Contains SVG templates and option definitions
 
 ### Apps Technology Stack
 

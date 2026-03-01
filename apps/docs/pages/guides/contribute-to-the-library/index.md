@@ -56,20 +56,16 @@ easiest way to add an avatar style. Most avatar styles for DiceBear avatars were
 created this way. Alternatively, you can create an avatar style
 [from scratch](/guides/create-an-avatar-style-from-scratch/).
 
-Place your avatar style in the following folder:
+Avatar styles are maintained in the following repository:
+[dicebear/definitions](https://github.com/dicebear/definitions).
+
+To contribute a new style or improve an existing one, please open an issue or
+pull request there.
+
+Place your avatar style in the following path:
 
 ```
-packages/@dicebear/<YOUR_AVATAR_STYLE_NAME>/
-```
-
-Note that your package name must be in the namespace `@dicebear`. You store the
-package name in the `package.json` of your avatar style.
-
-```json
-{
-  "name": "@dicebear/<YOUR_AVATAR_STYLE_NAME>"
-  // ...
-}
+src/<avatar-style>.json
 ```
 
 ### Verifying your changes
@@ -78,14 +74,13 @@ You can test your new avatar style as follows:
 
 ```
 npm install
-npm run build --workspace @dicebear/<YOUR_AVATAR_STYLE_NAME>
-npm run test --workspace @dicebear/<YOUR_AVATAR_STYLE_NAME>
+npm run build
+npm run test
 ```
 
-The test (if set up correctly) creates multiple avatars under the path
-`packages/@dicebear/<YOUR_AVATAR_STYLE_NAME>/tests/svg/` and checks that the
-result has not changed when the test is called again. It should not change
-because the creation with seed must be deterministic.
+The test creates multiple avatars under the path `tests/svg/<avatar-style>` and
+checks that the result has not changed when the test is called again. It should
+not change because the creation with seed must be deterministic.
 
 If you visually check the created avatars and find errors, you can correct your
 work and run the build and test again. But first delete the files in the
@@ -118,9 +113,10 @@ to create a Pull Request.
 
 Usually the official avatar styles were created with our
 [Figma Exporter](/guides/create-an-avatar-style-with-figma/) plugin. You can
-find the Figma source files in the `src/index.ts` file of the respective avatar
-style. So if you want to customize an avatar style, it's best to do the
-customization directly in Figma.
+find the Figma source files in the `figma` folder of the
+[dicebear/definitions](https://github.com/dicebear/definitions) repository. So
+if you want to customize an avatar style, it's best to do the customization
+directly in Figma.
 
 In order to edit the files in Figma, you must
 [duplicate](https://help.figma.com/hc/en-us/articles/360038511533-Duplicate-files)
@@ -132,7 +128,7 @@ difference that you are working on an existing avatar style.
 
 You want to contribute to a package, like `@dicebear/core` or the official CLI?
 All packages are written in [TypeScript](https://www.typescriptlang.org/) and
-you can find them in the `packages` folder.
+you can find them in the `src/js` folder.
 
 ### Verifying your changes
 
@@ -148,7 +144,7 @@ If you are working on the CLI, you can test your changes _after_ the build by
 calling the CLI script directly as follows:
 
 ```
-node packages/dicebear/bin/index.js <COMMAND>
+node src/js/cli/bin/index.js <COMMAND>
 ```
 
 ### Branching and committing

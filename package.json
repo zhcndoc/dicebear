@@ -4,8 +4,7 @@
   "packageManager": "npm@11.6.2",
   "workspaces": {
     "packages": [
-      "packages/dicebear",
-      "packages/@dicebear/*",
+      "src/js/*",
       "apps/*"
     ]
   },
@@ -14,7 +13,7 @@
     "test": "turbo run test",
     "test:scripts": "node --test 'tests/**/*.test.js'",
     "prepare-publish": "node scripts/version.mjs",
-    "prettier": "prettier --write \"{packages,apps}/**/*.{js,ts,json,md}\""
+    "prettier": "prettier --write \"{src,apps}/**/*.{js,ts,json,md}\""
   },
   "devDependencies": {
     "turbo": "^2.5.0",

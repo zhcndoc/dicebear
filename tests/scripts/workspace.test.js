@@ -7,15 +7,15 @@ const ROOT = resolve(import.meta.dirname, "../..");
 const results = resolveWorkspacePackages(ROOT);
 
 test("resolveWorkspacePackages finds @dicebear/core", () => {
-  assert.ok(results.some((p) => p.includes("packages/@dicebear/core/package.json")));
+  assert.ok(results.some((p) => p.includes("src/js/core/package.json")));
 });
 
 test("resolveWorkspacePackages finds @dicebear/converter", () => {
-  assert.ok(results.some((p) => p.includes("packages/@dicebear/converter/package.json")));
+  assert.ok(results.some((p) => p.includes("src/js/converter/package.json")));
 });
 
 test("resolveWorkspacePackages finds the CLI package (dicebear)", () => {
-  assert.ok(results.some((p) => p.includes("packages/dicebear/package.json")));
+  assert.ok(results.some((p) => p.includes("src/js/cli/package.json")));
 });
 
 test("resolveWorkspacePackages does not include root package.json", () => {
