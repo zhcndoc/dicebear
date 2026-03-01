@@ -30,6 +30,10 @@ jobs:
         run: find apps/editor/src/messages -type f ! -name 'en.json' -exec rm -f {} +
 
       - name: Build editor
+        env:
+          VITE_PRIVACY_POLICY_URL: ${{ vars.VITE_PRIVACY_POLICY_URL }}
+          VITE_COOKIE_POLICY_URL: ${{ vars.VITE_COOKIE_POLICY_URL }}
+          VITE_SITE_NOTICE_URL: ${{ vars.VITE_SITE_NOTICE_URL }}
         run: npx turbo run build --filter='@dicebear/editor...'
 
       - name: Deploy to Bunny.net

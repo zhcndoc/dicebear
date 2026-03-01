@@ -31,6 +31,10 @@ jobs:
         run: ./apps/docs/scripts/download-legal-pages.sh
 
       - name: Build with VitePress
+        env:
+          VITE_PRIVACY_POLICY_URL: ${{ vars.VITE_PRIVACY_POLICY_URL }}
+          VITE_COOKIE_POLICY_URL: ${{ vars.VITE_COOKIE_POLICY_URL }}
+          VITE_SITE_NOTICE_URL: ${{ vars.VITE_SITE_NOTICE_URL }}
         run: npx turbo run build --filter='@dicebear/docs...'
 
       - name: Deploy to Bunny.net
