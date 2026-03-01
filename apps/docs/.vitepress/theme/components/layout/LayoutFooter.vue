@@ -11,14 +11,12 @@ import { productLinks as exploreLinks, resourceLinks, legalLinks as staticLegalL
 const { theme } = useData<ThemeOptions>();
 const { hasSidebar } = useLayout();
 
-const legalLinks = computed(() => {
-  return [
-    ...staticLegalLinks,
-    ...(import.meta.env.VITE_PRIVACY_POLICY_URL ? [{ label: 'Privacy Policy', href: import.meta.env.VITE_PRIVACY_POLICY_URL, external: !import.meta.env.VITE_PRIVACY_POLICY_URL.startsWith('/') }] : []),
-    ...(import.meta.env.VITE_COOKIE_POLICY_URL ? [{ label: 'Cookie Policy', href: import.meta.env.VITE_COOKIE_POLICY_URL, external: !import.meta.env.VITE_COOKIE_POLICY_URL.startsWith('/') }] : []),
-    ...(import.meta.env.VITE_SITE_NOTICE_URL ? [{ label: 'Site Notice', href: import.meta.env.VITE_SITE_NOTICE_URL, external: !import.meta.env.VITE_SITE_NOTICE_URL.startsWith('/') }] : []),
-  ];
-});
+const legalLinks = computed(() => [
+  ...staticLegalLinks,
+  ...(__LEGAL_PRIVACY_POLICY_URL__ ? [{ label: 'Privacy Policy', href: __LEGAL_PRIVACY_POLICY_URL__, external: !__LEGAL_PRIVACY_POLICY_URL__.startsWith('/') }] : []),
+  ...(__LEGAL_COOKIE_POLICY_URL__ ? [{ label: 'Cookie Policy', href: __LEGAL_COOKIE_POLICY_URL__, external: !__LEGAL_COOKIE_POLICY_URL__.startsWith('/') }] : []),
+  ...(__LEGAL_SITE_NOTICE_URL__ ? [{ label: 'Site Notice', href: __LEGAL_SITE_NOTICE_URL__, external: !__LEGAL_SITE_NOTICE_URL__.startsWith('/') }] : []),
+]);
 
 const styles = computed(() => {
   const result: StyleMeta[] = [];

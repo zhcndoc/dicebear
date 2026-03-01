@@ -12,8 +12,6 @@ interface Umami {
 
 declare var umami: Umami | undefined;
 
-interface ImportMetaEnv {
-  readonly VITE_PRIVACY_POLICY_URL?: string;
-  readonly VITE_COOKIE_POLICY_URL?: string;
-  readonly VITE_SITE_NOTICE_URL?: string;
-}
+declare const __LEGAL_PRIVACY_POLICY_URL__: string;
+declare const __LEGAL_COOKIE_POLICY_URL__: string;
+declare const __LEGAL_SITE_NOTICE_URL__: string;
