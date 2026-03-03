@@ -84,7 +84,7 @@ export function addStyleCommand(
             case 'png':
               await writeFile(
                 fileName,
-                await toPng(avatar.toString(), { includeExif }).toArrayBuffer(),
+                await toPng(avatar.toString(), { includeExif, size: validated.size as number }).toArrayBuffer(),
               );
               break;
 
@@ -94,6 +94,7 @@ export function addStyleCommand(
                 fileName,
                 await toJpeg(avatar.toString(), {
                   includeExif,
+                  size: validated.size as number,
                 }).toArrayBuffer(),
               );
               break;
@@ -103,6 +104,7 @@ export function addStyleCommand(
                 fileName,
                 await toWebp(avatar.toString(), {
                   includeExif,
+                  size: validated.size as number,
                 }).toArrayBuffer(),
               );
               break;
@@ -112,6 +114,7 @@ export function addStyleCommand(
                 fileName,
                 await toAvif(avatar.toString(), {
                   includeExif,
+                  size: validated.size as number,
                 }).toArrayBuffer(),
               );
               break;

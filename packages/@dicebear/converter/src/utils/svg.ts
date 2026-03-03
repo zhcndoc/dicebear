@@ -1,16 +1,21 @@
 import { XMLParser } from 'fast-xml-parser';
 import { Metadata } from '../types';
 
-export function ensureSize(svg: string, defaultSize: number = 512) {
-  let size = defaultSize;
+const MAX_SIZE = 2048;
+const DEFAULT_SIZE = 512;
+
+function sanitizeSize(size: number): number {
+  if (!Number.isFinite(size) || size <= 0) {
+    return DEFAULT_SIZE;
+  }
+
+  return Math.floor(Math.min(size, MAX_SIZE));
+}
+
+export function ensureSize(svg: string, size: number = DEFAULT_SIZE) {
+  size = sanitizeSize(size);
 
   svg = svg.replace(/<svg([^>]*)/, (match, g1) => {
-    const found = g1.match(/width="([^"]+)"/);
-
-    if (found) {
-      size = parseInt(found[1]);
-    }
-
     if (g1.match(/width="([^"]+)"/)) {
       g1 = g1.replace(/width="([^"]+)"/, `width="${size}"`);
     } else {

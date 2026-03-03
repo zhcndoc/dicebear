@@ -18,6 +18,7 @@ export interface Exif {
 }
 
 export interface Options {
+  size?: number;
   fonts?: string[];
   includeExif?: boolean;
 }

@@ -1,5 +1,28 @@
 # Changelog
 
+## 9.4.0
+
+### Security
+
+- `@dicebear/converter`: `ensureSize()` no longer reads the SVG's `width` /
+  `height` attributes to determine the output canvas size. Previously, a
+  crafted SVG with extremely large dimensions could cause excessive memory
+  allocation (DoS). Thanks to [@maru1009](https://github.com/maru1009) for
+  reporting this issue.
+
+### New features
+
+- `@dicebear/converter`: New `size` option for `toPng`, `toJpeg`, `toWebp`, and
+  `toAvif` (default: 512, max: 2048). Invalid values (`NaN`, `<= 0`,
+  `Infinity`) fall back to 512.
+- `dicebear` CLI: The `--size` flag is now forwarded to the converter, so
+  rasterized output matches the requested avatar size.
+
+### Breaking changes
+
+- `@dicebear/converter`: The output image size is no longer derived from the
+  input SVG dimensions. It is always set by the `size` option.
+
 ## 9.0.0
 
 This release fixes a compatibility issue with Next.js caused by the converter

@@ -80,7 +80,7 @@ async function toBuffer(
 ): Promise<Buffer> {
   const hasFonts = Array.isArray(options.fonts);
 
-  const { svg } = ensureSize(rawSvg);
+  const { svg } = ensureSize(rawSvg, options.size);
 
   let buffer = (
     await renderAsync(svg, {

@@ -6,48 +6,57 @@ import type {
   ToPng,
   ToWebp,
   ToAvif,
+  Options,
 } from './types.js';
 import { getMimeType } from './utils/mime-type.js';
 import { ensureSize } from './utils/svg.js';
 
-export const toPng: ToPng = (avatar: Avatar) => {
-  return toFormat(avatar, 'png');
+export const toPng: ToPng = (avatar: Avatar, options: Options = {}) => {
+  return toFormat(avatar, 'png', options);
 };
 
-export const toJpeg: ToJpeg = (avatar: Avatar) => {
-  return toFormat(avatar, 'jpeg');
+export const toJpeg: ToJpeg = (avatar: Avatar, options: Options = {}) => {
+  return toFormat(avatar, 'jpeg', options);
 };
 
-export const toWebp: ToWebp = (avatar: Avatar) => {
-  return toFormat(avatar, 'webp');
+export const toWebp: ToWebp = (avatar: Avatar, options: Options = {}) => {
+  return toFormat(avatar, 'webp', options);
 };
 
-export const toAvif: ToAvif = (avatar: Avatar) => {
-  return toFormat(avatar, 'avif');
+export const toAvif: ToAvif = (avatar: Avatar, options: Options = {}) => {
+  return toFormat(avatar, 'avif', options);
 };
 
 function toFormat(
   avatar: Avatar,
   format: 'png' | 'jpeg' | 'webp' | 'avif',
+  options: Options = {},
 ): Result {
+  if (options.includeExif) {
+    console.warn(
+      'The `exif` option is not supported in the browser version of `@dicebear/converter`. \n' +
+        'Please use the node version of `@dicebear/converter` to generate images with exif data.',
+    );
+  }
+
   const svg = typeof avatar === 'string' ? avatar : avatar.toString();
 
   return {
-    toDataUri: () => toDataUri(svg, format),
-    toArrayBuffer: () => toArrayBuffer(svg, format),
+    toDataUri: () => toDataUri(svg, format, options),
+    toArrayBuffer: () => toArrayBuffer(svg, format, options),
   };
 }
 
 async function toDataUri(
   svg: string,
   format: 'svg' | 'png' | 'jpeg' | 'webp' | 'avif',
-  exif?: Exif,
+  options: Options,
 ): Promise<string> {
   if ('svg' === format) {
     return `data:${getMimeType(format)};utf8,${encodeURIComponent(svg)}`;
   }
 
-  const canvas = await toCanvas(svg, format, exif);
+  const canvas = await toCanvas(svg, format, options);
 
   return canvas.toDataURL(getMimeType(format));
 }
@@ -55,9 +64,9 @@ async function toDataUri(
 async function toArrayBuffer(
   rawSvg: string,
   format: 'png' | 'jpeg' | 'webp' | 'avif',
-  exif?: Exif,
+  options: Options,
 ): Promise<ArrayBufferLike> {
-  const canvas = await toCanvas(rawSvg, format, exif);
+  const canvas = await toCanvas(rawSvg, format, options);
 
   return await new Promise<ArrayBufferLike>((resolve, reject) => {
     canvas.toBlob((blob) => {
@@ -71,16 +80,9 @@ async function toArrayBuffer(
 async function toCanvas(
   rawSvg: string,
   format: 'png' | 'jpeg' | 'webp' | 'avif',
-  exif?: Exif,
+  options: Options,
 ): Promise<HTMLCanvasElement> {
-  if (exif) {
-    console.warn(
-      'The `exif` option is not supported in the browser version of `@dicebear/converter`. \n' +
-        'Please use the node version of `@dicebear/converter` to generate images with exif data.',
-    );
-  }
-
-  const { svg, size } = ensureSize(rawSvg);
+  const { svg, size } = ensureSize(rawSvg, options.size);
 
   const canvas = document.createElement('canvas');
   canvas.width = size;
@@ -101,7 +103,7 @@ async function toCanvas(
   img.width = size;
   img.height = size;
 
-  img.setAttribute('src', await toDataUri(svg, 'svg'));
+  img.setAttribute('src', await toDataUri(svg, 'svg', options));
 
   return new Promise((resolve, reject) => {
     img.onload = () => {
