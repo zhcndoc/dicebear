@@ -198,12 +198,41 @@ const png = toPng(svg, {
 const buffer = await png.toArrayBuffer(); // [!code focus]
 ```
 
-## Options
+## Options 
 
-| Option        | Type       | Default | Environment | Description                      |
-| ------------- | ---------- | ------- | ----------- | -------------------------------- |
-| `fonts`       | `string[]` | `[]`    | Node.js     | Paths to custom font files       |
-| `includeExif` | `boolean`  | `false` | Node.js     | Include metadata in output image |
+| Option        | Type       | Default | Environment       | Description                               |
+| ------------- | ---------- | ------- | ----------------- | ----------------------------------------- |
+| `size`        | `number`   | `512`   | Browser + Node.js | Output image size in pixels (max: `2048`) |
+| `fonts`       | `string[]` | `[]`    | Node.js           | Paths to custom font files                |
+| `includeExif` | `boolean`  | `false` | Node.js           | Include metadata in output image          |
+
+### size <Badge type="tip" text="^9.4.0" />
+
+**Type:** `number`
+
+**Default:** `512`
+
+**Maximum:** `2048`
+
+Controls the width and height of the rasterized output image in pixels. The
+output is always square. Values above `2048` are clamped to `2048`. Invalid
+values (`NaN`, `<= 0`, `Infinity`) fall back to `512`.
+
+::: warning Breaking change in v9.4.0
+
+Before v9.4.0, the output image size was derived from the SVG's `width` and
+`height` attributes. The output size is now always controlled by the `size`
+option and no longer read from the SVG itself.
+
+:::
+
+```js
+import { toPng } from '@dicebear/converter';
+
+const png = toPng(svg, {
+  size: 128,
+});
+```
 
 ### fonts <Badge type="warning" text="Node.js only" />
 
@@ -343,6 +372,19 @@ const png = toPng(avatar, {
   fonts: ['/path/to/Roboto-Bold.ttf'],
 });
 
+const dataUri = await png.toDataUri();
+```
+
+### Convert with a custom size
+
+```js
+import { createAvatar } from '@dicebear/core';
+import { lorelei } from '@dicebear/collection';
+import { toPng } from '@dicebear/converter';
+
+const avatar = createAvatar(lorelei, { seed: 'John Doe' });
+
+const png = toPng(avatar, { size: 128 });
 const dataUri = await png.toDataUri();
 ```
 

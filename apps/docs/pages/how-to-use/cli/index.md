@@ -111,6 +111,24 @@ Example:
 dicebear lorelei ./avatars --format png
 ```
 
+#### Controlling the output image size
+
+`--size` controls the output dimensions (width and height in pixels) for all
+formats. The default is `512`. For rasterized formats (PNG, JPEG, WebP, AVIF) the
+value is capped at `2048`.
+
+```
+dicebear lorelei ./avatars --format png --size 256
+```
+
+::: warning Breaking change in v9.4.0 (rasterized formats only)
+
+Before v9.4.0, the rasterized output size was derived from the SVG's `width` and
+`height` attributes. It is now always set by `--size`, regardless of the SVG
+dimensions.
+
+:::
+
 #### Adding Exif metadata
 
 When creating PNG, JPEG, WebP, or AVIF images, you can include Exif metadata:
