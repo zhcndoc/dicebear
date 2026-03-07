@@ -52,41 +52,10 @@ const thirdPartyScripts: HeadConfig[] = isProduction
   ? [
       [
         'script',
-        { type: 'text/javascript' },
-        `
-      var _iub = _iub || [];
-      _iub.csConfiguration = {"siteId":3488029,"cookiePolicyId":57216581,"lang":"en","storage":{"useSiteId":true}};
-    `,
-      ],
-      [
-        'script',
-        {
-          type: 'text/javascript',
-          src: 'https://cs.iubenda.com/autoblocking/3488029.js',
-        },
-      ],
-      [
-        'script',
-        {
-          type: 'text/javascript',
-          src: '//cdn.iubenda.com/cs/gpp/stub.js',
-        },
-      ],
-      [
-        'script',
-        {
-          type: 'text/javascript',
-          src: '//cdn.iubenda.com/cs/iubenda_cs.js',
-          charset: 'UTF-8',
-          async: '',
-        },
-      ],
-      [
-        'script',
         {
           defer: '',
-          src: 'https://hi.dicebear.com/script.js',
-          'data-website-id': '69953f4f-b70c-4534-8ccb-370f4e9da028',
+          src: 'https://hello.dicebear.com/script.js',
+          'data-website-id': '2e88c8f9-fb3c-4655-8457-616ee80afe2e',
         },
       ],
     ]
@@ -216,14 +185,22 @@ export default defineConfig<ThemeOptions>({
     ],
     outline: [2, 2],
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/dicebear/dicebear', ariaLabel: 'GitHub' },
       {
-        icon: { svg: `<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="${siFigma.path}"/></svg>` },
+        icon: 'github',
+        link: 'https://github.com/dicebear/dicebear',
+        ariaLabel: 'GitHub',
+      },
+      {
+        icon: {
+          svg: `<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="${siFigma.path}"/></svg>`,
+        },
         link: 'https://www.figma.com/@dicebear_com',
         ariaLabel: 'Figma',
       },
       {
-        icon: { svg: `<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="${siBluesky.path}"/></svg>` },
+        icon: {
+          svg: `<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="${siBluesky.path}"/></svg>`,
+        },
         link: 'https://bsky.app/profile/dicebear.bsky.social',
         ariaLabel: 'Bluesky',
       },
