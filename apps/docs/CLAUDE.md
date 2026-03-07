@@ -181,5 +181,4 @@ Markdown files in `pages/` with:
 
 ## External Services
 
-- **Umami** — Self-hosted analytics (`hi.dicebear.com`)
-- **iubenda** — Cookie/privacy consent
+- **Umami** — Self-hosted analytics (`hello.dicebear.com`)
