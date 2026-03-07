@@ -181,4 +181,4 @@ Markdown files in `pages/` with:
 
 ## External Services
 
-- **Umami** — Self-hosted analytics (`hello.dicebear.com`)
+- **Umami** — Self-hosted analytics (`u.dicebear.com`)
