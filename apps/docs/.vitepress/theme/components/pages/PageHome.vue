@@ -6,6 +6,7 @@ import AppEditor from '../app/AppEditor.vue';
 import AppCreateStyle from '../app/AppCreateStyle.vue';
 import AppOpenSource from '../app/AppOpenSource.vue';
 import AppUseCases from '../app/AppUseCases.vue';
+import AppStatsBanner from '../app/AppStatsBanner.vue';
 </script>
 
 <template>
@@ -13,6 +14,7 @@ import AppUseCases from '../app/AppUseCases.vue';
     <AppSeedDemo />
     <AppStyleShowcase />
     <AppUseCases />
+    <AppStatsBanner />
     <AppEditor />
     <AppCreateStyle />
     <AppOpenSource />

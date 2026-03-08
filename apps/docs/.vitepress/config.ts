@@ -140,7 +140,13 @@ export default defineConfig<ThemeOptions>({
   },
   vite: {
     ssr: {
-      noExternal: ['vue-countup-v3', '@ark-ui/vue'],
+      noExternal: [
+        'vue-countup-v3',
+        '@ark-ui/vue',
+        'vue-chartjs',
+        'globe.gl',
+        'three',
+      ],
     },
     resolve: {
       alias: {
@@ -167,10 +173,6 @@ export default defineConfig<ThemeOptions>({
     },
     nav: [
       {
-        text: 'Why DiceBear?',
-        link: '/why-dicebear/',
-      },
-      {
         text: 'Documentation',
         link: '/introduction/',
         activeMatch: '^/(introduction|how-to-use|guides)',
@@ -181,6 +183,7 @@ export default defineConfig<ThemeOptions>({
         activeMatch: '^/styles',
       },
       { text: 'Playground', link: '/playground/', activeMatch: '^/playground' },
+      { text: 'Stats', link: '/stats/', activeMatch: '^/stats' },
       { text: 'Editor', link: 'https://editor.dicebear.com' },
     ],
     outline: [2, 2],

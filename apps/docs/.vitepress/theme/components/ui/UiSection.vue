@@ -24,7 +24,7 @@ defineProps<{
 
 <style lang="scss" scoped>
 .ui-section {
-  padding: 100px 0;
+  padding: 120px 0;
   position: relative;
   overflow: hidden;
 
@@ -32,8 +32,9 @@ defineProps<{
     content: '';
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(80%, 600px);
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--vp-c-border), transparent);
   }

@@ -273,6 +273,7 @@ function getCellValue(row: ComparisonRow, key: keyof ComparisonRow): CellValue {
 
   &-highlight-col {
     background: color-mix(in srgb, var(--vp-c-brand-1) 5%, transparent);
+    font-weight: 600;
   }
 
   &-service-link {

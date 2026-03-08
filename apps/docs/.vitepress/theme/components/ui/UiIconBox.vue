@@ -31,10 +31,10 @@ defineProps<{
     align-items: center;
     justify-content: center;
     background: color-mix(in srgb, var(--icon-color) 12%, transparent);
-    border-radius: 12px;
+    border-radius: var(--vp-radius-sm);
     position: relative;
     z-index: 1;
-    transition: all 0.3s ease;
+    transition: all var(--duration-mid, 0.35s) var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
   }
 
   /* Sizes */
@@ -46,7 +46,7 @@ defineProps<{
     .ui-icon-box-inner {
       width: 36px;
       height: 36px;
-      border-radius: 10px;
+      border-radius: calc(var(--vp-radius-sm) - 2px);
     }
   }
 
@@ -58,7 +58,7 @@ defineProps<{
     .ui-icon-box-inner {
       width: 44px;
       height: 44px;
-      border-radius: 12px;
+      border-radius: var(--vp-radius-sm);
     }
   }
 
@@ -70,7 +70,7 @@ defineProps<{
     .ui-icon-box-inner {
       width: 56px;
       height: 56px;
-      border-radius: 16px;
+      border-radius: var(--vp-radius-md);
     }
   }
 }

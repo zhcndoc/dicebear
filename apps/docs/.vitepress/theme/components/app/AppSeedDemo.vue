@@ -1,23 +1,19 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { ThemeOptions } from '@theme/types';
-import { useData } from 'vitepress';
 import { kebabCase, camelCase, capitalCase } from 'change-case';
 import { Dice5, ChevronDown, Sparkles } from 'lucide-vue-next';
 import { UiAvatar, UiHeadline, UiDescription, UiBadge, UiContainer, UiSection, UiWindow } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
-import { useAvatarStyleMeta } from '../../composables/avatar';
+import { useAvatarStyleList, useAvatarStyleMeta } from '../../composables/avatar';
 import AppSeedDemoCode from './AppSeedDemoCode.vue';
 import AppSeedDemoStylePicker from './AppSeedDemoStylePicker.vue';
-
-const { theme } = useData<ThemeOptions>();
 
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef);
 const activeStyleIndex = ref(0);
 const styleDialogOpen = ref(false);
 
-const avatarStyleList = computed(() => Object.keys(theme.value.avatarStyles));
+const avatarStyleList = useAvatarStyleList();
 const currentStyle = computed(() => kebabCase(avatarStyleList.value[activeStyleIndex.value] || 'lorelei'));
 const currentStyleCamel = computed(() => camelCase(avatarStyleList.value[activeStyleIndex.value] || 'lorelei'));
 const currentStyleDisplay = computed(() => capitalCase(avatarStyleList.value[activeStyleIndex.value] || 'lorelei'));
@@ -329,12 +325,12 @@ function selectStyle(index: number) {
   &-avatar-main {
     width: 148px;
     height: 148px;
-    border-radius: 24px;
+    border-radius: var(--vp-radius-xl);
     margin-bottom: 24px;
     position: relative;
     z-index: 1;
     box-shadow: var(--app-seed-demo-avatar-shadow);
-    transition: transform 0.3s ease;
+    transition: transform var(--duration-mid) var(--ease-smooth);
 
     &:hover {
       transform: scale(1.05);
@@ -349,8 +345,8 @@ function selectStyle(index: number) {
     padding: 0 6px 0 14px;
     background: var(--vp-c-bg);
     border: 1px solid var(--vp-c-border);
-    border-radius: 10px;
-    transition: border-color 0.2s ease;
+    border-radius: calc(var(--vp-radius-sm) - 2px);
+    transition: border-color var(--duration-fast) var(--ease-smooth);
 
     &:hover {
       border-color: var(--vp-c-text-3);
@@ -390,20 +386,21 @@ function selectStyle(index: number) {
     justify-content: center;
     width: 30px;
     height: 30px;
-    border-radius: 7px;
+    border-radius: var(--vp-radius-xs);
     border: none;
     background: var(--vp-c-bg);
     color: var(--vp-c-text-3);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all var(--duration-mid) var(--ease-spring);
 
     &:hover {
       background: var(--vp-c-brand-soft);
       color: var(--vp-c-brand-1);
+      transform: rotate(90deg);
     }
 
     &:active {
-      transform: scale(0.9);
+      transform: rotate(180deg) scale(0.9);
     }
   }
 
@@ -424,10 +421,10 @@ function selectStyle(index: number) {
     gap: 6px;
     padding: 12px 4px;
     border: none;
-    border-radius: 10px;
+    border-radius: var(--vp-radius-sm);
     background: transparent;
     cursor: pointer;
-    transition: all 0.25s ease;
+    transition: all var(--duration-mid) var(--ease-spring);
 
     &:hover {
       background: var(--vp-c-bg);
@@ -452,9 +449,9 @@ function selectStyle(index: number) {
     &-avatar {
       width: 40px;
       height: 40px;
-      border-radius: 12px;
+      border-radius: var(--vp-radius-sm);
       border: 2px solid transparent;
-      transition: all 0.25s ease;
+      transition: all var(--duration-fast) var(--ease-smooth);
       box-shadow: var(--app-seed-demo-card-avatar-shadow);
     }
 

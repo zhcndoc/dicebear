@@ -4,18 +4,20 @@ import { ThemeOptions } from '@theme/types';
 import { useData } from 'vitepress';
 import { kebabCase } from 'change-case';
 import Prando from 'prando';
-import { Play, ArrowRight, ChevronDown } from 'lucide-vue-next';
-import { UiAvatar, UiButton } from '../ui';
+import { Play, ArrowRight, ChevronDown, Star } from 'lucide-vue-next';
+import { siGithub } from 'simple-icons';
+import { UiAvatar, UiButton, UiIcon } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 import { useTypewriter } from '../../composables/useTypewriter';
 import { useParallax } from '../../composables/useParallax';
+import { useAvatarStyleList } from '../../composables/avatar';
 
 const { theme } = useData<ThemeOptions>();
 
 const isVisible = useVisibility('.app-hero', { once: false, threshold: 0.1 });
 
 const prng = new Prando(777);
-const avatarStyleList = computed(() => Object.keys(theme.value.avatarStyles));
+const avatarStyleList = useAvatarStyleList();
 
 const heroRef = ref<HTMLElement>();
 const { setContainer, handleMouseMove } = useParallax(isVisible);
@@ -105,6 +107,12 @@ onUnmounted(() => {
     <!-- Animated gradient background -->
     <div class="app-hero-gradient"></div>
 
+    <!-- Decorative geometric shapes -->
+    <div class="app-hero-shape app-hero-shape-1"></div>
+    <div class="app-hero-shape app-hero-shape-2"></div>
+    <div class="app-hero-shape app-hero-shape-3"></div>
+    <div class="app-hero-shape app-hero-shape-4"></div>
+
     <!-- Floating avatars background with parallax -->
     <div class="app-hero-bg">
       <div
@@ -126,6 +134,19 @@ onUnmounted(() => {
     </div>
 
     <div class="app-hero-content">
+      <a
+        href="https://github.com/dicebear/dicebear"
+        target="_blank"
+        rel="noopener"
+        class="app-hero-badge"
+      >
+        <UiIcon :path="siGithub.path" :size="14" class="app-hero-badge-icon" />
+        <span>Open Source Avatar Library</span>
+        <span class="app-hero-badge-divider"></span>
+        <Star :size="13" class="app-hero-badge-star" />
+        <span class="app-hero-badge-count">{{ theme.githubStars?.['dicebear/dicebear'] || '8k+' }}</span>
+      </a>
+
       <h1 class="app-hero-title">
         <span class="app-hero-title-line">Unique Avatars for</span>
         <span class="app-hero-title-dynamic">
@@ -144,35 +165,11 @@ onUnmounted(() => {
         <UiButton href="/playground/" class="app-hero-btn-primary app-hero-action-btn">
           <Play :size="20" />
           Try Playground
-          <span class="app-hero-btn-shine"></span>
         </UiButton>
         <UiButton href="/introduction/" variant="secondary" class="app-hero-action-btn">
           Get Started
           <ArrowRight :size="20" class="app-hero-arrow-icon" />
         </UiButton>
-      </div>
-
-      <div class="app-hero-stats">
-        <div class="app-hero-stat">
-          <span class="app-hero-stat-value">
-            <span class="app-hero-counter" data-target="30">30</span>+
-          </span>
-          <span class="app-hero-stat-label">Avatar Styles</span>
-        </div>
-        <div class="app-hero-stat-divider"></div>
-        <div class="app-hero-stat">
-          <span class="app-hero-stat-value">
-            {{ theme.githubStars?.['dicebear/dicebear'] || '8k+' }}
-          </span>
-          <span class="app-hero-stat-label">GitHub Stars</span>
-        </div>
-        <div class="app-hero-stat-divider"></div>
-        <div class="app-hero-stat">
-          <span class="app-hero-stat-value">
-            <span class="app-hero-counter" data-target="1.25">1.25</span>B+
-          </span>
-          <span class="app-hero-stat-label">Monthly API Requests</span>
-        </div>
       </div>
     </div>
 
@@ -180,36 +177,27 @@ onUnmounted(() => {
     <button class="app-hero-scroll" @click="scrollToContent" aria-label="Scroll to content">
       <ChevronDown />
     </button>
-
-    <!-- Decorative elements -->
-    <div class="app-hero-orb app-hero-orb-1"></div>
-    <div class="app-hero-orb app-hero-orb-2"></div>
-    <div class="app-hero-orb app-hero-orb-3"></div>
   </section>
 </template>
 
 <style lang="scss">
 :root {
   --app-hero-gradient:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(14, 165, 233, 0.15), transparent),
-    radial-gradient(ellipse 60% 40% at 80% 50%, rgba(124, 58, 237, 0.1), transparent),
-    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(14, 165, 233, 0.08), transparent);
-  --app-hero-orb-1-bg: rgba(14, 165, 233, 0.25);
-  --app-hero-orb-2-bg: rgba(124, 58, 237, 0.2);
-  --app-hero-orb-3-bg: rgba(52, 211, 153, 0.15);
-  --app-hero-stats-bg: rgba(255, 255, 255, 0.85);
-  --app-hero-stats-border: rgba(255, 255, 255, 0.3);
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(14, 165, 233, 0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 50%, rgba(124, 58, 237, 0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(20, 184, 166, 0.06), transparent);
+  --app-hero-badge-bg: rgba(255, 255, 255, 0.8);
+  --app-hero-badge-border: rgba(0, 0, 0, 0.08);
+  --app-hero-star-color: #f59e0b;
 }
 .dark {
   --app-hero-gradient:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(14, 165, 233, 0.2), transparent),
-    radial-gradient(ellipse 60% 40% at 80% 50%, rgba(124, 58, 237, 0.15), transparent),
-    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(14, 165, 233, 0.1), transparent);
-  --app-hero-orb-1-bg: rgba(14, 165, 233, 0.18);
-  --app-hero-orb-2-bg: rgba(124, 58, 237, 0.15);
-  --app-hero-orb-3-bg: rgba(52, 211, 153, 0.1);
-  --app-hero-stats-bg: rgba(30, 30, 30, 0.88);
-  --app-hero-stats-border: rgba(255, 255, 255, 0.1);
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(14, 165, 233, 0.15), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 50%, rgba(124, 58, 237, 0.1), transparent),
+    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(20, 184, 166, 0.08), transparent);
+  --app-hero-badge-bg: rgba(35, 35, 40, 0.85);
+  --app-hero-badge-border: rgba(255, 255, 255, 0.1);
+  --app-hero-star-color: #fbbf24;
 }
 </style>
 
@@ -225,11 +213,10 @@ onUnmounted(() => {
 
   &--paused {
     .app-hero-gradient,
-    .app-hero-orb,
     .app-hero-cursor,
-    .app-hero-btn-shine,
     .app-hero-scroll,
-    .app-hero-title-text {
+    .app-hero-title-text,
+    .app-hero-shape {
       animation-play-state: paused;
     }
   }
@@ -243,7 +230,53 @@ onUnmounted(() => {
     position: absolute;
     inset: 0;
     background: var(--app-hero-gradient);
-    animation: app-hero-gradient-shift 15s ease-in-out infinite;
+    animation: app-hero-gradient-shift 20s ease-in-out infinite;
+  }
+
+  /* Decorative geometric shapes */
+  &-shape {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    will-change: transform;
+
+    &-1 {
+      width: 500px;
+      height: 500px;
+      top: -15%;
+      right: -5%;
+      background: radial-gradient(circle, color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent) 0%, transparent 70%);
+      animation: app-hero-shape-float 18s ease-in-out infinite;
+    }
+
+    &-2 {
+      width: 350px;
+      height: 350px;
+      bottom: -5%;
+      left: -3%;
+      background: radial-gradient(circle, color-mix(in srgb, var(--vp-c-purple-1) 8%, transparent) 0%, transparent 70%);
+      animation: app-hero-shape-float 22s ease-in-out infinite reverse;
+    }
+
+    &-3 {
+      width: 200px;
+      height: 200px;
+      top: 30%;
+      left: 8%;
+      background: radial-gradient(circle, color-mix(in srgb, var(--vp-c-green-1) 10%, transparent) 0%, transparent 70%);
+      animation: app-hero-shape-float 15s ease-in-out infinite;
+      animation-delay: -5s;
+    }
+
+    &-4 {
+      width: 160px;
+      height: 160px;
+      top: 20%;
+      right: 12%;
+      background: radial-gradient(circle, color-mix(in srgb, var(--vp-c-coral-2, var(--vp-c-yellow-2)) 8%, transparent) 0%, transparent 70%);
+      animation: app-hero-shape-float 20s ease-in-out infinite;
+      animation-delay: -10s;
+    }
   }
 
   /* Floating avatars background */
@@ -274,63 +307,80 @@ onUnmounted(() => {
     }
   }
 
-  /* Gradient orbs */
-  &-orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(120px);
-    pointer-events: none;
-    animation: app-hero-orb-float 20s ease-in-out infinite;
-    will-change: transform;
-    contain: strict;
-
-    &-1 {
-      width: 600px;
-      height: 600px;
-      background: var(--app-hero-orb-1-bg);
-      top: -200px;
-      right: -100px;
-      animation-delay: 0s;
-    }
-
-    &-2 {
-      width: 400px;
-      height: 400px;
-      background: var(--app-hero-orb-2-bg);
-      bottom: -100px;
-      left: -100px;
-      animation-delay: -7s;
-    }
-
-    &-3 {
-      width: 300px;
-      height: 300px;
-      background: var(--app-hero-orb-3-bg);
-      top: 40%;
-      left: 60%;
-      animation-delay: -14s;
-    }
-  }
-
   /* Content */
   &-content {
     position: relative;
     z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
     max-width: 900px;
-    animation: app-hero-fade-up 1s ease-out;
+    animation: app-hero-fade-up 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Top badge with GitHub stars */
+  &-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--vp-c-text-2);
+    background: var(--app-hero-badge-bg);
+    border: 1px solid var(--app-hero-badge-border);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    text-decoration: none;
+    margin-bottom: 32px;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: app-hero-fade-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
+
+    &::after {
+      display: none !important;
+    }
+
+    &:hover {
+      transform: translateY(-2px) scale(1.03);
+      border-color: var(--app-hero-star-color);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    &-icon {
+      color: var(--vp-c-text-1);
+    }
+
+    &-divider {
+      width: 1px;
+      height: 14px;
+      background: var(--vp-c-border);
+    }
+
+    &-star {
+      color: var(--app-hero-star-color);
+      fill: var(--app-hero-star-color);
+      animation: app-hero-star-pulse 2s ease-in-out infinite;
+    }
+
+    &-count {
+      font-weight: 800;
+      color: var(--vp-c-text-1);
+    }
   }
 
   &-title {
     margin: 0 0 28px;
     line-height: 1.1;
+    animation: app-hero-fade-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
 
     &-line {
       display: block;
-      font-size: clamp(48px, 8vw, 76px);
+      font-size: clamp(48px, 8vw, 80px);
       font-weight: 800;
       color: var(--vp-c-text-1);
-      letter-spacing: -0.03em;
+      letter-spacing: -0.04em;
       margin-bottom: 8px;
     }
 
@@ -338,18 +388,18 @@ onUnmounted(() => {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: clamp(48px, 8vw, 76px);
+      font-size: clamp(48px, 8vw, 80px);
       font-weight: 800;
       min-height: 1.2em;
     }
 
     &-text {
-      background: linear-gradient(135deg, var(--vp-c-brand-1) 0%, var(--vp-c-purple-1) 50%, var(--vp-c-brand-1) 100%);
-      background-size: 200% auto;
+      background: linear-gradient(135deg, var(--vp-c-brand-1) 0%, var(--vp-c-purple-1) 40%, var(--vp-c-coral-2, var(--vp-c-red-2)) 80%, var(--vp-c-brand-1) 100%);
+      background-size: 300% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      animation: app-hero-gradient-text 4s linear infinite;
+      animation: app-hero-gradient-text 6s linear infinite;
       white-space: nowrap;
     }
   }
@@ -357,7 +407,7 @@ onUnmounted(() => {
   &-cursor {
     display: inline-block;
     width: 4px;
-    height: 0.9em;
+    height: 0.85em;
     background: var(--vp-c-brand-1);
     margin-left: 4px;
     border-radius: 2px;
@@ -372,83 +422,24 @@ onUnmounted(() => {
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
+    animation: app-hero-fade-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
   }
 
   &-highlight {
     color: var(--vp-c-brand-1);
-    font-weight: 600;
+    font-weight: 700;
   }
 
   &-actions {
     display: flex;
     justify-content: center;
     gap: 16px;
-    margin-bottom: 56px;
+    animation: app-hero-fade-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s both;
   }
 
   &-btn-primary {
     padding: 18px 36px;
     font-size: 17px;
-
-    &:hover {
-      box-shadow:
-        0 8px 30px rgba(14, 165, 233, 0.5),
-        0 0 0 4px rgba(14, 165, 233, 0.1);
-    }
-  }
-
-  &-btn-shine {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.3),
-      transparent
-    );
-    animation: app-hero-shine 3s ease-in-out infinite;
-    will-change: transform;
-  }
-
-  &-stats {
-    display: inline-flex;
-    align-items: center;
-    gap: 40px;
-    padding: 24px 48px;
-    background: var(--app-hero-stats-bg);
-    border-radius: 20px;
-    border: 1px solid var(--app-hero-stats-border);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
-  }
-
-  &-stat {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-
-    &-value {
-      font-size: 32px;
-      font-weight: 800;
-      color: var(--vp-c-text-1);
-      letter-spacing: -0.02em;
-    }
-
-    &-label {
-      font-size: 13px;
-      color: var(--vp-c-text-3);
-      font-weight: 500;
-      white-space: nowrap;
-    }
-
-    &-divider {
-      width: 1px;
-      height: 48px;
-      background: linear-gradient(180deg, transparent, var(--vp-c-border), transparent);
-    }
   }
 
   /* Scroll indicator */
@@ -462,17 +453,18 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--vp-c-bg);
+    background: var(--vp-c-bg-elv);
     border: 2px solid var(--vp-c-border);
     border-radius: 50%;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     animation: app-hero-bounce 2s ease-in-out infinite;
     z-index: 10;
 
     &:hover {
       border-color: var(--vp-c-brand-1);
       background: var(--vp-c-brand-soft);
+      transform: translateX(-50%) scale(1.1);
 
       svg {
         color: var(--vp-c-brand-1);
@@ -492,26 +484,29 @@ onUnmounted(() => {
     transform: scale(1) rotate(0deg);
   }
   50% {
-    transform: scale(1.1) rotate(3deg);
+    transform: scale(1.05) rotate(2deg);
   }
 }
 
-@keyframes app-hero-orb-float {
+@keyframes app-hero-shape-float {
   0%, 100% {
     transform: translate(0, 0) scale(1);
   }
-  33% {
-    transform: translate(30px, -30px) scale(1.1);
+  25% {
+    transform: translate(20px, -15px) scale(1.05);
   }
-  66% {
-    transform: translate(-20px, 20px) scale(0.95);
+  50% {
+    transform: translate(-10px, 10px) scale(0.97);
+  }
+  75% {
+    transform: translate(15px, 5px) scale(1.03);
   }
 }
 
 @keyframes app-hero-fade-up {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(24px);
   }
   to {
     opacity: 1;
@@ -524,7 +519,7 @@ onUnmounted(() => {
     background-position: 0% center;
   }
   100% {
-    background-position: 200% center;
+    background-position: 300% center;
   }
 }
 
@@ -534,21 +529,21 @@ onUnmounted(() => {
   }
 }
 
-@keyframes app-hero-shine {
-  0%, 100% {
-    transform: translateX(-200%);
-  }
-  50% {
-    transform: translateX(200%);
-  }
-}
-
 @keyframes app-hero-bounce {
   0%, 100% {
     transform: translateX(-50%) translateY(0);
   }
   50% {
     transform: translateX(-50%) translateY(8px);
+  }
+}
+
+@keyframes app-hero-star-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
   }
 }
 
@@ -582,32 +577,17 @@ onUnmounted(() => {
       padding: 16px 28px;
     }
 
-    &-stats {
-      flex-direction: column;
-      gap: 20px;
-      padding: 28px 36px;
-    }
-
-    &-stat-divider {
-      width: 80px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--vp-c-border), transparent);
-    }
-
-    &-orb {
+    &-shape {
       &-1 {
-        width: 300px;
-        height: 300px;
+        width: 250px;
+        height: 250px;
       }
-
       &-2 {
-        width: 200px;
-        height: 200px;
+        width: 180px;
+        height: 180px;
       }
-
-      &-3 {
-        width: 150px;
-        height: 150px;
+      &-3, &-4 {
+        display: none;
       }
     }
 

@@ -19,18 +19,25 @@ defineProps<{
 
 <style lang="scss">
 :root {
-  --ui-card-border-color: rgba(0, 0, 0, 0.08);
+  --ui-card-border-color: rgba(0, 0, 0, 0.06);
+  --ui-card-hover-border-color: rgba(0, 0, 0, 0.12);
 }
 .dark {
-  --ui-card-border-color: rgba(255, 255, 255, 0.08);
+  --ui-card-border-color: rgba(255, 255, 255, 0.07);
+  --ui-card-hover-border-color: rgba(255, 255, 255, 0.14);
 }
 </style>
 
 <style lang="scss" scoped>
 .ui-card {
-  background: var(--vp-c-bg);
+  background: var(--vp-c-bg-elv);
   border: 1px solid var(--ui-card-border-color);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: border-color var(--duration-fast) var(--ease-smooth);
+  position: relative;
+
+  &:hover {
+    border-color: var(--ui-card-hover-border-color);
+  }
 
   /* Padding */
   &-padding-sm {
@@ -51,15 +58,15 @@ defineProps<{
 
   /* Border radius */
   &-radius-sm {
-    border-radius: 16px;
+    border-radius: var(--vp-radius-md);
   }
 
   &-radius-md {
-    border-radius: 20px;
+    border-radius: var(--vp-radius-lg);
   }
 
   &-radius-lg {
-    border-radius: 24px;
+    border-radius: var(--vp-radius-xl);
   }
 
   &-radius-xl {
@@ -70,7 +77,7 @@ defineProps<{
   @media (max-width: 640px) {
     &-padding-lg {
       padding: 24px;
-      border-radius: 20px;
+      border-radius: var(--vp-radius-lg);
     }
 
     &-padding-xl {

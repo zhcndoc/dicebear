@@ -125,7 +125,7 @@ const useCases = [
   &-header {
     opacity: 0;
     transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.8s var(--ease-smooth);
 
     .visible & {
       opacity: 1;
@@ -138,9 +138,16 @@ const useCases = [
     flex-direction: column;
     opacity: 0;
     transform: translateY(30px);
+    transition: box-shadow var(--duration-mid) var(--ease-spring);
+
+    &:hover {
+      box-shadow:
+        inset 0 3px 0 var(--accent-color),
+        0 0 20px color-mix(in srgb, var(--accent-color) 20%, transparent);
+    }
 
     .visible & {
-      animation: app-use-cases-card-reveal 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      animation: app-use-cases-card-reveal var(--duration-slow) var(--ease-spring) forwards;
     }
 
     &-header {
@@ -166,8 +173,9 @@ const useCases = [
     height: 32px;
     border-radius: 50%;
     border: 2px solid var(--vp-c-bg);
-    margin-left: -10px;
+    margin-left: -14px;
     background: var(--vp-c-bg-soft);
+    transition: transform var(--duration-mid) var(--ease-spring);
 
     &:first-child {
       margin-left: 0;

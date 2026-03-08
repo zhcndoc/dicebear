@@ -3,6 +3,11 @@ import { AvatarStyle, ThemeOptions } from '@theme/types';
 import { useData } from 'vitepress';
 import { computed, Ref, unref } from 'vue';
 
+export function useAvatarStyleList(): Ref<string[]> {
+  const data = useData<ThemeOptions>();
+  return computed(() => Object.keys(data.theme.value.avatarStyles));
+}
+
 export function useAvatarStyleFromOptions(
   avatarStyleName: string | Ref<string>,
 ): Ref<AvatarStyle | undefined> {

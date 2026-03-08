@@ -1,9 +1,12 @@
+import '@fontsource-variable/figtree';
 import { App, onMounted, watchEffect } from 'vue';
 import DefaultTheme from 'vitepress/theme';
 import Layout from './Layout.vue';
 import { createPinia } from 'pinia';
 import { useData } from 'vitepress';
 import VPBadge from 'vitepress/dist/client/theme-default/components/VPBadge.vue';
+
+let clickListenerAdded = false;
 
 export default {
   ...DefaultTheme,
@@ -27,7 +30,8 @@ export default {
         document.documentElement.dir = dir;
       });
 
-      if (typeof window !== 'undefined') {
+      if (typeof window !== 'undefined' && !clickListenerAdded) {
+        clickListenerAdded = true;
         window.addEventListener('click', (e) => {
           const link = (e.target as HTMLElement)?.closest('a');
 

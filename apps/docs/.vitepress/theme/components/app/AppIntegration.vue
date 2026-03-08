@@ -200,10 +200,13 @@ const svg = createAvatar(lorelei, {
 
   &-link {
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--vp-c-brand-1);
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
 
     &::after {
       display: none !important;
@@ -211,6 +214,7 @@ const svg = createAvatar(lorelei, {
 
     &:hover {
       color: var(--vp-c-brand-2);
+      gap: 8px;
     }
   }
 }

@@ -114,9 +114,16 @@ const highlights = [
   &-card {
     opacity: 0;
     transform: translateY(30px);
+    transition: box-shadow var(--duration-mid, 0.35s) var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
 
     .visible & {
-      animation: app-highlights-card-reveal 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      animation: app-highlights-card-reveal var(--duration-mid, 0.35s) var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1)) forwards;
+    }
+
+    &:hover {
+      box-shadow:
+        inset 0 3px 0 var(--accent-color),
+        0 0 20px color-mix(in srgb, var(--accent-color) 20%, transparent);
     }
   }
 
@@ -131,17 +138,17 @@ const highlights = [
   }
 
   &-title {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
     color: var(--vp-c-text-1);
-    margin: 0 0 12px;
+    margin: 0 0 8px;
   }
 
   &-description {
-    font-size: 15px;
+    font-size: 14px;
     color: var(--vp-c-text-2);
     margin: 0;
-    line-height: 1.7;
+    line-height: 1.6;
   }
 }
 

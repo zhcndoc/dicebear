@@ -1,17 +1,23 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Globe, Zap, Server } from 'lucide-vue-next';
 import { UiContainer, UiSection, UiSectionHeader, UiCard } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
+import { useApiStats } from '../../composables/useApiStats';
+import { formatNumber, formatBytes } from '../../utils/format';
 
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
 
-const stats = [
-  { value: '1.25B+', label: 'Requests / Month', icon: Globe },
-  { value: '4TB+', label: 'Data Served / Month', icon: Server },
+const apiStats = useApiStats();
+
+const monthLabel = computed(() => apiStats.value?.monthLabel ?? 'Month');
+
+const stats = computed(() => [
+  { value: apiStats.value ? formatNumber(apiStats.value.monthlyRequests) : '1B+', label: `Requests in ${monthLabel.value}`, icon: Globe },
+  { value: apiStats.value ? formatBytes(apiStats.value.monthlyTraffic) : '3TB+', label: `Data Served in ${monthLabel.value}`, icon: Server },
   { value: '85%+', label: 'Cache Hit Rate', icon: Zap },
-];
+]);
 </script>
 
 <template>
@@ -211,12 +217,18 @@ const stats = [
     gap: 16px;
     padding: 20px 24px;
     background: var(--vp-c-bg-soft);
-    border-radius: 12px;
+    border-radius: 14px;
     opacity: 0;
     transform: translateX(20px);
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: var(--vp-c-bg);
+      box-shadow: var(--vp-shadow-2);
+    }
 
     .visible & {
-      animation: app-cdn-stat-reveal 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      animation: app-cdn-stat-reveal 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
   }
 

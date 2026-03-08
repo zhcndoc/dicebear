@@ -133,6 +133,81 @@ Defined in `tsconfig.json` and VitePress config:
   Exception: styling own dynamically generated content (e.g. `v-html` with
   highlight.js classes) is acceptable.
 
+## Design Tokens & Standards
+
+All design tokens are defined in `main.scss` and `vars.scss`. Always use these
+tokens instead of hardcoded values.
+
+### Border Radius (`main.scss`)
+
+| Token              | Value  | Usage                                     |
+| ------------------ | ------ | ----------------------------------------- |
+| `--vp-radius-xs`   | `8px`  | Small controls, tab buttons, dice buttons |
+| `--vp-radius-sm`   | `12px` | Buttons, badges, inputs, social links     |
+| `--vp-radius-md`   | `16px` | Small cards, VPFeature, custom blocks     |
+| `--vp-radius-lg`   | `20px` | Medium cards, framework items, UiWindow   |
+| `--vp-radius-xl`   | `24px` | Large cards, avatar previews              |
+
+Never use hardcoded `border-radius` values — always reference a token. UiCard
+maps its `radius` prop to these tokens (sm→md, md→lg, lg→xl).
+
+### Shadows (`vars.scss`)
+
+| Token            | Usage                                    |
+| ---------------- | ---------------------------------------- |
+| `--vp-shadow-1`  | Subtle elevation (active tabs, inputs)   |
+| `--vp-shadow-2`  | Light cards, scroll buttons              |
+| `--vp-shadow-3`  | Card hover, avatar showcases             |
+| `--vp-shadow-4`  | Prominent elements (mockup avatars)      |
+| `--vp-shadow-5`  | Hero elements, large mockup frames       |
+
+Never use hardcoded `box-shadow` with raw `rgba()` — always use a shadow token.
+
+### Motion (`main.scss`)
+
+| Token              | Value                                  | Usage                  |
+| ------------------ | -------------------------------------- | ---------------------- |
+| `--ease-spring`    | `cubic-bezier(0.34, 1.56, 0.64, 1)`   | Interactive elements   |
+| `--ease-smooth`    | `cubic-bezier(0.4, 0, 0.2, 1)`        | Layout transitions     |
+| `--duration-fast`  | `0.2s`                                 | Hover color/opacity    |
+| `--duration-mid`   | `0.35s`                                | Transform, box-shadow  |
+| `--duration-slow`  | `0.6s`                                 | Card reveals, entries  |
+
+Never hardcode `transition` durations or easing curves — always use the tokens.
+When using `animation`, reference the tokens too:
+`animation: name var(--duration-mid) var(--ease-spring) forwards;`
+
+### Hover Effects
+
+Interactive elements must use consistent hover transforms:
+
+- **Buttons and cards with lift:** `translateY(-4px) scale(1.02)` — never more
+  aggressive (no `-10px` or `scale(1.05)`)
+- **Subtle links:** No `translateY`, only color/border/shadow changes
+- **Card accent:** `inset 0 3px 0 var(--accent-color)` + glow shadow
+
+### Card Title/Description Sizes
+
+Cards in 3-column grids (AppHighlights, AppUseCases) use:
+
+- **Title:** `18px` / `font-weight: 700`
+- **Description:** `14px` / `line-height: 1.6` / `color: var(--vp-c-text-2)`
+- **Title margin-bottom:** `8px`
+
+### Grid Gaps
+
+Use 8px-based gap values: `8px`, `16px`, `24px`, `32px`, `48px`, `64px`.
+Standard card grid gap is `24px`. Never use arbitrary gap values.
+
+### Responsive Breakpoints
+
+| Breakpoint | Usage                                  |
+| ---------- | -------------------------------------- |
+| `640px`    | Mobile — UI primitives, small elements |
+| `768px`    | Tablet — App section layouts           |
+| `960px`    | Sidebar — VitePress layout shifts      |
+| `1000px`   | Wide — 2-column content layouts        |
+
 ## State Management
 
 Single Pinia store: `stores/playground.ts`

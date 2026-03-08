@@ -5,6 +5,7 @@ export interface FooterLink {
 }
 
 export const productLinks: FooterLink[] = [
+  { label: 'Why DiceBear?', href: '/why-dicebear/' },
   { label: 'Playground', href: '/playground/' },
   { label: 'All Styles', href: '/styles/' },
   { label: 'Editor', href: 'https://editor.dicebear.com', external: true },
@@ -15,6 +16,7 @@ export const resourceLinks: FooterLink[] = [
   { label: 'JS Library', href: '/how-to-use/js-library/' },
   { label: 'HTTP API', href: '/how-to-use/http-api/' },
   { label: 'CLI', href: '/how-to-use/cli/' },
+  { label: 'Statistics', href: '/stats/' },
 ];
 
 const legalLinks: FooterLink[] = [{ label: 'Licenses', href: '/licenses/' }];

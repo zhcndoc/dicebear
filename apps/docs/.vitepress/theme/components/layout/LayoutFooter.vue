@@ -217,7 +217,9 @@ const styles = computed(() => {
 
   &-divider {
     height: 1px;
-    background: var(--vp-c-divider);
+    max-width: 800px;
+    margin: 0 auto;
+    background: linear-gradient(90deg, transparent, var(--vp-c-divider), transparent);
   }
 
   &-container {
@@ -280,15 +282,16 @@ const styles = computed(() => {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
+      width: 38px;
+      height: 38px;
+      border-radius: var(--vp-radius-sm);
       color: var(--vp-c-text-2);
-      transition: all 0.2s ease;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 
       &:hover {
-        color: var(--vp-c-text-1);
-        background: var(--vp-c-bg);
+        color: var(--vp-c-brand-1);
+        background: var(--vp-c-brand-soft);
+        transform: translateY(-2px);
       }
 
       svg {
@@ -330,7 +333,7 @@ const styles = computed(() => {
     font-size: 14px;
     color: var(--vp-c-text-2);
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: all 0.2s ease;
 
     &:hover {
       color: var(--vp-c-brand-1);

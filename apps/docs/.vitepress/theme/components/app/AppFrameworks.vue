@@ -95,17 +95,17 @@ const frameworks = [
     align-items: center;
     gap: 12px;
     text-decoration: none;
-    padding: 24px 32px;
-    min-width: 140px;
-    border-radius: 16px;
-    background: var(--vp-c-bg);
+    padding: 28px 36px;
+    min-width: 150px;
+    border-radius: var(--vp-radius-lg);
+    background: var(--vp-c-bg-elv);
     border: 1px solid var(--app-frameworks-item-border);
-    transition: all 0.3s ease;
+    transition: all var(--duration-mid) var(--ease-spring);
     opacity: 0;
     transform: translateY(20px);
 
     .visible & {
-      animation: app-frameworks-card-reveal 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      animation: app-frameworks-card-reveal var(--duration-mid) var(--ease-spring) forwards;
     }
 
     &::after {
@@ -113,9 +113,11 @@ const frameworks = [
     }
 
     &:hover {
-      transform: translateY(-8px);
+      transform: translateY(-4px) scale(1.02);
       border-color: var(--framework-color);
-      box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.15);
+      box-shadow:
+        var(--vp-shadow-3),
+        0 0 0 3px color-mix(in srgb, var(--framework-color) 15%, transparent);
     }
   }
 

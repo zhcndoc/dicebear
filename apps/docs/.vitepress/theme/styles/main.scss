@@ -1,6 +1,36 @@
 @use './vars.scss' as *;
 @use './ark-ui.scss';
 
+/* ----------------------------------------------------------------
+ * Global Motion & Interaction Tokens
+ * ---------------------------------------------------------------- */
+:root {
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 0.2s;
+  --duration-mid: 0.35s;
+  --duration-slow: 0.6s;
+}
+
+/* ----------------------------------------------------------------
+ * Border Radius Tokens
+ * ---------------------------------------------------------------- */
+:root {
+  --vp-radius-xs: 8px;
+  --vp-radius-sm: 12px;
+  --vp-radius-md: 16px;
+  --vp-radius-lg: 20px;
+  --vp-radius-xl: 24px;
+}
+
+/* Smooth page-wide transition feel */
+::selection {
+  background: color-mix(in srgb, var(--vp-c-brand-1) 30%, transparent);
+}
+
+/* ----------------------------------------------------------------
+ * VitePress Overrides
+ * ---------------------------------------------------------------- */
 .vp-code-light {
   display: none !important;
 }
@@ -10,13 +40,51 @@
 }
 
 .VPButton {
-  font-weight: 500 !important;
+  font-weight: 600 !important;
+  border-radius: var(--vp-radius-sm) !important;
 }
 
-.VPButton,
-.VPFeature,
+.VPFeature {
+  border-radius: var(--vp-radius-md) !important;
+  transition:
+    transform var(--duration-mid) var(--ease-spring),
+    box-shadow var(--duration-mid) var(--ease-smooth) !important;
+
+  &:hover {
+    transform: translateY(-4px) !important;
+  }
+}
+
 .custom-block {
-  border-radius: 6px !important;
+  border-radius: var(--vp-radius-sm) !important;
+}
+
+/* Figtree for headings, badges, and buttons */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3,
+.vp-doc h4,
+.VPButton {
+  font-family: var(--vp-font-family-heading);
+}
+
+/* Compact search button on tablet to prevent nav overflow */
+@media (max-width: 1100px) and (min-width: 768px) {
+  .VPNavBarSearchButton {
+    padding: 8px !important;
+    font-size: 18px !important;
+
+    .text,
+    .keys {
+      display: none !important;
+    }
+  }
 }
 
 .VPLink:not(.no-icon),
@@ -95,13 +163,21 @@
   padding-top: 0 !important;
   height: auto !important;
   max-height: calc(
-    100vh - var(--vp-nav-height) - var(--vp-layout-top-height, 0px) -
-      var(--vp-doc-top-height, 0px) - 48px
+    100vh - var(--vp-nav-height) - var(--vp-layout-top-height, 0px) - var(
+        --vp-doc-top-height,
+        0px
+      ) -
+      48px
   );
 }
 
 .VPDoc .aside-content {
   min-height: 0 !important;
+}
+
+/* Suppress VitePress external link icon on custom component links */
+.no-external-icon::after {
+  display: none !important;
 }
 
 img[src^='https://api.dicebear.com/']:not(.next, .prev) {

@@ -15,25 +15,27 @@ defineProps<{
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px;
-  border-radius: 24px;
-  font-size: 14px;
-  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 700;
   line-height: 1.4;
   margin-bottom: 24px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 
   &-brand {
-    background: var(--vp-c-brand-soft);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--vp-c-brand-1) 15%, transparent), color-mix(in srgb, var(--vp-c-purple-1) 12%, transparent));
     color: var(--vp-c-brand-1);
   }
 
   &-green {
-    background: var(--vp-c-green-soft);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--vp-c-green-1) 15%, transparent), color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent));
     color: var(--vp-c-green-1);
   }
 
   &-orange {
-    background: var(--vp-c-yellow-soft);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--vp-c-yellow-1) 15%, transparent), color-mix(in srgb, var(--vp-c-coral-1, var(--vp-c-red-1)) 10%, transparent));
     color: var(--vp-c-yellow-1);
   }
 }

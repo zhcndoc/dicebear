@@ -194,11 +194,12 @@ const steps = [
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--vp-c-green-1);
-    color: var(--vp-c-bg);
-    font-size: 14px;
+    background: var(--vp-c-bg-soft);
+    color: var(--vp-c-text-2);
+    font-size: 13px;
     font-weight: 700;
     border-radius: 50%;
+    border: 1px solid var(--vp-c-border);
   }
 
   &-step-content {
@@ -239,7 +240,7 @@ const steps = [
     background: #2c2c2c;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--vp-shadow-5);
   }
 
   &-figma-sidebar {
@@ -314,9 +315,9 @@ const steps = [
     width: 160px;
     height: 160px;
     background: white;
-    border-radius: 12px;
+    border-radius: var(--vp-radius-sm);
     padding: 20px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--vp-shadow-4);
     position: relative;
     z-index: 1;
 

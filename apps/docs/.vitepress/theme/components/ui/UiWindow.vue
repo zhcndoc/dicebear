@@ -25,22 +25,23 @@ defineProps<{
 
 <style lang="scss">
 :root {
-  --ui-window-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.25);
+  --ui-window-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.15), 0 8px 24px -8px rgba(0, 0, 0, 0.08);
 }
 .dark {
-  --ui-window-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.5);
+  --ui-window-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.5), 0 8px 24px -8px rgba(0, 0, 0, 0.3);
 }
 </style>
 
 <style lang="scss" scoped>
 .ui-window {
   position: relative;
-  border-radius: var(--window-radius, 16px);
+  border-radius: var(--window-radius, var(--vp-radius-lg));
   overflow: hidden;
-  background: var(--vp-c-bg);
+  background: var(--vp-c-bg-elv);
   box-shadow:
     0 0 0 1px var(--vp-c-border),
     var(--ui-window-shadow);
+  transition: box-shadow var(--duration-mid) var(--ease-smooth);
 
   &-header {
     display: flex;

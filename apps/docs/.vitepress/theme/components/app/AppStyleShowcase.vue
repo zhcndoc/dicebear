@@ -1,18 +1,15 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
-import { ThemeOptions } from '@theme/types';
-import { useData } from 'vitepress';
 import { kebabCase } from 'change-case';
 import Prando from 'prando';
 import { ArrowRight, ArrowLeft } from 'lucide-vue-next';
 import { UiAvatar, UiButton, UiContainer, UiSection, UiSectionHeader } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
-
-const { theme } = useData<ThemeOptions>();
+import { useAvatarStyleList } from '../../composables/avatar';
 
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef, { once: false, threshold: 0.1 });
-const avatarStyleList = computed(() => Object.keys(theme.value.avatarStyles));
+const avatarStyleList = useAvatarStyleList();
 
 const seeds = ['Felix', 'Aneka', 'Milo', 'Luna', 'Max', 'Sophie', 'Leo', 'Emma', 'Noah', 'Aria', 'Zoe', 'Oscar'];
 
@@ -252,7 +249,7 @@ onUnmounted(() => {
     border-radius: 50%;
     cursor: pointer;
     z-index: 10;
-    transition: all 0.2s ease;
+    transition: all var(--duration-fast) var(--ease-smooth);
     box-shadow: var(--vp-shadow-2);
 
     &:hover {
@@ -300,10 +297,10 @@ onUnmounted(() => {
     align-items: center;
     gap: 12px;
     text-decoration: none;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform var(--duration-mid) var(--ease-spring);
 
     &:hover {
-      transform: translateY(-10px) scale(1.05);
+      transform: translateY(-4px) scale(1.02);
 
       .app-style-showcase-avatar {
         box-shadow:
@@ -328,11 +325,11 @@ onUnmounted(() => {
   &-avatar {
     width: 116px;
     height: 116px;
-    border-radius: 24px;
+    border-radius: var(--vp-radius-xl);
     overflow: hidden;
     background: var(--vp-c-bg-soft);
     box-shadow: var(--vp-shadow-3);
-    transition: all 0.3s ease;
+    transition: all var(--duration-mid) var(--ease-smooth);
     position: relative;
 
     img {

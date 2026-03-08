@@ -4,11 +4,22 @@ import { Play, ArrowRight } from 'lucide-vue-next';
 import { UiAvatar, UiButton, UiHeadline, UiDescription, UiBadge, UiContainer, UiSection } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
+const props = withDefaults(defineProps<{
+  badge?: string;
+  headline?: string;
+  description?: string;
+}>(), {
+  badge: 'Why DiceBear?',
+  headline: 'Avatars That <strong>Stand Out</strong>',
+  description: 'DiceBear is an open source avatar library that lets you generate unique, deterministic profile pictures in no time. Whether you need geometric shapes, cute characters, or pixel art &mdash; our privacy-focused SVG avatar library with 30+ styles brings your projects to life.',
+});
+
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef, { threshold: 0.1 });
 
 const slots = useSlots();
 const hasAside = computed(() => !!slots.aside);
+const hasActions = computed(() => !!slots.actions);
 </script>
 
 <template>
@@ -19,14 +30,14 @@ const hasAside = computed(() => !!slots.aside);
     <UiContainer class="app-small-hero-container" :class="{ 'app-small-hero-container--has-aside': hasAside }">
       <div :class="{ 'app-small-hero-layout': hasAside }">
         <div>
-          <UiBadge>Why DiceBear?</UiBadge>
-          <UiHeadline tag="h1">Avatars That <strong>Stand Out</strong></UiHeadline>
-          <UiDescription class="app-small-hero-description">
-            DiceBear is an open source avatar library that lets you generate unique, deterministic profile pictures in no time. Whether you need geometric shapes,
-            cute characters, or pixel art &mdash; our privacy-focused SVG avatar library with 30+ styles brings your projects to life.
-          </UiDescription>
+          <UiBadge>{{ badge }}</UiBadge>
+          <UiHeadline tag="h1"><span v-html="headline" /></UiHeadline>
+          <UiDescription class="app-small-hero-description" v-html="description" />
 
-          <div class="app-small-hero-actions">
+          <div v-if="hasActions" class="app-small-hero-actions">
+            <slot name="actions" />
+          </div>
+          <div v-else class="app-small-hero-actions">
             <UiButton href="/playground/" class="app-small-hero-action-btn">
               <Play :size="20" />
               Try Playground
@@ -36,6 +47,8 @@ const hasAside = computed(() => !!slots.aside);
               <ArrowRight :size="20" class="app-small-hero-arrow-icon" />
             </UiButton>
           </div>
+
+          <slot name="below-actions" />
         </div>
 
         <div v-if="hasAside" class="app-small-hero-aside">
@@ -50,15 +63,42 @@ const hasAside = computed(() => !!slots.aside);
 .app-small-hero {
   &-gradient {
     background:
-      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(22, 137, 204, 0.12), transparent),
-      radial-gradient(ellipse 60% 40% at 80% 50%, rgba(111, 66, 193, 0.08), transparent);
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(14, 165, 233, 0.12), transparent),
+      radial-gradient(ellipse 60% 40% at 80% 50%, rgba(124, 58, 237, 0.08), transparent),
+      radial-gradient(ellipse 60% 40% at 20% 80%, rgba(20, 184, 166, 0.06), transparent);
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    &::before {
+      width: 400px;
+      height: 400px;
+      top: -10%;
+      right: -5%;
+      background: radial-gradient(circle, color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent) 0%, transparent 70%);
+      animation: app-small-hero-shape-float 18s ease-in-out infinite;
+    }
+
+    &::after {
+      width: 300px;
+      height: 300px;
+      bottom: -5%;
+      left: -3%;
+      background: radial-gradient(circle, color-mix(in srgb, var(--vp-c-purple-1) 8%, transparent) 0%, transparent 70%);
+      animation: app-small-hero-shape-float 22s ease-in-out infinite reverse;
+    }
   }
 
   &-container {
     text-align: center;
     opacity: 0;
     transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: app-small-hero-fade-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
 
     .visible & {
       opacity: 1;
@@ -92,7 +132,7 @@ const hasAside = computed(() => !!slots.aside);
     }
 
     > :last-child {
-      grid-column: 8 / 13;
+      grid-column: 7 / 13;
     }
   }
 
@@ -106,12 +146,14 @@ const hasAside = computed(() => !!slots.aside);
   &-description {
     margin-bottom: 40px;
     max-width: 550px;
+    animation: app-small-hero-fade-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
   }
 
   &-actions {
     display: flex;
     justify-content: center;
     gap: 16px;
+    animation: app-small-hero-fade-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
   }
 
   &-avatars {
@@ -119,6 +161,7 @@ const hasAside = computed(() => !!slots.aside);
     justify-content: center;
     gap: 16px;
     flex-wrap: wrap;
+    animation: app-small-hero-fade-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
   }
 
   &-avatar {
@@ -128,14 +171,14 @@ const hasAside = computed(() => !!slots.aside);
     overflow: hidden;
     opacity: 0;
     transform: translateY(20px) scale(0.9);
-    transition: all 0.3s ease;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 
     &::after {
       display: none !important;
     }
 
     .visible & {
-      animation: app-small-hero-avatar-reveal 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      animation: app-small-hero-avatar-reveal 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
 
     &:hover {
@@ -151,6 +194,17 @@ const hasAside = computed(() => !!slots.aside);
   }
 }
 
+@keyframes app-small-hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes app-small-hero-avatar-reveal {
   to {
     opacity: 1;
@@ -158,8 +212,35 @@ const hasAside = computed(() => !!slots.aside);
   }
 }
 
+@keyframes app-small-hero-shape-float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(20px, -15px) scale(1.05);
+  }
+  50% {
+    transform: translate(-10px, 10px) scale(0.97);
+  }
+  75% {
+    transform: translate(15px, 5px) scale(1.03);
+  }
+}
+
 @media (max-width: 768px) {
   .app-small-hero {
+    &-gradient {
+      &::before {
+        width: 200px;
+        height: 200px;
+      }
+
+      &::after {
+        width: 150px;
+        height: 150px;
+      }
+    }
+
     &-layout {
       grid-template-columns: 1fr;
       gap: 48px;

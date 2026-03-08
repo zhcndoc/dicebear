@@ -245,9 +245,9 @@ const features = [
     width: 140px;
     height: 140px;
     background: #ffd5dc;
-    border-radius: 24px;
+    border-radius: var(--vp-radius-xl);
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--vp-shadow-3);
     transition: background-color 0.3s ease;
 
     img {
@@ -277,7 +277,7 @@ const features = [
       font-weight: 500;
       color: var(--vp-c-text-2);
       white-space: nowrap;
-      border-radius: 6px;
+      border-radius: var(--vp-radius-xs);
       border: none;
       background: transparent;
       cursor: pointer;
@@ -289,8 +289,9 @@ const features = [
       }
 
       &.active {
-        color: var(--vp-c-green-1);
-        background: var(--vp-c-green-soft);
+        color: var(--vp-c-brand-1);
+        background: var(--vp-c-brand-soft);
+        font-weight: 600;
       }
     }
 
@@ -302,7 +303,7 @@ const features = [
 
     &-avatar {
       aspect-ratio: 1;
-      border-radius: 10px;
+      border-radius: var(--vp-radius-sm);
       overflow: hidden;
       opacity: 0;
       transform: scale(0.9);
@@ -310,7 +311,7 @@ const features = [
       padding: 0;
       cursor: pointer;
       background: transparent;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: transform var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
 
       &:hover {
         transform: scale(1.05);
