@@ -2,7 +2,7 @@
 import { useData, withBase } from 'vitepress';
 import { useLayout } from 'vitepress/theme';
 import { computed } from 'vue';
-import { siGithub, siFigma, siBluesky } from 'simple-icons';
+import { siGithub, siFigma } from 'simple-icons';
 import { UiIcon } from '../ui';
 import type { StyleMeta } from '@dicebear/core';
 import type { ThemeOptions } from '@theme/types';
@@ -81,15 +81,6 @@ const styles = computed(() => {
               class="layout-footer-social-link"
             >
               <UiIcon :path="siFigma.path" />
-            </a>
-            <a
-              href="https://bsky.app/profile/dicebear.bsky.social"
-              target="_blank"
-              rel="me noopener"
-              aria-label="Bluesky"
-              class="layout-footer-social-link"
-            >
-              <UiIcon :path="siBluesky.path" />
             </a>
           </div>
         </div>

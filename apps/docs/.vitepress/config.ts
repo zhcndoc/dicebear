@@ -6,7 +6,7 @@ import sidebarDocs from './config/sidebarDocs';
 import sidebarPlayground from './config/sidebarPlayground';
 import sidebarStyles from './config/sidebarStyles';
 import avatarStyles from './config/avatarStyles';
-import { siBluesky, siFigma } from 'simple-icons';
+import { siFigma } from 'simple-icons';
 
 function formatStars(count: number): string {
   if (count >= 1000) {
@@ -204,13 +204,6 @@ export default defineConfig<ThemeOptions>({
         },
         link: 'https://www.figma.com/@dicebear_com',
         ariaLabel: 'Figma',
-      },
-      {
-        icon: {
-          svg: `<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="${siBluesky.path}"/></svg>`,
-        },
-        link: 'https://bsky.app/profile/dicebear.bsky.social',
-        ariaLabel: 'Bluesky',
       },
     ],
     editLink: {
