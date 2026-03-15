@@ -84,6 +84,8 @@ The HTTP API supports the following environment variables:
 | `VERSIONS` | `5,6,7,8,9` | Comma-separated list of supported DiceBear major versions. |
 | `CACHE_CONTROL_AVATARS` | `31536000` | Cache duration for avatar responses in seconds (1 year). |
 | `WORKERS` | `1` | Number of Node.js worker threads. |
+| `QUERY_STRING_ARRAY_LIMIT_MIN` | `20` | Minimum number of values allowed per array parameter. |
+| `QUERY_STRING_PARAMETER_LIMIT_MIN` | `100` | Minimum number of query string parameters allowed. |
 
 :::info EXIF metadata
 The `*_EXIF` variables require [Perl](https://www.npmjs.com/package/exiftool-vendored#installation)
