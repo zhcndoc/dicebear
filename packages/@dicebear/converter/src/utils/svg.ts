@@ -1,8 +1,19 @@
-import { XMLParser } from 'fast-xml-parser';
+import { XMLParser, XMLBuilder } from 'fast-xml-parser';
 import { Metadata } from '../types';
 
 const MAX_SIZE = 2048;
 const DEFAULT_SIZE = 512;
+
+const xmlRoundTripOptions = {
+  ignoreAttributes: false,
+  attributeNamePrefix: '@_',
+  preserveOrder: true,
+  commentPropName: '#comment',
+  allowBooleanAttributes: true,
+};
+
+const xmlRoundTripParser = new XMLParser(xmlRoundTripOptions);
+const xmlRoundTripBuilder = new XMLBuilder(xmlRoundTripOptions);
 
 function sanitizeSize(size: number): number {
   if (!Number.isFinite(size) || size <= 0) {
@@ -15,21 +26,16 @@ function sanitizeSize(size: number): number {
 export function ensureSize(svg: string, size: number = DEFAULT_SIZE) {
   size = sanitizeSize(size);
 
-  svg = svg.replace(/<svg([^>]*)/, (match, g1) => {
-    if (g1.match(/width="([^"]+)"/)) {
-      g1 = g1.replace(/width="([^"]+)"/, `width="${size}"`);
-    } else {
-      g1 += ` width="${size}"`;
-    }
+  const parsed = xmlRoundTripParser.parse(svg);
+  const svgNode = parsed.find((node: Record<string, unknown>) => 'svg' in node);
 
-    if (g1.match(/height="([^"]+)"/)) {
-      g1 = g1.replace(/height="([^"]+)"/, `height="${size}"`);
-    } else {
-      g1 += ` height="${size}"`;
-    }
+  if (svgNode) {
+    svgNode[':@'] ??= {};
+    svgNode[':@']['@_width'] = String(size);
+    svgNode[':@']['@_height'] = String(size);
+  }
 
-    return `<svg${g1}`;
-  });
+  svg = xmlRoundTripBuilder.build(parsed);
 
   return { svg, size };
 }
