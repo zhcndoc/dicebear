@@ -48,8 +48,8 @@ dicebear/api/
 
 ## Versioning
 
-The API serves multiple DiceBear library versions in parallel (v5–v9). Each
-version is accessible via a URL prefix, for example `/9.x/avataaars/svg`.
+The API serves multiple DiceBear library versions in parallel. Each version is
+accessible via a URL prefix, for example `/9.x/avataaars/svg`.
 
 - Each version lives in `versions/<major>.x/` as a separate workspace package
   (e.g. `@dicebear/api-9`).
@@ -59,6 +59,12 @@ version is accessible via a URL prefix, for example `/9.x/avataaars/svg`.
   environment variable (default: `5,6,7,8,9`).
 - When a new major DiceBear version is released, a new `versions/<major>.x/`
   package is added.
+
+::: info
+Versions 5–8 will reach End of Life on April 30, 2028 and will be removed from
+the public API. See the [HTTP API documentation](/how-to-use/http-api/#versioning)
+for the current support status.
+:::
 
 ## Set up locally
 
