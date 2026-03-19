@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/micah",
-  "version": "9.4.1",
+  "version": "9.4.2",
   "description": "Avatar style for DiceBear",
   "keywords": [
     "dicebear"
@@ -29,7 +29,7 @@
     "test": "node --test"
   },
   "devDependencies": {
-    "@dicebear/core": "9.4.1",
+    "@dicebear/core": "9.4.2",
     "@tsconfig/recommended": "^1.0.13",
     "del-cli": "^7.0.0",
     "typescript": "^5.9.3"
