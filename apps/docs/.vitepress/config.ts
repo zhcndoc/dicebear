@@ -6,7 +6,7 @@ import sidebarDocs from './config/sidebarDocs';
 import sidebarPlayground from './config/sidebarPlayground';
 import sidebarStyles from './config/sidebarStyles';
 import avatarStyles from './config/avatarStyles';
-import { siBluesky, siFigma } from 'simple-icons';
+import { siFigma } from 'simple-icons';
 
 function formatStars(count: number): string {
   if (count >= 1000) {
@@ -66,7 +66,12 @@ export default defineConfig<ThemeOptions>({
   description:
     'DiceBear is a free, open source avatar library and avatar API with 30+ SVG styles. Generate profile pictures and user placeholder images for any project.',
   head: [
-    ['link', { rel: 'icon', href: '/favicon.ico' }],
+    ['link', { rel: 'icon', type: 'image/png', href: '/favicon-96x96.png', sizes: '96x96' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
+    ['link', { rel: 'shortcut icon', href: '/favicon.ico' }],
+    ['link', { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' }],
+    ['meta', { name: 'apple-mobile-web-app-title', content: 'DiceBear' }],
+    ['link', { rel: 'manifest', href: '/site.webmanifest' }],
     ['meta', { property: 'og:site_name', content: 'DiceBear' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { name: 'twitter:card', content: 'summary' }],
@@ -199,13 +204,6 @@ export default defineConfig<ThemeOptions>({
         },
         link: 'https://www.figma.com/@dicebear_com',
         ariaLabel: 'Figma',
-      },
-      {
-        icon: {
-          svg: `<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="${siBluesky.path}"/></svg>`,
-        },
-        link: 'https://bsky.app/profile/dicebear.bsky.social',
-        ariaLabel: 'Bluesky',
       },
     ],
     editLink: {

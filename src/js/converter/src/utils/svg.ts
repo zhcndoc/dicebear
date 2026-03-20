@@ -1,8 +1,21 @@
-import { XMLParser } from 'fast-xml-parser';
+import { XMLParser, XMLBuilder } from 'fast-xml-parser';
 import { Metadata } from '../types';
 
 const MAX_SIZE = 2048;
 const DEFAULT_SIZE = 512;
+const MAX_METADATA_LENGTH = 1024;
+
+const xmlRoundTripOptions = {
+  ignoreAttributes: false,
+  attributeNamePrefix: '@_',
+  preserveOrder: true,
+  commentPropName: '#comment',
+  allowBooleanAttributes: true,
+  processEntities: false,
+};
+
+const xmlRoundTripParser = new XMLParser(xmlRoundTripOptions);
+const xmlRoundTripBuilder = new XMLBuilder(xmlRoundTripOptions);
 
 function sanitizeSize(size: number): number {
   if (!Number.isFinite(size) || size <= 0) {
@@ -15,23 +28,26 @@ function sanitizeSize(size: number): number {
 export function ensureSize(svg: string, size: number = DEFAULT_SIZE) {
   size = sanitizeSize(size);
 
-  svg = svg.replace(/<svg([^>]*)/, (match, g1) => {
-    if (g1.match(/width="([^"]+)"/)) {
-      g1 = g1.replace(/width="([^"]+)"/, `width="${size}"`);
-    } else {
-      g1 += ` width="${size}"`;
-    }
+  const parsed = xmlRoundTripParser.parse(svg);
+  const svgNode = parsed.find((node: Record<string, unknown>) => 'svg' in node);
 
-    if (g1.match(/height="([^"]+)"/)) {
-      g1 = g1.replace(/height="([^"]+)"/, `height="${size}"`);
-    } else {
-      g1 += ` height="${size}"`;
-    }
+  if (svgNode) {
+    svgNode[':@'] ??= {};
+    svgNode[':@']['@_width'] = String(size);
+    svgNode[':@']['@_height'] = String(size);
+  }
 
-    return `<svg${g1}`;
-  });
+  svg = xmlRoundTripBuilder.build(parsed);
 
   return { svg, size };
+}
+
+function sanitizeMetadataValue(value: unknown): string | undefined {
+  if (typeof value !== 'string' || value.length === 0) {
+    return undefined;
+  }
+
+  return value.slice(0, MAX_METADATA_LENGTH);
 }
 
 export function getMetadata(svg: string): Metadata {
@@ -41,10 +57,10 @@ export function getMetadata(svg: string): Metadata {
   const rdfDescription = xml.svg.metadata?.['rdf:RDF']?.['rdf:Description'];
 
   return {
-    title: rdfDescription?.['dc:title'],
-    source: rdfDescription?.['dc:source'],
-    creator: rdfDescription?.['dc:creator'],
-    license: rdfDescription?.['dcterms:license'],
-    copyright: rdfDescription?.['dc:rights'],
+    title: sanitizeMetadataValue(rdfDescription?.['dc:title']),
+    source: sanitizeMetadataValue(rdfDescription?.['dc:source']),
+    creator: sanitizeMetadataValue(rdfDescription?.['dc:creator']),
+    license: sanitizeMetadataValue(rdfDescription?.['dcterms:license']),
+    copyright: sanitizeMetadataValue(rdfDescription?.['dc:rights']),
   };
 }

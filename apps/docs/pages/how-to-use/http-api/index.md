@@ -123,13 +123,27 @@ supports the following subsets: `cyrillic`, `cyrillic-ext`, `devanagari`,
 You can set the version in the URL. Just replace the `9.x` from the previous
 examples with the one you want.
 
-Supported versions: `5.x`, `6.x`, `7.x`, `8.x`, `9.x`
+| Version | Status | End of Life |
+| ------- | ------ | ----------- |
+| `9.x` | **Active** | — |
+| `8.x` | Deprecated | April 30, 2028 |
+| `7.x` | Deprecated | April 30, 2028 |
+| `6.x` | Deprecated | April 30, 2028 |
+| `5.x` | Deprecated | April 30, 2028 |
 
 ::: warning
 
-We reserve the right to discontinue any version at any time without notice. You
-can create your own instance of the API to be able to access discontinued
-versions even afterwards.
+Versions 5.x–8.x will reach End of Life on April 30, 2028. After that date, the
+HTTP API for these versions will be shut down and no longer available. Please
+upgrade to the latest version. See the
+[announcement](https://github.com/orgs/dicebear/discussions/491) for details.
+
+:::
+
+::: info
+
+You can [host the API yourself](/guides/host-the-http-api-yourself/) to keep
+using discontinued versions after their End of Life.
 
 :::
 
