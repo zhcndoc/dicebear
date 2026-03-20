@@ -55,7 +55,7 @@ const thirdPartyScripts: HeadConfig[] = isProduction
         {
           defer: '',
           src: 'https://u.dicebear.com/script.js',
-          'data-website-id': '69953f4f-b70c-4534-8ccb-370f4e9da028',
+          'data-website-id': '75d27df5-3441-4530-8f29-70d04ae9085e',
         },
       ],
     ]
