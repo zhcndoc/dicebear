@@ -3,6 +3,7 @@ import DefaultTheme from 'vitepress/theme';
 import { VPDocAsideSponsors } from 'vitepress/theme';
 import { withBase } from 'vitepress';
 import LayoutFooter from './components/layout/LayoutFooter.vue';
+import LayoutNavActions from './components/layout/LayoutNavActions.vue';
 import LayoutSidebarBefore from './components/layout/LayoutSidebarBefore.vue';
 import './styles/main.scss';
 
@@ -25,6 +26,9 @@ const sponsors = [
 
 <template>
   <Layout>
+    <template #nav-bar-content-after>
+      <LayoutNavActions />
+    </template>
     <template #sidebar-nav-before>
       <LayoutSidebarBefore />
     </template>
