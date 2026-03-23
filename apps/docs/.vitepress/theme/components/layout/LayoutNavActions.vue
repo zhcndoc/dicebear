@@ -140,6 +140,10 @@ function openSearch() {
     background var(--duration-fast) var(--ease-smooth),
     box-shadow var(--duration-fast) var(--ease-smooth);
 
+  :deep(svg) {
+    pointer-events: none;
+  }
+
   &:hover {
     border-color: var(--vp-c-brand-1);
     color: var(--vp-c-brand-1);
