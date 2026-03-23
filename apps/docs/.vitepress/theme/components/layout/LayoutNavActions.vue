@@ -37,8 +37,8 @@ function openSearch() {
       :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
       @click="toggleTheme"
     >
-      <Sun v-if="isDark" :size="16" :stroke-width="2.5" />
-      <Moon v-else :size="16" :stroke-width="2.5" />
+      <Sun v-show="isDark" :size="16" :stroke-width="2.5" />
+      <Moon v-show="!isDark" :size="16" :stroke-width="2.5" />
     </button>
     <a
       href="https://github.com/dicebear/dicebear"
