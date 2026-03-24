@@ -10,5 +10,30 @@ const ajv = new Ajv({ code: { source: true, esm: true } });
 const validate = ajv.compile(schema);
 const moduleCode = standaloneCode(ajv, validate);
 
-mkdirSync('./src/generated', { recursive: true });
-writeFileSync('./src/generated/validateDefinition.js', moduleCode);
+const match = moduleCode.match(/export default (\w+)/);
+
+if (!match) {
+  throw new Error('Could not find default export in Ajv standalone output');
+}
+
+const fnName = match[1];
+
+const internalCode = moduleCode
+  .replaceAll(`export const validate = ${fnName};`, '')
+  .replaceAll(`export default ${fnName};`, '');
+
+const classCode = `import { StyleValidationError } from '../Error/StyleValidationError.js';
+
+${internalCode}
+
+export class StyleValidator {
+  static validate(data) {
+    if (!${fnName}(data)) {
+      throw new StyleValidationError(${fnName}.errors || []);
+    }
+  }
+}
+`;
+
+mkdirSync('./src/Validator', { recursive: true });
+writeFileSync('./src/Validator/StyleValidator.js', classCode);

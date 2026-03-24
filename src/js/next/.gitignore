@@ -8,4 +8,4 @@ node_modules
 lib
 
 # Generated files
-src/generated/validateDefinition.js
+src/Validator/StyleValidator.js

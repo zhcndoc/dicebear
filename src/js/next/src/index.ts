@@ -1,2 +1,1 @@
-export { Style } from './Style.js';
-export type { Definition, DefinitionMeta } from './types.js';
+export { Style, type Definition } from './Style.js';
