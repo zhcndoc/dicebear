@@ -218,6 +218,21 @@ describe('Prng', () => {
 
       assert.equal(a.float('key', [0, 100]), b.float('key', [0, 100]));
     });
+
+    it('should round to four decimal places', () => {
+      const prng = new Prng('test');
+      const value = prng.float('scale', [0, 1]);
+      const decimals = value.toString().split('.')[1] ?? '';
+
+      assert.ok(decimals.length <= 4, `Expected at most 4 decimal places, got ${decimals.length}: ${value}`);
+    });
+
+    it('should return known values', () => {
+      const prng = new Prng('test');
+
+      assert.equal(prng.float('scale', [0, 1]), prng.float('scale', [0, 1]));
+      assert.equal(prng.float('a', [10, 20]), prng.float('a', [10, 20]));
+    });
   });
 
   describe('bool', () => {

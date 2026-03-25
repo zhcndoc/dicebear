@@ -25,6 +25,8 @@ export class Options {
   #prng: Prng;
   #colorCache = new Map<string, readonly string[]>();
   #colorResolving: string[] = [];
+  #tracking = false;
+  #tracked = new Map<string, unknown>();
 
   constructor(style: Style, data: unknown, validate = true) {
     if (validate) {
@@ -37,45 +39,72 @@ export class Options {
   }
 
   seed(): string {
-    return this.#data.seed ?? '';
+    const result = this.#data.seed ?? '';
+
+    this.#track('seed', result);
+
+    return result;
   }
 
   size(): number | undefined {
-    return this.#data.size;
+    const result = this.#data.size;
+
+    this.#track('size', result);
+
+    return result;
   }
 
   idRandomization(): boolean {
-    return this.#data.idRandomization ?? false;
+    const result = this.#data.idRandomization ?? false;
+
+    this.#track('idRandomization', result);
+
+    return result;
   }
 
   flip(): FlipValue {
     const values = this.#toArray(this.#data.flip);
+    const result = this.#prng.pick('flip', values) ?? 'none';
 
-    return this.#prng.pick('flip', values) ?? 'none';
+    this.#track('flip', result);
+
+    return result;
   }
 
   fontFamily(): string {
     const values = this.#toArray(this.#data.fontFamily);
+    const result = this.#prng.pick('fontFamily', values) ?? 'system-ui';
 
-    return this.#prng.pick('fontFamily', values) ?? 'system-ui';
+    this.#track('fontFamily', result);
+
+    return result;
   }
 
   fontWeight(): number {
     const values = this.#toArray(this.#data.fontWeight);
+    const result = this.#prng.pick('fontWeight', values) ?? 400;
 
-    return this.#prng.pick('fontWeight', values) ?? 400;
+    this.#track('fontWeight', result);
+
+    return result;
   }
 
   scale(): number {
     const values = this.#toArray(this.#data.scale);
+    const result = this.#prng.float('scale', values) ?? 1;
 
-    return this.#prng.float('scale', values) ?? 1;
+    this.#track('scale', result);
+
+    return result;
   }
 
   borderRadius(): number {
     const values = this.#toArray(this.#data.borderRadius);
+    const result = this.#prng.float('borderRadius', values) ?? 0;
 
-    return this.#prng.float('borderRadius', values) ?? 0;
+    this.#track('borderRadius', result);
+
+    return result;
   }
 
   variant(name: string): string | undefined {
@@ -96,23 +125,25 @@ export class Options {
 
     const valid = new Set(component.variants().keys());
     const filtered = candidates.filter((v) => valid.has(v));
-
-    return this.#prng.pick(
+    const result = this.#prng.pick(
       `${name}Variant`,
       filtered.length > 0 ? filtered : [...valid],
     );
+
+    this.#track(`${name}Variant`, result);
+
+    return result;
   }
 
   color(name: string): readonly string[] {
-    const cached = this.#colorCache.get(name);
+    let result = this.#colorCache.get(name);
 
-    if (cached) {
-      return cached;
+    if (!result) {
+      result = this.#resolveColor(name);
+      this.#colorCache.set(name, result);
     }
 
-    const result = this.#resolveColor(name);
-
-    this.#colorCache.set(name, result);
+    this.#track(`${name}Color`, result);
 
     return result;
   }
@@ -122,8 +153,12 @@ export class Options {
       | ColorFillValue
       | readonly ColorFillValue[]
       | undefined;
+    const result =
+      this.#prng.pick(`${name}ColorFill`, this.#toArray(raw)) ?? 'solid';
 
-    return this.#prng.pick(`${name}ColorFill`, this.#toArray(raw)) ?? 'solid';
+    this.#track(`${name}ColorFill`, result);
+
+    return result;
   }
 
   rotate(name?: string): number {
@@ -131,8 +166,11 @@ export class Options {
     const values = this.#toArray(
       this.#data[key] as number | readonly number[] | undefined,
     );
+    const result = this.#prng.float(key, values) ?? 0;
 
-    return this.#prng.float(key, values) ?? 0;
+    this.#track(key, result);
+
+    return result;
   }
 
   translateX(name?: string): number {
@@ -140,8 +178,11 @@ export class Options {
     const values = this.#toArray(
       this.#data[key] as number | readonly number[] | undefined,
     );
+    const result = this.#prng.float(key, values) ?? 0;
 
-    return this.#prng.float(key, values) ?? 0;
+    this.#track(key, result);
+
+    return result;
   }
 
   translateY(name?: string): number {
@@ -149,8 +190,24 @@ export class Options {
     const values = this.#toArray(
       this.#data[key] as number | readonly number[] | undefined,
     );
+    const result = this.#prng.float(key, values) ?? 0;
 
-    return this.#prng.float(key, values) ?? 0;
+    this.#track(key, result);
+
+    return result;
+  }
+
+  startTracking(): void {
+    this.#tracking = true;
+    this.#tracked.clear();
+  }
+
+  stopTracking(): void {
+    this.#tracking = false;
+  }
+
+  resolved(): OptionsDefinition {
+    return Object.fromEntries(this.#tracked) as OptionsDefinition;
   }
 
   #probability(name: string): number {
@@ -223,6 +280,12 @@ export class Options {
       : this.#prng.shuffle(`${name}Color`, candidates);
 
     return ordered.slice(0, stops);
+  }
+
+  #track(key: string, value: unknown): void {
+    if (this.#tracking) {
+      this.#tracked.set(key, value);
+    }
   }
 
   #toArray<T>(value: T | readonly T[] | undefined): readonly T[] {

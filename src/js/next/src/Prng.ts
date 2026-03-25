@@ -32,7 +32,7 @@ export class Prng {
     const min = Math.min(...values);
     const max = Math.max(...values);
 
-    return min + this.getValue(key) * (max - min);
+    return Math.round((min + this.getValue(key) * (max - min)) * 10000) / 10000;
   }
 
   integer(key: string, values: readonly number[]): number | undefined {

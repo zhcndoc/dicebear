@@ -554,4 +554,96 @@ describe('Options', () => {
       }
     });
   });
+
+  describe('resolved()', () => {
+    it('should return empty object when nothing was tracked', () => {
+      const options = new Options(minimalStyle, { seed: 'test' });
+
+      assert.deepEqual(options.resolved(), {});
+    });
+
+    it('should track global values', () => {
+      const options = new Options(minimalStyle, {
+        seed: 'test',
+        flip: ['horizontal', 'vertical'],
+        scale: [0.5, 1],
+      });
+
+      options.startTracking();
+      options.seed();
+      options.flip();
+      options.scale();
+      options.stopTracking();
+
+      const resolved = options.resolved();
+
+      assert.equal(resolved.seed, 'test');
+      assert.ok(['horizontal', 'vertical', 'none'].includes(resolved.flip));
+      assert.equal(typeof resolved.scale, 'number');
+    });
+
+    it('should track parametrized values', () => {
+      const options = new Options(styleWithComponents, {
+        seed: 'test',
+        eyesVariant: ['open', 'closed'],
+      }, false);
+
+      options.startTracking();
+      options.variant('eyes');
+      options.stopTracking();
+
+      const resolved = options.resolved();
+
+      assert.ok('eyesVariant' in resolved);
+      assert.ok(['open', 'closed', 'wink'].includes(resolved.eyesVariant));
+    });
+
+    it('should track color values', () => {
+      const options = new Options(styleWithColors, {
+        seed: 'test',
+        skinColor: ['#ff0000', '#00ff00'],
+      }, false);
+
+      options.startTracking();
+      options.color('skin');
+      options.stopTracking();
+
+      const resolved = options.resolved();
+
+      assert.ok('skinColor' in resolved);
+      assert.ok(Array.isArray(resolved.skinColor));
+    });
+
+    it('should not track values after stopTracking', () => {
+      const options = new Options(minimalStyle, { seed: 'test' });
+
+      options.startTracking();
+      options.seed();
+      options.stopTracking();
+      options.flip();
+
+      const resolved = options.resolved();
+
+      assert.ok('seed' in resolved);
+      assert.ok(!('flip' in resolved));
+    });
+
+    it('should reset on startTracking', () => {
+      const options = new Options(minimalStyle, { seed: 'test' });
+
+      options.startTracking();
+      options.seed();
+      options.flip();
+      options.stopTracking();
+
+      options.startTracking();
+      options.seed();
+      options.stopTracking();
+
+      const resolved = options.resolved();
+
+      assert.ok('seed' in resolved);
+      assert.ok(!('flip' in resolved));
+    });
+  });
 });
