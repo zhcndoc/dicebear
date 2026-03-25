@@ -27,24 +27,26 @@ export class Element {
     this.#data = data;
   }
 
-  get type(): ElementType {
+  type(): ElementType {
     return this.#data.type;
   }
 
-  get name(): string | undefined {
+  name(): string | undefined {
     return this.#data.name;
   }
 
-  get value(): ElementValue | undefined {
+  value(): ElementValue | undefined {
     return this.#data.value;
   }
 
-  get attributes(): DefinitionAttributes | undefined {
+  attributes(): DefinitionAttributes | undefined {
     return this.#data.attributes;
   }
 
-  get children(): readonly Element[] {
-    this.#children ??= (this.#data.children ?? []).map((child) => new Element(child));
+  children(): readonly Element[] {
+    this.#children ??= (this.#data.children ?? []).map(
+      (child) => new Element(child),
+    );
 
     return this.#children;
   }

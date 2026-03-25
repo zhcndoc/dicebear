@@ -34,31 +34,31 @@ export class Style {
     this.#data = data as Definition;
   }
 
-  get schema(): string | undefined {
+  schema(): string | undefined {
     return this.#data.$schema;
   }
 
-  get comment(): string | undefined {
+  comment(): string | undefined {
     return this.#data.$comment;
   }
 
-  get meta(): Meta {
+  meta(): Meta {
     this.#meta ??= new Meta(this.#data.meta ?? {});
 
     return this.#meta;
   }
 
-  get attributes(): DefinitionAttributes {
+  attributes(): DefinitionAttributes {
     return this.#data.attributes ?? {};
   }
 
-  get canvas(): Canvas {
+  canvas(): Canvas {
     this.#canvas ??= new Canvas(this.#data.canvas);
 
     return this.#canvas;
   }
 
-  get components(): ReadonlyMap<string, Component> {
+  components(): ReadonlyMap<string, Component> {
     this.#components ??= new Map(
       Object.entries(this.#data.components ?? {}).map(([name, data]) => [
         name,
@@ -69,7 +69,7 @@ export class Style {
     return this.#components;
   }
 
-  get colors(): ReadonlyMap<string, Color> {
+  colors(): ReadonlyMap<string, Color> {
     this.#colors ??= new Map(
       Object.entries(this.#data.colors ?? {}).map(([name, data]) => [
         name,

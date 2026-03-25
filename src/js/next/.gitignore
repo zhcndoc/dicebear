@@ -9,3 +9,4 @@ lib
 
 # Generated files
 src/Validator/StyleValidator.js
+src/Validator/OptionsValidator.js

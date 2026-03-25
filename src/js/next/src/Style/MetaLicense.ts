@@ -11,15 +11,15 @@ export class MetaLicense {
     this.#data = data;
   }
 
-  get name(): string | undefined {
+  name(): string | undefined {
     return this.#data.name;
   }
 
-  get url(): string | undefined {
+  url(): string | undefined {
     return this.#data.url;
   }
 
-  get text(): string | undefined {
+  text(): string | undefined {
     return this.#data.text;
   }
 }

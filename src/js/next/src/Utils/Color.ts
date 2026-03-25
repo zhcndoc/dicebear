@@ -1,0 +1,65 @@
+export class Color {
+  static toRgbHex(hex: string): string {
+    const h = hex.replace(/^#/, '').toLowerCase();
+
+    if (h.length === 3 || h.length === 4) {
+      return '#' + h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    }
+
+    return '#' + h.slice(0, 6);
+  }
+
+  static parseHex(hex: string): [number, number, number] {
+    const n = this.toRgbHex(hex).slice(1);
+
+    return [
+      parseInt(n.slice(0, 2), 16),
+      parseInt(n.slice(2, 4), 16),
+      parseInt(n.slice(4, 6), 16),
+    ];
+  }
+
+  // WCAG 2.1 relative luminance with sRGB linearization.
+  // https://www.w3.org/WAI/GL/wiki/Relative_luminance
+  static luminance(hex: string): number {
+    const [r, g, b] = this.parseHex(hex).map((c) => {
+      const s = c / 255;
+
+      return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+    });
+
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  }
+
+  // WCAG 2.1 contrast ratio. Returns a value between 1 (identical) and 21 (black/white).
+  // https://www.w3.org/WAI/GL/wiki/Contrast_ratio
+  static contrastRatio(a: string, b: string): number {
+    const la = this.luminance(a);
+    const lb = this.luminance(b);
+
+    return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+  }
+
+  static sortByContrast(candidates: string[], refColor: string): void {
+    candidates.sort(
+      (a, b) =>
+        this.contrastRatio(b, refColor) - this.contrastRatio(a, refColor),
+    );
+  }
+
+  // Filters in place. Keeps all candidates if filtering would empty the list.
+  static filterNotEqualTo(
+    candidates: string[],
+    excluded: readonly string[],
+  ): void {
+    const normalized = new Set(excluded.map((c) => this.toRgbHex(c)));
+    const filtered = candidates.filter(
+      (c) => !normalized.has(this.toRgbHex(c)),
+    );
+
+    if (filtered.length > 0) {
+      candidates.length = 0;
+      candidates.push(...filtered);
+    }
+  }
+}

@@ -21,19 +21,19 @@ export class Meta {
     this.#data = data;
   }
 
-  get license(): MetaLicense {
+  license(): MetaLicense {
     this.#license ??= new MetaLicense(this.#data.license ?? {});
 
     return this.#license;
   }
 
-  get creator(): MetaCreator {
+  creator(): MetaCreator {
     this.#creator ??= new MetaCreator(this.#data.creator ?? {});
 
     return this.#creator;
   }
 
-  get source(): MetaSource {
+  source(): MetaSource {
     this.#source ??= new MetaSource(this.#data.source ?? {});
 
     return this.#source;

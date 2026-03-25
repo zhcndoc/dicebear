@@ -15,15 +15,15 @@ export class Canvas {
     this.#data = data;
   }
 
-  get width(): number {
+  width(): number {
     return this.#data.width;
   }
 
-  get height(): number {
+  height(): number {
     return this.#data.height;
   }
 
-  get elements(): readonly Element[] {
+  elements(): readonly Element[] {
     this.#elements ??= this.#data.elements.map((el) => new Element(el));
 
     return this.#elements;

@@ -21,29 +21,29 @@ export class Component {
     this.#data = data;
   }
 
-  get width(): number {
+  width(): number {
     return this.#data.width;
   }
 
-  get height(): number {
+  height(): number {
     return this.#data.height;
   }
 
-  get probability(): number {
+  probability(): number {
     return this.#data.probability ?? 100;
   }
 
-  get rotate(): readonly number[] {
+  rotate(): readonly number[] {
     return this.#data.rotate ?? [];
   }
 
-  get translate(): ComponentTranslate {
+  translate(): ComponentTranslate {
     this.#translate ??= new ComponentTranslate(this.#data.translate ?? {});
 
     return this.#translate;
   }
 
-  get variants(): ReadonlyMap<string, ComponentVariant> {
+  variants(): ReadonlyMap<string, ComponentVariant> {
     this.#variants ??= new Map(
       Object.entries(this.#data.variants).map(([name, data]) => [
         name,

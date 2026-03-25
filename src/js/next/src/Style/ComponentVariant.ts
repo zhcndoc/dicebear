@@ -13,7 +13,7 @@ export class ComponentVariant {
     this.#data = data;
   }
 
-  get elements(): readonly Element[] {
+  elements(): readonly Element[] {
     this.#elements ??= this.#data.elements.map((el) => new Element(el));
 
     return this.#elements;

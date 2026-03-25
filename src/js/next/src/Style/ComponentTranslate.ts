@@ -10,11 +10,11 @@ export class ComponentTranslate {
     this.#data = data;
   }
 
-  get x(): readonly number[] {
+  x(): readonly number[] {
     return this.#data.x ?? [];
   }
 
-  get y(): readonly number[] {
+  y(): readonly number[] {
     return this.#data.y ?? [];
   }
 }
