@@ -59,23 +59,29 @@ export class Style {
   }
 
   components(): ReadonlyMap<string, Component> {
-    this.#components ??= new Map(
-      Object.entries(this.#data.components ?? {}).map(([name, data]) => [
-        name,
-        new Component(data),
-      ]),
-    );
+    if (!this.#components) {
+      const map = new Map<string, Component>();
+
+      for (const [name, data] of Object.entries(this.#data.components ?? {})) {
+        map.set(name, new Component(data));
+      }
+
+      this.#components = map;
+    }
 
     return this.#components;
   }
 
   colors(): ReadonlyMap<string, Color> {
-    this.#colors ??= new Map(
-      Object.entries(this.#data.colors ?? {}).map(([name, data]) => [
-        name,
-        new Color(data),
-      ]),
-    );
+    if (!this.#colors) {
+      const map = new Map<string, Color>();
+
+      for (const [name, data] of Object.entries(this.#data.colors ?? {})) {
+        map.set(name, new Color(data));
+      }
+
+      this.#colors = map;
+    }
 
     return this.#colors;
   }

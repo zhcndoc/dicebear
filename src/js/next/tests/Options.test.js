@@ -410,16 +410,22 @@ describe('Options', () => {
       assert.notEqual(result, 'invalid');
     });
 
-    it('should fall back to all style variants when none match', () => {
+    it('should return undefined when no user variants match', () => {
       const options = new Options(styleWithComponents, {
         seed: 'fallback-test',
         eyesVariant: ['invalid1', 'invalid2'],
       });
 
-      const result = options.variant('eyes');
+      assert.equal(options.variant('eyes'), undefined);
+    });
 
-      assert.ok(result);
-      assert.ok(['open', 'closed', 'wink'].includes(result));
+    it('should return undefined when user provides empty array', () => {
+      const options = new Options(styleWithComponents, {
+        seed: 'empty-test',
+        eyesVariant: [],
+      });
+
+      assert.equal(options.variant('eyes'), undefined);
     });
 
     it('should pick from style variants when no option is set', () => {

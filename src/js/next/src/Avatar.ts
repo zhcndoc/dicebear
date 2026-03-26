@@ -1,4 +1,6 @@
-import type { OptionsDefinition } from './Options.js';
+import { Style } from './Style.js';
+import { Options, type OptionsDefinition } from './Options.js';
+import { Renderer } from './Renderer.js';
 
 export interface AvatarJson {
   readonly svg: string;
@@ -9,9 +11,22 @@ export class Avatar {
   #svg: string;
   #resolvedOptions: OptionsDefinition;
 
-  constructor(svg: string, resolvedOptions: OptionsDefinition) {
-    this.#svg = svg;
-    this.#resolvedOptions = resolvedOptions;
+  constructor(style: Style | unknown, options?: Options | unknown) {
+    const resolvedStyle = style instanceof Style
+      ? style
+      : new Style(style);
+    const resolvedOptions = options instanceof Options
+      ? options
+      : new Options(resolvedStyle, options ?? {});
+
+    resolvedOptions.startTracking();
+
+    try {
+      this.#svg = new Renderer(resolvedStyle, resolvedOptions).render();
+      this.#resolvedOptions = resolvedOptions.resolved();
+    } finally {
+      resolvedOptions.stopTracking();
+    }
   }
 
   toString(): string {

@@ -112,23 +112,22 @@ export class Options {
       return undefined;
     }
 
-    const raw = this.#data[`${name}Variant`] as
-      | string
-      | readonly string[]
-      | undefined;
-    const candidates = this.#toArray(raw);
     const component = this.#style.components().get(name);
 
     if (!component) {
       return undefined;
     }
 
-    const valid = new Set(component.variants().keys());
-    const filtered = candidates.filter((v) => valid.has(v));
-    const result = this.#prng.pick(
-      `${name}Variant`,
-      filtered.length > 0 ? filtered : [...valid],
-    );
+    const raw = this.#data[`${name}Variant`] as
+      | string
+      | readonly string[]
+      | undefined;
+    const styleVariants = Array.from(component.variants().keys());
+    const valid = new Set(styleVariants);
+    const candidates = raw === undefined
+      ? styleVariants
+      : this.#toArray(raw).filter((v) => valid.has(v));
+    const result = this.#prng.pick(`${name}Variant`, candidates);
 
     this.#track(`${name}Variant`, result);
 
@@ -161,11 +160,25 @@ export class Options {
     return result;
   }
 
+  colorRotate(name: string): number {
+    const raw = this.#data[`${name}ColorRotate`] as
+      | number
+      | readonly number[]
+      | undefined;
+    const values = this.#toArray(raw);
+    const result = this.#prng.float(`${name}ColorRotate`, values) ?? 0;
+
+    this.#track(`${name}ColorRotate`, result);
+
+    return result;
+  }
+
   rotate(name?: string): number {
     const key = name ? `${name}Rotate` : 'rotate';
-    const values = this.#toArray(
-      this.#data[key] as number | readonly number[] | undefined,
-    );
+    const raw = this.#data[key] as number | readonly number[] | undefined;
+    const values = raw === undefined && name
+      ? this.#style.components().get(name)?.rotate() ?? []
+      : this.#toArray(raw);
     const result = this.#prng.float(key, values) ?? 0;
 
     this.#track(key, result);
@@ -175,9 +188,10 @@ export class Options {
 
   translateX(name?: string): number {
     const key = name ? `${name}TranslateX` : 'translateX';
-    const values = this.#toArray(
-      this.#data[key] as number | readonly number[] | undefined,
-    );
+    const raw = this.#data[key] as number | readonly number[] | undefined;
+    const values = raw === undefined && name
+      ? this.#style.components().get(name)?.translate().x() ?? []
+      : this.#toArray(raw);
     const result = this.#prng.float(key, values) ?? 0;
 
     this.#track(key, result);
@@ -187,9 +201,10 @@ export class Options {
 
   translateY(name?: string): number {
     const key = name ? `${name}TranslateY` : 'translateY';
-    const values = this.#toArray(
-      this.#data[key] as number | readonly number[] | undefined,
-    );
+    const raw = this.#data[key] as number | readonly number[] | undefined;
+    const values = raw === undefined && name
+      ? this.#style.components().get(name)?.translate().y() ?? []
+      : this.#toArray(raw);
     const result = this.#prng.float(key, values) ?? 0;
 
     this.#track(key, result);
@@ -211,7 +226,13 @@ export class Options {
   }
 
   #probability(name: string): number {
-    return (this.#data[`${name}Probability`] as number | undefined) ?? 100;
+    const raw = this.#data[`${name}Probability`] as number | undefined;
+
+    if (raw !== undefined) {
+      return raw;
+    }
+
+    return this.#style.components().get(name)?.probability() ?? 100;
   }
 
   #isVisible(name: string): boolean {
@@ -229,17 +250,17 @@ export class Options {
   }
 
   #resolveColor(name: string): readonly string[] {
-    // Collect candidates from user options
     const raw = this.#data[`${name}Color`] as
       | string
       | readonly string[]
       | undefined;
-    const candidates = [...this.#toArray(raw)];
+    const styleColor = this.#style.colors().get(name);
+    const source = raw === undefined
+      ? styleColor?.values() ?? []
+      : this.#toArray(raw);
+    const candidates = source.map((c) => Color.toHex(c));
     const fill = this.colorFill(name);
     const stops = fill === 'solid' ? 1 : this.#colorFillStops(name);
-
-    // Without style definition, shuffle and return
-    const styleColor = this.#style.colors().get(name);
 
     if (!styleColor) {
       return this.#prng.shuffle(`${name}Color`, candidates).slice(0, stops);
@@ -247,7 +268,7 @@ export class Options {
 
     // Detect circular references (e.g. a.contrastTo = b, b.contrastTo = a)
     if (this.#colorResolving.includes(name)) {
-      throw new CircularColorReferenceError([...this.#colorResolving, name]);
+      throw new CircularColorReferenceError(this.#colorResolving.concat(name));
     }
 
     this.#colorResolving.push(name);
@@ -266,7 +287,13 @@ export class Options {
 
       // Filter out colors that match excluded references
       if (notEqualTo.length > 0) {
-        const excluded = notEqualTo.flatMap((ref) => [...this.color(ref)]);
+        const excluded: string[] = [];
+
+        for (const ref of notEqualTo) {
+          for (const color of this.color(ref)) {
+            excluded.push(color);
+          }
+        }
 
         Color.filterNotEqualTo(candidates, excluded);
       }

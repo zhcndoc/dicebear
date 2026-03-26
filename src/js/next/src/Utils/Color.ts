@@ -1,12 +1,22 @@
 export class Color {
-  static toRgbHex(hex: string): string {
+  static toHex(hex: string): string {
     const h = hex.replace(/^#/, '').toLowerCase();
 
-    if (h.length === 3 || h.length === 4) {
+    if (h.length === 3) {
       return '#' + h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
     }
 
-    return '#' + h.slice(0, 6);
+    if (h.length === 4) {
+      return '#' + h[0] + h[0] + h[1] + h[1] + h[2] + h[2] + h[3] + h[3];
+    }
+
+    return '#' + h;
+  }
+
+  static toRgbHex(hex: string): string {
+    const h = this.toHex(hex);
+
+    return h.length > 7 ? h.slice(0, 7) : h;
   }
 
   static parseHex(hex: string): [number, number, number] {
@@ -59,7 +69,10 @@ export class Color {
 
     if (filtered.length > 0) {
       candidates.length = 0;
-      candidates.push(...filtered);
+
+      for (const c of filtered) {
+        candidates.push(c);
+      }
     }
   }
 }

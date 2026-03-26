@@ -15,9 +15,10 @@ export class Prng {
       return undefined;
     }
 
-    const index = Math.floor(this.getValue(key) * items.length);
+    const sorted = Array.from(items).sort(this.#compareByCodePoint);
+    const index = Math.floor(this.getValue(key) * sorted.length);
 
-    return items[index];
+    return sorted[index];
   }
 
   bool(key: string, likelihood: number = 50): boolean {
@@ -48,17 +49,20 @@ export class Prng {
 
   // Fisher-Yates shuffle with chained Mulberry32 state.
   shuffle<T>(key: string, items: readonly T[]): T[] {
-    const result = [...items];
+    const result = Array.from(items).sort(this.#compareByCodePoint);
     let state = this.fnv1a(this.#seed + ':' + key);
 
     for (let i = result.length - 1; i > 0; i--) {
-      const [value, next] = this.mulberry32(state);
+      const pair = this.mulberry32(state);
+      const value = pair[0];
 
-      state = next;
+      state = pair[1];
 
       const j = Math.floor(value * (i + 1));
+      const temp = result[i];
 
-      [result[i], result[j]] = [result[j], result[i]];
+      result[i] = result[j];
+      result[j] = temp;
     }
 
     return result;
@@ -86,11 +90,31 @@ export class Prng {
     let t = Math.imul(state ^ (state >>> 15), state | 1);
     t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
 
-    return [((t ^ (t >>> 14)) >>> 0) / 4294967296, state];
+    const result = ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+
+    return [result, state];
   }
 
   // Combines seed + key via FNV-1a, then runs one Mulberry32 step.
   getValue(key: string): number {
     return this.mulberry32(this.fnv1a(this.#seed + ':' + key))[0];
+  }
+
+  // Cross-language deterministic sort: compare by UTF-16 code units of
+  // the string representation. Every language can reproduce this by
+  // converting values to strings and comparing code unit by code unit.
+  #compareByCodePoint<T>(a: T, b: T): number {
+    const sa = String(a);
+    const sb = String(b);
+
+    if (sa < sb) {
+      return -1;
+    }
+
+    if (sa > sb) {
+      return 1;
+    }
+
+    return 0;
   }
 }
