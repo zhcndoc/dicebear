@@ -5,7 +5,10 @@ import { writeFileSync, mkdirSync } from 'fs';
 
 const require = createRequire(import.meta.url);
 
-function compileValidator({ schemaModule, errorImport, errorClass, validatorClass, outputPath }) {
+function compileValidator({ schemaModule, domain }) {
+  const errorClass = `${domain}ValidationError`;
+  const validatorClass = `${domain}Validator`;
+
   const schema = require(schemaModule);
 
   const ajv = new Ajv({ code: { source: true, esm: true } });
@@ -20,20 +23,26 @@ function compileValidator({ schemaModule, errorImport, errorClass, validatorClas
 
   const fnName = match[1];
 
+  // Strip Ajv's own exports and replace its require() call for the ucs2length
+  // runtime helper with a plain function reference. This eliminates any runtime
+  // dependency on the ajv package — the generated validators are fully standalone.
   const internalCode = moduleCode
     .replaceAll(`export const validate = ${fnName};`, '')
     .replaceAll(`export default ${fnName};`, '')
-    .replaceAll('require("ajv/dist/runtime/ucs2length").default', 'ucs2length.default');
+    .replaceAll('require("ajv/dist/runtime/ucs2length").default', 'ucs2length');
 
   const needsUcs2 = internalCode.includes('ucs2length');
 
-  const imports = [`import { ${errorClass} } from '${errorImport}';`];
+  const preamble = [`import { ${errorClass} } from '../Error/${errorClass}.js';`];
 
   if (needsUcs2) {
-    imports.push(`import ucs2length from 'ajv/dist/runtime/ucs2length.js';`);
+    // Ajv's ucs2length manually detects surrogate pairs via charCodeAt() for
+    // ES5 compatibility. Since ES2015, the string iterator (used by for...of)
+    // handles this natively, making the manual approach unnecessary.
+    preamble.push(`function ucs2length(str) { let n = 0; for (const _ of str) n++; return n; }`);
   }
 
-  const classCode = `${imports.join('\n')}
+  const classCode = `${preamble.join('\n')}
 
 ${internalCode}
 
@@ -46,23 +55,11 @@ export class ${validatorClass} {
 }
 `;
 
-  writeFileSync(outputPath, classCode);
+  writeFileSync(`./src/Validator/${validatorClass}.js`, classCode);
 }
 
 mkdirSync('./src/Validator', { recursive: true });
 
-compileValidator({
-  schemaModule: '@dicebear/schema/definition.json',
-  errorImport: '../Error/StyleValidationError.js',
-  errorClass: 'StyleValidationError',
-  validatorClass: 'StyleValidator',
-  outputPath: './src/Validator/StyleValidator.js',
-});
+compileValidator({ schemaModule: '@dicebear/schema/definition.json', domain: 'Style' });
+compileValidator({ schemaModule: '@dicebear/schema/options.json', domain: 'Options' });
 
-compileValidator({
-  schemaModule: '@dicebear/schema/options.json',
-  errorImport: '../Error/OptionsValidationError.js',
-  errorClass: 'OptionsValidationError',
-  validatorClass: 'OptionsValidator',
-  outputPath: './src/Validator/OptionsValidator.js',
-});

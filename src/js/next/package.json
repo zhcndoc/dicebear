@@ -32,6 +32,8 @@
     "prebuild": "del-cli lib && node scripts/compile-schema.mjs",
     "build": "tsc",
     "prepublishOnly": "npm run build",
+    "prepack": "node scripts/extend-license.mjs",
+    "postpack": "git checkout LICENSE",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint src/",
     "test": "node --test"
