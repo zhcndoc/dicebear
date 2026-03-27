@@ -10,4 +10,4 @@ node_modules
 .env*.local
 
 # claude code
-.claude/
+.claude/settings.local.json
