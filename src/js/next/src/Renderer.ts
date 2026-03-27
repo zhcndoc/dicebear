@@ -2,7 +2,7 @@ import type { Style } from './Style.js';
 import type { Options } from './Options.js';
 import type { Canvas } from './Style/Canvas.js';
 import type { Element } from './Style/Element.js';
-import type { ColorReference, DefinitionAttributes } from './types.js';
+import type { ColorReference, DefinitionAttributes, VariableReference } from './types.js';
 import type { ElementValue } from './Style/Element.js';
 import { Initials } from './Utils/Initials.js';
 import { License } from './Utils/License.js';
@@ -286,13 +286,17 @@ export class Renderer {
     return ` ${parts.join(' ')}`;
   }
 
-  #resolveAttributeValue(value: string | ColorReference): string | undefined {
+  #resolveAttributeValue(value: string | ColorReference | VariableReference): string | undefined {
     if (typeof value === 'string') {
       return value;
     }
 
     if (value.type === 'color') {
       return this.#resolveColorReference(value.value);
+    }
+
+    if (value.type === 'variable') {
+      return this.#resolveVariable(value.value);
     }
 
     return undefined;

@@ -642,6 +642,77 @@ describe('Renderer', () => {
     });
   });
 
+  describe('variable attributes', () => {
+    it('should resolve font-family variable reference in attributes', () => {
+      const style = new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            {
+              type: 'element',
+              name: 'text',
+              attributes: { 'font-family': { type: 'variable', value: 'fontFamily' } },
+              children: [
+                { type: 'text', value: 'Hello' },
+              ],
+            },
+          ],
+        },
+      });
+
+      const svg = new Avatar(style, { fontFamily: 'Arial' }).toString();
+
+      assert.ok(svg.includes('font-family="Arial"'));
+    });
+
+    it('should resolve font-weight variable reference in attributes', () => {
+      const style = new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            {
+              type: 'element',
+              name: 'text',
+              attributes: { 'font-weight': { type: 'variable', value: 'fontWeight' } },
+              children: [
+                { type: 'text', value: 'Hello' },
+              ],
+            },
+          ],
+        },
+      });
+
+      const svg = new Avatar(style, { fontWeight: 700 }).toString();
+
+      assert.ok(svg.includes('font-weight="700"'));
+    });
+
+    it('should still accept plain string for font-family', () => {
+      const style = new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            {
+              type: 'element',
+              name: 'text',
+              attributes: { 'font-family': 'monospace' },
+              children: [
+                { type: 'text', value: 'Hello' },
+              ],
+            },
+          ],
+        },
+      });
+
+      const svg = new Avatar(style).toString();
+
+      assert.ok(svg.includes('font-family="monospace"'));
+    });
+  });
+
   describe('xml escaping', () => {
     it('should escape attribute values', () => {
       const style = new Style({

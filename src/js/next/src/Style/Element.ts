@@ -1,11 +1,4 @@
-import type { DefinitionAttributes } from '../types.js';
-
-export type VariableName = 'initial' | 'initials' | 'fontWeight' | 'fontFamily';
-
-export interface VariableReference {
-  readonly type: 'variable';
-  readonly value: VariableName;
-}
+import type { DefinitionAttributes, VariableReference } from '../types.js';
 
 export type ElementValue = string | VariableReference;
 

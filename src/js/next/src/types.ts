@@ -1,3 +1,10 @@
+export type VariableName = 'initial' | 'initials' | 'fontWeight' | 'fontFamily';
+
+export interface VariableReference {
+  readonly type: 'variable';
+  readonly value: VariableName;
+}
+
 export interface ColorReference {
   readonly type: 'color';
   readonly value: string;
@@ -14,5 +21,7 @@ export interface DefinitionAttributes {
   readonly 'stop-color'?: ColorAttributeValue;
   readonly fill?: PaintAttributeValue;
   readonly stroke?: PaintAttributeValue;
-  readonly [key: string]: string | ColorReference | undefined;
+  readonly 'font-family'?: string | VariableReference;
+  readonly 'font-weight'?: string | VariableReference;
+  readonly [key: string]: string | ColorReference | VariableReference | undefined;
 }
