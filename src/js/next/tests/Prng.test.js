@@ -375,4 +375,86 @@ describe('Prng', () => {
       assert.deepEqual(prng.shuffle('key', [42]), [42]);
     });
   });
+
+  describe('weightedPick', () => {
+    it('should return undefined for empty array', () => {
+      const prng = new Prng('test');
+
+      assert.equal(prng.weightedPick('key', [], []), undefined);
+    });
+
+    it('should return the only item for single-element array', () => {
+      const prng = new Prng('test');
+
+      assert.equal(prng.weightedPick('key', ['only'], [1]), 'only');
+    });
+
+    it('should fall back to uniform pick when all weights are 0', () => {
+      const prng = new Prng('test');
+      const result = prng.weightedPick('key', ['a', 'b', 'c'], [0, 0, 0]);
+
+      assert.ok(['a', 'b', 'c'].includes(result));
+    });
+
+    it('should be deterministic', () => {
+      const a = new Prng('test');
+      const b = new Prng('test');
+      const items = ['a', 'b', 'c'];
+      const weights = [1, 5, 2];
+
+      assert.equal(
+        a.weightedPick('key', items, weights),
+        b.weightedPick('key', items, weights),
+      );
+    });
+
+    it('should never pick a weight-0 item', () => {
+      const items = ['rare', 'common'];
+      const weights = [0, 1];
+
+      for (let i = 0; i < 100; i++) {
+        const prng = new Prng(`seed-${i}`);
+
+        assert.equal(prng.weightedPick('key', items, weights), 'common');
+      }
+    });
+
+    it('should favor higher-weighted items', () => {
+      const items = ['heavy', 'light'];
+      const weights = [100, 1];
+      let heavyCount = 0;
+
+      for (let i = 0; i < 200; i++) {
+        const prng = new Prng(`seed-${i}`);
+
+        if (prng.weightedPick('key', items, weights) === 'heavy') {
+          heavyCount++;
+        }
+      }
+
+      assert.ok(heavyCount > 150, `Expected heavy to be picked most of the time, got ${heavyCount}/200`);
+    });
+
+    it('should produce order-independent results', () => {
+      const a = new Prng('test');
+      const b = new Prng('test');
+
+      const resultA = a.weightedPick('key', ['x', 'y', 'z'], [1, 5, 2]);
+      const resultB = b.weightedPick('key', ['z', 'x', 'y'], [2, 1, 5]);
+
+      assert.equal(resultA, resultB);
+    });
+
+    it('should always pick a valid item', () => {
+      const items = ['a', 'b', 'c'];
+      const weights = [1, 1, 1];
+
+      for (let i = 0; i < 50; i++) {
+        const prng = new Prng(`seed-${i}`);
+        const result = prng.weightedPick('key', items, weights);
+
+        assert.ok(items.includes(result));
+      }
+    });
+  });
 });

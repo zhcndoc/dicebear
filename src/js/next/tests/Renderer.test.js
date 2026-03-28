@@ -528,7 +528,7 @@ describe('Renderer', () => {
       const svg = new Avatar(minimalStyle, {
         backgroundColor: ['#ff0000', '#0000ff'],
         backgroundColorFill: 'linear',
-        backgroundColorRotate: 45,
+        backgroundColorAngle: 45,
       }).toString();
 
       assert.ok(svg.includes('gradientTransform="rotate(45, 0.5, 0.5)"'));

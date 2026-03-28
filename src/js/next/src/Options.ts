@@ -122,12 +122,18 @@ export class Options {
       | string
       | readonly string[]
       | undefined;
-    const styleVariants = Array.from(component.variants().keys());
-    const valid = new Set(styleVariants);
+    const rarityOverrides = this.#data[`${name}VariantRarity`] as
+      | Readonly<Record<string, number>>
+      | undefined;
+    const variants = component.variants();
+    const styleVariants = Array.from(variants.keys());
     const candidates = raw === undefined
       ? styleVariants
-      : this.#toArray(raw).filter((v) => valid.has(v));
-    const result = this.#prng.pick(`${name}Variant`, candidates);
+      : this.#toArray(raw).filter((v) => variants.has(v));
+    const weights = candidates.map((v) =>
+      rarityOverrides?.[v] ?? (variants.get(v)?.rarity() ?? 1),
+    );
+    const result = this.#prng.weightedPick(`${name}Variant`, candidates, weights);
 
     this.#track(`${name}Variant`, result);
 
@@ -160,15 +166,15 @@ export class Options {
     return result;
   }
 
-  colorRotate(name: string): number {
-    const raw = this.#data[`${name}ColorRotate`] as
+  colorAngle(name: string): number {
+    const raw = this.#data[`${name}ColorAngle`] as
       | number
       | readonly number[]
       | undefined;
     const values = this.#toArray(raw);
-    const result = this.#prng.float(`${name}ColorRotate`, values) ?? 0;
+    const result = this.#prng.float(`${name}ColorAngle`, values) ?? 0;
 
-    this.#track(`${name}ColorRotate`, result);
+    this.#track(`${name}ColorAngle`, result);
 
     return result;
   }

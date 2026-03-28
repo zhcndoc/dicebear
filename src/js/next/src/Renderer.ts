@@ -315,7 +315,7 @@ export class Renderer {
 
   #buildGradientDef(name: string, colors: readonly string[]): string {
     const fill = this.#options.colorFill(name);
-    const rotation = this.#options.colorRotate(name);
+    const rotation = this.#options.colorAngle(name);
     const id = `${name}-color`;
     const tag = fill === 'linear' ? 'linearGradient' : 'radialGradient';
     const rotateAttr = rotation !== 0

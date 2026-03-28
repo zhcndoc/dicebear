@@ -21,6 +21,38 @@ export class Prng {
     return sorted[index];
   }
 
+  weightedPick<T>(key: string, items: readonly T[], weights: readonly number[]): T | undefined {
+    if (items.length === 0) {
+      return undefined;
+    }
+
+    const paired = items.map((item, i) => ({
+      item,
+      weight: weights[i] ?? 1,
+    }));
+    paired.sort((a, b) => this.#compareByCodePoint(a.item, b.item));
+
+    const totalWeight = paired.reduce((sum, p) => sum + p.weight, 0);
+
+    if (totalWeight === 0) {
+      return this.pick(key, items);
+    }
+
+    const threshold = this.getValue(key) * totalWeight;
+
+    let cumulative = 0;
+
+    for (const p of paired) {
+      cumulative += p.weight;
+
+      if (threshold < cumulative) {
+        return p.item;
+      }
+    }
+
+    return paired[paired.length - 1].item;
+  }
+
   bool(key: string, likelihood: number = 50): boolean {
     return this.getValue(key) * 100 < likelihood;
   }

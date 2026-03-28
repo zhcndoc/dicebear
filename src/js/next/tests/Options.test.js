@@ -41,6 +41,21 @@ const styleWithColors = new Style({
   },
 });
 
+const styleWithRarity = new Style({
+  canvas: { width: 100, height: 100, elements: [] },
+  components: {
+    eyes: {
+      width: 50,
+      height: 50,
+      variants: {
+        common: { elements: [], rarity: 10 },
+        rare: { elements: [], rarity: 1 },
+        hidden: { elements: [], rarity: 0 },
+      },
+    },
+  },
+});
+
 const minimal = {};
 
 const full = {
@@ -650,6 +665,119 @@ describe('Options', () => {
 
       assert.ok('seed' in resolved);
       assert.ok(!('flip' in resolved));
+    });
+  });
+
+  describe('variant rarity', () => {
+    it('should never pick a rarity-0 variant via PRNG', () => {
+      for (let i = 0; i < 100; i++) {
+        const options = new Options(styleWithRarity, { seed: `rarity-${i}` });
+        const result = options.variant('eyes');
+
+        assert.notEqual(result, 'hidden');
+      }
+    });
+
+    it('should allow rarity-0 variant when explicitly specified', () => {
+      const options = new Options(styleWithRarity, {
+        seed: 'explicit-hidden',
+        eyesVariant: 'hidden',
+      });
+
+      assert.equal(options.variant('eyes'), 'hidden');
+    });
+
+    it('should favor higher-rarity variants', () => {
+      let commonCount = 0;
+
+      for (let i = 0; i < 200; i++) {
+        const options = new Options(styleWithRarity, { seed: `favor-${i}` });
+
+        if (options.variant('eyes') === 'common') {
+          commonCount++;
+        }
+      }
+
+      assert.ok(commonCount > 100, `Expected common to be picked most of the time, got ${commonCount}/200`);
+    });
+
+    it('should override rarity via VariantRarity option', () => {
+      for (let i = 0; i < 100; i++) {
+        const options = new Options(styleWithRarity, {
+          seed: `override-${i}`,
+          eyesVariantRarity: { common: 0, rare: 0, hidden: 1 },
+        }, false);
+
+        assert.equal(options.variant('eyes'), 'hidden');
+      }
+    });
+
+    it('should retain definition rarity for variants not in VariantRarity', () => {
+      for (let i = 0; i < 100; i++) {
+        const options = new Options(styleWithRarity, {
+          seed: `partial-${i}`,
+          eyesVariantRarity: { common: 0 },
+        }, false);
+
+        const result = options.variant('eyes');
+
+        assert.notEqual(result, 'common');
+        assert.notEqual(result, 'hidden');
+        assert.equal(result, 'rare');
+      }
+    });
+
+    it('should fall back to uniform pick when all variants have rarity 0', () => {
+      const style = new Style({
+        canvas: { width: 100, height: 100, elements: [] },
+        components: {
+          eyes: {
+            width: 50,
+            height: 50,
+            variants: {
+              a: { elements: [], rarity: 0 },
+              b: { elements: [], rarity: 0 },
+            },
+          },
+        },
+      });
+      const options = new Options(style, { seed: 'all-zero' });
+
+      assert.ok(['a', 'b'].includes(options.variant('eyes')));
+    });
+
+    it('should be deterministic with rarity weights', () => {
+      const a = new Options(styleWithRarity, { seed: 'deterministic-test' });
+      const b = new Options(styleWithRarity, { seed: 'deterministic-test' });
+
+      assert.equal(a.variant('eyes'), b.variant('eyes'));
+    });
+  });
+
+  describe('colorAngle', () => {
+    it('should return 0 by default', () => {
+      const options = new Options(minimalStyle, {});
+
+      assert.equal(options.colorAngle('skin'), 0);
+    });
+
+    it('should return single value as-is', () => {
+      const options = new Options(minimalStyle, {
+        skinColorAngle: 45,
+      }, false);
+
+      assert.equal(options.colorAngle('skin'), 45);
+    });
+
+    it('should interpolate range', () => {
+      const options = new Options(minimalStyle, {
+        seed: 'angle-test',
+        skinColorAngle: [-90, 90],
+      }, false);
+
+      const value = options.colorAngle('skin');
+
+      assert.ok(value >= -90 && value <= 90);
     });
   });
 });
