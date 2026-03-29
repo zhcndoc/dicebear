@@ -41,16 +41,16 @@ const styleWithColors = new Style({
   },
 });
 
-const styleWithRarity = new Style({
+const styleWithWeights = new Style({
   canvas: { width: 100, height: 100, elements: [] },
   components: {
     eyes: {
       width: 50,
       height: 50,
       variants: {
-        common: { elements: [], rarity: 10 },
-        rare: { elements: [], rarity: 1 },
-        hidden: { elements: [], rarity: 0 },
+        common: { elements: [], weight: 10 },
+        rare: { elements: [], weight: 1 },
+        hidden: { elements: [], weight: 0 },
       },
     },
   },
@@ -668,18 +668,18 @@ describe('Options', () => {
     });
   });
 
-  describe('variant rarity', () => {
-    it('should never pick a rarity-0 variant via PRNG', () => {
+  describe('variant weights', () => {
+    it('should never pick a weight-0 variant via PRNG', () => {
       for (let i = 0; i < 100; i++) {
-        const options = new Options(styleWithRarity, { seed: `rarity-${i}` });
+        const options = new Options(styleWithWeights, { seed: `weight-${i}` });
         const result = options.variant('eyes');
 
         assert.notEqual(result, 'hidden');
       }
     });
 
-    it('should allow rarity-0 variant when explicitly specified', () => {
-      const options = new Options(styleWithRarity, {
+    it('should allow weight-0 variant when explicitly specified as string', () => {
+      const options = new Options(styleWithWeights, {
         seed: 'explicit-hidden',
         eyesVariant: 'hidden',
       });
@@ -687,11 +687,11 @@ describe('Options', () => {
       assert.equal(options.variant('eyes'), 'hidden');
     });
 
-    it('should favor higher-rarity variants', () => {
+    it('should favor higher-weight variants', () => {
       let commonCount = 0;
 
       for (let i = 0; i < 200; i++) {
-        const options = new Options(styleWithRarity, { seed: `favor-${i}` });
+        const options = new Options(styleWithWeights, { seed: `favor-${i}` });
 
         if (options.variant('eyes') === 'common') {
           commonCount++;
@@ -701,33 +701,31 @@ describe('Options', () => {
       assert.ok(commonCount > 100, `Expected common to be picked most of the time, got ${commonCount}/200`);
     });
 
-    it('should override rarity via VariantRarity option', () => {
+    it('should override weights via object variant option', () => {
       for (let i = 0; i < 100; i++) {
-        const options = new Options(styleWithRarity, {
+        const options = new Options(styleWithWeights, {
           seed: `override-${i}`,
-          eyesVariantRarity: { common: 0, rare: 0, hidden: 1 },
-        }, false);
+          eyesVariant: { hidden: 1 },
+        });
 
         assert.equal(options.variant('eyes'), 'hidden');
       }
     });
 
-    it('should retain definition rarity for variants not in VariantRarity', () => {
+    it('should filter and weight via object variant option', () => {
       for (let i = 0; i < 100; i++) {
-        const options = new Options(styleWithRarity, {
-          seed: `partial-${i}`,
-          eyesVariantRarity: { common: 0 },
-        }, false);
+        const options = new Options(styleWithWeights, {
+          seed: `filter-${i}`,
+          eyesVariant: { common: 1, rare: 1 },
+        });
 
         const result = options.variant('eyes');
 
-        assert.notEqual(result, 'common');
-        assert.notEqual(result, 'hidden');
-        assert.equal(result, 'rare');
+        assert.ok(['common', 'rare'].includes(result));
       }
     });
 
-    it('should fall back to uniform pick when all variants have rarity 0', () => {
+    it('should fall back to uniform pick when all variants have weight 0', () => {
       const style = new Style({
         canvas: { width: 100, height: 100, elements: [] },
         components: {
@@ -735,8 +733,8 @@ describe('Options', () => {
             width: 50,
             height: 50,
             variants: {
-              a: { elements: [], rarity: 0 },
-              b: { elements: [], rarity: 0 },
+              a: { elements: [], weight: 0 },
+              b: { elements: [], weight: 0 },
             },
           },
         },
@@ -746,9 +744,9 @@ describe('Options', () => {
       assert.ok(['a', 'b'].includes(options.variant('eyes')));
     });
 
-    it('should be deterministic with rarity weights', () => {
-      const a = new Options(styleWithRarity, { seed: 'deterministic-test' });
-      const b = new Options(styleWithRarity, { seed: 'deterministic-test' });
+    it('should be deterministic with weights', () => {
+      const a = new Options(styleWithWeights, { seed: 'deterministic-test' });
+      const b = new Options(styleWithWeights, { seed: 'deterministic-test' });
 
       assert.equal(a.variant('eyes'), b.variant('eyes'));
     });

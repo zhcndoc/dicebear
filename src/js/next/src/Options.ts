@@ -121,19 +121,22 @@ export class Options {
     const raw = this.#data[`${name}Variant`] as
       | string
       | readonly string[]
-      | undefined;
-    const rarityOverrides = this.#data[`${name}VariantRarity`] as
       | Readonly<Record<string, number>>
       | undefined;
     const variants = component.variants();
-    const styleVariants = Array.from(variants.keys());
-    const candidates = raw === undefined
-      ? styleVariants
-      : this.#toArray(raw).filter((v) => variants.has(v));
-    const weights = candidates.map((v) =>
-      rarityOverrides?.[v] ?? (variants.get(v)?.rarity() ?? 1),
-    );
-    const result = this.#prng.weightedPick(`${name}Variant`, candidates, weights);
+
+    let entries: [string, number][];
+
+    if (raw !== null && typeof raw === 'object' && !Array.isArray(raw)) {
+      entries = Object.entries(raw).filter(([v]) => variants.has(v));
+    } else {
+      const candidates = raw === undefined
+        ? Array.from(variants.keys())
+        : this.#toArray(raw as string | readonly string[]).filter((v) => variants.has(v));
+      entries = candidates.map((v) => [v, variants.get(v)!.weight()]);
+    }
+
+    const result = this.#prng.weightedPick(`${name}Variant`, entries);
 
     this.#track(`${name}Variant`, result);
 

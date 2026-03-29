@@ -3,7 +3,7 @@ import { Element } from './Element.js';
 
 export interface DefinitionComponentVariant {
   readonly elements: readonly DefinitionElement[];
-  readonly rarity?: number;
+  readonly weight?: number;
 }
 
 export class ComponentVariant {
@@ -20,7 +20,7 @@ export class ComponentVariant {
     return this.#elements;
   }
 
-  rarity(): number {
-    return this.#data.rarity ?? 1;
+  weight(): number {
+    return this.#data.weight ?? 1;
   }
 }
