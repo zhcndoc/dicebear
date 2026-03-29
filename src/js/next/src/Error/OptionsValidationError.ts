@@ -17,6 +17,7 @@ export class OptionsValidationError extends ValidationError {
       if (detail.instancePath) {
         segments.push(detail.instancePath);
       }
+
       if (detail.message) {
         segments.push(detail.message);
       }

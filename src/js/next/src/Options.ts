@@ -138,8 +138,10 @@ export class Options {
         candidates = this.#toArray(raw as string | readonly string[]).filter((v) => variants.has(v));
       }
 
+
       entries = candidates.map((v) => {
         const variant = variants.get(v)!;
+
         return [v, variant.weight()];
       });
     }
@@ -241,6 +243,7 @@ export class Options {
     } else {
       values = this.#toArray(raw);
     }
+
     const result = this.#prng.float(key, values) ?? 0;
 
     this.#track(key, result);
@@ -298,6 +301,7 @@ export class Options {
     } else {
       source = this.#toArray(raw);
     }
+
     const candidates = source.map((c) => Color.toHex(c));
     const fill = this.colorFill(name);
     const stops = fill === 'solid' ? 1 : this.#colorFillStops(name);

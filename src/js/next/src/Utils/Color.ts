@@ -40,16 +40,6 @@ export class Color {
     return 0.2126 * linearR + 0.7152 * linearG + 0.0722 * linearB;
   }
 
-  static #linearize(channel: number): number {
-    const s = channel / 255;
-
-    if (s <= 0.04045) {
-      return s / 12.92;
-    }
-
-    return ((s + 0.055) / 1.055) ** 2.4;
-  }
-
   // WCAG 2.1 contrast ratio. Returns a value between 1 (identical) and 21 (black/white).
   // https://www.w3.org/WAI/GL/wiki/Contrast_ratio
   static contrastRatio(a: string, b: string): number {
@@ -83,5 +73,15 @@ export class Color {
         candidates.push(c);
       }
     }
+  }
+
+  static #linearize(channel: number): number {
+    const s = channel / 255;
+
+    if (s <= 0.04045) {
+      return s / 12.92;
+    }
+
+    return ((s + 0.055) / 1.055) ** 2.4;
   }
 }
