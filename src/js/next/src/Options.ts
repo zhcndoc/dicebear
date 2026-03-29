@@ -130,10 +130,18 @@ export class Options {
     if (raw !== null && typeof raw === 'object' && !Array.isArray(raw)) {
       entries = Object.entries(raw).filter(([v]) => variants.has(v));
     } else {
-      const candidates = raw === undefined
-        ? Array.from(variants.keys())
-        : this.#toArray(raw as string | readonly string[]).filter((v) => variants.has(v));
-      entries = candidates.map((v) => [v, variants.get(v)!.weight()]);
+      let candidates: string[];
+
+      if (raw === undefined) {
+        candidates = Array.from(variants.keys());
+      } else {
+        candidates = this.#toArray(raw as string | readonly string[]).filter((v) => variants.has(v));
+      }
+
+      entries = candidates.map((v) => {
+        const variant = variants.get(v)!;
+        return [v, variant.weight()];
+      });
     }
 
     const result = this.#prng.weightedPick(`${name}Variant`, entries);
@@ -185,9 +193,15 @@ export class Options {
   rotate(name?: string): number {
     const key = name ? `${name}Rotate` : 'rotate';
     const raw = this.#data[key] as number | readonly number[] | undefined;
-    const values = raw === undefined && name
-      ? this.#style.components().get(name)?.rotate() ?? []
-      : this.#toArray(raw);
+    let values: readonly number[];
+
+    if (raw === undefined && name) {
+      const component = this.#style.components().get(name);
+      values = component ? component.rotate() : [];
+    } else {
+      values = this.#toArray(raw);
+    }
+
     const result = this.#prng.float(key, values) ?? 0;
 
     this.#track(key, result);
@@ -198,9 +212,16 @@ export class Options {
   translateX(name?: string): number {
     const key = name ? `${name}TranslateX` : 'translateX';
     const raw = this.#data[key] as number | readonly number[] | undefined;
-    const values = raw === undefined && name
-      ? this.#style.components().get(name)?.translate().x() ?? []
-      : this.#toArray(raw);
+
+    let values: readonly number[];
+
+    if (raw === undefined && name) {
+      const component = this.#style.components().get(name);
+      values = component ? component.translate().x() : [];
+    } else {
+      values = this.#toArray(raw);
+    }
+
     const result = this.#prng.float(key, values) ?? 0;
 
     this.#track(key, result);
@@ -211,9 +232,15 @@ export class Options {
   translateY(name?: string): number {
     const key = name ? `${name}TranslateY` : 'translateY';
     const raw = this.#data[key] as number | readonly number[] | undefined;
-    const values = raw === undefined && name
-      ? this.#style.components().get(name)?.translate().y() ?? []
-      : this.#toArray(raw);
+
+    let values: readonly number[];
+
+    if (raw === undefined && name) {
+      const component = this.#style.components().get(name);
+      values = component ? component.translate().y() : [];
+    } else {
+      values = this.#toArray(raw);
+    }
     const result = this.#prng.float(key, values) ?? 0;
 
     this.#track(key, result);
@@ -264,9 +291,13 @@ export class Options {
       | readonly string[]
       | undefined;
     const styleColor = this.#style.colors().get(name);
-    const source = raw === undefined
-      ? styleColor?.values() ?? []
-      : this.#toArray(raw);
+    let source: readonly string[];
+
+    if (raw === undefined) {
+      source = styleColor ? styleColor.values() : [];
+    } else {
+      source = this.#toArray(raw);
+    }
     const candidates = source.map((c) => Color.toHex(c));
     const fill = this.colorFill(name);
     const stops = fill === 'solid' ? 1 : this.#colorFillStops(name);

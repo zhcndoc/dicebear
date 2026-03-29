@@ -9,9 +9,22 @@ export class OptionsValidationError extends ValidationError {
   readonly details: readonly OptionsValidationErrorDetail[];
 
   constructor(details: readonly OptionsValidationErrorDetail[]) {
-    const message = details
-      .map((e) => [e.instancePath, e.message].filter(Boolean).join(' '))
-      .join(', ');
+    const parts: string[] = [];
+
+    for (const detail of details) {
+      const segments: string[] = [];
+
+      if (detail.instancePath) {
+        segments.push(detail.instancePath);
+      }
+      if (detail.message) {
+        segments.push(detail.message);
+      }
+
+      parts.push(segments.join(' '));
+    }
+
+    const message = parts.join(', ');
 
     super(`Invalid options: ${message}`);
     this.name = 'OptionsValidationError';

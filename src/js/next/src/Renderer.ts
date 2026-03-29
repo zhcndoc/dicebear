@@ -228,7 +228,16 @@ export class Renderer {
       return '';
     }
 
-    const variant = this.#style.components().get(value)!.variants().get(variantName)!;
+    const component = this.#style.components().get(value);
+    if (!component) {
+      return '';
+    }
+
+    const variant = component.variants().get(variantName);
+    if (!variant) {
+      return '';
+    }
+
     const body = this.#renderElements(variant.elements());
     const transforms = this.#buildTransforms(value);
 
@@ -250,7 +259,11 @@ export class Renderer {
     }
 
     if (rotate !== 0) {
-      const component = this.#style.components().get(componentName)!;
+      const component = this.#style.components().get(componentName);
+      if (!component) {
+        return transforms;
+      }
+
       const cx = component.width() / 2;
       const cy = component.height() / 2;
 

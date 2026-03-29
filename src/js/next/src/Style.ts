@@ -43,7 +43,9 @@ export class Style {
   }
 
   meta(): Meta {
-    this.#meta ??= new Meta(this.#data.meta ?? {});
+    if (!this.#meta) {
+      this.#meta = new Meta(this.#data.meta ?? {});
+    }
 
     return this.#meta;
   }
@@ -53,7 +55,9 @@ export class Style {
   }
 
   canvas(): Canvas {
-    this.#canvas ??= new Canvas(this.#data.canvas);
+    if (!this.#canvas) {
+      this.#canvas = new Canvas(this.#data.canvas);
+    }
 
     return this.#canvas;
   }

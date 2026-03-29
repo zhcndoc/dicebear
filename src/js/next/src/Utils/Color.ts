@@ -32,13 +32,22 @@ export class Color {
   // WCAG 2.1 relative luminance with sRGB linearization.
   // https://www.w3.org/WAI/GL/wiki/Relative_luminance
   static luminance(hex: string): number {
-    const [r, g, b] = this.parseHex(hex).map((c) => {
-      const s = c / 255;
+    const rgb = this.parseHex(hex);
+    const linearR = this.#linearize(rgb[0]);
+    const linearG = this.#linearize(rgb[1]);
+    const linearB = this.#linearize(rgb[2]);
 
-      return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
-    });
+    return 0.2126 * linearR + 0.7152 * linearG + 0.0722 * linearB;
+  }
 
-    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  static #linearize(channel: number): number {
+    const s = channel / 255;
+
+    if (s <= 0.04045) {
+      return s / 12.92;
+    }
+
+    return ((s + 0.055) / 1.055) ** 2.4;
   }
 
   // WCAG 2.1 contrast ratio. Returns a value between 1 (identical) and 21 (black/white).
