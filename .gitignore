@@ -8,6 +8,3 @@ node_modules
 
 # Local environment files
 .env*.local
-
-# claude code
-.claude/settings.local.json
