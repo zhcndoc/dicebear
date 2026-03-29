@@ -127,23 +127,12 @@ export class Options {
 
     let entries: [string, number][];
 
-    if (raw !== null && typeof raw === 'object' && !Array.isArray(raw)) {
-      entries = Object.entries(raw).filter(([v]) => variants.has(v));
+    if (raw === undefined) {
+      entries = Array.from(variants).map(([v, variant]) => [v, variant.weight()]);
+    } else if (typeof raw === 'string' || Array.isArray(raw)) {
+      entries = this.#toArray(raw).filter((v) => variants.has(v)).map((v) => [v, 1]);
     } else {
-      let candidates: string[];
-
-      if (raw === undefined) {
-        candidates = Array.from(variants.keys());
-      } else {
-        candidates = this.#toArray(raw as string | readonly string[]).filter((v) => variants.has(v));
-      }
-
-
-      entries = candidates.map((v) => {
-        const variant = variants.get(v)!;
-
-        return [v, variant.weight()];
-      });
+      entries = Object.entries(raw).filter(([v]) => variants.has(v));
     }
 
     const result = this.#prng.weightedPick(`${name}Variant`, entries);

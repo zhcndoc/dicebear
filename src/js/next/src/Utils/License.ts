@@ -13,13 +13,13 @@ export class License {
       return '';
     }
 
-    let title = sourceName ? `„${sourceName}"` : 'Design';
+    let title = sourceName ? `“${sourceName}”` : 'Design';
 
     if (sourceUrl) {
       title += ` (${sourceUrl})`;
     }
 
-    const creator = `„${creatorName ?? 'Unknown'}"`;
+    const creator = `“${creatorName ?? 'Unknown'}”`;
 
     let result = '';
 
@@ -34,7 +34,7 @@ export class License {
     result += `${title} by ${creator}`;
 
     if (licenseName) {
-      result += `, licensed under „${licenseName}"`;
+      result += `, licensed under “${licenseName}”`;
 
       if (licenseUrl) {
         result += ` (${licenseUrl})`;
