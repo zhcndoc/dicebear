@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { Style, Options, Avatar } from '../lib/index.js';
+import { Style, Avatar } from '../lib/index.js';
 
 const minimalStyleData = {
   canvas: { width: 100, height: 100, elements: [] },
@@ -32,19 +32,6 @@ describe('Avatar', () => {
       const avatar = new Avatar(minimalStyle);
 
       assert.ok(avatar instanceof Avatar);
-    });
-
-    it('should accept an Options instance', () => {
-      const options = new Options(minimalStyle, { seed: 'test' });
-      const avatar = new Avatar(minimalStyle, options);
-
-      assert.ok(avatar instanceof Avatar);
-    });
-
-    it('should accept an Options instance with validation disabled', () => {
-      assert.doesNotThrow(() => {
-        new Avatar(minimalStyle, new Options(minimalStyle, { size: -1 }, false));
-      });
     });
   });
 

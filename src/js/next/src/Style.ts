@@ -19,17 +19,15 @@ export interface Definition {
   readonly colors?: Readonly<Record<string, DefinitionColor>>;
 }
 
-export class Style {
+export class Style<D = unknown> {
   #data: Definition;
   #meta?: Meta;
   #canvas?: Canvas;
   #components?: ReadonlyMap<string, Component>;
   #colors?: ReadonlyMap<string, Color>;
 
-  constructor(data: unknown, validate = true) {
-    if (validate) {
-      StyleValidator.validate(data);
-    }
+  constructor(data: D) {
+    StyleValidator.validate(data);
 
     this.#data = data as Definition;
   }

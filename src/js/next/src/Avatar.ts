@@ -1,39 +1,34 @@
 import { Style } from './Style.js';
-import { Options, type OptionsDefinition } from './Options.js';
+import { Options } from './Options.js';
 import { Renderer } from './Renderer.js';
+import type { StyleOptions } from './types.js';
 
-export interface AvatarJson {
+type UnwrapStyle<D> = D extends Style<infer S> ? S : D;
+
+export interface AvatarJson<D = unknown> {
   readonly svg: string;
-  readonly options: OptionsDefinition;
+  readonly options: StyleOptions<UnwrapStyle<D>>;
 }
 
-export class Avatar {
+export class Avatar<D = unknown> {
   #svg: string;
-  #resolvedOptions: OptionsDefinition;
+  #resolvedOptions: StyleOptions<UnwrapStyle<D>>;
 
-  constructor(style: Style | unknown, options?: Options | unknown) {
+  constructor(style: D, options?: StyleOptions<UnwrapStyle<D>>) {
     const resolvedStyle = style instanceof Style
       ? style
       : new Style(style);
-    const resolvedOptions = options instanceof Options
-      ? options
-      : new Options(resolvedStyle, options ?? {});
+    const resolvedOptions = new Options(resolvedStyle, options ?? {});
 
-    resolvedOptions.startTracking();
-
-    try {
-      this.#svg = new Renderer(resolvedStyle, resolvedOptions).render();
-      this.#resolvedOptions = resolvedOptions.resolved();
-    } finally {
-      resolvedOptions.stopTracking();
-    }
+    this.#svg = new Renderer(resolvedStyle, resolvedOptions).render();
+    this.#resolvedOptions = resolvedOptions.resolved();
   }
 
   toString(): string {
     return this.#svg;
   }
 
-  toJson(): AvatarJson {
+  toJson(): AvatarJson<D> {
     return {
       svg: this.#svg,
       options: this.#resolvedOptions,

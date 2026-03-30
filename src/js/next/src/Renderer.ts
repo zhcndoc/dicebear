@@ -23,6 +23,8 @@ export class Renderer {
     const background = this.#renderBackground(canvas);
     let body = this.#renderElements(canvas.elements());
 
+    // Order matters: scale and flip around center, then rotate, translate,
+    // and finally clip with border radius (outermost wrapper).
     body = this.#applyScale(body, canvas);
     body = this.#applyFlip(body, canvas);
     body = this.#applyRotate(body, canvas);

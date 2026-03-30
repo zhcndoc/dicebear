@@ -1,7 +1,6 @@
 import type { DefinitionAttributes, VariableReference } from '../types.js';
 
 export type ElementValue = string | VariableReference;
-
 export type ElementType = 'element' | 'text' | 'component';
 
 export interface DefinitionElement {

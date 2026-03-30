@@ -1,4 +1,5 @@
 export class Color {
+  // Normalizes any hex format to 6- or 8-digit lowercase with '#' prefix.
   static toHex(hex: string): string {
     const h = hex.replace(/^#/, '').toLowerCase();
 
@@ -13,6 +14,7 @@ export class Color {
     return '#' + h;
   }
 
+  // Like toHex, but strips the alpha channel to always return 6-digit hex.
   static toRgbHex(hex: string): string {
     const h = this.toHex(hex);
 
@@ -49,6 +51,7 @@ export class Color {
     return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
   }
 
+  // Sorts in place by descending contrast against the reference color.
   static sortByContrast(candidates: string[], refColor: string): void {
     candidates.sort(
       (a, b) =>

@@ -3,258 +3,188 @@ import { Prng } from './Prng.js';
 import { Color } from './Utils/Color.js';
 import { CircularColorReferenceError } from './Error/CircularColorReferenceError.js';
 import type { Style } from './Style.js';
+import type { FlipValue, ColorFillValue, StyleOptions } from './types.js';
 
-export type FlipValue = 'none' | 'horizontal' | 'vertical' | 'both';
-export type ColorFillValue = 'solid' | 'linear' | 'radial';
+export type { FlipValue, ColorFillValue } from './types.js';
 
-export interface OptionsDefinition {
-  readonly seed?: string;
-  readonly size?: number;
-  readonly idRandomization?: boolean;
-  readonly flip?: FlipValue | readonly FlipValue[];
-  readonly fontFamily?: string | readonly string[];
-  readonly fontWeight?: number | readonly number[];
-  readonly scale?: number | readonly [number, number];
-  readonly borderRadius?: number | readonly [number, number];
-  readonly [key: string]: unknown;
-}
-
-export class Options {
-  #data: OptionsDefinition;
-  #style: Style;
+export class Options<D = unknown> {
+  #data: StyleOptions<D>;
+  #style: Style<D>;
   #prng: Prng;
-  #colorCache = new Map<string, readonly string[]>();
   #colorResolving: string[] = [];
-  #tracking = false;
-  #tracked = new Map<string, unknown>();
+  #result: Record<string, unknown> = {};
 
-  constructor(style: Style, data: unknown, validate = true) {
-    if (validate) {
-      OptionsValidator.validate(data);
-    }
+  constructor(style: Style<D>, data: StyleOptions<D>) {
+    OptionsValidator.validate(data);
 
-    this.#data = data as OptionsDefinition;
+    this.#data = data;
     this.#style = style;
     this.#prng = new Prng(this.seed());
   }
 
   seed(): string {
-    const result = this.#data.seed ?? '';
-
-    this.#track('seed', result);
-
-    return result;
+    return this.#memo('seed', () => this.#data.seed ?? '');
   }
 
   size(): number | undefined {
-    const result = this.#data.size;
-
-    this.#track('size', result);
-
-    return result;
+    return this.#memo('size', () => this.#data.size);
   }
 
   idRandomization(): boolean {
-    const result = this.#data.idRandomization ?? false;
-
-    this.#track('idRandomization', result);
-
-    return result;
+    return this.#memo('idRandomization', () => this.#data.idRandomization ?? false);
   }
 
   flip(): FlipValue {
-    const values = this.#toArray(this.#data.flip);
-    const result = this.#prng.pick('flip', values) ?? 'none';
-
-    this.#track('flip', result);
-
-    return result;
+    return this.#memo('flip', () =>
+      this.#prng.pick('flip', this.#toArray(this.#data.flip)) ?? 'none');
   }
 
   fontFamily(): string {
-    const values = this.#toArray(this.#data.fontFamily);
-    const result = this.#prng.pick('fontFamily', values) ?? 'system-ui';
-
-    this.#track('fontFamily', result);
-
-    return result;
+    return this.#memo('fontFamily', () =>
+      this.#prng.pick('fontFamily', this.#toArray(this.#data.fontFamily)) ?? 'system-ui');
   }
 
   fontWeight(): number {
-    const values = this.#toArray(this.#data.fontWeight);
-    const result = this.#prng.pick('fontWeight', values) ?? 400;
-
-    this.#track('fontWeight', result);
-
-    return result;
+    return this.#memo('fontWeight', () =>
+      this.#prng.pick('fontWeight', this.#toArray(this.#data.fontWeight)) ?? 400);
   }
 
   scale(): number {
-    const values = this.#toArray(this.#data.scale);
-    const result = this.#prng.float('scale', values) ?? 1;
-
-    this.#track('scale', result);
-
-    return result;
+    return this.#memo('scale', () =>
+      this.#prng.float('scale', this.#toArray(this.#data.scale)) ?? 1);
   }
 
   borderRadius(): number {
-    const values = this.#toArray(this.#data.borderRadius);
-    const result = this.#prng.float('borderRadius', values) ?? 0;
-
-    this.#track('borderRadius', result);
-
-    return result;
+    return this.#memo('borderRadius', () =>
+      this.#prng.float('borderRadius', this.#toArray(this.#data.borderRadius)) ?? 0);
   }
 
+  // Selects a variant for the given component. Depending on what was passed
+  // as `${name}Variant` in the input data:
+  // - undefined: PRNG picks from all style variants using their weights
+  // - string or string[]: PRNG picks from the given subset (weight 1 each)
+  // - Record<string, number>: PRNG picks using the provided weights
+  // Only variants that exist in the style definition are considered.
   variant(name: string): string | undefined {
-    if (!this.#isVisible(name)) {
-      return undefined;
-    }
+    return this.#memo(`${name}Variant`, () => {
+      if (!this.#isVisible(name)) {
+        return undefined;
+      }
 
-    const component = this.#style.components().get(name);
+      const component = this.#style.components().get(name);
 
-    if (!component) {
-      return undefined;
-    }
+      if (!component) {
+        return undefined;
+      }
 
-    const raw = this.#data[`${name}Variant`] as
-      | string
-      | readonly string[]
-      | Readonly<Record<string, number>>
-      | undefined;
-    const variants = component.variants();
+      const raw = this.#get(`${name}Variant`) as
+        | string
+        | readonly string[]
+        | Readonly<Record<string, number>>
+        | undefined;
+      const variants = component.variants();
 
-    let entries: [string, number][];
+      let entries: [string, number][];
 
-    if (raw === undefined) {
-      entries = Array.from(variants).map(([v, variant]) => [v, variant.weight()]);
-    } else if (typeof raw === 'string' || Array.isArray(raw)) {
-      entries = this.#toArray(raw).filter((v) => variants.has(v)).map((v) => [v, 1]);
-    } else {
-      entries = Object.entries(raw).filter(([v]) => variants.has(v));
-    }
+      if (raw === undefined) {
+        entries = Array.from(variants).map(([v, variant]) => [v, variant.weight()]);
+      } else if (typeof raw === 'string' || Array.isArray(raw)) {
+        entries = this.#toArray(raw).filter((v) => variants.has(v)).map((v) => [v, 1]);
+      } else {
+        entries = Object.entries(raw).filter(([v]) => variants.has(v));
+      }
 
-    const result = this.#prng.weightedPick(`${name}Variant`, entries);
-
-    this.#track(`${name}Variant`, result);
-
-    return result;
+      return this.#prng.weightedPick(`${name}Variant`, entries);
+    });
   }
 
   color(name: string): readonly string[] {
-    let result = this.#colorCache.get(name);
-
-    if (!result) {
-      result = this.#resolveColor(name);
-      this.#colorCache.set(name, result);
-    }
-
-    this.#track(`${name}Color`, result);
-
-    return result;
+    return this.#memo(`${name}Color`, () => this.#resolveColor(name));
   }
 
   colorFill(name: string): ColorFillValue {
-    const raw = this.#data[`${name}ColorFill`] as
-      | ColorFillValue
-      | readonly ColorFillValue[]
-      | undefined;
-    const result =
-      this.#prng.pick(`${name}ColorFill`, this.#toArray(raw)) ?? 'solid';
+    const key = `${name}ColorFill`;
 
-    this.#track(`${name}ColorFill`, result);
+    return this.#memo(key, () => {
+      const raw = this.#get(key) as
+        | ColorFillValue
+        | readonly ColorFillValue[]
+        | undefined;
 
-    return result;
+      return this.#prng.pick(key, this.#toArray(raw)) ?? 'solid';
+    });
   }
 
   colorAngle(name: string): number {
-    const raw = this.#data[`${name}ColorAngle`] as
-      | number
-      | readonly number[]
-      | undefined;
-    const values = this.#toArray(raw);
-    const result = this.#prng.float(`${name}ColorAngle`, values) ?? 0;
+    const key = `${name}ColorAngle`;
 
-    this.#track(`${name}ColorAngle`, result);
+    return this.#memo(key, () => {
+      const raw = this.#get(key) as number | readonly number[] | undefined;
 
-    return result;
+      return this.#prng.float(key, this.#toArray(raw)) ?? 0;
+    });
   }
 
   rotate(name?: string): number {
     const key = name ? `${name}Rotate` : 'rotate';
-    const raw = this.#data[key] as number | readonly number[] | undefined;
-    let values: readonly number[];
 
-    if (raw === undefined && name) {
-      const component = this.#style.components().get(name);
-      values = component ? component.rotate() : [];
-    } else {
-      values = this.#toArray(raw);
-    }
+    return this.#memo(key, () => {
+      const raw = this.#get(key) as number | readonly number[] | undefined;
+      let values: readonly number[];
 
-    const result = this.#prng.float(key, values) ?? 0;
+      if (raw === undefined && name) {
+        const component = this.#style.components().get(name);
+        values = component ? component.rotate() : [];
+      } else {
+        values = this.#toArray(raw);
+      }
 
-    this.#track(key, result);
-
-    return result;
+      return this.#prng.float(key, values) ?? 0;
+    });
   }
 
   translateX(name?: string): number {
     const key = name ? `${name}TranslateX` : 'translateX';
-    const raw = this.#data[key] as number | readonly number[] | undefined;
 
-    let values: readonly number[];
+    return this.#memo(key, () => {
+      const raw = this.#get(key) as number | readonly number[] | undefined;
+      let values: readonly number[];
 
-    if (raw === undefined && name) {
-      const component = this.#style.components().get(name);
-      values = component ? component.translate().x() : [];
-    } else {
-      values = this.#toArray(raw);
-    }
+      if (raw === undefined && name) {
+        const component = this.#style.components().get(name);
+        values = component ? component.translate().x() : [];
+      } else {
+        values = this.#toArray(raw);
+      }
 
-    const result = this.#prng.float(key, values) ?? 0;
-
-    this.#track(key, result);
-
-    return result;
+      return this.#prng.float(key, values) ?? 0;
+    });
   }
 
   translateY(name?: string): number {
     const key = name ? `${name}TranslateY` : 'translateY';
-    const raw = this.#data[key] as number | readonly number[] | undefined;
 
-    let values: readonly number[];
+    return this.#memo(key, () => {
+      const raw = this.#get(key) as number | readonly number[] | undefined;
+      let values: readonly number[];
 
-    if (raw === undefined && name) {
-      const component = this.#style.components().get(name);
-      values = component ? component.translate().y() : [];
-    } else {
-      values = this.#toArray(raw);
-    }
+      if (raw === undefined && name) {
+        const component = this.#style.components().get(name);
+        values = component ? component.translate().y() : [];
+      } else {
+        values = this.#toArray(raw);
+      }
 
-    const result = this.#prng.float(key, values) ?? 0;
-
-    this.#track(key, result);
-
-    return result;
+      return this.#prng.float(key, values) ?? 0;
+    });
   }
 
-  startTracking(): void {
-    this.#tracking = true;
-    this.#tracked.clear();
-  }
-
-  stopTracking(): void {
-    this.#tracking = false;
-  }
-
-  resolved(): OptionsDefinition {
-    return Object.fromEntries(this.#tracked) as OptionsDefinition;
+  resolved(): StyleOptions<D> {
+    return this.#result as StyleOptions<D>;
   }
 
   #probability(name: string): number {
-    const raw = this.#data[`${name}Probability`] as number | undefined;
+    const raw = this.#get(`${name}Probability`) as number | undefined;
 
     if (raw !== undefined) {
       return raw;
@@ -268,7 +198,7 @@ export class Options {
   }
 
   #colorFillStops(name: string): number {
-    const raw = this.#data[`${name}ColorFillStops`] as
+    const raw = this.#get(`${name}ColorFillStops`) as
       | number
       | readonly number[]
       | undefined;
@@ -278,7 +208,7 @@ export class Options {
   }
 
   #resolveColor(name: string): readonly string[] {
-    const raw = this.#data[`${name}Color`] as
+    const raw = this.#get(`${name}Color`) as
       | string
       | readonly string[]
       | undefined;
@@ -342,10 +272,20 @@ export class Options {
     return ordered.slice(0, stops);
   }
 
-  #track(key: string, value: unknown): void {
-    if (this.#tracking) {
-      this.#tracked.set(key, value);
+  #get(key: string): unknown {
+    return (this.#data as Record<string, unknown>)[key];
+  }
+
+  #memo<T>(key: string, compute: () => T): T {
+    if (key in this.#result) {
+      return this.#result[key] as T;
     }
+
+    const value = compute();
+
+    this.#result[key] = value;
+
+    return value;
   }
 
   #toArray<T>(value: T | readonly T[] | undefined): readonly T[] {

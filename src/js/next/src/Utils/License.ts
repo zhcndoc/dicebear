@@ -2,6 +2,7 @@ import type { Meta } from '../Style/Meta.js';
 import { Xml } from './Xml.js';
 
 export class License {
+  // Builds a human-readable attribution string from style metadata.
   static text(meta: Meta): string {
     const sourceName = meta.source().name();
     const sourceUrl = meta.source().url();
@@ -23,6 +24,7 @@ export class License {
 
     let result = '';
 
+    // Skip "Remix of" prefix for MIT-licensed or DiceBear-original styles.
     if (
       licenseName !== 'MIT' &&
       creatorName !== 'DiceBear' &&
@@ -44,6 +46,7 @@ export class License {
     return result;
   }
 
+  // Renders Dublin Core metadata as an SVG <metadata> element.
   static xml(meta: Meta): string {
     const title = meta.source().name();
     const creatorName = meta.creator().name();

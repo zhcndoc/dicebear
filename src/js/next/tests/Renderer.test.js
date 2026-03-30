@@ -319,7 +319,7 @@ describe('Renderer', () => {
       const svg = new Avatar(style, {
         seed: 'test',
         bgColor: ['#ff0000'],
-      }, false).toString();
+      }).toString();
 
       assert.ok(svg.includes('fill="#ff0000"'));
     });
@@ -346,7 +346,7 @@ describe('Renderer', () => {
         seed: 'test',
         bgColor: ['#ff0000', '#0000ff'],
         bgColorFill: 'linear',
-      }, false).toString();
+      }).toString();
 
       assert.ok(svg.includes('<defs>'));
       assert.ok(svg.includes('<linearGradient id="bg-color">'));
@@ -377,7 +377,7 @@ describe('Renderer', () => {
         seed: 'test',
         bgColor: ['#ff0000', '#0000ff'],
         bgColorFill: 'radial',
-      }, false).toString();
+      }).toString();
 
       assert.ok(svg.includes('<radialGradient id="bg-color">'));
       assert.ok(svg.includes('fill="url(#bg-color)"'));
@@ -720,14 +720,14 @@ describe('Renderer', () => {
           width: 100,
           height: 100,
           elements: [
-            { type: 'element', name: 'rect', attributes: { id: 'a & b "c"' } },
+            { type: 'element', name: 'rect', attributes: { d: 'a & b "c"' } },
           ],
         },
-      }, false);
+      });
 
       const svg = new Avatar(style).toString();
 
-      assert.ok(svg.includes('id="a &amp; b &quot;c&quot;"'));
+      assert.ok(svg.includes('d="a &amp; b &quot;c&quot;"'));
     });
 
     it('should escape text content', () => {

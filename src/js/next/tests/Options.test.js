@@ -1,6 +1,7 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { Style, Options } from '../lib/index.js';
+import { Style } from '../lib/index.js';
+import { Options } from '../lib/Options.js';
 import { OptionsValidationError } from '../lib/Error/OptionsValidationError.js';
 import { ValidationError } from '../lib/Error/ValidationError.js';
 import { CircularColorReferenceError } from '../lib/Error/CircularColorReferenceError.js';
@@ -90,10 +91,6 @@ describe('Options', () => {
       const options = new Options(minimalStyle, full);
 
       assert.ok(options);
-    });
-
-    it('should skip validation when validate is false', () => {
-      assert.doesNotThrow(() => new Options(minimalStyle, { size: -1 }, false));
     });
 
     it('should throw OptionsValidationError for invalid data', () => {
@@ -250,7 +247,7 @@ describe('Options', () => {
         skinColor: ['#f0c8a0', '#d4a574', '#8d5524'],
         skinColorFill: 'linear',
         skinColorFillStops: 2,
-      }, false);
+      });
 
       const colors = options.color('skin');
 
@@ -266,7 +263,7 @@ describe('Options', () => {
         seed: 'gradient-default-test',
         skinColor: ['#f0c8a0', '#d4a574', '#8d5524'],
         skinColorFill: 'radial',
-      }, false);
+      });
 
       assert.equal(options.color('skin').length, 2);
     });
@@ -276,7 +273,7 @@ describe('Options', () => {
         seed: 'solid-test',
         skinColor: ['#f0c8a0', '#d4a574', '#8d5524'],
         skinColorFill: 'solid',
-      }, false);
+      });
 
       const colors = options.color('skin');
 
@@ -344,7 +341,7 @@ describe('Options', () => {
         skinColor: ['#ff0000', '#00ff00', '#0000ff', '#ffffff'],
         skinColorFill: 'linear',
         skinColorFillStops: 3,
-      }, false);
+      });
 
       assert.equal(options.color('skin').length, 3);
     });
@@ -356,7 +353,7 @@ describe('Options', () => {
           skinColor: ['#ff0000', '#00ff00', '#0000ff', '#ffffff', '#000000'],
           skinColorFill: 'radial',
           skinColorFillStops: [2, 4],
-        }, false);
+        });
 
         const count = options.color('skin').length;
 
@@ -538,7 +535,7 @@ describe('Options', () => {
         seed: 'circular-test',
         aColor: ['#ff0000', '#00ff00'],
         bColor: ['#0000ff', '#ffffff'],
-      }, false);
+      });
 
       try {
         options.color('a');
@@ -563,7 +560,7 @@ describe('Options', () => {
         seed: 'circular-not-equal-test',
         aColor: ['#ff0000'],
         bColor: ['#00ff00'],
-      }, false);
+      });
 
       try {
         options.color('a');
@@ -577,24 +574,16 @@ describe('Options', () => {
   });
 
   describe('resolved()', () => {
-    it('should return empty object when nothing was tracked', () => {
-      const options = new Options(minimalStyle, { seed: 'test' });
-
-      assert.deepEqual(options.resolved(), {});
-    });
-
-    it('should track global values', () => {
+    it('should include consumed values', () => {
       const options = new Options(minimalStyle, {
         seed: 'test',
         flip: ['horizontal', 'vertical'],
         scale: [0.5, 1],
       });
 
-      options.startTracking();
       options.seed();
       options.flip();
       options.scale();
-      options.stopTracking();
 
       const resolved = options.resolved();
 
@@ -603,15 +592,13 @@ describe('Options', () => {
       assert.equal(typeof resolved.scale, 'number');
     });
 
-    it('should track parametrized values', () => {
+    it('should include variant values', () => {
       const options = new Options(styleWithComponents, {
         seed: 'test',
         eyesVariant: ['open', 'closed'],
-      }, false);
+      });
 
-      options.startTracking();
       options.variant('eyes');
-      options.stopTracking();
 
       const resolved = options.resolved();
 
@@ -619,15 +606,13 @@ describe('Options', () => {
       assert.ok(['open', 'closed', 'wink'].includes(resolved.eyesVariant));
     });
 
-    it('should track color values', () => {
+    it('should include color values', () => {
       const options = new Options(styleWithColors, {
         seed: 'test',
         skinColor: ['#ff0000', '#00ff00'],
-      }, false);
+      });
 
-      options.startTracking();
       options.color('skin');
-      options.stopTracking();
 
       const resolved = options.resolved();
 
@@ -635,36 +620,16 @@ describe('Options', () => {
       assert.ok(Array.isArray(resolved.skinColor));
     });
 
-    it('should not track values after stopTracking', () => {
-      const options = new Options(minimalStyle, { seed: 'test' });
+    it('should return memoized values on repeated calls', () => {
+      const options = new Options(minimalStyle, {
+        seed: 'test',
+        flip: ['horizontal', 'vertical'],
+      });
 
-      options.startTracking();
-      options.seed();
-      options.stopTracking();
-      options.flip();
+      const first = options.flip();
+      const second = options.flip();
 
-      const resolved = options.resolved();
-
-      assert.ok('seed' in resolved);
-      assert.ok(!('flip' in resolved));
-    });
-
-    it('should reset on startTracking', () => {
-      const options = new Options(minimalStyle, { seed: 'test' });
-
-      options.startTracking();
-      options.seed();
-      options.flip();
-      options.stopTracking();
-
-      options.startTracking();
-      options.seed();
-      options.stopTracking();
-
-      const resolved = options.resolved();
-
-      assert.ok('seed' in resolved);
-      assert.ok(!('flip' in resolved));
+      assert.equal(first, second);
     });
   });
 
@@ -762,7 +727,7 @@ describe('Options', () => {
     it('should return single value as-is', () => {
       const options = new Options(minimalStyle, {
         skinColorAngle: 45,
-      }, false);
+      });
 
       assert.equal(options.colorAngle('skin'), 45);
     });
@@ -771,7 +736,7 @@ describe('Options', () => {
       const options = new Options(minimalStyle, {
         seed: 'angle-test',
         skinColorAngle: [-90, 90],
-      }, false);
+      });
 
       const value = options.colorAngle('skin');
 

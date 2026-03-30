@@ -88,10 +88,6 @@ describe('Style', () => {
       assert.ok(style);
     });
 
-    it('should skip validation when validate is false', () => {
-      assert.doesNotThrow(() => new Style(minimal, false));
-    });
-
     it('should throw StyleValidationError for invalid data', () => {
       assert.throws(() => new Style({}), StyleValidationError);
     });
