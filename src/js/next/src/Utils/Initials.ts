@@ -10,7 +10,7 @@ export class Initials {
       input = seed.replace(/@.*/, '');
     }
 
-    input = input.replace(/[`´'''ʼ]/g, '');
+    input = input.replace(/[`´'ʼ]/g, '');
 
     const matches = input.match(/(\p{L}[\p{L}\p{M}]*)/gu);
 

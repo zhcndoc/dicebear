@@ -31,10 +31,6 @@ export interface Options {
   randomizeIds?: boolean;
 }
 
-export interface Exif {
-  [key: string]: string;
-}
-
 export type SchemaDefaults = Record<string, unknown>;
 
 export interface Prng {

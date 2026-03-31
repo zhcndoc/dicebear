@@ -1,4 +1,5 @@
 import { OptionsValidator } from './Validator/OptionsValidator.js';
+import { OptionsValidationError } from './Error/OptionsValidationError.js';
 import { Prng } from './Prng.js';
 import { Color } from './Utils/Color.js';
 import { CircularColorReferenceError } from './Error/CircularColorReferenceError.js';
@@ -13,6 +14,10 @@ export class Options<D = unknown> {
   #result: Record<string, unknown> = {};
 
   constructor(style: Style<D>, data: StyleOptions<D>) {
+    if (data == null) {
+      throw new OptionsValidationError([{ message: 'must be object' }]);
+    }
+
     OptionsValidator.validate(data);
 
     this.#data = structuredClone(data);
