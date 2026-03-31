@@ -1,5 +1,4 @@
 import { StyleValidator } from './Validator/StyleValidator.js';
-import { StyleValidationError } from './Error/StyleValidationError.js';
 import type { StyleDefinition, StyleDefinitionAttributes } from './StyleDefinition.js';
 import { Meta } from './Style/Meta.js';
 import { Canvas } from './Style/Canvas.js';
@@ -16,15 +15,9 @@ export class Style<D = unknown> {
   #colors?: ReadonlyMap<string, Color>;
 
   constructor(data: D) {
-    if (data == null) {
-      throw new StyleValidationError([{ message: 'must be object' }]);
-    }
-
     StyleValidator.validate(data);
 
-    // Double cast needed because the null guard narrows D to NonNullable<D>,
-    // which TypeScript can't directly cast to StyleDefinition.
-    this.#data = structuredClone(data) as unknown as StyleDefinition;
+    this.#data = structuredClone(data) as StyleDefinition;
   }
 
   id(): string | undefined {
