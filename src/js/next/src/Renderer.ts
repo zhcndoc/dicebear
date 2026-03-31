@@ -157,16 +157,13 @@ export class Renderer {
       return svg;
     }
 
-    for (const id of ids) {
-      const newId = `${id}-${suffix}`;
+    const escaped = Array.from(ids, (id) => id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    const pattern = new RegExp(
+      `(id="|url\\(#|href="#)(${escaped.join('|')})("|\\))`,
+      'g',
+    );
 
-      svg = svg
-        .replaceAll(`id="${id}"`, `id="${newId}"`)
-        .replaceAll(`url(#${id})`, `url(#${newId})`)
-        .replaceAll(`href="#${id}"`, `href="#${newId}"`);
-    }
-
-    return svg;
+    return svg.replace(pattern, (_, prefix, id, end) => `${prefix}${id}-${suffix}${end}`);
   }
 
   #renderElements(elements: readonly Element[]): string {

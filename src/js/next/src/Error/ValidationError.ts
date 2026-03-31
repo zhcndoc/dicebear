@@ -1,6 +1,30 @@
+export interface ValidationErrorDetail {
+  readonly message?: string;
+  readonly instancePath?: string;
+}
+
 export class ValidationError extends Error {
-  constructor(message: string) {
-    super(message);
+  readonly details: readonly ValidationErrorDetail[];
+
+  constructor(prefix: string, details: readonly ValidationErrorDetail[]) {
+    const parts: string[] = [];
+
+    for (const detail of details) {
+      const segments: string[] = [];
+
+      if (detail.instancePath) {
+        segments.push(detail.instancePath);
+      }
+
+      if (detail.message) {
+        segments.push(detail.message);
+      }
+
+      parts.push(segments.join(' '));
+    }
+
+    super(`${prefix}: ${parts.join(', ')}`);
     this.name = 'ValidationError';
+    this.details = details;
   }
 }

@@ -103,70 +103,54 @@ describe('Color', () => {
 
   describe('sortByContrast', () => {
     it('should sort by descending contrast to reference', () => {
-      const candidates = ['#ffffff', '#808080', '#000000'];
+      const result = Color.sortByContrast(['#ffffff', '#808080', '#000000'], '#ffffff');
 
-      Color.sortByContrast(candidates, '#ffffff');
-
-      assert.equal(candidates[0], '#000000');
-      assert.equal(candidates[2], '#ffffff');
+      assert.equal(result[0], '#000000');
+      assert.equal(result[2], '#ffffff');
     });
 
     it('should sort relative to a colored reference', () => {
-      const candidates = ['#000000', '#ffffff'];
+      const result = Color.sortByContrast(['#000000', '#ffffff'], '#f0c8a0');
 
-      Color.sortByContrast(candidates, '#f0c8a0');
-
-      assert.equal(candidates[0], '#000000');
+      assert.equal(result[0], '#000000');
     });
 
     it('should not change array length', () => {
-      const candidates = ['#ff0000', '#00ff00', '#0000ff'];
+      const result = Color.sortByContrast(['#ff0000', '#00ff00', '#0000ff'], '#ffffff');
 
-      Color.sortByContrast(candidates, '#ffffff');
-
-      assert.equal(candidates.length, 3);
+      assert.equal(result.length, 3);
     });
   });
 
   describe('filterNotEqualTo', () => {
     it('should filter exact matches', () => {
-      const candidates = ['#ff0000', '#00ff00', '#0000ff'];
+      const result = Color.filterNotEqualTo(['#ff0000', '#00ff00', '#0000ff'], ['#ff0000']);
 
-      Color.filterNotEqualTo(candidates, ['#ff0000']);
-
-      assert.deepEqual(candidates, ['#00ff00', '#0000ff']);
+      assert.deepEqual(result, ['#00ff00', '#0000ff']);
     });
 
     it('should filter case-insensitively', () => {
-      const candidates = ['#ff0000', '#00ff00'];
+      const result = Color.filterNotEqualTo(['#ff0000', '#00ff00'], ['#FF0000']);
 
-      Color.filterNotEqualTo(candidates, ['#FF0000']);
-
-      assert.deepEqual(candidates, ['#00ff00']);
+      assert.deepEqual(result, ['#00ff00']);
     });
 
     it('should match short and long hex forms', () => {
-      const candidates = ['#ff0000', '#00ff00'];
+      const result = Color.filterNotEqualTo(['#ff0000', '#00ff00'], ['#f00']);
 
-      Color.filterNotEqualTo(candidates, ['#f00']);
-
-      assert.deepEqual(candidates, ['#00ff00']);
+      assert.deepEqual(result, ['#00ff00']);
     });
 
     it('should keep all when filtering would empty the list', () => {
-      const candidates = ['#ff0000'];
+      const result = Color.filterNotEqualTo(['#ff0000'], ['#ff0000']);
 
-      Color.filterNotEqualTo(candidates, ['#ff0000']);
-
-      assert.deepEqual(candidates, ['#ff0000']);
+      assert.deepEqual(result, ['#ff0000']);
     });
 
     it('should handle multiple exclusions', () => {
-      const candidates = ['#ff0000', '#00ff00', '#0000ff'];
+      const result = Color.filterNotEqualTo(['#ff0000', '#00ff00', '#0000ff'], ['#ff0000', '#0000ff']);
 
-      Color.filterNotEqualTo(candidates, ['#ff0000', '#0000ff']);
-
-      assert.deepEqual(candidates, ['#00ff00']);
+      assert.deepEqual(result, ['#00ff00']);
     });
   });
 });

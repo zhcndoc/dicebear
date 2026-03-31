@@ -51,31 +51,26 @@ export class Color {
     return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
   }
 
-  // Sorts in place by descending contrast against the reference color.
-  static sortByContrast(candidates: string[], refColor: string): void {
-    candidates.sort(
+  // Returns a new array sorted by descending contrast against the reference color.
+  static sortByContrast(candidates: readonly string[], refColor: string): string[] {
+    return Array.from(candidates).sort(
       (a, b) =>
         this.contrastRatio(b, refColor) - this.contrastRatio(a, refColor),
     );
   }
 
-  // Filters in place. Keeps all candidates if filtering would empty the list.
+  // Returns a new array with excluded colors removed.
+  // Returns the original candidates if filtering would empty the list.
   static filterNotEqualTo(
-    candidates: string[],
+    candidates: readonly string[],
     excluded: readonly string[],
-  ): void {
+  ): string[] {
     const normalized = new Set(excluded.map((c) => this.toRgbHex(c)));
     const filtered = candidates.filter(
       (c) => !normalized.has(this.toRgbHex(c)),
     );
 
-    if (filtered.length > 0) {
-      candidates.length = 0;
-
-      for (const c of filtered) {
-        candidates.push(c);
-      }
-    }
+    return filtered.length > 0 ? filtered : Array.from(candidates);
   }
 
   static #linearize(channel: number): number {

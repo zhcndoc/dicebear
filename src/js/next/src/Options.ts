@@ -180,7 +180,7 @@ export class Options<D = unknown> {
   }
 
   resolved(): StyleOptions<D> {
-    return this.#result as StyleOptions<D>;
+    return { ...this.#result } as StyleOptions<D>;
   }
 
   #probability(name: string): number {
@@ -221,7 +221,7 @@ export class Options<D = unknown> {
       source = this.#toArray(raw);
     }
 
-    const candidates = source.map((c) => Color.toHex(c));
+    let candidates = source.map((c) => Color.toHex(c));
     const fill = this.colorFill(name);
     const stops = fill === 'solid' ? 1 : this.#colorFillStops(name);
 
@@ -244,7 +244,7 @@ export class Options<D = unknown> {
         const refColor = this.color(contrastTo)[0];
 
         if (refColor) {
-          Color.sortByContrast(candidates, refColor);
+          candidates = Color.sortByContrast(candidates, refColor);
         }
       }
 
@@ -258,7 +258,7 @@ export class Options<D = unknown> {
           }
         }
 
-        Color.filterNotEqualTo(candidates, excluded);
+        candidates = Color.filterNotEqualTo(candidates, excluded);
       }
     } finally {
       this.#colorResolving.pop();
