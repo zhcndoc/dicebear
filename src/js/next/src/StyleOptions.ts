@@ -1,29 +1,5 @@
-export interface VariableReference {
-  readonly type: 'variable';
-  readonly value: 'initial' | 'initials' | 'fontWeight' | 'fontFamily';
-}
-
-export interface ColorReference {
-  readonly type: 'color';
-  readonly value: string;
-}
-
-export type ColorAttributeValue = string | ColorReference;
-
-export interface DefinitionAttributes {
-  readonly color?: ColorAttributeValue;
-  readonly 'flood-color'?: ColorAttributeValue;
-  readonly 'lighting-color'?: ColorAttributeValue;
-  readonly 'stop-color'?: ColorAttributeValue;
-  readonly fill?: ColorAttributeValue;
-  readonly stroke?: ColorAttributeValue;
-  readonly 'font-family'?: string | VariableReference;
-  readonly 'font-weight'?: string | VariableReference;
-  readonly [key: string]: string | ColorReference | VariableReference | undefined;
-}
-
-export type FlipValue = 'none' | 'horizontal' | 'vertical' | 'both';
-export type ColorFillValue = 'solid' | 'linear' | 'radial';
+export type StyleOptionsFlipValue = 'none' | 'horizontal' | 'vertical' | 'both';
+export type StyleOptionsColorFillValue = 'solid' | 'linear' | 'radial';
 
 // ---------------------------------------------------------------------------
 // StyleOptions
@@ -31,12 +7,12 @@ export type ColorFillValue = 'solid' | 'linear' | 'radial';
 // Uses mapped types and template literal types to derive a precise options
 // interface from a style definition. When D has literal keys (e.g. from a
 // JSON import) the result provides full autocomplete. When D is the generic
-// Definition it falls back to an index signature.
+// StyleDefinition it falls back to an index signature.
 //
 // The helper types use conditional `extends` checks instead of indexed access
-// so that D does not need to extend Definition. This is necessary because
+// so that D does not need to extend StyleDefinition. This is necessary because
 // JSON imports widen string values to `string`, which doesn't satisfy the
-// literal unions in Definition (e.g. ElementType).
+// literal unions in StyleDefinition (e.g. StyleDefinitionElementType).
 // ---------------------------------------------------------------------------
 
 // Extracts literal component/color names from D; `never` when generic.
@@ -72,11 +48,11 @@ type HasSpecificKeys<D> =
       : true
     : true;
 
-export interface BaseOptions {
+export interface StyleOptionsBase {
   readonly seed?: string;
   readonly size?: number;
   readonly idRandomization?: boolean;
-  readonly flip?: FlipValue | readonly FlipValue[];
+  readonly flip?: StyleOptionsFlipValue | readonly StyleOptionsFlipValue[];
   readonly fontFamily?: string | readonly string[];
   readonly fontWeight?: number | readonly number[];
   readonly scale?: number | readonly [number, number];
@@ -106,12 +82,12 @@ type ComponentOptions<D, C extends string> =
 type ColorOptions<C extends string> =
   [C] extends [never] ? unknown :
   { readonly [K in C as `${K}Color`]?: string | readonly string[] }
-  & { readonly [K in C as `${K}ColorFill`]?: ColorFillValue | readonly ColorFillValue[] }
+  & { readonly [K in C as `${K}ColorFill`]?: StyleOptionsColorFillValue | readonly StyleOptionsColorFillValue[] }
   & { readonly [K in C as `${K}ColorFillStops`]?: number | readonly [number, number] }
   & { readonly [K in C as `${K}ColorAngle`]?: number | readonly [number, number] };
 
 export type StyleOptions<D = unknown> =
-  BaseOptions
+  StyleOptionsBase
   & ComponentOptions<D, ComponentNames<D>>
   & ColorOptions<AllColorNames<D>>
   & (HasSpecificKeys<D> extends true ? unknown : { readonly [key: string]: unknown });

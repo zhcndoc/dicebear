@@ -1,17 +1,12 @@
-import type { DefinitionElement } from './Element.js';
+import type { StyleDefinitionCanvas } from '../StyleDefinition.js';
 import { Element } from './Element.js';
 
-export interface DefinitionCanvas {
-  readonly width: number;
-  readonly height: number;
-  readonly elements: readonly DefinitionElement[];
-}
 
 export class Canvas {
-  #data: DefinitionCanvas;
+  #data: StyleDefinitionCanvas;
   #elements?: readonly Element[];
 
-  constructor(data: DefinitionCanvas) {
+  constructor(data: StyleDefinitionCanvas) {
     this.#data = data;
   }
 

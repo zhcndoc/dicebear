@@ -1,25 +1,15 @@
-import type { DefinitionAttributes, VariableReference } from '../types.js';
+import type { StyleDefinitionElement, StyleDefinitionElementValue, StyleDefinitionElementType, StyleDefinitionAttributes } from '../StyleDefinition.js';
 
-export type ElementValue = string | VariableReference;
-export type ElementType = 'element' | 'text' | 'component';
-
-export interface DefinitionElement {
-  readonly type: ElementType;
-  readonly name?: string;
-  readonly value?: ElementValue;
-  readonly attributes?: DefinitionAttributes;
-  readonly children?: readonly DefinitionElement[];
-}
 
 export class Element {
-  #data: DefinitionElement;
+  #data: StyleDefinitionElement;
   #children?: readonly Element[];
 
-  constructor(data: DefinitionElement) {
+  constructor(data: StyleDefinitionElement) {
     this.#data = data;
   }
 
-  type(): ElementType {
+  type(): StyleDefinitionElementType {
     return this.#data.type;
   }
 
@@ -27,11 +17,11 @@ export class Element {
     return this.#data.name;
   }
 
-  value(): ElementValue | undefined {
+  value(): StyleDefinitionElementValue | undefined {
     return this.#data.value;
   }
 
-  attributes(): DefinitionAttributes | undefined {
+  attributes(): StyleDefinitionAttributes | undefined {
     return this.#data.attributes;
   }
 

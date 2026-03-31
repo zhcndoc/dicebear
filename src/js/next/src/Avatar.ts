@@ -1,11 +1,11 @@
 import { Style } from './Style.js';
 import { Options } from './Options.js';
 import { Renderer } from './Renderer.js';
-import type { StyleOptions } from './types.js';
+import type { StyleOptions } from './StyleOptions.js';
 
 type UnwrapStyle<D> = D extends Style<infer S> ? S : D;
 
-export interface AvatarJson<D = unknown> {
+interface AvatarJson<D = unknown> {
   readonly svg: string;
   readonly options: StyleOptions<UnwrapStyle<D>>;
 }

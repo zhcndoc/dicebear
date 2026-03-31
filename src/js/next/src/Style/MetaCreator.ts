@@ -1,12 +1,10 @@
-export interface DefinitionMetaCreator {
-  readonly name?: string;
-  readonly url?: string;
-}
+import type { StyleDefinitionMetaCreator } from '../StyleDefinition.js';
+
 
 export class MetaCreator {
-  #data: DefinitionMetaCreator;
+  #data: StyleDefinitionMetaCreator;
 
-  constructor(data: DefinitionMetaCreator) {
+  constructor(data: StyleDefinitionMetaCreator) {
     this.#data = data;
   }
 

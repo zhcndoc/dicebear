@@ -1,13 +1,10 @@
-export interface DefinitionMetaLicense {
-  readonly name?: string;
-  readonly url?: string;
-  readonly text?: string;
-}
+import type { StyleDefinitionMetaLicense } from '../StyleDefinition.js';
+
 
 export class MetaLicense {
-  #data: DefinitionMetaLicense;
+  #data: StyleDefinitionMetaLicense;
 
-  constructor(data: DefinitionMetaLicense) {
+  constructor(data: StyleDefinitionMetaLicense) {
     this.#data = data;
   }
 

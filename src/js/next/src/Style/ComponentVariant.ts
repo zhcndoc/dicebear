@@ -1,16 +1,12 @@
-import type { DefinitionElement } from './Element.js';
+import type { StyleDefinitionComponentVariant } from '../StyleDefinition.js';
 import { Element } from './Element.js';
 
-export interface DefinitionComponentVariant {
-  readonly elements: readonly DefinitionElement[];
-  readonly weight?: number;
-}
 
 export class ComponentVariant {
-  #data: DefinitionComponentVariant;
+  #data: StyleDefinitionComponentVariant;
   #elements?: readonly Element[];
 
-  constructor(data: DefinitionComponentVariant) {
+  constructor(data: StyleDefinitionComponentVariant) {
     this.#data = data;
   }
 

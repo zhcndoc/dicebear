@@ -1,27 +1,14 @@
 import { StyleValidator } from './Validator/StyleValidator.js';
-import type { DefinitionAttributes } from './types.js';
-import type { DefinitionMeta } from './Style/Meta.js';
-import type { DefinitionCanvas } from './Style/Canvas.js';
-import type { DefinitionComponent } from './Style/Component.js';
-import type { DefinitionColor } from './Style/Color.js';
+import type { StyleDefinition, StyleDefinitionAttributes } from './StyleDefinition.js';
 import { Meta } from './Style/Meta.js';
 import { Canvas } from './Style/Canvas.js';
 import { Component } from './Style/Component.js';
 import { Color } from './Style/Color.js';
 
-export interface Definition {
-  readonly $id?: string;
-  readonly $schema?: string;
-  readonly $comment?: string;
-  readonly meta?: DefinitionMeta;
-  readonly attributes?: DefinitionAttributes;
-  readonly canvas: DefinitionCanvas;
-  readonly components?: Readonly<Record<string, DefinitionComponent>>;
-  readonly colors?: Readonly<Record<string, DefinitionColor>>;
-}
+export type { StyleDefinition } from './StyleDefinition.js';
 
 export class Style<D = unknown> {
-  #data: Definition;
+  #data: StyleDefinition;
   #meta?: Meta;
   #canvas?: Canvas;
   #components?: ReadonlyMap<string, Component>;
@@ -30,7 +17,7 @@ export class Style<D = unknown> {
   constructor(data: D) {
     StyleValidator.validate(data);
 
-    this.#data = structuredClone(data) as Definition;
+    this.#data = structuredClone(data) as StyleDefinition;
   }
 
   id(): string | undefined {
@@ -53,7 +40,7 @@ export class Style<D = unknown> {
     return this.#meta;
   }
 
-  attributes(): DefinitionAttributes {
+  attributes(): StyleDefinitionAttributes {
     return this.#data.attributes ?? {};
   }
 

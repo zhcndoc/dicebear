@@ -1,12 +1,10 @@
-export interface DefinitionMetaSource {
-  readonly name?: string;
-  readonly url?: string;
-}
+import type { StyleDefinitionMetaSource } from '../StyleDefinition.js';
+
 
 export class MetaSource {
-  #data: DefinitionMetaSource;
+  #data: StyleDefinitionMetaSource;
 
-  constructor(data: DefinitionMetaSource) {
+  constructor(data: StyleDefinitionMetaSource) {
     this.#data = data;
   }
 

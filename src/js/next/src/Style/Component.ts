@@ -1,23 +1,14 @@
-import type { DefinitionComponentTranslate } from './ComponentTranslate.js';
-import type { DefinitionComponentVariant } from './ComponentVariant.js';
+import type { StyleDefinitionComponent } from '../StyleDefinition.js';
 import { ComponentTranslate } from './ComponentTranslate.js';
 import { ComponentVariant } from './ComponentVariant.js';
 
-export interface DefinitionComponent {
-  readonly width: number;
-  readonly height: number;
-  readonly probability?: number;
-  readonly rotate?: readonly number[];
-  readonly translate?: DefinitionComponentTranslate;
-  readonly variants: Readonly<Record<string, DefinitionComponentVariant>>;
-}
 
 export class Component {
-  #data: DefinitionComponent;
+  #data: StyleDefinitionComponent;
   #translate?: ComponentTranslate;
   #variants?: ReadonlyMap<string, ComponentVariant>;
 
-  constructor(data: DefinitionComponent) {
+  constructor(data: StyleDefinitionComponent) {
     this.#data = data;
   }
 

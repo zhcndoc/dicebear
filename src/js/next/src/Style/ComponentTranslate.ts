@@ -1,12 +1,10 @@
-export interface DefinitionComponentTranslate {
-  readonly x?: readonly number[];
-  readonly y?: readonly number[];
-}
+import type { StyleDefinitionComponentTranslate } from '../StyleDefinition.js';
+
 
 export class ComponentTranslate {
-  #data: DefinitionComponentTranslate;
+  #data: StyleDefinitionComponentTranslate;
 
-  constructor(data: DefinitionComponentTranslate) {
+  constructor(data: StyleDefinitionComponentTranslate) {
     this.#data = data;
   }
 

@@ -3,9 +3,7 @@ import { Prng } from './Prng.js';
 import { Color } from './Utils/Color.js';
 import { CircularColorReferenceError } from './Error/CircularColorReferenceError.js';
 import type { Style } from './Style.js';
-import type { FlipValue, ColorFillValue, StyleOptions } from './types.js';
-
-export type { FlipValue, ColorFillValue } from './types.js';
+import type { StyleOptionsFlipValue, StyleOptionsColorFillValue, StyleOptions } from './StyleOptions.js';
 
 export class Options<D = unknown> {
   #data: StyleOptions<D>;
@@ -34,7 +32,7 @@ export class Options<D = unknown> {
     return this.#memo('idRandomization', () => this.#data.idRandomization ?? false);
   }
 
-  flip(): FlipValue {
+  flip(): StyleOptionsFlipValue {
     return this.#memo('flip', () =>
       this.#prng.pick('flip', this.#toArray(this.#data.flip)) ?? 'none');
   }
@@ -102,13 +100,13 @@ export class Options<D = unknown> {
     return this.#memo(`${name}Color`, () => this.#resolveColor(name));
   }
 
-  colorFill(name: string): ColorFillValue {
+  colorFill(name: string): StyleOptionsColorFillValue {
     const key = `${name}ColorFill`;
 
     return this.#memo(key, () => {
       const raw = this.#get(key) as
-        | ColorFillValue
-        | readonly ColorFillValue[]
+        | StyleOptionsColorFillValue
+        | readonly StyleOptionsColorFillValue[]
         | undefined;
 
       return this.#prng.pick(key, this.#toArray(raw)) ?? 'solid';

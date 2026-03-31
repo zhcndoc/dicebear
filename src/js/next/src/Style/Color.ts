@@ -1,13 +1,10 @@
-export interface DefinitionColor {
-  readonly values: readonly string[];
-  readonly notEqualTo?: readonly string[];
-  readonly contrastTo?: string;
-}
+import type { StyleDefinitionColor } from '../StyleDefinition.js';
+
 
 export class Color {
-  #data: DefinitionColor;
+  #data: StyleDefinitionColor;
 
-  constructor(data: DefinitionColor) {
+  constructor(data: StyleDefinitionColor) {
     this.#data = data;
   }
 

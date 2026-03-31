@@ -2,8 +2,7 @@ import type { Style } from './Style.js';
 import type { Options } from './Options.js';
 import type { Canvas } from './Style/Canvas.js';
 import type { Element } from './Style/Element.js';
-import type { ColorReference, DefinitionAttributes, VariableReference } from './types.js';
-import type { ElementValue } from './Style/Element.js';
+import type { StyleDefinitionColorReference, StyleDefinitionAttributes, StyleDefinitionVariableReference, StyleDefinitionElementValue } from './StyleDefinition.js';
 import { Initials } from './Utils/Initials.js';
 import { License } from './Utils/License.js';
 import { Xml } from './Utils/Xml.js';
@@ -272,7 +271,7 @@ export class Renderer {
     return transforms;
   }
 
-  #renderAttributes(attributes: DefinitionAttributes | undefined): string {
+  #renderAttributes(attributes: StyleDefinitionAttributes | undefined): string {
     if (!attributes) {
       return '';
     }
@@ -298,7 +297,7 @@ export class Renderer {
     return ` ${parts.join(' ')}`;
   }
 
-  #resolveAttributeValue(value: string | ColorReference | VariableReference): string | undefined {
+  #resolveAttributeValue(value: string | StyleDefinitionColorReference | StyleDefinitionVariableReference): string | undefined {
     if (typeof value === 'string') {
       return value;
     }
@@ -344,7 +343,7 @@ export class Renderer {
     return `url(#${id})`;
   }
 
-  #resolveValue(value: ElementValue): string {
+  #resolveValue(value: StyleDefinitionElementValue): string {
     if (typeof value === 'string') {
       return value;
     }
