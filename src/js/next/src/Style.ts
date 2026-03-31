@@ -10,6 +10,7 @@ import { Component } from './Style/Component.js';
 import { Color } from './Style/Color.js';
 
 export interface Definition {
+  readonly $id?: string;
   readonly $schema?: string;
   readonly $comment?: string;
   readonly meta?: DefinitionMeta;
@@ -30,6 +31,10 @@ export class Style<D = unknown> {
     StyleValidator.validate(data);
 
     this.#data = structuredClone(data) as Definition;
+  }
+
+  id(): string | undefined {
+    return this.#data.$id;
   }
 
   schema(): string | undefined {
