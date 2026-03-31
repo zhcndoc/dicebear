@@ -29,7 +29,7 @@ export class Style<D = unknown> {
   constructor(data: D) {
     StyleValidator.validate(data);
 
-    this.#data = data as Definition;
+    this.#data = structuredClone(data) as Definition;
   }
 
   schema(): string | undefined {

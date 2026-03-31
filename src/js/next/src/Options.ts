@@ -17,7 +17,7 @@ export class Options<D = unknown> {
   constructor(style: Style<D>, data: StyleOptions<D>) {
     OptionsValidator.validate(data);
 
-    this.#data = data;
+    this.#data = structuredClone(data);
     this.#style = style;
     this.#prng = new Prng(this.seed());
   }
@@ -180,7 +180,7 @@ export class Options<D = unknown> {
   }
 
   resolved(): StyleOptions<D> {
-    return { ...this.#result } as StyleOptions<D>;
+    return structuredClone(this.#result) as StyleOptions<D>;
   }
 
   #probability(name: string): number {
