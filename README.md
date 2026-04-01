@@ -1,3 +1,6 @@
+> [!WARNING]  
+> This is the **unstable v10** development branch. For the current stable release, see the [`9.x` branch](https://github.com/dicebear/dicebear/tree/9.x).
+
 <h1><img src="https://www.dicebear.com/logo-readme.svg" width="28" /> DiceBear</h1>
 
 <p>
