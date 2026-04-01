@@ -1,33 +1,35 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { Prng } from '../lib/Prng.js';
+import { Fnv1a } from '../lib/Prng/Fnv1a.js';
+import { Mulberry32 } from '../lib/Prng/Mulberry32.js';
 
 describe('Prng', () => {
   describe('fnv1a', () => {
     it('should return offset basis for empty string', () => {
-      assert.equal(Prng.fnv1a(''), 0x811c9dc5);
+      assert.equal(Fnv1a.hash(''), 0x811c9dc5);
     });
 
     it('should hash known values correctly', () => {
-      assert.equal(Prng.fnv1a('a'), 0xe40c292c);
-      assert.equal(Prng.fnv1a('b'), 0xe70c2de5);
-      assert.equal(Prng.fnv1a('c'), 0xe60c2c52);
-      assert.equal(Prng.fnv1a('hello'), 0x4f9f2cab);
-      assert.equal(Prng.fnv1a('test'), 0xafd071e5);
-      assert.equal(Prng.fnv1a('foobar'), 0xbf9cf968);
-      assert.equal(Prng.fnv1a('123'), 0x7238631b);
-      assert.equal(Prng.fnv1a('dicebear'), 0x54d2afd4);
+      assert.equal(Fnv1a.hash('a'), 0xe40c292c);
+      assert.equal(Fnv1a.hash('b'), 0xe70c2de5);
+      assert.equal(Fnv1a.hash('c'), 0xe60c2c52);
+      assert.equal(Fnv1a.hash('hello'), 0x4f9f2cab);
+      assert.equal(Fnv1a.hash('test'), 0xafd071e5);
+      assert.equal(Fnv1a.hash('foobar'), 0xbf9cf968);
+      assert.equal(Fnv1a.hash('123'), 0x7238631b);
+      assert.equal(Fnv1a.hash('dicebear'), 0x54d2afd4);
     });
 
     it('should produce different hashes for different inputs', () => {
-      assert.notEqual(Prng.fnv1a('abc'), Prng.fnv1a('abd'));
+      assert.notEqual(Fnv1a.hash('abc'), Fnv1a.hash('abd'));
     });
 
     it('should always return unsigned 32-bit integers', () => {
       const inputs = ['', 'a', 'hello', 'test:flip', 'some-long-seed:optionName'];
 
       for (const input of inputs) {
-        const hash = Prng.fnv1a(input);
+        const hash = Fnv1a.hash(input);
 
         assert.ok(hash >= 0);
         assert.ok(hash <= 0xffffffff);
@@ -38,37 +40,44 @@ describe('Prng', () => {
 
   describe('fnv1aHex', () => {
     it('should return 8-character hex string', () => {
-      assert.equal(Prng.fnv1aHex('test'), 'afd071e5');
-      assert.equal(Prng.fnv1aHex(''), '811c9dc5');
-      assert.equal(Prng.fnv1aHex('hello'), '4f9f2cab');
+      assert.equal(Fnv1a.hex('test'), 'afd071e5');
+      assert.equal(Fnv1a.hex(''), '811c9dc5');
+      assert.equal(Fnv1a.hex('hello'), '4f9f2cab');
     });
 
     it('should pad short hashes to 8 characters', () => {
-      const hex = Prng.fnv1aHex('test');
+      const hex = Fnv1a.hex('test');
 
       assert.equal(hex.length, 8);
     });
   });
 
   describe('mulberry32', () => {
+    function mulberry32Step(seed) {
+      const mulberry = new Mulberry32(seed);
+
+      return [mulberry.nextFloat(), mulberry.state()];
+    }
+
     it('should return known values for various seeds', () => {
-      assert.deepEqual(Prng.mulberry32(0), [0.26642920868471265, 1831565813]);
-      assert.deepEqual(Prng.mulberry32(1), [0.6270739405881613, 1831565814]);
-      assert.deepEqual(Prng.mulberry32(2), [0.7342509443406016, 1831565815]);
-      assert.deepEqual(Prng.mulberry32(42), [0.6011037519201636, 1831565855]);
-      assert.deepEqual(Prng.mulberry32(100), [0.2043598669115454, 1831565913]);
+      assert.deepEqual(mulberry32Step(0), [0.26642920868471265, 1831565813]);
+      assert.deepEqual(mulberry32Step(1), [0.6270739405881613, 1831565814]);
+      assert.deepEqual(mulberry32Step(2), [0.7342509443406016, 1831565815]);
+      assert.deepEqual(mulberry32Step(42), [0.6011037519201636, 1831565855]);
+      assert.deepEqual(mulberry32Step(100), [0.2043598669115454, 1831565913]);
     });
 
     it('should handle edge case seeds', () => {
-      assert.deepEqual(Prng.mulberry32(0x811c9dc5), [0.6112444521859288, -297265222]);
-      assert.deepEqual(Prng.mulberry32(0xffffffff), [0.8964226141106337, 1831565812]);
+      assert.deepEqual(mulberry32Step(0x811c9dc5), [0.6112444521859288, -297265222]);
+      assert.deepEqual(mulberry32Step(0xffffffff), [0.8964226141106337, 1831565812]);
     });
 
     it('should return a float in [0, 1)', () => {
       const seeds = [0, 1, 42, 2166136261, 4294967295];
 
       for (const seed of seeds) {
-        const [value] = Prng.mulberry32(seed);
+        const mulberry = new Mulberry32(seed);
+        const value = mulberry.nextFloat();
 
         assert.ok(value >= 0);
         assert.ok(value < 1);
@@ -76,10 +85,16 @@ describe('Prng', () => {
     });
 
     it('should produce known values when chained', () => {
-      const [v0, s0] = Prng.mulberry32(0);
-      const [v1, s1] = Prng.mulberry32(s0);
-      const [v2, s2] = Prng.mulberry32(s1);
-      const [v3, s3] = Prng.mulberry32(s2);
+      const mulberry = new Mulberry32(0);
+
+      const v0 = mulberry.nextFloat();
+      const s0 = mulberry.state();
+      const v1 = mulberry.nextFloat();
+      const s1 = mulberry.state();
+      const v2 = mulberry.nextFloat();
+      const s2 = mulberry.state();
+      const v3 = mulberry.nextFloat();
+      const s3 = mulberry.state();
 
       assert.deepEqual([v0, s0], [0.26642920868471265, 1831565813]);
       assert.deepEqual([v1, s1], [0.0003297457005828619, -631835670]);

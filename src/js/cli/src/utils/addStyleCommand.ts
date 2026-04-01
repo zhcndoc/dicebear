@@ -122,7 +122,7 @@ export function addStyleCommand(
             case 'json':
               await writeFile(
                 fileName,
-                JSON.stringify(avatar.toJson(), null, 2),
+                JSON.stringify(avatar.toJSON(), null, 2),
               );
               break;
           }
@@ -134,7 +134,7 @@ export function addStyleCommand(
               `${name}-${i}.json`,
             );
 
-            await fs.writeJSON(jsonFileName, avatar.toJson(), { spaces: 2 });
+            await fs.writeJSON(jsonFileName, avatar.toJSON(), { spaces: 2 });
           }
 
           bar.increment();

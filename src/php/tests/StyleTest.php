@@ -1,0 +1,338 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DiceBear\Tests;
+
+use DiceBear\Error\StyleValidationError;
+use DiceBear\Error\ValidationError;
+use DiceBear\Style;
+use PHPUnit\Framework\TestCase;
+
+class StyleTest extends TestCase
+{
+    private static function minimal(): array
+    {
+        return ['canvas' => ['width' => 100, 'height' => 100, 'elements' => []]];
+    }
+
+    private static function full(): array
+    {
+        return [
+            '$schema' => 'https://example.com/schema.json',
+            '$comment' => 'Test style',
+            'meta' => [
+                'license' => ['name' => 'MIT', 'url' => 'https://example.com/license', 'text' => 'MIT License'],
+                'creator' => ['name' => 'Test', 'url' => 'https://example.com'],
+                'source' => ['name' => 'Source', 'url' => 'https://example.com/source'],
+            ],
+            'canvas' => [
+                'width' => 200,
+                'height' => 200,
+                'elements' => [
+                    [
+                        'type' => 'element',
+                        'name' => 'rect',
+                        'attributes' => ['width' => '100', 'height' => '100', 'fill' => '#ff0000'],
+                        'children' => [
+                            ['type' => 'text', 'value' => 'hello'],
+                        ],
+                    ],
+                    [
+                        'type' => 'component',
+                        'value' => 'eyes',
+                    ],
+                    [
+                        'type' => 'text',
+                        'value' => ['type' => 'variable', 'value' => 'initials'],
+                    ],
+                ],
+            ],
+            'components' => [
+                'eyes' => [
+                    'width' => 50,
+                    'height' => 50,
+                    'probability' => 100,
+                    'rotate' => [-10, 10],
+                    'translate' => ['x' => [0, 5], 'y' => [-2, 2]],
+                    'variants' => [
+                        'open' => [
+                            'elements' => [
+                                ['type' => 'element', 'name' => 'circle', 'attributes' => ['r' => '10', 'cx' => '25', 'cy' => '25']],
+                            ],
+                        ],
+                        'closed' => [
+                            'elements' => [
+                                ['type' => 'element', 'name' => 'line', 'attributes' => ['x1' => '10', 'y1' => '25', 'x2' => '40', 'y2' => '25']],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'colors' => [
+                'skin' => [
+                    'values' => ['#f0c8a0', '#d4a574', '#8d5524'],
+                ],
+                'hair' => [
+                    'values' => ['#2c1b18', '#b55239'],
+                    'notEqualTo' => ['skin'],
+                ],
+                'background' => [
+                    'values' => ['#ffffff', '#000000'],
+                    'contrastTo' => 'skin',
+                ],
+            ],
+        ];
+    }
+
+    // constructor
+
+    public function testAcceptsMinimalDefinition(): void
+    {
+        $style = new Style(self::minimal());
+        $this->assertNotNull($style);
+    }
+
+    public function testAcceptsFullDefinition(): void
+    {
+        $style = new Style(self::full());
+        $this->assertNotNull($style);
+    }
+
+    public function testThrowsStyleValidationErrorForInvalidData(): void
+    {
+        $this->expectException(StyleValidationError::class);
+        new Style([]);
+    }
+
+    public function testThrowsValidationError(): void
+    {
+        $this->expectException(ValidationError::class);
+        new Style([]);
+    }
+
+    public function testThrowsRuntimeException(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        new Style([]);
+    }
+
+    public function testErrorIncludesDetails(): void
+    {
+        try {
+            new Style([]);
+            $this->fail('Expected error');
+        } catch (StyleValidationError $e) {
+            $this->assertIsArray($e->details);
+            $this->assertGreaterThan(0, count($e->details));
+        }
+    }
+
+    // primitive methods
+
+    public function testReturnsSchema(): void
+    {
+        $full = self::full();
+        $this->assertSame($full['$schema'], (new Style($full))->schema());
+    }
+
+    public function testReturnsComment(): void
+    {
+        $full = self::full();
+        $this->assertSame($full['$comment'], (new Style($full))->comment());
+    }
+
+    public function testReturnsNullForMissingOptionalPrimitives(): void
+    {
+        $style = new Style(self::minimal());
+        $this->assertNull($style->schema());
+        $this->assertNull($style->comment());
+    }
+
+    public function testReturnsDefaultsForMissingOptionalObjects(): void
+    {
+        $style = new Style(self::minimal());
+        $this->assertNotNull($style->meta());
+        $this->assertNull($style->meta()->license()->name());
+        $this->assertNull($style->meta()->creator()->name());
+        $this->assertNull($style->meta()->source()->name());
+        $this->assertSame([], $style->attributes());
+    }
+
+    // canvas
+
+    public function testCanvasWidthAndHeight(): void
+    {
+        $style = new Style(self::full());
+        $this->assertSame(200, $style->canvas()->width());
+        $this->assertSame(200, $style->canvas()->height());
+    }
+
+    public function testCanvasElements(): void
+    {
+        $style = new Style(self::full());
+        $this->assertCount(3, $style->canvas()->elements());
+        $this->assertSame('element', $style->canvas()->elements()[0]->type());
+        $this->assertSame('rect', $style->canvas()->elements()[0]->name());
+        $this->assertSame('component', $style->canvas()->elements()[1]->type());
+        $this->assertSame('eyes', $style->canvas()->elements()[1]->value());
+    }
+
+    public function testCanvasElementChildren(): void
+    {
+        $style = new Style(self::full());
+        $children = $style->canvas()->elements()[0]->children();
+        $this->assertCount(1, $children);
+        $this->assertSame('text', $children[0]->type());
+        $this->assertSame('hello', $children[0]->value());
+    }
+
+    public function testCanvasElementAttributes(): void
+    {
+        $style = new Style(self::full());
+        $attrs = $style->canvas()->elements()[0]->attributes();
+        $this->assertNotNull($attrs);
+        $this->assertSame('100', $attrs['width']);
+        $this->assertSame('#ff0000', $attrs['fill']);
+    }
+
+    public function testCanvasElementVariableReference(): void
+    {
+        $style = new Style(self::full());
+        $el = $style->canvas()->elements()[2];
+        $this->assertSame('text', $el->type());
+        $this->assertSame(['type' => 'variable', 'value' => 'initials'], $el->value());
+    }
+
+    public function testCanvasCachesElements(): void
+    {
+        $style = new Style(self::full());
+        $this->assertSame($style->canvas()->elements(), $style->canvas()->elements());
+    }
+
+    // meta
+
+    public function testMetaLicense(): void
+    {
+        $style = new Style(self::full());
+        $this->assertSame('MIT', $style->meta()->license()->name());
+        $this->assertSame('https://example.com/license', $style->meta()->license()->url());
+        $this->assertSame('MIT License', $style->meta()->license()->text());
+    }
+
+    public function testMetaCreator(): void
+    {
+        $style = new Style(self::full());
+        $this->assertSame('Test', $style->meta()->creator()->name());
+        $this->assertSame('https://example.com', $style->meta()->creator()->url());
+    }
+
+    public function testMetaSource(): void
+    {
+        $style = new Style(self::full());
+        $this->assertSame('Source', $style->meta()->source()->name());
+    }
+
+    public function testMetaCached(): void
+    {
+        $style = new Style(self::full());
+        $this->assertSame($style->meta(), $style->meta());
+    }
+
+    // components
+
+    public function testComponentsReturnsArray(): void
+    {
+        $style = new Style(self::full());
+        $this->assertCount(1, $style->components());
+        $this->assertArrayHasKey('eyes', $style->components());
+    }
+
+    public function testComponentProperties(): void
+    {
+        $style = new Style(self::full());
+        $eyes = $style->components()['eyes'];
+        $this->assertSame(50, $eyes->width());
+        $this->assertSame(50, $eyes->height());
+        $this->assertSame(100, $eyes->probability());
+        $this->assertSame([-10, 10], $eyes->rotate());
+    }
+
+    public function testComponentTranslate(): void
+    {
+        $style = new Style(self::full());
+        $translate = $style->components()['eyes']->translate();
+        $this->assertSame([0, 5], $translate->x());
+        $this->assertSame([-2, 2], $translate->y());
+    }
+
+    public function testComponentVariants(): void
+    {
+        $style = new Style(self::full());
+        $eyes = $style->components()['eyes'];
+        $this->assertCount(2, $eyes->variants());
+        $this->assertArrayHasKey('open', $eyes->variants());
+        $this->assertArrayHasKey('closed', $eyes->variants());
+    }
+
+    public function testVariantElements(): void
+    {
+        $style = new Style(self::full());
+        $open = $style->components()['eyes']->variants()['open'];
+        $this->assertCount(1, $open->elements());
+        $this->assertSame('circle', $open->elements()[0]->name());
+    }
+
+    public function testEmptyComponentsWhenNone(): void
+    {
+        $style = new Style(self::minimal());
+        $this->assertCount(0, $style->components());
+    }
+
+    public function testComponentsCached(): void
+    {
+        $style = new Style(self::full());
+        $this->assertSame($style->components(), $style->components());
+    }
+
+    // colors
+
+    public function testColorsReturnsArray(): void
+    {
+        $style = new Style(self::full());
+        $this->assertCount(3, $style->colors());
+    }
+
+    public function testColorValues(): void
+    {
+        $style = new Style(self::full());
+        $skin = $style->colors()['skin'];
+        $this->assertSame(['#f0c8a0', '#d4a574', '#8d5524'], $skin->values());
+    }
+
+    public function testColorNotEqualTo(): void
+    {
+        $style = new Style(self::full());
+        $hair = $style->colors()['hair'];
+        $this->assertSame(['skin'], $hair->notEqualTo());
+    }
+
+    public function testColorContrastTo(): void
+    {
+        $style = new Style(self::full());
+        $bg = $style->colors()['background'];
+        $this->assertSame('skin', $bg->contrastTo());
+    }
+
+    public function testEmptyColorsWhenNone(): void
+    {
+        $style = new Style(self::minimal());
+        $this->assertCount(0, $style->colors());
+    }
+
+    public function testColorsCached(): void
+    {
+        $style = new Style(self::full());
+        $this->assertSame($style->colors(), $style->colors());
+    }
+}

@@ -83,7 +83,7 @@ export function createAvatar<O extends {}>(
 
   return {
     toString: () => svg,
-    toJson: () => ({
+    toJSON: () => ({
       svg: svg,
       extra: {
         primaryBackgroundColor,

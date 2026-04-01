@@ -72,7 +72,7 @@ data.forEach((options, key) => {
 
       fs.writeFileSync(
         jsonPath,
-        JSON.stringify(createAvatar(style, options).toJson(), null, 2)
+        JSON.stringify(createAvatar(style, options).toJSON(), null, 2)
       );
     }
 
@@ -80,6 +80,6 @@ data.forEach((options, key) => {
     const json = JSON.parse(fs.readFileSync(jsonPath, { encoding: 'utf-8' }));
 
     equal(createAvatar(style, options).toString(), svg);
-    equal(JSON.parse(JSON.stringify(createAvatar(style, options).toJson())), json);
+    equal(JSON.parse(JSON.stringify(createAvatar(style, options).toJSON())), json);
   });
 });

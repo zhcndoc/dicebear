@@ -8,7 +8,7 @@ import type {
   StyleDefinitionVariableReference,
   StyleDefinitionElementValue,
 } from './StyleDefinition.js';
-import { Prng } from './Prng.js';
+import { Fnv1a } from './Prng/Fnv1a.js';
 import { Initials } from './Utils/Initials.js';
 import { License } from './Utils/License.js';
 import { Xml } from './Utils/Xml.js';
@@ -416,6 +416,6 @@ export class Renderer {
   }
 
   #hashSeed(): string {
-    return (this.#cachedSeedHash ??= Prng.fnv1aHex(this.#options.seed()));
+    return (this.#cachedSeedHash ??= Fnv1a.hex(this.#options.seed()));
   }
 }

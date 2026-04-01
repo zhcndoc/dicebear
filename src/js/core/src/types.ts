@@ -6,7 +6,7 @@ export interface ResultConvertOptions {
 
 export interface Result {
   toString(): string;
-  toJson(): {
+  toJSON(): {
     svg: string;
     extra: Record<string, unknown>;
   };

@@ -26,7 +26,7 @@ export class Avatar<D = unknown> {
     return this.#svg;
   }
 
-  toJson(): AvatarJson<D> {
+  toJSON(): AvatarJson<D> {
     return {
       svg: this.#svg,
       options: structuredClone(this.#resolvedOptions),

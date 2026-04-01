@@ -43,10 +43,10 @@ describe('Avatar', () => {
     });
   });
 
-  describe('toJson()', () => {
+  describe('toJSON()', () => {
     it('should return an object with svg and options', () => {
       const avatar = new Avatar(minimalStyle, { seed: 'test' });
-      const json = avatar.toJson();
+      const json = avatar.toJSON();
 
       assert.equal(typeof json.svg, 'string');
       assert.ok(json.options !== null && typeof json.options === 'object');
@@ -55,16 +55,16 @@ describe('Avatar', () => {
     it('should have consistent svg with toString()', () => {
       const avatar = new Avatar(minimalStyle, { seed: 'test' });
 
-      assert.equal(avatar.toJson().svg, avatar.toString());
+      assert.equal(avatar.toJSON().svg, avatar.toString());
     });
 
     it('should return a deep copy of options', () => {
       const avatar = new Avatar(minimalStyle, { seed: 'test' });
-      const json1 = avatar.toJson();
+      const json1 = avatar.toJSON();
 
       json1.options.seed = 'modified';
 
-      const json2 = avatar.toJson();
+      const json2 = avatar.toJSON();
 
       assert.equal(json2.options.seed, 'test');
     });

@@ -1,3 +1,6 @@
+import { Fnv1a } from './Prng/Fnv1a.js';
+import { Mulberry32 } from './Prng/Mulberry32.js';
+
 // Key-based pseudorandom number generator.
 //
 // Each method takes a key that, combined with the seed, produces a
@@ -89,15 +92,10 @@ export class Prng {
   // Fisher-Yates shuffle with chained Mulberry32 state.
   shuffle<T>(key: string, items: readonly T[]): T[] {
     const result = Array.from(items).sort(this.#compareByCodePoint);
-    let state = Prng.fnv1a(this.#seed + ':' + key);
+    const prng = new Mulberry32(Fnv1a.hash(this.#seed + ':' + key));
 
     for (let i = result.length - 1; i > 0; i--) {
-      const pair = Prng.mulberry32(state);
-      const value = pair[0];
-
-      state = pair[1];
-
-      const j = Math.floor(value * (i + 1));
+      const j = Math.floor(prng.nextFloat() * (i + 1));
       const temp = result[i];
 
       result[i] = result[j];
@@ -107,40 +105,8 @@ export class Prng {
     return result;
   }
 
-  // FNV-1a 32-bit hash. Offset basis: 0x811c9dc5, prime: 0x01000193.
-  // https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function
-  static fnv1a(input: string): number {
-    let hash = 2166136261;
-
-    for (let i = 0; i < input.length; i++) {
-      hash ^= input.charCodeAt(i);
-      hash = Math.imul(hash, 16777619);
-    }
-
-    return hash >>> 0;
-  }
-
-  static fnv1aHex(input: string): string {
-    return Prng.fnv1a(input).toString(16).padStart(8, '0');
-  }
-
-  // Mulberry32 PRNG. Returns a random value between 0 and 1, and the next seed.
-  // The seed advances by a fixed increment (0x6d2b79f5) per step.
-  // https://gist.github.com/tommyettinger/46a874533244883189143505d203312c
-  static mulberry32(seed: number): [number, number] {
-    const state = (seed + 0x6d2b79f5) | 0;
-
-    let t = Math.imul(state ^ (state >>> 15), state | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-
-    const result = ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-
-    return [result, state];
-  }
-
-  // Combines seed + key via FNV-1a, then runs one Mulberry32 step.
   getValue(key: string): number {
-    return Prng.mulberry32(Prng.fnv1a(this.#seed + ':' + key))[0];
+    return new Mulberry32(Fnv1a.hash(this.#seed + ':' + key)).nextFloat();
   }
 
   // Cross-language deterministic sort: compare by UTF-16 code units of
