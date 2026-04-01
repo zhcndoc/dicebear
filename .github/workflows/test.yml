@@ -43,11 +43,11 @@ jobs:
           php-version: ${{ matrix.php-version }}
           extensions: mbstring
       - name: Install dependencies
-        working-directory: src/php
+        working-directory: src/php/core
         run: composer install --no-interaction --prefer-dist
       - name: Run PHPStan
-        working-directory: src/php
+        working-directory: src/php/core
         run: vendor/bin/phpstan analyse --no-progress
       - name: Run tests
-        working-directory: src/php
+        working-directory: src/php/core
         run: vendor/bin/phpunit
