@@ -3,7 +3,6 @@ import { MetaLicense } from './MetaLicense.js';
 import { MetaCreator } from './MetaCreator.js';
 import { MetaSource } from './MetaSource.js';
 
-
 export class Meta {
   #data: StyleDefinitionMeta;
   #license?: MetaLicense;

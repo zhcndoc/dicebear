@@ -2,7 +2,6 @@ import type { StyleDefinitionComponent } from '../StyleDefinition.js';
 import { ComponentTranslate } from './ComponentTranslate.js';
 import { ComponentVariant } from './ComponentVariant.js';
 
-
 export class Component {
   #data: StyleDefinitionComponent;
   #translate?: ComponentTranslate;
@@ -36,8 +35,10 @@ export class Component {
 
   variants(): ReadonlyMap<string, ComponentVariant> {
     this.#variants ??= new Map(
-      Object.entries(this.#data.variants).map(
-        ([name, data]) => [name, new ComponentVariant(data)]),
+      Object.entries(this.#data.variants).map(([name, data]) => [
+        name,
+        new ComponentVariant(data),
+      ]),
     );
 
     return this.#variants;

@@ -25,11 +25,7 @@ export class License {
     let result = '';
 
     // Skip "Remix of" prefix for MIT-licensed or DiceBear-original styles.
-    if (
-      licenseName !== 'MIT' &&
-      creatorName !== 'DiceBear' &&
-      sourceName
-    ) {
+    if (licenseName !== 'MIT' && creatorName !== 'DiceBear' && sourceName) {
       result += 'Remix of ';
     }
 
@@ -69,11 +65,15 @@ export class License {
     }
 
     if (sourceUrl) {
-      fields.push(`<dc:source xsi:type="dcterms:URI">${Xml.escape(sourceUrl)}</dc:source>`);
+      fields.push(
+        `<dc:source xsi:type="dcterms:URI">${Xml.escape(sourceUrl)}</dc:source>`,
+      );
     }
 
     if (licenseUrl) {
-      fields.push(`<dcterms:license xsi:type="dcterms:URI">${Xml.escape(licenseUrl)}</dcterms:license>`);
+      fields.push(
+        `<dcterms:license xsi:type="dcterms:URI">${Xml.escape(licenseUrl)}</dcterms:license>`,
+      );
     }
 
     if (rights) {

@@ -44,11 +44,15 @@ export class Color {
 
   // Returns a new array sorted by descending contrast against the reference color.
   // https://www.w3.org/WAI/GL/wiki/Contrast_ratio
-  static sortByContrast(candidates: readonly string[], refColor: string): string[] {
+  static sortByContrast(
+    candidates: readonly string[],
+    refColor: string,
+  ): string[] {
     const refLum = this.luminance(refColor);
     const withRatio = candidates.map((c) => {
       const lum = this.luminance(c);
-      const ratio = (Math.max(lum, refLum) + 0.05) / (Math.min(lum, refLum) + 0.05);
+      const ratio =
+        (Math.max(lum, refLum) + 0.05) / (Math.min(lum, refLum) + 0.05);
 
       return { color: c, ratio };
     });

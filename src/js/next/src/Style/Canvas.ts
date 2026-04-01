@@ -1,7 +1,6 @@
 import type { StyleDefinitionCanvas } from '../StyleDefinition.js';
 import { Element } from './Element.js';
 
-
 export class Canvas {
   #data: StyleDefinitionCanvas;
   #elements?: readonly Element[];

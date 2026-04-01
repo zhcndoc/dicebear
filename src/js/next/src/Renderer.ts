@@ -2,7 +2,12 @@ import type { Style } from './Style.js';
 import type { Options } from './Options.js';
 import type { Canvas } from './Style/Canvas.js';
 import type { Element } from './Style/Element.js';
-import type { StyleDefinitionColorReference, StyleDefinitionAttributes, StyleDefinitionVariableReference, StyleDefinitionElementValue } from './StyleDefinition.js';
+import type {
+  StyleDefinitionColorReference,
+  StyleDefinitionAttributes,
+  StyleDefinitionVariableReference,
+  StyleDefinitionElementValue,
+} from './StyleDefinition.js';
 import { Prng } from './Prng.js';
 import { Initials } from './Utils/Initials.js';
 import { License } from './Utils/License.js';
@@ -33,9 +38,10 @@ export class Renderer {
     body = this.#applyBorderRadius(`${background}${body}`, canvas);
 
     const metadata = License.xml(this.#style.meta());
-    const defs = this.#defs.size > 0
-      ? `<defs>${Array.from(this.#defs.values()).join('')}</defs>`
-      : '';
+    const defs =
+      this.#defs.size > 0
+        ? `<defs>${Array.from(this.#defs.values()).join('')}</defs>`
+        : '';
     const size = this.#options.size();
 
     const title = this.#options.title();
@@ -56,9 +62,8 @@ export class Renderer {
       attrs.push(`width="${size}"`, `height="${size}"`);
     }
 
-    const titleElement = escapedTitle !== undefined
-      ? `<title>${escapedTitle}</title>`
-      : '';
+    const titleElement =
+      escapedTitle !== undefined ? `<title>${escapedTitle}</title>` : '';
 
     let svg = `<svg ${attrs.join(' ')}>${metadata}${defs}${titleElement}${body}</svg>`;
 
@@ -117,7 +122,8 @@ export class Renderer {
 
     const id = `clip-${this.#hashSeed()}`;
 
-    this.#defs.set(id,
+    this.#defs.set(
+      id,
       `<clipPath id="${id}"><rect width="${canvas.width()}" height="${canvas.height()}" rx="${radius}" ry="${radius}"/></clipPath>`,
     );
 
@@ -165,7 +171,9 @@ export class Renderer {
     // Uses Math.random() intentionally — a PRNG-based suffix would
     // produce the same ID for the same seed, preventing two identical
     // avatars from coexisting in the same document.
-    const suffix = Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0');
+    const suffix = Math.floor(Math.random() * 0xffffff)
+      .toString(16)
+      .padStart(6, '0');
     const ids = new Set<string>();
 
     for (const match of svg.matchAll(/\bid="([^"]+)"/g)) {
@@ -176,13 +184,18 @@ export class Renderer {
       return svg;
     }
 
-    const escaped = Array.from(ids, (id) => id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    const escaped = Array.from(ids, (id) =>
+      id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+    );
     const pattern = new RegExp(
       `(id="|url\\(#|href="#)(${escaped.join('|')})("|\\))`,
       'g',
     );
 
-    return svg.replace(pattern, (_, prefix, id, end) => `${prefix}${id}-${suffix}${end}`);
+    return svg.replace(
+      pattern,
+      (_, prefix, id, end) => `${prefix}${id}-${suffix}${end}`,
+    );
   }
 
   #renderElements(elements: readonly Element[]): string {
@@ -325,7 +338,12 @@ export class Renderer {
     return ` ${parts.join(' ')}`;
   }
 
-  #resolveAttributeValue(value: string | StyleDefinitionColorReference | StyleDefinitionVariableReference): string | undefined {
+  #resolveAttributeValue(
+    value:
+      | string
+      | StyleDefinitionColorReference
+      | StyleDefinitionVariableReference,
+  ): string | undefined {
     if (typeof value === 'string') {
       return value;
     }
@@ -357,16 +375,20 @@ export class Renderer {
     const rotation = this.#options.colorAngle(name);
     const id = `${name}-color-${this.#hashSeed()}`;
     const tag = fill === 'linear' ? 'linearGradient' : 'radialGradient';
-    const rotateAttr = rotation !== 0
-      ? ` gradientTransform="rotate(${rotation}, 0.5, 0.5)"`
-      : '';
+    const rotateAttr =
+      rotation !== 0
+        ? ` gradientTransform="rotate(${rotation}, 0.5, 0.5)"`
+        : '';
     const stops = colors.map((color, i) => {
       const offset = Math.round((i / (colors.length - 1)) * 100);
 
       return `<stop offset="${offset}%" stop-color="${Xml.escape(color)}"/>`;
     });
 
-    this.#defs.set(id, `<${tag} id="${id}"${rotateAttr}>${stops.join('')}</${tag}>`);
+    this.#defs.set(
+      id,
+      `<${tag} id="${id}"${rotateAttr}>${stops.join('')}</${tag}>`,
+    );
 
     return `url(#${id})`;
   }
@@ -399,6 +421,6 @@ export class Renderer {
   }
 
   #hashSeed(): string {
-    return this.#cachedSeedHash ??= Prng.fnv1aHex(this.#options.seed());
+    return (this.#cachedSeedHash ??= Prng.fnv1aHex(this.#options.seed()));
   }
 }

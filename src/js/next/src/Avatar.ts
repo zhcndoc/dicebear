@@ -15,9 +15,7 @@ export class Avatar<D = unknown> {
   #resolvedOptions: StyleOptions<UnwrapStyle<D>>;
 
   constructor(style: D, options?: StyleOptions<UnwrapStyle<D>>) {
-    const resolvedStyle = style instanceof Style
-      ? style
-      : new Style(style);
+    const resolvedStyle = style instanceof Style ? style : new Style(style);
     const resolvedOptions = new Options(resolvedStyle, options ?? {});
 
     this.#svg = new Renderer(resolvedStyle, resolvedOptions).render();

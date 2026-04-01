@@ -3,7 +3,11 @@ import { Prng } from './Prng.js';
 import { Color } from './Utils/Color.js';
 import { CircularColorReferenceError } from './Error/CircularColorReferenceError.js';
 import type { Style } from './Style.js';
-import type { StyleOptionsFlipValue, StyleOptionsColorFillValue, StyleOptions } from './StyleOptions.js';
+import type {
+  StyleOptionsFlipValue,
+  StyleOptionsColorFillValue,
+  StyleOptions,
+} from './StyleOptions.js';
 
 export class Options<D = unknown> {
   #data: StyleOptions<D>;
@@ -29,7 +33,10 @@ export class Options<D = unknown> {
   }
 
   idRandomization(): boolean {
-    return this.#memo('idRandomization', () => this.#data.idRandomization ?? false);
+    return this.#memo(
+      'idRandomization',
+      () => this.#data.idRandomization ?? false,
+    );
   }
 
   title(): string | undefined {
@@ -37,28 +44,46 @@ export class Options<D = unknown> {
   }
 
   flip(): StyleOptionsFlipValue {
-    return this.#memo('flip', () =>
-      this.#prng.pick('flip', this.#toArray(this.#data.flip)) ?? 'none');
+    return this.#memo(
+      'flip',
+      () => this.#prng.pick('flip', this.#toArray(this.#data.flip)) ?? 'none',
+    );
   }
 
   fontFamily(): string {
-    return this.#memo('fontFamily', () =>
-      this.#prng.pick('fontFamily', this.#toArray(this.#data.fontFamily)) ?? 'system-ui');
+    return this.#memo(
+      'fontFamily',
+      () =>
+        this.#prng.pick('fontFamily', this.#toArray(this.#data.fontFamily)) ??
+        'system-ui',
+    );
   }
 
   fontWeight(): number {
-    return this.#memo('fontWeight', () =>
-      this.#prng.pick('fontWeight', this.#toArray(this.#data.fontWeight)) ?? 400);
+    return this.#memo(
+      'fontWeight',
+      () =>
+        this.#prng.pick('fontWeight', this.#toArray(this.#data.fontWeight)) ??
+        400,
+    );
   }
 
   scale(): number {
-    return this.#memo('scale', () =>
-      this.#prng.float('scale', this.#toArray(this.#data.scale)) ?? 1);
+    return this.#memo(
+      'scale',
+      () => this.#prng.float('scale', this.#toArray(this.#data.scale)) ?? 1,
+    );
   }
 
   borderRadius(): number {
-    return this.#memo('borderRadius', () =>
-      this.#prng.float('borderRadius', this.#toArray(this.#data.borderRadius)) ?? 0);
+    return this.#memo(
+      'borderRadius',
+      () =>
+        this.#prng.float(
+          'borderRadius',
+          this.#toArray(this.#data.borderRadius),
+        ) ?? 0,
+    );
   }
 
   // Selects a variant for the given component. Depending on what was passed
@@ -89,9 +114,14 @@ export class Options<D = unknown> {
       let entries: [string, number][];
 
       if (raw === undefined) {
-        entries = Array.from(variants).map(([v, variant]) => [v, variant.weight()]);
+        entries = Array.from(variants).map(([v, variant]) => [
+          v,
+          variant.weight(),
+        ]);
       } else if (typeof raw === 'string' || Array.isArray(raw)) {
-        entries = this.#toArray(raw).filter((v) => variants.has(v)).map((v) => [v, 1]);
+        entries = this.#toArray(raw)
+          .filter((v) => variants.has(v))
+          .map((v) => [v, 1]);
       } else {
         entries = Object.entries(raw).filter(([v]) => variants.has(v));
       }

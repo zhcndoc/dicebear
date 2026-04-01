@@ -1,5 +1,9 @@
-import type { StyleDefinitionElement, StyleDefinitionElementValue, StyleDefinitionElementType, StyleDefinitionAttributes } from '../StyleDefinition.js';
-
+import type {
+  StyleDefinitionElement,
+  StyleDefinitionElementValue,
+  StyleDefinitionElementType,
+  StyleDefinitionAttributes,
+} from '../StyleDefinition.js';
 
 export class Element {
   #data: StyleDefinitionElement;

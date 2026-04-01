@@ -16,15 +16,21 @@ export type StyleOptionsColorFillValue = 'solid' | 'linear' | 'radial';
 // ---------------------------------------------------------------------------
 
 // Extracts literal component/color names from D; `never` when generic.
-type ComponentNames<D> =
-  D extends { components: Record<infer K extends string, unknown> }
-    ? string extends K ? never : K
-    : never;
+type ComponentNames<D> = D extends {
+  components: Record<infer K extends string, unknown>;
+}
+  ? string extends K
+    ? never
+    : K
+  : never;
 
-type ColorNames<D> =
-  D extends { colors: Record<infer K extends string, unknown> }
-    ? string extends K ? never : K
-    : never;
+type ColorNames<D> = D extends {
+  colors: Record<infer K extends string, unknown>;
+}
+  ? string extends K
+    ? never
+    : K
+  : never;
 
 // Always includes 'background' because the renderer unconditionally
 // calls options.color('background') when rendering.
@@ -32,21 +38,25 @@ type AllColorNames<D> = ColorNames<D> | 'background';
 
 // Resolves variant names for component C; falls back to `string` when
 // the definition or the component is generic.
-type VariantNames<D, C extends string> =
-  D extends { components: Record<string, unknown> }
-    ? C extends keyof D['components']
-      ? D['components'][C] extends { variants: Record<infer V extends string, unknown> }
-        ? string extends V ? string : V
-        : string
+type VariantNames<D, C extends string> = D extends {
+  components: Record<string, unknown>;
+}
+  ? C extends keyof D['components']
+    ? D['components'][C] extends {
+        variants: Record<infer V extends string, unknown>;
+      }
+      ? string extends V
+        ? string
+        : V
       : string
-    : string;
+    : string
+  : string;
 
-type HasSpecificKeys<D> =
-  [ComponentNames<D>] extends [never]
-    ? [ColorNames<D>] extends [never]
-      ? false
-      : true
-    : true;
+type HasSpecificKeys<D> = [ComponentNames<D>] extends [never]
+  ? [ColorNames<D>] extends [never]
+    ? false
+    : true
+  : true;
 
 export interface StyleOptionsBase {
   readonly seed?: string;
@@ -71,24 +81,42 @@ type ComponentVariantOption<D, K extends string> =
   | Readonly<Partial<Record<VariantNames<D, K>, number>>>;
 
 // For each component C generates: Variant, Probability, Rotate, TranslateX/Y.
-type ComponentOptions<D, C extends string> =
-  [C] extends [never] ? unknown :
-  { readonly [K in C as `${K}Variant`]?: ComponentVariantOption<D, K> }
-  & { readonly [K in C as `${K}Probability`]?: number }
-  & { readonly [K in C as `${K}Rotate`]?: number | readonly [number, number] }
-  & { readonly [K in C as `${K}TranslateX`]?: number | readonly [number, number] }
-  & { readonly [K in C as `${K}TranslateY`]?: number | readonly [number, number] };
+type ComponentOptions<D, C extends string> = [C] extends [never]
+  ? unknown
+  : { readonly [K in C as `${K}Variant`]?: ComponentVariantOption<D, K> } & {
+      readonly [K in C as `${K}Probability`]?: number;
+    } & {
+      readonly [K in C as `${K}Rotate`]?: number | readonly [number, number];
+    } & {
+      readonly [K in C as `${K}TranslateX`]?:
+        | number
+        | readonly [number, number];
+    } & {
+      readonly [K in C as `${K}TranslateY`]?:
+        | number
+        | readonly [number, number];
+    };
 
 // For each color C generates: Color, ColorFill, ColorFillStops, ColorAngle.
-type ColorOptions<C extends string> =
-  [C] extends [never] ? unknown :
-  { readonly [K in C as `${K}Color`]?: string | readonly string[] }
-  & { readonly [K in C as `${K}ColorFill`]?: StyleOptionsColorFillValue | readonly StyleOptionsColorFillValue[] }
-  & { readonly [K in C as `${K}ColorFillStops`]?: number | readonly [number, number] }
-  & { readonly [K in C as `${K}ColorAngle`]?: number | readonly [number, number] };
+type ColorOptions<C extends string> = [C] extends [never]
+  ? unknown
+  : { readonly [K in C as `${K}Color`]?: string | readonly string[] } & {
+      readonly [K in C as `${K}ColorFill`]?:
+        | StyleOptionsColorFillValue
+        | readonly StyleOptionsColorFillValue[];
+    } & {
+      readonly [K in C as `${K}ColorFillStops`]?:
+        | number
+        | readonly [number, number];
+    } & {
+      readonly [K in C as `${K}ColorAngle`]?:
+        | number
+        | readonly [number, number];
+    };
 
-export type StyleOptions<D = unknown> =
-  StyleOptionsBase
-  & ComponentOptions<D, ComponentNames<D>>
-  & ColorOptions<AllColorNames<D>>
-  & (HasSpecificKeys<D> extends true ? unknown : { readonly [key: string]: unknown });
+export type StyleOptions<D = unknown> = StyleOptionsBase &
+  ComponentOptions<D, ComponentNames<D>> &
+  ColorOptions<AllColorNames<D>> &
+  (HasSpecificKeys<D> extends true
+    ? unknown
+    : { readonly [key: string]: unknown });

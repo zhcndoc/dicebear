@@ -1,6 +1,5 @@
 import type { StyleDefinitionMetaSource } from '../StyleDefinition.js';
 
-
 export class MetaSource {
   #data: StyleDefinitionMetaSource;
 

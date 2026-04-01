@@ -1,6 +1,5 @@
 import type { StyleDefinitionMetaLicense } from '../StyleDefinition.js';
 
-
 export class MetaLicense {
   #data: StyleDefinitionMetaLicense;
 

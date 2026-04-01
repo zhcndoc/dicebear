@@ -25,16 +25,24 @@ export class Prng {
     return sorted[index];
   }
 
-  weightedPick<T>(key: string, entries: readonly (readonly [T, number])[]): T | undefined {
+  weightedPick<T>(
+    key: string,
+    entries: readonly (readonly [T, number])[],
+  ): T | undefined {
     if (entries.length === 0) {
       return undefined;
     }
 
-    const sorted = Array.from(entries).sort((a, b) => this.#compareByCodePoint(a[0], b[0]));
+    const sorted = Array.from(entries).sort((a, b) =>
+      this.#compareByCodePoint(a[0], b[0]),
+    );
     const totalWeight = sorted.reduce((sum, e) => sum + e[1], 0);
 
     if (totalWeight === 0) {
-      return this.pick(key, sorted.map((e) => e[0]));
+      return this.pick(
+        key,
+        sorted.map((e) => e[0]),
+      );
     }
 
     const threshold = this.getValue(key) * totalWeight;

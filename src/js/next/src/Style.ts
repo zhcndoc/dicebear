@@ -1,5 +1,8 @@
 import { StyleValidator } from './Validator/StyleValidator.js';
-import type { StyleDefinition, StyleDefinitionAttributes } from './StyleDefinition.js';
+import type {
+  StyleDefinition,
+  StyleDefinitionAttributes,
+} from './StyleDefinition.js';
 import { Meta } from './Style/Meta.js';
 import { Canvas } from './Style/Canvas.js';
 import { Component } from './Style/Component.js';
@@ -50,8 +53,10 @@ export class Style<D = unknown> {
 
   components(): ReadonlyMap<string, Component> {
     this.#components ??= new Map(
-      Object.entries(this.#data.components ?? {}).map(
-        ([name, data]) => [name, new Component(data)]),
+      Object.entries(this.#data.components ?? {}).map(([name, data]) => [
+        name,
+        new Component(data),
+      ]),
     );
 
     return this.#components;
@@ -59,8 +64,10 @@ export class Style<D = unknown> {
 
   colors(): ReadonlyMap<string, Color> {
     this.#colors ??= new Map(
-      Object.entries(this.#data.colors ?? {}).map(
-        ([name, data]) => [name, new Color(data)]),
+      Object.entries(this.#data.colors ?? {}).map(([name, data]) => [
+        name,
+        new Color(data),
+      ]),
     );
 
     return this.#colors;

@@ -1,6 +1,5 @@
 import type { StyleDefinitionComponentTranslate } from '../StyleDefinition.js';
 
-
 export class ComponentTranslate {
   #data: StyleDefinitionComponentTranslate;
 

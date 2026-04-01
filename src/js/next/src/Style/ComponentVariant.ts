@@ -1,7 +1,6 @@
 import type { StyleDefinitionComponentVariant } from '../StyleDefinition.js';
 import { Element } from './Element.js';
 
-
 export class ComponentVariant {
   #data: StyleDefinitionComponentVariant;
   #elements?: readonly Element[];

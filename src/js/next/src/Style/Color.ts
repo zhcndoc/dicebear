@@ -1,6 +1,5 @@
 import type { StyleDefinitionColor } from '../StyleDefinition.js';
 
-
 export class Color {
   #data: StyleDefinitionColor;
 

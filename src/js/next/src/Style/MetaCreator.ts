@@ -1,6 +1,5 @@
 import type { StyleDefinitionMetaCreator } from '../StyleDefinition.js';
 
-
 export class MetaCreator {
   #data: StyleDefinitionMetaCreator;
 

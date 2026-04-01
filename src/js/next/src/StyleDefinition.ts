@@ -30,8 +30,12 @@ export interface StyleDefinitionColorReference {
   readonly value: string;
 }
 
-export type StyleDefinitionColorAttributeValue = string | StyleDefinitionColorReference;
-export type StyleDefinitionElementValue = string | StyleDefinitionVariableReference;
+export type StyleDefinitionColorAttributeValue =
+  | string
+  | StyleDefinitionColorReference;
+export type StyleDefinitionElementValue =
+  | string
+  | StyleDefinitionVariableReference;
 export type StyleDefinitionElementType = 'element' | 'text' | 'component';
 
 export interface StyleDefinitionAttributes {
@@ -43,7 +47,11 @@ export interface StyleDefinitionAttributes {
   readonly stroke?: StyleDefinitionColorAttributeValue;
   readonly 'font-family'?: string | StyleDefinitionVariableReference;
   readonly 'font-weight'?: string | StyleDefinitionVariableReference;
-  readonly [key: string]: string | StyleDefinitionColorReference | StyleDefinitionVariableReference | undefined;
+  readonly [key: string]:
+    | string
+    | StyleDefinitionColorReference
+    | StyleDefinitionVariableReference
+    | undefined;
 }
 
 export interface StyleDefinitionElement {
