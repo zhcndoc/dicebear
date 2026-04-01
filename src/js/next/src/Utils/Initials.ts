@@ -1,8 +1,7 @@
 // @see https://www.regular-expressions.info/unicode.html
 export class Initials {
-  // Extracts up to two initials from a seed string. Strips everything
-  // after '@' first so email addresses like "john@example.com" yield "J"
-  // instead of being treated as two words.
+  // Strips '@...' so email addresses yield a single initial instead
+  // of being treated as two words.
   static fromSeed(seed: string, discardAtSymbol = true): string {
     let input = seed;
 

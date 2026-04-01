@@ -22,12 +22,12 @@ export class Color {
   }
 
   static parseHex(hex: string): [number, number, number] {
-    const n = this.toRgbHex(hex).slice(1);
+    const h = this.toHex(hex).slice(1);
 
     return [
-      parseInt(n.slice(0, 2), 16),
-      parseInt(n.slice(2, 4), 16),
-      parseInt(n.slice(4, 6), 16),
+      parseInt(h.slice(0, 2), 16),
+      parseInt(h.slice(2, 4), 16),
+      parseInt(h.slice(4, 6), 16),
     ];
   }
 

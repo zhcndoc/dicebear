@@ -42,7 +42,7 @@ export class Style<D = unknown> {
   }
 
   attributes(): StyleDefinitionAttributes {
-    return this.#data.attributes ?? {};
+    return structuredClone(this.#data.attributes ?? {});
   }
 
   canvas(): Canvas {

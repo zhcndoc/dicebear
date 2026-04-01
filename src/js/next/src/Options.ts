@@ -258,7 +258,6 @@ export class Options<D = unknown> {
     const notEqualTo = styleColor.notEqualTo();
 
     try {
-      // Sort by contrast to a reference color (highest contrast first)
       if (contrastTo) {
         const refColor = this.color(contrastTo)[0];
 
@@ -267,7 +266,6 @@ export class Options<D = unknown> {
         }
       }
 
-      // Filter out colors that match excluded references
       if (notEqualTo.length > 0) {
         const excluded: string[] = [];
 

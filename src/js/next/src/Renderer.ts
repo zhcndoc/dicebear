@@ -18,6 +18,7 @@ export class Renderer {
   #options: Options;
   #defs = new Map<string, string>();
   #cachedSeedHash?: string;
+  #cachedInitials?: string;
 
   constructor(style: Style, options: Options) {
     this.#style = style;
@@ -324,11 +325,7 @@ export class Renderer {
         continue;
       }
 
-      const resolved = this.#resolveAttributeValue(value);
-
-      if (resolved !== undefined) {
-        parts.push(`${key}="${Xml.escape(resolved)}"`);
-      }
+      parts.push(`${key}="${Xml.escape(this.#resolveAttributeValue(value))}"`);
     }
 
     if (parts.length === 0) {
@@ -343,7 +340,7 @@ export class Renderer {
       | string
       | StyleDefinitionColorReference
       | StyleDefinitionVariableReference,
-  ): string | undefined {
+  ): string {
     if (typeof value === 'string') {
       return value;
     }
@@ -352,11 +349,7 @@ export class Renderer {
       return this.#resolveColorReference(value.value);
     }
 
-    if (value.type === 'variable') {
-      return this.#resolveVariable(value.value);
-    }
-
-    return undefined;
+    return this.#resolveVariable(value.value);
   }
 
   #resolveColorReference(name: string): string {
@@ -408,14 +401,18 @@ export class Renderer {
   #resolveVariable(name: StyleDefinitionVariableReference['value']): string {
     switch (name) {
       case 'initial':
-        return Initials.fromSeed(this.#options.seed()).charAt(0);
+        return this.#initials().charAt(0);
       case 'initials':
-        return Initials.fromSeed(this.#options.seed());
+        return this.#initials();
       case 'fontWeight':
         return String(this.#options.fontWeight());
       case 'fontFamily':
         return this.#options.fontFamily();
     }
+  }
+
+  #initials(): string {
+    return (this.#cachedInitials ??= Initials.fromSeed(this.#options.seed()));
   }
 
   #hashSeed(): string {

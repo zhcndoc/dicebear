@@ -1,10 +1,18 @@
 export class Xml {
+  static #entities: Record<string, string> = {
+    '&': '&amp;',
+    "'": '&apos;',
+    '"': '&quot;',
+    '<': '&lt;',
+    '>': '&gt;',
+  };
+
+  static #pattern = new RegExp(
+    `[${Object.keys(Xml.#entities).join('')}]`,
+    'g',
+  );
+
   static escape(value: string): string {
-    return value
-      .replaceAll('&', '&amp;')
-      .replaceAll("'", '&apos;')
-      .replaceAll('"', '&quot;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;');
+    return value.replace(Xml.#pattern, (ch) => Xml.#entities[ch]);
   }
 }

@@ -45,6 +45,9 @@ export type FieldDescriptor =
 export type Descriptor = Record<string, FieldDescriptor>;
 
 export class OptionsDescriptor {
+  static #rotateRange: RangeField = { type: 'range', min: -360, max: 360 };
+  static #translateRange: RangeField = { type: 'range', min: -100, max: 100 };
+
   #descriptor?: Descriptor;
   #style: Style;
 
@@ -73,9 +76,9 @@ export class OptionsDescriptor {
       fontWeight: { type: 'number', min: 1, max: 1000, list: true },
       scale: { type: 'range', min: 0 },
       borderRadius: { type: 'range', min: 0, max: 50 },
-      rotate: { type: 'range', min: -360, max: 360 },
-      translateX: { type: 'range', min: -100, max: 100 },
-      translateY: { type: 'range', min: -100, max: 100 },
+      rotate: OptionsDescriptor.#rotateRange,
+      translateX: OptionsDescriptor.#translateRange,
+      translateY: OptionsDescriptor.#translateRange,
     };
 
     for (const [name, component] of this.#style.components()) {
@@ -88,9 +91,9 @@ export class OptionsDescriptor {
         weighted: true,
       };
       result[`${name}Probability`] = { type: 'number', min: 0, max: 100 };
-      result[`${name}Rotate`] = { type: 'range', min: -360, max: 360 };
-      result[`${name}TranslateX`] = { type: 'range', min: -100, max: 100 };
-      result[`${name}TranslateY`] = { type: 'range', min: -100, max: 100 };
+      result[`${name}Rotate`] = OptionsDescriptor.#rotateRange;
+      result[`${name}TranslateX`] = OptionsDescriptor.#translateRange;
+      result[`${name}TranslateY`] = OptionsDescriptor.#translateRange;
     }
 
     for (const name of [...this.#style.colors().keys(), 'background']) {
@@ -101,7 +104,7 @@ export class OptionsDescriptor {
         list: true,
       };
       result[`${name}ColorFillStops`] = { type: 'range', min: 1 };
-      result[`${name}ColorAngle`] = { type: 'range', min: -360, max: 360 };
+      result[`${name}ColorAngle`] = OptionsDescriptor.#rotateRange;
     }
 
     return result;
