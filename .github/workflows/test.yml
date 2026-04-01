@@ -10,7 +10,7 @@ on:
   workflow_call: {}
 
 jobs:
-  test:
+  test-js:
     runs-on: ubuntu-latest
 
     strategy:
@@ -27,3 +27,27 @@ jobs:
       - run: npm ci
       - run: npx turbo run build --filter='!@dicebear/docs' --filter='!@dicebear/editor'
       - run: npx turbo run test
+
+  test-php:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version: ['8.2', '8.3', '8.4', '8.5']
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring
+      - name: Install dependencies
+        working-directory: src/php
+        run: composer install --no-interaction --prefer-dist
+      - name: Run PHPStan
+        working-directory: src/php
+        run: vendor/bin/phpstan analyse --no-progress
+      - name: Run tests
+        working-directory: src/php
+        run: vendor/bin/phpunit
