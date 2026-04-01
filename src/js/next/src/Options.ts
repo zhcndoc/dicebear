@@ -3,6 +3,7 @@ import { Prng } from './Prng.js';
 import { Color } from './Utils/Color.js';
 import { CircularColorReferenceError } from './Error/CircularColorReferenceError.js';
 import type { Style } from './Style.js';
+import type { Component } from './Style/Component.js';
 import type {
   StyleOptionsFlipValue,
   StyleOptionsColorFillValue,
@@ -158,61 +159,47 @@ export class Options<D = unknown> {
   }
 
   rotate(name?: string): number {
-    const key = name ? `${name}Rotate` : 'rotate';
-
-    return this.#memo(key, () => {
-      const raw = this.#get(key) as number | readonly number[] | undefined;
-      let values: readonly number[];
-
-      if (raw === undefined && name) {
-        const component = this.#style.components().get(name);
-        values = component ? component.rotate() : [];
-      } else {
-        values = this.#toArray(raw);
-      }
-
-      return this.#prng.float(key, values) ?? 0;
-    });
+    return this.#numericComponentOption('rotate', name, (c) => c.rotate());
   }
 
   translateX(name?: string): number {
-    const key = name ? `${name}TranslateX` : 'translateX';
-
-    return this.#memo(key, () => {
-      const raw = this.#get(key) as number | readonly number[] | undefined;
-      let values: readonly number[];
-
-      if (raw === undefined && name) {
-        const component = this.#style.components().get(name);
-        values = component ? component.translate().x() : [];
-      } else {
-        values = this.#toArray(raw);
-      }
-
-      return this.#prng.float(key, values) ?? 0;
-    });
+    return this.#numericComponentOption('translateX', name, (c) =>
+      c.translate().x(),
+    );
   }
 
   translateY(name?: string): number {
-    const key = name ? `${name}TranslateY` : 'translateY';
-
-    return this.#memo(key, () => {
-      const raw = this.#get(key) as number | readonly number[] | undefined;
-      let values: readonly number[];
-
-      if (raw === undefined && name) {
-        const component = this.#style.components().get(name);
-        values = component ? component.translate().y() : [];
-      } else {
-        values = this.#toArray(raw);
-      }
-
-      return this.#prng.float(key, values) ?? 0;
-    });
+    return this.#numericComponentOption('translateY', name, (c) =>
+      c.translate().y(),
+    );
   }
 
   resolved(): StyleOptions<D> {
     return structuredClone(this.#result) as StyleOptions<D>;
+  }
+
+  #numericComponentOption(
+    option: string,
+    name: string | undefined,
+    componentDefault: (c: Component) => readonly number[],
+  ): number {
+    const key = name
+      ? `${name}${option.charAt(0).toUpperCase()}${option.slice(1)}`
+      : option;
+
+    return this.#memo(key, () => {
+      const raw = this.#get(key) as number | readonly number[] | undefined;
+      let values: readonly number[];
+
+      if (raw === undefined && name) {
+        const component = this.#style.components().get(name);
+        values = component ? componentDefault(component) : [];
+      } else {
+        values = this.#toArray(raw);
+      }
+
+      return this.#prng.float(key, values) ?? 0;
+    });
   }
 
   #probability(name: string): number {

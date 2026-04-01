@@ -405,7 +405,7 @@ export class Renderer {
     return '';
   }
 
-  #resolveVariable(name: string): string {
+  #resolveVariable(name: StyleDefinitionVariableReference['value']): string {
     switch (name) {
       case 'initial':
         return Initials.fromSeed(this.#options.seed()).charAt(0);
@@ -415,8 +415,6 @@ export class Renderer {
         return String(this.#options.fontWeight());
       case 'fontFamily':
         return this.#options.fontFamily();
-      default:
-        return '';
     }
   }
 
