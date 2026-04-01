@@ -32,6 +32,10 @@ export class Options<D = unknown> {
     return this.#memo('idRandomization', () => this.#data.idRandomization ?? false);
   }
 
+  title(): string | undefined {
+    return this.#memo('title', () => this.#data.title);
+  }
+
   flip(): StyleOptionsFlipValue {
     return this.#memo('flip', () =>
       this.#prng.pick('flip', this.#toArray(this.#data.flip)) ?? 'none');

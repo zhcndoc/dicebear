@@ -52,6 +52,7 @@ export interface StyleOptionsBase {
   readonly seed?: string;
   readonly size?: number;
   readonly idRandomization?: boolean;
+  readonly title?: string;
   readonly flip?: StyleOptionsFlipValue | readonly StyleOptionsFlipValue[];
   readonly fontFamily?: string | readonly string[];
   readonly fontWeight?: number | readonly number[];

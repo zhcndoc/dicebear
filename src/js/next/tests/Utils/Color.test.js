@@ -77,30 +77,6 @@ describe('Color', () => {
     });
   });
 
-  describe('contrastRatio', () => {
-    it('should return 21 for black vs white', () => {
-      assert.ok(Math.abs(Color.contrastRatio('#000000', '#ffffff') - 21) < 0.01);
-    });
-
-    it('should return 1 for identical colors', () => {
-      assert.equal(Color.contrastRatio('#ff0000', '#ff0000'), 1);
-    });
-
-    it('should be symmetric', () => {
-      assert.equal(
-        Color.contrastRatio('#ff0000', '#0000ff'),
-        Color.contrastRatio('#0000ff', '#ff0000'),
-      );
-    });
-
-    it('should be case-insensitive', () => {
-      assert.equal(
-        Color.contrastRatio('#FF0000', '#000000'),
-        Color.contrastRatio('#ff0000', '#000000'),
-      );
-    });
-  });
-
   describe('sortByContrast', () => {
     it('should sort by descending contrast to reference', () => {
       const result = Color.sortByContrast(['#ffffff', '#808080', '#000000'], '#ffffff');

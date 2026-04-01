@@ -63,6 +63,7 @@ export class OptionsDescriptor {
       seed: { type: 'string' },
       size: { type: 'number', min: 1 },
       idRandomization: { type: 'boolean' },
+      title: { type: 'string' },
       flip: { type: 'enum', values: ['none', 'horizontal', 'vertical', 'both'], list: true },
       fontFamily: { type: 'string', list: true },
       fontWeight: { type: 'number', min: 1, max: 1000, list: true },

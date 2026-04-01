@@ -33,9 +33,7 @@ export class Style<D = unknown> {
   }
 
   meta(): Meta {
-    if (!this.#meta) {
-      this.#meta = new Meta(this.#data.meta ?? {});
-    }
+    this.#meta ??= new Meta(this.#data.meta ?? {});
 
     return this.#meta;
   }
@@ -45,37 +43,25 @@ export class Style<D = unknown> {
   }
 
   canvas(): Canvas {
-    if (!this.#canvas) {
-      this.#canvas = new Canvas(this.#data.canvas);
-    }
+    this.#canvas ??= new Canvas(this.#data.canvas);
 
     return this.#canvas;
   }
 
   components(): ReadonlyMap<string, Component> {
-    if (!this.#components) {
-      const map = new Map<string, Component>();
-
-      for (const [name, data] of Object.entries(this.#data.components ?? {})) {
-        map.set(name, new Component(data));
-      }
-
-      this.#components = map;
-    }
+    this.#components ??= new Map(
+      Object.entries(this.#data.components ?? {}).map(
+        ([name, data]) => [name, new Component(data)]),
+    );
 
     return this.#components;
   }
 
   colors(): ReadonlyMap<string, Color> {
-    if (!this.#colors) {
-      const map = new Map<string, Color>();
-
-      for (const [name, data] of Object.entries(this.#data.colors ?? {})) {
-        map.set(name, new Color(data));
-      }
-
-      this.#colors = map;
-    }
+    this.#colors ??= new Map(
+      Object.entries(this.#data.colors ?? {}).map(
+        ([name, data]) => [name, new Color(data)]),
+    );
 
     return this.#colors;
   }

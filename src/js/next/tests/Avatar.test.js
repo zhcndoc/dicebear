@@ -57,13 +57,24 @@ describe('Avatar', () => {
 
       assert.equal(avatar.toJson().svg, avatar.toString());
     });
+
+    it('should return a deep copy of options', () => {
+      const avatar = new Avatar(minimalStyle, { seed: 'test' });
+      const json1 = avatar.toJson();
+
+      json1.options.seed = 'modified';
+
+      const json2 = avatar.toJson();
+
+      assert.equal(json2.options.seed, 'test');
+    });
   });
 
   describe('toDataUri()', () => {
     it('should return a data URI string', () => {
       const avatar = new Avatar(minimalStyle, { seed: 'test' });
 
-      assert.ok(avatar.toDataUri().startsWith('data:image/svg+xml;utf8,'));
+      assert.ok(avatar.toDataUri().startsWith('data:image/svg+xml;charset=utf-8,'));
     });
 
     it('should contain the encoded SVG', () => {

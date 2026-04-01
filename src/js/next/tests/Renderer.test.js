@@ -17,6 +17,30 @@ describe('Renderer', () => {
       assert.ok(svg.endsWith('</svg>'));
     });
 
+    it('should include role="img" and aria-label when title is set', () => {
+      const svg = new Avatar(minimalStyle, { title: 'Test Avatar' }).toString();
+
+      assert.ok(svg.includes('role="img"'));
+      assert.ok(svg.includes('aria-label="Test Avatar"'));
+      assert.ok(svg.includes('<title>Test Avatar</title>'));
+    });
+
+    it('should escape title in aria-label and title element', () => {
+      const svg = new Avatar(minimalStyle, { title: 'A & B <C>' }).toString();
+
+      assert.ok(svg.includes('aria-label="A &amp; B &lt;C&gt;"'));
+      assert.ok(svg.includes('<title>A &amp; B &lt;C&gt;</title>'));
+    });
+
+    it('should be aria-hidden when title is not set', () => {
+      const svg = new Avatar(minimalStyle).toString();
+
+      assert.ok(svg.includes('aria-hidden="true"'));
+      assert.ok(!svg.includes('role="img"'));
+      assert.ok(!svg.includes('<title>'));
+      assert.ok(!svg.includes('aria-label'));
+    });
+
     it('should include size when set', () => {
       const svg = new Avatar(minimalStyle, { size: 64 }).toString();
 
@@ -349,10 +373,10 @@ describe('Renderer', () => {
       }).toString();
 
       assert.ok(svg.includes('<defs>'));
-      assert.ok(svg.includes('<linearGradient id="bg-color">'));
+      assert.ok(svg.includes('<linearGradient id="bg-color-'));
       assert.ok(svg.includes('stop-color="#ff0000"'));
       assert.ok(svg.includes('stop-color="#0000ff"'));
-      assert.ok(svg.includes('fill="url(#bg-color)"'));
+      assert.ok(svg.includes('fill="url(#bg-color-'));
     });
 
     it('should render radial gradient', () => {
@@ -379,8 +403,8 @@ describe('Renderer', () => {
         bgColorFill: 'radial',
       }).toString();
 
-      assert.ok(svg.includes('<radialGradient id="bg-color">'));
-      assert.ok(svg.includes('fill="url(#bg-color)"'));
+      assert.ok(svg.includes('<radialGradient id="bg-color-'));
+      assert.ok(svg.includes('fill="url(#bg-color-'));
     });
   });
 
@@ -433,10 +457,10 @@ describe('Renderer', () => {
     it('should apply border radius via clipPath', () => {
       const svg = new Avatar(minimalStyle, { borderRadius: 10 }).toString();
 
-      assert.ok(svg.includes('<clipPath id="clip">'));
+      assert.ok(svg.includes('<clipPath id="clip-'));
       assert.ok(svg.includes('rx="10"'));
       assert.ok(svg.includes('ry="10"'));
-      assert.ok(svg.includes('clip-path="url(#clip)"'));
+      assert.ok(svg.includes('clip-path="url(#clip-'));
     });
 
     it('should not apply border radius when 0', () => {
@@ -520,8 +544,8 @@ describe('Renderer', () => {
         backgroundColorFill: 'linear',
       }).toString();
 
-      assert.ok(svg.includes('<linearGradient id="background-color">'));
-      assert.ok(svg.includes('fill="url(#background-color)"'));
+      assert.ok(svg.includes('<linearGradient id="background-color-'));
+      assert.ok(svg.includes('fill="url(#background-color-'));
     });
 
     it('should apply gradient rotation', () => {

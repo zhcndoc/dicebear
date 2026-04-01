@@ -42,21 +42,20 @@ export class Color {
     return 0.2126 * linearR + 0.7152 * linearG + 0.0722 * linearB;
   }
 
-  // WCAG 2.1 contrast ratio. Returns a value between 1 (identical) and 21 (black/white).
-  // https://www.w3.org/WAI/GL/wiki/Contrast_ratio
-  static contrastRatio(a: string, b: string): number {
-    const la = this.luminance(a);
-    const lb = this.luminance(b);
-
-    return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
-  }
-
   // Returns a new array sorted by descending contrast against the reference color.
+  // https://www.w3.org/WAI/GL/wiki/Contrast_ratio
   static sortByContrast(candidates: readonly string[], refColor: string): string[] {
-    return Array.from(candidates).sort(
-      (a, b) =>
-        this.contrastRatio(b, refColor) - this.contrastRatio(a, refColor),
-    );
+    const refLum = this.luminance(refColor);
+    const withRatio = candidates.map((c) => {
+      const lum = this.luminance(c);
+      const ratio = (Math.max(lum, refLum) + 0.05) / (Math.min(lum, refLum) + 0.05);
+
+      return { color: c, ratio };
+    });
+
+    withRatio.sort((a, b) => b.ratio - a.ratio);
+
+    return withRatio.map((e) => e.color);
   }
 
   // Returns a new array with excluded colors removed.

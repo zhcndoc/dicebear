@@ -15,6 +15,10 @@ export class Prng {
       return undefined;
     }
 
+    if (items.length === 1) {
+      return items[0];
+    }
+
     const sorted = Array.from(items).sort(this.#compareByCodePoint);
     const index = Math.floor(this.getValue(key) * sorted.length);
 
@@ -77,10 +81,10 @@ export class Prng {
   // Fisher-Yates shuffle with chained Mulberry32 state.
   shuffle<T>(key: string, items: readonly T[]): T[] {
     const result = Array.from(items).sort(this.#compareByCodePoint);
-    let state = this.fnv1a(this.#seed + ':' + key);
+    let state = Prng.fnv1a(this.#seed + ':' + key);
 
     for (let i = result.length - 1; i > 0; i--) {
-      const pair = this.mulberry32(state);
+      const pair = Prng.mulberry32(state);
       const value = pair[0];
 
       state = pair[1];
@@ -97,7 +101,7 @@ export class Prng {
 
   // FNV-1a 32-bit hash. Offset basis: 0x811c9dc5, prime: 0x01000193.
   // https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function
-  fnv1a(input: string): number {
+  static fnv1a(input: string): number {
     let hash = 2166136261;
 
     for (let i = 0; i < input.length; i++) {
@@ -108,10 +112,14 @@ export class Prng {
     return hash >>> 0;
   }
 
+  static fnv1aHex(input: string): string {
+    return Prng.fnv1a(input).toString(16).padStart(8, '0');
+  }
+
   // Mulberry32 PRNG. Returns a random value between 0 and 1, and the next seed.
   // The seed advances by a fixed increment (0x6d2b79f5) per step.
   // https://gist.github.com/tommyettinger/46a874533244883189143505d203312c
-  mulberry32(seed: number): [number, number] {
+  static mulberry32(seed: number): [number, number] {
     const state = (seed + 0x6d2b79f5) | 0;
 
     let t = Math.imul(state ^ (state >>> 15), state | 1);
@@ -124,7 +132,7 @@ export class Prng {
 
   // Combines seed + key via FNV-1a, then runs one Mulberry32 step.
   getValue(key: string): number {
-    return this.mulberry32(this.fnv1a(this.#seed + ':' + key))[0];
+    return Prng.mulberry32(Prng.fnv1a(this.#seed + ':' + key))[0];
   }
 
   // Cross-language deterministic sort: compare by UTF-16 code units of

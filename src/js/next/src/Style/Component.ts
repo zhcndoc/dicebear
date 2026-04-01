@@ -29,23 +29,16 @@ export class Component {
   }
 
   translate(): ComponentTranslate {
-    if (!this.#translate) {
-      this.#translate = new ComponentTranslate(this.#data.translate ?? {});
-    }
+    this.#translate ??= new ComponentTranslate(this.#data.translate ?? {});
 
     return this.#translate;
   }
 
   variants(): ReadonlyMap<string, ComponentVariant> {
-    if (!this.#variants) {
-      const map = new Map<string, ComponentVariant>();
-
-      for (const [name, data] of Object.entries(this.#data.variants)) {
-        map.set(name, new ComponentVariant(data));
-      }
-
-      this.#variants = map;
-    }
+    this.#variants ??= new Map(
+      Object.entries(this.#data.variants).map(
+        ([name, data]) => [name, new ComponentVariant(data)]),
+    );
 
     return this.#variants;
   }

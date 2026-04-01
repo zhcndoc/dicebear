@@ -3,6 +3,7 @@ import type { Options } from './Options.js';
 import type { Canvas } from './Style/Canvas.js';
 import type { Element } from './Style/Element.js';
 import type { StyleDefinitionColorReference, StyleDefinitionAttributes, StyleDefinitionVariableReference, StyleDefinitionElementValue } from './StyleDefinition.js';
+import { Prng } from './Prng.js';
 import { Initials } from './Utils/Initials.js';
 import { License } from './Utils/License.js';
 import { Xml } from './Utils/Xml.js';
@@ -10,7 +11,8 @@ import { Xml } from './Utils/Xml.js';
 export class Renderer {
   #style: Style;
   #options: Options;
-  #defs: string[] = [];
+  #defs = new Map<string, string>();
+  #cachedSeedHash?: string;
 
   constructor(style: Style, options: Options) {
     this.#style = style;
@@ -31,21 +33,34 @@ export class Renderer {
     body = this.#applyBorderRadius(`${background}${body}`, canvas);
 
     const metadata = License.xml(this.#style.meta());
-    const defs = this.#defs.length > 0
-      ? `<defs>${this.#defs.join('')}</defs>`
+    const defs = this.#defs.size > 0
+      ? `<defs>${Array.from(this.#defs.values()).join('')}</defs>`
       : '';
     const size = this.#options.size();
+
+    const title = this.#options.title();
+    const escapedTitle = title !== undefined ? Xml.escape(title) : undefined;
 
     const attrs = [
       'xmlns="http://www.w3.org/2000/svg"',
       `viewBox="0 0 ${canvas.width()} ${canvas.height()}"`,
     ];
 
+    if (escapedTitle !== undefined) {
+      attrs.push('role="img"', `aria-label="${escapedTitle}"`);
+    } else {
+      attrs.push('aria-hidden="true"');
+    }
+
     if (size !== undefined) {
       attrs.push(`width="${size}"`, `height="${size}"`);
     }
 
-    let svg = `<svg ${attrs.join(' ')}>${metadata}${defs}${body}</svg>`;
+    const titleElement = escapedTitle !== undefined
+      ? `<title>${escapedTitle}</title>`
+      : '';
+
+    let svg = `<svg ${attrs.join(' ')}>${metadata}${defs}${titleElement}${body}</svg>`;
 
     if (this.#options.idRandomization()) {
       svg = this.#randomizeIds(svg);
@@ -100,11 +115,13 @@ export class Renderer {
       return body;
     }
 
-    this.#defs.push(
-      `<clipPath id="clip"><rect width="${canvas.width()}" height="${canvas.height()}" rx="${radius}" ry="${radius}"/></clipPath>`,
+    const id = `clip-${this.#hashSeed()}`;
+
+    this.#defs.set(id,
+      `<clipPath id="${id}"><rect width="${canvas.width()}" height="${canvas.height()}" rx="${radius}" ry="${radius}"/></clipPath>`,
     );
 
-    return `<g clip-path="url(#clip)">${body}</g>`;
+    return `<g clip-path="url(#${id})">${body}</g>`;
   }
 
   #applyRotate(body: string, canvas: Canvas): string {
@@ -141,10 +158,13 @@ export class Renderer {
       return '';
     }
 
-    return `<rect width="${canvas.width()}" height="${canvas.height()}" fill="${this.#resolveColorReference('background')}"/>`;
+    return `<rect width="${canvas.width()}" height="${canvas.height()}" fill="${Xml.escape(this.#resolveColorReference('background'))}"/>`;
   }
 
   #randomizeIds(svg: string): string {
+    // Uses Math.random() intentionally — a PRNG-based suffix would
+    // produce the same ID for the same seed, preventing two identical
+    // avatars from coexisting in the same document.
     const suffix = Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0');
     const ids = new Set<string>();
 
@@ -180,6 +200,9 @@ export class Renderer {
     }
   }
 
+  // Element names and attribute names are not escaped here — they are
+  // validated by StyleValidator against a strict allowlist schema
+  // (no <script>, no event handlers). Values are escaped via Xml.escape().
   #renderSvgElement(element: Element): string {
     const name = element.name();
 
@@ -188,10 +211,15 @@ export class Renderer {
     }
 
     if (name === 'defs') {
-      const children = this.#renderElements(element.children());
+      for (const child of element.children()) {
+        const rendered = this.#renderElement(child);
 
-      if (children.length > 0) {
-        this.#defs.push(children);
+        if (rendered.length > 0) {
+          const id = child.attributes()?.id;
+          const key = typeof id === 'string' ? id : `_${this.#defs.size}`;
+
+          this.#defs.set(key, rendered);
+        }
       }
 
       return '';
@@ -327,7 +355,7 @@ export class Renderer {
   #buildGradientDef(name: string, colors: readonly string[]): string {
     const fill = this.#options.colorFill(name);
     const rotation = this.#options.colorAngle(name);
-    const id = `${name}-color`;
+    const id = `${name}-color-${this.#hashSeed()}`;
     const tag = fill === 'linear' ? 'linearGradient' : 'radialGradient';
     const rotateAttr = rotation !== 0
       ? ` gradientTransform="rotate(${rotation}, 0.5, 0.5)"`
@@ -335,10 +363,10 @@ export class Renderer {
     const stops = colors.map((color, i) => {
       const offset = Math.round((i / (colors.length - 1)) * 100);
 
-      return `<stop offset="${offset}%" stop-color="${color}"/>`;
+      return `<stop offset="${offset}%" stop-color="${Xml.escape(color)}"/>`;
     });
 
-    this.#defs.push(`<${tag} id="${id}"${rotateAttr}>${stops.join('')}</${tag}>`);
+    this.#defs.set(id, `<${tag} id="${id}"${rotateAttr}>${stops.join('')}</${tag}>`);
 
     return `url(#${id})`;
   }
@@ -368,5 +396,9 @@ export class Renderer {
       default:
         return '';
     }
+  }
+
+  #hashSeed(): string {
+    return this.#cachedSeedHash ??= Prng.fnv1aHex(this.#options.seed());
   }
 }

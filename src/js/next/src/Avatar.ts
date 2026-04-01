@@ -31,11 +31,11 @@ export class Avatar<D = unknown> {
   toJson(): AvatarJson<D> {
     return {
       svg: this.#svg,
-      options: this.#resolvedOptions,
+      options: structuredClone(this.#resolvedOptions),
     };
   }
 
   toDataUri(): string {
-    return `data:image/svg+xml;utf8,${encodeURIComponent(this.#svg)}`;
+    return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(this.#svg)}`;
   }
 }
