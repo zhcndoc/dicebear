@@ -1,9 +1,5 @@
 <h1><img src="https://www.dicebear.com/logo-readme.svg" width="28" /> DiceBear Core (PHP)</h1>
 
-> [!NOTE]
-> This is a **read-only split** of [`dicebear/dicebear`](https://github.com/dicebear/dicebear) (path: `src/php/core`).
-> Please open issues and pull requests in the [main repository](https://github.com/dicebear/dicebear).
-
 PHP implementation of the DiceBear avatar library. Generates deterministic SVG avatars from style definitions and a seed string.
 
 DiceBear is available for multiple languages. All implementations share the same PRNG and rendering pipeline, producing identical SVG output for the same seed, style, and options — regardless of the language used.
