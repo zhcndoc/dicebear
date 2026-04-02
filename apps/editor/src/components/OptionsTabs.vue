@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import useMainStore from '@/stores/main';
+import availableStyles from '@/config/styles';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -7,12 +8,15 @@ const store = useMainStore();
 const { t } = useI18n();
 
 const tabs = computed(() => {
+  const resolvedOptions = store.selectedStylePreview.toJSON().options;
+  const configStyleOptions = availableStyles[store.selectedStyleName].options;
+
   const result: Record<string, boolean> = {
     style: Object.keys(store.availableStyles).length > 1,
   };
 
-  for (const key in store.selectedStyleCombinations) {
-    result[key] = store.selectedStyleCombinations[key].length > 1;
+  for (const key in configStyleOptions) {
+    result[key] = key in resolvedOptions;
   }
 
   return result;

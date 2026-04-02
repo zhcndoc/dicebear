@@ -1,4 +1,5 @@
-import type { JSONSchema7, JSONSchema7Definition } from 'json-schema';
+import type { Style } from '@dicebear/core';
+import { OptionsDescriptor } from '@dicebear/core';
 import type { ConfigStyleOptions } from '@/types';
 
 const defaultBackgroundColors = [
@@ -88,40 +89,23 @@ const defaultBackgroundColors = [
 ];
 
 export default function getSchemaOptions(
-  schema: JSONSchema7,
+  style: Style,
 ): ConfigStyleOptions {
+  const descriptor = new OptionsDescriptor(style).toJSON();
   const result: ConfigStyleOptions = {};
-  const properties: Record<string, JSONSchema7Definition> = {
-    backgroundColor: {
-      type: 'array',
-      items: {
-        type: 'string',
-        pattern: '^(transparent|[a-fA-F0-9]{6})$',
-      },
-    },
-    ...schema.properties,
-  };
 
-  for (const key in properties) {
-    if (false === Object.prototype.hasOwnProperty.call(properties, key)) {
-      continue;
-    }
-
-    if (key === 'style') {
-      continue;
-    }
-
-    const property = properties[key];
-
-    if (typeof property === 'boolean') {
-      continue;
-    }
-
-    const isColor = !!key.match(/Color$/);
-    const isArray = property.type === 'array';
+  for (const [key, field] of Object.entries(descriptor)) {
+    // Only show variant (enum with weighted) and color options in the editor
+    const isColor = field.type === 'color';
+    const isVariant = field.type === 'enum' && 'weighted' in field && field.weighted === true;
     const isBackgroundColor = key === 'backgroundColor';
-    const probability = properties[`${key}Probability`];
-    const hasProbability = typeof probability === 'object';
+
+    if (!isColor && !isVariant && !isBackgroundColor) {
+      continue;
+    }
+
+    const isArray = 'list' in field && field.list === true;
+    const hasProbability = `${key}Probability` in descriptor;
 
     const values = new Set<string>();
 
@@ -129,39 +113,25 @@ export default function getSchemaOptions(
       values.add('');
     }
 
-    if (property.enum) {
-      for (const value of property.enum) {
-        if (typeof value === 'string') {
-          values.add(value);
+    if (field.type === 'enum' && 'values' in field) {
+      for (const value of field.values) {
+        values.add(value);
+      }
+    }
+
+    if (isColor) {
+      // Use the style's defined color values (strip # prefix for the editor)
+      const colorName = key.replace(/Color$/, '');
+      const styleColor = style.colors().get(colorName);
+
+      if (styleColor) {
+        for (const value of styleColor.values()) {
+          values.add(value.replace(/^#/, ''));
         }
       }
     }
 
-    if (property.default && Array.isArray(property.default)) {
-      for (const value of property.default) {
-        if (typeof value === 'string') {
-          values.add(value);
-        }
-      }
-    }
-
-    if (
-      typeof property.items === 'object' &&
-      !Array.isArray(property.items) &&
-      property.items.enum
-    ) {
-      for (const value of property.items.enum) {
-        if (typeof value === 'string') {
-          values.add(value);
-        }
-      }
-    }
-
-    if (values.size <= 1) {
-      if (!isBackgroundColor) {
-        continue;
-      }
-
+    if (isBackgroundColor && values.size <= 1) {
       for (const fallbackBackgroundColor of defaultBackgroundColors) {
         values.add(fallbackBackgroundColor);
       }
@@ -177,7 +147,7 @@ export default function getSchemaOptions(
       isColor,
       isArray,
       hasProbability,
-      probability: hasProbability ? (probability.default as number) : 100,
+      probability: 100,
     };
   }
 

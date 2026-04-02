@@ -12,9 +12,20 @@ const store = useMainStore();
 const show = ref(false);
 const { isFullscreen, enter } = useFullscreen();
 
-const styleMeta = computed(
-  () => availableStyles[store.selectedStyleName].style.meta,
-);
+const styleMeta = computed(() => {
+  const meta = availableStyles[store.selectedStyleName].style.meta();
+
+  return {
+    title: meta.source().name(),
+    source: meta.source().url(),
+    creator: meta.creator().name(),
+    homepage: meta.creator().url(),
+    license: {
+      name: meta.license().name(),
+      url: meta.license().url(),
+    },
+  };
+});
 
 function onShuffle() {
   store.selectedStyleOptions = getRandomOptions(

@@ -11,7 +11,7 @@ export type ConfigStyleOption = {
 export type ConfigStyleOptions = Record<string, ConfigStyleOption>;
 
 export type ConfigStyle = {
-  style: Style<any>;
+  style: Style;
   options: ConfigStyleOptions;
 };
 

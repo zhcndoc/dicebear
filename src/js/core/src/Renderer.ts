@@ -53,6 +53,12 @@ export class Renderer {
       `viewBox="0 0 ${canvas.width()} ${canvas.height()}"`,
     ];
 
+    const rootAttributes = this.#renderAttributes(this.#style.attributes());
+
+    if (rootAttributes) {
+      attrs.push(rootAttributes.trimStart());
+    }
+
     if (escapedTitle !== undefined) {
       attrs.push('role="img"', `aria-label="${escapedTitle}"`);
     } else {

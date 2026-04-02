@@ -1,104 +1,63 @@
 import type { ConfigStyleCollection } from '@/types';
+import { Style } from '@dicebear/core';
 import getSchemaOptions from '@/utils/getSchemaOptions';
-import * as collection from '@dicebear/collection';
+
+import adventurerDef from '@dicebear/definitions/adventurer.json';
+import adventurerNeutralDef from '@dicebear/definitions/adventurer-neutral.json';
+import avataaars from '@dicebear/definitions/avataaars.json';
+import avataaarsNeutralDef from '@dicebear/definitions/avataaars-neutral.json';
+import bigEarsDef from '@dicebear/definitions/big-ears.json';
+import bigEarsNeutralDef from '@dicebear/definitions/big-ears-neutral.json';
+import bigSmileDef from '@dicebear/definitions/big-smile.json';
+import botttsDef from '@dicebear/definitions/bottts.json';
+import botttsNeutralDef from '@dicebear/definitions/bottts-neutral.json';
+import croodlesDef from '@dicebear/definitions/croodles.json';
+import croodlesNeutralDef from '@dicebear/definitions/croodles-neutral.json';
+import dylanDef from '@dicebear/definitions/dylan.json';
+import funEmojiDef from '@dicebear/definitions/fun-emoji.json';
+import loreleiDef from '@dicebear/definitions/lorelei.json';
+import loreleiNeutralDef from '@dicebear/definitions/lorelei-neutral.json';
+import micahDef from '@dicebear/definitions/micah.json';
+import mininavsDef from '@dicebear/definitions/miniavs.json';
+import notionistsDef from '@dicebear/definitions/notionists.json';
+import notionistsNeutralDef from '@dicebear/definitions/notionists-neutral.json';
+import openPeepsDef from '@dicebear/definitions/open-peeps.json';
+import personasDef from '@dicebear/definitions/personas.json';
+import pixelArtDef from '@dicebear/definitions/pixel-art.json';
+import pixelArtNeutralDef from '@dicebear/definitions/pixel-art-neutral.json';
+import toonHeadDef from '@dicebear/definitions/toon-head.json';
+
+function createStyle(definition: unknown): { style: Style; options: ReturnType<typeof getSchemaOptions> } {
+  const style = new Style(definition);
+
+  return { style, options: getSchemaOptions(style) };
+}
 
 const availableStyles: ConfigStyleCollection = {
-  adventurer: {
-    style: collection.adventurer,
-    options: getSchemaOptions(collection.adventurer.schema ?? {}),
-  },
-  adventurerNeutral: {
-    style: collection.adventurerNeutral,
-    options: getSchemaOptions(collection.adventurerNeutral.schema ?? {}),
-  },
-  avataaars: {
-    style: collection.avataaars,
-    options: getSchemaOptions(collection.avataaars.schema ?? {}),
-  },
-  avataaarsNeutral: {
-    style: collection.avataaarsNeutral,
-    options: getSchemaOptions(collection.avataaarsNeutral.schema ?? {}),
-  },
-  bigEars: {
-    style: collection.bigEars,
-    options: getSchemaOptions(collection.bigEars.schema ?? {}),
-  },
-  bigEarsNeutral: {
-    style: collection.bigEarsNeutral,
-    options: getSchemaOptions(collection.bigEarsNeutral.schema ?? {}),
-  },
-  bigSmile: {
-    style: collection.bigSmile,
-    options: getSchemaOptions(collection.bigSmile.schema ?? {}),
-  },
-  bottts: {
-    style: collection.bottts,
-    options: getSchemaOptions(collection.bottts.schema ?? {}),
-  },
-  botttsNeutral: {
-    style: collection.botttsNeutral,
-    options: getSchemaOptions(collection.botttsNeutral.schema ?? {}),
-  },
-  croodles: {
-    style: collection.croodles,
-    options: getSchemaOptions(collection.croodles.schema ?? {}),
-  },
-  croodlesNeutral: {
-    style: collection.croodlesNeutral,
-    options: getSchemaOptions(collection.croodlesNeutral.schema ?? {}),
-  },
-  dylan: {
-    style: collection.dylan,
-    options: getSchemaOptions(collection.dylan.schema ?? {}),
-  },
-  funEmoji: {
-    style: collection.funEmoji,
-    options: getSchemaOptions(collection.funEmoji.schema ?? {}),
-  },
-  lorelei: {
-    style: collection.lorelei,
-    options: getSchemaOptions(collection.lorelei.schema ?? {}),
-  },
-  loreleiNeutral: {
-    style: collection.loreleiNeutral,
-    options: getSchemaOptions(collection.loreleiNeutral.schema ?? {}),
-  },
-  micah: {
-    style: collection.micah,
-    options: getSchemaOptions(collection.micah.schema ?? {}),
-  },
-  miniavs: {
-    style: collection.miniavs,
-    options: getSchemaOptions(collection.miniavs.schema ?? {}),
-  },
-  notionists: {
-    style: collection.notionists,
-    options: getSchemaOptions(collection.notionists.schema ?? {}),
-  },
-  notionistsNeutral: {
-    style: collection.notionistsNeutral,
-    options: getSchemaOptions(collection.notionistsNeutral.schema ?? {}),
-  },
-  openPeeps: {
-    style: collection.openPeeps,
-    options: getSchemaOptions(collection.openPeeps.schema ?? {}),
-  },
-  personas: {
-    style: collection.personas,
-    options: getSchemaOptions(collection.personas.schema ?? {}),
-  },
-  pixelArt: {
-    style: collection.pixelArt,
-    options: getSchemaOptions(collection.pixelArt.schema ?? {}),
-  },
-  pixelArtNeutral: {
-    style: collection.pixelArtNeutral,
-    options: getSchemaOptions(collection.pixelArtNeutral.schema ?? {}),
-  },
-  toonHead: {
-    style: collection.toonHead,
-    options: getSchemaOptions(collection.toonHead.schema ?? {}),
-  },
+  adventurer: createStyle(adventurerDef),
+  adventurerNeutral: createStyle(adventurerNeutralDef),
+  avataaars: createStyle(avataaars),
+  avataaarsNeutral: createStyle(avataaarsNeutralDef),
+  bigEars: createStyle(bigEarsDef),
+  bigEarsNeutral: createStyle(bigEarsNeutralDef),
+  bigSmile: createStyle(bigSmileDef),
+  bottts: createStyle(botttsDef),
+  botttsNeutral: createStyle(botttsNeutralDef),
+  croodles: createStyle(croodlesDef),
+  croodlesNeutral: createStyle(croodlesNeutralDef),
+  dylan: createStyle(dylanDef),
+  funEmoji: createStyle(funEmojiDef),
+  lorelei: createStyle(loreleiDef),
+  loreleiNeutral: createStyle(loreleiNeutralDef),
+  micah: createStyle(micahDef),
+  miniavs: createStyle(mininavsDef),
+  notionists: createStyle(notionistsDef),
+  notionistsNeutral: createStyle(notionistsNeutralDef),
+  openPeeps: createStyle(openPeepsDef),
+  personas: createStyle(personasDef),
+  pixelArt: createStyle(pixelArtDef),
+  pixelArtNeutral: createStyle(pixelArtNeutralDef),
+  toonHead: createStyle(toonHeadDef),
 };
 
 export default availableStyles;

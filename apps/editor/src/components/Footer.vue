@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import useMainStore from '@/stores/main';
-import type { Style, StyleMeta } from '@dicebear/core';
+import type { Style } from '@dicebear/core';
 import { computed } from 'vue';
 import availableStyles from '@/config/styles';
 import { useI18n } from 'vue-i18n';
@@ -19,7 +19,7 @@ const { t } = useI18n();
 
 const version = __dicebearEditorVersion;
 
-const visibleStyles = computed<Style<any>[]>(() => {
+const visibleStyles = computed<Style[]>(() => {
   if (props.tab === 'style') {
     return Object.values(availableStyles).map((v) => v.style);
   }
@@ -27,22 +27,44 @@ const visibleStyles = computed<Style<any>[]>(() => {
   return [availableStyles[store.selectedStyleName].style];
 });
 
+type MetaEntry = {
+  title?: string;
+  creator?: string;
+  creatorUrl?: string;
+  sourceUrl?: string;
+  licenseName?: string;
+  licenseUrl?: string;
+};
+
 const metaList = computed(() => {
-  const result: StyleMeta[] = [];
-  const knownWork: string[] = [];
+  const result: MetaEntry[] = [];
+  const knownSources: string[] = [];
 
-  for (const val of visibleStyles.value) {
-    if (!val.meta || val.meta.creator === 'Florian Körner') continue;
+  for (const style of visibleStyles.value) {
+    const meta = style.meta();
+    const creatorName = meta.creator().name();
+    const sourceUrl = meta.source().url();
 
-    if (val.meta.source) {
-      if (knownWork.includes(val.meta.source)) {
+    if (!creatorName || creatorName === 'Florian Körner') {
+      continue;
+    }
+
+    if (sourceUrl) {
+      if (knownSources.includes(sourceUrl)) {
         continue;
       }
 
-      knownWork.push(val.meta.source);
+      knownSources.push(sourceUrl);
     }
 
-    result.push(val.meta);
+    result.push({
+      title: meta.source().name(),
+      creator: creatorName,
+      creatorUrl: meta.creator().url(),
+      sourceUrl,
+      licenseName: meta.license().name(),
+      licenseUrl: meta.license().url(),
+    });
   }
 
   return result;
@@ -83,20 +105,20 @@ const metaList = computed(() => {
       {{ t('licenses') }}
     </div>
     <p class="footer-licenses" v-if="metaList.length > 0">
-      <template v-for="meta in metaList" :key="meta.source">
-        <a :href="meta.source" target="_blank" rel="noopener noreferrer">{{
+      <template v-for="meta in metaList" :key="meta.sourceUrl">
+        <a :href="meta.sourceUrl" target="_blank" rel="noopener noreferrer">{{
           meta.title
         }}</a>
         by
-        <a :href="meta.homepage" target="_blank" rel="noopener noreferrer">{{
+        <a :href="meta.creatorUrl" target="_blank" rel="noopener noreferrer">{{
           meta.creator
         }}</a>
         /
         <a
-          :href="meta.license?.url"
+          :href="meta.licenseUrl"
           target="_blank"
           rel="noopener noreferrer"
-          >{{ meta.license?.name.replace(/\.$/, '') }}</a
+          >{{ meta.licenseName?.replace(/\.$/, '') }}</a
         >.
         {{ ' ' }}
       </template>

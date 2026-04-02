@@ -1,12 +1,11 @@
 import type { SelectedStyleOptions } from '@/types';
-import type { StyleOptions } from '@dicebear/core';
 import styleCollection from '@/config/styles';
 
 export default function getAvatarOptions(
   styleName: string,
   options: SelectedStyleOptions,
 ): Record<string, unknown> {
-  const result: StyleOptions<any> = {
+  const result: Record<string, unknown> = {
     size: 512,
   };
 
@@ -20,10 +19,20 @@ export default function getAvatarOptions(
     const avatarOption = options[key];
     const styleOption = configStyleOptions[key];
 
+    if (!styleOption) {
+      continue;
+    }
+
+    if (styleOption.isColor && (!avatarOption || avatarOption === 'transparent')) {
+      continue;
+    }
+
+    const value = styleOption.isColor ? `#${avatarOption}` : avatarOption;
+
     if (styleOption.isArray) {
-      result[key] = avatarOption ? [avatarOption] : [];
+      result[key] = value ? [value] : [];
     } else {
-      result[key] = avatarOption;
+      result[key] = value;
     }
 
     if (styleOption.hasProbability) {

@@ -1,14 +1,13 @@
 import type { SelectedStyleOptions } from '@/types';
-import type { Result } from '@dicebear/core';
-import { createAvatar as createAvatarCore } from '@dicebear/core';
+import { Avatar } from '@dicebear/core';
 import getAvatarOptions from './getAvatarOptions';
 import availableStyles from '@/config/styles';
 
 export function createAvatar(
   styleName: string,
   options: SelectedStyleOptions,
-): Result {
-  return createAvatarCore(
+): Avatar {
+  return new Avatar(
     availableStyles[styleName].style,
     getAvatarOptions(styleName, options),
   );
