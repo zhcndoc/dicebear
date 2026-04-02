@@ -1,6 +1,5 @@
 # Cache and log files
 .DS_Store
-yarn-error.log
 
 # Dependencies
 node_modules
@@ -9,4 +8,5 @@ node_modules
 lib
 
 # Generated files
-src/options.ts
+src/Validator/StyleValidator.js
+src/Validator/OptionsValidator.js

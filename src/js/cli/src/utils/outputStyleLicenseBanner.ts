@@ -1,36 +1,33 @@
-// @ts-ignore
 import type { Style } from '@dicebear/core';
 import chalk from 'chalk';
 import chalkTemplate from 'chalk-template';
 
-export function outputStyleLicenseBanner(name: string, style: Style<any>) {
-  let banner = ['-'.repeat(64)];
-  let creator = Array.isArray(style.meta?.creator)
-    ? style.meta?.creator.join(', ')
-    : style.meta?.creator;
+export function outputStyleLicenseBanner(name: string, style: Style) {
+  const meta = style.meta();
+  const sourceName = meta.source().name();
+  const creatorName = meta.creator().name();
+  const sourceUrl = meta.source().url();
+  const licenseName = meta.license().name();
+  const licenseUrl = meta.license().url();
 
-  if (style.meta?.title && creator) {
-    banner.push(chalkTemplate`{bold ${style.meta.title}} by {bold ${creator}}`);
-  } else if (style.meta?.title) {
-    banner.push(chalkTemplate`{bold ${style.meta.title}}`);
-  } else if (creator) {
-    banner.push(chalkTemplate`{bold ${name}} by {bold ${creator}}`);
+  const banner = ['-'.repeat(64)];
+
+  if (sourceName && creatorName) {
+    banner.push(chalkTemplate`{bold ${sourceName}} by {bold ${creatorName}}`);
+  } else if (sourceName) {
+    banner.push(chalkTemplate`{bold ${sourceName}}`);
+  } else if (creatorName) {
+    banner.push(chalkTemplate`{bold ${name}} by {bold ${creatorName}}`);
   }
 
   banner.push('');
 
-  if (style.meta?.homepage) {
-    banner.push(`Homepage: ${style.meta.homepage}`);
+  if (sourceUrl) {
+    banner.push(`Source: ${sourceUrl}`);
   }
 
-  if (style.meta?.source) {
-    banner.push(`Source: ${style.meta.source}`);
-  }
-
-  if (style.meta?.license) {
-    banner.push(
-      `License: ${style.meta.license.name} - ${style.meta.license.url}`,
-    );
+  if (licenseName) {
+    banner.push(`License: ${licenseName}${licenseUrl ? ` - ${licenseUrl}` : ''}`);
   }
 
   banner.push('-'.repeat(64));

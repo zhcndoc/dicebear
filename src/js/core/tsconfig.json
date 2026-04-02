@@ -1,11 +1,14 @@
 {
   "extends": "@tsconfig/recommended/tsconfig.json",
   "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
     "module": "ES2020",
-    "target": "ES2019",
+    "target": "ES2021",
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "declaration": true,
     "outDir": "./lib"
   },
-  "include": ["./src/**/*.ts"]
+  "include": ["./src/**/*.ts", "./src/**/*.js"]
 }

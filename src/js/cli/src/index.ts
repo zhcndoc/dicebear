@@ -1,20 +1,19 @@
 import updateNotifier from 'update-notifier';
-import * as collection from '@dicebear/collection';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
 import { getPackageJson } from './utils/getPackageJson.js';
 import { addStyleCommand } from './utils/addStyleCommand.js';
+import { loadStyles } from './utils/loadStyles.js';
 
 (async () => {
   const pkg = await getPackageJson();
   updateNotifier({ pkg }).notify();
 
   const cli = yargs(hideBin(process.argv));
+  const styles = loadStyles();
 
-  for (let name of Object.keys(collection)) {
-    const style = collection[name as keyof typeof collection];
-
+  for (const [name, style] of styles) {
     addStyleCommand(cli, name, style);
   }
 

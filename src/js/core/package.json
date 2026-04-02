@@ -1,10 +1,13 @@
 {
   "name": "@dicebear/core",
-  "version": "9.4.2",
-  "description": "An avatar library for designers and developers.",
+  "version": "9.4.0",
+  "description": "Unique avatars from dozens of styles — deterministic, customizable, vector-based.",
   "keywords": [
     "avatar",
-    "identicon"
+    "identicon",
+    "avataaars",
+    "bottts",
+    "dicebear"
   ],
   "homepage": "https://www.dicebear.com",
   "bugs": {
@@ -20,27 +23,36 @@
   "main": "./lib/index.js",
   "exports": "./lib/index.js",
   "types": "./lib/index.d.ts",
+  "sideEffects": false,
   "files": [
     "LICENSE",
     "lib",
     "README.md"
   ],
   "scripts": {
-    "prebuild": "del-cli lib",
+    "prebuild": "del-cli lib && node scripts/compile-schema.mjs",
     "build": "tsc",
     "prepublishOnly": "npm run build",
+    "prepack": "node scripts/extend-license.mjs",
+    "postpack": "git checkout LICENSE",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "eslint src/",
     "test": "node --test"
   },
-  "dependencies": {
-    "@types/json-schema": "^7.0.15"
-  },
   "devDependencies": {
+    "@dicebear/schema": "^0.9.0",
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
     "@tsconfig/recommended": "^1.0.13",
+    "ajv": "^8.17.1",
     "del-cli": "^7.0.0",
-    "typescript": "^5.9.3"
+    "eslint": "^10.1.0",
+    "eslint-config-prettier": "^10.1.8",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.57.2"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.0.0"
   },
   "publishConfig": {
     "access": "public"

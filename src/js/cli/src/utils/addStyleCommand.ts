@@ -1,27 +1,16 @@
 import type { Style } from '@dicebear/core';
-import { createAvatar } from '@dicebear/core';
-import { toJpeg, toPng, toWebp, toAvif } from '@dicebear/converter';
 import yargs from 'yargs';
-import cliProgress from 'cli-progress';
-import PQueue from 'p-queue';
-import os from 'node:os';
-import * as path from 'node:path';
-import fs from 'fs-extra';
-import { exiftool } from 'exiftool-vendored';
+import chalk from 'chalk';
 
-import { getStyleCommandSchema } from './getStyleCommandSchema.js';
-import { getOptionsBySchema } from './getOptionsBySchema.js';
-import { validateInputBySchema } from './validateInputBySchema.js';
-import { outputStyleLicenseBanner } from './outputStyleLicenseBanner.js';
-import { createRandomSeed } from './createRandomSeed.js';
-import { writeFile } from './writeFile.js';
+import { getStyleCommandOptions } from './getStyleCommandOptions.js';
+import { handleStyleCommand } from './handleStyleCommand.js';
 
 export function addStyleCommand(
   cli: yargs.Argv<{}>,
   name: string,
-  style: Style<any>,
+  style: Style,
 ) {
-  const schema = getStyleCommandSchema(style);
+  const options = getStyleCommandOptions(style);
 
   return cli.command({
     command: `${name} [outputPath]`,
@@ -29,123 +18,17 @@ export function addStyleCommand(
     builder: (yargs) => {
       return yargs
         .default('outputPath', '.')
-        .options(getOptionsBySchema(schema));
+        .options(options);
     },
     handler: async (argv) => {
-      const bar = new cliProgress.SingleBar(
-        {},
-        cliProgress.Presets.shades_classic,
-      );
+      try {
+        await handleStyleCommand(argv, name, style);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
 
-      const validated = validateInputBySchema(argv, schema);
-
-      const format = validated.format as string;
-      const count = validated.count as number;
-      const includeExif = validated.exif as boolean;
-      const json = validated.json as boolean;
-
-      outputStyleLicenseBanner(name, style);
-
-      bar.start(count, 0);
-
-      const queue = new PQueue({ concurrency: os.cpus().length || 1 });
-
-      queue.on('next', () => {
-        bar.update(count - queue.size - queue.pending);
-      });
-
-      const outputPath = path.resolve(process.cwd(), argv.outputPath as string);
-
-      await fs.ensureDir(outputPath);
-
-      for (let i = 0; i < count; i++) {
-        queue.add(async () => {
-          const fileName = path.resolve(
-            process.cwd(),
-            outputPath,
-            `${name}-${i}.${format}`,
-          );
-
-          const avatar = createAvatar(
-            style,
-            count <= 1
-              ? validated
-              : {
-                  ...validated,
-                  seed: createRandomSeed(),
-                },
-          );
-
-          switch (format) {
-            case 'svg':
-              await writeFile(fileName, avatar.toString());
-              break;
-
-            case 'png':
-              await writeFile(
-                fileName,
-                await toPng(avatar.toString(), { includeExif, size: validated.size as number }).toArrayBuffer(),
-              );
-              break;
-
-            case 'jpg':
-            case 'jpeg':
-              await writeFile(
-                fileName,
-                await toJpeg(avatar.toString(), {
-                  includeExif,
-                  size: validated.size as number,
-                }).toArrayBuffer(),
-              );
-              break;
-
-            case 'webp':
-              await writeFile(
-                fileName,
-                await toWebp(avatar.toString(), {
-                  includeExif,
-                  size: validated.size as number,
-                }).toArrayBuffer(),
-              );
-              break;
-
-            case 'avif':
-              await writeFile(
-                fileName,
-                await toAvif(avatar.toString(), {
-                  includeExif,
-                  size: validated.size as number,
-                }).toArrayBuffer(),
-              );
-              break;
-
-            case 'json':
-              await writeFile(
-                fileName,
-                JSON.stringify(avatar.toJSON(), null, 2),
-              );
-              break;
-          }
-
-          if (json && 'json' !== format) {
-            const jsonFileName = path.resolve(
-              process.cwd(),
-              outputPath,
-              `${name}-${i}.json`,
-            );
-
-            await fs.writeJSON(jsonFileName, avatar.toJSON(), { spaces: 2 });
-          }
-
-          bar.increment();
-        });
+        console.error(chalk.red(`\nError: ${message}`));
+        process.exit(1);
       }
-
-      await queue.onIdle();
-
-      bar.stop();
-
-      exiftool.end();
     },
   });
 }
