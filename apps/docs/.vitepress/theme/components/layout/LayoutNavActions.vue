@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useData } from 'vitepress';
 import { computed } from 'vue';
-import { Search, Sun, Moon } from 'lucide-vue-next';
+import { Search, Sun, Moon } from '@lucide/vue';
 import { siGithub } from 'simple-icons';
 import UiIcon from '@theme/components/ui/UiIcon.vue';
 import type { ThemeOptions } from '@theme/types';

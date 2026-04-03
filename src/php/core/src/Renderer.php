@@ -120,9 +120,12 @@ class Renderer
             return $body;
         }
 
+        $rx = ($radius / 100) * $canvas->width();
+        $ry = ($radius / 100) * $canvas->height();
+
         $id = 'clip-' . $this->hashSeed();
 
-        $this->defs[$id] = "<clipPath id=\"{$id}\"><rect width=\"{$canvas->width()}\" height=\"{$canvas->height()}\" rx=\"{$radius}\" ry=\"{$radius}\"/></clipPath>";
+        $this->defs[$id] = "<clipPath id=\"{$id}\"><rect width=\"{$canvas->width()}\" height=\"{$canvas->height()}\" rx=\"{$rx}\" ry=\"{$ry}\"/></clipPath>";
 
         return "<g clip-path=\"url(#{$id})\">{$body}</g>";
     }

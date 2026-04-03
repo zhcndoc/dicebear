@@ -1,19 +1,21 @@
 <script setup lang="ts">
-import { createAvatar, StyleOptions } from '@dicebear/core';
-import { getAvatarApiUrl, loadAvatarStyle } from '@theme/utils/avatar';
+import { Avatar } from '@dicebear/core';
+import { getAvatarApiUrl, loadAvatarStyle, clonePlain } from '@theme/utils/avatar';
 import { computedAsync } from '@vueuse/core';
 
 const props = withDefaults(
   defineProps<{
     size?: number;
     styleName: string;
-    styleOptions: StyleOptions<any>;
+    styleOptions: Record<string, unknown>;
     mode?: 'library' | 'http-api';
     alt?: string;
+    bare?: boolean;
   }>(),
   {
     mode: 'http-api',
     alt: 'avatar',
+    bare: false,
   }
 );
 
@@ -24,7 +26,7 @@ const svg = computedAsync(() => {
   switch (props.mode) {
     case 'library':
       return loadAvatarStyle(styleName).then((avatarStyle) =>
-        createAvatar(avatarStyle, styleOptions).toDataUri()
+        new Avatar(avatarStyle, clonePlain(styleOptions)).toDataUri()
       );
     case 'http-api':
       return getAvatarApiUrl(styleName, styleOptions);
@@ -33,7 +35,7 @@ const svg = computedAsync(() => {
 </script>
 
 <template>
-  <div class="ui-avatar">
+  <div class="ui-avatar" :class="{ 'ui-avatar-bare': bare }">
     <img :src="svg" v-if="svg" :alt="alt" loading="lazy" />
   </div>
 </template>
@@ -66,6 +68,13 @@ const svg = computedAsync(() => {
   img {
     height: 100%;
     width: 100%;
+  }
+
+  &-bare {
+    width: 100%;
+    height: auto;
+    border-radius: 0;
+    background: none;
   }
 }
 </style>

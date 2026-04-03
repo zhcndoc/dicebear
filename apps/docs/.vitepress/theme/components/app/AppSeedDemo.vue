@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { kebabCase, camelCase, capitalCase } from 'change-case';
-import { Dice5, ChevronDown, Sparkles } from 'lucide-vue-next';
+import { Dice5, ChevronDown, Sparkles } from '@lucide/vue';
 import { UiAvatar, UiHeadline, UiDescription, UiBadge, UiContainer, UiSection, UiWindow } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 import { useAvatarStyleList, useAvatarStyleMeta } from '../../composables/avatar';

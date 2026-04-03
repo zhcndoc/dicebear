@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import UiAlert from '@theme/components/ui/UiAlert.vue';
+import Message from 'primevue/message';
 import PlaygroundLicenseText from './PlaygroundLicenseText.vue';
 
 defineProps<{
@@ -8,10 +8,20 @@ defineProps<{
 </script>
 
 <template>
-  <UiAlert type="info" class="dialog-license">
+  <Message severity="info" :closable="false" class="playground-license-alert">
     <strong>
       Please note the following license before using the avatar:
     </strong>
     <PlaygroundLicenseText :style="styleName" />
-  </UiAlert>
+  </Message>
 </template>
+
+<style scoped lang="scss">
+.playground-license-alert {
+  :deep(strong) {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+}
+</style>

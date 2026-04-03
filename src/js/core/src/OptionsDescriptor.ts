@@ -103,7 +103,7 @@ export class OptionsDescriptor {
         values: ['solid', 'linear', 'radial'],
         list: true,
       };
-      result[`${name}ColorFillStops`] = { type: 'range', min: 1 };
+      result[`${name}ColorFillStops`] = { type: 'range', min: 2 };
       result[`${name}ColorAngle`] = OptionsDescriptor.#rotateRange;
     }
 

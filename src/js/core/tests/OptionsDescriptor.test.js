@@ -56,7 +56,7 @@ describe('OptionsDescriptor', () => {
 
       assert.deepEqual(schema.backgroundColor, { type: 'color', list: true });
       assert.deepEqual(schema.backgroundColorFill, { type: 'enum', values: ['solid', 'linear', 'radial'], list: true });
-      assert.deepEqual(schema.backgroundColorFillStops, { type: 'range', min: 1 });
+      assert.deepEqual(schema.backgroundColorFillStops, { type: 'range', min: 2 });
       assert.deepEqual(schema.backgroundColorAngle, { type: 'range', min: -360, max: 360 });
     });
   });

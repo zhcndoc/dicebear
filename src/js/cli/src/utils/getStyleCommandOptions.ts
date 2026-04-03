@@ -34,15 +34,20 @@ export function getStyleCommandOptions(style: Style): Record<string, Options> {
         option.type = 'string';
         break;
       case 'number':
-      case 'range':
         option.type = 'number';
+        break;
+      case 'range':
+        option.type = 'string';
         break;
       case 'boolean':
         option.type = 'boolean';
         break;
       case 'enum':
         option.type = 'string';
-        option.choices = field.values as string[];
+        if (!field.weighted) {
+          option.choices = field.values as string[];
+        }
+
         break;
       case 'color':
         option.type = 'string';

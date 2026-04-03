@@ -1,8 +1,8 @@
 ---
+layout: page
 title: Playground
 editLink: false
 aside: false
-sidebarMenuLabel: Options
 
 description: >
   Free online avatar maker. Design custom profile pictures, preview avatar

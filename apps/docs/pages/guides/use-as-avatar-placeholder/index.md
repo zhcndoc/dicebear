@@ -7,7 +7,7 @@ description: >
 ---
 
 <script setup>
-import { Fingerprint, Zap, Server, Palette } from 'lucide-vue-next';
+import { Fingerprint, Zap, Server, Palette } from '@lucide/vue';
 import BrowserPreview from '@theme/components/ui/UiBrowserPreview.vue';
 import DocsHighlights from '@theme/components/docs/DocsHighlights.vue';
 import DocsStyleGrid from '@theme/components/docs/DocsStyleGrid.vue';

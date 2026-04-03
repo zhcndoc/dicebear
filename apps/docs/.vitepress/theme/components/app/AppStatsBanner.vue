@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { Activity, Server, Download, ArrowRight } from 'lucide-vue-next';
+import { Activity, Server, Download, ArrowRight } from '@lucide/vue';
 import { UiContainer, UiSection, UiSectionHeader, UiCard, UiIconBox, UiButton } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 import { useApiStats } from '../../composables/useApiStats';

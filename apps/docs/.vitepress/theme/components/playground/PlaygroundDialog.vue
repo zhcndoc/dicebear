@@ -1,33 +1,34 @@
 <script setup lang="ts">
-import { X } from 'lucide-vue-next';
-import { Dialog } from '@ark-ui/vue/dialog';
+import { computed } from 'vue';
+import Dialog from 'primevue/dialog';
 
-defineProps<{
+const props = defineProps<{
   open: boolean;
   maxWidth?: string;
+  header?: string;
 }>();
 
 const emit = defineEmits<{
   'update:open': [value: boolean];
 }>();
 
-function onOpenChange(details: { open: boolean }) {
-  emit('update:open', details.open);
-}
+const visible = computed({
+  get: () => props.open,
+  set: (val: boolean) => emit('update:open', val),
+});
 </script>
 
 <template>
-  <Dialog.Root :open="open" lazy-mount unmount-on-exit @open-change="onOpenChange">
-    <Teleport to="body">
-      <Dialog.Backdrop />
-      <Dialog.Positioner>
-        <Dialog.Content class="dialog" :style="{ maxWidth: maxWidth || '540px', width: '100%' }">
-          <button class="dialog-close-btn" @click="emit('update:open', false)" title="Close">
-            <X :size="20" />
-          </button>
-          <slot />
-        </Dialog.Content>
-      </Dialog.Positioner>
-    </Teleport>
-  </Dialog.Root>
+  <Dialog
+    v-model:visible="visible"
+    modal
+    :closable="true"
+    :header="header || ' '"
+    :style="{ width: maxWidth || '540px' }"
+    :pt="{
+      content: { class: 'playground-dialog-content' },
+    }"
+  >
+    <slot />
+  </Dialog>
 </template>

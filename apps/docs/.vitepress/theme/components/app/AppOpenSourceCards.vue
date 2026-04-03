@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Star, Heart, Scale, ArrowRight } from 'lucide-vue-next';
+import { Star, Heart, Scale, ArrowRight } from '@lucide/vue';
 import { siGithub } from 'simple-icons';
 import { UiButton, UiHeadline, UiDescription, UiContainer, UiSection, UiCard, UiIconBox, UiIcon } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';

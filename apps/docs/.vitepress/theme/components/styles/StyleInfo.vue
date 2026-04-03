@@ -25,12 +25,8 @@ const schemaJsonHttpApiUrl = computed(() => {
   )}/schema.json`;
 });
 
-const exampleCollectionImport = computed(() => {
-  return `import { ${props.styleName} } from '@dicebear/collection';`;
-});
-
-const examplePackageImport = computed(() => {
-  return `import * as style from '@dicebear/${kebabCase(props.styleName)}';`;
+const exampleDefinitionImport = computed(() => {
+  return `import definition from '@dicebear/definitions/${kebabCase(props.styleName)}.json';`;
 });
 
 const exampleCliCommand = computed(() => {
@@ -53,15 +49,9 @@ const exampleCliCommand = computed(() => {
 
     <tbody>
       <tr>
-        <td>Collection Import</td>
+        <td>Definition Import</td>
         <td>
-          <Code lang="js" :code="exampleCollectionImport" />
-        </td>
-      </tr>
-      <tr>
-        <td>Package Import</td>
-        <td>
-          <Code lang="js" :code="examplePackageImport" />
+          <Code lang="js" :code="exampleDefinitionImport" />
         </td>
       </tr>
       <tr>

@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { kebabCase } from 'change-case';
 import Prando from 'prando';
-import { ArrowRight, ArrowLeft } from 'lucide-vue-next';
+import { ArrowRight, ArrowLeft } from '@lucide/vue';
 import { UiAvatar, UiButton, UiContainer, UiSection, UiSectionHeader } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 import { useAvatarStyleList } from '../../composables/avatar';

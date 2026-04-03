@@ -2,7 +2,7 @@
 import { useData } from 'vitepress';
 import { ThemeOptions } from '@theme/types';
 import { useStyleFiltering } from '@theme/composables/useStyleFiltering';
-import { Search, CircleUser, Scale, ArrowRight, Filter, X } from 'lucide-vue-next';
+import { Search, CircleUser, Scale, ArrowRight, Filter, X } from '@lucide/vue';
 import { UiAvatar } from '../ui';
 
 const { theme } = useData<ThemeOptions>();

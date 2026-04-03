@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Globe, Code, Terminal } from 'lucide-vue-next';
+import { Globe, Code, Terminal } from '@lucide/vue';
 import { UiContainer, UiSection, UiSectionHeader, UiCard, UiIconBox, UiCode } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
@@ -8,10 +8,11 @@ const sectionRef = ref();
 const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
 
 const plainCode = {
-  js: `import { createAvatar } from '@dicebear/core';
-import { lorelei } from '@dicebear/collection';
+  js: `import { Style, Avatar } from '@dicebear/core';
+import lorelei from '@dicebear/definitions/lorelei.json';
 
-const svg = createAvatar(lorelei, {
+const style = new Style(lorelei);
+const svg = new Avatar(style, {
   seed: 'Mia',
 }).toString();`,
   api: `https://api.dicebear.com/9.x/lorelei/svg?seed=Mia`,

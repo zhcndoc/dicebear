@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, useSlots, computed } from 'vue';
-import { Play, ArrowRight } from 'lucide-vue-next';
+import { Play, ArrowRight } from '@lucide/vue';
 import { UiAvatar, UiButton, UiHeadline, UiDescription, UiBadge, UiContainer, UiSection } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 

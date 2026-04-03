@@ -3,7 +3,6 @@ import { defineConfig, HeadConfig } from 'vitepress';
 import { ThemeOptions } from '@theme/types';
 
 import sidebarDocs from './config/sidebarDocs';
-import sidebarPlayground from './config/sidebarPlayground';
 import sidebarStyles from './config/sidebarStyles';
 import avatarStyles from './config/avatarStyles';
 
@@ -147,7 +146,6 @@ export default defineConfig<ThemeOptions>({
     ssr: {
       noExternal: [
         'vue-countup-v3',
-        '@ark-ui/vue',
         'vue-chartjs',
         'globe.gl',
         'three',
@@ -202,7 +200,6 @@ export default defineConfig<ThemeOptions>({
       '/styles/': sidebarStyles,
       '/how-to-use/': sidebarDocs,
       '/guides/': sidebarDocs,
-      '/playground/': sidebarPlayground,
     },
   },
   sitemap: {

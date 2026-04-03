@@ -1,27 +1,21 @@
 <script setup lang="ts">
-import { Download } from 'lucide-vue-next';
+import { ref } from 'vue';
+import { Download } from '@lucide/vue';
 import { getAvatarApiUrl } from '@theme/utils/avatar';
 import { UiAvatar } from '../ui';
 import PlaygroundConfetti from './PlaygroundConfetti.vue';
 import PlaygroundDialog from './PlaygroundDialog.vue';
 import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
-import { Tooltip } from '@ark-ui/vue/tooltip';
-import { Menu } from '@ark-ui/vue/menu';
+import Button from 'primevue/button';
+import Menu from 'primevue/menu';
 
 const props = defineProps<{
   seed: string;
 }>();
 
 const { store, open, confettiKey, options, showDialog } = usePlaygroundDialog(() => props.seed);
-
-const menuItems = [
-  { label: 'SVG', format: 'svg' },
-  { label: 'PNG', format: 'png' },
-  { label: 'JPEG', format: 'jpg' },
-  { label: 'WebP', format: 'webp' },
-  { label: 'AVIF', format: 'avif' },
-];
+const menu = ref();
 
 async function downloadBinary(format: string) {
   showDialog();
@@ -43,36 +37,23 @@ async function downloadBinary(format: string) {
 
   URL.revokeObjectURL(file);
 }
+
+const menuItems = [
+  { label: 'SVG', command: () => downloadBinary('svg') },
+  { label: 'PNG', command: () => downloadBinary('png') },
+  { label: 'JPEG', command: () => downloadBinary('jpg') },
+  { label: 'WebP', command: () => downloadBinary('webp') },
+  { label: 'AVIF', command: () => downloadBinary('avif') },
+];
 </script>
 
 <template>
-  <Menu.Root>
-    <Tooltip.Root>
-      <Tooltip.Trigger as-child>
-        <div>
-          <Menu.Trigger class="playground-button-download">
-            <Download :size="16" />
-          </Menu.Trigger>
-        </div>
-      </Tooltip.Trigger>
-      <Tooltip.Positioner>
-        <Tooltip.Content>Download</Tooltip.Content>
-      </Tooltip.Positioner>
-    </Tooltip.Root>
-
-    <Menu.Positioner>
-      <Menu.Content>
-        <Menu.Item
-          v-for="item in menuItems"
-          :key="item.format"
-          :value="item.format"
-          @click="downloadBinary(item.format)"
-        >
-          {{ item.label }}
-        </Menu.Item>
-      </Menu.Content>
-    </Menu.Positioner>
-  </Menu.Root>
+  <Button label="Download" severity="secondary" @click="(e: Event) => menu.toggle(e)">
+    <template #icon>
+      <Download :size="15" />
+    </template>
+  </Button>
+  <Menu ref="menu" :model="menuItems" :popup="true" />
 
   <PlaygroundDialog v-model:open="open">
     <PlaygroundConfetti :key="confettiKey" />
@@ -92,24 +73,3 @@ async function downloadBinary(format: string) {
     </div>
   </PlaygroundDialog>
 </template>
-
-<style scoped lang="scss">
-.playground-button-download {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 8px;
-  background: var(--vp-c-bg);
-  color: var(--vp-c-text-2);
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-
-  &:hover {
-    color: var(--vp-c-brand-1);
-    background: var(--vp-c-brand-soft);
-  }
-}
-</style>

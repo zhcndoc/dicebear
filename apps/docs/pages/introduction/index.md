@@ -7,7 +7,7 @@ description: >
 ---
 
 <script setup>
-import { Palette, Code2, Globe, Terminal } from 'lucide-vue-next';
+import { Palette, Code2, Globe, Terminal } from '@lucide/vue';
 import DocsHighlights from '@theme/components/docs/DocsHighlights.vue';
 
 const highlights = [

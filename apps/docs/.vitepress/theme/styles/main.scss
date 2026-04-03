@@ -1,5 +1,82 @@
 @use './vars.scss' as *;
-@use './ark-ui.scss';
+@use './playground-dialog.scss';
+
+/* ----------------------------------------------------------------
+ * Bridge PrimeVue to VitePress
+ * PrimeVue's Aura/zinc palette clashes with VitePress's grays.
+ * Remap all PrimeVue component tokens to VitePress variables so
+ * both systems share the same visual language.
+ * ---------------------------------------------------------------- */
+:root {
+  --pg-border: var(--vp-c-divider);
+}
+
+.dark {
+  --pg-border: var(--vp-c-border);
+}
+
+:root {
+  --p-content-background: var(--vp-c-bg);
+  --p-content-hover-background: var(--vp-c-bg-soft);
+  --p-content-border-color: var(--pg-border);
+  --p-content-color: var(--vp-c-text-1);
+  --p-content-hover-color: var(--vp-c-text-1);
+  --p-text-color: var(--vp-c-text-1);
+  --p-text-hover-color: var(--vp-c-text-1);
+  --p-text-muted-color: var(--vp-c-text-2);
+  --p-text-hover-muted-color: var(--vp-c-text-1);
+
+  // Accordion
+  --p-accordion-header-background: var(--vp-c-bg);
+  --p-accordion-header-hover-background: var(--vp-c-bg-soft);
+  --p-accordion-header-active-background: var(--vp-c-bg);
+  --p-accordion-header-active-hover-background: var(--vp-c-bg-soft);
+  --p-accordion-header-color: var(--vp-c-text-2);
+  --p-accordion-header-hover-color: var(--vp-c-text-1);
+  --p-accordion-header-active-color: var(--vp-c-text-1);
+  --p-accordion-header-active-hover-color: var(--vp-c-text-1);
+  --p-accordion-header-toggle-icon-color: var(--vp-c-text-3);
+  --p-accordion-header-toggle-icon-hover-color: var(--vp-c-text-1);
+  --p-accordion-header-toggle-icon-active-color: var(--vp-c-text-1);
+  --p-accordion-content-background: var(--vp-c-bg);
+  --p-accordion-content-color: var(--vp-c-text-1);
+  --p-accordion-panel-border-color: var(--pg-border);
+  --p-accordion-header-border-color: var(--pg-border);
+  --p-accordion-content-border-color: var(--pg-border);
+
+  // Toolbar
+  --p-toolbar-background: var(--vp-c-bg);
+  --p-toolbar-border-color: var(--pg-border);
+  --p-toolbar-color: var(--vp-c-text-1);
+}
+
+/* ----------------------------------------------------------------
+ * Playground shared field layout (used across Component/Color/Transform)
+ * ---------------------------------------------------------------- */
+.pg-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pg-field-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+}
+
+.pg-field-value {
+  margin-left: auto;
+  font-weight: 600;
+}
+
+.pg-field-toggle {
+  padding: 0 6px !important;
+  min-width: 0 !important;
+  height: 24px !important;
+}
 
 /* ----------------------------------------------------------------
  * Global Motion & Interaction Tokens

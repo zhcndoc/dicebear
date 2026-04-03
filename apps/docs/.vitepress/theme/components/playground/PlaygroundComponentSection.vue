@@ -1,0 +1,303 @@
+<script setup lang="ts">
+import Slider from 'primevue/slider';
+import Button from 'primevue/button';
+import InputNumber from 'primevue/inputnumber';
+import { ArrowLeftRight, Weight } from '@lucide/vue';
+import { UiAvatar } from '../ui';
+import useStore from '@theme/stores/playground';
+import { useRangeField } from '@theme/composables/useRangeField';
+import { useVariantWeights } from '@theme/composables/useVariantWeights';
+
+const props = defineProps<{
+  componentName: string;
+  allComponentNames: string[];
+  variants: string[];
+  hasProbability: boolean;
+  hasRotate: boolean;
+  hasTranslateX: boolean;
+  hasTranslateY: boolean;
+  hasNonDefaultWeights: boolean;
+  defaultProbability: number;
+  defaultRotate: readonly number[];
+  defaultTranslateX: readonly number[];
+  defaultTranslateY: readonly number[];
+  dependency?: { parentName: string; parentVariant: string; parentColors: { colorKey: string; defaultCount: number }[] };
+  allDependencies?: Record<string, { parentName: string; parentVariant: string; parentColors: { colorKey: string; defaultCount: number }[] }>;
+}>();
+
+const store = useStore();
+
+const {
+  showWeights,
+  variantWeights,
+  toggleWeights,
+  toggleVariant,
+  setWeight,
+  selectAll,
+  selectNone,
+} = useVariantWeights(
+  store.avatarStyleOptions,
+  () => props.componentName,
+  () => props.variants,
+  () => props.hasNonDefaultWeights,
+);
+
+// Build options that isolate this component by hiding all others
+function variantPreviewOptions(variant: string) {
+  const opts: Record<string, any> = {
+    seed: 'JD',
+    [`${props.componentName}Variant`]: variant,
+    [`${props.componentName}Probability`]: 100,
+  };
+
+  const keep = new Set<string>([props.componentName]);
+
+  if (props.allDependencies) {
+    // Walk ancestors upward (e.g. eyes → face → shape)
+    let current = props.componentName;
+
+    while (props.allDependencies[current]) {
+      const dep = props.allDependencies[current];
+
+      keep.add(dep.parentName);
+      opts[`${dep.parentName}Variant`] = dep.parentVariant;
+      opts[`${dep.parentName}Probability`] = 100;
+
+      for (const { colorKey, defaultCount } of dep.parentColors) {
+        if (defaultCount > 1) {
+          opts[colorKey] = ['555555'];
+        }
+      }
+
+      current = dep.parentName;
+    }
+
+    // Keep descendants alive (e.g. face contains eyes + mouth)
+    for (const [child, dep] of Object.entries(props.allDependencies)) {
+      if (keep.has(dep.parentName)) {
+        keep.add(child);
+      }
+    }
+  }
+
+  for (const name of props.allComponentNames) {
+    if (keep.has(name)) continue;
+
+    opts[`${name}Probability`] = 0;
+  }
+
+  return opts;
+}
+
+const { rangeMode, isRangeMode, toggleRangeMode, singleComputed, rangeComputed } = useRangeField(store.avatarStyleOptions);
+
+const probability = singleComputed(`${props.componentName}Probability`, props.defaultProbability);
+
+const rotateKey = `${props.componentName}Rotate`;
+const translateXKey = `${props.componentName}TranslateX`;
+const translateYKey = `${props.componentName}TranslateY`;
+
+const defaultRotateFallback = props.defaultRotate.length === 1 ? props.defaultRotate[0] : 0;
+const defaultTranslateXFallback = props.defaultTranslateX.length === 1 ? props.defaultTranslateX[0] : 0;
+const defaultTranslateYFallback = props.defaultTranslateY.length === 1 ? props.defaultTranslateY[0] : 0;
+
+// Initialize range mode from defaults if they define a range
+if (props.defaultRotate.length === 2) rangeMode[rotateKey] = true;
+if (props.defaultTranslateX.length === 2) rangeMode[translateXKey] = true;
+if (props.defaultTranslateY.length === 2) rangeMode[translateYKey] = true;
+
+const rotateSingle = singleComputed(rotateKey, defaultRotateFallback);
+const rotateRange = rangeComputed(rotateKey, props.defaultRotate.length === 2 ? props.defaultRotate : defaultRotateFallback);
+const translateXSingle = singleComputed(translateXKey, defaultTranslateXFallback);
+const translateXRange = rangeComputed(translateXKey, props.defaultTranslateX.length === 2 ? props.defaultTranslateX : defaultTranslateXFallback);
+const translateYSingle = singleComputed(translateYKey, defaultTranslateYFallback);
+const translateYRange = rangeComputed(translateYKey, props.defaultTranslateY.length === 2 ? props.defaultTranslateY : defaultTranslateYFallback);
+</script>
+
+<template>
+  <div class="pg-comp-body">
+    <div class="pg-comp-variants" v-if="variants.length > 0">
+      <div class="pg-field-label">
+        <span>Variants</span>
+        <Button
+          size="small"
+          :severity="showWeights ? 'primary' : 'secondary'"
+          v-tooltip="showWeights ? 'Hide weights' : 'Show weights'"
+          @click="toggleWeights"
+          class="pg-field-toggle"
+        >
+          <Weight :size="14" />
+        </Button>
+        <Button label="All" size="small" severity="secondary" @click="selectAll" class="pg-field-toggle" />
+        <Button label="None" size="small" severity="secondary" @click="selectNone" class="pg-field-toggle" />
+      </div>
+      <div class="pg-comp-variants-grid">
+        <div
+          v-for="variant in variants"
+          :key="variant"
+          class="pg-comp-variant"
+          :class="{ 'pg-comp-variant-off': variantWeights[variant] === undefined }"
+        >
+          <button
+            class="pg-comp-variant-btn"
+            :class="{ 'pg-comp-variant-btn-active': variantWeights[variant] !== undefined }"
+            @click="toggleVariant(variant)"
+          >
+            <UiAvatar
+              bare
+              :style-name="store.avatarStyleName"
+              :style-options="variantPreviewOptions(variant)"
+              mode="library"
+            />
+          </button>
+          <span class="pg-comp-variant-name">{{ variant }}</span>
+          <InputNumber
+            v-if="showWeights && variantWeights[variant] !== undefined"
+            v-tooltip="'Weight — higher values increase probability'"
+            :model-value="variantWeights[variant]"
+            @update:model-value="(val: number) => setWeight(variant, Math.max(0, val ?? 0))"
+            :min="0"
+            :min-fraction-digits="0"
+            :max-fraction-digits="2"
+            :show-buttons="false"
+            locale="en-US"
+            class="pg-comp-variant-weight"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="pg-field" v-if="hasProbability">
+      <div class="pg-field-label">
+        <span>Probability</span>
+        <span class="pg-field-value">{{ probability }}%</span>
+      </div>
+      <Slider v-model="probability" :min="0" :max="100" :step="1" />
+    </div>
+
+    <div class="pg-field" v-if="hasRotate">
+      <div class="pg-field-label">
+        <span>Rotate</span>
+        <Button
+          size="small"
+          :severity="isRangeMode(rotateKey) ? 'primary' : 'secondary'"
+          v-tooltip="isRangeMode(rotateKey) ? 'Switch to fixed value' : 'Switch to range'"
+          @click="toggleRangeMode(rotateKey, 0)"
+          class="pg-field-toggle"
+        >
+          <ArrowLeftRight :size="14" />
+        </Button>
+        <span class="pg-field-value" v-if="isRangeMode(rotateKey)">{{ rotateRange[0] }}° — {{ rotateRange[1] }}°</span>
+        <span class="pg-field-value" v-else>{{ rotateSingle }}°</span>
+      </div>
+      <Slider v-if="isRangeMode(rotateKey)" v-model="rotateRange" :range="true" :min="-360" :max="360" :step="1" />
+      <Slider v-else v-model="rotateSingle" :min="-360" :max="360" :step="1" />
+    </div>
+
+    <div class="pg-field" v-if="hasTranslateX">
+      <div class="pg-field-label">
+        <span>Translate X</span>
+        <Button
+          size="small"
+          :severity="isRangeMode(translateXKey) ? 'primary' : 'secondary'"
+          v-tooltip="isRangeMode(translateXKey) ? 'Switch to fixed value' : 'Switch to range'"
+          @click="toggleRangeMode(translateXKey, 0)"
+          class="pg-field-toggle"
+        >
+          <ArrowLeftRight :size="14" />
+        </Button>
+        <span class="pg-field-value" v-if="isRangeMode(translateXKey)">{{ translateXRange[0] }}% — {{ translateXRange[1] }}%</span>
+        <span class="pg-field-value" v-else>{{ translateXSingle }}%</span>
+      </div>
+      <Slider v-if="isRangeMode(translateXKey)" v-model="translateXRange" :range="true" :min="-100" :max="100" :step="1" />
+      <Slider v-else v-model="translateXSingle" :min="-100" :max="100" :step="1" />
+    </div>
+
+    <div class="pg-field" v-if="hasTranslateY">
+      <div class="pg-field-label">
+        <span>Translate Y</span>
+        <Button
+          size="small"
+          :severity="isRangeMode(translateYKey) ? 'primary' : 'secondary'"
+          v-tooltip="isRangeMode(translateYKey) ? 'Switch to fixed value' : 'Switch to range'"
+          @click="toggleRangeMode(translateYKey, 0)"
+          class="pg-field-toggle"
+        >
+          <ArrowLeftRight :size="14" />
+        </Button>
+        <span class="pg-field-value" v-if="isRangeMode(translateYKey)">{{ translateYRange[0] }}% — {{ translateYRange[1] }}%</span>
+        <span class="pg-field-value" v-else>{{ translateYSingle }}%</span>
+      </div>
+      <Slider v-if="isRangeMode(translateYKey)" v-model="translateYRange" :range="true" :min="-100" :max="100" :step="1" />
+      <Slider v-else v-model="translateYSingle" :min="-100" :max="100" :step="1" />
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
+.pg-comp-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pg-comp-variants-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.pg-comp-variant {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  transition: opacity var(--duration-fast) ease;
+
+  &-off {
+    opacity: 0.25;
+  }
+}
+
+.pg-comp-variant-btn {
+  width: 100%;
+  padding: 4px;
+  border: 2px solid transparent;
+  border-radius: var(--vp-radius-xs);
+  background: none;
+  cursor: pointer;
+  transition: all var(--duration-fast) ease;
+
+  &-active {
+    border-color: var(--p-primary-color);
+  }
+
+  &:hover {
+    border-color: var(--p-primary-200);
+  }
+}
+
+.pg-comp-variant-name {
+  font-size: 9px;
+  color: var(--vp-c-text-3);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.pg-comp-variant-weight {
+  width: 40px;
+
+  :deep(input) {
+    width: 40px;
+    height: 20px;
+    padding: 0 4px;
+    font-size: 11px;
+    text-align: center;
+  }
+}
+
+</style>

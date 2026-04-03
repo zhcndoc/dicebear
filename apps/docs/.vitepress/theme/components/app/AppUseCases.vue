@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { CircleUser, MessageCircle, Gamepad2, MessagesSquare, Users, Mountain } from 'lucide-vue-next';
+import { CircleUser, MessageCircle, Gamepad2, MessagesSquare, Users, Mountain } from '@lucide/vue';
 import { UiAvatar, UiContainer, UiSection, UiSectionHeader, UiCard, UiIconBox } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 

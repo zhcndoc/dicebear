@@ -1,11 +1,9 @@
 import { defineStore } from 'pinia';
-import { computed, ref, watch, unref } from 'vue';
-import isEqual from 'lodash/isEqual';
+import { computed, ref, watch } from 'vue';
 import type {
   PlaygroundStoreStyle,
   PlaygroundStoreOptions,
 } from '@theme/types';
-import { useAvatarStyleDefaults } from '@theme/composables/avatar';
 import { useData } from 'vitepress';
 import { camelCase } from 'change-case';
 
@@ -24,40 +22,24 @@ export default defineStore('playground', () => {
   }
 
   const avatarStyleName = ref<PlaygroundStoreStyle>(defaultAvatarStyleName);
-
-  const avatarStyleDefaults = useAvatarStyleDefaults(avatarStyleName);
-
-  const avatarStyleOptions = ref<PlaygroundStoreOptions>({
-    ...unref(avatarStyleDefaults),
-  });
+  const avatarStyleOptions = ref<PlaygroundStoreOptions>({});
 
   const avatarStyleOptionsWithoutDefaults = computed(() => {
-    const calculatedOptions: PlaygroundStoreOptions = {};
+    const result: PlaygroundStoreOptions = {};
 
-    for (let key in avatarStyleOptions.value) {
-      if (false === avatarStyleOptions.value.hasOwnProperty(key)) {
-        continue;
-      }
-
-      const value = avatarStyleOptions.value[key];
-      const defaultValue = avatarStyleDefaults.value?.[key];
-
-      if (value !== undefined && false === isEqual(value, defaultValue)) {
-        calculatedOptions[key] = value;
+    for (const [key, value] of Object.entries(avatarStyleOptions.value)) {
+      if (value !== undefined) {
+        result[key] = value;
       }
     }
 
-    return calculatedOptions;
+    return result;
   });
 
-  watch(avatarStyleDefaults, (newValue, oldValue) => {
-    if (newValue === oldValue) {
-      return;
+  watch(avatarStyleName, () => {
+    for (const key of Object.keys(avatarStyleOptions.value)) {
+      delete avatarStyleOptions.value[key];
     }
-
-    avatarStyleOptions.value = {
-      ...unref(avatarStyleDefaults),
-    };
   });
 
   return {

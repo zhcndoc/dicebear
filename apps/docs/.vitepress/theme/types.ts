@@ -1,9 +1,19 @@
-import type { StyleMeta, StyleSchema } from '@dicebear/core';
 import type { DefaultTheme } from 'vitepress';
 
+export type AvatarStyleMeta = {
+  title?: string;
+  creator?: string;
+  homepage?: string;
+  source?: string;
+  license?: {
+    name?: string;
+    url?: string;
+    text?: string;
+  };
+};
+
 export type AvatarStyle = {
-  meta: StyleMeta;
-  schema: StyleSchema;
+  meta: AvatarStyleMeta;
 };
 
 export type AvatarStyles = Record<string, AvatarStyle>;

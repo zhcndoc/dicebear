@@ -129,9 +129,12 @@ export class Renderer {
 
     const id = `clip-${this.#hashSeed()}`;
 
+    const rx = (radius / 100) * canvas.width();
+    const ry = (radius / 100) * canvas.height();
+
     this.#defs.set(
       id,
-      `<clipPath id="${id}"><rect width="${canvas.width()}" height="${canvas.height()}" rx="${radius}" ry="${radius}"/></clipPath>`,
+      `<clipPath id="${id}"><rect width="${canvas.width()}" height="${canvas.height()}" rx="${rx}" ry="${ry}"/></clipPath>`,
     );
 
     return `<g clip-path="url(#${id})">${body}</g>`;

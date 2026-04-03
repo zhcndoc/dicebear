@@ -4,7 +4,7 @@ import { ThemeOptions } from '@theme/types';
 import { useData } from 'vitepress';
 import { kebabCase } from 'change-case';
 import Prando from 'prando';
-import { Play, ArrowRight, ChevronDown, Star } from 'lucide-vue-next';
+import { Play, ArrowRight, ChevronDown, Star } from '@lucide/vue';
 import { siGithub } from 'simple-icons';
 import { UiAvatar, UiButton, UiIcon } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';

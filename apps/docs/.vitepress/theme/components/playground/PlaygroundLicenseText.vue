@@ -64,7 +64,7 @@ const avatarStyleLink = computed(
     font-weight: 500;
     color: var(--vp-c-brand-1);
     text-decoration-style: dotted;
-    transition: color 0.25s;
+    transition: color var(--duration-fast);
     cursor: pointer;
 
     &:hover {

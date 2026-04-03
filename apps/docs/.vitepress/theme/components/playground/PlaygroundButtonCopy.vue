@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { Copy } from 'lucide-vue-next';
+import { Copy } from '@lucide/vue';
 import { ref } from 'vue';
 import copy from 'copy-to-clipboard';
-import { createAvatar } from '@dicebear/core';
-import { loadAvatarStyle } from '@theme/utils/avatar';
+import { Avatar } from '@dicebear/core';
+import { loadAvatarStyle, clonePlain } from '@theme/utils/avatar';
 import { UiAvatar } from '../ui';
 import PlaygroundConfetti from './PlaygroundConfetti.vue';
 import PlaygroundDialog from './PlaygroundDialog.vue';
-import PlaygroundActionButton from './PlaygroundActionButton.vue';
+import Button from 'primevue/button';
 import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
-import { Dialog } from '@ark-ui/vue/dialog';
 
 const props = defineProps<{
   seed: string;
@@ -22,10 +21,10 @@ const text = ref('');
 
 async function onClick() {
   const avatarStyle = await loadAvatarStyle(store.avatarStyleName);
-  const avatar = createAvatar(avatarStyle, {
+  const avatar = new Avatar(avatarStyle, clonePlain({
     ...options.value,
     size: 512,
-  });
+  }));
 
   const successful = copy(avatar.toString());
 
@@ -38,9 +37,11 @@ async function onClick() {
 </script>
 
 <template>
-  <PlaygroundActionButton tooltip="Copy" @click="onClick">
-    <Copy :size="16" />
-  </PlaygroundActionButton>
+  <Button label="Copy SVG" severity="secondary" @click="onClick">
+    <template #icon>
+      <Copy :size="15" />
+    </template>
+  </Button>
 
   <PlaygroundDialog v-model:open="open">
     <PlaygroundConfetti :key="confettiKey" />
@@ -51,7 +52,7 @@ async function onClick() {
         :size="128"
       />
     </div>
-    <Dialog.Title class="dialog-title">{{ text }}</Dialog.Title>
+    <h2 class="dialog-title">{{ text }}</h2>
     <div class="dialog-subtitle">Please note the license below before using.</div>
     <div class="dialog-text">
       <PlaygroundLicenseAlert :style-name="store.avatarStyleName" />

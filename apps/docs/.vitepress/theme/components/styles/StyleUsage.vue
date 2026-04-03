@@ -2,7 +2,11 @@
 import { kebabCase } from 'change-case';
 import { UiCode as Code } from '../ui';
 import { computed, ref } from 'vue';
-import { Tabs } from '@ark-ui/vue/tabs';
+import Tabs from 'primevue/tabs';
+import TabList from 'primevue/tablist';
+import Tab from 'primevue/tab';
+import TabPanels from 'primevue/tabpanels';
+import TabPanel from 'primevue/tabpanel';
 
 const props = defineProps<{
   styleName: string;
@@ -22,14 +26,15 @@ const exampleHttpApiImgTag = computed(() => {
 });
 
 const exampleJsLibraryInstall = computed(() => {
-  return `npm install @dicebear/core @dicebear/collection --save`;
+  return `npm install @dicebear/core @dicebear/definitions --save`;
 });
 
 const exampleJsLibraryUsage = computed(() => {
-  return `import { createAvatar } from '@dicebear/core';
-import { ${props.styleName} } from '@dicebear/collection';
+  return `import { Style, Avatar } from '@dicebear/core';
+import definition from '@dicebear/definitions/${kebabCase(props.styleName)}.json';
 
-const avatar = createAvatar(${props.styleName}, {
+const style = new Style(definition);
+const avatar = new Avatar(style, {
   // ... options
 });
 
@@ -48,46 +53,47 @@ const exampleCliUsage = computed(() => {
 
 <template>
   <div class="style-usage">
-    <Tabs.Root v-model="tab">
-      <Tabs.List>
-        <Tabs.Trigger value="http-api">HTTP-API</Tabs.Trigger>
-        <Tabs.Trigger value="js-library">JS-Library</Tabs.Trigger>
-        <Tabs.Trigger value="cli">CLI</Tabs.Trigger>
-      </Tabs.List>
+    <Tabs v-model:value="tab">
+      <TabList>
+        <Tab value="http-api">HTTP-API</Tab>
+        <Tab value="js-library">JS-Library</Tab>
+        <Tab value="cli">CLI</Tab>
+      </TabList>
+      <TabPanels>
+        <TabPanel value="http-api" class="style-usage-body">
+          <p>Use this URL to request this avatar style via our HTTP API.</p>
+          <Code :code="exampleHttpApiUrl" />
 
-      <Tabs.Content value="http-api" class="style-usage-body">
-        <p>Use this URL to request this avatar style via our HTTP API.</p>
-        <Code :code="exampleHttpApiUrl" />
+          <p>You can use the URL directly as image source.</p>
+          <Code lang="html" :code="exampleHttpApiImgTag" />
+          <p>
+            See <a href="/how-to-use/http-api">HTTP-API</a> docs for more
+            information.
+          </p>
+        </TabPanel>
+        <TabPanel value="js-library" class="style-usage-body">
+          <p>First install the required packages via npm:</p>
+          <Code :code="exampleJsLibraryInstall" />
 
-        <p>You can use the URL directly as image source.</p>
-        <Code lang="html" :code="exampleHttpApiImgTag" />
-        <p>
-          See <a href="/how-to-use/http-api">HTTP-API</a> docs for more
-          information.
-        </p>
-      </Tabs.Content>
-      <Tabs.Content value="js-library" class="style-usage-body">
-        <p>First install the required packages via npm:</p>
-        <Code :code="exampleJsLibraryInstall" />
+          <p>Then you can create this avatar as follows:</p>
+          <Code lang="js" :code="exampleJsLibraryUsage" />
+          <p>
+            See <a href="/how-to-use/js-library">JS-Library</a> docs for more
+            information.
+          </p>
+        </TabPanel>
+        <TabPanel value="cli" class="style-usage-body">
+          <p>First install the CLI package via npm:</p>
+          <Code :code="exampleCliInstall" />
 
-        <p>Then you can create this avatar as follows:</p>
-        <Code lang="js" :code="exampleJsLibraryUsage" />
-        <p>
-          See <a href="/how-to-use/js-library">JS-Library</a> docs for more
-          information.
-        </p>
-      </Tabs.Content>
-      <Tabs.Content value="cli" class="style-usage-body">
-        <p>First install the CLI package via npm:</p>
-        <Code :code="exampleCliInstall" />
-
-        <p>Then you can create this avatar as follows:</p>
-        <Code :code="exampleCliUsage" />
-        <p>
-          See <a href="/how-to-use/cli">CLI</a> docs for more information.
-        </p>
-      </Tabs.Content>
-    </Tabs.Root>
+          <p>Then you can create this avatar as follows:</p>
+          <Code :code="exampleCliUsage" />
+          <p>
+            See <a href="/how-to-use/cli">CLI</a> docs for more information.
+          </p>
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
   </div>
 </template>
 

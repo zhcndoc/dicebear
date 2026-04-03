@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import { kebabCase } from 'change-case';
 import Prando from 'prando';
-import { Play, ArrowRight, Star, BarChart3 } from 'lucide-vue-next';
+import { Play, ArrowRight, Star, BarChart3 } from '@lucide/vue';
 import { siGithub } from 'simple-icons';
 import { UiAvatar, UiButton, UiBadge, UiHeadline, UiDescription, UiContainer, UiSection, UiIcon } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';

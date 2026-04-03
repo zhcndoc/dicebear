@@ -3,7 +3,7 @@ import { onBeforeUnmount, onMounted, ref, watch, computed } from 'vue';
 import hljs from 'highlight.js/lib/core';
 import javascript from 'highlight.js/lib/languages/javascript';
 import xml from 'highlight.js/lib/languages/xml';
-import { Copy, Check } from 'lucide-vue-next';
+import { Copy, Check } from '@lucide/vue';
 
 const props = defineProps<{
   lang?: string;

@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import { Code as CodeIcon } from 'lucide-vue-next';
+import { Code as CodeIcon } from '@lucide/vue';
 import { computed, ref } from 'vue';
 import { UiAvatar, UiCode } from '../ui';
 import { getAvatarApiUrl, getAvatarApiCommand } from '@theme/utils/avatar';
 import PlaygroundDialog from './PlaygroundDialog.vue';
-import PlaygroundActionButton from './PlaygroundActionButton.vue';
+import Button from 'primevue/button';
 import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
-import { Dialog } from '@ark-ui/vue/dialog';
-import { Tabs } from '@ark-ui/vue/tabs';
+import Tabs from 'primevue/tabs';
+import TabList from 'primevue/tablist';
+import Tab from 'primevue/tab';
+import TabPanels from 'primevue/tabpanels';
+import TabPanel from 'primevue/tabpanel';
 
 const props = defineProps<{
   seed: string;
@@ -27,10 +30,11 @@ const exampleHttpApiHtml = computed(
   alt="avatar" />`
 );
 const exampleJsLibrary = computed(
-  () => `import { createAvatar } from '@dicebear/core';
-import { ${store.avatarStyleName} } from '@dicebear/collection';
+  () => `import { Style, Avatar } from '@dicebear/core';
+import definition from '@dicebear/definitions/${store.avatarStyleName}.json';
 
-const avatar = createAvatar(${store.avatarStyleName}, ${JSON.stringify(
+const style = new Style(definition);
+const avatar = new Avatar(style, ${JSON.stringify(
     options.value,
     null,
     2
@@ -44,64 +48,56 @@ const exampleCli = computed(() =>
 </script>
 
 <template>
-  <PlaygroundActionButton tooltip="How to use" @click="open = true">
-    <CodeIcon :size="16" />
-  </PlaygroundActionButton>
+  <Button label="How to use" severity="secondary" @click="open = true">
+    <template #icon>
+      <CodeIcon :size="15" />
+    </template>
+  </Button>
 
-  <PlaygroundDialog v-model:open="open" max-width="800px">
-    <div class="playground-button-how-to-use-header">
-      <UiAvatar
-        :style-name="store.avatarStyleName"
-        :style-options="options"
-        :size="64"
-      />
-      <div class="playground-button-how-to-use-header-text">
-        <Dialog.Title class="playground-button-how-to-use-header-title">How to use</Dialog.Title>
-        <p class="playground-button-how-to-use-header-subtitle">Let's see how you can use this avatar in your project.</p>
-      </div>
-    </div>
+  <PlaygroundDialog v-model:open="open" max-width="800px" header="How to use">
 
     <div class="playground-button-how-to-use-text">
       <div class="playground-button-how-to-use-tabs-card">
-        <Tabs.Root v-model="tab">
-          <Tabs.List>
-            <Tabs.Trigger value="http-api">HTTP-API</Tabs.Trigger>
-            <Tabs.Trigger value="js-library">JS-Library</Tabs.Trigger>
-            <Tabs.Trigger value="cli">CLI</Tabs.Trigger>
-          </Tabs.List>
-
-          <Tabs.Content value="http-api" class="playground-button-how-to-use-tab-content">
-            <p>Use this URL to request this avatar style via our HTTP API.</p>
-            <UiCode :code="exampleHttpApi" />
-            <p>You can use the URL directly as image source.</p>
-            <UiCode :code="exampleHttpApiHtml" lang="html" />
-            <p>
-              See <a href="/how-to-use/http-api">HTTP-API</a> docs for more
-              information.
-            </p>
-          </Tabs.Content>
-          <Tabs.Content value="js-library" class="playground-button-how-to-use-tab-content">
-            <p>First install the required packages via npm:</p>
-            <UiCode
-              code="npm install @dicebear/core @dicebear/collection --save"
-            />
-            <p>Then you can create this avatar as follows:</p>
-            <UiCode :code="exampleJsLibrary" lang="js" />
-            <p>
-              See <a href="/how-to-use/js-library">JS-Library</a> docs for more
-              information.
-            </p>
-          </Tabs.Content>
-          <Tabs.Content value="cli" class="playground-button-how-to-use-tab-content">
-            <p>First install the CLI package via npm:</p>
-            <UiCode code="npm install --global dicebear" />
-            <p>Then you can create this avatar as follows:</p>
-            <UiCode :code="exampleCli" />
-            <p>
-              See <a href="/how-to-use/cli">CLI</a> docs for more information.
-            </p>
-          </Tabs.Content>
-        </Tabs.Root>
+        <Tabs v-model:value="tab">
+          <TabList>
+            <Tab value="http-api">HTTP-API</Tab>
+            <Tab value="js-library">JS-Library</Tab>
+            <Tab value="cli">CLI</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel value="http-api" class="playground-button-how-to-use-tab-content">
+              <p>Use this URL to request this avatar style via our HTTP API.</p>
+              <UiCode :code="exampleHttpApi" />
+              <p>You can use the URL directly as image source.</p>
+              <UiCode :code="exampleHttpApiHtml" lang="html" />
+              <p>
+                See <a href="/how-to-use/http-api">HTTP-API</a> docs for more
+                information.
+              </p>
+            </TabPanel>
+            <TabPanel value="js-library" class="playground-button-how-to-use-tab-content">
+              <p>First install the required packages via npm:</p>
+              <UiCode
+                code="npm install @dicebear/core @dicebear/definitions --save"
+              />
+              <p>Then you can create this avatar as follows:</p>
+              <UiCode :code="exampleJsLibrary" lang="js" />
+              <p>
+                See <a href="/how-to-use/js-library">JS-Library</a> docs for more
+                information.
+              </p>
+            </TabPanel>
+            <TabPanel value="cli" class="playground-button-how-to-use-tab-content">
+              <p>First install the CLI package via npm:</p>
+              <UiCode code="npm install --global dicebear" />
+              <p>Then you can create this avatar as follows:</p>
+              <UiCode :code="exampleCli" />
+              <p>
+                See <a href="/how-to-use/cli">CLI</a> docs for more information.
+              </p>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
       </div>
 
       <PlaygroundLicenseAlert :style-name="store.avatarStyleName" />
@@ -111,27 +107,6 @@ const exampleCli = computed(() =>
 
 <style scoped lang="scss">
 .playground-button-how-to-use {
-  &-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 1.5rem;
-    background: var(--vp-c-bg-soft);
-    border-bottom: 1px solid var(--vp-c-border);
-
-    &-title {
-      font-size: 20px;
-      font-weight: 600;
-      margin: 0;
-    }
-
-    &-subtitle {
-      font-size: 14px;
-      color: var(--vp-c-text-2);
-      margin: 2px 0 0;
-    }
-  }
-
   &-text {
     display: flex;
     flex-direction: column;
@@ -149,7 +124,7 @@ const exampleCli = computed(() =>
 
   &-tabs-card {
     border: 1px solid var(--vp-c-border);
-    border-radius: 8px;
+    border-radius: var(--vp-radius-xs);
     overflow: hidden;
   }
 
@@ -163,8 +138,5 @@ const exampleCli = computed(() =>
     }
   }
 
-  &-cli-warning {
-    margin-bottom: 12px;
-  }
 }
 </style>

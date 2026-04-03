@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { ArrowRight } from 'lucide-vue-next';
+import { ArrowRight } from '@lucide/vue';
 import { UiButton, UiCode } from '../ui';
 import { escapeJsString, escapeShellArg } from '../../utils/escape';
 
@@ -19,10 +19,11 @@ const apiExample = computed(() =>
 );
 
 const jsExample = computed(() =>
-  `import { createAvatar } from '@dicebear/core';
-import * as ${props.styleCamel} from '@dicebear/${props.style}';
+  `import { Style, Avatar } from '@dicebear/core';
+import definition from '@dicebear/definitions/${props.style}.json';
 
-const avatar = createAvatar(${props.styleCamel}, {
+const style = new Style(definition);
+const avatar = new Avatar(style, {
   seed: '${escapeJsString(props.seed)}'
 });`
 );

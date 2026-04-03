@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { MousePointerClick, Palette, Download, ArrowRight } from 'lucide-vue-next';
+import { MousePointerClick, Palette, Download, ArrowRight } from '@lucide/vue';
 import { UiAvatar, UiButton, UiHeadline, UiDescription, UiBadge, UiContainer, UiSection, UiWindow, UiIconBox } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 

@@ -4,15 +4,14 @@ import { useLayout } from 'vitepress/theme';
 import { computed } from 'vue';
 import { siGithub, siFigma } from 'simple-icons';
 import { UiIcon } from '../ui';
-import type { StyleMeta } from '@dicebear/core';
-import type { ThemeOptions } from '@theme/types';
+import type { AvatarStyleMeta, ThemeOptions } from '@theme/types';
 import { productLinks as exploreLinks, resourceLinks, legalLinks } from '../../config/footer-links';
 
 const { theme } = useData<ThemeOptions>();
 const { hasSidebar } = useLayout();
 
 const styles = computed(() => {
-  const result: StyleMeta[] = [];
+  const result: AvatarStyleMeta[] = [];
   const knownWork: string[] = [];
 
   for (const val of Object.values(theme.value.avatarStyles)) {

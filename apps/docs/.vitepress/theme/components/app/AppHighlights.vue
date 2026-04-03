@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { UiContainer, UiSection, UiSectionHeader, UiIconBox, UiCard, UiIcon } from '../ui';
-import { Target, Palette, Zap, SlidersHorizontal, Package, Globe } from 'lucide-vue-next';
+import { Target, Palette, Zap, SlidersHorizontal, Package, Globe } from '@lucide/vue';
 import { siGithub } from 'simple-icons';
 import { useVisibility } from '../../composables/useVisibility';
 

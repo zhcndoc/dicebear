@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { UiAvatar } from '../ui';
-import { ArrowRight } from 'lucide-vue-next';
+import { ArrowRight } from '@lucide/vue';
 
 withDefaults(
   defineProps<{

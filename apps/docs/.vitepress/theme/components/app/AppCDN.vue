@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { Globe, Zap, Server } from 'lucide-vue-next';
+import { Globe, Zap, Server } from '@lucide/vue';
 import { UiContainer, UiSection, UiSectionHeader, UiCard } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 import { useApiStats } from '../../composables/useApiStats';

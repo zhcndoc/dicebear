@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Check, X, Minus } from 'lucide-vue-next';
+import { Check, X, Minus } from '@lucide/vue';
 import { ThemeOptions } from '@theme/types';
 import { useData } from 'vitepress';
 import { UiContainer, UiSection, UiSectionHeader, UiCard } from '../ui';

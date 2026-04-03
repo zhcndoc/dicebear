@@ -45,6 +45,12 @@ export default tseslint.config(
   },
   prettier,
   {
-    ignores: ['lib/', 'src/Validator/StyleValidator.js', 'src/Validator/OptionsValidator.js'],
+    ignores: [
+      'node_modules/',
+      '**/lib/',
+      '**/dist/',
+      '**/*.js',
+      '!eslint.config.js',
+    ],
   },
 );

@@ -68,7 +68,7 @@ class OptionsDescriptorTest extends TestCase
 
         $this->assertSame(['type' => 'color', 'list' => true], $schema['backgroundColor']);
         $this->assertSame(['type' => 'enum', 'values' => ['solid', 'linear', 'radial'], 'list' => true], $schema['backgroundColorFill']);
-        $this->assertSame(['type' => 'range', 'min' => 1], $schema['backgroundColorFillStops']);
+        $this->assertSame(['type' => 'range', 'min' => 2], $schema['backgroundColorFillStops']);
         $this->assertSame(['type' => 'range', 'min' => -360, 'max' => 360], $schema['backgroundColorAngle']);
     }
 

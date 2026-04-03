@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { ArrowRight } from 'lucide-vue-next';
+import { ArrowRight } from '@lucide/vue';
 import { UiButton, UiContainer, UiSection, UiSectionHeader, UiCard } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 

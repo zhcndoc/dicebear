@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { Star, Heart } from 'lucide-vue-next';
+import { Star, Heart } from '@lucide/vue';
 import { siGithub } from 'simple-icons';
 import { ThemeOptions } from '@theme/types';
 import { useData } from 'vitepress';
