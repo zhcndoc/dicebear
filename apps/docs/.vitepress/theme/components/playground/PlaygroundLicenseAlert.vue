@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-  <Message severity="info" :closable="false" class="playground-license-alert">
+  <Message severity="secondary" :closable="false" class="playground-license-alert">
     <strong>
       Please note the following license before using the avatar:
     </strong>

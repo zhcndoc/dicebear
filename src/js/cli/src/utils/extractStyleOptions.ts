@@ -1,10 +1,10 @@
 import { Style, OptionsDescriptor } from '@dicebear/core';
 
-// Parses "variant01:2,variant03:1" into { variant01: 2, variant03: 1 }
-function parseWeightedValue(value: string): Record<string, number> {
+// Parses ['variant01:2', 'variant03:1'] (array from yargs) into { variant01: 2, variant03: 1 }
+function parseWeightedValue(value: string[]): Record<string, number> {
   const result: Record<string, number> = {};
 
-  for (const pair of value.split(',')) {
+  for (const pair of value) {
     const [key, weight] = pair.split(':');
 
     if (key) {
@@ -44,7 +44,7 @@ export function extractStyleOptions(
 
     let value: unknown = argv[key];
 
-    if (field.type === 'enum' && field.weighted && typeof value === 'string') {
+    if (field.type === 'enum' && field.weighted && Array.isArray(value)) {
       value = parseWeightedValue(value);
     }
 

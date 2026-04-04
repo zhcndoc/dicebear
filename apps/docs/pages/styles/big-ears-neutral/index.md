@@ -20,18 +20,18 @@ Big Ears Neutral is the gender-neutral variant of the Big Ears vector avatar
 style, delivering abstract character designs perfect for inclusive user profile
 icons.
 
-<StylePreview styleName="bigEarsNeutral" />
+<StylePreview styleName="big-ears-neutral" />
 
-<StyleDescription styleName="bigEarsNeutral" />
+<StyleDescription styleName="big-ears-neutral" />
 
 ## Usage
 
-<StyleUsage styleName="bigEarsNeutral" />
+<StyleUsage styleName="big-ears-neutral" />
 
 ## Options
 
-<StyleOptions styleName="bigEarsNeutral" />
+<StyleOptions styleName="big-ears-neutral" />
 
 ## Details
 
-<StyleInfo styleName="bigEarsNeutral" />
+<StyleInfo styleName="big-ears-neutral" />

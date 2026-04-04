@@ -20,18 +20,18 @@ Adventurer Neutral is the gender-neutral variant of the Adventurer vector
 avatar style. It generates abstract, character-based customizable profile icons
 suitable for any audience.
 
-<StylePreview styleName="adventurerNeutral" />
+<StylePreview styleName="adventurer-neutral" />
 
-<StyleDescription styleName="adventurerNeutral" />
+<StyleDescription styleName="adventurer-neutral" />
 
 ## Usage
 
-<StyleUsage styleName="adventurerNeutral" />
+<StyleUsage styleName="adventurer-neutral" />
 
 ## Options
 
-<StyleOptions styleName="adventurerNeutral" />
+<StyleOptions styleName="adventurer-neutral" />
 
 ## Details
 
-<StyleInfo styleName="adventurerNeutral" />
+<StyleInfo styleName="adventurer-neutral" />

@@ -19,18 +19,18 @@ Big Smile is a friendly vector avatar style featuring characters with
 expressive, prominent smiles. Generate warm, customizable SVG profile icons
 that stand out in user feeds and comment sections.
 
-<StylePreview styleName="bigSmile" />
+<StylePreview styleName="big-smile" />
 
-<StyleDescription styleName="bigSmile" />
+<StyleDescription styleName="big-smile" />
 
 ## Usage
 
-<StyleUsage styleName="bigSmile" />
+<StyleUsage styleName="big-smile" />
 
 ## Options
 
-<StyleOptions styleName="bigSmile" />
+<StyleOptions styleName="big-smile" />
 
 ## Details
 
-<StyleInfo styleName="bigSmile" />
+<StyleInfo styleName="big-smile" />

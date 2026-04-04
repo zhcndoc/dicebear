@@ -20,18 +20,18 @@ Bottts Neutral is a minimalist robot-inspired vector avatar style with clean
 geometric shapes. Generate simple, distinct customizable profile icons ideal
 for API services and tech platforms.
 
-<StylePreview styleName="botttsNeutral" />
+<StylePreview styleName="bottts-neutral" />
 
-<StyleDescription styleName="botttsNeutral" />
+<StyleDescription styleName="bottts-neutral" />
 
 ## Usage
 
-<StyleUsage styleName="botttsNeutral" />
+<StyleUsage styleName="bottts-neutral" />
 
 ## Options
 
-<StyleOptions styleName="botttsNeutral" />
+<StyleOptions styleName="bottts-neutral" />
 
 ## Details
 
-<StyleInfo styleName="botttsNeutral" />
+<StyleInfo styleName="bottts-neutral" />

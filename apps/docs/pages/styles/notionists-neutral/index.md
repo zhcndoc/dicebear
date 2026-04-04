@@ -20,18 +20,18 @@ Notionists Neutral is the gender-neutral variant of the Notionists vector
 avatar style, delivering abstract, professional customizable profile icons for
 inclusive platforms.
 
-<StylePreview styleName="notionistsNeutral" />
+<StylePreview styleName="notionists-neutral" />
 
-<StyleDescription styleName="notionistsNeutral" />
+<StyleDescription styleName="notionists-neutral" />
 
 ## Usage
 
-<StyleUsage styleName="notionistsNeutral" />
+<StyleUsage styleName="notionists-neutral" />
 
 ## Options
 
-<StyleOptions styleName="notionistsNeutral" />
+<StyleOptions styleName="notionists-neutral" />
 
 ## Details
 
-<StyleInfo styleName="notionistsNeutral" />
+<StyleInfo styleName="notionists-neutral" />

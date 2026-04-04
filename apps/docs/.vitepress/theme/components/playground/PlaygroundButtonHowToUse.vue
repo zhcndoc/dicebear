@@ -65,36 +65,42 @@ const exampleCli = computed(() =>
             <Tab value="cli">CLI</Tab>
           </TabList>
           <TabPanels>
-            <TabPanel value="http-api" class="playground-button-how-to-use-tab-content">
-              <p>Use this URL to request this avatar style via our HTTP API.</p>
-              <UiCode :code="exampleHttpApi" />
-              <p>You can use the URL directly as image source.</p>
-              <UiCode :code="exampleHttpApiHtml" lang="html" />
-              <p>
-                See <a href="/how-to-use/http-api">HTTP-API</a> docs for more
-                information.
-              </p>
+            <TabPanel value="http-api">
+              <div class="playground-button-how-to-use-tab-content">
+                <p>Use this URL to request this avatar style via our HTTP API.</p>
+                <UiCode :code="exampleHttpApi" />
+                <p>You can use the URL directly as image source.</p>
+                <UiCode :code="exampleHttpApiHtml" lang="html" />
+                <p>
+                  See <a href="/how-to-use/http-api">HTTP-API</a> docs for more
+                  information.
+                </p>
+              </div>
             </TabPanel>
-            <TabPanel value="js-library" class="playground-button-how-to-use-tab-content">
-              <p>First install the required packages via npm:</p>
-              <UiCode
-                code="npm install @dicebear/core @dicebear/definitions --save"
-              />
-              <p>Then you can create this avatar as follows:</p>
-              <UiCode :code="exampleJsLibrary" lang="js" />
-              <p>
-                See <a href="/how-to-use/js-library">JS-Library</a> docs for more
-                information.
-              </p>
+            <TabPanel value="js-library">
+              <div class="playground-button-how-to-use-tab-content">
+                <p>First install the required packages via npm:</p>
+                <UiCode
+                  code="npm install @dicebear/core @dicebear/definitions --save"
+                />
+                <p>Then you can create this avatar as follows:</p>
+                <UiCode :code="exampleJsLibrary" lang="js" />
+                <p>
+                  See <a href="/how-to-use/js-library">JS-Library</a> docs for more
+                  information.
+                </p>
+              </div>
             </TabPanel>
-            <TabPanel value="cli" class="playground-button-how-to-use-tab-content">
-              <p>First install the CLI package via npm:</p>
-              <UiCode code="npm install --global dicebear" />
-              <p>Then you can create this avatar as follows:</p>
-              <UiCode :code="exampleCli" />
-              <p>
-                See <a href="/how-to-use/cli">CLI</a> docs for more information.
-              </p>
+            <TabPanel value="cli">
+              <div class="playground-button-how-to-use-tab-content">
+                <p>First install the CLI package via npm:</p>
+                <UiCode code="npm install --global dicebear" />
+                <p>Then you can create this avatar as follows:</p>
+                <UiCode :code="exampleCli" />
+                <p>
+                  See <a href="/how-to-use/cli">CLI</a> docs for more information.
+                </p>
+              </div>
             </TabPanel>
           </TabPanels>
         </Tabs>
@@ -111,8 +117,6 @@ const exampleCli = computed(() =>
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding: 1.5rem;
-
     a {
       color: var(--vp-c-brand-1);
 

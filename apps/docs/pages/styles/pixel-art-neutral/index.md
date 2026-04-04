@@ -20,18 +20,18 @@ Pixel Art Neutral is the gender-neutral variant of the Pixel Art vector avatar
 style, offering abstract pixel-based customizable profile icons in a retro
 aesthetic.
 
-<StylePreview styleName="pixelArtNeutral" />
+<StylePreview styleName="pixel-art-neutral" />
 
-<StyleDescription styleName="pixelArtNeutral" />
+<StyleDescription styleName="pixel-art-neutral" />
 
 ## Usage
 
-<StyleUsage styleName="pixelArtNeutral" />
+<StyleUsage styleName="pixel-art-neutral" />
 
 ## Options
 
-<StyleOptions styleName="pixelArtNeutral" />
+<StyleOptions styleName="pixel-art-neutral" />
 
 ## Details
 
-<StyleInfo styleName="pixelArtNeutral" />
+<StyleInfo styleName="pixel-art-neutral" />

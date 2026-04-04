@@ -133,10 +133,10 @@ export function getAvatarApiCommand(
 
       if (typeof v === 'object' && v !== null && !Array.isArray(v)) {
         const pairs = Object.entries(v)
-          .map(([vk, vv]) => `${vk}:${vv}`)
-          .join(',');
+          .map(([vk, vv]) => `'${vk}:${vv}'`)
+          .join(' ');
 
-        return `  --${k} '${pairs}'`;
+        return `  --${k} ${pairs}`;
       }
 
       return `  --${k} '${String(v)}'`;

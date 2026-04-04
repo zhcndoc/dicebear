@@ -19,18 +19,18 @@ Open Peeps is a hand-drawn illustration vector avatar style featuring diverse
 human figures with mix-and-match components. Generate inclusive, expressive
 customizable SVG profile icons for community platforms and social apps.
 
-<StylePreview styleName="openPeeps" />
+<StylePreview styleName="open-peeps" />
 
-<StyleDescription styleName="openPeeps" />
+<StyleDescription styleName="open-peeps" />
 
 ## Usage
 
-<StyleUsage styleName="openPeeps" />
+<StyleUsage styleName="open-peeps" />
 
 ## Options
 
-<StyleOptions styleName="openPeeps" />
+<StyleOptions styleName="open-peeps" />
 
 ## Details
 
-<StyleInfo styleName="openPeeps" />
+<StyleInfo styleName="open-peeps" />

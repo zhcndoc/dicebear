@@ -19,18 +19,18 @@ Big Ears is a playful illustrated vector avatar style featuring cartoon
 characters with characteristically large ears. Generate cheerful, customizable
 profile icons for apps and communities.
 
-<StylePreview styleName="bigEars" />
+<StylePreview styleName="big-ears" />
 
-<StyleDescription styleName="bigEars" />
+<StyleDescription styleName="big-ears" />
 
 ## Usage
 
-<StyleUsage styleName="bigEars" />
+<StyleUsage styleName="big-ears" />
 
 ## Options
 
-<StyleOptions styleName="bigEars" />
+<StyleOptions styleName="big-ears" />
 
 ## Details
 
-<StyleInfo styleName="bigEars" />
+<StyleInfo styleName="big-ears" />

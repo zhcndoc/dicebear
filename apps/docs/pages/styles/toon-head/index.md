@@ -19,18 +19,18 @@ Toon Head is an illustrated vector avatar style featuring detailed character
 portraits with diverse skin tones, hairstyles, and expressive faces. Generate
 lifelike, customizable SVG profile icons in a modern animated-series aesthetic.
 
-<StylePreview styleName="toonHead" />
+<StylePreview styleName="toon-head" />
 
-<StyleDescription styleName="toonHead" />
+<StyleDescription styleName="toon-head" />
 
 ## Usage
 
-<StyleUsage styleName="toonHead" />
+<StyleUsage styleName="toon-head" />
 
 ## Options
 
-<StyleOptions styleName="toonHead" />
+<StyleOptions styleName="toon-head" />
 
 ## Details
 
-<StyleInfo styleName="toonHead" />
+<StyleInfo styleName="toon-head" />

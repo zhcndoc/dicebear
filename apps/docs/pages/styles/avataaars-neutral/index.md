@@ -20,18 +20,18 @@ Avataaars Neutral is the gender-neutral variant of the Avataaars vector avatar
 style, offering abstract character designs with extensive customization options
 for user profile icons.
 
-<StylePreview styleName="avataaarsNeutral" />
+<StylePreview styleName="avataaars-neutral" />
 
-<StyleDescription styleName="avataaarsNeutral" />
+<StyleDescription styleName="avataaars-neutral" />
 
 ## Usage
 
-<StyleUsage styleName="avataaarsNeutral" />
+<StyleUsage styleName="avataaars-neutral" />
 
 ## Options
 
-<StyleOptions styleName="avataaarsNeutral" />
+<StyleOptions styleName="avataaars-neutral" />
 
 ## Details
 
-<StyleInfo styleName="avataaarsNeutral" />
+<StyleInfo styleName="avataaars-neutral" />

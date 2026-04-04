@@ -20,18 +20,18 @@ Lorelei Neutral is the gender-neutral variant of the Lorelei vector avatar
 style, providing abstract character-based customizable profile icons for
 inclusive platforms.
 
-<StylePreview styleName="loreleiNeutral" />
+<StylePreview styleName="lorelei-neutral" />
 
-<StyleDescription styleName="loreleiNeutral" />
+<StyleDescription styleName="lorelei-neutral" />
 
 ## Usage
 
-<StyleUsage styleName="loreleiNeutral" />
+<StyleUsage styleName="lorelei-neutral" />
 
 ## Options
 
-<StyleOptions styleName="loreleiNeutral" />
+<StyleOptions styleName="lorelei-neutral" />
 
 ## Details
 
-<StyleInfo styleName="loreleiNeutral" />
+<StyleInfo styleName="lorelei-neutral" />

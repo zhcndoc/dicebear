@@ -19,18 +19,18 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 Croodles Neutral is the gender-neutral doodle variant, offering abstract
 hand-drawn customizable profile icons with a casual, creative character.
 
-<StylePreview styleName="croodlesNeutral" />
+<StylePreview styleName="croodles-neutral" />
 
-<StyleDescription styleName="croodlesNeutral" />
+<StyleDescription styleName="croodles-neutral" />
 
 ## Usage
 
-<StyleUsage styleName="croodlesNeutral" />
+<StyleUsage styleName="croodles-neutral" />
 
 ## Options
 
-<StyleOptions styleName="croodlesNeutral" />
+<StyleOptions styleName="croodles-neutral" />
 
 ## Details
 
-<StyleInfo styleName="croodlesNeutral" />
+<StyleInfo styleName="croodles-neutral" />

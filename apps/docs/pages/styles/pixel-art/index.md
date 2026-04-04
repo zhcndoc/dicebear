@@ -19,18 +19,18 @@ Pixel Art is a retro-styled vector avatar style that renders characters in a
 classic 8-bit pixel aesthetic. Generate nostalgic, customizable SVG profile
 icons popular in gaming communities and developer tools.
 
-<StylePreview styleName="pixelArt" />
+<StylePreview styleName="pixel-art" />
 
-<StyleDescription styleName="pixelArt" />
+<StyleDescription styleName="pixel-art" />
 
 ## Usage
 
-<StyleUsage styleName="pixelArt" />
+<StyleUsage styleName="pixel-art" />
 
 ## Options
 
-<StyleOptions styleName="pixelArt" />
+<StyleOptions styleName="pixel-art" />
 
 ## Details
 
-<StyleInfo styleName="pixelArt" />
+<StyleInfo styleName="pixel-art" />
