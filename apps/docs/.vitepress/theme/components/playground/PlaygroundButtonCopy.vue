@@ -50,6 +50,7 @@ async function onClick() {
         :style-name="store.avatarStyleName"
         :style-options="options"
         :size="128"
+        mode="library"
       />
     </div>
     <h2 class="dialog-title">{{ text }}</h2>

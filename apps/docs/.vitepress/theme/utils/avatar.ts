@@ -1,12 +1,11 @@
 import { Style } from '@dicebear/core';
 import { kebabCase } from 'change-case';
+import { escapeShellArg } from './escape';
 
 export function stripHash(hex: string): string {
   return hex.replace(/^#/, '');
 }
 
-// Deep-clone an object to strip Vue reactive proxies.
-// Required before passing options to Avatar constructor (uses structuredClone).
 export function clonePlain<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));
 }
@@ -47,13 +46,30 @@ const definitionImports: Record<string, () => Promise<{ default: unknown }>> = {
 
 const styleCache = new Map<string, Style>();
 
-export async function loadAvatarStyle(avatarStyle: string): Promise<Style> {
-  const name = kebabCase(avatarStyle);
+export function registerCustomStyle(key: string, definition: object): Style {
+  const style = new Style(definition);
 
-  const cached = styleCache.get(name);
+  styleCache.set(key, style);
+
+  return style;
+}
+
+export function unregisterCustomStyle(key: string): void {
+  styleCache.delete(key);
+}
+
+export async function loadAvatarStyle(avatarStyle: string): Promise<Style> {
+  const cached = styleCache.get(avatarStyle);
 
   if (cached) {
     return cached;
+  }
+
+  const name = kebabCase(avatarStyle);
+  const cachedByName = styleCache.get(name);
+
+  if (cachedByName) {
+    return cachedByName;
   }
 
   const loader = definitionImports[name];
@@ -68,6 +84,61 @@ export async function loadAvatarStyle(avatarStyle: string): Promise<Style> {
   styleCache.set(name, style);
 
   return style;
+}
+
+async function readAllBytes(readable: ReadableStream<Uint8Array>): Promise<Uint8Array> {
+  const chunks: Uint8Array[] = [];
+  const reader = readable.getReader();
+
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    chunks.push(value);
+  }
+
+  const result = new Uint8Array(
+    chunks.reduce((sum, c) => sum + c.length, 0),
+  );
+
+  let offset = 0;
+
+  for (const chunk of chunks) {
+    result.set(chunk, offset);
+    offset += chunk.length;
+  }
+
+  return result;
+}
+
+export async function compressFragment(data: object): Promise<string> {
+  const json = JSON.stringify(data);
+  const bytes = new TextEncoder().encode(json);
+
+  const cs = new CompressionStream('deflate-raw');
+  const writer = cs.writable.getWriter();
+  writer.write(bytes);
+  writer.close();
+
+  const compressed = await readAllBytes(cs.readable);
+  const base64 = btoa(String.fromCharCode(...compressed));
+
+  return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+export async function decompressFragment(encoded: string): Promise<object> {
+  const base64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
+  const binary = atob(base64);
+  const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+
+  const ds = new DecompressionStream('deflate-raw');
+  const writer = ds.writable.getWriter();
+  writer.write(bytes);
+  writer.close();
+
+  const decompressed = await readAllBytes(ds.readable);
+  const json = new TextDecoder().decode(decompressed);
+
+  return JSON.parse(json);
 }
 
 export function getAvatarApiUrl(
@@ -111,6 +182,10 @@ export function getAvatarApiUrl(
   }`;
 }
 
+function shellQuote(value: string): string {
+  return `'${escapeShellArg(value)}'`;
+}
+
 export function getAvatarApiCommand(
   avatarStyle: string,
   options: Record<string, unknown> = {},
@@ -119,7 +194,7 @@ export function getAvatarApiCommand(
     .map(([k, v]) => {
       if (Array.isArray(v)) {
         return `  --${k} ${v
-          .map((c) => typeof c === 'string' ? `'${c.replace(/'/g, "'\\''")}'` : String(c))
+          .map((c) => shellQuote(String(c)))
           .join(' ')}`.trimEnd();
       }
 
@@ -128,22 +203,22 @@ export function getAvatarApiCommand(
       }
 
       if (typeof v == 'string') {
-        return `  --${k} '${v.replace(/'/g, "'\\''")}'`;
+        return `  --${k} ${shellQuote(v)}`;
       }
 
       if (typeof v === 'object' && v !== null && !Array.isArray(v)) {
         const pairs = Object.entries(v)
-          .map(([vk, vv]) => `'${vk}:${vv}'`)
+          .map(([vk, vv]) => shellQuote(`${vk}:${vv}`))
           .join(' ');
 
         return `  --${k} ${pairs}`;
       }
 
-      return `  --${k} '${String(v)}'`;
+      return `  --${k} ${shellQuote(String(v))}`;
     })
     .join(' \\\n');
 
-  return `dicebear ${avatarStyle} .${
+  return `dicebear ${shellQuote(avatarStyle)} .${
     args.length > 0 ? ` \\\n${args}` : ''
   }`.trim();
 }
@@ -222,160 +297,6 @@ export function getAvatarPropertyPreviewOptions(
   };
 }
 
-// Parses URL query params into a validated options object for the playground store.
-// Only keys present in the descriptor are accepted. Values are type-checked and
-// bounds-checked against the descriptor definition.
-const DANGEROUS_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
-
-export function parsePlaygroundParams(
-  searchParams: URLSearchParams,
-  descriptor: Record<string, any>,
-): Record<string, unknown> {
-  const result: Record<string, unknown> = {};
-
-  for (const [key, raw] of searchParams) {
-    if (key === 'style' || key === 'seed') continue;
-    if (DANGEROUS_KEYS.has(key)) continue;
-
-    if (!Object.prototype.hasOwnProperty.call(descriptor, key)) continue;
-
-    const field = descriptor[key];
-
-    const parsed = parseParamValue(raw, field);
-
-    if (parsed !== undefined) {
-      result[key] = parsed;
-    }
-  }
-
-  return result;
-}
-
-function parseParamValue(raw: string, field: any): unknown {
-  switch (field.type) {
-    case 'string':
-      return raw;
-
-    case 'boolean':
-      return raw === 'true';
-
-    case 'number': {
-      const n = Number(raw);
-
-      if (isNaN(n)) return undefined;
-      if (field.min !== undefined && n < field.min) return undefined;
-      if (field.max !== undefined && n > field.max) return undefined;
-
-      return n;
-    }
-
-    case 'range': {
-      if (raw.includes(',')) {
-        const parts = raw.split(',').map(Number);
-
-        if (parts.length !== 2 || parts.some(isNaN)) return undefined;
-        if (field.min !== undefined && parts.some((p: number) => p < field.min)) return undefined;
-        if (field.max !== undefined && parts.some((p: number) => p > field.max)) return undefined;
-
-        return parts;
-      }
-
-      const n = Number(raw);
-
-      if (isNaN(n)) return undefined;
-      if (field.min !== undefined && n < field.min) return undefined;
-      if (field.max !== undefined && n > field.max) return undefined;
-
-      return n;
-    }
-
-    case 'enum': {
-      if (field.weighted && raw.includes(':')) {
-        // Weighted: "variant01:2,variant03:1"
-        const obj: Record<string, number> = {};
-
-        for (const pair of raw.split(',')) {
-          const [k, v] = pair.split(':');
-
-          if (!k || DANGEROUS_KEYS.has(k)) continue;
-
-          const weight = v !== undefined ? Number(v) : 1;
-
-          if (isNaN(weight)) continue;
-          if (field.values && !field.values.includes(k)) continue;
-
-          obj[k] = weight;
-        }
-
-        return Object.keys(obj).length > 0 ? obj : undefined;
-      }
-
-      if (raw.includes(',')) {
-        // Array: "variant01,variant03"
-        const values = raw.split(',');
-
-        if (field.values) {
-          const valid = values.filter((v: string) => field.values.includes(v));
-
-          return valid.length > 0 ? valid : undefined;
-        }
-
-        return values;
-      }
-
-      // Single value
-      if (field.values && !field.values.includes(raw)) return undefined;
-
-      return raw;
-    }
-
-    case 'color': {
-      if (raw === '') return [];
-
-      const colors = raw.split(',').filter((c: string) =>
-        /^[0-9a-fA-F]{3}$|^[0-9a-fA-F]{4}$|^[0-9a-fA-F]{6}$|^[0-9a-fA-F]{8}$/.test(c)
-      );
-
-      return colors.length > 0 ? colors : undefined;
-    }
-
-    default:
-      return undefined;
-  }
-}
-
-// Serializes playground options to URL search params (inverse of parsePlaygroundParams).
-export function serializePlaygroundParams(
-  styleName: string,
-  seed: string,
-  options: Record<string, unknown>,
-): URLSearchParams {
-  const params = new URLSearchParams();
-
-  params.set('style', kebabCase(styleName));
-
-  if (seed) {
-    params.set('seed', seed);
-  }
-
-  for (const [key, value] of Object.entries(options)) {
-    if (value === undefined) continue;
-
-    if (Array.isArray(value)) {
-      params.set(key, value.join(','));
-    } else if (typeof value === 'object' && value !== null) {
-      const pairs = Object.entries(value)
-        .map(([vk, vv]) => `${vk}:${vv}`)
-        .join(',');
-
-      params.set(key, pairs);
-    } else {
-      params.set(key, String(value));
-    }
-  }
-
-  return params;
-}
 
 function getDisabledProbabilities(
   excludeKey: string,

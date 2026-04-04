@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Download } from '@lucide/vue';
-import { getAvatarApiUrl } from '@theme/utils/avatar';
+import { Avatar } from '@dicebear/core';
+import { getAvatarApiUrl, loadAvatarStyle, clonePlain } from '@theme/utils/avatar';
 import { UiAvatar } from '../ui';
 import PlaygroundConfetti from './PlaygroundConfetti.vue';
 import PlaygroundDialog from './PlaygroundDialog.vue';
@@ -17,6 +18,29 @@ const props = defineProps<{
 const { store, open, confettiKey, options, showDialog } = usePlaygroundDialog(() => props.seed);
 const menu = ref();
 
+function triggerDownload(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+async function downloadSvg() {
+  showDialog();
+
+  const avatarStyle = await loadAvatarStyle(store.avatarStyleName);
+  const avatar = new Avatar(avatarStyle, clonePlain({
+    ...options.value,
+    size: 512,
+  }));
+
+  const blob = new Blob([avatar.toString()], { type: 'image/svg+xml' });
+  triggerDownload(blob, `${store.avatarStyleName}-${Date.now()}.svg`);
+}
+
 async function downloadBinary(format: string) {
   showDialog();
 
@@ -25,30 +49,28 @@ async function downloadBinary(format: string) {
   );
 
   const blob = await response.blob();
-  const file = URL.createObjectURL(blob);
-  const timestamp = new Date().getTime();
-
-  const link = document.createElement('a');
-  link.href = file;
-  link.download = `${store.avatarStyleName}-${timestamp}.${format}`;
-  link.target = '_blank';
-  link.click();
-  link.remove();
-
-  URL.revokeObjectURL(file);
+  triggerDownload(blob, `${store.avatarStyleName}-${Date.now()}.${format}`);
 }
 
 const menuItems = [
-  { label: 'SVG', command: () => downloadBinary('svg') },
+  { label: 'SVG', command: () => downloadSvg() },
   { label: 'PNG', command: () => downloadBinary('png') },
   { label: 'JPEG', command: () => downloadBinary('jpg') },
   { label: 'WebP', command: () => downloadBinary('webp') },
   { label: 'AVIF', command: () => downloadBinary('avif') },
 ];
+
+function onDownloadClick(e: Event) {
+  if (store.isCustomStyle) {
+    downloadSvg();
+  } else {
+    menu.value.toggle(e);
+  }
+}
 </script>
 
 <template>
-  <Button label="Download" severity="secondary" @click="(e: Event) => menu.toggle(e)">
+  <Button :label="store.isCustomStyle ? 'Download SVG' : 'Download'" severity="secondary" @click="onDownloadClick">
     <template #icon>
       <Download :size="15" />
     </template>
@@ -62,6 +84,7 @@ const menuItems = [
         :style-name="store.avatarStyleName"
         :style-options="options"
         :size="128"
+        mode="library"
       />
     </div>
     <div class="dialog-title">

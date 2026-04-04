@@ -18,6 +18,11 @@ defineProps<{
 
 <style scoped lang="scss">
 .playground-license-alert {
+  :deep(.p-message-text) {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
   :deep(strong) {
     display: block;
     margin-bottom: 4px;

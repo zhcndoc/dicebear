@@ -1,21 +1,92 @@
 <script setup lang="ts">
 import { useAvatarStyleMeta } from '@theme/composables/avatar';
+import { loadAvatarStyle } from '@theme/utils/avatar';
 import { capitalCase, kebabCase } from 'change-case';
 import { computed } from 'vue';
+import { computedAsync } from '@vueuse/core';
 import useStore from '@theme/stores/playground';
 
 const store = useStore();
 
 const avatarStyleKey = computed(() => store.avatarStyleName);
 const avatarStyleMeta = useAvatarStyleMeta(avatarStyleKey);
-const avatarStyleName = computed(() => capitalCase(store.avatarStyleName));
+
+// For custom styles, load meta from the Style object directly
+const customStyleMeta = computedAsync(async () => {
+  if (!store.isCustomStyle) return null;
+
+  try {
+    const style = await loadAvatarStyle(store.avatarStyleName);
+    const meta = style.meta();
+
+    return {
+      creator: meta.creator()?.name(),
+      homepage: meta.creator()?.url(),
+      title: meta.source()?.name(),
+      source: meta.source()?.url(),
+      license: {
+        name: meta.license()?.name(),
+        url: meta.license()?.url(),
+      },
+    };
+  } catch {
+    return null;
+  }
+}, null);
+
+const hasCustomMeta = computed(() => {
+  const meta = customStyleMeta.value;
+  return meta && (meta.creator || meta.license?.name);
+});
+
+const avatarStyleName = computed(() => {
+  if (store.isCustomStyle) {
+    return store.customStyles[store.avatarStyleName]?.name ?? 'Custom Style';
+  }
+
+  return capitalCase(store.avatarStyleName);
+});
+
 const avatarStyleLink = computed(
-  () => `/styles/${kebabCase(store.avatarStyleName)}/`,
+  () => store.isCustomStyle ? undefined : `/styles/${kebabCase(store.avatarStyleName)}/`,
 );
 </script>
 
 <template>
-  <p class="playground-license-text">
+  <p class="playground-license-text" v-if="store.isCustomStyle">
+    <template v-if="hasCustomMeta">
+      <span class="playground-license-text-name">{{ avatarStyleName }}</span>
+      <template v-if="customStyleMeta?.title">
+        is based on:
+        <a
+          v-if="customStyleMeta?.source"
+          :href="customStyleMeta.source"
+          target="_blank"
+          rel="noopener noreferrer"
+        >{{ customStyleMeta.title }}</a>
+        <template v-else>{{ customStyleMeta.title }}</template>
+      </template>
+      <template v-if="customStyleMeta?.creator">
+        by {{ customStyleMeta.creator }}
+      </template>
+      <template v-if="customStyleMeta?.license?.name">
+        , licensed under
+        <a
+          v-if="customStyleMeta?.license?.url"
+          :href="customStyleMeta.license.url"
+          target="_blank"
+          rel="noopener noreferrer"
+        >{{ customStyleMeta.license.name }}</a>
+        <template v-else>{{ customStyleMeta.license.name }}</template>
+      </template>
+      (as stated by the creator — not verified by DiceBear).
+    </template>
+    <template v-else>
+      This avatar style was provided by a user. License and copyright have not been verified by DiceBear.
+    </template>
+  </p>
+
+  <p class="playground-license-text" v-else>
     <template v-if="avatarStyleMeta?.creator !== 'DiceBear'">
       The avatar style
     </template>
@@ -60,6 +131,10 @@ const avatarStyleLink = computed(
 
 <style scoped lang="scss">
 .playground-license-text {
+  &-name {
+    font-weight: 600;
+  }
+
   a {
     font-weight: 500;
     color: var(--vp-c-brand-1);

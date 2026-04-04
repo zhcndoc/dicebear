@@ -23,5 +23,10 @@ export type ThemeOptions = {
   githubStars: Record<string, string>;
 } & DefaultTheme.Config;
 
+export type CustomStyleEntry = {
+  name: string;
+  definition: object;
+};
+
 export type PlaygroundStoreStyle = string;
 export type PlaygroundStoreOptions = Record<string, any>;

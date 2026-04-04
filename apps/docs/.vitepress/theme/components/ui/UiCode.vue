@@ -3,6 +3,7 @@ import { onBeforeUnmount, onMounted, ref, watch, computed } from 'vue';
 import hljs from 'highlight.js/lib/core';
 import javascript from 'highlight.js/lib/languages/javascript';
 import xml from 'highlight.js/lib/languages/xml';
+import php from 'highlight.js/lib/languages/php';
 import { Copy, Check } from '@lucide/vue';
 
 const props = defineProps<{
@@ -50,6 +51,7 @@ onBeforeUnmount(() => {
 onMounted(() => {
   hljs.getLanguage('js') || hljs.registerLanguage('js', javascript);
   hljs.getLanguage('html') || hljs.registerLanguage('html', xml);
+  hljs.getLanguage('php') || hljs.registerLanguage('php', php);
 
   updateCodeHtml();
 });

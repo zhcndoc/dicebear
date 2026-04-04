@@ -60,7 +60,6 @@ const playgroundUrl = computed(() => {
   <a
     :href="playgroundUrl"
     class="style-description-btn"
-    target="_blank"
   >
     Open in Playground
   </a>

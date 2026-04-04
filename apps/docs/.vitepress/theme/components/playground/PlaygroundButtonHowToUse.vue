@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Code as CodeIcon } from '@lucide/vue';
-import { computed, ref } from 'vue';
-import { UiAvatar, UiCode } from '../ui';
+import { computed, ref, watch } from 'vue';
+import { UiCode } from '../ui';
 import { getAvatarApiUrl, getAvatarApiCommand } from '@theme/utils/avatar';
 import PlaygroundDialog from './PlaygroundDialog.vue';
 import Button from 'primevue/button';
@@ -19,7 +19,13 @@ const props = defineProps<{
 
 const { store, open, options } = usePlaygroundDialog(() => props.seed);
 
-const tab = ref<string>('http-api');
+const tab = ref<string>(store.isCustomStyle ? 'js-library' : 'http-api');
+
+watch(() => store.isCustomStyle, (isCustom) => {
+  if (isCustom && tab.value === 'http-api') {
+    tab.value = 'js-library';
+  }
+});
 
 const exampleHttpApi = computed(() =>
   getAvatarApiUrl(store.avatarStyleName, options.value)
@@ -29,8 +35,24 @@ const exampleHttpApiHtml = computed(
   src="${getAvatarApiUrl(store.avatarStyleName, options.value)}"
   alt="avatar" />`
 );
-const exampleJsLibrary = computed(
-  () => `import { Style, Avatar } from '@dicebear/core';
+const exampleJsLibrary = computed(() => {
+  if (store.isCustomStyle) {
+    return `import { Style, Avatar } from '@dicebear/core';
+
+// Your custom style definition
+const definition = { /* ... */ };
+
+const style = new Style(definition);
+const avatar = new Avatar(style, ${JSON.stringify(
+      options.value,
+      null,
+      2
+    )});
+
+const svg = avatar.toString();`;
+  }
+
+  return `import { Style, Avatar } from '@dicebear/core';
 import definition from '@dicebear/definitions/${store.avatarStyleName}.json';
 
 const style = new Style(definition);
@@ -40,10 +62,78 @@ const avatar = new Avatar(style, ${JSON.stringify(
     2
   )});
 
-const svg = avatar.toString();`
-);
+const svg = avatar.toString();`;
+});
+function toPhpValue(value: unknown, depth: number): string {
+  const indent = '    '.repeat(depth);
+  const outerIndent = '    '.repeat(depth - 1);
+
+  if (value === null || value === undefined) return 'null';
+  if (typeof value === 'boolean') return value ? 'true' : 'false';
+  if (typeof value === 'number') return String(value);
+  if (typeof value === 'string') return `'${value.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
+
+  if (Array.isArray(value)) {
+    if (value.length === 0) return '[]';
+
+    const items = value.map((v) => `${indent}${toPhpValue(v, depth + 1)}`);
+
+    return `[\n${items.join(',\n')}\n${outerIndent}]`;
+  }
+
+  if (typeof value === 'object') {
+    const entries = Object.entries(value as Record<string, unknown>);
+
+    if (entries.length === 0) return '[]';
+
+    const items = entries.map(
+      ([k, v]) => `${indent}'${k.replace(/'/g, "\\'")}' => ${toPhpValue(v, depth + 1)}`,
+    );
+
+    return `[\n${items.join(',\n')}\n${outerIndent}]`;
+  }
+
+  return String(value);
+}
+
+const examplePhp = computed(() => {
+  const phpOptions = toPhpValue(options.value, 1);
+
+  if (store.isCustomStyle) {
+    return `<?php
+
+use DiceBear\\Style;
+use DiceBear\\Avatar;
+
+// Your custom style definition
+$definition = json_decode(file_get_contents('./my-style.json'), true);
+
+$style = new Style($definition);
+$avatar = new Avatar($style, ${phpOptions});
+
+$svg = (string) $avatar;`;
+  }
+
+  return `<?php
+
+use Composer\\InstalledVersions;
+use DiceBear\\Style;
+use DiceBear\\Avatar;
+
+$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$definition = json_decode(file_get_contents($basePath . '/src/${store.avatarStyleName}.json'), true);
+
+$style = new Style($definition);
+$avatar = new Avatar($style, ${phpOptions});
+
+$svg = (string) $avatar;`;
+});
+
 const exampleCli = computed(() =>
-  getAvatarApiCommand(store.avatarStyleName, options.value)
+  getAvatarApiCommand(
+    store.isCustomStyle ? './my-style.json' : store.avatarStyleName,
+    options.value,
+  )
 );
 </script>
 
@@ -60,12 +150,13 @@ const exampleCli = computed(() =>
       <div class="playground-button-how-to-use-tabs-card">
         <Tabs v-model:value="tab">
           <TabList>
-            <Tab value="http-api">HTTP-API</Tab>
+            <Tab v-if="!store.isCustomStyle" value="http-api">HTTP-API</Tab>
             <Tab value="js-library">JS-Library</Tab>
+            <Tab value="php-library">PHP-Library</Tab>
             <Tab value="cli">CLI</Tab>
           </TabList>
           <TabPanels>
-            <TabPanel value="http-api">
+            <TabPanel v-if="!store.isCustomStyle" value="http-api">
               <div class="playground-button-how-to-use-tab-content">
                 <p>Use this URL to request this avatar style via our HTTP API.</p>
                 <UiCode :code="exampleHttpApi" />
@@ -81,7 +172,9 @@ const exampleCli = computed(() =>
               <div class="playground-button-how-to-use-tab-content">
                 <p>First install the required packages via npm:</p>
                 <UiCode
-                  code="npm install @dicebear/core @dicebear/definitions --save"
+                  :code="store.isCustomStyle
+                    ? 'npm install @dicebear/core --save'
+                    : 'npm install @dicebear/core @dicebear/definitions --save'"
                 />
                 <p>Then you can create this avatar as follows:</p>
                 <UiCode :code="exampleJsLibrary" lang="js" />
@@ -91,12 +184,30 @@ const exampleCli = computed(() =>
                 </p>
               </div>
             </TabPanel>
+            <TabPanel value="php-library">
+              <div class="playground-button-how-to-use-tab-content">
+                <p>First install the required packages via Composer:</p>
+                <UiCode
+                  :code="store.isCustomStyle
+                    ? 'composer require dicebear/core'
+                    : 'composer require dicebear/core dicebear/definitions'"
+                />
+                <p>Then you can create this avatar as follows:</p>
+                <UiCode :code="examplePhp" lang="php" />
+                <p v-if="store.isCustomStyle">
+                  Replace <code>./my-style.json</code> with the path to your style definition.
+                </p>
+              </div>
+            </TabPanel>
             <TabPanel value="cli">
               <div class="playground-button-how-to-use-tab-content">
                 <p>First install the CLI package via npm:</p>
                 <UiCode code="npm install --global dicebear" />
                 <p>Then you can create this avatar as follows:</p>
                 <UiCode :code="exampleCli" />
+                <p v-if="store.isCustomStyle">
+                  Replace <code>./my-style.json</code> with the path to your style definition.
+                </p>
                 <p>
                   See <a href="/how-to-use/cli">CLI</a> docs for more information.
                 </p>

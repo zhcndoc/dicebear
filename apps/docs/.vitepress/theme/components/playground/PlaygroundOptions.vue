@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject, ref, watch } from 'vue';
 import { OptionsDescriptor } from '@dicebear/core';
-import { loadAvatarStyle, parsePlaygroundParams, stripHash } from '@theme/utils/avatar';
+import { loadAvatarStyle, stripHash } from '@theme/utils/avatar';
 import { useDependencyMap, type ComponentDependency } from '@theme/composables/useDependencyMap';
 import { computedAsync } from '@vueuse/core';
 import { capitalCase } from 'change-case';
@@ -34,19 +34,19 @@ const descriptor = computed(() => {
   return new OptionsDescriptor(loadedStyle.value).toJSON();
 });
 
-// Apply URL params once after descriptor first loads
-const initialUrlParams = inject<URLSearchParams>('initialUrlParams', new URLSearchParams());
-const urlParamsApplied = ref(false);
+// Apply initial options (from fragment import) once after descriptor first loads
+const initialOptions = inject<import('vue').Ref<Record<string, unknown>>>('initialOptions', ref({}));
+const initialOptionsApplied = ref(false);
 
 watch(descriptor, (desc) => {
-  if (urlParamsApplied.value || Object.keys(desc).length === 0) return;
+  if (initialOptionsApplied.value || Object.keys(desc).length === 0) return;
 
-  urlParamsApplied.value = true;
+  initialOptionsApplied.value = true;
 
-  const parsed = parsePlaygroundParams(initialUrlParams, desc);
+  const opts = initialOptions.value;
 
-  if (Object.keys(parsed).length > 0) {
-    Object.assign(store.avatarStyleOptions, parsed);
+  if (Object.keys(opts).length > 0) {
+    Object.assign(store.avatarStyleOptions, opts);
   }
 }, { immediate: true });
 

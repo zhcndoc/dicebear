@@ -1,5 +1,6 @@
-import { ref, computed } from 'vue';
+import { ref, computed, Ref } from 'vue';
 import { kebabCase, capitalCase } from 'change-case';
+import type { CustomStyleEntry } from '@theme/types';
 
 interface StyleMeta {
   meta: {
@@ -22,7 +23,7 @@ function getCategory(name: string): string {
   return minimalistStyles.has(name) ? 'Minimalist' : 'Characters';
 }
 
-const categoryOrder = ['Minimalist', 'Characters', 'Other'];
+const categoryOrder = ['Custom', 'Minimalist', 'Characters', 'Other'];
 
 const seeds = ['Felix', 'Aneka', 'Milo', 'Luna'];
 
@@ -33,13 +34,16 @@ function normalizeLicense(license: string): string {
   return 'Other';
 }
 
-export function useStyleFiltering(styles: Record<string, StyleMeta>) {
+export function useStyleFiltering(
+  styles: Record<string, StyleMeta>,
+  customStyles?: Ref<Record<string, CustomStyleEntry>>,
+) {
   const searchQuery = ref('');
   const selectedLicense = ref<string | null>(null);
   const selectedCategory = ref<string | null>(null);
 
   const allStyles = computed(() => {
-    return Object.entries(styles)
+    const builtIn = Object.entries(styles)
       .map(([styleName, style]) => {
         const rawLicense = style.meta.license?.name || 'Unknown';
         return {
@@ -50,12 +54,31 @@ export function useStyleFiltering(styles: Record<string, StyleMeta>) {
           license: rawLicense,
           licenseNormalized: normalizeLicense(rawLicense),
           category: getCategory(kebabCase(styleName)),
+          isCustom: false,
           avatars: seeds.map((seed) => ({
             seed,
           })),
         };
       })
       .sort((a, b) => a.displayName.localeCompare(b.displayName));
+
+    if (!customStyles) return builtIn;
+
+    const custom = Object.entries(customStyles.value).map(([key, entry]) => ({
+      name: key,
+      displayName: entry.name,
+      slug: key,
+      creator: 'Custom',
+      license: 'Unknown',
+      licenseNormalized: 'Unknown',
+      category: 'Custom',
+      isCustom: true,
+      avatars: seeds.map((seed) => ({
+        seed,
+      })),
+    }));
+
+    return [...custom, ...builtIn];
   });
 
   const availableLicenses = computed(() => {

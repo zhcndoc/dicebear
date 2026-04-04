@@ -1,56 +1,77 @@
 <script setup lang="ts">
-import { ref, computed, provide } from 'vue';
-import { capitalCase } from 'change-case';
-import { useData } from 'vitepress';
+import { ref, provide } from 'vue';
 import { storeToRefs } from 'pinia';
+import { kebabCase } from 'change-case';
 import { RotateCcw, Link } from '@lucide/vue';
 import PlaygroundOptions from './PlaygroundOptions.vue';
 import PlaygroundPreviewPanel from './PlaygroundPreviewPanel.vue';
+import PlaygroundStyleSelect from './PlaygroundStyleSelect.vue';
 import useStore from '@theme/stores/playground';
-import { ThemeOptions } from '@theme/types';
-import { UiAvatar } from '../ui';
-import { serializePlaygroundParams } from '@theme/utils/avatar';
-import Select from 'primevue/select';
+import { compressFragment, decompressFragment } from '@theme/utils/avatar';
 import Button from 'primevue/button';
 
 const store = useStore();
-const { avatarStyleName } = storeToRefs(store);
-const data = useData<ThemeOptions>();
+const { avatarStyleName, seed } = storeToRefs(store);
 
-// Read URL params once on init, then clear them from the address bar
-const urlParams = new URL(window.location.href).searchParams;
-const seed = ref(urlParams.get('seed') ?? 'Felix');
-const initialUrlParams = new URLSearchParams(urlParams);
+const initialOptions = ref<Record<string, unknown>>({});
 
-if (initialUrlParams.toString()) {
+// ?style= query param overrides persisted style (used by "Open in Playground" links)
+const styleParam = new URL(window.location.href).searchParams.get('style');
+
+if (styleParam) {
+  const styleName = kebabCase(styleParam);
+
+  if (store.availableAvatarStyles.includes(styleName)) {
+    avatarStyleName.value = styleName;
+    store.resetOptions();
+  }
+
   history.replaceState(null, '', window.location.pathname);
 }
 
-const styleOptions = computed(() =>
-  Object.keys(data.theme.value.avatarStyles)
-    .sort()
-    .map((key) => ({ value: key, label: capitalCase(key) })),
-);
+// Fragment import: read #data=... on init, overrides persisted state
+async function importFragment() {
+  const hash = window.location.hash;
 
-function resetOptions() {
-  for (const key of Object.keys(store.avatarStyleOptions)) {
-    delete store.avatarStyleOptions[key];
+  if (!hash.startsWith('#data=')) return;
+
+  try {
+    const payload = await decompressFragment(hash.slice('#data='.length)) as {
+      style?: string;
+      options?: Record<string, unknown>;
+    };
+
+    store.resetOptions();
+
+    if (payload.style && store.availableAvatarStyles.includes(payload.style)) {
+      avatarStyleName.value = payload.style;
+    }
+
+    if (payload.options && typeof payload.options === 'object') {
+      initialOptions.value = payload.options;
+    }
+  } catch {
+    // Invalid fragment — ignore, use defaults
   }
+
+  history.replaceState(null, '', window.location.pathname);
 }
 
-// Provide initial URL params to PlaygroundOptions for deferred application
-provide('initialUrlParams', initialUrlParams);
+importFragment();
+
+// Provide initial options from fragment to PlaygroundOptions
+provide('initialOptions', initialOptions);
 
 const linkCopied = ref(false);
 
 async function copyLink() {
-  const params = serializePlaygroundParams(
-    avatarStyleName.value,
-    seed.value,
-    store.avatarStyleOptionsWithoutDefaults,
-  );
+  const payload: Record<string, unknown> = {
+    style: avatarStyleName.value,
+    options: store.avatarStyleOptionsWithoutDefaults,
+  };
 
-  const url = `${window.location.origin}${window.location.pathname}?${params}`;
+  const encoded = await compressFragment(payload);
+  const url = `${window.location.origin}${window.location.pathname}#data=${encoded}`;
 
   await navigator.clipboard.writeText(url);
 
@@ -63,31 +84,14 @@ async function copyLink() {
 <template>
   <div class="pg">
     <header class="pg-header">
-      <Select
-        v-model="avatarStyleName"
-        :options="styleOptions"
-        option-label="label"
-        option-value="value"
-        class="pg-header-style"
-      >
-        <template #value="{ value }">
-          <div class="pg-header-style-item" v-if="value">
-            <UiAvatar :size="20" :style-name="value" :style-options="{ seed: 'JD' }" mode="library" />
-            <span>{{ capitalCase(value) }}</span>
-          </div>
-        </template>
-        <template #option="{ option }">
-          <div class="pg-header-style-item">
-            <UiAvatar :size="20" :style-name="option.value" :style-options="{ seed: 'JD' }" mode="http-api" />
-            <span>{{ option.label }}</span>
-          </div>
-        </template>
-      </Select>
+      <PlaygroundStyleSelect />
 
       <div class="pg-header-actions">
         <Button
           :label="linkCopied ? 'Copied!' : 'Copy Link'"
           severity="secondary"
+          :disabled="store.isCustomStyle"
+          v-tooltip="store.isCustomStyle ? 'Custom styles cannot be shared via link' : undefined"
           @click="copyLink"
         >
           <template #icon>
@@ -97,7 +101,7 @@ async function copyLink() {
         <Button
           label="Reset"
           severity="secondary"
-          @click="resetOptions"
+          @click="store.resetOptions"
         >
           <template #icon>
             <RotateCcw :size="15" />
@@ -132,16 +136,6 @@ async function copyLink() {
   padding: 12px 0;
   margin-bottom: 20px;
   border-bottom: 1px solid var(--pg-border);
-
-  &-style {
-    min-width: 200px;
-  }
-
-  &-style-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
 
   &-actions {
     display: flex;
