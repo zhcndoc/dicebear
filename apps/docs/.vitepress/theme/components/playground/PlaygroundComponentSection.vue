@@ -17,6 +17,7 @@ const props = defineProps<{
   hasTranslateX: boolean;
   hasTranslateY: boolean;
   hasNonDefaultWeights: boolean;
+  defaultWeights: Record<string, number>;
   defaultProbability: number;
   defaultRotate: readonly number[];
   defaultTranslateX: readonly number[];
@@ -40,6 +41,7 @@ const {
   () => props.componentName,
   () => props.variants,
   () => props.hasNonDefaultWeights,
+  () => props.defaultWeights,
 );
 
 // Build options that isolate this component by hiding all others

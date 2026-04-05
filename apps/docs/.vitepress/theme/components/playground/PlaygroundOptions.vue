@@ -76,6 +76,7 @@ type ComponentInfo = {
   defaultTranslateX: readonly number[];
   defaultTranslateY: readonly number[];
   hasNonDefaultWeights: boolean;
+  defaultWeights: Record<string, number>;
   dependency?: ComponentDependency;
 };
 
@@ -111,6 +112,9 @@ const components = computed(() => {
       defaultTranslateX: comp?.translate().x() ?? [],
       defaultTranslateY: comp?.translate().y() ?? [],
       hasNonDefaultWeights: comp ? [...comp.variants().values()].some((v) => v.weight() !== 1) : false,
+      defaultWeights: comp
+        ? Object.fromEntries([...comp.variants()].map(([name, v]) => [name, v.weight()]))
+        : {},
       dependency: componentDeps.value[name],
     });
   }
@@ -239,6 +243,7 @@ const onSeedFocus = (e: FocusEvent) => {
               :default-translate-x="comp.defaultTranslateX"
               :default-translate-y="comp.defaultTranslateY"
               :has-non-default-weights="comp.hasNonDefaultWeights"
+              :default-weights="comp.defaultWeights"
               :dependency="comp.dependency"
               :all-dependencies="componentDeps"
             />
