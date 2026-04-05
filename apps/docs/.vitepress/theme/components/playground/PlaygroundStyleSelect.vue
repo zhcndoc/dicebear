@@ -86,8 +86,8 @@ const currentDisplayName = computed(() => {
       :style-options="{ seed: 'JD' }"
       mode="library"
     />
-    <span>{{ currentDisplayName }}</span>
-    <ChevronDown :size="14" />
+    <span class="pg-style-select-trigger-label">{{ currentDisplayName }}</span>
+    <ChevronDown :size="14" class="pg-style-select-trigger-chevron" />
   </Button>
 
   <Dialog
@@ -231,6 +231,16 @@ const currentDisplayName = computed(() => {
   align-items: center;
   gap: 8px;
   min-width: 200px;
+
+  &-label {
+    flex: 1;
+    text-align: left;
+  }
+
+  &-chevron {
+    flex-shrink: 0;
+    margin-left: auto;
+  }
 }
 
 .pg-style-select {

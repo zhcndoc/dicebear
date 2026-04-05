@@ -45,17 +45,47 @@ const definitionImports: Record<string, () => Promise<{ default: unknown }>> = {
 };
 
 const styleCache = new Map<string, Style>();
+const definitionRawCache = new Map<string, object>();
+const variableResultCache = new Map<string, Map<string, boolean>>();
+
+export const webSafeFonts = [
+  'system-ui',
+  'Arial',
+  'Verdana',
+  'Tahoma',
+  'Trebuchet MS',
+  'Times New Roman',
+  'Georgia',
+  'Garamond',
+  'Courier New',
+] as const;
+
+export const fontWeights = [
+  { label: '100 — Thin', value: 100 },
+  { label: '200 — Extra Light', value: 200 },
+  { label: '300 — Light', value: 300 },
+  { label: '400 — Normal', value: 400 },
+  { label: '500 — Medium', value: 500 },
+  { label: '600 — Semi Bold', value: 600 },
+  { label: '700 — Bold', value: 700 },
+  { label: '800 — Extra Bold', value: 800 },
+  { label: '900 — Black', value: 900 },
+] as const;
 
 export function registerCustomStyle(key: string, definition: object): Style {
   const style = new Style(definition);
 
   styleCache.set(key, style);
+  definitionRawCache.set(key, definition);
+  variableResultCache.delete(key);
 
   return style;
 }
 
 export function unregisterCustomStyle(key: string): void {
   styleCache.delete(key);
+  definitionRawCache.delete(key);
+  variableResultCache.delete(key);
 }
 
 export async function loadAvatarStyle(avatarStyle: string): Promise<Style> {
@@ -79,11 +109,52 @@ export async function loadAvatarStyle(avatarStyle: string): Promise<Style> {
   }
 
   const def = await loader();
-  const style = new Style(def.default);
+  const raw = def.default as object;
+
+  definitionRawCache.set(name, raw);
+
+  const style = new Style(raw);
 
   styleCache.set(name, style);
 
   return style;
+}
+
+function scanForVariable(obj: unknown, variableName: string): boolean {
+  if (typeof obj !== 'object' || obj === null) return false;
+
+  const record = obj as Record<string, unknown>;
+
+  if (record.type === 'variable' && record.value === variableName) return true;
+
+  for (const val of Object.values(record)) {
+    if (scanForVariable(val, variableName)) return true;
+  }
+
+  return false;
+}
+
+export function styleUsesVariable(avatarStyle: string, variableName: string): boolean {
+  const name = kebabCase(avatarStyle);
+  const key = definitionRawCache.has(name) ? name : avatarStyle;
+  const raw = definitionRawCache.get(key);
+
+  if (!raw) return false;
+
+  let perStyle = variableResultCache.get(key);
+
+  if (!perStyle) {
+    perStyle = new Map();
+    variableResultCache.set(key, perStyle);
+  }
+
+  if (perStyle.has(variableName)) return perStyle.get(variableName)!;
+
+  const result = scanForVariable(raw, variableName);
+
+  perStyle.set(variableName, result);
+
+  return result;
 }
 
 async function readAllBytes(readable: ReadableStream<Uint8Array>): Promise<Uint8Array> {

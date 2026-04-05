@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject, ref, watch } from 'vue';
 import { OptionsDescriptor } from '@dicebear/core';
-import { loadAvatarStyle, stripHash } from '@theme/utils/avatar';
+import { loadAvatarStyle, stripHash, styleUsesVariable, webSafeFonts } from '@theme/utils/avatar';
 import { useDependencyMap, type ComponentDependency } from '@theme/composables/useDependencyMap';
 import { computedAsync } from '@vueuse/core';
 import { capitalCase } from 'change-case';
@@ -18,6 +18,7 @@ import { Shuffle } from '@lucide/vue';
 import PlaygroundComponentSection from './PlaygroundComponentSection.vue';
 import PlaygroundColorSection from './PlaygroundColorSection.vue';
 import PlaygroundTransformSection from './PlaygroundTransformSection.vue';
+import PlaygroundFontSection from './PlaygroundFontSection.vue';
 
 const seed = defineModel<string>('seed', { required: true });
 
@@ -46,6 +47,17 @@ watch(descriptor, (desc) => {
   const opts = initialOptions.value;
 
   if (Object.keys(opts).length > 0) {
+    if ('fontFamily' in opts) {
+      const allowed: readonly string[] = webSafeFonts;
+
+      if (typeof opts.fontFamily === 'string' && !allowed.includes(opts.fontFamily)) {
+        delete opts.fontFamily;
+      } else if (Array.isArray(opts.fontFamily)) {
+        opts.fontFamily = opts.fontFamily.filter((f: unknown) => typeof f === 'string' && allowed.includes(f));
+        if ((opts.fontFamily as string[]).length === 0) delete opts.fontFamily;
+      }
+    }
+
     Object.assign(store.avatarStyleOptions, opts);
   }
 }, { immediate: true });
@@ -61,6 +73,14 @@ const defaultColors = computed<Record<string, string[]>>(() => {
 
   return result;
 });
+
+const hasFontFamily = computed(() =>
+  loadedStyle.value ? styleUsesVariable(avatarStyleName.value, 'fontFamily') : false,
+);
+
+const hasFontWeight = computed(() =>
+  loadedStyle.value ? styleUsesVariable(avatarStyleName.value, 'fontWeight') : false,
+);
 
 const { componentDeps } = useDependencyMap(loadedStyle);
 
@@ -208,6 +228,14 @@ const onSeedFocus = (e: FocusEvent) => {
               <Shuffle :size="16" />
             </Button>
           </div>
+        </AccordionContent>
+      </AccordionPanel>
+      <AccordionPanel v-if="hasFontFamily || hasFontWeight" value="__font">
+        <AccordionHeader>
+          <span class="pg-options-label">Font</span>
+        </AccordionHeader>
+        <AccordionContent>
+          <PlaygroundFontSection :key="avatarStyleName" :has-font-family="hasFontFamily" :has-font-weight="hasFontWeight" />
         </AccordionContent>
       </AccordionPanel>
       <AccordionPanel value="__transform">

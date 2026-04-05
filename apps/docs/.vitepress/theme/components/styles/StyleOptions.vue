@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { OptionsDescriptor } from '@dicebear/core';
-import { loadAvatarStyle } from '@theme/utils/avatar';
+import { loadAvatarStyle, styleUsesVariable } from '@theme/utils/avatar';
 import { computedAsync } from '@vueuse/core';
 import { capitalCase } from 'change-case';
 import { Search } from '@lucide/vue';
@@ -69,8 +69,14 @@ const groups = computed<OptionGroup[]>(() => {
   const { descriptor, componentNames, colorNames } = styleData.value;
   const result: OptionGroup[] = [];
 
+  const hiddenKeys = new Set<string>();
+
+  if (!styleUsesVariable(props.styleName, 'fontFamily')) hiddenKeys.add('fontFamily');
+  if (!styleUsesVariable(props.styleName, 'fontWeight')) hiddenKeys.add('fontWeight');
+
   const generalKeys = Object.keys(descriptor).filter(
     (key) =>
+      !hiddenKeys.has(key) &&
       !isComponentOption(key, componentNames) &&
       !isColorOption(key, colorNames),
   );
