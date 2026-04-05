@@ -149,8 +149,9 @@ const canSubmit = computed(() => jsonInput.value.trim().length > 0 && !loading.v
       />
 
       <p class="pg-custom-upload-notice">
-        Make sure you have the necessary rights to use this avatar style.
-        Your style will be stored locally in your browser for easy access.
+        Note: Please only upload styles for which you hold the necessary
+        copyrights. Your data is processed and stored exclusively in your
+        local browser and never reaches our server.
       </p>
     </div>
   </Dialog>

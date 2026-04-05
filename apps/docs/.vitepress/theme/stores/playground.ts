@@ -1,13 +1,14 @@
 import { defineStore } from 'pinia';
 import { computed, watch } from 'vue';
 import { useLocalStorage } from '@vueuse/core';
+import { useIDBKeyval } from '@vueuse/integrations/useIDBKeyval';
 import type {
   CustomStyleEntry,
   PlaygroundStoreStyle,
   PlaygroundStoreOptions,
 } from '@theme/types';
 import { useData } from 'vitepress';
-import { registerCustomStyle, unregisterCustomStyle } from '@theme/utils/avatar';
+import { clonePlain, registerCustomStyle, unregisterCustomStyle } from '@theme/utils/avatar';
 
 export default defineStore('playground', () => {
   const data = useData();
@@ -24,20 +25,31 @@ export default defineStore('playground', () => {
   );
   const seed = useLocalStorage<string>('dicebear-playground-seed', 'Felix');
 
-  const customStyles = useLocalStorage<Record<string, CustomStyleEntry>>(
+  const { data: customStyles, isFinished: customStylesReady } = useIDBKeyval<Record<string, CustomStyleEntry>>(
     'dicebear-playground-custom-styles',
     {},
   );
 
-  // Register persisted custom styles in the style cache on init.
-  // Strip Vue reactive proxies — Style constructor uses structuredClone internally.
-  for (const [key, entry] of Object.entries(customStyles.value)) {
-    try {
-      registerCustomStyle(key, JSON.parse(JSON.stringify(entry.definition)));
-    } catch {
-      delete customStyles.value[key];
+  // useIDBKeyval returns reactive proxies; structuredClone inside Style throws on those.
+  watch(customStylesReady, (isReady) => {
+    if (!isReady) return;
+
+    const invalid: string[] = [];
+
+    for (const [key, entry] of Object.entries(customStyles.value)) {
+      try {
+        registerCustomStyle(key, clonePlain(entry.definition));
+      } catch {
+        invalid.push(key);
+      }
     }
-  }
+
+    if (invalid.length > 0) {
+      customStyles.value = Object.fromEntries(
+        Object.entries(customStyles.value).filter(([key]) => !invalid.includes(key)),
+      );
+    }
+  }, { immediate: true });
 
   const isCustomStyle = computed(() =>
     avatarStyleName.value.startsWith('custom:'),
