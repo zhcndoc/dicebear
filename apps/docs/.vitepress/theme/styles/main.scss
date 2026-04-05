@@ -251,6 +251,11 @@ h6,
   display: none !important;
 }
 
+/* Override .vp-doc img { margin: 16px 0 } for UiAvatar instances */
+.vp-doc .ui-avatar img {
+  margin: 0;
+}
+
 img[src^='https://api.dicebear.com/']:not(.next, .prev) {
   background: repeating-conic-gradient(
       var(--avatar-background-color-1) 0% 25%,

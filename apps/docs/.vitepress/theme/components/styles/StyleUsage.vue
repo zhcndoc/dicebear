@@ -46,6 +46,29 @@ const exampleCliInstall = computed(() => {
   return `npm install --global dicebear`;
 });
 
+const examplePhpInstall = computed(() => {
+  return `composer require dicebear/core dicebear/definitions`;
+});
+
+const examplePhpUsage = computed(() => {
+  return `<?php
+
+use Composer\\InstalledVersions;
+use DiceBear\\Style;
+use DiceBear\\Avatar;
+
+$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$definition = json_decode(file_get_contents($basePath . '/src/${kebabCase(props.styleName)}.json'), true);
+
+$style = new Style($definition);
+$avatar = new Avatar($style, [
+  // ... options
+]);
+
+$svg = (string) $avatar;
+`;
+});
+
 const exampleCliUsage = computed(() => {
   return `dicebear ${props.styleName}`;
 });
@@ -56,7 +79,8 @@ const exampleCliUsage = computed(() => {
     <Tabs v-model:value="tab">
       <TabList>
         <Tab value="http-api">HTTP-API</Tab>
-        <Tab value="js-library">JS-Library</Tab>
+        <Tab value="js-library">JS</Tab>
+        <Tab value="php-library">PHP</Tab>
         <Tab value="cli">CLI</Tab>
       </TabList>
       <TabPanels>
@@ -78,7 +102,18 @@ const exampleCliUsage = computed(() => {
           <p>Then you can create this avatar as follows:</p>
           <Code lang="js" :code="exampleJsLibraryUsage" />
           <p>
-            See <a href="/how-to-use/js-library">JS-Library</a> docs for more
+            See <a href="/how-to-use/js-library">JS</a> docs for more
+            information.
+          </p>
+        </TabPanel>
+        <TabPanel value="php-library" class="style-usage-body">
+          <p>First install the required packages via Composer:</p>
+          <Code :code="examplePhpInstall" />
+
+          <p>Then you can create this avatar as follows:</p>
+          <Code lang="php" :code="examplePhpUsage" />
+          <p>
+            See <a href="/how-to-use/php-library">PHP</a> docs for more
             information.
           </p>
         </TabPanel>

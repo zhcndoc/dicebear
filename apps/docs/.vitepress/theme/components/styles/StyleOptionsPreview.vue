@@ -37,7 +37,7 @@ function selectLabel(event: MouseEvent) {
     <div class="style-options-preview">
         <div class="style-options-preview-avatar-wrapper">
             <UiAvatar
-                :size="name === 'size' ? parseInt(value as any) : 96"
+                :size="name === 'size' ? parseInt(value as any) : 80"
                 :styleName="styleName"
                 :styleOptions="options"
                 class="style-options-preview-avatar"
@@ -51,15 +51,18 @@ function selectLabel(event: MouseEvent) {
 .style-options-preview {
     display: flex;
     flex-direction: column;
-    box-shadow: 1px 0 0 var(--vp-c-border),
-                0 1px 0 var(--vp-c-border);
+    align-items: center;
+    min-width: 128px;
+    border-radius: var(--vp-radius-xs);
+    background: var(--vp-c-bg-soft);
+    overflow: hidden;
 
     &-avatar-wrapper {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: center;
-        padding: 16px;
-        min-height: 128px;
+        padding: 16px 12px 12px;
+        min-height: 96px;
     }
 
     &-avatar {
@@ -69,11 +72,13 @@ function selectLabel(event: MouseEvent) {
     &-label {
         display: block;
         text-align: center;
-        padding: 8px 4px;
-        border-top: 1px solid var(--vp-c-border);
-        font-size: 12px;
+        padding: 6px 4px 10px;
+        font-size: 11px;
+        font-weight: 500;
         line-height: 1;
+        color: var(--vp-c-text-2);
         cursor: pointer;
+        background: none;
     }
 }
 </style>

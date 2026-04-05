@@ -151,8 +151,8 @@ const exampleCli = computed(() =>
         <Tabs v-model:value="tab">
           <TabList>
             <Tab v-if="!store.isCustomStyle" value="http-api">HTTP-API</Tab>
-            <Tab value="js-library">JS-Library</Tab>
-            <Tab value="php-library">PHP-Library</Tab>
+            <Tab value="js-library">JS</Tab>
+            <Tab value="php-library">PHP</Tab>
             <Tab value="cli">CLI</Tab>
           </TabList>
           <TabPanels>
@@ -179,7 +179,7 @@ const exampleCli = computed(() =>
                 <p>Then you can create this avatar as follows:</p>
                 <UiCode :code="exampleJsLibrary" lang="js" />
                 <p>
-                  See <a href="/how-to-use/js-library">JS-Library</a> docs for more
+                  See <a href="/how-to-use/js-library">JS</a> docs for more
                   information.
                 </p>
               </div>
