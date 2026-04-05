@@ -12,7 +12,10 @@ const props = defineProps<{
   styleName: string;
   optionName: string;
   value: unknown;
+  excludeHttpApi?: boolean;
 }>();
+
+const defaultTab = computed(() => props.excludeHttpApi ? 'js' : 'http-api');
 
 const examples = computed(() =>
   generateCodeExamples(props.styleName, props.optionName, props.value),
@@ -21,15 +24,15 @@ const examples = computed(() =>
 
 <template>
   <div class="style-options-code-panel">
-    <Tabs value="http-api">
+    <Tabs :value="defaultTab">
       <TabList>
-        <Tab value="http-api">HTTP-API</Tab>
+        <Tab v-if="!excludeHttpApi" value="http-api">HTTP-API</Tab>
         <Tab value="js">JS</Tab>
         <Tab value="php">PHP</Tab>
         <Tab value="cli">CLI</Tab>
       </TabList>
       <TabPanels>
-        <TabPanel value="http-api">
+        <TabPanel v-if="!excludeHttpApi" value="http-api">
           <Code :code="examples.httpApi" />
         </TabPanel>
         <TabPanel value="js">

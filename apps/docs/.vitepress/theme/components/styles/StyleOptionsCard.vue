@@ -93,11 +93,15 @@ const skipPreview = computed(() => {
     return true;
   }
 
-  if (fieldType.value === 'boolean' || n === 'fontFamily') {
+  if (fieldType.value === 'boolean' || n === 'fontFamily' || n === 'title') {
     return true;
   }
 
   return false;
+});
+
+const excludeHttpApi = computed(() => {
+  return props.name === 'title' || props.name === 'idRandomization';
 });
 
 const possibleValues = computed(() => {
@@ -149,6 +153,8 @@ const codeExampleValue = computed(() => {
   if (fieldType.value === 'boolean') return true;
   if (fieldType.value === 'color') return ['b6e3f4'];
   if (fieldType.value === 'range' && fieldMin.value !== undefined) return fieldMin.value;
+  if (props.name === 'title') return 'Avatar';
+  if (props.name === 'fontFamily') return 'Arial';
 
   return undefined;
 });
@@ -193,6 +199,15 @@ const description = computed(() => {
   return undefined;
 });
 
+const descriptionWithHints = computed(() => {
+  let text = description.value;
+  if (!text) return undefined;
+
+  if (excludeHttpApi.value) text += ' Not available via HTTP-API.';
+
+  return text;
+});
+
 const weightedExampleValue = computed(() => {
   if (!isWeighted.value) return undefined;
 
@@ -228,8 +243,8 @@ const weightedExampleValue = computed(() => {
       </div>
     </div>
 
-    <p class="style-options-card-description" v-if="description">
-      {{ description }}
+    <p class="style-options-card-description" v-if="descriptionWithHints">
+      {{ descriptionWithHints }}
     </p>
 
     <div class="style-options-card-preview" v-if="previewItems.length > 0">
@@ -249,6 +264,7 @@ const weightedExampleValue = computed(() => {
         :style-name="styleName"
         :option-name="name"
         :value="codeExampleValue"
+        :exclude-http-api="excludeHttpApi"
       />
     </div>
 
@@ -259,6 +275,7 @@ const weightedExampleValue = computed(() => {
           :style-name="styleName"
           :option-name="name"
           :value="codeExampleValue"
+          :exclude-http-api="excludeHttpApi"
         />
       </div>
       <div class="style-options-card-code-section">
@@ -267,6 +284,7 @@ const weightedExampleValue = computed(() => {
           :style-name="styleName"
           :option-name="name"
           :value="weightedExampleValue"
+          :exclude-http-api="excludeHttpApi"
         />
       </div>
     </div>
