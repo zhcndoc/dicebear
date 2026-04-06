@@ -22,8 +22,8 @@ You can use DiceBear with Angular either via the
 
 ```typescript [Angular 17+]
 import { Component, input, computed } from '@angular/core';
-import { createAvatar } from '@dicebear/core';
-import { lorelei } from '@dicebear/collection';
+import { Avatar } from '@dicebear/core';
+import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
 @Component({
   selector: 'app-avatar',
@@ -33,7 +33,7 @@ export class AvatarComponent {
   seed = input('John Doe');
 
   avatarUrl = computed(() =>
-    createAvatar(lorelei, {
+    new Avatar(lorelei, {
       seed: this.seed(),
       size: 128,
       // ... other options
@@ -44,8 +44,8 @@ export class AvatarComponent {
 
 ```typescript [Angular 16 and earlier]
 import { Component, Input, OnChanges } from '@angular/core';
-import { createAvatar } from '@dicebear/core';
-import { lorelei } from '@dicebear/collection';
+import { Avatar } from '@dicebear/core';
+import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
 @Component({
   selector: 'app-avatar',
@@ -57,7 +57,7 @@ export class AvatarComponent implements OnChanges {
   avatarUrl: string = '';
 
   ngOnChanges() {
-    this.avatarUrl = createAvatar(lorelei, {
+    this.avatarUrl = new Avatar(lorelei, {
       seed: this.seed,
       size: 128,
       // ... other options
@@ -83,7 +83,7 @@ export class AvatarComponent {
   seed = input('John Doe');
 
   avatarUrl = computed(() => {
-    const url = new URL('https://api.dicebear.com/9.x/lorelei/svg');
+    const url = new URL('https://api.dicebear.com/10.x/lorelei/svg');
     url.searchParams.set('seed', this.seed());
     url.searchParams.set('size', '128');
     // ... other options
@@ -105,7 +105,7 @@ export class AvatarComponent implements OnChanges {
   avatarUrl: string = '';
 
   ngOnChanges() {
-    const url = new URL('https://api.dicebear.com/9.x/lorelei/svg');
+    const url = new URL('https://api.dicebear.com/10.x/lorelei/svg');
     url.searchParams.set('seed', this.seed);
     url.searchParams.set('size', '128');
     // ... other options

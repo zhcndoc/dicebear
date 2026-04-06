@@ -21,15 +21,15 @@ You can use DiceBear with Vue either via the
 ```vue
 <script setup>
 import { computed } from 'vue';
-import { createAvatar } from '@dicebear/core';
-import { lorelei } from '@dicebear/collection';
+import { Avatar } from '@dicebear/core';
+import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
 const props = defineProps({
   seed: { type: String, default: 'John Doe' },
 });
 
 const avatar = computed(() =>
-  createAvatar(lorelei, {
+  new Avatar(lorelei, {
     seed: props.seed,
     size: 128,
     // ... other options
@@ -53,7 +53,7 @@ const props = defineProps({
 });
 
 const src = computed(() => {
-  const url = new URL('https://api.dicebear.com/9.x/lorelei/svg');
+  const url = new URL('https://api.dicebear.com/10.x/lorelei/svg');
   url.searchParams.set('seed', props.seed);
   url.searchParams.set('size', '128');
   // ... other options

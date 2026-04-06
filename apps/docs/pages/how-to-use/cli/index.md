@@ -12,7 +12,7 @@ With the CLI you can create thousands of avatars in no time!
 
 ## Installation
 
-Make sure you have [Node.js](https://nodejs.org/en/) (version 18 or higher) and
+Make sure you have [Node.js](https://nodejs.org/en/) (version 22 or higher) and
 npm installed.
 
 ```
@@ -121,14 +121,6 @@ value is capped at `2048`.
 dicebear lorelei ./avatars --format png --size 256
 ```
 
-::: warning Breaking change in v9.4.0 (rasterized formats only)
-
-Before v9.4.0, the rasterized output size was derived from the SVG's `width` and
-`height` attributes. It is now always set by `--size`, regardless of the SVG
-dimensions.
-
-:::
-
 #### Adding Exif metadata
 
 When creating PNG, JPEG, WebP, or AVIF images, you can include Exif metadata:
@@ -171,18 +163,18 @@ Options:
       --exif               Include Exif Metadata                       [boolean]
       --json               Save JSON file in addition to image file    [boolean]
       --seed                                                            [string]
-      --flip                                                           [boolean]
+      --flip                                                            [string]
       --rotate                                                          [number]
       --scale                                                           [number]
-      --radius                                                          [number]
+      --borderRadius                                                    [number]
       --size                                                            [number]
       --backgroundColor                                                  [array]
-      --backgroundType                                                   [array]
-      --backgroundRotation                                               [array]
       --translateX                                                      [number]
       --translateY                                                      [number]
-      --clip                                                           [boolean]
-      --randomizeIds                                                   [boolean]
+      --idRandomization                                                [boolean]
+      --title                                                           [string]
+      --fontFamily                                                      [string]
+      --fontWeight                                                      [number]
       ... (style-specific options)
 ```
 
@@ -271,6 +263,31 @@ Commands:
 Options:
   --version  Show version number                                       [boolean]
   --help     Show help                                                 [boolean]
+```
+
+## Custom styles
+
+You can use any JSON [definition file](/specification/definition-schema/) as a
+style — including your own custom styles or styles exported from the
+[Figma plugin](/guides/create-an-avatar-style-with-figma/).
+
+Just pass the path to the JSON file instead of a style name:
+
+```
+dicebear ./my-style.json ./avatars
+```
+
+All available options are automatically detected from the definition. Use
+`--help` to see them:
+
+```
+dicebear ./my-style.json --help
+```
+
+Generate multiple avatars in PNG format:
+
+```
+dicebear ./my-style.json ./avatars --count 20 --format png
 ```
 
 ## Examples

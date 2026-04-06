@@ -22,13 +22,13 @@ You can use DiceBear with Svelte either via the
 
 ```svelte [Svelte 5]
 <script>
-  import { createAvatar } from '@dicebear/core';
-  import { lorelei } from '@dicebear/collection';
+  import { Avatar } from '@dicebear/core';
+  import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
   let { seed = 'John Doe' } = $props();
 
   const avatar = $derived(
-    createAvatar(lorelei, {
+    new Avatar(lorelei, {
       seed,
       size: 128,
       // ... other options
@@ -41,12 +41,12 @@ You can use DiceBear with Svelte either via the
 
 ```svelte [Svelte 4]
 <script>
-  import { createAvatar } from '@dicebear/core';
-  import { lorelei } from '@dicebear/collection';
+  import { Avatar } from '@dicebear/core';
+  import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
   export let seed = 'John Doe';
 
-  $: avatar = createAvatar(lorelei, {
+  $: avatar = new Avatar(lorelei, {
     seed,
     size: 128,
     // ... other options
@@ -67,7 +67,7 @@ You can use DiceBear with Svelte either via the
   let { seed = 'John Doe' } = $props();
 
   const src = $derived.by(() => {
-    const url = new URL('https://api.dicebear.com/9.x/lorelei/svg');
+    const url = new URL('https://api.dicebear.com/10.x/lorelei/svg');
     url.searchParams.set('seed', seed);
     url.searchParams.set('size', '128');
     // ... other options
@@ -85,7 +85,7 @@ You can use DiceBear with Svelte either via the
   let src = '';
 
   $: {
-    const url = new URL('https://api.dicebear.com/9.x/lorelei/svg');
+    const url = new URL('https://api.dicebear.com/10.x/lorelei/svg');
     url.searchParams.set('seed', seed);
     url.searchParams.set('size', '128');
     // ... other options

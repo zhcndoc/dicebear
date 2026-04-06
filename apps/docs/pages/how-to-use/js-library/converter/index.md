@@ -32,10 +32,10 @@ example to create the avatar.
 
 ```js
 import { toPng } from '@dicebear/converter';
-import { createAvatar } from '@dicebear/core';
-import { lorelei } from '@dicebear/collection';
+import { Avatar } from '@dicebear/core';
+import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
-const avatar = createAvatar(lorelei, {
+const avatar = new Avatar(lorelei, {
   seed: 'John Doe',
   // ... other options
 });
@@ -206,7 +206,7 @@ const buffer = await png.toArrayBuffer(); // [!code focus]
 | `fonts`       | `string[]` | `[]`    | Node.js           | Paths to custom font files                |
 | `includeExif` | `boolean`  | `false` | Node.js           | Include metadata in output image          |
 
-### size <Badge type="tip" text="^9.4.0" />
+### size
 
 **Type:** `number`
 
@@ -218,13 +218,6 @@ Controls the width and height of the rasterized output image in pixels. The
 output is always square. Values above `2048` are clamped to `2048`. Invalid
 values (`NaN`, `<= 0`, `Infinity`) fall back to `512`.
 
-::: warning Breaking change in v9.4.0
-
-Before v9.4.0, the output image size was derived from the SVG's `width` and
-`height` attributes. The output size is now always controlled by the `size`
-option and no longer read from the SVG itself.
-
-:::
 
 ```js
 import { toPng } from '@dicebear/converter';
@@ -299,13 +292,13 @@ await exiftool.end();
 ### Convert DiceBear avatar to PNG
 
 ```js
-import { createAvatar } from '@dicebear/core';
-import { lorelei } from '@dicebear/collection';
+import { Avatar } from '@dicebear/core';
+import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 
-const avatar = createAvatar(lorelei, {
+const avatar = new Avatar(lorelei, {
   seed: 'John Doe',
-  backgroundColor: ['b6e3f4'],
+  backgroundColor: ['#b6e3f4'],
 });
 
 const png = toPng(avatar);
@@ -318,12 +311,12 @@ document.querySelector('img').src = dataUri;
 ### Save avatar to file (Node.js)
 
 ```js
-import { createAvatar } from '@dicebear/core';
-import { bottts } from '@dicebear/collection';
+import { Avatar } from '@dicebear/core';
+import bottts from '@dicebear/definitions/bottts.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 import { writeFile } from 'node:fs/promises';
 
-const avatar = createAvatar(bottts, {
+const avatar = new Avatar(bottts, {
   seed: 'robot-42',
 });
 
@@ -336,13 +329,13 @@ await writeFile('avatar.png', Buffer.from(buffer));
 ### Convert with Exif metadata (Node.js)
 
 ```js
-import { createAvatar } from '@dicebear/core';
-import { lorelei } from '@dicebear/collection';
+import { Avatar } from '@dicebear/core';
+import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 import { exiftool } from 'exiftool-vendored';
 import { writeFile } from 'node:fs/promises';
 
-const avatar = createAvatar(lorelei, {
+const avatar = new Avatar(lorelei, {
   seed: 'John Doe',
 });
 
@@ -360,11 +353,11 @@ await exiftool.end();
 ### Use with custom fonts (Node.js)
 
 ```js
-import { createAvatar } from '@dicebear/core';
-import { initials } from '@dicebear/collection';
+import { Avatar } from '@dicebear/core';
+import initials from '@dicebear/definitions/initials.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 
-const avatar = createAvatar(initials, {
+const avatar = new Avatar(initials, {
   seed: 'John Doe',
 });
 
@@ -378,11 +371,11 @@ const dataUri = await png.toDataUri();
 ### Convert with a custom size
 
 ```js
-import { createAvatar } from '@dicebear/core';
-import { lorelei } from '@dicebear/collection';
+import { Avatar } from '@dicebear/core';
+import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 
-const avatar = createAvatar(lorelei, { seed: 'John Doe' });
+const avatar = new Avatar(lorelei, { seed: 'John Doe' });
 
 const png = toPng(avatar, { size: 128 });
 const dataUri = await png.toDataUri();

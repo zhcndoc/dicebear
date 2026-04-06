@@ -15,7 +15,7 @@ const style = new Style(lorelei);
 const svg = new Avatar(style, {
   seed: 'Mia',
 }).toString();`,
-  api: `https://api.dicebear.com/9.x/lorelei/svg?seed=Mia`,
+  api: `https://api.dicebear.com/10.x/lorelei/svg?seed=Mia`,
   cli: `npx dicebear lorelei --seed "Mia" --format svg`,
 };
 </script>

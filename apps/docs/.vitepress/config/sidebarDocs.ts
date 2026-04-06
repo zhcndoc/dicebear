@@ -9,13 +9,14 @@ const sidebar: DefaultTheme.SidebarItem[] = [
     text: 'How to use',
     items: [
       {
-        text: 'JS-Library',
+        text: 'JS Library',
         link: '/how-to-use/js-library/',
         items: [
           { text: 'Core', link: '/how-to-use/js-library/' },
           { text: 'Converter', link: '/how-to-use/js-library/converter/' },
         ],
       },
+      { text: 'PHP Library', link: '/how-to-use/php-library/' },
       { text: 'HTTP-API', link: '/how-to-use/http-api/' },
       { text: 'CLI', link: '/how-to-use/cli/' },
     ],
@@ -46,7 +47,7 @@ const sidebar: DefaultTheme.SidebarItem[] = [
     ],
   },
   {
-    text: 'Create Avatar Styles',
+    text: 'Custom Styles',
     items: [
       {
         text: 'With Figma',
@@ -55,6 +56,19 @@ const sidebar: DefaultTheme.SidebarItem[] = [
       {
         text: 'From Scratch',
         link: '/guides/create-an-avatar-style-from-scratch/',
+      },
+    ],
+  },
+  {
+    text: 'Specification',
+    items: [
+      {
+        text: 'Definition Schema',
+        link: '/specification/definition-schema/',
+      },
+      {
+        text: 'Implement DiceBear Core',
+        link: '/specification/implement-dicebear-core/',
       },
     ],
   },
@@ -85,14 +99,6 @@ const sidebar: DefaultTheme.SidebarItem[] = [
       {
         text: 'Unique Avatar Count',
         link: '/guides/how-many-unique-avatars/',
-      },
-      {
-        text: 'Use without Tree Shaking',
-        link: '/guides/use-the-library-without-tree-shaking/',
-      },
-      {
-        text: 'Use without ESM',
-        link: '/guides/use-the-library-without-esm/',
       },
     ],
   },

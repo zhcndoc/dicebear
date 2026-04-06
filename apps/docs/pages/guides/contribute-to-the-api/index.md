@@ -49,14 +49,14 @@ dicebear/api/
 ## Versioning
 
 The API serves multiple DiceBear library versions in parallel. Each version is
-accessible via a URL prefix, for example `/9.x/avataaars/svg`.
+accessible via a URL prefix, for example `/10.x/avataaars/svg`.
 
 - Each version lives in `versions/<major>.x/` as a separate workspace package
   (e.g. `@dicebear/api-9`).
 - Each version package depends on the corresponding `@dicebear/core` and
   `@dicebear/collection` versions.
 - Which versions are loaded at runtime is controlled by the `VERSIONS`
-  environment variable (default: `5,6,7,8,9`).
+  environment variable (default: `5,6,7,8,9,10`).
 - When a new major DiceBear version is released, a new `versions/<major>.x/`
   package is added.
 

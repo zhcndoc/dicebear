@@ -15,7 +15,7 @@ const tabs = ['api', 'js', 'cli'] as const;
 const activeTabIndex = computed(() => tabs.indexOf(activeTab.value));
 
 const apiExample = computed(() =>
-  `https://api.dicebear.com/9.x/${props.style}/svg?seed=${encodeURIComponent(props.seed)}`
+  `https://api.dicebear.com/10.x/${props.style}/svg?seed=${encodeURIComponent(props.seed)}`
 );
 
 const jsExample = computed(() =>

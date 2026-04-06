@@ -38,7 +38,7 @@ withDefaults(
           :key="seed"
           :size="avatarSize"
           :style-name="style.styleName"
-          :style-options="{ seed, size: avatarSize, radius: 50 }"
+          :style-options="{ seed, size: avatarSize, borderRadius: 50 }"
           :alt="style.name"
         />
       </div>

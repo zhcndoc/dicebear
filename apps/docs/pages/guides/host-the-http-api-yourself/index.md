@@ -81,7 +81,7 @@ The HTTP API supports the following environment variables:
 | `AVIF_SIZE_MAX` | `128` | Maximum allowed AVIF size in px. |
 | `AVIF_SIZE_DEFAULT` | `128` | Default AVIF size in px. |
 | `AVIF_EXIF` | `1` | Enable EXIF metadata for AVIF (1 = on, 0 = off). Requires Perl and procps. |
-| `VERSIONS` | `5,6,7,8,9` | Comma-separated list of supported DiceBear major versions. |
+| `VERSIONS` | `5,6,7,8,9,10` | Comma-separated list of supported DiceBear major versions. |
 | `CACHE_CONTROL_AVATARS` | `31536000` | Cache duration for avatar responses in seconds (1 year). |
 | `WORKERS` | `1` | Number of Node.js worker threads. |
 | `QUERY_STRING_ARRAY_LIMIT_MIN` | `20` | Minimum number of values allowed per array parameter. |

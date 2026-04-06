@@ -50,13 +50,13 @@ Use the following address and replace `<styleName>` with your preferred avatar
 style (camelCase). Every official [avatar style](/styles/) is supported.
 
 ```
-https://api.dicebear.com/9.x/<styleName>/svg
+https://api.dicebear.com/10.x/<styleName>/svg
 ```
 
 ### A few examples
 
-<BrowserPreview url="https://api.dicebear.com/9.x/pixel-art/svg" />
-<BrowserPreview url="https://api.dicebear.com/9.x/lorelei/svg" />
+<BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg" />
+<BrowserPreview url="https://api.dicebear.com/10.x/lorelei/svg" />
 
 :::info
 
@@ -70,13 +70,13 @@ themselves. For a quick overview we have created an
 ## Options
 
 All [core options](/how-to-use/js-library/#core-options) — such as `seed`,
-`flip`, `rotate`, `scale`, `radius`, `backgroundColor`, and more — are
+`flip`, `rotate`, `scale`, `borderRadius`, `backgroundColor`, and more — are
 available as [query parameters](https://en.wikipedia.org/wiki/Query_string).
 Style-specific options are listed on each [avatar style page](/styles/).
 For example:
 
-<BrowserPreview url="https://api.dicebear.com/9.x/pixel-art/svg?seed=John" />
-<BrowserPreview url="https://api.dicebear.com/9.x/pixel-art/svg?seed=Jane" />
+<BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=John" />
+<BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=Jane" />
 
 :::tip
 
@@ -92,15 +92,16 @@ if you want to provide the PRNG with several hair styles in addition to the
 seed. Note that the avatar styles provide different options. In this example, we
 use the [Pixel Art](/styles/pixel-art/) avatar style.
 
-<BrowserPreview url="https://api.dicebear.com/9.x/pixel-art/svg?seed=John&hair=short01,short02,short03,short04,short05" />
-<BrowserPreview url="https://api.dicebear.com/9.x/pixel-art/svg?seed=Jane&hair=long01,long02,long03,long04,long05" />
+<BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=John&hairVariant=short01,short02,short03,short04,short05" />
+<BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=Jane&hairVariant=long01,long02,long03,long04,long05" />
 
-### Boolean options
+### Enum options
 
-Boolean values can be set as strings (`true` and `false`).
+Enum values are passed as strings. For example, the `flip` option accepts
+`none`, `horizontal`, `vertical`, or `both`:
 
-<BrowserPreview url="https://api.dicebear.com/9.x/lorelei/svg?flip=true" />
-<BrowserPreview url="https://api.dicebear.com/9.x/lorelei/svg?flip=false" />
+<BrowserPreview url="https://api.dicebear.com/10.x/lorelei/svg?flip=horizontal" />
+<BrowserPreview url="https://api.dicebear.com/10.x/lorelei/svg?flip=none" />
 
 ## File format
 
@@ -112,19 +113,20 @@ supports the following subsets: `cyrillic`, `cyrillic-ext`, `devanagari`,
 `greek`, `greek-ext`, `japanese`, `korean`, `latin`, `latin-ext`,
 `simplified-chinese`, `thai` and `vietnamese`.
 
-<BrowserPreview url="https://api.dicebear.com/9.x/bottts/svg" />
-<BrowserPreview url="https://api.dicebear.com/9.x/bottts/png" />
-<BrowserPreview url="https://api.dicebear.com/9.x/bottts/jpg" />
-<BrowserPreview url="https://api.dicebear.com/9.x/bottts/webp" />
-<BrowserPreview url="https://api.dicebear.com/9.x/bottts/avif" />
+<BrowserPreview url="https://api.dicebear.com/10.x/bottts/svg" />
+<BrowserPreview url="https://api.dicebear.com/10.x/bottts/png" />
+<BrowserPreview url="https://api.dicebear.com/10.x/bottts/jpg" />
+<BrowserPreview url="https://api.dicebear.com/10.x/bottts/webp" />
+<BrowserPreview url="https://api.dicebear.com/10.x/bottts/avif" />
 
 ## Versioning
 
-You can set the version in the URL. Just replace the `9.x` from the previous
+You can set the version in the URL. Just replace the `10.x` from the previous
 examples with the one you want.
 
 | Version | Status | End of Life |
 | ------- | ------ | ----------- |
+| `10.x` | **Active** | — |
 | `9.x` | **Active** | — |
 | `8.x` | Deprecated | April 30, 2028 |
 | `7.x` | Deprecated | April 30, 2028 |

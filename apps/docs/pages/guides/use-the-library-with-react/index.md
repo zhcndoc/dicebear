@@ -20,12 +20,12 @@ You can use DiceBear with React either via the
 
 ```jsx
 import { useMemo } from 'react';
-import { createAvatar } from '@dicebear/core';
-import { lorelei } from '@dicebear/collection';
+import { Avatar } from '@dicebear/core';
+import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
-export default function Avatar({ seed = 'John Doe' }) {
+export default function UserAvatar({ seed = 'John Doe' }) {
   const avatar = useMemo(() => {
-    return createAvatar(lorelei, {
+    return new Avatar(lorelei, {
       seed,
       size: 128,
       // ... other options
@@ -43,7 +43,7 @@ import { useMemo } from 'react';
 
 export default function Avatar({ seed = 'John Doe' }) {
   const avatar = useMemo(() => {
-    const url = new URL('https://api.dicebear.com/9.x/lorelei/svg');
+    const url = new URL('https://api.dicebear.com/10.x/lorelei/svg');
     url.searchParams.set('seed', seed);
     url.searchParams.set('size', '128');
     // ... other options

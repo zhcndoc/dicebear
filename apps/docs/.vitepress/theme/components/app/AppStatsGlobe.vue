@@ -13,7 +13,7 @@ let eventInterval: ReturnType<typeof setInterval>;
 let resizeObserver: ResizeObserver | null = null;
 let rotationFrame: number | null = null;
 
-const apiBase = 'https://api.dicebear.com/9.x';
+const apiBase = 'https://api.dicebear.com/10.x';
 const avatarStyles = ['thumbs', 'shapes', 'lorelei', 'pixel-art', 'adventurer', 'bottts', 'avataaars', 'notionists'];
 
 interface GlobeEvent {

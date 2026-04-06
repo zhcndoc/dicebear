@@ -9,8 +9,9 @@ description: >
 
 The library is written in [TypeScript](https://www.typescriptlang.org/) /
 [JavaScript](https://developer.mozilla.org/en-US/Web/JavaScript) and can be used
-in the browser and also in [Node.js](https://nodejs.org/en/) (version 18 or
+in the browser and also in [Node.js](https://nodejs.org/en/) (version 22 or
 higher). In other environments you may be interested in the
+[PHP Library](/how-to-use/php-library/), the
 [HTTP API](/how-to-use/http-api/) or the [CLI](/how-to-use/cli/).
 
 The library is a pure
@@ -21,23 +22,12 @@ if you are new to ESM packages.
 
 ## Installation
 
-At least two packages are needed. The first package is the core library
-`@dicebear/core` and the second package is an avatar style. In our examples we
-use the package `@dicebear/collection` which contains all official avatar
-styles.
+You need two packages: the core library `@dicebear/core` and the avatar style
+definitions `@dicebear/definitions`.
 
 ```
-npm install @dicebear/core @dicebear/collection
+npm install @dicebear/core @dicebear/definitions
 ```
-
-::: tip
-
-We highly recommend the use of a bundler with
-[tree shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking)
-functionality. If you don't have one, take a look at our guide
-"[Using the library without tree shaking](/guides/use-the-library-without-tree-shaking/)".
-
-:::
 
 ## Usage
 
@@ -45,10 +35,10 @@ We use the avatar style [lorelei](/styles/lorelei/) in our example. You can find
 more avatar styles [here](/styles/).
 
 ```js
-import { createAvatar } from '@dicebear/core';
-import { lorelei } from '@dicebear/collection';
+import { Avatar } from '@dicebear/core';
+import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
-const avatar = createAvatar(lorelei, {
+const avatar = new Avatar(lorelei, {
   seed: 'John Doe',
   // ... other options
 });
@@ -85,36 +75,54 @@ The `seed` option is the key to generating deterministic avatars. The same seed
 will always produce the same avatar, making it perfect for user profiles:
 
 ```js
-import { createAvatar } from '@dicebear/core';
-import { lorelei } from '@dicebear/collection';
+import { Avatar } from '@dicebear/core';
+import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
 // These will always produce the same avatar
-const avatar1 = createAvatar(lorelei, { seed: 'user-123' });
-const avatar2 = createAvatar(lorelei, { seed: 'user-123' });
+const avatar1 = new Avatar(lorelei, { seed: 'user-123' });
+const avatar2 = new Avatar(lorelei, { seed: 'user-123' });
 
 avatar1.toString() === avatar2.toString(); // true
 ```
 
-## Methods
+## Classes
 
-### `createAvatar(style, options)`
+### `Avatar`
 
-**Return type:** Object with [.toString()](#tostring), [.toJson()](#tojson) and
-[.toDataUri()](#todatauri) methods.
+The main class for generating avatars. Accepts a style definition (or a `Style`
+instance) and optional options.
 
-Every cool avatar starts here! An avatar style is expected as the first
-argument. The second argument is an optional `object` with options. Which
-options are possible here depends on the [avatar style](/styles/).
-
-<!-- prettier-ignore -->
 ```js
-import { createAvatar } from '@dicebear/core';
-import { lorelei } from '@dicebear/collection';
+import { Avatar } from '@dicebear/core';
+import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
-const avatar = createAvatar(lorelei, { // [!code focus:3]
+const avatar = new Avatar(lorelei, { // [!code focus:3]
   // ... options
 });
 ```
+
+### `Style`
+
+An immutable wrapper around a style definition. Use it when you want to reuse
+the same parsed style across multiple avatars without re-parsing each time.
+
+```js
+import { Style, Avatar } from '@dicebear/core';
+import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+
+const style = new Style(lorelei); // [!code focus:4]
+
+const avatar1 = new Avatar(style, { seed: 'Alice' });
+const avatar2 = new Avatar(style, { seed: 'Bob' });
+```
+
+### `OptionsDescriptor`
+
+Describes all valid options for a given style. Useful for building UIs or
+validating user input. See
+[Access Style Options](/guides/access-all-available-options/) for details.
+
+## Methods
 
 ### `.toString()`
 
@@ -123,40 +131,40 @@ const avatar = createAvatar(lorelei, { // [!code focus:3]
 Returns the avatar as SVG in XML format.
 
 ```js
-import { createAvatar } from '@dicebear/core';
-import { lorelei } from '@dicebear/collection';
+import { Avatar } from '@dicebear/core';
+import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
-const avatar = createAvatar(lorelei, {
+const avatar = new Avatar(lorelei, {
   // ... options
 });
 
 const svg = avatar.toString(); // [!code focus]
 ```
 
-### `.toJson()`
+### `.toJSON()`
 
-**Return type:** `{ svg: string, extra: Record<string, unknown> }`
+**Return type:** `{ svg: string, options: StyleOptions }`
 
-Returns a JSON with the SVG and additional information, such as the actual
-options used. The `extra` object contains the resolved options and any
-style-specific metadata.
+Returns an object with the SVG and the resolved options that were used to
+generate the avatar.
 
 ```js
-import { createAvatar } from '@dicebear/core';
-import { lorelei } from '@dicebear/collection';
+import { Avatar } from '@dicebear/core';
+import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
-const avatar = createAvatar(lorelei, {
+const avatar = new Avatar(lorelei, {
   seed: 'John Doe',
   // ... other options
 });
 
-const json = avatar.toJson(); // [!code focus]
+const json = avatar.toJSON(); // [!code focus]
 
 // Example output:
 // {
 //   svg: '<svg>...</svg>',
-//   extra: {
-//     // resolved options and style-specific data
+//   options: {
+//     seed: 'John Doe',
+//     // ... resolved options
 //   }
 // }
 ```
@@ -169,10 +177,10 @@ Returns the avatar as [data uri](https://en.wikipedia.org/wiki/Data_URI_scheme).
 This is useful for embedding the avatar directly in HTML or CSS.
 
 ```js
-import { createAvatar } from '@dicebear/core';
-import { lorelei } from '@dicebear/collection';
+import { Avatar } from '@dicebear/core';
+import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
-const avatar = createAvatar(lorelei, {
+const avatar = new Avatar(lorelei, {
   seed: 'John Doe',
   // ... other options
 });
@@ -187,33 +195,66 @@ const dataUri = avatar.toDataUri(); // [!code focus]
 
 These options are available for all avatar styles:
 
-| Option               | Type       | Default     | Description                                             |
-| -------------------- | ---------- | ----------- | ------------------------------------------------------- |
-| `seed`               | `string`   | _random_    | Seed for deterministic generation                       |
-| `flip`               | `boolean`  | `false`     | Flip the avatar horizontally                            |
-| `rotate`             | `number`   | `0`         | Rotate the avatar (0-360 degrees)                       |
-| `scale`              | `number`   | `100`       | Scale the avatar (0-200 percent)                        |
-| `radius`             | `number`   | `0`         | Border radius (0-50 percent)                            |
-| `size`               | `number`   | _undefined_ | Fixed size in pixels                                    |
-| `backgroundColor`    | `string[]` | _undefined_ | Background colors (hex without #, or "transparent")     |
-| `backgroundType`     | `string[]` | `['solid']` | Background type: "solid" or "gradientLinear"            |
-| `backgroundRotation` | `number[]` | `[0, 360]`  | Gradient rotation range (-360 to 360)                   |
-| `translateX`         | `number`   | `0`         | Horizontal translation (-100 to 100 percent)            |
-| `translateY`         | `number`   | `0`         | Vertical translation (-100 to 100 percent)              |
-| `clip`               | `boolean`  | `true`      | Clip content to the avatar boundary                     |
-| `randomizeIds`       | `boolean`  | `false`     | Randomize SVG element IDs (useful for multiple avatars) |
+| Option              | Type                                              | Default     | Description                                      |
+| ------------------- | ------------------------------------------------- | ----------- | ------------------------------------------------ |
+| `seed`              | `string`                                          | `''`        | Seed for deterministic generation                |
+| `flip`              | `'none' \| 'horizontal' \| 'vertical' \| 'both'` | `'none'`    | Flip the avatar                                  |
+| `rotate`            | `number \| [min, max]`                            | `0`         | Rotate the avatar (-360 to 360 degrees)          |
+| `scale`             | `number \| [min, max]`                            | `1`         | Scale the avatar                                 |
+| `borderRadius`      | `number \| [min, max]`                            | `0`         | Border radius (0-50 percent, 50 = circle)        |
+| `size`              | `number`                                          | _undefined_ | Fixed size in pixels                             |
+| `translateX`        | `number \| [min, max]`                            | `0`         | Horizontal translation (-100 to 100 percent)     |
+| `translateY`        | `number \| [min, max]`                            | `0`         | Vertical translation (-100 to 100 percent)       |
+| `idRandomization`   | `boolean`                                         | `false`     | Randomize SVG element IDs                        |
+| `title`             | `string`                                          | _undefined_ | Accessible title for the SVG                     |
+| `fontFamily`        | `string \| string[]`                              | `'system-ui'` | Font family for text-based styles              |
+| `fontWeight`        | `number \| number[]`                              | `400`       | Font weight for text-based styles (1-1000)       |
+
+### Background options
+
+| Option                    | Type                                    | Default     | Description                                |
+| ------------------------- | --------------------------------------- | ----------- | ------------------------------------------ |
+| `backgroundColor`         | `string \| string[]`                    | _undefined_ | Background colors (hex with #)             |
+| `backgroundColorFill`     | `'solid' \| 'linear' \| 'radial'`      | `'solid'`   | Background fill type                       |
+| `backgroundColorFillStops`| `number \| [min, max]`                  | _undefined_ | Number of gradient stops                   |
+| `backgroundColorAngle`    | `number \| [min, max]`                  | _undefined_ | Gradient angle (-360 to 360 degrees)       |
+
+### Dynamic component options
+
+For each component in a style (e.g. `eyes`, `mouth`, `hair`), the following
+options are available:
+
+| Pattern                   | Type                                   | Description                              |
+| ------------------------- | -------------------------------------- | ---------------------------------------- |
+| `{component}Variant`      | `string \| string[] \| Record<string, number>` | Select specific variants or set weights |
+| `{component}Probability`  | `number`                               | Visibility probability (0-100)           |
+| `{component}Rotate`       | `number \| [min, max]`                 | Component rotation (-360 to 360)         |
+| `{component}TranslateX`   | `number \| [min, max]`                 | Component horizontal offset (-100 to 100)|
+| `{component}TranslateY`   | `number \| [min, max]`                 | Component vertical offset (-100 to 100)  |
+
+### Dynamic color options
+
+For each color group in a style (e.g. `skin`, `hair`) and `background`, the
+following options are available:
+
+| Pattern                   | Type                                    | Description                              |
+| ------------------------- | --------------------------------------- | ---------------------------------------- |
+| `{color}Color`            | `string \| string[]`                    | Override color palette (hex with #)      |
+| `{color}ColorFill`        | `'solid' \| 'linear' \| 'radial'`      | Color fill type                          |
+| `{color}ColorFillStops`   | `number \| [min, max]`                  | Number of gradient stops                 |
+| `{color}ColorAngle`       | `number \| [min, max]`                  | Gradient angle (-360 to 360 degrees)     |
 
 ## Examples
 
 ### Avatar with custom background
 
 ```js
-import { createAvatar } from '@dicebear/core';
-import { lorelei } from '@dicebear/collection';
+import { Avatar } from '@dicebear/core';
+import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
-const avatar = createAvatar(lorelei, {
+const avatar = new Avatar(lorelei, {
   seed: 'John Doe',
-  backgroundColor: ['b6e3f4', 'c0aede', 'd1d4f9'],
+  backgroundColor: ['#b6e3f4', '#c0aede', '#d1d4f9'],
   // ... other options
 });
 ```
@@ -221,13 +262,13 @@ const avatar = createAvatar(lorelei, {
 ### Fixed size avatar
 
 ```js
-import { createAvatar } from '@dicebear/core';
-import { bottts } from '@dicebear/collection';
+import { Avatar } from '@dicebear/core';
+import bottts from '@dicebear/definitions/bottts.json' with { type: 'json' };
 
-const avatar = createAvatar(bottts, {
+const avatar = new Avatar(bottts, {
   seed: 'robot-42',
   size: 128,
-  radius: 50, // circular avatar
+  borderRadius: 50, // circular avatar
   // ... other options
 });
 ```
@@ -235,12 +276,12 @@ const avatar = createAvatar(bottts, {
 ### Avatar with transformations
 
 ```js
-import { createAvatar } from '@dicebear/core';
-import { avataaars } from '@dicebear/collection';
+import { Avatar } from '@dicebear/core';
+import avataaars from '@dicebear/definitions/avataaars.json' with { type: 'json' };
 
-const avatar = createAvatar(avataaars, {
+const avatar = new Avatar(avataaars, {
   seed: 'Jane Doe',
-  flip: true,
+  flip: 'horizontal',
   rotate: 10,
   scale: 90,
   translateY: 5,
@@ -250,22 +291,37 @@ const avatar = createAvatar(avataaars, {
 
 ### Multiple avatars on the same page
 
-When rendering multiple avatars on the same page, use `randomizeIds` to prevent
-SVG ID conflicts:
+When rendering multiple avatars on the same page, use `idRandomization` to
+prevent SVG ID conflicts:
 
 ```js
-import { createAvatar } from '@dicebear/core';
-import { lorelei } from '@dicebear/collection';
+import { Avatar } from '@dicebear/core';
+import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
 const users = ['alice', 'bob', 'charlie'];
 
 const avatars = users.map((user) =>
-  createAvatar(lorelei, {
+  new Avatar(lorelei, {
     seed: user,
-    randomizeIds: true,
+    idRandomization: true,
     // ... other options
   }).toString(),
 );
+```
+
+### Weighted variant selection
+
+You can influence the PRNG to prefer certain variants by passing a weight map:
+
+```js
+import { Avatar } from '@dicebear/core';
+import avataaars from '@dicebear/definitions/avataaars.json' with { type: 'json' };
+
+const avatar = new Avatar(avataaars, {
+  seed: 'John Doe',
+  topVariant: { short01: 2, short02: 2, long01: 1 },
+  // ... other options
+});
 ```
 
 ## TypeScript
@@ -273,20 +329,19 @@ const avatars = users.map((user) =>
 The library is fully typed. You can import types for better IDE support:
 
 ```ts
-import { createAvatar } from '@dicebear/core';
-import { lorelei } from '@dicebear/collection';
-import type { Options } from '@dicebear/core';
+import { Avatar, Style } from '@dicebear/core';
+import type { StyleOptions, StyleDefinition } from '@dicebear/core';
+import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
-const options: Options = {
+const avatar = new Avatar(lorelei, {
   seed: 'John Doe',
-  backgroundColor: ['b6e3f4'],
+  backgroundColor: ['#b6e3f4'],
   // ... other options
-};
-
-const avatar = createAvatar(lorelei, options);
+});
 ```
 
-Each style also exports its own options type for style-specific options.
+When importing a style definition as JSON, TypeScript infers the literal types
+of the definition, providing autocomplete for component and color option names.
 
 ## Convert to other formats
 

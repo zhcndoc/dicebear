@@ -16,7 +16,7 @@ const style = computed(() => {
 });
 
 const exampleHttpApiUrl = computed(() => {
-  return `https://api.dicebear.com/9.x/${kebabCase(props.styleName)}/svg`;
+  return `https://api.dicebear.com/10.x/${kebabCase(props.styleName)}/svg`;
 });
 
 const exampleDefinitionImport = computed(() => {

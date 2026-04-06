@@ -178,7 +178,7 @@ export default defineConfig<ThemeOptions>({
       {
         text: 'Documentation',
         link: '/introduction/',
-        activeMatch: '^/(introduction|how-to-use|guides)',
+        activeMatch: '^/(introduction|how-to-use|guides|specification)',
       },
       {
         text: 'Styles',
@@ -193,13 +193,14 @@ export default defineConfig<ThemeOptions>({
     socialLinks: [],
     editLink: {
       pattern:
-        'https://github.com/dicebear/dicebear/edit/9.x/apps/docs/pages/:path',
+        'https://github.com/dicebear/dicebear/edit/10.x/apps/docs/pages/:path',
     },
     sidebar: {
       '/introduction/': sidebarDocs,
       '/styles/': sidebarStyles,
       '/how-to-use/': sidebarDocs,
       '/guides/': sidebarDocs,
+      '/specification/': sidebarDocs,
     },
   },
   sitemap: {

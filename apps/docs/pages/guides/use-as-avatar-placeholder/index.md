@@ -94,12 +94,12 @@ The simplest approach: use a DiceBear API URL as the `src` of an `<img>` tag.
 Use a stable identifier as the seed — a numeric user ID works well. For full
 options and rate limit details, see the [HTTP API documentation](/how-to-use/http-api/).
 
-<BrowserPreview url="https://api.dicebear.com/9.x/initials/svg?seed=JD" />
-<BrowserPreview url="https://api.dicebear.com/9.x/pixel-art/svg?seed=user-42" />
+<BrowserPreview url="https://api.dicebear.com/10.x/initials/svg?seed=JD" />
+<BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=user-42" />
 
 ```html
 <img
-  src="https://api.dicebear.com/9.x/initials/svg?seed=JD"
+  src="https://api.dicebear.com/10.x/initials/svg?seed=JD"
   alt="User avatar"
   width="48"
   height="48"
@@ -114,7 +114,7 @@ user's uploaded photo fails to load:
 ```html
 <img
   src="/uploads/user-123.jpg"
-  onerror="this.src='https://api.dicebear.com/9.x/pixel-art/svg?seed=123'; this.onerror=null;"
+  onerror="this.src='https://api.dicebear.com/10.x/pixel-art/svg?seed=123'; this.onerror=null;"
   alt="User avatar"
 />
 ```
@@ -126,10 +126,10 @@ the same placeholder:
 
 ```js
 const userId = 'user-8f3a2c';
-const avatarUrl = `https://api.dicebear.com/9.x/thumbs/svg?seed=${encodeURIComponent(userId)}`;
+const avatarUrl = `https://api.dicebear.com/10.x/thumbs/svg?seed=${encodeURIComponent(userId)}`;
 ```
 
-<BrowserPreview url="https://api.dicebear.com/9.x/thumbs/svg?seed=user-8f3a2c" />
+<BrowserPreview url="https://api.dicebear.com/10.x/thumbs/svg?seed=user-8f3a2c" />
 
 ## With the JavaScript Library
 
@@ -138,14 +138,14 @@ your markup without an additional HTTP request. For full installation and API
 details, see the [JavaScript library documentation](/how-to-use/js-library/).
 
 ```js
-import { createAvatar } from '@dicebear/core';
-import { thumbs } from '@dicebear/collection';
+import { Avatar } from '@dicebear/core';
+import thumbs from '@dicebear/definitions/thumbs.json' with { type: 'json' };
 
 function getPlaceholderAvatar(userId) {
-  return createAvatar(thumbs, {
+  return new Avatar(thumbs, {
     seed: userId,
     size: 48,
-    radius: 50,
+    borderRadius: 50,
   }).toString();
 }
 ```
@@ -164,10 +164,10 @@ loads:
 
 ```js
 // JS library
-createAvatar(thumbs, { seed: userId, size: 48, radius: 50 });
+new Avatar(thumbs, { seed: userId, size: 48, borderRadius: 50 });
 ```
 
 ```
 // HTTP API
-https://api.dicebear.com/9.x/thumbs/svg?seed=user-123&size=48&radius=50
+https://api.dicebear.com/10.x/thumbs/svg?seed=user-123&size=48&borderRadius=50
 ```

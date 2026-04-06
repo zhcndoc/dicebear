@@ -46,7 +46,7 @@ function onSeedInput(event: Event) {
 }
 
 const mainAvatarLink = computed(() =>
-  `https://api.dicebear.com/9.x/${currentStyle.value}/svg?seed=${encodeURIComponent(seed.value)}`
+  `https://api.dicebear.com/10.x/${currentStyle.value}/svg?seed=${encodeURIComponent(seed.value)}`
 );
 
 const allStyleAvatars = computed(() =>

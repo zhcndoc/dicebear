@@ -2,31 +2,56 @@
 title: Access All Available Style Options Programmatically | DiceBear
 description: >
   Learn how to programmatically access all available options of a DiceBear
-  avatar style using the JSON schema exposed by each style package.
+  avatar style using the OptionsDescriptor class.
 ---
 
 # How to programmatically access all available options of an avatar style?
 
-Each official avatar style provides a [JSON schema](https://json-schema.org/)
-that you can use to validate your options. But you can also use this JSON to
-find out what options are available to you.
+Each avatar style has different options depending on its components and colors.
+The `OptionsDescriptor` class lets you discover all available options at runtime.
 
-Here is a small example of how to access all the options of an avatar style.
+## JavaScript
 
 ```js
-import { schema } from '@dicebear/core';
-import { micah } from '@dicebear/collection';
+import { Style, OptionsDescriptor } from '@dicebear/core';
+import definition from '@dicebear/definitions/micah.json' with { type: 'json' };
 
-const options = {
-  ...schema.properties,
-  ...micah.schema.properties,
-};
+const style = new Style(definition);
+const descriptor = new OptionsDescriptor(style);
 
-console.log(options);
+console.log(descriptor.toJSON());
 ```
 
-Also for this documentation and the CLI, we are parsing this JSON schema to show
-all the available options.
+## PHP
 
-Example:
-https://github.com/dicebear/dicebear/blob/main/src/js/cli/src/utils/getOptionsBySchema.ts
+```php
+use Composer\InstalledVersions;
+use DiceBear\Style;
+use DiceBear\OptionsDescriptor;
+
+$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$definition = json_decode(file_get_contents($basePath . '/src/micah.json'), true);
+
+$style = new Style($definition);
+$descriptor = new OptionsDescriptor($style);
+
+print_r($descriptor->toJSON());
+```
+
+## Field descriptor types
+
+The `toJSON()` method returns a map of option names to field descriptors. Each
+descriptor has a `type` and additional properties depending on the type:
+
+| Type      | Properties                        | Example option           |
+| --------- | --------------------------------- | ------------------------ |
+| `string`  | `list?`                           | `seed`, `fontFamily`     |
+| `number`  | `min?`, `max?`, `list?`           | `fontWeight`             |
+| `boolean` |                                   | `idRandomization`        |
+| `enum`    | `values`, `list?`, `weighted?`    | `flip`, `*Variant`       |
+| `color`   | `list?`                           | `*Color`                 |
+| `range`   | `min?`, `max?`                    | `rotate`, `borderRadius` |
+
+The `list` flag indicates the option accepts an array. The `weighted` flag
+(on enum fields) indicates the option accepts a `Record<string, number>` for
+weighted PRNG selection.

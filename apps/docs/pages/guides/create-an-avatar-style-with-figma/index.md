@@ -9,8 +9,7 @@ description: >
 
 Our [Figma plugin](https://www.figma.com/community/plugin/1005765655729342787)
 is the easiest way to create an avatar style for DiceBear. The following
-tutorial requires basic knowledge about [Figma](https://www.figma.com/) and
-[Node.js](https://nodejs.org/en/).
+tutorial requires basic knowledge about [Figma](https://www.figma.com/).
 
 ## Step 1
 
@@ -85,8 +84,8 @@ settings, you can export your avatar style.
 
 ::: tip
 
-It's important that you choose the correct version for your export. This guide
-only covers the currently stable versions 5.x - 9.x.
+Make sure you select version **10.x** in the export settings. This guide covers
+version 10.x.
 
 ![You can find the version option in the "General" tab](/guides/create-an-avatar-style-with-figma/version-hint.png)
 
@@ -94,48 +93,62 @@ only covers the currently stable versions 5.x - 9.x.
 
 ## Step 7
 
-Now you can unzip the created zip archive. Then open the console. Make sure that
-you have [Node.js](https://nodejs.org/en/) installed on your system.
+The plugin exports a JSON file — your
+[style definition](/specification/definition-schema/). This file is ready to use
+immediately. No build step required.
 
-With the following command you can install all dependencies:
-
-```
-npm install
-```
-
-After that you can compile your avatar style:
+You can test your style right away with the [CLI](/how-to-use/cli/):
 
 ```
-npm run build
+dicebear ./your-style.json ./test-output --count 10
 ```
 
-And with the following command you can create sample avatars of your avatar
-style:
-
-```
-npm run test
-```
-
-<video src="/guides/create-an-avatar-style-with-figma/7.mp4" controls muted></video>
+This generates 10 sample avatars in the `./test-output` directory.
 
 ## Step 8
 
 Congratulations! You can now use your avatar style with the
-[JS-Library](/how-to-use/js-library/).
+[JS Library](/how-to-use/js-library/), the
+[PHP Library](/how-to-use/php-library/), or the [CLI](/how-to-use/cli/).
+
+### With the JS Library
 
 ```js
-import { createAvatar } from '@dicebear/core';
-import * as style from 'path/to/your-avatar-style';
+import { Avatar } from '@dicebear/core';
+import definition from './your-style.json' with { type: 'json' };
 
-let avatar = createAvatar(style, {
+const avatar = new Avatar(definition, {
   seed: 'dicebear',
   // ... other options
 });
 ```
 
-::: warning Limitations
+### With the PHP Library
 
-Currently it is not yet possible to use custom avatar styles with the CLI or
-HTTP API without a fork of these projects.
+```php
+use DiceBear\Avatar;
+
+$definition = json_decode(file_get_contents('./your-style.json'), true);
+
+$avatar = new Avatar($definition, [
+  'seed' => 'dicebear',
+  // ... other options
+]);
+```
+
+### With the CLI
+
+```
+dicebear ./your-style.json ./avatars --seed "dicebear" --format png
+```
+
+::: tip
+
+The CLI automatically detects all available options from your style definition.
+Use `--help` with your definition file to see them:
+
+```
+dicebear ./your-style.json --help
+```
 
 :::

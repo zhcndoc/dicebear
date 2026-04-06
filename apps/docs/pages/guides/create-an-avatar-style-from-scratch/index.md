@@ -1,138 +1,359 @@
 ---
 title: Create an Avatar Style from Scratch | DiceBear
 description: >
-  Learn how to create a DiceBear avatar style from scratch using TypeScript
-  without the Figma plugin.
+  Learn how to create a DiceBear avatar style from scratch by writing a JSON
+  definition file. No Figma or design tools required.
 ---
 
-# Create an avatar style from Scratch
+# Create an avatar style from scratch
 
 We highly recommend our
 [Figma plugin](/guides/create-an-avatar-style-with-figma/) to create an avatar
-style. Most of DiceBear official avatar styles were created with the plugin. But
-with appropriate programming skills you can also create an avatar style without
-Figma.
+style. Most of DiceBear's official avatar styles were created with the plugin.
+But you can also create an avatar style by writing a JSON
+[definition file](/specification/definition-schema/) by hand.
 
-## Interfaces
+## Minimal example
 
-```ts
-interface AvatarStyle {
-  meta?: {
-    title?: string;
-    source?: string;
-    creator?: string;
-    homepage?: string;
-    license?: {
-      name: string;
-      url: string;
-    };
-  };
-  schema?: JSONSchema7;
-  create(props: { prng: Prng; options: object }): {
-    attributes: {
-      viewBox: string;
-      [key: string]: string;
-    };
-    body: string;
-  };
-}
+A minimal style definition with a colored circle:
 
-interface Prng {
-  seed: string;
-  bool(likelihood?: number): boolean;
-  integer(min: number, max: number): number;
-  pick<T>(arr: T[], fallback?: T): T | undefined;
-  shuffle<T>(arr: T[]): T[];
-  string(length: number, characters?: string): string;
-}
-```
-
-## Minimal Example
-
-A minimal example of an avatar style with a circle colored red or blue by the
-PRNG based on a seed.
-
-```ts
-const style = {
-  create: ({ prng, options }) => {
-    const attributes = {
-      viewBox: '0 0 100 100',
-    };
-
-    const fill = prng.bool() ? 'red' : 'blue';
-    const body = `<circle cx="50" cy="50" r="50" fill="${fill}" />`;
-
-    return { attributes, body };
+```json
+{
+  "canvas": {
+    "width": 100,
+    "height": 100,
+    "elements": [
+      {
+        "type": "element",
+        "name": "circle",
+        "attributes": {
+          "cx": "50",
+          "cy": "50",
+          "r": "45",
+          "fill": { "type": "color", "value": "background" }
+        }
+      }
+    ]
   },
-};
+  "colors": {
+    "background": {
+      "values": ["#f94144", "#f9c74f", "#90be6d", "#43aa8b", "#577590"]
+    }
+  }
+}
 ```
 
-As you can see, it doesn't take much to create an avatar style. Both the
-metadata and the JSON schema are optional. The `create` method takes the PRNG
-and options and creates the avatar. What you do exactly in this function is up
-to you.
+Save this as `my-style.json` and test it:
 
-If you specify metadata, it will be placed in the metadata of the created
-avatars. If none are specified, the avatar's metadata is empty accordingly.
-
-The JSON Schema object describes the allowed options that can be passed to the
-`createAvatar` option. It is mainly used by the CLI, the API and the
-documentation. So you can leave the object empty without any real disadvantages.
-But it can help to document your avatar style.
-
-## PRNG Methods
-
-The `prng` object provides deterministic randomness — the same seed always
-produces the same result. Here is what each method is useful for:
-
-**`prng.bool(likelihood?)`** — Returns `true` or `false`. The optional
-`likelihood` parameter (0–100) sets the probability of `true`. Useful for
-toggling optional elements on or off.
-
-```ts
-// Show glasses on ~40% of avatars
-const hasGlasses = prng.bool(40);
-const body = hasGlasses
-  ? `<circle cx="35" cy="45" r="8" fill="none" stroke="black" stroke-width="2" />
-     <circle cx="65" cy="45" r="8" fill="none" stroke="black" stroke-width="2" />`
-  : '';
+```
+dicebear ./my-style.json ./output --count 5
 ```
 
-**`prng.integer(min, max)`** — Returns a random integer between `min` and `max`
-(inclusive). Useful for sizes, positions, or rotation angles.
+The PRNG picks a different background color for each seed.
 
-```ts
-// Random rotation between -15° and 15°
-const angle = prng.integer(-15, 15);
-const body = `<rect x="25" y="25" width="50" height="50"
-  transform="rotate(${angle} 50 50)" fill="steelblue" />`;
+## Adding components
+
+Components are the randomizable parts of your avatar. Each component has
+multiple variants that the PRNG can choose from.
+
+Let's add a face component with two variants:
+
+```json
+{
+  "canvas": {
+    "width": 100,
+    "height": 100,
+    "elements": [
+      {
+        "type": "element",
+        "name": "circle",
+        "attributes": {
+          "cx": "50",
+          "cy": "50",
+          "r": "45",
+          "fill": { "type": "color", "value": "background" }
+        }
+      },
+      {
+        "type": "component",
+        "value": "face"
+      }
+    ]
+  },
+  "components": {
+    "face": {
+      "width": 100,
+      "height": 100,
+      "variants": {
+        "smile": {
+          "elements": [
+            {
+              "type": "element",
+              "name": "circle",
+              "attributes": { "cx": "35", "cy": "40", "r": "4", "fill": "#000" }
+            },
+            {
+              "type": "element",
+              "name": "circle",
+              "attributes": { "cx": "65", "cy": "40", "r": "4", "fill": "#000" }
+            },
+            {
+              "type": "element",
+              "name": "path",
+              "attributes": {
+                "d": "M 30 60 Q 50 80 70 60",
+                "stroke": "#000",
+                "stroke-width": "3",
+                "fill": "none"
+              }
+            }
+          ]
+        },
+        "neutral": {
+          "elements": [
+            {
+              "type": "element",
+              "name": "circle",
+              "attributes": { "cx": "35", "cy": "40", "r": "4", "fill": "#000" }
+            },
+            {
+              "type": "element",
+              "name": "circle",
+              "attributes": { "cx": "65", "cy": "40", "r": "4", "fill": "#000" }
+            },
+            {
+              "type": "element",
+              "name": "line",
+              "attributes": {
+                "x1": "35",
+                "y1": "62",
+                "x2": "65",
+                "y2": "62",
+                "stroke": "#000",
+                "stroke-width": "3"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "colors": {
+    "background": {
+      "values": ["#f94144", "#f9c74f", "#90be6d", "#43aa8b", "#577590"]
+    }
+  }
+}
 ```
 
-**`prng.pick(arr)`** — Picks one item from an array. Useful for selecting a
-color from a palette or choosing a component variant.
+The `canvas.elements` array references the `face` component via
+`{ "type": "component", "value": "face" }`. The PRNG selects either the
+`smile` or `neutral` variant.
 
-```ts
-// Pick a random background color
-const palette = ['#f9c74f', '#90be6d', '#43aa8b', '#577590', '#f94144'];
-const color = prng.pick(palette);
+## Multiple components
+
+You can add as many components as you like. Each component is independent — the
+PRNG selects a variant for each one separately.
+
+```json
+{
+  "components": {
+    "eyes": {
+      "width": 100,
+      "height": 100,
+      "variants": {
+        "round": { "elements": [...] },
+        "narrow": { "elements": [...] }
+      }
+    },
+    "mouth": {
+      "width": 100,
+      "height": 100,
+      "variants": {
+        "smile": { "elements": [...] },
+        "open": { "elements": [...] },
+        "flat": { "elements": [...] }
+      }
+    },
+    "accessories": {
+      "width": 100,
+      "height": 100,
+      "probability": 30,
+      "variants": {
+        "glasses": { "elements": [...] },
+        "hat": { "elements": [...] }
+      }
+    }
+  }
+}
 ```
 
-**`prng.shuffle(arr)`** — Returns a shuffled copy of the array. Useful for
-varying the layering order of elements.
+### Probability
 
-```ts
-// Randomize the order of decorative stripes
-const stripes = ['#e63946', '#457b9d', '#2a9d8f'];
-const shuffled = prng.shuffle(stripes);
-const body = shuffled
-  .map((c, i) => `<rect x="0" y="${i * 34}" width="100" height="34" fill="${c}" />`)
-  .join('');
+The `probability` property (0-100) controls how often a component appears.
+In the example above, `accessories` only appears in ~30% of generated avatars.
+Default is `100` (always visible).
+
+### Variant weights
+
+Control how often specific variants are selected:
+
+```json
+{
+  "variants": {
+    "common": { "weight": 3, "elements": [...] },
+    "uncommon": { "weight": 1, "elements": [...] },
+    "rare": { "weight": 0, "elements": [...] }
+  }
+}
 ```
 
-## Real-world examples
+Higher weight = more likely to be selected. Weight `0` is only chosen when all
+other weights are also `0`. Default weight is `1`.
 
-For production-ready reference implementations, take a look at the source code
-of simpler official styles on GitHub:
+### Component transforms
 
-- [`@dicebear/shapes`](https://github.com/dicebear/dicebear/tree/main/packages/%40dicebear/shapes/src) — geometric shapes, minimal dependencies
-- [`@dicebear/identicon`](https://github.com/dicebear/dicebear/tree/main/packages/%40dicebear/identicon/src) — grid-based identicon, shows integer usage
+Components can have default rotation and translation ranges:
+
+```json
+{
+  "eyes": {
+    "width": 80,
+    "height": 40,
+    "rotate": [-5, 5],
+    "translate": {
+      "x": [-2, 2],
+      "y": [-3, 3]
+    },
+    "variants": { ... }
+  }
+}
+```
+
+## Color palettes
+
+Colors can be referenced from element attributes. The PRNG picks a value from
+the palette for each avatar.
+
+```json
+{
+  "colors": {
+    "skin": {
+      "values": ["#f5d6c3", "#d4a889", "#a67c5b", "#614335"]
+    },
+    "hair": {
+      "values": ["#2c1b18", "#b58143", "#d6b370", "#724133"],
+      "notEqualTo": ["skin"]
+    },
+    "text": {
+      "values": ["#ffffff", "#000000"],
+      "contrastTo": "background"
+    }
+  }
+}
+```
+
+### Color references
+
+Use color references in SVG attributes to apply dynamic colors:
+
+```json
+{
+  "type": "element",
+  "name": "circle",
+  "attributes": {
+    "fill": { "type": "color", "value": "skin" }
+  }
+}
+```
+
+### Color constraints
+
+**`notEqualTo`** prevents two color groups from selecting the same color. In the
+example above, `hair` will never be the same color as `skin`.
+
+**`contrastTo`** picks the color with the highest contrast ratio against the
+referenced color group. This is useful for ensuring text is readable against a
+background.
+
+## Metadata
+
+Add metadata to your definition for license attribution:
+
+```json
+{
+  "meta": {
+    "license": {
+      "name": "CC BY 4.0",
+      "url": "https://creativecommons.org/licenses/by/4.0/",
+      "text": "Full license text..."
+    },
+    "creator": {
+      "name": "Your Name",
+      "url": "https://your-website.com"
+    },
+    "source": {
+      "name": "My Style",
+      "url": "https://github.com/your/repo"
+    }
+  }
+}
+```
+
+This metadata appears in:
+- The license comment inside generated SVGs
+- The CLI license banner
+- The documentation (if your style is added to the official collection)
+
+## Schema validation
+
+Add the `$schema` property to enable validation in your editor:
+
+```json
+{
+  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@0.9.0/dist/definition.min.json",
+  "canvas": { ... }
+}
+```
+
+Most editors (VS Code, WebStorm, etc.) will provide autocompletion and inline
+validation for your definition file.
+
+## Testing
+
+### With the CLI
+
+```
+dicebear ./my-style.json ./output --count 10
+dicebear ./my-style.json ./output --seed "Alice" --format png
+```
+
+### With the JS Library
+
+```js
+import { Avatar } from '@dicebear/core';
+import definition from './my-style.json' with { type: 'json' };
+
+const avatar = new Avatar(definition, { seed: 'test' });
+console.log(avatar.toString());
+```
+
+### With the PHP Library
+
+```php
+use DiceBear\Avatar;
+
+$definition = json_decode(file_get_contents('./my-style.json'), true);
+$avatar = new Avatar($definition, ['seed' => 'test']);
+echo (string) $avatar;
+```
+
+## Next steps
+
+- See the [Definition Schema Reference](/specification/definition-schema/) for
+  the complete specification
+- Browse the
+  [official definitions](https://github.com/dicebear/definitions) for
+  real-world examples
+- Use the [Figma plugin](/guides/create-an-avatar-style-with-figma/) for a
+  visual workflow
