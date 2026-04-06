@@ -148,7 +148,7 @@ const steps = [
   &-container {
     opacity: 0;
     transform: translateY(40px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--duration-reveal) var(--ease-smooth);
 
     .visible & {
       opacity: 1;
@@ -183,7 +183,7 @@ const steps = [
     transform: translateX(-20px);
 
     .visible & {
-      animation: app-create-style-step-reveal 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      animation: reveal-up 0.6s var(--ease-smooth) forwards;
     }
   }
 
@@ -238,7 +238,7 @@ const steps = [
     max-width: 520px;
     height: 420px;
     background: #2c2c2c;
-    border-radius: 12px;
+    border-radius: var(--vp-radius-sm);
     overflow: hidden;
     box-shadow: var(--vp-shadow-5);
   }
@@ -352,14 +352,6 @@ const steps = [
     }
   }
 }
-
-@keyframes app-create-style-step-reveal {
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
 @media (max-width: 960px) {
   .app-create-style {
     &-grid {

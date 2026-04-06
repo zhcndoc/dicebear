@@ -53,13 +53,13 @@ defineProps<{
     gap: 0;
     background: var(--vp-c-bg);
     border: 1px solid var(--ui-card-border-color);
-    border-radius: 20px;
+    border-radius: var(--vp-radius-lg);
     padding: 32px;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--duration-mid) var(--ease-smooth);
 
     @media (max-width: 640px) {
       padding: 24px;
-      border-radius: 20px;
+      border-radius: var(--vp-radius-lg);
     }
 
     &-link {

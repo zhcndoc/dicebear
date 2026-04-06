@@ -31,6 +31,7 @@ function normalizeLicense(license: string): string {
   if (license.includes('CC BY 4.0')) return 'CC BY 4.0';
   if (license.includes('CC0 1.0')) return 'CC0 1.0';
   if (license.includes('MIT')) return 'MIT';
+
   return 'Other';
 }
 
@@ -46,6 +47,7 @@ export function useStyleFiltering(
     const builtIn = Object.entries(styles)
       .map(([styleName, style]) => {
         const rawLicense = style.meta.license?.name || 'Unknown';
+
         return {
           name: styleName,
           displayName: capitalCase(styleName),
@@ -83,11 +85,13 @@ export function useStyleFiltering(
 
   const availableLicenses = computed(() => {
     const licenses = new Set(allStyles.value.map((s) => s.licenseNormalized));
+
     return Array.from(licenses).sort();
   });
 
   const availableCategories = computed(() => {
     const categories = new Set(allStyles.value.map((s) => s.category));
+
     return Array.from(categories).sort(
       (a, b) => categoryOrder.indexOf(a) - categoryOrder.indexOf(b),
     );
@@ -104,15 +108,18 @@ export function useStyleFiltering(
       ) {
         return false;
       }
+
       if (
         selectedLicense.value &&
         style.licenseNormalized !== selectedLicense.value
       ) {
         return false;
       }
+
       if (selectedCategory.value && style.category !== selectedCategory.value) {
         return false;
       }
+
       return true;
     });
   });
@@ -123,14 +130,17 @@ export function useStyleFiltering(
       if (!groups[style.category]) {
         groups[style.category] = [];
       }
+
       groups[style.category].push(style);
     }
+
     const sortedGroups: typeof groups = {};
     for (const cat of categoryOrder) {
       if (groups[cat]) {
         sortedGroups[cat] = groups[cat];
       }
     }
+
     return sortedGroups;
   });
 

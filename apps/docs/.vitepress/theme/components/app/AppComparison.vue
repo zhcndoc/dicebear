@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Check, X, Minus } from '@lucide/vue';
+import { Check, X } from '@lucide/vue';
 import { ThemeOptions } from '@theme/types';
 import { useData } from 'vitepress';
 import { UiContainer, UiSection, UiSectionHeader, UiCard } from '../ui';
@@ -204,7 +204,7 @@ function getCellValue(row: ComparisonRow, key: keyof ComparisonRow): CellValue {
   &-header {
     opacity: 0;
     transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--duration-reveal) var(--ease-smooth);
 
     .visible & {
       opacity: 1;
@@ -215,7 +215,7 @@ function getCellValue(row: ComparisonRow, key: keyof ComparisonRow): CellValue {
   &-table-card {
     opacity: 0;
     transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+    transition: all var(--duration-reveal) var(--ease-smooth) 0.2s;
 
     .visible & {
       opacity: 1;
@@ -279,7 +279,7 @@ function getCellValue(row: ComparisonRow, key: keyof ComparisonRow): CellValue {
   &-service-link {
     color: inherit;
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: color var(--duration-fast) ease;
 
     &::after {
       display: none !important;
@@ -307,7 +307,7 @@ function getCellValue(row: ComparisonRow, key: keyof ComparisonRow): CellValue {
     justify-content: center;
     height: 28px;
     padding: 0 12px;
-    border-radius: 14px;
+    border-radius: var(--vp-radius-sm);
     background: var(--vp-c-green-soft);
     color: var(--vp-c-green-1);
     font-size: 13px;
@@ -320,7 +320,7 @@ function getCellValue(row: ComparisonRow, key: keyof ComparisonRow): CellValue {
     justify-content: center;
     height: 28px;
     padding: 0 12px;
-    border-radius: 14px;
+    border-radius: var(--vp-radius-sm);
     background: color-mix(in srgb, var(--vp-c-text-3) 10%, transparent);
     color: var(--vp-c-text-2);
     font-size: 13px;

@@ -56,7 +56,7 @@ async function onClick() {
     <h2 class="dialog-title">{{ text }}</h2>
     <div class="dialog-subtitle">Please note the license below before using.</div>
     <div class="dialog-text">
-      <PlaygroundLicenseAlert :style-name="store.avatarStyleName" />
+      <PlaygroundLicenseAlert />
     </div>
   </PlaygroundDialog>
 </template>

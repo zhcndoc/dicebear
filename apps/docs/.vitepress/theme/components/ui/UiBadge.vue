@@ -20,9 +20,9 @@ defineProps<{
   font-size: 13px;
   font-weight: 700;
   line-height: 1.4;
-  margin-bottom: 24px;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+  margin-bottom: 24px;
 
   &-brand {
     background: linear-gradient(135deg, color-mix(in srgb, var(--vp-c-brand-1) 15%, transparent), color-mix(in srgb, var(--vp-c-purple-1) 12%, transparent));

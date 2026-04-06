@@ -74,7 +74,7 @@ const frameworks = [
     text-align: center;
     opacity: 0;
     transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--duration-reveal) var(--ease-smooth);
 
     .visible & {
       opacity: 1;
@@ -105,7 +105,7 @@ const frameworks = [
     transform: translateY(20px);
 
     .visible & {
-      animation: app-frameworks-card-reveal var(--duration-mid) var(--ease-spring) forwards;
+      animation: reveal-up var(--duration-mid) var(--ease-spring) forwards;
     }
 
     &::after {
@@ -128,10 +128,4 @@ const frameworks = [
   }
 }
 
-@keyframes app-frameworks-card-reveal {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 </style>

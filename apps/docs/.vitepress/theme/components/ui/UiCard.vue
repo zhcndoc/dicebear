@@ -70,7 +70,7 @@ defineProps<{
   }
 
   &-radius-xl {
-    border-radius: 28px;
+    border-radius: var(--vp-radius-xl);
   }
 
   /* Responsive */

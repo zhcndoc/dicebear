@@ -125,7 +125,7 @@ const useCases = [
   &-header {
     opacity: 0;
     transform: translateY(30px);
-    transition: all 0.8s var(--ease-smooth);
+    transition: all var(--duration-reveal) var(--ease-smooth);
 
     .visible & {
       opacity: 1;
@@ -147,7 +147,7 @@ const useCases = [
     }
 
     .visible & {
-      animation: app-use-cases-card-reveal var(--duration-slow) var(--ease-spring) forwards;
+      animation: reveal-up var(--duration-slow) var(--ease-spring) forwards;
     }
 
     &-header {
@@ -196,14 +196,6 @@ const useCases = [
     line-height: 1.6;
   }
 }
-
-@keyframes app-use-cases-card-reveal {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @media (max-width: 900px) {
   .app-use-cases {
     &-grid {

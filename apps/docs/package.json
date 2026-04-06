@@ -15,9 +15,6 @@
     "@fontsource-variable/figtree": "^5.2.10",
     "@lucide/vue": "^1.7.0",
     "@primeuix/themes": "^2.0.3",
-    "@types/canvas-confetti": "^1.9.0",
-    "@types/json-schema": "^7.0.15",
-    "@types/node": "^24.0.3",
     "@vueuse/core": "^14.2.0",
     "canvas-confetti": "^1.9.4",
     "change-case": "^5.4.4",
@@ -32,10 +29,15 @@
     "random-int": "^3.1.0",
     "random-item": "^4.0.1",
     "simple-icons": "^16.7.0",
-    "typescript": "^5.9.3",
     "vitepress": "^2.0.0-alpha.16",
     "vue": "^3.5.17",
     "vue-chartjs": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/json-schema": "^7.0.15",
+    "@types/node": "^24.0.3",
+    "typescript": "^5.9.3"
   },
   "private": true
 }

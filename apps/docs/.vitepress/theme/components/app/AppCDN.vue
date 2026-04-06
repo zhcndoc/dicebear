@@ -123,7 +123,7 @@ const stats = computed(() => [
     --hl-to: var(--vp-c-brand-1);
     opacity: 0;
     transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--duration-reveal) var(--ease-smooth);
 
     .visible & {
       opacity: 1;
@@ -134,7 +134,7 @@ const stats = computed(() => [
   &-content {
     opacity: 0;
     transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.15s;
+    transition: all var(--duration-reveal) var(--ease-smooth) 0.15s;
 
     .visible & {
       opacity: 1;
@@ -189,7 +189,7 @@ const stats = computed(() => [
     font-weight: 600;
     color: var(--vp-c-brand-1);
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: color var(--duration-fast) ease;
 
     &::after {
       display: none !important;
@@ -217,10 +217,10 @@ const stats = computed(() => [
     gap: 16px;
     padding: 20px 24px;
     background: var(--vp-c-bg-soft);
-    border-radius: 14px;
+    border-radius: var(--vp-radius-sm);
     opacity: 0;
     transform: translateX(20px);
-    transition: all 0.3s ease;
+    transition: all var(--duration-mid) ease;
 
     &:hover {
       background: var(--vp-c-bg);
@@ -228,7 +228,7 @@ const stats = computed(() => [
     }
 
     .visible & {
-      animation: app-cdn-stat-reveal 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      animation: app-cdn-stat-reveal 0.5s var(--ease-spring) forwards;
     }
   }
 

@@ -12,6 +12,8 @@ interface Umami {
 
 declare var umami: Umami | undefined;
 
+declare module 'three';
+
 interface ImportMetaEnv {
   readonly VITE_PRIVACY_POLICY_URL?: string;
   readonly VITE_COOKIE_POLICY_URL?: string;

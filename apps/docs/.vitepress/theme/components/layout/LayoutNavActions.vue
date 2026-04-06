@@ -114,7 +114,7 @@ function openSearch() {
   align-items: center;
   padding: 1px 6px;
   margin-left: 1px;
-  border-radius: 6px;
+  border-radius: var(--vp-radius-xs);
   background: var(--star-accent-hover);
   color: var(--star-accent-text);
   font-size: 12px;

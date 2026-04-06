@@ -71,7 +71,7 @@ withDefaults(
     gap: 12px;
     padding: 16px;
     border: 1px solid var(--vp-c-divider);
-    border-radius: 12px;
+    border-radius: var(--vp-radius-sm);
     text-decoration: none;
     transition:
       border-color 0.2s ease,
@@ -113,7 +113,7 @@ withDefaults(
 
   &-arrow {
     color: var(--vp-c-brand-1);
-    transition: transform 0.2s ease;
+    transition: transform var(--duration-fast) ease;
   }
 
   &-desc {
@@ -131,7 +131,7 @@ withDefaults(
     font-weight: 500;
     color: var(--vp-c-brand-1);
     text-decoration: none;
-    transition: gap 0.2s ease;
+    transition: gap var(--duration-fast) ease;
 
     &:hover {
       gap: 10px;

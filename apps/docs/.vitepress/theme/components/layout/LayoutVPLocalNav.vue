@@ -70,11 +70,11 @@ function scrollToTop() {
     font-size: 12px;
     font-weight: 500;
     color: var(--vp-c-text-2);
-    transition: color 0.5s;
+    transition: color var(--duration-slow);
 
     &:hover {
       color: var(--vp-c-text-1);
-      transition: color 0.25s;
+      transition: color var(--duration-fast);
     }
 
     @media (min-width: 768px) {
@@ -96,11 +96,11 @@ function scrollToTop() {
     font-size: 12px;
     font-weight: 500;
     color: var(--vp-c-text-2);
-    transition: color 0.5s;
+    transition: color var(--duration-slow);
 
     &:hover {
       color: var(--vp-c-text-1);
-      transition: color 0.25s;
+      transition: color var(--duration-fast);
     }
 
     @media (min-width: 768px) {

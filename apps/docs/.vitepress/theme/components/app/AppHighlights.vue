@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { UiContainer, UiSection, UiSectionHeader, UiIconBox, UiCard, UiIcon } from '../ui';
-import { Target, Palette, Zap, SlidersHorizontal, Package, Globe } from '@lucide/vue';
+import { Target, Palette, Zap, SlidersHorizontal, Globe } from '@lucide/vue';
 import { siGithub } from 'simple-icons';
 import { useVisibility } from '../../composables/useVisibility';
 
@@ -103,7 +103,7 @@ const highlights = [
   &-header {
     opacity: 0;
     transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--duration-reveal) var(--ease-smooth);
 
     .visible & {
       opacity: 1;
@@ -114,10 +114,10 @@ const highlights = [
   &-card {
     opacity: 0;
     transform: translateY(30px);
-    transition: box-shadow var(--duration-mid, 0.35s) var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
+    transition: box-shadow var(--duration-mid) var(--ease-spring);
 
     .visible & {
-      animation: app-highlights-card-reveal var(--duration-mid, 0.35s) var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1)) forwards;
+      animation: reveal-up var(--duration-mid) var(--ease-spring) forwards;
     }
 
     &:hover {
@@ -151,14 +151,6 @@ const highlights = [
     line-height: 1.6;
   }
 }
-
-@keyframes app-highlights-card-reveal {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @media (max-width: 1000px) {
   .app-highlights {
     &-grid {

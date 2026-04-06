@@ -60,7 +60,7 @@ const exampleCliCommand = computed(() => {
           <a
             :href="exampleHttpApiUrl"
             target="_blank"
-            ref="noopener noreferrer"
+            rel="noopener noreferrer"
           >
             {{ exampleHttpApiUrl }}
           </a>
@@ -105,7 +105,7 @@ const exampleCliCommand = computed(() => {
             v-if="style.meta.homepage"
             :href="style.meta.homepage"
             target="_blank"
-            ref="noopener noreferrer"
+            rel="noopener noreferrer"
           >
             {{ style.meta.creator }}
           </a>
@@ -120,7 +120,7 @@ const exampleCliCommand = computed(() => {
           <a
             :href="style.meta.homepage"
             target="_blank"
-            ref="noopener noreferrer"
+            rel="noopener noreferrer"
             >{{ style.meta.homepage }}</a
           >
         </td>
@@ -132,7 +132,7 @@ const exampleCliCommand = computed(() => {
             v-if="style.meta.license.url"
             :href="style.meta.license.url"
             target="_blank"
-            ref="noopener noreferrer"
+            rel="noopener noreferrer"
           >
             {{ style.meta.license.name }}
           </a>
@@ -147,7 +147,7 @@ const exampleCliCommand = computed(() => {
           <a
             :href="style.meta.source"
             target="_blank"
-            ref="noopener noreferrer"
+            rel="noopener noreferrer"
             >{{ style.meta.source }}</a
           >
         </td>

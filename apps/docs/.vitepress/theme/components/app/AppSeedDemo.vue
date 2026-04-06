@@ -5,6 +5,7 @@ import { Dice5, ChevronDown, Sparkles } from '@lucide/vue';
 import { UiAvatar, UiHeadline, UiDescription, UiBadge, UiContainer, UiSection, UiWindow } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 import { useAvatarStyleList, useAvatarStyleMeta } from '../../composables/avatar';
+import { formatLicenseName } from '../../utils/format';
 import AppSeedDemoCode from './AppSeedDemoCode.vue';
 import AppSeedDemoStylePicker from './AppSeedDemoStylePicker.vue';
 
@@ -153,7 +154,7 @@ function selectStyle(index: number) {
           </template>
           by
           <a :href="avatarStyleMeta?.homepage" target="_blank" rel="noopener noreferrer">{{ avatarStyleMeta?.creator }}</a>, licensed under
-          <a :href="avatarStyleMeta?.license?.url" target="_blank" rel="noopener noreferrer">{{ avatarStyleMeta?.license?.name.replace(/\.$/, '') }}</a>.
+          <a :href="avatarStyleMeta?.license?.url" target="_blank" rel="noopener noreferrer">{{ formatLicenseName(avatarStyleMeta?.license?.name) }}</a>.
         </p>
       </div>
 
@@ -192,7 +193,7 @@ function selectStyle(index: number) {
   &-container {
     opacity: 0;
     transform: translateY(40px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--duration-reveal) var(--ease-smooth);
 
     .visible & {
       opacity: 1;
@@ -227,7 +228,7 @@ function selectStyle(index: number) {
       text-decoration: underline;
       text-decoration-style: dotted;
       text-decoration-color: var(--vp-c-border);
-      transition: color 0.2s ease;
+      transition: color var(--duration-fast) ease;
 
       &:hover {
         color: var(--vp-c-brand-1);
@@ -254,9 +255,9 @@ function selectStyle(index: number) {
     padding: 0 10px 0 14px;
     background: var(--vp-c-bg);
     border: 1px solid var(--vp-c-border);
-    border-radius: 10px;
+    border-radius: var(--vp-radius-xs);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all var(--duration-fast) ease;
     font-size: 14px;
 
     &:hover {
@@ -459,7 +460,7 @@ function selectStyle(index: number) {
       font-size: 11px;
       font-weight: 600;
       color: var(--vp-c-text-3);
-      transition: color 0.2s ease;
+      transition: color var(--duration-fast) ease;
     }
   }
 }
@@ -483,7 +484,7 @@ function selectStyle(index: number) {
     &-avatar-main {
       width: 88px;
       height: 88px;
-      border-radius: 18px;
+      border-radius: var(--vp-radius-md);
     }
 
     &-avatar-glow {
@@ -494,7 +495,7 @@ function selectStyle(index: number) {
     &-seed-card-avatar {
       width: 36px;
       height: 36px;
-      border-radius: 10px;
+      border-radius: var(--vp-radius-xs);
     }
 
     &-seed-card {
@@ -517,7 +518,7 @@ function selectStyle(index: number) {
     &-avatar-main {
       width: 80px;
       height: 80px;
-      border-radius: 16px;
+      border-radius: var(--vp-radius-md);
     }
 
     &-avatar-glow {
@@ -538,7 +539,7 @@ function selectStyle(index: number) {
     &-seed-card-avatar {
       width: 30px;
       height: 30px;
-      border-radius: 8px;
+      border-radius: var(--vp-radius-xs);
     }
   }
 }

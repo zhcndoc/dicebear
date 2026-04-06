@@ -4,6 +4,7 @@ import { computed, Ref, unref } from 'vue';
 
 export function useAvatarStyleList(): Ref<string[]> {
   const data = useData<ThemeOptions>();
+
   return computed(() => Object.keys(data.theme.value.avatarStyles));
 }
 

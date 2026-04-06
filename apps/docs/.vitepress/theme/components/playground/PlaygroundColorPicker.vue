@@ -115,7 +115,7 @@ function addPreset(hex: string) {
   width: 28px;
   height: 28px;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--vp-radius-xs);
   cursor: pointer;
   transition: transform var(--duration-fast) ease;
 
@@ -137,7 +137,7 @@ function addPreset(hex: string) {
   height: 36px;
   padding: 2px;
   border: 1px solid var(--pg-border);
-  border-radius: 6px;
+  border-radius: var(--vp-radius-xs);
   background: var(--vp-c-bg);
   cursor: pointer;
   flex-shrink: 0;

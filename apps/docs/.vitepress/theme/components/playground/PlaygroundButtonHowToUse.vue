@@ -3,6 +3,7 @@ import { Code as CodeIcon } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
 import { UiCode } from '../ui';
 import { getAvatarApiUrl, getAvatarApiCommand } from '@theme/utils/avatar';
+import { formatPhpValue } from '@theme/utils/code-examples';
 import PlaygroundDialog from './PlaygroundDialog.vue';
 import Button from 'primevue/button';
 import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
@@ -64,40 +65,8 @@ const avatar = new Avatar(style, ${JSON.stringify(
 
 const svg = avatar.toString();`;
 });
-function toPhpValue(value: unknown, depth: number): string {
-  const indent = '    '.repeat(depth);
-  const outerIndent = '    '.repeat(depth - 1);
-
-  if (value === null || value === undefined) return 'null';
-  if (typeof value === 'boolean') return value ? 'true' : 'false';
-  if (typeof value === 'number') return String(value);
-  if (typeof value === 'string') return `'${value.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
-
-  if (Array.isArray(value)) {
-    if (value.length === 0) return '[]';
-
-    const items = value.map((v) => `${indent}${toPhpValue(v, depth + 1)}`);
-
-    return `[\n${items.join(',\n')}\n${outerIndent}]`;
-  }
-
-  if (typeof value === 'object') {
-    const entries = Object.entries(value as Record<string, unknown>);
-
-    if (entries.length === 0) return '[]';
-
-    const items = entries.map(
-      ([k, v]) => `${indent}'${k.replace(/'/g, "\\'")}' => ${toPhpValue(v, depth + 1)}`,
-    );
-
-    return `[\n${items.join(',\n')}\n${outerIndent}]`;
-  }
-
-  return String(value);
-}
-
 const examplePhp = computed(() => {
-  const phpOptions = toPhpValue(options.value, 1);
+  const phpOptions = formatPhpValue(options.value, 1);
 
   if (store.isCustomStyle) {
     return `<?php
@@ -217,7 +186,7 @@ const exampleCli = computed(() =>
         </Tabs>
       </div>
 
-      <PlaygroundLicenseAlert :style-name="store.avatarStyleName" />
+      <PlaygroundLicenseAlert />
     </div>
   </PlaygroundDialog>
 </template>

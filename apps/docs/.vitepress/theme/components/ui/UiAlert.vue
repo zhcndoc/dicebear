@@ -13,7 +13,7 @@ defineProps<{
 <style lang="scss" scoped>
 .ui-alert {
   padding: 16px;
-  border-radius: 8px;
+  border-radius: var(--vp-radius-xs);
   font-size: 14px;
   line-height: 1.6;
 

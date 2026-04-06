@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted, ref, nextTick } from 'vue';
-import confetti from 'canvas-confetti';
 
 const canvas = ref<HTMLCanvasElement>();
 
@@ -11,6 +10,7 @@ onMounted(async () => {
 
   if (!canvas.value) return;
 
+  const { default: confetti } = await import('canvas-confetti');
   const instance = confetti.create(canvas.value, {
     resize: true,
     disableForReducedMotion: true,

@@ -46,14 +46,14 @@ export function useRangeField(avatarStyleOptions: PlaygroundStoreOptions) {
       get: () => {
         const val = avatarStyleOptions[key];
 
-        if (Array.isArray(val) && val.length === 2) return [val[0], val[1]];
-        if (typeof val === 'number') return [val, val];
+        if (Array.isArray(val) && val.length === 2) return [val[0], val[1]] as [number, number];
+        if (typeof val === 'number') return [val, val] as [number, number];
 
-        if (Array.isArray(fallback) && fallback.length === 2) return [fallback[0], fallback[1]];
+        if (Array.isArray(fallback) && fallback.length === 2) return [fallback[0], fallback[1]] as [number, number];
 
         const fb = typeof fallback === 'number' ? fallback : 0;
 
-        return [fb, fb];
+        return [fb, fb] as [number, number];
       },
       set: (val: [number, number]) => {
         avatarStyleOptions[key] = [val[0], val[1]];

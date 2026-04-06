@@ -21,8 +21,10 @@ export function useParallax(isVisible: Ref<boolean>) {
   function animate() {
     if (!isVisible.value) {
       animationFrameId = null;
+
       return;
     }
+
     const lerp = 0.08;
     currentX += (targetMouseX - currentX) * lerp;
     currentY += (targetMouseY - currentY) * lerp;

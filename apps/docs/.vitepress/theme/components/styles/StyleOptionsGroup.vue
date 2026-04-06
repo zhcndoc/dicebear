@@ -5,13 +5,13 @@ import AccordionPanel from 'primevue/accordionpanel';
 import AccordionHeader from 'primevue/accordionheader';
 import AccordionContent from 'primevue/accordioncontent';
 import { Settings, Puzzle, Palette } from '@lucide/vue';
-import StyleOptionsCard from './StyleOptionsCard.vue';
+import StyleOptionsCard, { type OptionValue } from './StyleOptionsCard.vue';
 
 const props = defineProps<{
   styleName: string;
   label: string;
   category: 'general' | 'component' | 'color';
-  options: Record<string, any>;
+  options: Record<string, OptionValue>;
   defaultExpanded?: boolean;
 }>();
 
@@ -25,8 +25,8 @@ const icon = computed(() => {
 
 const optionCount = computed(() => Object.keys(props.options).length);
 
-const EXPANDED = ['0'] as const;
-const COLLAPSED = [] as const;
+const EXPANDED: string[] = ['0'];
+const COLLAPSED: string[] = [];
 
 const expandedValues = computed(() => {
   return props.defaultExpanded ? EXPANDED : COLLAPSED;

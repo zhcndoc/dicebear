@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useData } from 'vitepress';
+import { useVisibility } from '@theme/composables/useVisibility';
 
 const props = defineProps<{
   rate: number;
@@ -8,8 +9,10 @@ const props = defineProps<{
 
 const { isDark } = useData();
 const containerRef = ref<HTMLDivElement>();
+const globeRef = ref<HTMLDivElement>();
+const isVisible = useVisibility(globeRef, { once: false, threshold: 0.1 });
 let globe: any = null;
-let eventInterval: ReturnType<typeof setInterval>;
+let eventInterval: ReturnType<typeof setInterval> | null = null;
 let resizeObserver: ResizeObserver | null = null;
 let rotationFrame: number | null = null;
 
@@ -285,23 +288,6 @@ async function initGlobe() {
   controls.enablePan = false;
   controls.enableRotate = false;
 
-  // Custom tilted rotation to maximize visible landmass.
-  // The latitude oscillates so when the view crosses the Pacific,
-  // it tilts north (Russia/Alaska) or south (Australia/Indonesia).
-  let rotLng = 20;
-  const ROT_SPEED = 0.05;  // °/frame — full rotation ≈ 120 s at 60 fps
-  const TILT = 15;         // latitude oscillation amplitude
-  const BASE_LAT = 35;     // center latitude (Northern Hemisphere bias)
-  const TILT_FREQ = 1.3;   // oscillations per rotation (non-integer avoids repetition)
-
-  function animateRotation() {
-    rotLng += ROT_SPEED;
-    const lat = BASE_LAT + TILT * Math.sin(rotLng * TILT_FREQ * Math.PI / 180);
-    globe.pointOfView({ lat, lng: rotLng % 360, altitude: 1.8 }, 0);
-    rotationFrame = requestAnimationFrame(animateRotation);
-  }
-  rotationFrame = requestAnimationFrame(animateRotation);
-
   globe.renderer().domElement.style.cursor = 'default';
 
   const scene = globe.scene();
@@ -354,27 +340,71 @@ function applyTheme() {
   globe.lights([ambient, dir]);
 }
 
-onMounted(async () => {
-  fillPreloadBuffer();
-  await initGlobe();
-
+function startEvents() {
+  if (eventInterval) return;
   for (let i = 0; i < 8; i++) {
     pendingTimeouts.push(setTimeout(addEvent, i * 250));
   }
   eventInterval = setInterval(addEvent, 800);
+}
+
+function stopEvents() {
+  if (eventInterval) { clearInterval(eventInterval); eventInterval = null; }
+  pendingTimeouts.forEach(clearTimeout);
+  pendingTimeouts.length = 0;
+}
+
+function startRotation() {
+  if (rotationFrame !== null || !globe) return;
+  const pov = globe.pointOfView();
+  let rotLng = pov.lng;
+  const ROT_SPEED = 0.05;
+  const TILT = 15;
+  const BASE_LAT = 35;
+  const TILT_FREQ = 1.3;
+
+  function animateRotation() {
+    rotLng += ROT_SPEED;
+    const lat = BASE_LAT + TILT * Math.sin(rotLng * TILT_FREQ * Math.PI / 180);
+    globe.pointOfView({ lat, lng: rotLng % 360, altitude: 1.8 }, 0);
+    rotationFrame = requestAnimationFrame(animateRotation);
+  }
+  rotationFrame = requestAnimationFrame(animateRotation);
+}
+
+function stopRotation() {
+  if (rotationFrame !== null) { cancelAnimationFrame(rotationFrame); rotationFrame = null; }
+}
+
+onMounted(async () => {
+  fillPreloadBuffer();
+  await initGlobe();
+
+  if (isVisible.value) {
+    startEvents();
+    startRotation();
+  }
+});
+
+watch(isVisible, (visible) => {
+  if (visible) {
+    startEvents();
+    startRotation();
+  } else {
+    stopEvents();
+    stopRotation();
+  }
 });
 
 watch(isDark, () => { applyTheme(); });
 
 onUnmounted(() => {
-  clearInterval(eventInterval);
-  pendingTimeouts.forEach(clearTimeout);
-  pendingTimeouts.length = 0;
+  stopEvents();
+  stopRotation();
   events = [];
   eventId = 0;
   elementMap.clear();
   preloadedUrls.length = 0;
-  if (rotationFrame !== null) { cancelAnimationFrame(rotationFrame); rotationFrame = null; }
   if (globe) { globe._destructor(); globe = null; }
   if (resizeObserver) { resizeObserver.disconnect(); resizeObserver = null; }
 });
@@ -386,7 +416,7 @@ const formattedRate = (r: number) => {
 </script>
 
 <template>
-  <div class="app-stats-globe">
+  <div ref="globeRef" class="app-stats-globe">
     <div ref="containerRef" class="app-stats-globe-wrap">
       <div class="app-stats-globe-ring" />
     </div>
@@ -460,8 +490,8 @@ const formattedRate = (r: number) => {
   justify-content: center;
   opacity: 0;
   transform: scale(0);
-  transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-              transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: opacity var(--duration-slow) var(--ease-spring),
+              transform var(--duration-slow) var(--ease-spring);
 
   &--visible {
     opacity: 1;
@@ -476,7 +506,7 @@ const formattedRate = (r: number) => {
   &--leaving {
     opacity: 0 !important;
     transform: scale(0.3) !important;
-    transition: opacity 0.5s ease, transform 0.5s ease !important;
+    transition: opacity var(--duration-slow) ease, transform var(--duration-slow) ease !important;
   }
 
   &-ring {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, useSlots, computed } from 'vue';
 import { Play, ArrowRight } from '@lucide/vue';
-import { UiAvatar, UiButton, UiHeadline, UiDescription, UiBadge, UiContainer, UiSection } from '../ui';
+import { UiButton, UiHeadline, UiDescription, UiBadge, UiContainer, UiSection } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
 const props = withDefaults(defineProps<{
@@ -81,7 +81,7 @@ const hasActions = computed(() => !!slots.actions);
       top: -10%;
       right: -5%;
       background: radial-gradient(circle, color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent) 0%, transparent 70%);
-      animation: app-small-hero-shape-float 18s ease-in-out infinite;
+      animation: shape-float 18s ease-in-out infinite;
     }
 
     &::after {
@@ -90,7 +90,7 @@ const hasActions = computed(() => !!slots.actions);
       bottom: -5%;
       left: -3%;
       background: radial-gradient(circle, color-mix(in srgb, var(--vp-c-purple-1) 8%, transparent) 0%, transparent 70%);
-      animation: app-small-hero-shape-float 22s ease-in-out infinite reverse;
+      animation: shape-float 22s ease-in-out infinite reverse;
     }
   }
 
@@ -98,7 +98,7 @@ const hasActions = computed(() => !!slots.actions);
     text-align: center;
     opacity: 0;
     transform: translateY(30px);
-    animation: app-small-hero-fade-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation: fade-up var(--duration-reveal) var(--ease-smooth) both;
 
     .visible & {
       opacity: 1;
@@ -146,14 +146,14 @@ const hasActions = computed(() => !!slots.actions);
   &-description {
     margin-bottom: 40px;
     max-width: 550px;
-    animation: app-small-hero-fade-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
+    animation: fade-up var(--duration-reveal) var(--ease-smooth) 0.1s both;
   }
 
   &-actions {
     display: flex;
     justify-content: center;
     gap: 16px;
-    animation: app-small-hero-fade-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
+    animation: fade-up var(--duration-reveal) var(--ease-smooth) 0.2s both;
   }
 
   &-avatars {
@@ -161,24 +161,24 @@ const hasActions = computed(() => !!slots.actions);
     justify-content: center;
     gap: 16px;
     flex-wrap: wrap;
-    animation: app-small-hero-fade-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
+    animation: fade-up var(--duration-reveal) var(--ease-smooth) 0.3s both;
   }
 
   &-avatar {
     width: 72px;
     height: 72px;
-    border-radius: 16px;
+    border-radius: var(--vp-radius-md);
     overflow: hidden;
     opacity: 0;
     transform: translateY(20px) scale(0.9);
-    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all var(--duration-mid) var(--ease-spring);
 
     &::after {
       display: none !important;
     }
 
     .visible & {
-      animation: app-small-hero-avatar-reveal 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      animation: app-small-hero-avatar-reveal 0.5s var(--ease-spring) forwards;
     }
 
     &:hover {
@@ -193,37 +193,10 @@ const hasActions = computed(() => !!slots.actions);
     }
   }
 }
-
-@keyframes app-small-hero-fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @keyframes app-small-hero-avatar-reveal {
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes app-small-hero-shape-float {
-  0%, 100% {
-    transform: translate(0, 0) scale(1);
-  }
-  25% {
-    transform: translate(20px, -15px) scale(1.05);
-  }
-  50% {
-    transform: translate(-10px, 10px) scale(0.97);
-  }
-  75% {
-    transform: translate(15px, 5px) scale(1.03);
   }
 }
 
@@ -280,7 +253,7 @@ const hasActions = computed(() => !!slots.actions);
     &-avatar {
       width: 56px;
       height: 56px;
-      border-radius: 12px;
+      border-radius: var(--vp-radius-sm);
     }
   }
 }

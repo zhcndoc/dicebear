@@ -73,10 +73,10 @@ function onSelect(index: number) {
     gap: 6px;
     padding: 8px;
     border: 2px solid transparent;
-    border-radius: 14px;
+    border-radius: var(--vp-radius-sm);
     background: var(--vp-c-bg-soft);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all var(--duration-fast) ease;
 
     &:hover {
       border-color: var(--vp-c-border);
@@ -96,7 +96,7 @@ function onSelect(index: number) {
     img {
       width: 56px;
       height: 56px;
-      border-radius: 10px;
+      border-radius: var(--vp-radius-xs);
       object-fit: cover;
     }
   }

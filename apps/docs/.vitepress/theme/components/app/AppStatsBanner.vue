@@ -90,7 +90,7 @@ const metrics = computed(() => [
   &-header {
     opacity: 0;
     transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--duration-reveal) var(--ease-smooth);
 
     .visible & {
       opacity: 1;
@@ -110,7 +110,7 @@ const metrics = computed(() => [
     transition: box-shadow var(--duration-mid) var(--ease-spring);
 
     .visible & {
-      animation: app-stats-banner-card-reveal var(--duration-mid) var(--ease-spring) forwards;
+      animation: reveal-up var(--duration-mid) var(--ease-spring) forwards;
     }
 
     &:hover {
@@ -155,7 +155,7 @@ const metrics = computed(() => [
     margin-top: 48px;
     opacity: 0;
     transform: translateY(20px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+    transition: all var(--duration-reveal) var(--ease-smooth) 0.3s;
 
     .visible & {
       opacity: 1;
@@ -163,14 +163,6 @@ const metrics = computed(() => [
     }
   }
 }
-
-@keyframes app-stats-banner-card-reveal {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @media (max-width: 1000px) {
   .app-stats-banner {
     &-grid {

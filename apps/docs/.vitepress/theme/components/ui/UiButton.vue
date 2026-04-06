@@ -29,11 +29,11 @@ defineProps<{
   font-size: 16px;
   text-decoration: none;
   transition:
-    transform var(--duration-mid, 0.35s) var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1)),
-    box-shadow var(--duration-mid, 0.35s) ease,
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease;
+    transform var(--duration-mid) var(--ease-spring),
+    box-shadow var(--duration-mid) ease,
+    background-color var(--duration-fast) ease,
+    border-color var(--duration-fast) ease,
+    color var(--duration-fast) ease;
   position: relative;
   letter-spacing: -0.01em;
 

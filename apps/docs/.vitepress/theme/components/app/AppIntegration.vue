@@ -114,7 +114,7 @@ const svg = new Avatar(style, {
   &-header {
     opacity: 0;
     transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--duration-reveal) var(--ease-smooth);
 
     .visible & {
       opacity: 1;
@@ -127,7 +127,7 @@ const svg = new Avatar(style, {
     transform: translateY(30px);
 
     .visible & {
-      animation: app-integration-card-reveal 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      animation: reveal-up 0.6s var(--ease-smooth) forwards;
     }
   }
 
@@ -204,7 +204,7 @@ const svg = new Avatar(style, {
     font-weight: 700;
     color: var(--vp-c-brand-1);
     text-decoration: none;
-    transition: all 0.25s ease;
+    transition: all var(--duration-fast) ease;
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -219,14 +219,6 @@ const svg = new Avatar(style, {
     }
   }
 }
-
-@keyframes app-integration-card-reveal {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @media (max-width: 1000px) {
   .app-integration {
     &-featured-layout {

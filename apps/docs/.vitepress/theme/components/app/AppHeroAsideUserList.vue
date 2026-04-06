@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { UiAvatar } from '../ui';
+import { useVisibility } from '../../composables/useVisibility';
+
+const listRef = ref<HTMLElement>();
+const isVisible = useVisibility(listRef, { once: false, threshold: 0.1 });
 
 const avatarStyles = ['thumbs', 'initials', 'shapes', 'lorelei', 'pixel-art'];
 const styleA = ref(avatarStyles[0]);
@@ -8,25 +12,38 @@ const styleB = ref(avatarStyles[1]);
 const activeLayer = ref<'a' | 'b'>('a');
 let styleCounter = 0;
 
-let interval: ReturnType<typeof setInterval>;
+let interval: ReturnType<typeof setInterval> | null = null;
+
+function tick() {
+  styleCounter++;
+  const nextStyle = avatarStyles[styleCounter % avatarStyles.length];
+
+  if (activeLayer.value === 'a') {
+    styleB.value = nextStyle;
+    activeLayer.value = 'b';
+  } else {
+    styleA.value = nextStyle;
+    activeLayer.value = 'a';
+  }
+}
+
+watch(isVisible, (visible) => {
+  if (visible && !interval) {
+    interval = setInterval(tick, 3000);
+  } else if (!visible && interval) {
+    clearInterval(interval);
+    interval = null;
+  }
+});
 
 onMounted(() => {
-  interval = setInterval(() => {
-    styleCounter++;
-    const nextStyle = avatarStyles[styleCounter % avatarStyles.length];
-
-    if (activeLayer.value === 'a') {
-      styleB.value = nextStyle;
-      activeLayer.value = 'b';
-    } else {
-      styleA.value = nextStyle;
-      activeLayer.value = 'a';
-    }
-  }, 3000);
+  if (isVisible.value) {
+    interval = setInterval(tick, 3000);
+  }
 });
 
 onUnmounted(() => {
-  clearInterval(interval);
+  if (interval) clearInterval(interval);
 });
 
 const users = [
@@ -39,7 +56,7 @@ const users = [
 </script>
 
 <template>
-  <div class="app-hero-aside-user-list">
+  <div ref="listRef" class="app-hero-aside-user-list">
     <div
       v-for="(user, index) in users"
       :key="user.name"
@@ -78,7 +95,7 @@ const users = [
     align-items: center;
     gap: 16px;
     padding: 12px 16px;
-    border-radius: 16px;
+    border-radius: var(--vp-radius-md);
     background:
       linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.7) 100%);
     border: 1px solid rgba(255, 255, 255, 0.6);
@@ -89,7 +106,7 @@ const users = [
     opacity: 0;
 
     .visible & {
-      animation: app-hero-aside-user-list-card-reveal 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      animation: reveal-up 0.5s var(--ease-smooth) forwards;
     }
   }
 
@@ -97,7 +114,7 @@ const users = [
     position: relative;
     width: 48px;
     height: 48px;
-    border-radius: 12px;
+    border-radius: var(--vp-radius-sm);
     overflow: hidden;
     flex-shrink: 0;
 
@@ -108,9 +125,9 @@ const users = [
     inset: 0;
     width: 48px !important;
     height: 48px !important;
-    border-radius: 12px;
+    border-radius: var(--vp-radius-sm);
     opacity: 0;
-    transition: opacity 0.6s ease;
+    transition: opacity var(--duration-slow) ease;
 
     &-active {
       opacity: 1;
@@ -171,18 +188,6 @@ const users = [
     0 1px 3px rgba(0, 0, 0, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
-
-@keyframes app-hero-aside-user-list-card-reveal {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
 @media (max-width: 768px) {
   .app-hero-aside-user-list {
     max-width: 320px;

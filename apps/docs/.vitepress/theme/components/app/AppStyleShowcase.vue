@@ -28,6 +28,8 @@ const showcaseAvatars = computed(() => {
   return avatars;
 });
 
+const doubledAvatars = computed(() => [...showcaseAvatars.value, ...showcaseAvatars.value]);
+
 const trackRef = ref<HTMLElement>();
 let scrollPosition = 0;
 let animationFrame: number | null = null;
@@ -173,7 +175,7 @@ onUnmounted(() => {
             class="app-style-showcase-track"
           >
             <a
-              v-for="(avatar, index) in [...showcaseAvatars, ...showcaseAvatars]"
+              v-for="(avatar, index) in doubledAvatars"
               :key="`${avatar.style}-${index}`"
               :href="`/styles/${avatar.style}/`"
               class="app-style-showcase-item"
@@ -215,7 +217,7 @@ onUnmounted(() => {
     padding: 0 24px;
     opacity: 0;
     transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--duration-reveal) var(--ease-smooth);
 
     .visible & {
       opacity: 1;
@@ -265,7 +267,7 @@ onUnmounted(() => {
       width: 20px;
       height: 20px;
       color: var(--vp-c-text-2);
-      transition: color 0.2s ease;
+      transition: color var(--duration-fast) ease;
     }
 
     &-left {
@@ -343,7 +345,7 @@ onUnmounted(() => {
       inset: 0;
       background: linear-gradient(135deg, transparent 40%, rgba(22, 137, 204, 0.2));
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity var(--duration-mid) ease;
     }
   }
 
@@ -356,7 +358,7 @@ onUnmounted(() => {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    transition: color 0.3s ease;
+    transition: color var(--duration-mid) ease;
   }
 
   &-cta {
@@ -378,7 +380,7 @@ onUnmounted(() => {
     &-avatar {
       width: 88px;
       height: 88px;
-      border-radius: 18px;
+      border-radius: var(--vp-radius-md);
     }
 
     &-track {

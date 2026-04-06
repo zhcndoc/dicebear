@@ -3,22 +3,12 @@ import { computed } from 'vue';
 import { getAvatarPropertyPreviewOptions } from '@theme/utils/avatar';
 import { UiAvatar } from '../ui';
 
-const props = defineProps({
-    styleName: {
-        type: String,
-        required: true,
-    },
-    name: {
-        type: String,
-        required: true,
-    },
-    value: {
-        required: true,
-    },
-    schemaProperties: {
-        type: Object,
-    },
-});
+const props = defineProps<{
+  styleName: string;
+  name: string;
+  value: string | number | boolean;
+  schemaProperties?: Record<string, unknown>;
+}>();
 
 const options = computed(() =>
     getAvatarPropertyPreviewOptions(props.name, props.value, props.schemaProperties)
@@ -37,7 +27,7 @@ function selectLabel(event: MouseEvent) {
     <div class="style-options-preview">
         <div class="style-options-preview-avatar-wrapper">
             <UiAvatar
-                :size="name === 'size' ? parseInt(value as any) : 80"
+                :size="name === 'size' ? Number(value) : 80"
                 :styleName="styleName"
                 :styleOptions="options"
                 class="style-options-preview-avatar"

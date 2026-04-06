@@ -1,30 +1,44 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref, watch, computed } from 'vue';
-import hljs from 'highlight.js/lib/core';
-import javascript from 'highlight.js/lib/languages/javascript';
-import xml from 'highlight.js/lib/languages/xml';
-import php from 'highlight.js/lib/languages/php';
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { Copy, Check } from '@lucide/vue';
+import { escapeHtml } from '@theme/utils/escape';
+
+type Hljs = typeof import('highlight.js/lib/core').default;
 
 const props = defineProps<{
   lang?: string;
   code: string;
 }>();
 
-const codeHtml = ref(props.code);
+const codeHtml = ref(escapeHtml(props.code));
 const copied = ref(false);
-let timeout: any = null;
+let timeout: ReturnType<typeof setTimeout> | null = null;
+let hljs: Hljs | null = null;
 
-const isMultiline = computed(() => props.code.includes('\n'));
+async function loadHljs(): Promise<Hljs> {
+  if (hljs) return hljs;
 
-function updateCodeHtml() {
-  if (props.lang && hljs.getLanguage(props.lang)) {
-    codeHtml.value =
-      hljs.highlight(props.code, {
-        language: props.lang,
-      }).value ?? '';
+  const [{ default: core }, { default: javascript }, { default: xml }, { default: php }] =
+    await Promise.all([
+      import('highlight.js/lib/core'),
+      import('highlight.js/lib/languages/javascript'),
+      import('highlight.js/lib/languages/xml'),
+      import('highlight.js/lib/languages/php'),
+    ]);
+
+  core.getLanguage('js') || core.registerLanguage('js', javascript);
+  core.getLanguage('html') || core.registerLanguage('html', xml);
+  core.getLanguage('php') || core.registerLanguage('php', php);
+
+  hljs = core;
+  return core;
+}
+
+function updateCodeHtml(instance?: Hljs) {
+  if (props.lang && instance?.getLanguage(props.lang)) {
+    codeHtml.value = instance.highlight(props.code, { language: props.lang }).value;
   } else {
-    codeHtml.value = props.code;
+    codeHtml.value = escapeHtml(props.code);
   }
 }
 
@@ -48,21 +62,22 @@ onBeforeUnmount(() => {
   }
 });
 
-onMounted(() => {
-  hljs.getLanguage('js') || hljs.registerLanguage('js', javascript);
-  hljs.getLanguage('html') || hljs.registerLanguage('html', xml);
-  hljs.getLanguage('php') || hljs.registerLanguage('php', php);
-
-  updateCodeHtml();
+onMounted(async () => {
+  if (props.lang) {
+    const instance = await loadHljs();
+    updateCodeHtml(instance);
+  }
 });
 
-watch(() => props.code, updateCodeHtml);
+watch(() => props.code, async () => {
+  const instance = props.lang ? await loadHljs() : undefined;
+  updateCodeHtml(instance);
+});
 </script>
 
 <template>
   <div class="ui-code">
-    <pre v-if="isMultiline" class="ui-code-text" v-html="codeHtml"></pre>
-    <pre v-else class="ui-code-text" v-html="codeHtml"></pre>
+    <pre class="ui-code-text" v-html="codeHtml"></pre>
     <button class="ui-code-copy" @click="onCopy" :title="copied ? 'Copied!' : 'Copy'">
       <Check v-if="copied" :size="14" />
       <Copy v-else :size="14" />
@@ -74,7 +89,7 @@ watch(() => props.code, updateCodeHtml);
 .ui-code {
   position: relative;
   background: var(--vp-c-bg-soft);
-  border-radius: 12px;
+  border-radius: var(--vp-radius-sm);
   padding: 14px 16px;
   overflow: hidden;
 
@@ -100,9 +115,9 @@ watch(() => props.code, updateCodeHtml);
     justify-content: center;
     background: var(--vp-c-bg);
     border: 1px solid var(--vp-c-border);
-    border-radius: 6px;
+    border-radius: var(--vp-radius-xs);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all var(--duration-fast) ease;
     color: var(--vp-c-text-3);
 
     &:hover {

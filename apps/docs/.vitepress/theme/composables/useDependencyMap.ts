@@ -7,6 +7,13 @@ export type ComponentDependency = {
   parentColors: { colorKey: string; defaultCount: number }[];
 };
 
+interface DefinitionElement {
+  type(): string;
+  value(): unknown;
+  attributes(): Record<string, unknown> | undefined;
+  children(): readonly DefinitionElement[];
+}
+
 export function useDependencyMap(loadedStyle: Ref<Style | null>) {
   const componentDeps = computed<Record<string, ComponentDependency>>(() => {
     if (!loadedStyle.value) {
@@ -46,7 +53,7 @@ export function useDependencyMap(loadedStyle: Ref<Style | null>) {
 }
 
 function collectComponentRefs(
-  elements: readonly { type(): string; value(): unknown; attributes(): Record<string, any> | undefined; children(): readonly any[] }[],
+  elements: readonly DefinitionElement[],
   parentName: string,
   parentVariant: string,
   deps: Record<string, ComponentDependency>,
@@ -61,8 +68,10 @@ function collectComponentRefs(
 
     if (attrs) {
       for (const val of Object.values(attrs)) {
-        if (val && typeof val === 'object' && val.type === 'color') {
-          colorRefs.add(val.value);
+        const attr = val as Record<string, unknown> | null;
+
+        if (attr && typeof attr === 'object' && attr.type === 'color' && typeof attr.value === 'string') {
+          colorRefs.add(attr.value);
         }
       }
     }

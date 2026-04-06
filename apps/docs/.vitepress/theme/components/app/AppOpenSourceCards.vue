@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { Star, Heart, Scale, ArrowRight } from '@lucide/vue';
 import { siGithub } from 'simple-icons';
-import { UiButton, UiHeadline, UiDescription, UiContainer, UiSection, UiCard, UiIconBox, UiIcon } from '../ui';
+import { UiButton, UiContainer, UiSection, UiCard, UiIconBox, UiIcon } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
 const sectionRef = ref();
@@ -77,7 +77,7 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
     gap: 24px;
     opacity: 0;
     transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--duration-reveal) var(--ease-smooth);
 
     .visible & {
       opacity: 1;

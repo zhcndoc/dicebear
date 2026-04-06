@@ -144,7 +144,7 @@ const {
     margin-bottom: 32px;
     padding: 24px;
     background: var(--vp-c-bg-soft);
-    border-radius: 12px;
+    border-radius: var(--vp-radius-sm);
   }
 
   &-filter-row {
@@ -201,9 +201,9 @@ const {
     color: var(--vp-c-text-2);
     background: var(--vp-c-bg);
     border: 1px solid var(--vp-c-border);
-    border-radius: 20px;
+    border-radius: var(--vp-radius-lg);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all var(--duration-fast) ease;
 
     &:hover {
       border-color: var(--vp-c-brand-1);
@@ -231,9 +231,9 @@ const {
     color: var(--vp-c-text-3);
     background: transparent;
     border: 1px dashed var(--vp-c-border);
-    border-radius: 20px;
+    border-radius: var(--vp-radius-lg);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all var(--duration-fast) ease;
 
     &:hover {
       border-color: var(--vp-c-danger-1);
@@ -265,9 +265,9 @@ const {
     align-items: center;
     background: var(--vp-c-bg);
     border: 1px solid var(--vp-c-border);
-    border-radius: 20px;
+    border-radius: var(--vp-radius-lg);
     padding: 0 14px;
-    transition: all 0.2s ease;
+    transition: all var(--duration-fast) ease;
 
     &:focus-within {
       border-color: var(--vp-c-brand-1);
@@ -307,10 +307,10 @@ const {
     display: flex;
     flex-direction: column;
     background: var(--vp-c-bg-soft);
-    border-radius: 16px;
+    border-radius: var(--vp-radius-md);
     padding: 20px;
     text-decoration: none;
-    transition: all 0.2s ease;
+    transition: all var(--duration-fast) ease;
     border: 2px solid transparent;
     position: relative;
 
@@ -333,7 +333,7 @@ const {
     &-avatar {
       width: 64px;
       height: 64px;
-      border-radius: 12px;
+      border-radius: var(--vp-radius-sm);
       overflow: hidden;
       background: var(--vp-c-bg);
       box-shadow: var(--vp-shadow-1);
@@ -388,10 +388,10 @@ const {
       align-items: center;
       justify-content: center;
       background: var(--vp-c-bg);
-      border-radius: 8px;
+      border-radius: var(--vp-radius-xs);
       opacity: 0;
       transform: translateX(-8px);
-      transition: all 0.2s ease;
+      transition: all var(--duration-fast) ease;
 
       svg {
         width: 18px;

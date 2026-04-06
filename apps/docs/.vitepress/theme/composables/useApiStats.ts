@@ -27,6 +27,7 @@ export function lastCompleteMonth(
     const key = date.slice(0, 7);
     monthly[key] = (monthly[key] || 0) + value;
   }
+
   const keys = Object.keys(monthly).sort();
   if (keys.length < 2) return null;
   const lastKey = keys[keys.length - 2];
@@ -35,6 +36,7 @@ export function lastCompleteMonth(
     month: 'short',
     year: 'numeric',
   });
+
   return { total: monthly[lastKey], label };
 }
 
@@ -70,10 +72,12 @@ function ensureFetched() {
 
 export function useApiStats() {
   ensureFetched();
+
   return cached;
 }
 
 export function useApiStatsRaw() {
   ensureFetched();
+
   return rawData;
 }

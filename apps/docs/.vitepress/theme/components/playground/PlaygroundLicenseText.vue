@@ -2,14 +2,14 @@
 import { useAvatarStyleMeta } from '@theme/composables/avatar';
 import { loadAvatarStyle } from '@theme/utils/avatar';
 import { capitalCase, kebabCase } from 'change-case';
-import { computed } from 'vue';
+import { computed, toRef } from 'vue';
 import { computedAsync } from '@vueuse/core';
 import useStore from '@theme/stores/playground';
+import { formatLicenseName } from '@theme/utils/format';
 
 const store = useStore();
 
-const avatarStyleKey = computed(() => store.avatarStyleName);
-const avatarStyleMeta = useAvatarStyleMeta(avatarStyleKey);
+const avatarStyleMeta = useAvatarStyleMeta(toRef(store, 'avatarStyleName'));
 
 // For custom styles, load meta from the Style object directly
 const customStyleMeta = computedAsync(async () => {
@@ -123,7 +123,7 @@ const avatarStyleLink = computed(
       target="_blank"
       rel="noopener noreferrer"
     >
-      {{ avatarStyleMeta?.license?.name.replace(/\.$/, '') }}
+      {{ formatLicenseName(avatarStyleMeta?.license?.name) }}
     </a>
     .
   </p>

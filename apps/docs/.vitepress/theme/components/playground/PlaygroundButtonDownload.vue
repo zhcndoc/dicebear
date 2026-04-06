@@ -92,7 +92,7 @@ function onDownloadClick(e: Event) {
     </div>
     <div class="dialog-subtitle">Please note the license below before using.</div>
     <div class="dialog-text">
-      <PlaygroundLicenseAlert :style-name="store.avatarStyleName" />
+      <PlaygroundLicenseAlert />
     </div>
   </PlaygroundDialog>
 </template>

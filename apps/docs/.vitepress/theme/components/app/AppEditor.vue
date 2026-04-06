@@ -219,7 +219,7 @@ const features = [
     align-items: center;
     opacity: 0;
     transform: translateY(40px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--duration-reveal) var(--ease-smooth);
 
     .visible & {
       opacity: 1;
@@ -238,7 +238,7 @@ const features = [
     justify-content: center;
     padding: 32px;
     min-height: 200px;
-    transition: background-color 0.3s ease;
+    transition: background-color var(--duration-mid) ease;
   }
 
   &-avatar-preview {
@@ -248,7 +248,7 @@ const features = [
     border-radius: var(--vp-radius-xl);
     overflow: hidden;
     box-shadow: var(--vp-shadow-3);
-    transition: background-color 0.3s ease;
+    transition: background-color var(--duration-mid) ease;
 
     img {
       width: 100%;
@@ -281,7 +281,7 @@ const features = [
       border: none;
       background: transparent;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all var(--duration-fast) ease;
 
       &:hover {
         color: var(--vp-c-text-1);
@@ -326,7 +326,7 @@ const features = [
       }
 
       .visible & {
-        animation: app-editor-avatar-pop 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation: app-editor-avatar-pop 0.4s var(--ease-smooth) forwards;
       }
 
       img {
@@ -340,10 +340,6 @@ const features = [
   /* Content */
   &-content {
     min-width: 0;
-  }
-
-  &-title-text {
-    margin-bottom: 24px;
   }
 
   &-description {
@@ -366,7 +362,7 @@ const features = [
     transform: translateX(20px);
 
     .visible & {
-      animation: app-editor-feature-slide 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      animation: app-editor-feature-slide 0.5s var(--ease-smooth) forwards;
     }
 
     &-text {

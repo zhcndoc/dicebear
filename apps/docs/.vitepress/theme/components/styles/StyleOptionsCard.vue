@@ -13,10 +13,19 @@ import StyleOptionsTypeBadge from './StyleOptionsTypeBadge.vue';
 import StyleOptionsPreview from './StyleOptionsPreview.vue';
 import StyleOptionsCodePanel from './StyleOptionsCodePanel.vue';
 
+export interface OptionValue {
+  type: string;
+  values?: string[];
+  min?: number;
+  max?: number;
+  list?: boolean;
+  weighted?: boolean;
+}
+
 const props = defineProps<{
   styleName: string;
   name: string;
-  value: any;
+  value: OptionValue;
 }>();
 
 const naturalSort = (a: string | number, b: string | number) => {
@@ -26,10 +35,10 @@ const naturalSort = (a: string | number, b: string | number) => {
   });
 };
 
-const fieldType = computed(() => props.value.type as string);
-const fieldValues = computed(() => (props.value.values as string[]) ?? []);
-const fieldMin = computed(() => props.value.min as number | undefined);
-const fieldMax = computed(() => props.value.max as number | undefined);
+const fieldType = computed(() => props.value.type);
+const fieldValues = computed(() => props.value.values ?? []);
+const fieldMin = computed(() => props.value.min);
+const fieldMax = computed(() => props.value.max);
 const isList = computed(() => props.value.list === true);
 const isWeighted = computed(() => props.value.weighted === true);
 

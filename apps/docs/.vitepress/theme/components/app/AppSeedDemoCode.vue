@@ -104,7 +104,7 @@ const docsLinkLabel = computed(() => {
     position: relative;
     background: var(--vp-c-bg-soft);
     padding: 4px;
-    border-radius: 10px;
+    border-radius: var(--vp-radius-xs);
 
     &-indicator {
       position: absolute;
@@ -113,8 +113,8 @@ const docsLinkLabel = computed(() => {
       width: calc((100% - 8px) / 3);
       height: calc(100% - 8px);
       background: var(--vp-c-brand-soft);
-      border-radius: 8px;
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: var(--vp-radius-xs);
+      transition: transform var(--duration-mid) var(--ease-smooth);
       pointer-events: none;
     }
   }
@@ -126,10 +126,10 @@ const docsLinkLabel = computed(() => {
     font-weight: 600;
     background: transparent;
     border: none;
-    border-radius: 8px;
+    border-radius: var(--vp-radius-xs);
     cursor: pointer;
     color: var(--vp-c-text-2);
-    transition: color 0.2s ease;
+    transition: color var(--duration-fast) ease;
     position: relative;
     z-index: 1;
     white-space: nowrap;

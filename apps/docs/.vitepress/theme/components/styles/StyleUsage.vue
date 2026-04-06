@@ -135,7 +135,7 @@ const exampleCliUsage = computed(() => {
 <style lang="scss" scoped>
 .style-usage {
   border: 1px solid var(--vp-c-border);
-  border-radius: 6px;
+  border-radius: var(--vp-radius-xs);
   overflow: hidden;
 
   &-body {

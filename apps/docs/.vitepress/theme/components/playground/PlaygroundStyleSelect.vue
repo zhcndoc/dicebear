@@ -298,7 +298,7 @@ const currentDisplayName = computed(() => {
   color: var(--vp-c-text-2);
   background: var(--vp-c-bg-soft);
   border: 1px solid var(--vp-c-border);
-  border-radius: 16px;
+  border-radius: var(--vp-radius-md);
   cursor: pointer;
   transition: all var(--duration-fast);
 
@@ -413,7 +413,7 @@ const currentDisplayName = computed(() => {
     justify-content: center;
     background: var(--vp-c-bg);
     border: 1px solid var(--vp-c-border);
-    border-radius: 6px;
+    border-radius: var(--vp-radius-xs);
     cursor: pointer;
     opacity: 0;
     transition: all var(--duration-fast);

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-// @ts-ignore
-import VPLink from 'vitepress/dist/client/theme-default/components/VPLink.vue';
 import { useData } from 'vitepress';
 import { ThemeOptions } from '@theme/types';
 import { kebabCase } from 'change-case';
@@ -18,9 +16,9 @@ const styles = theme.value.avatarStyles;
     <thead>
       <tr>
         <th colspan="2" align="left">
-          <VPLink :href="`/styles/${kebabCase(styleName)}/`">{{
+          <a :href="`/styles/${kebabCase(styleName)}/`">{{
             styleName
-          }}</VPLink>
+          }}</a>
         </th>
       </tr>
     </thead>
@@ -36,13 +34,13 @@ const styles = theme.value.avatarStyles;
       <tr v-if="style.meta.source">
         <td>Source</td>
         <td>
-          <VPLink :href="style.meta.source">{{ style.meta.source }}</VPLink>
+          <a :href="style.meta.source" target="_blank" rel="noopener noreferrer">{{ style.meta.source }}</a>
         </td>
       </tr>
       <tr v-if="style.meta.homepage">
         <td>Homepage</td>
         <td>
-          <VPLink :href="style.meta.homepage">{{ style.meta.homepage }}</VPLink>
+          <a :href="style.meta.homepage" target="_blank" rel="noopener noreferrer">{{ style.meta.homepage }}</a>
         </td>
       </tr>
       <tr v-if="style.meta.license?.name">
@@ -52,9 +50,9 @@ const styles = theme.value.avatarStyles;
       <tr v-if="style.meta.license?.url">
         <td>License URL</td>
         <td>
-          <VPLink :href="style.meta.license?.url">{{
+          <a :href="style.meta.license?.url" target="_blank" rel="noopener noreferrer">{{
             style.meta.license?.url
-          }}</VPLink>
+          }}</a>
         </td>
       </tr>
     </tbody>

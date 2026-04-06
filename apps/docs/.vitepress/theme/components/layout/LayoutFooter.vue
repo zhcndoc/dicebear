@@ -276,7 +276,7 @@ const styles = computed(() => {
       height: 38px;
       border-radius: var(--vp-radius-sm);
       color: var(--vp-c-text-2);
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: all var(--duration-mid) var(--ease-spring);
 
       &:hover {
         color: var(--vp-c-brand-1);
@@ -323,7 +323,7 @@ const styles = computed(() => {
     font-size: 14px;
     color: var(--vp-c-text-2);
     text-decoration: none;
-    transition: all 0.2s ease;
+    transition: color var(--duration-fast) ease;
 
     &:hover {
       color: var(--vp-c-brand-1);
@@ -394,7 +394,7 @@ const styles = computed(() => {
   &-credit-link {
     color: var(--vp-c-text-2);
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: color var(--duration-fast) ease;
 
     &:hover {
       color: var(--vp-c-brand-1);
@@ -417,7 +417,7 @@ const styles = computed(() => {
     color: var(--vp-c-text-2);
     text-decoration: none;
     border-bottom: 1px dashed var(--vp-c-text-3);
-    transition: all 0.2s ease;
+    transition: all var(--duration-fast) ease;
 
     &:hover {
       color: var(--vp-c-brand-1);

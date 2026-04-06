@@ -7,21 +7,40 @@ export interface CodeExamples {
   cli: string;
 }
 
-function formatPhpValue(value: unknown): string {
+export function formatPhpValue(value: unknown, depth = 0): string {
+  const indent = '    '.repeat(depth);
+  const outerIndent = depth > 0 ? '    '.repeat(depth - 1) : '';
+
+  if (value === null || value === undefined) return 'null';
   if (typeof value === 'boolean') return value ? 'true' : 'false';
   if (typeof value === 'number') return String(value);
-  if (typeof value === 'string') return `'${value}'`;
+  if (typeof value === 'string') return `'${value.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
 
   if (Array.isArray(value)) {
-    return `[${value.map(formatPhpValue).join(', ')}]`;
+    if (value.length === 0) return '[]';
+
+    if (depth === 0) {
+      return `[${value.map((v) => formatPhpValue(v)).join(', ')}]`;
+    }
+
+    const items = value.map((v) => `${indent}${formatPhpValue(v, depth + 1)}`);
+
+    return `[\n${items.join(',\n')}\n${outerIndent}]`;
   }
 
-  if (typeof value === 'object' && value !== null) {
-    const entries = Object.entries(value)
-      .map(([k, v]) => `'${k}' => ${formatPhpValue(v)}`)
-      .join(', ');
+  if (typeof value === 'object') {
+    const entries = Object.entries(value as Record<string, unknown>);
+    if (entries.length === 0) return '[]';
 
-    return `[${entries}]`;
+    if (depth === 0) {
+      return `[${entries.map(([k, v]) => `'${k.replace(/'/g, "\\'")}' => ${formatPhpValue(v)}`).join(', ')}]`;
+    }
+
+    const items = entries.map(
+      ([k, v]) => `${indent}'${k.replace(/'/g, "\\'")}' => ${formatPhpValue(v, depth + 1)}`,
+    );
+
+    return `[\n${items.join(',\n')}\n${outerIndent}]`;
   }
 
   return String(value);

@@ -131,13 +131,13 @@ const scatteredAvatars = computed(() => {
 
   &-bg-avatar {
     position: absolute;
-    border-radius: 14px;
+    border-radius: var(--vp-radius-sm);
     overflow: hidden;
     opacity: 0;
     pointer-events: none;
 
     .visible & {
-      animation: app-open-source-avatar-float 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      animation: app-open-source-avatar-float 0.6s var(--ease-spring) forwards;
     }
 
     img {
@@ -150,7 +150,7 @@ const scatteredAvatars = computed(() => {
   &-container {
     opacity: 0;
     transform: translateY(40px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--duration-reveal) var(--ease-smooth);
 
     .visible & {
       opacity: 1;
@@ -221,7 +221,7 @@ const scatteredAvatars = computed(() => {
     border-radius: 100px;
     box-shadow: var(--vp-shadow-2);
     text-decoration: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
 
     &:hover {
       border-color: var(--app-open-source-star-color);

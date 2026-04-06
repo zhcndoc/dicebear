@@ -25,6 +25,7 @@ export function useTypewriter(
           isDeleting.value = true;
           tick();
         }, pauseMs);
+
         return;
       }
     } else {

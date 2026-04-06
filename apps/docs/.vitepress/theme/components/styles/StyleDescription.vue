@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { useData } from 'vitepress';
 import { ThemeOptions } from '@theme/types';
 import { kebabCase } from 'change-case';
+import { formatLicenseName } from '@theme/utils/format';
 
 const { theme } = useData<ThemeOptions>();
 const props = defineProps<{
@@ -38,7 +39,7 @@ const playgroundUrl = computed(() => {
       target="_blank"
       rel="noopener noreferrer"
     >
-      {{ style.meta?.license?.name.replace(/\.$/, '') }}
+      {{ formatLicenseName(style.meta?.license?.name) }}
     </a>
     .
   </p>
@@ -51,8 +52,8 @@ const playgroundUrl = computed(() => {
       <a
         :href="style.meta.license?.url"
         target="_blank"
-        ref="noopener noreferrer"
-        >{{ style.meta.license?.name.replace(/\.$/, '') }}</a
+        rel="noopener noreferrer"
+        >{{ formatLicenseName(style.meta.license?.name) }}</a
       >. See <a href="#details">details</a> for more information.
     </p>
   </div>
@@ -71,13 +72,13 @@ const playgroundUrl = computed(() => {
     display: inline-flex;
     align-items: center;
     padding: 8px 20px;
-    border-radius: 6px;
+    border-radius: var(--vp-radius-xs);
     font-size: 14px;
     font-weight: 500;
     text-decoration: none;
     background: var(--vp-c-brand-soft);
     color: var(--vp-c-brand-1);
-    transition: all 0.2s ease;
+    transition: all var(--duration-fast) ease;
     margin-right: 8px;
 
     &:hover {

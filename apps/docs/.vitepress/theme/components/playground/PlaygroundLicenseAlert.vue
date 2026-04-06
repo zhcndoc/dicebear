@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import Message from 'primevue/message';
 import PlaygroundLicenseText from './PlaygroundLicenseText.vue';
-
-defineProps<{
-  styleName: string;
-}>();
 </script>
 
 <template>
@@ -12,7 +8,7 @@ defineProps<{
     <strong>
       Please note the following license before using the avatar:
     </strong>
-    <PlaygroundLicenseText :style="styleName" />
+    <PlaygroundLicenseText />
   </Message>
 </template>
 

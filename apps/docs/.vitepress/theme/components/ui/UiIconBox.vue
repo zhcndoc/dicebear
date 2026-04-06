@@ -34,7 +34,7 @@ defineProps<{
     border-radius: var(--vp-radius-sm);
     position: relative;
     z-index: 1;
-    transition: all var(--duration-mid, 0.35s) var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
+    transition: all var(--duration-mid) var(--ease-spring);
   }
 
   /* Sizes */

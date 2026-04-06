@@ -29,7 +29,7 @@ defineProps<{
 
 <style lang="scss" scoped>
 .ui-browser-preview {
-  border-radius: 12px;
+  border-radius: var(--vp-radius-sm);
   overflow: hidden;
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);

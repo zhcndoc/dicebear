@@ -11,4 +11,5 @@ export { default as UiIconBox } from './UiIconBox.vue';
 export { default as UiSection } from './UiSection.vue';
 export { default as UiIcon } from './UiIcon.vue';
 export { default as UiSectionHeader } from './UiSectionHeader.vue';
+export { default as UiBrowserPreview } from './UiBrowserPreview.vue';
 export { default as UiWindow } from './UiWindow.vue';
