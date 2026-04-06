@@ -1,4 +1,4 @@
-import Ajv from 'ajv/dist/2020.js';
+import Ajv from 'ajv';
 import standaloneCode from 'ajv/dist/standalone/index.js';
 import { createRequire } from 'module';
 import { writeFileSync, mkdirSync } from 'fs';
