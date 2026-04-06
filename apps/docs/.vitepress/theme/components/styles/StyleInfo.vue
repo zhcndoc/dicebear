@@ -19,12 +19,6 @@ const exampleHttpApiUrl = computed(() => {
   return `https://api.dicebear.com/9.x/${kebabCase(props.styleName)}/svg`;
 });
 
-const schemaJsonHttpApiUrl = computed(() => {
-  return `https://api.dicebear.com/9.x/${kebabCase(
-    props.styleName,
-  )}/schema.json`;
-});
-
 const exampleDefinitionImport = computed(() => {
   return `import definition from '@dicebear/definitions/${kebabCase(props.styleName)}.json';`;
 });
@@ -72,22 +66,15 @@ const exampleCliCommand = computed(() => {
           </a>
         </td>
       </tr>
-      <tr>
+      <tr v-if="style.definitionUrl">
+        <td>Definition</td>
         <td>
           <a
-            href="https://json-schema.org/"
+            :href="style.definitionUrl"
             target="_blank"
-            rel="nnoopener noreferrer"
-            >JSON Schema</a
+            rel="noopener noreferrer"
           >
-        </td>
-        <td>
-          <a
-            :href="schemaJsonHttpApiUrl"
-            target="_blank"
-            ref="noopener noreferrer"
-          >
-            {{ schemaJsonHttpApiUrl }}
+            {{ style.definitionUrl }}
           </a>
         </td>
       </tr>

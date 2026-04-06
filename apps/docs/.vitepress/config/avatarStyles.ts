@@ -25,6 +25,7 @@ for (const file of fs.readdirSync(definitionsDir)) {
   const meta = style.meta();
 
   avatarStyles[name] = {
+    definitionUrl: style.id(),
     meta: {
       title: meta.source().name(),
       creator: meta.creator().name(),

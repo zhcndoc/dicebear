@@ -13,6 +13,7 @@ export type AvatarStyleMeta = {
 };
 
 export type AvatarStyle = {
+  definitionUrl?: string;
   meta: AvatarStyleMeta;
 };
 
