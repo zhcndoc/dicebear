@@ -148,7 +148,7 @@ const currentDisplayName = computed(() => {
               <span class="pg-style-select-card-name">Add Custom Style</span>
             </button>
 
-            <button
+            <div
               v-for="cs in customStyleList"
               :key="cs.key"
               class="pg-style-select-card"
@@ -176,7 +176,7 @@ const currentDisplayName = computed(() => {
                 <span class="pg-style-select-card-name">{{ cs.name }}</span>
                 <Tag value="Custom" severity="warn" class="pg-style-select-card-tag" />
               </div>
-            </button>
+            </div>
           </div>
         </div>
 
