@@ -14,7 +14,7 @@
     "lint": "eslint . --fix"
   },
   "dependencies": {
-    "@dicebear/core": "9.4.2",
+    "@dicebear/core": "10.0.0-rc.1",
     "@dicebear/definitions": "^0.1.0",
     "@primeuix/themes": "^2.0.3",
     "@vueuse/core": "^14.2.0",
