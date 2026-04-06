@@ -12,6 +12,8 @@ import {
 import StyleOptionsTypeBadge from './StyleOptionsTypeBadge.vue';
 import StyleOptionsPreview from './StyleOptionsPreview.vue';
 import StyleOptionsCodePanel from './StyleOptionsCodePanel.vue';
+import Message from 'primevue/message';
+import { unsupportedHttpApiOptions } from '@theme/utils/avatar';
 
 export interface OptionValue {
   type: string;
@@ -109,9 +111,7 @@ const skipPreview = computed(() => {
   return false;
 });
 
-const excludeHttpApi = computed(() => {
-  return props.name === 'title' || props.name === 'idRandomization';
-});
+const excludeHttpApi = computed(() => unsupportedHttpApiOptions.has(props.name));
 
 const possibleValues = computed(() => {
   if (skipPreview.value) return [];
@@ -297,6 +297,13 @@ const weightedExampleValue = computed(() => {
         />
       </div>
     </div>
+
+    <div v-if="excludeHttpApi" class="style-options-card-message">
+      <Message severity="warn" :closable="false">
+        This option is not supported by our public <a href="/how-to-use/http-api/">HTTP-API</a>.
+        You can enable it by <a href="/guides/host-the-http-api-yourself/">hosting your own instance</a>.
+      </Message>
+    </div>
   </div>
 </template>
 
@@ -367,6 +374,11 @@ const weightedExampleValue = computed(() => {
     letter-spacing: 0.04em;
     color: var(--vp-c-text-3);
     margin-bottom: 8px;
+  }
+
+  &-message {
+    margin-top: 16px;
+    --p-message-text-font-size: 13px;
   }
 }
 </style>

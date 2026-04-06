@@ -2,12 +2,13 @@
 import { Code as CodeIcon } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
 import { UiCode } from '../ui';
-import { getAvatarApiUrl, getAvatarApiCommand } from '@theme/utils/avatar';
+import { getAvatarApiUrl, getAvatarApiCommand, unsupportedHttpApiOptions } from '@theme/utils/avatar';
 import { formatPhpValue } from '@theme/utils/code-examples';
 import PlaygroundDialog from './PlaygroundDialog.vue';
 import Button from 'primevue/button';
 import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
+import Message from 'primevue/message';
 import Tabs from 'primevue/tabs';
 import TabList from 'primevue/tablist';
 import Tab from 'primevue/tab';
@@ -31,6 +32,12 @@ watch(() => store.isCustomStyle, (isCustom) => {
 const exampleHttpApi = computed(() =>
   getAvatarApiUrl(store.avatarStyleName, options.value)
 );
+const hasExcludedOptions = computed(() => {
+  const opts = options.value as Record<string, unknown>;
+  return Object.keys(opts).some(
+    (k) => unsupportedHttpApiOptions.has(k) && opts[k] !== undefined,
+  );
+});
 const exampleHttpApiHtml = computed(
   () => `<img
   src="${getAvatarApiUrl(store.avatarStyleName, options.value)}"
@@ -131,6 +138,11 @@ const exampleCli = computed(() =>
                 <UiCode :code="exampleHttpApi" />
                 <p>You can use the URL directly as image source.</p>
                 <UiCode :code="exampleHttpApiHtml" lang="html" />
+                <Message v-if="hasExcludedOptions" severity="warn" :closable="false" :style="{ '--p-message-text-font-size': '13px' }">
+                  Some options you selected are not supported by our public
+                  HTTP-API and have been omitted from the URL. You can enable
+                  them by <a href="/guides/host-the-http-api-yourself/">hosting your own instance</a>.
+                </Message>
                 <p>
                   See <a href="/how-to-use/http-api">HTTP-API</a> docs for more
                   information.

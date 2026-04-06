@@ -85,6 +85,14 @@ query strings.
 
 :::
 
+::: warning
+
+The options `idRandomization`, `fontFamily`, `fontWeight`, and `title` are not
+supported by our public HTTP API. You can enable them by
+[hosting your own instance](/guides/host-the-http-api-yourself/).
+
+:::
+
 ### Array options
 
 Array values are separated by a comma. For example, the URL could look like this

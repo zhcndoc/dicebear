@@ -212,13 +212,20 @@ export async function decompressFragment(encoded: string): Promise<object> {
   return JSON.parse(json);
 }
 
+export const unsupportedHttpApiOptions = new Set([
+  'idRandomization',
+  'fontFamily',
+  'fontWeight',
+  'title',
+]);
+
 export function getAvatarApiUrl(
   avatarStyle: string,
   options: Record<string, unknown> = {},
   format: string = 'svg',
 ): string {
   const qs = Object.entries(options)
-    .filter(([, v]) => v !== undefined)
+    .filter(([k, v]) => v !== undefined && !unsupportedHttpApiOptions.has(k))
     .map(([k, v]) => {
       if (Array.isArray(v)) {
         return v.length === 0
