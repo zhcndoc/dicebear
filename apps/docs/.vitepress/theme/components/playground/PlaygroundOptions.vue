@@ -139,6 +139,8 @@ const components = computed(() => {
     });
   }
 
+  result.sort((a, b) => a.name.localeCompare(b.name));
+
   return result;
 });
 
@@ -167,6 +169,8 @@ const allColors = computed(() => {
 const sortedColors = computed(() => {
   const bg = allColors.value.filter((c) => c.name === 'background');
   const rest = allColors.value.filter((c) => c.name !== 'background');
+
+  rest.sort((a, b) => a.name.localeCompare(b.name));
 
   return [...bg, ...rest];
 });

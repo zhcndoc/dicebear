@@ -24,8 +24,11 @@ const searchQuery = ref('');
 const styleData = computedAsync(async () => {
   const style = await loadAvatarStyle(props.styleName);
   const descriptor = new OptionsDescriptor(style).toJSON();
-  const componentNames = Array.from(style.components().keys());
-  const colorNames = [...new Set([...Array.from(style.colors().keys()), 'background'])];
+  const componentNames = Array.from(style.components().keys()).sort((a, b) => a.localeCompare(b));
+  const colorNames = [
+    'background',
+    ...Array.from(style.colors().keys()).filter((n) => n !== 'background').sort((a, b) => a.localeCompare(b)),
+  ];
 
   return { descriptor, componentNames, colorNames };
 }, null);

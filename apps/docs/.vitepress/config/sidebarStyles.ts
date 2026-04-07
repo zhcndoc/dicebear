@@ -5,10 +5,12 @@ import avatarStyles from './avatarStyles';
 const sidebar: DefaultTheme.SidebarItem[] = [
   {
     text: 'Styles',
-    items: Object.keys(avatarStyles).map((styleName) => ({
-      text: capitalCase(styleName),
-      link: `/styles/${styleName}/`,
-    })),
+    items: Object.keys(avatarStyles)
+      .sort((a, b) => a.localeCompare(b))
+      .map((styleName) => ({
+        text: capitalCase(styleName),
+        link: `/styles/${styleName}/`,
+      })),
   },
 ];
 
