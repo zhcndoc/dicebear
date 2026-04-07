@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { OptionsDescriptor } from '@dicebear/core';
+import { computed, provide, ref, shallowRef } from 'vue';
+import { OptionsDescriptor, type Style } from '@dicebear/core';
 import { loadAvatarStyle, styleUsesVariable } from '@theme/utils/avatar';
 import { computedAsync } from '@vueuse/core';
 import { capitalCase } from 'change-case';
 import { Search } from '@lucide/vue';
 import InputText from 'primevue/inputtext';
 import StyleOptionsGroup from './StyleOptionsGroup.vue';
+import { useDependencyMap } from '@theme/composables/useDependencyMap';
+import { componentDepsKey, componentNamesKey } from './styleOptionsKeys';
 
 interface OptionGroup {
   id: string;
@@ -21,8 +23,11 @@ const props = defineProps<{
 
 const searchQuery = ref('');
 
+const loadedStyle = shallowRef<Style | null>(null);
+
 const styleData = computedAsync(async () => {
   const style = await loadAvatarStyle(props.styleName);
+  loadedStyle.value = style;
   const descriptor = new OptionsDescriptor(style).toJSON();
   const componentNames = Array.from(style.components().keys()).sort((a, b) => a.localeCompare(b));
   const colorNames = [
@@ -32,6 +37,12 @@ const styleData = computedAsync(async () => {
 
   return { descriptor, componentNames, colorNames };
 }, null);
+
+const { componentDeps } = useDependencyMap(loadedStyle);
+
+const allComponentNames = computed(() => styleData.value?.componentNames ?? []);
+provide(componentNamesKey, allComponentNames);
+provide(componentDepsKey, componentDeps);
 
 function isComponentOption(key: string, names: string[]): boolean {
   return names.some(

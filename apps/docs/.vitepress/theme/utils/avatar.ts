@@ -1,6 +1,7 @@
 import { Style } from '@dicebear/core';
 import { kebabCase } from 'change-case';
 import { escapeShellArg } from './escape';
+import type { ComponentDependency } from '@theme/composables/useDependencyMap';
 
 export function stripHash(hex: string): string {
   return hex.replace(/^#/, '');
@@ -430,4 +431,51 @@ function getDisabledProbabilities(
   }
 
   return result;
+}
+
+export function getComponentVariantPreviewOptions(
+  componentName: string,
+  variant: string,
+  allComponentNames: string[],
+  allDependencies: Record<string, ComponentDependency>,
+): Record<string, unknown> {
+  const opts: Record<string, unknown> = {
+    seed: 'JD',
+    [`${componentName}Variant`]: variant,
+    [`${componentName}Probability`]: 100,
+  };
+
+  const keep = new Set<string>([componentName]);
+
+  let current = componentName;
+
+  while (allDependencies[current]) {
+    const dep = allDependencies[current];
+
+    keep.add(dep.parentName);
+    opts[`${dep.parentName}Variant`] = dep.parentVariant;
+    opts[`${dep.parentName}Probability`] = 100;
+
+    for (const { colorKey, defaultCount } of dep.parentColors) {
+      if (defaultCount > 1) {
+        opts[colorKey] = ['555555'];
+      }
+    }
+
+    current = dep.parentName;
+  }
+
+  for (const [child, dep] of Object.entries(allDependencies)) {
+    if (keep.has(dep.parentName)) {
+      keep.add(child);
+    }
+  }
+
+  for (const name of allComponentNames) {
+    if (keep.has(name)) continue;
+
+    opts[`${name}Probability`] = 0;
+  }
+
+  return opts;
 }

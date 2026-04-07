@@ -7,6 +7,8 @@ import { UiAvatar } from '../ui';
 import useStore from '@theme/stores/playground';
 import { useRangeField } from '@theme/composables/useRangeField';
 import { useVariantWeights } from '@theme/composables/useVariantWeights';
+import { getComponentVariantPreviewOptions } from '@theme/utils/avatar';
+import type { ComponentDependency } from '@theme/composables/useDependencyMap';
 
 const props = defineProps<{
   componentName: string;
@@ -22,8 +24,8 @@ const props = defineProps<{
   defaultRotate: readonly number[];
   defaultTranslateX: readonly number[];
   defaultTranslateY: readonly number[];
-  dependency?: { parentName: string; parentVariant: string; parentColors: { colorKey: string; defaultCount: number }[] };
-  allDependencies?: Record<string, { parentName: string; parentVariant: string; parentColors: { colorKey: string; defaultCount: number }[] }>;
+  dependency?: ComponentDependency;
+  allDependencies?: Record<string, ComponentDependency>;
 }>();
 
 const store = useStore();
@@ -44,51 +46,13 @@ const {
   () => props.defaultWeights,
 );
 
-// Build options that isolate this component by hiding all others
 function variantPreviewOptions(variant: string) {
-  const opts: Record<string, any> = {
-    seed: 'JD',
-    [`${props.componentName}Variant`]: variant,
-    [`${props.componentName}Probability`]: 100,
-  };
-
-  const keep = new Set<string>([props.componentName]);
-
-  if (props.allDependencies) {
-    // Walk ancestors upward (e.g. eyes → face → shape)
-    let current = props.componentName;
-
-    while (props.allDependencies[current]) {
-      const dep = props.allDependencies[current];
-
-      keep.add(dep.parentName);
-      opts[`${dep.parentName}Variant`] = dep.parentVariant;
-      opts[`${dep.parentName}Probability`] = 100;
-
-      for (const { colorKey, defaultCount } of dep.parentColors) {
-        if (defaultCount > 1) {
-          opts[colorKey] = ['555555'];
-        }
-      }
-
-      current = dep.parentName;
-    }
-
-    // Keep descendants alive (e.g. face contains eyes + mouth)
-    for (const [child, dep] of Object.entries(props.allDependencies)) {
-      if (keep.has(dep.parentName)) {
-        keep.add(child);
-      }
-    }
-  }
-
-  for (const name of props.allComponentNames) {
-    if (keep.has(name)) continue;
-
-    opts[`${name}Probability`] = 0;
-  }
-
-  return opts;
+  return getComponentVariantPreviewOptions(
+    props.componentName,
+    variant,
+    props.allComponentNames,
+    props.allDependencies ?? {},
+  );
 }
 
 const { rangeMode, isRangeMode, toggleRangeMode, singleComputed, rangeComputed } = useRangeField(store.avatarStyleOptions);

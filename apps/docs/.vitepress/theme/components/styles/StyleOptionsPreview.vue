@@ -1,18 +1,36 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import { getAvatarPropertyPreviewOptions } from '@theme/utils/avatar';
+import { computed, inject } from 'vue';
+import { getAvatarPropertyPreviewOptions, getComponentVariantPreviewOptions } from '@theme/utils/avatar';
 import { UiAvatar } from '../ui';
+import { componentNamesKey, componentNamesDefault, componentDepsKey, componentDepsDefault } from './styleOptionsKeys';
 
 const props = defineProps<{
   styleName: string;
   name: string;
   value: string | number | boolean;
-  schemaProperties?: Record<string, unknown>;
 }>();
 
-const options = computed(() =>
-    getAvatarPropertyPreviewOptions(props.name, props.value, props.schemaProperties)
+const allComponentNames = inject(componentNamesKey, componentNamesDefault);
+const allDependencies = inject(componentDepsKey, componentDepsDefault);
+
+const isVariantPreview = computed(() =>
+  props.name.endsWith('Variant') && allComponentNames.value.length > 0,
 );
+
+const options = computed(() => {
+  if (isVariantPreview.value) {
+    const componentName = props.name.replace(/Variant$/, '');
+    return getComponentVariantPreviewOptions(
+      componentName,
+      String(props.value),
+      allComponentNames.value,
+      allDependencies.value,
+    );
+  }
+  return getAvatarPropertyPreviewOptions(props.name, props.value);
+});
+
+const avatarMode = computed(() => isVariantPreview.value ? 'library' : 'http-api');
 
 function selectLabel(event: MouseEvent) {
     const range = document.createRange();
@@ -30,6 +48,7 @@ function selectLabel(event: MouseEvent) {
                 :size="name === 'size' ? Number(value) : 80"
                 :styleName="styleName"
                 :styleOptions="options"
+                :mode="avatarMode"
                 class="style-options-preview-avatar"
             />
         </div>
