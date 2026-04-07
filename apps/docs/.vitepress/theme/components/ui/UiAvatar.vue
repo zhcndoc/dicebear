@@ -25,9 +25,14 @@ const svg = computedAsync(() => {
 
   switch (props.mode) {
     case 'library':
-      return loadAvatarStyle(styleName).then((avatarStyle) =>
-        new Avatar(avatarStyle, clonePlain(styleOptions)).toDataUri()
-      );
+      return loadAvatarStyle(styleName)
+        .then((avatarStyle) =>
+          new Avatar(avatarStyle, clonePlain(styleOptions)).toDataUri()
+        )
+        .catch((e) => {
+          if (import.meta.env.DEV) console.warn('Avatar render failed:', e);
+          return undefined;
+        });
     case 'http-api':
       return getAvatarApiUrl(styleName, styleOptions);
   }

@@ -8,7 +8,7 @@ import type {
   PlaygroundStoreOptions,
 } from '@theme/types';
 import { useData } from 'vitepress';
-import { clonePlain, registerCustomStyle, unregisterCustomStyle } from '@theme/utils/avatar';
+import { clonePlain, registerCustomStyle, unregisterCustomStyle, flushPendingCustomStyles } from '@theme/utils/avatar';
 
 export default defineStore('playground', () => {
   const data = useData();
@@ -49,6 +49,8 @@ export default defineStore('playground', () => {
         Object.entries(customStyles.value).filter(([key]) => !invalid.includes(key)),
       );
     }
+
+    flushPendingCustomStyles();
   }, { immediate: true });
 
   const isCustomStyle = computed(() =>

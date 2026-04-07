@@ -47,6 +47,8 @@ const definitionImports: Record<string, () => Promise<{ default: unknown }>> = {
 const styleCache = new Map<string, Style>();
 const definitionRawCache = new Map<string, object>();
 const variableResultCache = new Map<string, Map<string, boolean>>();
+const pendingCustomStyles = new Map<string, PromiseWithResolvers<Style>>();
+let customStylesFlushed = false;
 
 export const webSafeFonts = [
   'system-ui',
@@ -79,7 +81,23 @@ export function registerCustomStyle(key: string, definition: object): Style {
   definitionRawCache.set(key, definition);
   variableResultCache.delete(key);
 
+  const pending = pendingCustomStyles.get(key);
+
+  if (pending) {
+    pending.resolve(style);
+    pendingCustomStyles.delete(key);
+  }
+
   return style;
+}
+
+export function flushPendingCustomStyles(): void {
+  for (const [key, { reject }] of pendingCustomStyles) {
+    reject(new Error(`Custom style "${key}" not found in storage.`));
+  }
+
+  pendingCustomStyles.clear();
+  customStylesFlushed = true;
 }
 
 export function unregisterCustomStyle(key: string): void {
@@ -100,6 +118,24 @@ export async function loadAvatarStyle(avatarStyle: string): Promise<Style> {
 
   if (cachedByName) {
     return cachedByName;
+  }
+
+  if (avatarStyle.startsWith('custom:')) {
+    if (customStylesFlushed) {
+      throw new Error(`Custom style "${avatarStyle}" not found.`);
+    }
+
+    const existing = pendingCustomStyles.get(avatarStyle);
+
+    if (existing) {
+      return existing.promise;
+    }
+
+    const deferred = Promise.withResolvers<Style>();
+
+    pendingCustomStyles.set(avatarStyle, deferred);
+
+    return deferred.promise;
   }
 
   const loader = definitionImports[name];
