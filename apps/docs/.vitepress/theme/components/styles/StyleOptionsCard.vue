@@ -13,7 +13,7 @@ import StyleOptionsTypeBadge from './StyleOptionsTypeBadge.vue';
 import StyleOptionsPreview from './StyleOptionsPreview.vue';
 import StyleOptionsCodePanel from './StyleOptionsCodePanel.vue';
 import Message from 'primevue/message';
-import { unsupportedHttpApiOptions } from '@theme/utils/avatar';
+import { fallbackColors, unsupportedHttpApiOptions } from '@theme/utils/avatar';
 
 export interface OptionValue {
   type: string;
@@ -128,7 +128,7 @@ const examples = computed<(string | number | boolean)[] | undefined>(() => {
 
   if (props.name.match(/Probability$/)) return [0, 50, 100];
   if (props.name === 'backgroundColor') return ['b6e3f4', 'c0aede', 'd1d4f9', 'ffd5dc', 'ffdfbf'];
-  if (props.name.match(/Color$/) && props.name !== 'backgroundColor') return undefined;
+  if (props.name.match(/Color$/)) return [...fallbackColors];
   if (props.name === 'seed') return ['Felix', 'Aneka', 'Mia', 'James'];
   if (props.name === 'flip') return ['none', 'horizontal', 'vertical', 'both'];
   if (props.name === 'rotate' || props.name.match(/Rotate$/)) return [0, 90, 180, 270];

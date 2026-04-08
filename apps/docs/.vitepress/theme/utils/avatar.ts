@@ -51,6 +51,8 @@ const variableResultCache = new Map<string, Map<string, boolean>>();
 const pendingCustomStyles = new Map<string, PromiseWithResolvers<Style>>();
 let customStylesFlushed = false;
 
+export const fallbackColors = ['ffdde6', 'fff5d9', 'dfffe4', 'b5e0ff'] as const;
+
 export const webSafeFonts = [
   'system-ui',
   'Arial',
