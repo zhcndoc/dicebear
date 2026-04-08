@@ -2,17 +2,19 @@
 import { computed, inject } from 'vue';
 import { getAvatarPropertyPreviewOptions, getComponentVariantPreviewOptions } from '@theme/utils/avatar';
 import { UiAvatar } from '../ui';
-import { componentNamesKey, componentNamesDefault, componentDepsKey, componentDepsDefault, styleColorsKey, styleColorsDefault } from './styleOptionsKeys';
+import { componentNamesKey, componentNamesDefault, componentDepsKey, componentDepsDefault, styleColorsKey, styleColorsDefault, colorComponentMapKey, colorComponentMapDefault } from './styleOptionsKeys';
 
 const props = defineProps<{
   styleName: string;
   name: string;
   value: string | number | boolean;
+  isDefault?: boolean;
 }>();
 
 const allComponentNames = inject(componentNamesKey, componentNamesDefault);
 const allDependencies = inject(componentDepsKey, componentDepsDefault);
 const styleColors = inject(styleColorsKey, styleColorsDefault);
+const colorComponentMap = inject(colorComponentMapKey, colorComponentMapDefault);
 
 const isVariantPreview = computed(() =>
   props.name.endsWith('Variant') && allComponentNames.value.length > 0,
@@ -28,7 +30,12 @@ const options = computed(() => {
       allDependencies.value,
     );
   }
-  return getAvatarPropertyPreviewOptions(props.name, props.value, { styleColors: styleColors.value });
+  return getAvatarPropertyPreviewOptions(props.name, props.value, {
+    styleColors: styleColors.value,
+    allComponentNames: allComponentNames.value,
+    allDependencies: allDependencies.value,
+    colorComponentMap: colorComponentMap.value,
+  });
 });
 
 const avatarMode = computed(() => isVariantPreview.value ? 'library' : 'http-api');
@@ -54,6 +61,7 @@ function selectLabel(event: MouseEvent) {
             />
         </div>
         <code class="style-options-preview-label" @click="selectLabel">{{ value }}</code>
+        <span v-if="isDefault" class="style-options-preview-default">default</span>
     </div>
 </template>
 
@@ -82,13 +90,30 @@ function selectLabel(event: MouseEvent) {
     &-label {
         display: block;
         text-align: center;
-        padding: 6px 4px 10px;
+        padding: 6px 4px 4px;
         font-size: 11px;
         font-weight: 500;
         line-height: 1;
         color: var(--vp-c-text-2);
         cursor: pointer;
         background: none;
+    }
+
+    &-default {
+        display: block;
+        text-align: center;
+        padding: 0 4px 6px;
+        font-size: 9px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--vp-c-brand-1);
+        line-height: 1;
+    }
+
+    // Keep bottom padding consistent when no default label
+    &-label:last-child {
+        padding-bottom: 10px;
     }
 }
 </style>

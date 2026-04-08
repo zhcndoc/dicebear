@@ -8,7 +8,7 @@ import { Search } from '@lucide/vue';
 import InputText from 'primevue/inputtext';
 import StyleOptionsGroup from './StyleOptionsGroup.vue';
 import { useDependencyMap } from '@theme/composables/useDependencyMap';
-import { componentDepsKey, componentNamesKey, styleColorsKey } from './styleOptionsKeys';
+import { componentDepsKey, componentNamesKey, styleColorsKey, colorComponentMapKey, styleDefaultsKey } from './styleOptionsKeys';
 
 interface OptionGroup {
   id: string;
@@ -38,11 +38,12 @@ const styleData = computedAsync(async () => {
   return { descriptor, componentNames, colorNames };
 }, null);
 
-const { componentDeps } = useDependencyMap(loadedStyle);
+const { componentDeps, colorComponentMap } = useDependencyMap(loadedStyle);
 
 const allComponentNames = computed(() => styleData.value?.componentNames ?? []);
 provide(componentNamesKey, allComponentNames);
 provide(componentDepsKey, componentDeps);
+provide(colorComponentMapKey, colorComponentMap);
 
 const styleColors = computed<Record<string, string[]>>(() => {
   if (!loadedStyle.value) return {};
@@ -56,6 +57,23 @@ const styleColors = computed<Record<string, string[]>>(() => {
   return result;
 });
 provide(styleColorsKey, styleColors);
+
+const styleDefaults = computed<Record<string, unknown>>(() => {
+  if (!loadedStyle.value) return {};
+
+  const result: Record<string, unknown> = {};
+
+  for (const [name, component] of loadedStyle.value.components()) {
+    result[`${name}Probability`] = component.probability();
+  }
+
+  for (const [name, values] of Object.entries(styleColors.value)) {
+    result[`${name}Color`] = values;
+  }
+
+  return result;
+});
+provide(styleDefaultsKey, styleDefaults);
 
 function isComponentOption(key: string, names: string[]): boolean {
   return names.some(

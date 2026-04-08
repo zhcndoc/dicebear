@@ -14,7 +14,7 @@ import StyleOptionsPreview from './StyleOptionsPreview.vue';
 import StyleOptionsCodePanel from './StyleOptionsCodePanel.vue';
 import Message from 'primevue/message';
 import { padColors, unsupportedHttpApiOptions } from '@theme/utils/avatar';
-import { styleColorsKey, styleColorsDefault } from './styleOptionsKeys';
+import { styleColorsKey, styleColorsDefault, styleDefaultsKey, styleDefaultsDefault } from './styleOptionsKeys';
 
 export interface OptionValue {
   type: string;
@@ -32,6 +32,7 @@ const props = defineProps<{
 }>();
 
 const styleColors = inject(styleColorsKey, styleColorsDefault);
+const styleDefaults = inject(styleDefaultsKey, styleDefaultsDefault);
 
 function colorExamples(colorName: string, min?: number): string[] {
   return padColors(styleColors.value[colorName] ?? [], min);
@@ -235,6 +236,16 @@ const weightedExampleValue = computed(() => {
 
   return { variant01: 2, variant02: 1 };
 });
+
+function isDefault(value: string | number | boolean): boolean {
+  const dv = styleDefaults.value[props.name];
+
+  if (dv === undefined) return false;
+  if (typeof dv === 'number') return dv === value;
+  if (Array.isArray(dv)) return dv.includes(String(value));
+
+  return dv === value;
+}
 </script>
 
 <template>
@@ -267,6 +278,7 @@ const weightedExampleValue = computed(() => {
           :style-name="styleName"
           :name="name"
           :value="val"
+          :is-default="isDefault(val)"
         />
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { Style } from '@dicebear/core';
 import { kebabCase } from 'change-case';
 import { escapeShellArg } from './escape';
-import type { ComponentDependency } from '@theme/composables/useDependencyMap';
+import type { ComponentDependency, ColorComponentRef } from '@theme/composables/useDependencyMap';
 
 export function stripHash(hex: string): string {
   return hex.replace(/^#/, '');
@@ -51,7 +51,7 @@ const variableResultCache = new Map<string, Map<string, boolean>>();
 const pendingCustomStyles = new Map<string, PromiseWithResolvers<Style>>();
 let customStylesFlushed = false;
 
-export const fallbackColors = ['ffdde6', 'fff5d9', 'dfffe4', 'b5e0ff', 'e0d0ff'] as const;
+export const fallbackColors = ['ff8aab', 'ffbe47', '5bc971', '4da6ff', 'a67df5'] as const;
 
 export function padColors(values: readonly string[], min = 4): string[] {
   if (values.length >= min) return [...values];
@@ -356,154 +356,23 @@ function resolveColors(colorName: string, styleColors?: Record<string, string[]>
   return fallbackColors;
 }
 
-interface PropertyPreviewContext {
-  schemaProperties?: Record<string, unknown>;
+export interface PropertyPreviewContext {
   styleColors?: Record<string, string[]>;
+  allComponentNames?: string[];
+  allDependencies?: Record<string, ComponentDependency>;
+  colorComponentMap?: Record<string, ColorComponentRef[]>;
 }
 
-export function getAvatarPropertyPreviewOptions(
-  propertyName: string,
-  propertyValue: unknown,
-  context?: PropertyPreviewContext,
-): Record<string, unknown> {
-  const { schemaProperties, styleColors } = context ?? {};
-  if (propertyName === 'seed') {
-    return {
-      [propertyName]: propertyValue,
-    };
-  }
-
-  if (propertyName === 'backgroundType') {
-    return {
-      backgroundColor: ['6d28d9', 'c026d3'],
-      [propertyName]: [propertyValue],
-    };
-  }
-
-  if (propertyName === 'backgroundRotation') {
-    return {
-      backgroundColor: ['3f3f46', 'd4d4d8'],
-      backgroundType: ['gradientLinear'],
-      [propertyName]: [propertyValue],
-    };
-  }
-
-  if (propertyName.match(/Color$/)) {
-    const probabilityName = propertyName.replace(/Color$/, 'Probability');
-    const disabledProbabilities = getDisabledProbabilities(
-      probabilityName,
-      schemaProperties,
-    );
-
-    return {
-      seed: 'JD',
-      ...disabledProbabilities,
-      [probabilityName]: 100,
-      [propertyName]: [propertyValue],
-    };
-  }
-
-  if (propertyName.endsWith('ColorFill')) {
-    const base = propertyName.slice(0, -'Fill'.length);
-    const colorName = base.slice(0, -'Color'.length);
-
-    return {
-      seed: 'JD',
-      [base]: resolveColors(colorName, styleColors),
-      [propertyName]: [propertyValue],
-    };
-  }
-
-  if (propertyName.endsWith('ColorFillStops')) {
-    const base = propertyName.slice(0, -'FillStops'.length);
-    const colorName = base.slice(0, -'Color'.length);
-    const fillName = `${base}Fill`;
-    const stops = Number(propertyValue) || 2;
-
-    return {
-      seed: 'JD',
-      [base]: resolveColors(colorName, styleColors).slice(0, stops),
-      [fillName]: ['linear'],
-      [propertyName]: [propertyValue],
-    };
-  }
-
-  if (propertyName.endsWith('ColorAngle')) {
-    const base = propertyName.slice(0, -'Angle'.length);
-    const colorName = base.slice(0, -'Color'.length);
-    const fillName = `${base}Fill`;
-
-    return {
-      seed: 'JD',
-      [base]: resolveColors(colorName, styleColors),
-      [fillName]: ['linear'],
-      [propertyName]: [propertyValue],
-    };
-  }
-
-  if (propertyName.match(/Probability$/)) {
-    return {
-      seed: 'JD',
-      [propertyName]: propertyValue,
-    };
-  }
-
-  if (
-    propertyName.match(/OffsetX$/) ||
-    propertyName.match(/OffsetY$/) ||
-    propertyName.match(/Rotation$/)
-  ) {
-    return {
-      seed: 'JD',
-      [propertyName]: [propertyValue],
-    };
-  }
-
-  const ownProbability = `${propertyName}Probability`;
-  const disabledProbabilities = getDisabledProbabilities(
-    ownProbability,
-    schemaProperties,
-  );
-
-  return {
-    seed: 'JD',
-    ...disabledProbabilities,
-    [ownProbability]: 100,
-    [propertyName]:
-      typeof propertyValue === 'string' ? [propertyValue] : propertyValue,
-  };
-}
-
-
-function getDisabledProbabilities(
-  excludeKey: string,
-  schemaProperties?: Record<string, unknown>,
-): Record<string, number> {
-  if (!schemaProperties) return {};
-
-  const result: Record<string, number> = {};
-
-  for (const [key, value] of Object.entries(schemaProperties)) {
-    if (key.endsWith('Probability') && key !== excludeKey) {
-      const def = (value as Record<string, unknown>)?.default;
-      if (def !== 100) {
-        result[key] = 0;
-      }
-    }
-  }
-
-  return result;
-}
-
-export function getComponentVariantPreviewOptions(
+/**
+ * Returns options that make the given component visible by walking
+ * its parent dependency chain and disabling all unrelated components.
+ */
+export function getComponentVisibilityOptions(
   componentName: string,
-  variant: string,
   allComponentNames: string[],
   allDependencies: Record<string, ComponentDependency>,
 ): Record<string, unknown> {
   const opts: Record<string, unknown> = {
-    seed: 'JD',
-    [`${componentName}Variant`]: variant,
     [`${componentName}Probability`]: 100,
   };
 
@@ -540,4 +409,156 @@ export function getComponentVariantPreviewOptions(
   }
 
   return opts;
+}
+
+export function getComponentVariantPreviewOptions(
+  componentName: string,
+  variant: string,
+  allComponentNames: string[],
+  allDependencies: Record<string, ComponentDependency>,
+): Record<string, unknown> {
+  return {
+    seed: 'JD',
+    [`${componentName}Variant`]: variant,
+    ...getComponentVisibilityOptions(componentName, allComponentNames, allDependencies),
+  };
+}
+
+function colorVisibility(
+  colorName: string,
+  context: PropertyPreviewContext,
+): Record<string, unknown> {
+  const { allComponentNames, allDependencies, colorComponentMap } = context;
+
+  if (!allComponentNames || !allDependencies || !colorComponentMap) return {};
+
+  const refs = colorComponentMap[colorName];
+
+  if (!refs || refs.length === 0) return {};
+
+  const { componentName, variantName } = refs[0];
+  const opts = getComponentVisibilityOptions(componentName, allComponentNames, allDependencies);
+
+  opts[`${componentName}Variant`] = variantName;
+
+  return opts;
+}
+
+export function getAvatarPropertyPreviewOptions(
+  propertyName: string,
+  propertyValue: unknown,
+  context?: PropertyPreviewContext,
+): Record<string, unknown> {
+  const ctx = context ?? {};
+  const { styleColors } = ctx;
+
+  if (propertyName === 'seed') {
+    return {
+      [propertyName]: propertyValue,
+    };
+  }
+
+  if (propertyName === 'backgroundType') {
+    return {
+      backgroundColor: ['6d28d9', 'c026d3'],
+      [propertyName]: [propertyValue],
+    };
+  }
+
+  if (propertyName === 'backgroundRotation') {
+    return {
+      backgroundColor: ['3f3f46', 'd4d4d8'],
+      backgroundType: ['gradientLinear'],
+      [propertyName]: [propertyValue],
+    };
+  }
+
+  if (propertyName.match(/Color$/)) {
+    const colorName = propertyName.replace(/Color$/, '');
+
+    return {
+      seed: 'JD',
+      ...colorVisibility(colorName, ctx),
+      [propertyName]: [propertyValue],
+    };
+  }
+
+  if (propertyName.endsWith('ColorFill')) {
+    const base = propertyName.slice(0, -'Fill'.length);
+    const colorName = base.slice(0, -'Color'.length);
+
+    return {
+      seed: 'JD',
+      ...colorVisibility(colorName, ctx),
+      [base]: padColors(resolveColors(colorName, styleColors), 2),
+      [propertyName]: [propertyValue],
+    };
+  }
+
+  if (propertyName.endsWith('ColorFillStops')) {
+    const base = propertyName.slice(0, -'FillStops'.length);
+    const colorName = base.slice(0, -'Color'.length);
+    const fillName = `${base}Fill`;
+    const stops = Number(propertyValue) || 2;
+
+    return {
+      seed: 'JD',
+      ...colorVisibility(colorName, ctx),
+      [base]: padColors(resolveColors(colorName, styleColors), stops).slice(0, stops),
+      [fillName]: ['linear'],
+      [propertyName]: [propertyValue],
+    };
+  }
+
+  if (propertyName.endsWith('ColorAngle')) {
+    const base = propertyName.slice(0, -'Angle'.length);
+    const colorName = base.slice(0, -'Color'.length);
+    const fillName = `${base}Fill`;
+
+    return {
+      seed: 'JD',
+      ...colorVisibility(colorName, ctx),
+      [base]: padColors(resolveColors(colorName, styleColors), 2),
+      [fillName]: ['linear'],
+      [propertyName]: [propertyValue],
+    };
+  }
+
+  if (propertyName.match(/Probability$/)) {
+    const componentName = propertyName.replace(/Probability$/, '');
+    const { allComponentNames, allDependencies } = ctx;
+
+    if (allComponentNames && allDependencies && allComponentNames.includes(componentName) && Number(propertyValue) > 0) {
+      const visibility = getComponentVisibilityOptions(componentName, allComponentNames, allDependencies);
+
+      return {
+        seed: 'JD',
+        ...visibility,
+        // Override with the actual preview value instead of 100
+        [propertyName]: propertyValue,
+      };
+    }
+
+    return {
+      seed: 'JD',
+      [propertyName]: propertyValue,
+    };
+  }
+
+  if (
+    propertyName.match(/OffsetX$/) ||
+    propertyName.match(/OffsetY$/) ||
+    propertyName.match(/Rotation$/)
+  ) {
+    return {
+      seed: 'JD',
+      [propertyName]: [propertyValue],
+    };
+  }
+
+  return {
+    seed: 'JD',
+    [propertyName]:
+      typeof propertyValue === 'string' ? [propertyValue] : propertyValue,
+  };
 }
