@@ -2,7 +2,7 @@
 import { computed, inject } from 'vue';
 import { getAvatarPropertyPreviewOptions, getComponentVariantPreviewOptions } from '@theme/utils/avatar';
 import { UiAvatar } from '../ui';
-import { componentNamesKey, componentNamesDefault, componentDepsKey, componentDepsDefault } from './styleOptionsKeys';
+import { componentNamesKey, componentNamesDefault, componentDepsKey, componentDepsDefault, styleColorsKey, styleColorsDefault } from './styleOptionsKeys';
 
 const props = defineProps<{
   styleName: string;
@@ -12,6 +12,7 @@ const props = defineProps<{
 
 const allComponentNames = inject(componentNamesKey, componentNamesDefault);
 const allDependencies = inject(componentDepsKey, componentDepsDefault);
+const styleColors = inject(styleColorsKey, styleColorsDefault);
 
 const isVariantPreview = computed(() =>
   props.name.endsWith('Variant') && allComponentNames.value.length > 0,
@@ -27,7 +28,7 @@ const options = computed(() => {
       allDependencies.value,
     );
   }
-  return getAvatarPropertyPreviewOptions(props.name, props.value);
+  return getAvatarPropertyPreviewOptions(props.name, props.value, { styleColors: styleColors.value });
 });
 
 const avatarMode = computed(() => isVariantPreview.value ? 'library' : 'http-api');

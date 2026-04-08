@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject, ref, watch } from 'vue';
 import { OptionsDescriptor } from '@dicebear/core';
-import { fallbackColors, loadAvatarStyle, stripHash, styleUsesVariable, webSafeFonts } from '@theme/utils/avatar';
+import { loadAvatarStyle, padColors, stripHash, styleUsesVariable, webSafeFonts } from '@theme/utils/avatar';
 import { useDependencyMap, type ComponentDependency } from '@theme/composables/useDependencyMap';
 import { computedAsync } from '@vueuse/core';
 import { capitalCase } from 'change-case';
@@ -68,14 +68,7 @@ const defaultColors = computed<Record<string, string[]>>(() => {
   const result: Record<string, string[]> = {};
 
   for (const [name, color] of loadedStyle.value.colors()) {
-    const values = color.values().map(stripHash);
-
-    if (values.length < 4) {
-      const pool = fallbackColors.filter((c) => !values.includes(c));
-      values.push(...pool.slice(0, 4 - values.length));
-    }
-
-    result[name] = values;
+    result[name] = padColors(color.values().map(stripHash));
   }
 
   return result;

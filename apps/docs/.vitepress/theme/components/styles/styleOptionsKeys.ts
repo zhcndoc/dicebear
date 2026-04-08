@@ -6,3 +6,6 @@ export const componentNamesDefault = readonly(ref<string[]>([]));
 
 export const componentDepsKey: InjectionKey<Ref<Record<string, ComponentDependency>>> = Symbol('componentDeps');
 export const componentDepsDefault = readonly(ref<Record<string, ComponentDependency>>({}));
+
+export const styleColorsKey: InjectionKey<Ref<Record<string, string[]>>> = Symbol('styleColors');
+export const styleColorsDefault = readonly(ref<Record<string, string[]>>({}));

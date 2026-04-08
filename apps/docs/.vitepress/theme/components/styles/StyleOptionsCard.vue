@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type Component } from 'vue';
+import { computed, inject, type Component } from 'vue';
 import {
   Type,
   Hash,
@@ -13,7 +13,8 @@ import StyleOptionsTypeBadge from './StyleOptionsTypeBadge.vue';
 import StyleOptionsPreview from './StyleOptionsPreview.vue';
 import StyleOptionsCodePanel from './StyleOptionsCodePanel.vue';
 import Message from 'primevue/message';
-import { fallbackColors, unsupportedHttpApiOptions } from '@theme/utils/avatar';
+import { padColors, unsupportedHttpApiOptions } from '@theme/utils/avatar';
+import { styleColorsKey, styleColorsDefault } from './styleOptionsKeys';
 
 export interface OptionValue {
   type: string;
@@ -29,6 +30,12 @@ const props = defineProps<{
   name: string;
   value: OptionValue;
 }>();
+
+const styleColors = inject(styleColorsKey, styleColorsDefault);
+
+function colorExamples(colorName: string, min?: number): string[] {
+  return padColors(styleColors.value[colorName] ?? [], min);
+}
 
 const naturalSort = (a: string | number, b: string | number) => {
   return a.toString().localeCompare(b.toString(), undefined, {
@@ -97,19 +104,9 @@ const badges = computed<BadgeConfig[]>(() => {
   }
 });
 
-const skipPreview = computed(() => {
-  const n = props.name;
-
-  if (n.match(/ColorFillStops$/) || n.match(/ColorAngle$/)) {
-    return true;
-  }
-
-  if (fieldType.value === 'boolean' || n === 'fontFamily' || n === 'title') {
-    return true;
-  }
-
-  return false;
-});
+const skipPreview = computed(() =>
+  fieldType.value === 'boolean' || props.name === 'fontFamily' || props.name === 'title',
+);
 
 const excludeHttpApi = computed(() => unsupportedHttpApiOptions.has(props.name));
 
@@ -127,8 +124,14 @@ const examples = computed<(string | number | boolean)[] | undefined>(() => {
   }
 
   if (props.name.match(/Probability$/)) return [0, 50, 100];
-  if (props.name === 'backgroundColor') return ['b6e3f4', 'c0aede', 'd1d4f9', 'ffd5dc', 'ffdfbf'];
-  if (props.name.match(/Color$/)) return [...fallbackColors];
+  if (props.name === 'backgroundColor') return colorExamples('background', 5);
+  if (props.name.match(/Color$/)) {
+    const colorName = props.name.slice(0, -'Color'.length);
+    return colorExamples(colorName);
+  }
+  if (props.name.match(/ColorFill$/)) return ['solid', 'linear', 'radial'];
+  if (props.name.match(/ColorFillStops$/)) return [2, 3, 4, 5];
+  if (props.name.match(/ColorAngle$/)) return [0, 90, 180, 270];
   if (props.name === 'seed') return ['Felix', 'Aneka', 'Mia', 'James'];
   if (props.name === 'flip') return ['none', 'horizontal', 'vertical', 'both'];
   if (props.name === 'rotate' || props.name.match(/Rotate$/)) return [0, 90, 180, 270];

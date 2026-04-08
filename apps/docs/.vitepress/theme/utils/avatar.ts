@@ -51,7 +51,15 @@ const variableResultCache = new Map<string, Map<string, boolean>>();
 const pendingCustomStyles = new Map<string, PromiseWithResolvers<Style>>();
 let customStylesFlushed = false;
 
-export const fallbackColors = ['ffdde6', 'fff5d9', 'dfffe4', 'b5e0ff'] as const;
+export const fallbackColors = ['ffdde6', 'fff5d9', 'dfffe4', 'b5e0ff', 'e0d0ff'] as const;
+
+export function padColors(values: readonly string[], min = 4): string[] {
+  if (values.length >= min) return [...values];
+
+  const pool = fallbackColors.filter((c) => !values.includes(c));
+
+  return [...values, ...pool.slice(0, min - values.length)];
+}
 
 export const webSafeFonts = [
   'system-ui',
@@ -340,11 +348,25 @@ export function getAvatarApiCommand(
   }`.trim();
 }
 
+function resolveColors(colorName: string, styleColors?: Record<string, string[]>): readonly string[] {
+  const values = styleColors?.[colorName];
+
+  if (values && values.length > 0) return values;
+
+  return fallbackColors;
+}
+
+interface PropertyPreviewContext {
+  schemaProperties?: Record<string, unknown>;
+  styleColors?: Record<string, string[]>;
+}
+
 export function getAvatarPropertyPreviewOptions(
   propertyName: string,
   propertyValue: unknown,
-  schemaProperties?: Record<string, unknown>,
+  context?: PropertyPreviewContext,
 ): Record<string, unknown> {
+  const { schemaProperties, styleColors } = context ?? {};
   if (propertyName === 'seed') {
     return {
       [propertyName]: propertyValue,
@@ -377,6 +399,44 @@ export function getAvatarPropertyPreviewOptions(
       seed: 'JD',
       ...disabledProbabilities,
       [probabilityName]: 100,
+      [propertyName]: [propertyValue],
+    };
+  }
+
+  if (propertyName.endsWith('ColorFill')) {
+    const base = propertyName.slice(0, -'Fill'.length);
+    const colorName = base.slice(0, -'Color'.length);
+
+    return {
+      seed: 'JD',
+      [base]: resolveColors(colorName, styleColors),
+      [propertyName]: [propertyValue],
+    };
+  }
+
+  if (propertyName.endsWith('ColorFillStops')) {
+    const base = propertyName.slice(0, -'FillStops'.length);
+    const colorName = base.slice(0, -'Color'.length);
+    const fillName = `${base}Fill`;
+    const stops = Number(propertyValue) || 2;
+
+    return {
+      seed: 'JD',
+      [base]: resolveColors(colorName, styleColors).slice(0, stops),
+      [fillName]: ['linear'],
+      [propertyName]: [propertyValue],
+    };
+  }
+
+  if (propertyName.endsWith('ColorAngle')) {
+    const base = propertyName.slice(0, -'Angle'.length);
+    const colorName = base.slice(0, -'Color'.length);
+    const fillName = `${base}Fill`;
+
+    return {
+      seed: 'JD',
+      [base]: resolveColors(colorName, styleColors),
+      [fillName]: ['linear'],
       [propertyName]: [propertyValue],
     };
   }

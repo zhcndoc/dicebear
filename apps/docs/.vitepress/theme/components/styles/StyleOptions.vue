@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { computed, provide, ref, shallowRef } from 'vue';
 import { OptionsDescriptor, type Style } from '@dicebear/core';
-import { loadAvatarStyle, styleUsesVariable } from '@theme/utils/avatar';
+import { loadAvatarStyle, stripHash, styleUsesVariable } from '@theme/utils/avatar';
 import { computedAsync } from '@vueuse/core';
 import { capitalCase } from 'change-case';
 import { Search } from '@lucide/vue';
 import InputText from 'primevue/inputtext';
 import StyleOptionsGroup from './StyleOptionsGroup.vue';
 import { useDependencyMap } from '@theme/composables/useDependencyMap';
-import { componentDepsKey, componentNamesKey } from './styleOptionsKeys';
+import { componentDepsKey, componentNamesKey, styleColorsKey } from './styleOptionsKeys';
 
 interface OptionGroup {
   id: string;
@@ -43,6 +43,19 @@ const { componentDeps } = useDependencyMap(loadedStyle);
 const allComponentNames = computed(() => styleData.value?.componentNames ?? []);
 provide(componentNamesKey, allComponentNames);
 provide(componentDepsKey, componentDeps);
+
+const styleColors = computed<Record<string, string[]>>(() => {
+  if (!loadedStyle.value) return {};
+
+  const result: Record<string, string[]> = {};
+
+  for (const [name, color] of loadedStyle.value.colors()) {
+    result[name] = color.values().map(stripHash);
+  }
+
+  return result;
+});
+provide(styleColorsKey, styleColors);
 
 function isComponentOption(key: string, names: string[]): boolean {
   return names.some(
