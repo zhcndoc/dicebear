@@ -34,7 +34,7 @@ const expandedValues = computed(() => {
 </script>
 
 <template>
-  <Accordion :value="expandedValues" multiple class="style-options-group">
+  <Accordion :value="expandedValues" multiple lazy class="style-options-group">
     <AccordionPanel value="0">
       <AccordionHeader>
         <span class="style-options-group-header">

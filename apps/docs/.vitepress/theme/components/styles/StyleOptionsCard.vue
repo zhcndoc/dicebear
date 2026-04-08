@@ -124,7 +124,6 @@ const examples = computed<(string | number | boolean)[] | undefined>(() => {
     return undefined;
   }
 
-  if (props.name.match(/Probability$/)) return [0, 50, 100];
   if (props.name === 'backgroundColor') return colorExamples('background', 5);
   if (props.name.match(/Color$/)) {
     const colorName = props.name.slice(0, -'Color'.length);
@@ -135,12 +134,12 @@ const examples = computed<(string | number | boolean)[] | undefined>(() => {
   if (props.name.match(/ColorAngle$/)) return [0, 90, 180, 270];
   if (props.name === 'seed') return ['Felix', 'Aneka', 'Mia', 'James'];
   if (props.name === 'flip') return ['none', 'horizontal', 'vertical', 'both'];
-  if (props.name === 'rotate' || props.name.match(/Rotate$/)) return [0, 90, 180, 270];
+  if (props.name === 'rotate') return [0, 90, 180, 270];
   if (props.name === 'scale') return [0.5, 0.75, 1, 1.5];
   if (props.name === 'borderRadius') return [0, 10, 25, 50];
   if (props.name === 'size') return [32, 64, 96, 128];
-  if (props.name === 'translateX' || props.name.match(/TranslateX$/)) return [-50, -25, 0, 25, 50];
-  if (props.name === 'translateY' || props.name.match(/TranslateY$/)) return [-50, -25, 0, 25, 50];
+  if (props.name === 'translateX') return [-50, -25, 0, 25, 50];
+  if (props.name === 'translateY') return [-50, -25, 0, 25, 50];
   if (props.name === 'fontWeight') return [100, 400, 700, 900];
 
   return undefined;
@@ -165,7 +164,12 @@ const codeExampleValue = computed(() => {
 
   if (fieldType.value === 'boolean') return true;
   if (fieldType.value === 'color') return ['b6e3f4'];
-  if (fieldType.value === 'range' && fieldMin.value !== undefined) return fieldMin.value;
+  if (fieldType.value === 'number' || fieldType.value === 'range') {
+    const dv = styleDefaults.value[props.name];
+    if (typeof dv === 'number') return dv;
+    if (fieldMin.value !== undefined) return fieldMin.value;
+    return 0;
+  }
   if (props.name === 'title') return 'Avatar';
   if (props.name === 'fontFamily') return 'Arial';
 
@@ -176,40 +180,52 @@ const headerId = computed(() => {
   return `options-${props.name.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
 });
 
-function boundsHint(): string {
-  const min = fieldMin.value;
-  const max = fieldMax.value;
-
-  if (min !== undefined && max !== undefined) return ` Value between ${min} and ${max}.`;
-  if (min !== undefined) return ` Minimum ${min}.`;
-  if (max !== undefined) return ` Maximum ${max}.`;
-
-  return '';
-}
-
 const description = computed(() => {
   const n = props.name;
-  const bounds = boundsHint();
 
   if (n === 'seed') return 'The seed determines the initial value for the PRNG. With the same seed, the same avatar is generated every time.';
-  if (n === 'size') return 'Output size in pixels. If omitted, the avatar scales to 100% of its container.' + bounds;
+  if (n === 'size') return 'Output size in pixels. If omitted, the avatar scales to 100% of its container.';
   if (n === 'idRandomization') return 'Randomizes all SVG element IDs to avoid conflicts when embedding multiple avatars in the same page.';
   if (n === 'title') return 'Accessible title for the SVG element. Useful for screen readers.';
-  if (n.match(/Probability$/)) return 'Probability that this component appears in the avatar.' + bounds;
+  if (n.match(/Probability$/)) return 'Probability that this component appears in the avatar.';
   if (n.match(/Variant$/)) return 'The visual variant for this component. If multiple values are given, the PRNG picks one.';
   if (n.match(/Color$/) && !n.match(/ColorFill/)) return 'Hex color value(s). If multiple values are given, the PRNG picks one.';
   if (n.match(/ColorFill$/)) return 'Fill mode for the color gradient. Only visible when multiple color stops are used.';
-  if (n.match(/ColorFillStops$/)) return 'Number of color stops for gradient fills.' + bounds;
-  if (n.match(/ColorAngle$/)) return 'Rotation angle for gradient fills in degrees.' + bounds;
+  if (n.match(/ColorFillStops$/)) return 'Number of color stops for gradient fills.';
+  if (n.match(/ColorAngle$/)) return 'Rotation angle for gradient fills in degrees.';
   if (n === 'flip') return 'Mirror direction for the avatar.';
-  if (n === 'scale') return 'Scale factor. A value of 1 corresponds to the original size. As a range [min, max], the PRNG picks a value in between.' + bounds;
-  if (n === 'borderRadius') return 'Corner radius as a percentage. 0 = sharp corners, 50 = full circle.' + bounds;
-  if (n === 'rotate' || n.match(/Rotate$/)) return 'Rotation in degrees. As a range [min, max], the PRNG picks a value in between.' + bounds;
-  if (n === 'translateX' || n === 'translateY' || n.match(/TranslateX$/) || n.match(/TranslateY$/)) return 'Translation as a percentage of the canvas size. As a range [min, max], the PRNG picks a value in between.' + bounds;
+  if (n === 'scale') return 'Scale factor. A value of 1 corresponds to the original size. As a range [min, max], the PRNG picks a value in between.';
+  if (n === 'borderRadius') return 'Corner radius as a percentage. 0 = sharp corners, 50 = full circle.';
+  if (n === 'rotate' || n.match(/Rotate$/)) return 'Rotation in degrees. As a range [min, max], the PRNG picks a value in between.';
+  if (n === 'translateX' || n === 'translateY' || n.match(/TranslateX$/) || n.match(/TranslateY$/)) return 'Translation as a percentage of the canvas size. As a range [min, max], the PRNG picks a value in between.';
   if (n === 'fontFamily') return 'Font family for text elements within the avatar SVG.';
-  if (n === 'fontWeight') return 'Font weight for text elements within the avatar SVG.' + bounds;
+  if (n === 'fontWeight') return 'Font weight for text elements within the avatar SVG.';
 
   return undefined;
+});
+
+interface MetaItem { label: string; value: string }
+
+const metaItems = computed<MetaItem[]>(() => {
+  const items: MetaItem[] = [];
+  const min = fieldMin.value;
+  const max = fieldMax.value;
+
+  if (min !== undefined && max !== undefined) {
+    items.push({ label: 'Range', value: `${min} — ${max}` });
+  } else if (min !== undefined) {
+    items.push({ label: 'Min', value: String(min) });
+  } else if (max !== undefined) {
+    items.push({ label: 'Max', value: String(max) });
+  }
+
+  const dv = styleDefaults.value[props.name];
+
+  if (dv !== undefined) {
+    items.push({ label: 'Default', value: Array.isArray(dv) ? `[${dv.join(', ')}]` : String(dv) });
+  }
+
+  return items;
 });
 
 const descriptionWithHints = computed(() => {
@@ -269,6 +285,12 @@ function isDefault(value: string | number | boolean): boolean {
     <p class="style-options-card-description" v-if="descriptionWithHints">
       {{ descriptionWithHints }}
     </p>
+
+    <div class="style-options-card-meta" v-if="metaItems.length > 0">
+      <span v-for="item in metaItems" :key="item.label" class="style-options-card-meta-item">
+        {{ item.label }} <code>{{ item.value }}</code>
+      </span>
+    </div>
 
     <div class="style-options-card-preview" v-if="previewItems.length > 0">
       <div class="style-options-card-preview-grid">
@@ -358,6 +380,27 @@ function isDefault(value: string | number | boolean): boolean {
     font-size: 14px;
     line-height: 1.6;
     color: var(--vp-c-text-2);
+  }
+
+  &-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+
+    &-item {
+      font-size: 13px;
+      color: var(--vp-c-text-3);
+
+      code {
+        font-size: 12px;
+        font-weight: 600;
+        padding: 1px 5px;
+        border-radius: 3px;
+        background: var(--vp-c-bg-soft);
+        color: var(--vp-c-text-2);
+      }
+    }
   }
 
   &-preview {

@@ -8,7 +8,8 @@ import { Search } from '@lucide/vue';
 import InputText from 'primevue/inputtext';
 import StyleOptionsGroup from './StyleOptionsGroup.vue';
 import { useDependencyMap } from '@theme/composables/useDependencyMap';
-import { componentDepsKey, componentNamesKey, styleColorsKey, colorComponentMapKey, styleDefaultsKey } from './styleOptionsKeys';
+import { ComponentPreview } from '@theme/utils/componentPreview';
+import { componentDepsKey, componentNamesKey, styleColorsKey, componentPreviewKey, styleDefaultsKey } from './styleOptionsKeys';
 
 interface OptionGroup {
   id: string;
@@ -38,12 +39,14 @@ const styleData = computedAsync(async () => {
   return { descriptor, componentNames, colorNames };
 }, null);
 
-const { componentDeps, colorComponentMap } = useDependencyMap(loadedStyle);
+const { componentDeps } = useDependencyMap(loadedStyle);
 
 const allComponentNames = computed(() => styleData.value?.componentNames ?? []);
 provide(componentNamesKey, allComponentNames);
 provide(componentDepsKey, componentDeps);
-provide(colorComponentMapKey, colorComponentMap);
+
+const preview = computed(() => loadedStyle.value ? new ComponentPreview(loadedStyle.value) : null);
+provide(componentPreviewKey, preview);
 
 const styleColors = computed<Record<string, string[]>>(() => {
   if (!loadedStyle.value) return {};
@@ -65,6 +68,15 @@ const styleDefaults = computed<Record<string, unknown>>(() => {
 
   for (const [name, component] of loadedStyle.value.components()) {
     result[`${name}Probability`] = component.probability();
+
+    const rotate = component.rotate();
+    result[`${name}Rotate`] = rotate.length === 2 ? rotate : rotate[0] ?? 0;
+
+    const tx = component.translate().x();
+    result[`${name}TranslateX`] = tx.length === 2 ? tx : tx[0] ?? 0;
+
+    const ty = component.translate().y();
+    result[`${name}TranslateY`] = ty.length === 2 ? ty : ty[0] ?? 0;
   }
 
   for (const [name, values] of Object.entries(styleColors.value)) {

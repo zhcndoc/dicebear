@@ -1,7 +1,7 @@
 import { Style } from '@dicebear/core';
 import { kebabCase } from 'change-case';
 import { escapeShellArg } from './escape';
-import type { ComponentDependency, ColorComponentRef } from '@theme/composables/useDependencyMap';
+import type { ComponentDependency } from '@theme/composables/useDependencyMap';
 
 export function stripHash(hex: string): string {
   return hex.replace(/^#/, '');
@@ -348,7 +348,7 @@ export function getAvatarApiCommand(
   }`.trim();
 }
 
-function resolveColors(colorName: string, styleColors?: Record<string, string[]>): readonly string[] {
+export function resolveColors(colorName: string, styleColors?: Record<string, string[]>): readonly string[] {
   const values = styleColors?.[colorName];
 
   if (values && values.length > 0) return values;
@@ -358,9 +358,6 @@ function resolveColors(colorName: string, styleColors?: Record<string, string[]>
 
 export interface PropertyPreviewContext {
   styleColors?: Record<string, string[]>;
-  allComponentNames?: string[];
-  allDependencies?: Record<string, ComponentDependency>;
-  colorComponentMap?: Record<string, ColorComponentRef[]>;
 }
 
 /**
@@ -424,33 +421,17 @@ export function getComponentVariantPreviewOptions(
   };
 }
 
-function colorVisibility(
-  colorName: string,
-  context: PropertyPreviewContext,
-): Record<string, unknown> {
-  const { allComponentNames, allDependencies, colorComponentMap } = context;
-
-  if (!allComponentNames || !allDependencies || !colorComponentMap) return {};
-
-  const refs = colorComponentMap[colorName];
-
-  if (!refs || refs.length === 0) return {};
-
-  const { componentName, variantName } = refs[0];
-  const opts = getComponentVisibilityOptions(componentName, allComponentNames, allDependencies);
-
-  opts[`${componentName}Variant`] = variantName;
-
-  return opts;
-}
-
+/**
+ * Build preview options for general (non-component) style options.
+ * Component-specific options (Variant, Color, Probability, etc.) are
+ * handled by ComponentPreview instead.
+ */
 export function getAvatarPropertyPreviewOptions(
   propertyName: string,
   propertyValue: unknown,
   context?: PropertyPreviewContext,
 ): Record<string, unknown> {
-  const ctx = context ?? {};
-  const { styleColors } = ctx;
+  const { styleColors } = context ?? {};
 
   if (propertyName === 'seed') {
     return {
@@ -474,11 +455,8 @@ export function getAvatarPropertyPreviewOptions(
   }
 
   if (propertyName.match(/Color$/)) {
-    const colorName = propertyName.replace(/Color$/, '');
-
     return {
       seed: 'JD',
-      ...colorVisibility(colorName, ctx),
       [propertyName]: [propertyValue],
     };
   }
@@ -489,7 +467,6 @@ export function getAvatarPropertyPreviewOptions(
 
     return {
       seed: 'JD',
-      ...colorVisibility(colorName, ctx),
       [base]: padColors(resolveColors(colorName, styleColors), 2),
       [propertyName]: [propertyValue],
     };
@@ -503,7 +480,6 @@ export function getAvatarPropertyPreviewOptions(
 
     return {
       seed: 'JD',
-      ...colorVisibility(colorName, ctx),
       [base]: padColors(resolveColors(colorName, styleColors), stops).slice(0, stops),
       [fillName]: ['linear'],
       [propertyName]: [propertyValue],
@@ -517,7 +493,6 @@ export function getAvatarPropertyPreviewOptions(
 
     return {
       seed: 'JD',
-      ...colorVisibility(colorName, ctx),
       [base]: padColors(resolveColors(colorName, styleColors), 2),
       [fillName]: ['linear'],
       [propertyName]: [propertyValue],
@@ -525,34 +500,9 @@ export function getAvatarPropertyPreviewOptions(
   }
 
   if (propertyName.match(/Probability$/)) {
-    const componentName = propertyName.replace(/Probability$/, '');
-    const { allComponentNames, allDependencies } = ctx;
-
-    if (allComponentNames && allDependencies && allComponentNames.includes(componentName) && Number(propertyValue) > 0) {
-      const visibility = getComponentVisibilityOptions(componentName, allComponentNames, allDependencies);
-
-      return {
-        seed: 'JD',
-        ...visibility,
-        // Override with the actual preview value instead of 100
-        [propertyName]: propertyValue,
-      };
-    }
-
     return {
       seed: 'JD',
       [propertyName]: propertyValue,
-    };
-  }
-
-  if (
-    propertyName.match(/OffsetX$/) ||
-    propertyName.match(/OffsetY$/) ||
-    propertyName.match(/Rotation$/)
-  ) {
-    return {
-      seed: 'JD',
-      [propertyName]: [propertyValue],
     };
   }
 

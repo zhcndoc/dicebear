@@ -45,6 +45,10 @@ export class Style<D = unknown> {
     return structuredClone(this.#data.attributes ?? {});
   }
 
+  definition(): StyleDefinition {
+    return structuredClone(this.#data);
+  }
+
   canvas(): Canvas {
     this.#canvas ??= new Canvas(this.#data.canvas);
 
