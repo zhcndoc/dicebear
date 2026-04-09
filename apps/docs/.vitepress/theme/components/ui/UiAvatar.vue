@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Avatar } from '@dicebear/core';
-import { getAvatarApiUrl, loadAvatarStyle, clonePlain } from '@theme/utils/avatar';
+import { getAvatarApiUrl } from '@theme/utils/avatar/api';
+import { loadAvatarStyle, clonePlain } from '@theme/utils/avatar/style';
 import { computedAsync } from '@vueuse/core';
 
 const props = withDefaults(

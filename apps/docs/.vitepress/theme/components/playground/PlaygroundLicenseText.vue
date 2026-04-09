@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useAvatarStyleMeta } from '@theme/composables/avatar';
-import { loadAvatarStyle } from '@theme/utils/avatar';
+import { loadAvatarStyle } from '@theme/utils/avatar/style';
 import { capitalCase, kebabCase } from 'change-case';
 import { computed, toRef } from 'vue';
 import { computedAsync } from '@vueuse/core';

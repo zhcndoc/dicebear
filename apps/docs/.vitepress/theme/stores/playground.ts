@@ -8,7 +8,7 @@ import type {
   PlaygroundStoreOptions,
 } from '@theme/types';
 import { useData } from 'vitepress';
-import { clonePlain, registerCustomStyle, unregisterCustomStyle, flushPendingCustomStyles } from '@theme/utils/avatar';
+import { clonePlain, registerCustomStyle, unregisterCustomStyle, flushPendingCustomStyles } from '@theme/utils/avatar/style';
 
 export default defineStore('playground', () => {
   const data = useData();

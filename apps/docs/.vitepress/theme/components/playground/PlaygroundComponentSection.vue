@@ -8,7 +8,7 @@ import PlaygroundRangeField from './PlaygroundRangeField.vue';
 import useStore from '@theme/stores/playground';
 import { useRangeField } from '@theme/composables/useRangeField';
 import { useVariantWeights } from '@theme/composables/useVariantWeights';
-import { getComponentVariantPreviewOptions } from '@theme/utils/avatar';
+import { getComponentVariantPreviewOptions } from '@theme/utils/avatar/preview';
 import type { ComponentDependency } from '@theme/composables/useDependencyMap';
 
 const props = defineProps<{

@@ -1,4 +1,4 @@
-import { getAvatarApiUrl, getAvatarApiCommand } from './avatar';
+import { getAvatarApiUrl, getAvatarApiCommand } from './avatar/api';
 
 export interface CodeExamples {
   httpApi: string;

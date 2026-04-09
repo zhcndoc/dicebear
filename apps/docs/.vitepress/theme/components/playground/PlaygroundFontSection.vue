@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import Select from 'primevue/select';
 import useStore from '@theme/stores/playground';
-import { webSafeFonts, fontWeights } from '@theme/utils/avatar';
+import { webSafeFonts, fontWeights } from '@theme/utils/avatar/fonts';
 
 const fontFamilyOptions = [...webSafeFonts];
 const fontWeightOptions = [...fontWeights];

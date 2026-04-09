@@ -3,7 +3,7 @@ import { Copy } from '@lucide/vue';
 import { ref } from 'vue';
 import copy from 'copy-to-clipboard';
 import { Avatar } from '@dicebear/core';
-import { loadAvatarStyle, clonePlain } from '@theme/utils/avatar';
+import { loadAvatarStyle, clonePlain } from '@theme/utils/avatar/style';
 import { UiAvatar } from '../ui';
 import PlaygroundConfetti from './PlaygroundConfetti.vue';
 import PlaygroundDialog from './PlaygroundDialog.vue';

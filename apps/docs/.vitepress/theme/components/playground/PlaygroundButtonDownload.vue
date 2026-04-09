@@ -2,7 +2,8 @@
 import { ref } from 'vue';
 import { Download } from '@lucide/vue';
 import { Avatar } from '@dicebear/core';
-import { getAvatarApiUrl, loadAvatarStyle, clonePlain } from '@theme/utils/avatar';
+import { getAvatarApiUrl } from '@theme/utils/avatar/api';
+import { loadAvatarStyle, clonePlain } from '@theme/utils/avatar/style';
 import { UiAvatar } from '../ui';
 import PlaygroundConfetti from './PlaygroundConfetti.vue';
 import PlaygroundDialog from './PlaygroundDialog.vue';

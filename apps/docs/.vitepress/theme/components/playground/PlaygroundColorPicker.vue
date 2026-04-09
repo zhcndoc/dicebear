@@ -4,7 +4,7 @@ import { Plus } from '@lucide/vue';
 import Button from 'primevue/button';
 import Slider from 'primevue/slider';
 import Popover from 'primevue/popover';
-import { stripHash } from '@theme/utils/avatar';
+import { stripHash } from '@theme/utils/avatar/colors';
 
 const props = defineProps<{
   presetColors: string[];

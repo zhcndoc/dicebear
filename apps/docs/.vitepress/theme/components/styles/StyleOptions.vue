@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, provide, ref, shallowRef } from 'vue';
 import { OptionsDescriptor, type Style } from '@dicebear/core';
-import { loadAvatarStyle, stripHash, styleUsesVariable } from '@theme/utils/avatar';
+import { loadAvatarStyle, styleUsesVariable } from '@theme/utils/avatar/style';
+import { stripHash } from '@theme/utils/avatar/colors';
 import { computedAsync } from '@vueuse/core';
 import { capitalCase } from 'change-case';
 import { Search } from '@lucide/vue';

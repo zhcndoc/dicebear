@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, inject, ref } from 'vue';
-import { getAvatarPropertyPreviewOptions, padColors, resolveColors } from '@theme/utils/avatar';
+import { getAvatarPropertyPreviewOptions } from '@theme/utils/avatar/preview';
+import { padColors, resolveColors } from '@theme/utils/avatar/colors';
 import { UiAvatar } from '../ui';
 import { componentNamesKey, componentNamesDefault, styleColorsKey, styleColorsDefault, componentPreviewKey } from './styleOptionsKeys';
 

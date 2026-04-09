@@ -6,7 +6,7 @@ import Select from 'primevue/select';
 import Slider from 'primevue/slider';
 import useStore from '@theme/stores/playground';
 import { useRangeField } from '@theme/composables/useRangeField';
-import { stripHash } from '@theme/utils/avatar';
+import { stripHash } from '@theme/utils/avatar/colors';
 import PlaygroundColorPicker from './PlaygroundColorPicker.vue';
 
 const props = defineProps<{

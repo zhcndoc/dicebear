@@ -7,7 +7,7 @@ import PlaygroundOptions from './PlaygroundOptions.vue';
 import PlaygroundPreviewPanel from './PlaygroundPreviewPanel.vue';
 import PlaygroundStyleSelect from './PlaygroundStyleSelect.vue';
 import useStore from '@theme/stores/playground';
-import { compressFragment, decompressFragment } from '@theme/utils/avatar';
+import { compressFragment, decompressFragment } from '@theme/utils/avatar/fragment';
 import Button from 'primevue/button';
 
 const store = useStore();

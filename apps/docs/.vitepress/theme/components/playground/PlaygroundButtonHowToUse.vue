@@ -2,7 +2,7 @@
 import { Code as CodeIcon } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
 import { UiCode } from '../ui';
-import { getAvatarApiUrl, getAvatarApiCommand, unsupportedHttpApiOptions } from '@theme/utils/avatar';
+import { getAvatarApiUrl, getAvatarApiCommand, unsupportedHttpApiOptions } from '@theme/utils/avatar/api';
 import { formatPhpValue } from '@theme/utils/code-examples';
 import PlaygroundDialog from './PlaygroundDialog.vue';
 import Button from 'primevue/button';

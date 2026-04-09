@@ -17,7 +17,8 @@ import StyleOptionsTypeBadge from './StyleOptionsTypeBadge.vue';
 import StyleOptionsPreview from './StyleOptionsPreview.vue';
 import StyleOptionsCodePanel from './StyleOptionsCodePanel.vue';
 import Message from 'primevue/message';
-import { padColors, unsupportedHttpApiOptions } from '@theme/utils/avatar';
+import { padColors } from '@theme/utils/avatar/colors';
+import { unsupportedHttpApiOptions } from '@theme/utils/avatar/api';
 import { getOptionDescription, getOptionExamples } from '@theme/utils/styleOptionMeta';
 import { styleColorsKey, styleColorsDefault, styleDefaultsKey, styleDefaultsDefault } from './styleOptionsKeys';
 

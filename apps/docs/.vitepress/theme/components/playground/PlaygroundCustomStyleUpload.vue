@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import { Style } from '@dicebear/core';
-import { registerCustomStyle } from '@theme/utils/avatar';
+import { registerCustomStyle } from '@theme/utils/avatar/style';
 import useStore from '@theme/stores/playground';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';

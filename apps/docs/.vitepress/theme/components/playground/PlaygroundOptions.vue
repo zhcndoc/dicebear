@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, inject, ref, watch } from 'vue';
 import { OptionsDescriptor } from '@dicebear/core';
-import { loadAvatarStyle, padColors, stripHash, styleUsesVariable, webSafeFonts } from '@theme/utils/avatar';
+import { loadAvatarStyle, styleUsesVariable } from '@theme/utils/avatar/style';
+import { padColors, stripHash } from '@theme/utils/avatar/colors';
+import { webSafeFonts } from '@theme/utils/avatar/fonts';
 import { useDependencyMap, type ComponentDependency } from '@theme/composables/useDependencyMap';
 import { computedAsync } from '@vueuse/core';
 import { capitalCase } from 'change-case';
