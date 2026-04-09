@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, provide, ref, shallowRef } from 'vue';
+import { computed, nextTick, provide, ref, shallowRef } from 'vue';
 import { OptionsDescriptor, type Style } from '@dicebear/core';
+import { getScrollOffset, inBrowser } from 'vitepress';
 import { loadAvatarStyle, styleUsesVariable } from '@theme/utils/avatar/style';
 import { stripHash } from '@theme/utils/avatar/colors';
-import { computedAsync } from '@vueuse/core';
+import { computedAsync, watchOnce } from '@vueuse/core';
 import { capitalCase } from 'change-case';
 import { Search } from '@lucide/vue';
 import InputText from 'primevue/inputtext';
@@ -225,6 +226,34 @@ const filteredGroups = computed(() => {
       return { ...group, options: filtered };
     })
     .filter((group) => Object.keys(group.options).length > 0);
+});
+
+// Option cards render asynchronously, so the browser's initial hash-scroll
+// runs before the target anchors exist. Re-do the scroll once they're in.
+watchOnce(styleData, async (data) => {
+  if (!inBrowser || !data) return;
+
+  const hash = window.location.hash;
+  if (!hash.startsWith('#options-')) return;
+
+  await nextTick();
+
+  let id: string;
+  try {
+    id = decodeURIComponent(hash).slice(1);
+  } catch {
+    return;
+  }
+
+  const target = document.getElementById(id);
+  if (!target) return;
+
+  const top =
+    window.scrollY +
+    target.getBoundingClientRect().top -
+    getScrollOffset();
+
+  window.scrollTo({ left: 0, top, behavior: 'instant' });
 });
 </script>
 
