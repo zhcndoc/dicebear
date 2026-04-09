@@ -6,6 +6,7 @@ import { computed, toRef } from 'vue';
 import { computedAsync } from '@vueuse/core';
 import useStore from '@theme/stores/playground';
 import { formatLicenseName } from '@theme/utils/format';
+import { safeHttpUrl } from '@theme/utils/url';
 
 const store = useStore();
 
@@ -39,6 +40,13 @@ const hasCustomMeta = computed(() => {
   return meta && (meta.creator || meta.license?.name);
 });
 
+const customSourceUrl = computed(() => safeHttpUrl(customStyleMeta.value?.source));
+const customLicenseUrl = computed(() => safeHttpUrl(customStyleMeta.value?.license?.url));
+
+const builtInSourceUrl = computed(() => safeHttpUrl(avatarStyleMeta.value?.source));
+const builtInHomepageUrl = computed(() => safeHttpUrl(avatarStyleMeta.value?.homepage));
+const builtInLicenseUrl = computed(() => safeHttpUrl(avatarStyleMeta.value?.license?.url));
+
 const avatarStyleName = computed(() => {
   if (store.isCustomStyle) {
     return store.customStyles[store.avatarStyleName]?.name ?? 'Custom Style';
@@ -59,12 +67,12 @@ const avatarStyleLink = computed(
       <template v-if="customStyleMeta?.title">
         is based on:
         <a
-          v-if="customStyleMeta?.source"
-          :href="customStyleMeta.source"
+          v-if="customSourceUrl"
+          :href="customSourceUrl"
           target="_blank"
           rel="noopener noreferrer"
-        >{{ customStyleMeta.title }}</a>
-        <template v-else>{{ customStyleMeta.title }}</template>
+        >{{ customStyleMeta?.title }}</a>
+        <template v-else>{{ customStyleMeta?.title }}</template>
       </template>
       <template v-if="customStyleMeta?.creator">
         by {{ customStyleMeta.creator }}
@@ -72,12 +80,12 @@ const avatarStyleLink = computed(
       <template v-if="customStyleMeta?.license?.name">
         , licensed under
         <a
-          v-if="customStyleMeta?.license?.url"
-          :href="customStyleMeta.license.url"
+          v-if="customLicenseUrl"
+          :href="customLicenseUrl"
           target="_blank"
           rel="noopener noreferrer"
-        >{{ customStyleMeta.license.name }}</a>
-        <template v-else>{{ customStyleMeta.license.name }}</template>
+        >{{ customStyleMeta?.license?.name }}</a>
+        <template v-else>{{ customStyleMeta?.license?.name }}</template>
       </template>
       (as stated by the creator — not verified by DiceBear).
     </template>
@@ -103,28 +111,32 @@ const avatarStyleLink = computed(
       </template>
       <template v-else> is based on: </template>
       <a
-        :href="avatarStyleMeta?.source"
+        v-if="builtInSourceUrl"
+        :href="builtInSourceUrl"
         target="_blank"
         rel="noopener noreferrer"
       >
         {{ avatarStyleMeta?.title ?? 'Design' }}
       </a>
+      <template v-else>{{ avatarStyleMeta?.title ?? 'Design' }}</template>
     </template>
     by
     <a
-      :href="avatarStyleMeta?.homepage"
+      v-if="builtInHomepageUrl"
+      :href="builtInHomepageUrl"
       target="_blank"
       rel="noopener noreferrer"
-    >
-      {{ avatarStyleMeta?.creator }} </a
-    >, licensed under
+    >{{ avatarStyleMeta?.creator }}</a>
+    <template v-else>{{ avatarStyleMeta?.creator }}</template>, licensed under
     <a
-      :href="avatarStyleMeta?.license?.url"
+      v-if="builtInLicenseUrl"
+      :href="builtInLicenseUrl"
       target="_blank"
       rel="noopener noreferrer"
     >
       {{ formatLicenseName(avatarStyleMeta?.license?.name) }}
     </a>
+    <template v-else>{{ formatLicenseName(avatarStyleMeta?.license?.name) }}</template>
     .
   </p>
 </template>
