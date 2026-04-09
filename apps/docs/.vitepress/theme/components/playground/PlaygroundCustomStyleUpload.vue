@@ -17,6 +17,8 @@ const emit = defineEmits<{
 
 const store = useStore();
 
+const MAX_UPLOAD_SIZE = 1024 * 1024;
+
 const jsonInput = ref('');
 const styleName = ref('');
 const error = ref('');
@@ -48,6 +50,12 @@ function extractName(definition: Record<string, unknown>): string {
 
 async function submit() {
   error.value = '';
+
+  if (new TextEncoder().encode(jsonInput.value).length > MAX_UPLOAD_SIZE) {
+    error.value = 'Style definition is too large (max 1 MB).';
+    return;
+  }
+
   loading.value = true;
 
   try {
@@ -65,7 +73,7 @@ async function submit() {
     if (err instanceof SyntaxError) {
       error.value = 'Invalid JSON: ' + err.message;
     } else if (err instanceof Error) {
-      error.value = err.message;
+      error.value = 'Invalid style definition. Check format and required fields.';
     } else {
       error.value = 'An unknown error occurred.';
     }
@@ -78,7 +86,15 @@ async function onFileSelect(event: Event) {
   const input = event.target as HTMLInputElement;
   const file = input.files?.[0];
 
+  error.value = '';
+
   if (!file) return;
+
+  if (file.size > MAX_UPLOAD_SIZE) {
+    error.value = 'File is too large (max 1 MB).';
+    input.value = '';
+    return;
+  }
 
   try {
     jsonInput.value = await file.text();
