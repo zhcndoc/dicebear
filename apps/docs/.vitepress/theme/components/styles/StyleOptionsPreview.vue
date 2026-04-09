@@ -8,7 +8,6 @@ const props = defineProps<{
   styleName: string;
   name: string;
   value: string | number | boolean;
-  isDefault?: boolean;
 }>();
 
 const allComponentNames = inject(componentNamesKey, componentNamesDefault);
@@ -117,9 +116,7 @@ const previewDataUri = computed(() => {
 const generalOptions = computed(() => {
   if (isComponentPreview.value) return undefined;
 
-  return getAvatarPropertyPreviewOptions(props.name, props.value, {
-    styleColors: styleColors.value,
-  });
+  return getAvatarPropertyPreviewOptions(props.name, props.value);
 });
 
 function selectLabel(event: MouseEvent) {
@@ -147,7 +144,6 @@ function selectLabel(event: MouseEvent) {
             />
         </div>
         <code class="style-options-preview-label" @click="selectLabel">{{ value }}</code>
-        <span v-if="isDefault" class="style-options-preview-default">default</span>
     </div>
 </template>
 
@@ -156,7 +152,7 @@ function selectLabel(event: MouseEvent) {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 128px;
+    min-width: 0;
     border-radius: var(--vp-radius-xs);
     background: var(--vp-c-bg-soft);
     overflow: hidden;
@@ -196,30 +192,13 @@ function selectLabel(event: MouseEvent) {
     &-label {
         display: block;
         text-align: center;
-        padding: 6px 4px 4px;
+        padding: 6px 4px 10px;
         font-size: 11px;
         font-weight: 500;
         line-height: 1;
         color: var(--vp-c-text-2);
         cursor: pointer;
         background: none;
-    }
-
-    &-default {
-        display: block;
-        text-align: center;
-        padding: 0 4px 6px;
-        font-size: 9px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        color: var(--vp-c-brand-1);
-        line-height: 1;
-    }
-
-    // Keep bottom padding consistent when no default label
-    &-label:last-child {
-        padding-bottom: 10px;
     }
 }
 </style>

@@ -9,6 +9,10 @@ import {
   SlidersHorizontal,
   Weight,
 } from '@lucide/vue';
+import Accordion from 'primevue/accordion';
+import AccordionPanel from 'primevue/accordionpanel';
+import AccordionHeader from 'primevue/accordionheader';
+import AccordionContent from 'primevue/accordioncontent';
 import StyleOptionsTypeBadge from './StyleOptionsTypeBadge.vue';
 import StyleOptionsPreview from './StyleOptionsPreview.vue';
 import StyleOptionsCodePanel from './StyleOptionsCodePanel.vue';
@@ -222,7 +226,15 @@ const metaItems = computed<MetaItem[]>(() => {
   const dv = styleDefaults.value[props.name];
 
   if (dv !== undefined) {
-    items.push({ label: 'Default', value: Array.isArray(dv) ? `[${dv.join(', ')}]` : String(dv) });
+    let formatted: string;
+    if (Array.isArray(dv)) {
+      formatted = `[${dv.join(', ')}]`;
+    } else if (typeof dv === 'object' && dv !== null) {
+      formatted = Object.entries(dv).map(([k, v]) => `${k}: ${v}`).join(', ');
+    } else {
+      formatted = String(dv);
+    }
+    items.push({ label: 'Default', value: formatted });
   }
 
   return items;
@@ -253,15 +265,11 @@ const weightedExampleValue = computed(() => {
   return { variant01: 2, variant02: 1 };
 });
 
-function isDefault(value: string | number | boolean): boolean {
-  const dv = styleDefaults.value[props.name];
-
-  if (dv === undefined) return false;
-  if (typeof dv === 'number') return dv === value;
-  if (Array.isArray(dv)) return dv.includes(String(value));
-
-  return dv === value;
-}
+const hasDetails = computed(() => {
+  return previewItems.value.length > 0
+    || codeExampleValue.value !== undefined
+    || excludeHttpApi.value;
+});
 </script>
 
 <template>
@@ -292,55 +300,63 @@ function isDefault(value: string | number | boolean): boolean {
       </span>
     </div>
 
-    <div class="style-options-card-preview" v-if="previewItems.length > 0">
-      <div class="style-options-card-preview-grid">
-        <StyleOptionsPreview
-          v-for="(val, key) in previewItems"
-          :key="key"
-          :style-name="styleName"
-          :name="name"
-          :value="val"
-          :is-default="isDefault(val)"
-        />
-      </div>
-    </div>
+    <Accordion v-if="hasDetails" :value="[]" multiple lazy class="style-options-card-details">
+      <AccordionPanel value="0">
+        <AccordionHeader>Examples</AccordionHeader>
+        <AccordionContent>
+          <div class="style-options-card-details-body">
+            <div class="style-options-card-preview" v-if="previewItems.length > 0">
+              <div class="style-options-card-preview-grid">
+                <StyleOptionsPreview
+                  v-for="(val, key) in previewItems"
+                  :key="key"
+                  :style-name="styleName"
+                  :name="name"
+                  :value="val"
+                />
+              </div>
+            </div>
 
-    <div class="style-options-card-code" v-if="codeExampleValue !== undefined && !weightedExampleValue">
-      <StyleOptionsCodePanel
-        :style-name="styleName"
-        :option-name="name"
-        :value="codeExampleValue"
-        :exclude-http-api="excludeHttpApi"
-      />
-    </div>
+            <div class="style-options-card-code" v-if="codeExampleValue !== undefined && !weightedExampleValue">
+              <StyleOptionsCodePanel
+                :style-name="styleName"
+                :option-name="name"
+                :value="codeExampleValue"
+                :exclude-http-api="excludeHttpApi"
+              />
+            </div>
 
-    <div class="style-options-card-code-group" v-if="codeExampleValue !== undefined && weightedExampleValue">
-      <div class="style-options-card-code-section">
-        <span class="style-options-card-code-label">Usage</span>
-        <StyleOptionsCodePanel
-          :style-name="styleName"
-          :option-name="name"
-          :value="codeExampleValue"
-          :exclude-http-api="excludeHttpApi"
-        />
-      </div>
-      <div class="style-options-card-code-section">
-        <span class="style-options-card-code-label">Weighted</span>
-        <StyleOptionsCodePanel
-          :style-name="styleName"
-          :option-name="name"
-          :value="weightedExampleValue"
-          :exclude-http-api="excludeHttpApi"
-        />
-      </div>
-    </div>
+            <div class="style-options-card-code-group" v-if="codeExampleValue !== undefined && weightedExampleValue">
+              <div class="style-options-card-code-section">
+                <span class="style-options-card-code-label">Usage</span>
+                <StyleOptionsCodePanel
+                  :style-name="styleName"
+                  :option-name="name"
+                  :value="codeExampleValue"
+                  :exclude-http-api="excludeHttpApi"
+                />
+              </div>
+              <div class="style-options-card-code-section">
+                <span class="style-options-card-code-label">Weighted</span>
+                <StyleOptionsCodePanel
+                  :style-name="styleName"
+                  :option-name="name"
+                  :value="weightedExampleValue"
+                  :exclude-http-api="excludeHttpApi"
+                />
+              </div>
+            </div>
 
-    <div v-if="excludeHttpApi" class="style-options-card-message">
-      <Message severity="warn" :closable="false">
-        This option is not supported by our public <a href="/how-to-use/http-api/">HTTP-API</a>.
-        You can enable it by <a href="/guides/host-the-http-api-yourself/">hosting your own instance</a>.
-      </Message>
-    </div>
+            <div v-if="excludeHttpApi" class="style-options-card-message">
+              <Message severity="warn" :closable="false">
+                This option is not supported by our public <a href="/how-to-use/http-api/">HTTP-API</a>.
+                You can enable it by <a href="/guides/host-the-http-api-yourself/">hosting your own instance</a>.
+              </Message>
+            </div>
+          </div>
+        </AccordionContent>
+      </AccordionPanel>
+    </Accordion>
   </div>
 </template>
 
@@ -382,6 +398,35 @@ function isDefault(value: string | number | boolean): boolean {
     color: var(--vp-c-text-2);
   }
 
+  &-details {
+    margin-top: 12px;
+    --p-accordion-panel-border-color: var(--vp-c-border);
+    --p-accordion-header-padding: 8px 0;
+    --p-accordion-content-padding: 0;
+    --p-accordion-header-background: transparent;
+    --p-accordion-header-hover-background: transparent;
+    --p-accordion-header-active-background: transparent;
+    --p-accordion-header-active-hover-background: transparent;
+    --p-accordion-content-background: transparent;
+    --p-accordion-panel-border-width: 0;
+    --p-accordion-header-font-size: 13px;
+    --p-accordion-header-font-weight: 600;
+    --p-accordion-header-color: var(--vp-c-text-3);
+    --p-accordion-header-hover-color: var(--vp-c-text-2);
+    --p-accordion-header-active-color: var(--vp-c-text-3);
+    --p-accordion-header-active-hover-color: var(--vp-c-text-2);
+
+    &-body {
+      display: flex;
+      flex-direction: column;
+      padding-top: 4px;
+    }
+
+    :deep(.p-accordioncontent-wrapper) {
+      min-width: 0;
+    }
+  }
+
   &-meta {
     display: flex;
     flex-wrap: wrap;
@@ -407,8 +452,8 @@ function isDefault(value: string | number | boolean): boolean {
     margin-top: 16px;
 
     &-grid {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
       gap: 8px;
     }
   }

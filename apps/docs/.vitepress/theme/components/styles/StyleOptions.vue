@@ -66,7 +66,24 @@ const styleDefaults = computed<Record<string, unknown>>(() => {
 
   const result: Record<string, unknown> = {};
 
+  // General option defaults (from Options.ts)
+  result.flip = 'none';
+  result.fontFamily = 'system-ui';
+  result.fontWeight = 400;
+  result.scale = 1;
+  result.borderRadius = 0;
+  result.rotate = 0;
+  result.translateX = 0;
+  result.translateY = 0;
+  result.idRandomization = false;
+
   for (const [name, component] of loadedStyle.value.components()) {
+    const variantDefaults: Record<string, number> = {};
+    for (const [v, variant] of component.variants()) {
+      variantDefaults[v] = variant.weight();
+    }
+    result[`${name}Variant`] = variantDefaults;
+
     result[`${name}Probability`] = component.probability();
 
     const rotate = component.rotate();
@@ -81,6 +98,9 @@ const styleDefaults = computed<Record<string, unknown>>(() => {
 
   for (const [name, values] of Object.entries(styleColors.value)) {
     result[`${name}Color`] = values;
+    result[`${name}ColorFill`] = 'solid';
+    result[`${name}ColorFillStops`] = 2;
+    result[`${name}ColorAngle`] = 0;
   }
 
   return result;
@@ -228,7 +248,6 @@ const filteredGroups = computed(() => {
         :label="group.label"
         :category="group.category"
         :options="group.options"
-        :default-expanded="group.category === 'general'"
       />
     </div>
 

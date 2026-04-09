@@ -356,10 +356,6 @@ export function resolveColors(colorName: string, styleColors?: Record<string, st
   return fallbackColors;
 }
 
-export interface PropertyPreviewContext {
-  styleColors?: Record<string, string[]>;
-}
-
 /**
  * Returns options that make the given component visible by walking
  * its parent dependency chain and disabling all unrelated components.
@@ -429,10 +425,7 @@ export function getComponentVariantPreviewOptions(
 export function getAvatarPropertyPreviewOptions(
   propertyName: string,
   propertyValue: unknown,
-  context?: PropertyPreviewContext,
 ): Record<string, unknown> {
-  const { styleColors } = context ?? {};
-
   if (propertyName === 'seed') {
     return {
       [propertyName]: propertyValue,
@@ -451,58 +444,6 @@ export function getAvatarPropertyPreviewOptions(
       backgroundColor: ['3f3f46', 'd4d4d8'],
       backgroundType: ['gradientLinear'],
       [propertyName]: [propertyValue],
-    };
-  }
-
-  if (propertyName.match(/Color$/)) {
-    return {
-      seed: 'JD',
-      [propertyName]: [propertyValue],
-    };
-  }
-
-  if (propertyName.endsWith('ColorFill')) {
-    const base = propertyName.slice(0, -'Fill'.length);
-    const colorName = base.slice(0, -'Color'.length);
-
-    return {
-      seed: 'JD',
-      [base]: padColors(resolveColors(colorName, styleColors), 2),
-      [propertyName]: [propertyValue],
-    };
-  }
-
-  if (propertyName.endsWith('ColorFillStops')) {
-    const base = propertyName.slice(0, -'FillStops'.length);
-    const colorName = base.slice(0, -'Color'.length);
-    const fillName = `${base}Fill`;
-    const stops = Number(propertyValue) || 2;
-
-    return {
-      seed: 'JD',
-      [base]: padColors(resolveColors(colorName, styleColors), stops).slice(0, stops),
-      [fillName]: ['linear'],
-      [propertyName]: [propertyValue],
-    };
-  }
-
-  if (propertyName.endsWith('ColorAngle')) {
-    const base = propertyName.slice(0, -'Angle'.length);
-    const colorName = base.slice(0, -'Color'.length);
-    const fillName = `${base}Fill`;
-
-    return {
-      seed: 'JD',
-      [base]: padColors(resolveColors(colorName, styleColors), 2),
-      [fillName]: ['linear'],
-      [propertyName]: [propertyValue],
-    };
-  }
-
-  if (propertyName.match(/Probability$/)) {
-    return {
-      seed: 'JD',
-      [propertyName]: propertyValue,
     };
   }
 
