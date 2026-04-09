@@ -234,6 +234,12 @@ const onSeedFocus = (e: FocusEvent) => {
               <Shuffle :size="16" />
             </Button>
           </div>
+          <p class="pg-options-seed-help">
+            The seed is the starting value used to generate the avatar.
+            <strong>The same seed always produces the same avatar</strong>, so you can reuse it whenever you need the
+            exact same result. For privacy, prefer an opaque identifier such as a random string or hashed user ID
+            instead of personal data like names or email addresses.
+          </p>
         </AccordionContent>
       </AccordionPanel>
       <AccordionPanel v-if="hasFontFamily || hasFontWeight" value="__font">
@@ -356,5 +362,12 @@ const onSeedFocus = (e: FocusEvent) => {
 .pg-options-seed {
   flex: 1;
   min-width: 0;
+}
+
+.pg-options-seed-help {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--vp-c-text-2);
 }
 </style>
