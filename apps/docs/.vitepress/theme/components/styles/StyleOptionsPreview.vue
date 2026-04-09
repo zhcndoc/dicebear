@@ -15,7 +15,6 @@ const allComponentNames = inject(componentNamesKey, componentNamesDefault);
 const styleColors = inject(styleColorsKey, styleColorsDefault);
 const preview = inject(componentPreviewKey, ref(null));
 
-// Determine what type of preview this is and which component/color it targets
 const previewTarget = computed(() => {
   const n = props.name;
 
@@ -52,13 +51,12 @@ const isComponentPreview = computed(() => {
 
   const t = previewTarget.value;
 
-  if (t.type === 'general') return false;
-
-  // Check the target component/color exists
-  if ('component' in t) return allComponentNames.value.includes(t.component);
-  if ('color' in t) {
-    const usage = preview.value.colorUsage();
-    return (usage[t.color]?.length ?? 0) > 0;
+  // Color-typed previews (plain *Color and the *ColorFill / *ColorFillStops /
+  // *ColorAngle gradient configuration options) render the full avatar via the
+  // HTTP-API path, so e.g. Identicon's rowColor preview shows every row
+  // instead of a single isolated row from one component.
+  if (t.type === 'variant' || t.type === 'probability') {
+    return allComponentNames.value.includes(t.component);
   }
 
   return false;
@@ -70,54 +68,46 @@ const previewDataUri = computed(() => {
   const p = preview.value;
   const t = previewTarget.value;
 
-  switch (t.type) {
-    case 'variant':
-      return p.toDataUri(t.component, String(props.value));
+  if (t.type === 'variant') {
+    return p.toDataUri(t.component, String(props.value));
+  }
 
-    case 'probability': {
-      const firstVariant = p.firstVariant(t.component);
-      if (!firstVariant) return undefined;
-      return p.toDataUri(t.component, firstVariant, {
-        [props.name]: props.value,
-      });
-    }
-
-    case 'color':
-      return p.toDataUriForColor(t.color, {
-        [`${t.color}Color`]: [props.value],
-      });
-
-    case 'colorFill':
-      return p.toDataUriForColor(t.color, {
-        [`${t.color}Color`]: padColors(resolveColors(t.color, styleColors.value), 2),
-        [`${t.color}ColorFill`]: [props.value],
-      });
-
-    case 'colorFillStops': {
-      const stops = Number(props.value) || 2;
-      return p.toDataUriForColor(t.color, {
-        [`${t.color}Color`]: padColors(resolveColors(t.color, styleColors.value), stops).slice(0, stops),
-        [`${t.color}ColorFill`]: ['linear'],
-        [`${t.color}ColorFillStops`]: [props.value],
-      });
-    }
-
-    case 'colorAngle':
-      return p.toDataUriForColor(t.color, {
-        [`${t.color}Color`]: padColors(resolveColors(t.color, styleColors.value), 2),
-        [`${t.color}ColorFill`]: ['linear'],
-        [`${t.color}ColorAngle`]: [props.value],
-      });
+  if (t.type === 'probability') {
+    const firstVariant = p.firstVariant(t.component);
+    if (!firstVariant) return undefined;
+    return p.toDataUri(t.component, firstVariant, { [props.name]: props.value });
   }
 
   return undefined;
 });
 
-// Fallback: general options still use UiAvatar with getAvatarPropertyPreviewOptions
 const generalOptions = computed(() => {
   if (isComponentPreview.value) return undefined;
 
-  return getAvatarPropertyPreviewOptions(props.name, props.value);
+  const t = previewTarget.value;
+
+  if (t.type === 'general' || t.type === 'variant' || t.type === 'probability') {
+    return getAvatarPropertyPreviewOptions(props.name, props.value);
+  }
+
+  const colorKey = `${t.color}Color`;
+  const fillKey = `${t.color}ColorFill`;
+  const opts: Record<string, unknown> = { seed: 'JD' };
+
+  if (t.type === 'color') {
+    opts[colorKey] = [props.value];
+    return opts;
+  }
+
+  const stops = t.type === 'colorFillStops' ? Number(props.value) || 2 : 2;
+
+  opts[colorKey] = padColors(resolveColors(t.color, styleColors.value), stops).slice(0, stops);
+  opts[fillKey] = t.type === 'colorFill' ? [props.value] : ['linear'];
+
+  if (t.type === 'colorFillStops') opts[`${t.color}ColorFillStops`] = [props.value];
+  if (t.type === 'colorAngle') opts[`${t.color}ColorAngle`] = [props.value];
+
+  return opts;
 });
 
 function selectLabel(event: MouseEvent) {

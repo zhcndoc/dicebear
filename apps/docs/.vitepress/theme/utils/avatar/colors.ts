@@ -12,7 +12,10 @@ export function padColors(values: readonly string[], min = 4): string[] {
   return [...values, ...pool.slice(0, min - values.length)];
 }
 
-export function resolveColors(colorName: string, styleColors?: Record<string, string[]>): readonly string[] {
+export function resolveColors(
+  colorName: string,
+  styleColors?: Readonly<Record<string, readonly string[]>>,
+): readonly string[] {
   const values = styleColors?.[colorName];
 
   if (values && values.length > 0) return values;
