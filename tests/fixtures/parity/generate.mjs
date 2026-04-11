@@ -242,8 +242,6 @@ writeJson('prng.json', prngFixtures);
 
 console.log('Generating avatar fixtures…');
 
-// idRandomization is forced off in every case so the SVG output is
-// reproducible across languages.
 function avatarCases(extra) {
   return [
     {
@@ -371,14 +369,13 @@ const avatarFixtures = {
 for (const [styleName, cases] of Object.entries(avatarFixtures)) {
   const styleData = styles[styleName];
   const out = cases.map((c) => {
-    const options = { ...c.options, idRandomization: false };
-    const json = new Avatar(styleData, options).toJSON();
+    const json = new Avatar(styleData, c.options).toJSON();
     // JSON-round-trip the resolved options so the fixture matches what
     // any consumer would see after JSON.stringify — this drops undefined
     // values like `size` and `title` when they were not provided.
     const resolvedOptions = JSON.parse(JSON.stringify(json.options));
 
-    return { id: c.id, options, svg: json.svg, resolvedOptions };
+    return { id: c.id, options: c.options, svg: json.svg, resolvedOptions };
   });
   writeJson(join('avatars', `${styleName}.json`), out);
 }

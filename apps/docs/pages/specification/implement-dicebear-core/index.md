@@ -388,12 +388,11 @@ The fixture tree contains:
 - **`styles/{initials,thumbs,glass,notionists}.json`** — vendored copies of
   four style definitions chosen to cover most rendering features (text,
   components, color overrides, gradient fills, root SVG attributes).
-- **`avatars/{initials,thumbs,glass,notionists}.json`** — `{id, options, svg}`
-  cases per style, exercising seed, size, scale, rotate, translate, border
-  radius, flip, background gradients (solid/linear/radial), component variant
-  overrides, and style-specific options like `fontFamily` and
-  `gestureVariant`. All cases pin `idRandomization: false` so the SVG is
-  reproducible across languages.
+- **`avatars/{initials,thumbs,glass,notionists}.json`** — `{id, options, svg,
+  resolvedOptions}` cases per style, exercising seed, size, scale, rotate,
+  translate, border radius, flip, background gradients (solid/linear/radial),
+  component variant overrides, and style-specific options like `fontFamily`
+  and `gestureVariant`.
 
 ### How to use the fixtures
 
