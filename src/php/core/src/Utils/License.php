@@ -20,13 +20,13 @@ class License
             return '';
         }
 
-        $title = $sourceName !== null ? "\"{$sourceName}\"" : 'Design';
+        $title = $sourceName !== null ? "“{$sourceName}”" : 'Design';
 
         if ($sourceUrl !== null) {
             $title .= " ({$sourceUrl})";
         }
 
-        $creator = '"' . ($creatorName ?? 'Unknown') . '"';
+        $creator = '“' . ($creatorName ?? 'Unknown') . '”';
 
         $result = '';
 
@@ -38,7 +38,7 @@ class License
         $result .= "{$title} by {$creator}";
 
         if ($licenseName !== null) {
-            $result .= ", licensed under \"{$licenseName}\"";
+            $result .= ", licensed under “{$licenseName}”";
 
             if ($licenseUrl !== null) {
                 $result .= " ({$licenseUrl})";
