@@ -367,14 +367,72 @@ The `initial` and `initials` variables are derived from the seed:
 
 ## Testing your implementation
 
-The most reliable way to verify your implementation:
+The DiceBear repository ships a language-neutral parity test suite at
+[`tests/fixtures/parity/`](https://github.com/dicebear/dicebear/tree/10.x/tests/fixtures/parity).
+It is the canonical way to verify a new implementation: the JavaScript and PHP
+reference implementations both consume the same JSON fixtures and assert the
+same outputs, so any port that reads these fixtures gets the same coverage for
+free.
 
-1. Generate an avatar with both your implementation and the JS reference using
-   the same seed and style definition
-2. Compare the SVG output byte-for-byte
+The fixture tree contains:
+
+- **`fnv1a.json`** — input strings with their expected 32-bit hash and 8-char
+  hex representation. Includes ASCII, the `seed:key` patterns produced by
+  `Prng.getValue()`, and Unicode (`„é"`, `„日本語"`, emoji, long strings).
+- **`mulberry32.json`** — seeds with the first 5 chained `{nextFloat, state}`
+  pairs each. Catches state-progression bugs, not just first-step bugs.
+- **`prng.json`** — every `Prng` method (`getValue`, `pick`, `weightedPick`,
+  `bool`, `float`, `integer`, `shuffle`) with `{seed, key, args, result}`
+  test cases, including order-independence checks for `pick` / `weightedPick`
+  / `shuffle`.
+- **`styles/{initials,thumbs,glass,notionists}.json`** — vendored copies of
+  four style definitions chosen to cover most rendering features (text,
+  components, color overrides, gradient fills, root SVG attributes).
+- **`avatars/{initials,thumbs,glass,notionists}.json`** — `{id, options, svg}`
+  cases per style, exercising seed, size, scale, rotate, translate, border
+  radius, flip, background gradients (solid/linear/radial), component variant
+  overrides, and style-specific options like `fontFamily` and
+  `gestureVariant`. All cases pin `idRandomization: false` so the SVG is
+  reproducible across languages.
+
+### How to use the fixtures
+
+For each fixture entry, your implementation must produce the recorded result
+exactly:
+
+```text
+fnv1a:      Fnv1a::hash(input)        == entry.hash
+            Fnv1a::hex(input)         == entry.hex
+mulberry32: m = Mulberry32(seed);
+            for each {float, state} in sequence:
+              m.nextFloat() == float && m.state() == state
+prng:       Prng(seed).<method>(key, args) == result
+avatar:     Avatar(style, options).toString() == svg   (byte-for-byte)
+```
+
+Start with `fnv1a.json` and `mulberry32.json` — these are pure functions and
+the easiest to debug. Once those are green, the `prng.json` cases will tell
+you whether your sort order, weighted-pick threshold, and Fisher–Yates loop
+match. Only then move on to the avatar fixtures, which compose everything.
+
+### Regenerating the fixtures
+
+The fixtures are produced from the JavaScript reference implementation:
 
 ```bash
-# Generate reference SVGs with the CLI
+npm run fixtures:parity
+```
+
+This rewrites every file under `tests/fixtures/parity/` from `@dicebear/core`.
+You only need to run this if you have intentionally changed the JS rendering
+output and want to update the expected values for every implementation.
+
+### Manual SVG comparison
+
+For ad-hoc spot checks beyond the fixtures, you can also generate reference
+SVGs from the CLI and compare byte-for-byte:
+
+```bash
 dicebear initials ./reference --seed "Alice" --count 1
 dicebear lorelei ./reference --seed "Alice" --count 1
 dicebear avataaars ./reference --seed "Alice" --count 1

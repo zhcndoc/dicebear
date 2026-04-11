@@ -147,6 +147,41 @@ calling the CLI script directly as follows:
 node src/js/cli/bin/index.js <COMMAND>
 ```
 
+#### Cross-language parity tests
+
+`@dicebear/core` and `dicebear/core` (PHP) must produce **byte-identical**
+output for the same inputs. This is enforced by a shared fixture suite at
+`tests/fixtures/parity/` that both implementations consume:
+
+- The JavaScript side runs as part of `npm run test --workspace @dicebear/core`
+  via `src/js/core/tests/Parity.test.js`.
+- The PHP side runs via `vendor/bin/phpunit` in `src/php/core/` through
+  `tests/ParityTest.php`.
+
+Coverage:
+
+- `Fnv1a` (hash + hex), `Mulberry32` (chained sequences), every `Prng` method
+- Full `Avatar.toString()` output for the `initials`, `thumbs`, `glass`, and
+  `notionists` styles, exercising seed, size, transforms, gradients, and
+  component-variant overrides
+
+If you change anything that affects rendering or the PRNG in
+`@dicebear/core`, regenerate the fixtures from the JS reference and commit
+the diff:
+
+```
+npm run fixtures:parity
+```
+
+The PHP suite will then fail loudly until the PHP side is brought back in
+sync — that is the intended signal. If you only intend to touch one
+language, expect to update both before your PR can be merged.
+
+When porting DiceBear to another language, the same fixtures are the
+canonical conformance test — see
+[Implement DiceBear Core](/specification/implement-dicebear-core/) for
+details.
+
 ### Branching and committing
 
 Once you are happy with the changes, create a branch so you can commit the
