@@ -1,22 +1,25 @@
+<script lang="ts">
+import { Settings, Puzzle, Palette } from '@lucide/vue';
+
+const categoryIcons = {
+  general: Settings,
+  component: Puzzle,
+  color: Palette,
+} as const;
+</script>
+
 <script setup lang="ts">
 import { computed } from 'vue';
-import { Settings, Puzzle, Palette } from '@lucide/vue';
 import StyleOptionsCard, { type OptionValue } from './StyleOptionsCard.vue';
 
 const props = defineProps<{
   styleName: string;
   label: string;
-  category: 'general' | 'component' | 'color';
+  category: keyof typeof categoryIcons;
   options: Record<string, OptionValue>;
 }>();
 
-const icon = computed(() => {
-  switch (props.category) {
-    case 'general': return Settings;
-    case 'component': return Puzzle;
-    case 'color': return Palette;
-  }
-});
+const icon = computed(() => categoryIcons[props.category]);
 
 const optionCount = computed(() => Object.keys(props.options).length);
 </script>
@@ -33,7 +36,7 @@ const optionCount = computed(() => Object.keys(props.options).length);
         v-for="(value, name) of options"
         :key="name"
         :style-name="styleName"
-        :name="(name as string)"
+        :name="name"
         :value="value"
       />
     </div>

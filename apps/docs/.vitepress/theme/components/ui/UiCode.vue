@@ -13,25 +13,32 @@ const props = defineProps<{
 const codeHtml = ref(escapeHtml(props.code));
 const copied = ref(false);
 let timeout: ReturnType<typeof setTimeout> | null = null;
-let hljs: Hljs | null = null;
+let hljsPromise: Promise<Hljs> | null = null;
 
-async function loadHljs(): Promise<Hljs> {
-  if (hljs) return hljs;
-
-  const [{ default: core }, { default: javascript }, { default: xml }, { default: php }] =
-    await Promise.all([
+function loadHljs(): Promise<Hljs> {
+  return (hljsPromise ??= (async () => {
+    const [
+      { default: core },
+      { default: javascript },
+      { default: xml },
+      { default: php },
+    ] = await Promise.all([
       import('highlight.js/lib/core'),
       import('highlight.js/lib/languages/javascript'),
       import('highlight.js/lib/languages/xml'),
       import('highlight.js/lib/languages/php'),
     ]);
 
-  core.getLanguage('js') || core.registerLanguage('js', javascript);
-  core.getLanguage('html') || core.registerLanguage('html', xml);
-  core.getLanguage('php') || core.registerLanguage('php', php);
+    for (const [name, language] of [
+      ['js', javascript],
+      ['html', xml],
+      ['php', php],
+    ] as const) {
+      core.registerLanguage(name, language);
+    }
 
-  hljs = core;
-  return core;
+    return core;
+  })());
 }
 
 function updateCodeHtml(instance?: Hljs) {

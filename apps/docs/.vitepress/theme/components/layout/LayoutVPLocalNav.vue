@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useData } from 'vitepress';
 import { useLayout } from 'vitepress/theme';
-// @ts-ignore
+// @ts-expect-error vitepress does not ship types for its internal theme components
 import VPIconAlignLeft from 'vitepress/dist/client/theme-default/components/icons/VPIconAlignLeft.vue';
 
 defineProps<{

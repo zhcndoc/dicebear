@@ -30,26 +30,24 @@ const showcaseAvatars = computed(() => {
 
 const doubledAvatars = computed(() => [...showcaseAvatars.value, ...showcaseAvatars.value]);
 
+const ITEM_WIDTH = 140;
+const SCROLL_DURATION_MS = 400;
+
+const totalWidth = computed(() => showcaseAvatars.value.length * ITEM_WIDTH);
+
 const trackRef = ref<HTMLElement>();
 let scrollPosition = 0;
 let animationFrame: number | null = null;
 let isPaused = false;
-let scrollDirection = 1;
 
 // Smooth scroll animation state
 let isManualScrolling = false;
 let scrollStartPosition = 0;
 let scrollTargetPosition = 0;
 let scrollStartTime = 0;
-const scrollDuration = 400; // ms
 
 function easeOutCubic(t: number): number {
   return 1 - Math.pow(1 - t, 3);
-}
-
-function getTotalWidth() {
-  const itemWidth = 140;
-  return showcaseAvatars.value.length * itemWidth;
 }
 
 function updateTrackTransform() {
@@ -58,15 +56,15 @@ function updateTrackTransform() {
   }
 }
 
-function animate() {
+function animate(timestamp: number) {
   if (!isVisible.value) {
     animationFrame = null;
     return;
   }
 
   if (isManualScrolling) {
-    const elapsed = Date.now() - scrollStartTime;
-    const progress = Math.min(elapsed / scrollDuration, 1);
+    const elapsed = timestamp - scrollStartTime;
+    const progress = Math.min(elapsed / SCROLL_DURATION_MS, 1);
     const easedProgress = easeOutCubic(progress);
 
     scrollPosition = scrollStartPosition + (scrollTargetPosition - scrollStartPosition) * easedProgress;
@@ -74,22 +72,17 @@ function animate() {
     if (progress >= 1) {
       isManualScrolling = false;
       // Normalize position after manual scroll
-      const totalWidth = getTotalWidth();
-      if (scrollPosition >= totalWidth) {
-        scrollPosition = scrollPosition % totalWidth;
+      if (scrollPosition >= totalWidth.value) {
+        scrollPosition = scrollPosition % totalWidth.value;
       }
       if (scrollPosition < 0) {
-        scrollPosition = totalWidth + (scrollPosition % totalWidth);
+        scrollPosition = totalWidth.value + (scrollPosition % totalWidth.value);
       }
     }
   } else if (!isPaused) {
-    scrollPosition += 0.5 * scrollDirection;
-    const totalWidth = getTotalWidth();
-    if (scrollPosition >= totalWidth) {
+    scrollPosition += 0.5;
+    if (scrollPosition >= totalWidth.value) {
       scrollPosition = 0;
-    }
-    if (scrollPosition < 0) {
-      scrollPosition = totalWidth;
     }
   }
   updateTrackTransform();
@@ -113,7 +106,7 @@ function resumeAnimation() {
 function smoothScroll(delta: number) {
   scrollStartPosition = scrollPosition;
   scrollTargetPosition = scrollPosition + delta;
-  scrollStartTime = Date.now();
+  scrollStartTime = performance.now();
   isManualScrolling = true;
 }
 
@@ -195,7 +188,6 @@ onUnmounted(() => {
         <ArrowRight />
       </button>
     </div>
-
 
     <UiContainer class="app-style-showcase-cta">
       <UiButton href="/styles/">

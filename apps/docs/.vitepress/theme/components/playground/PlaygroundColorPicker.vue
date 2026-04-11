@@ -6,7 +6,7 @@ import Slider from 'primevue/slider';
 import Popover from 'primevue/popover';
 import { stripHash } from '@theme/utils/avatar/colors';
 
-const props = defineProps<{
+defineProps<{
   presetColors: string[];
   colors: string[];
 }>();

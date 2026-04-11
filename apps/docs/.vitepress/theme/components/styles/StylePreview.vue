@@ -21,6 +21,7 @@ const seeds = [
   <div class="style-preview">
     <UiAvatar
       v-for="seed in seeds"
+      :key="seed"
       :size="72"
       :style-name="styleName"
       :style-options="{ seed }"

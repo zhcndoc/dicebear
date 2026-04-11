@@ -9,7 +9,7 @@ const styles = theme.value.avatarStyles;
 </script>
 
 <template>
-  <table v-for="(style, styleName) in styles">
+  <table v-for="(style, styleName) in styles" :key="styleName">
     <colgroup>
       <col width="20%" />
       <col />
