@@ -1,46 +1,37 @@
 import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
 import stylistic from '@stylistic/eslint-plugin';
 import prettier from 'eslint-config-prettier';
+import {
+  defineConfigWithVueTs,
+  vueTsConfigs,
+} from '@vue/eslint-config-typescript';
+import pluginVue from 'eslint-plugin-vue';
+import globals from 'globals';
 
-export default tseslint.config(
+export default defineConfigWithVueTs(
   eslint.configs.recommended,
-  ...tseslint.configs.recommended,
+  ...pluginVue.configs['flat/essential'],
+  vueTsConfigs.recommended,
   {
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+      },
+    },
     plugins: {
       '@stylistic': stylistic,
     },
     rules: {
       curly: ['error', 'all'],
-      '@typescript-eslint/member-ordering': [
+      '@stylistic/multiline-comment-style': [
         'error',
-        {
-          default: {
-            memberTypes: [
-              'public-field',
-              'protected-field',
-              'private-field',
-              '#private-field',
-              'constructor',
-              'public-method',
-              'protected-method',
-              'private-method',
-              '#private-method',
-            ],
-          },
-        },
+        'separate-lines',
+        { checkJSDoc: false },
       ],
-      '@stylistic/brace-style': ['error', '1tbs'],
-      '@stylistic/padding-line-between-statements': [
-        'error',
-        { blankLine: 'always', prev: 'block-like', next: '*' },
-        { blankLine: 'always', prev: 'import', next: '*' },
-        { blankLine: 'any', prev: 'import', next: 'import' },
-        { blankLine: 'always', prev: '*', next: 'export' },
-        { blankLine: 'any', prev: 'export', next: 'export' },
-        { blankLine: 'always', prev: '*', next: 'return' },
-        { blankLine: 'always', prev: '*', next: 'throw' },
-      ],
+      'vue/multi-word-component-names': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-empty-object-type': 'off',
     },
   },
   prettier,
@@ -49,8 +40,11 @@ export default tseslint.config(
       'node_modules/',
       '**/lib/',
       '**/dist/',
+      '**/dist-ssr/',
+      '**/coverage/',
+      '**/.vitepress/cache/',
+      '**/.vitepress/dist/',
       '**/*.js',
-      '!eslint.config.js',
     ],
   },
 );

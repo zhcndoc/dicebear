@@ -1,5 +1,6 @@
 # Cache and log files
 .turbo
+.eslintcache
 .DS_Store
 yarn-error.log
 
