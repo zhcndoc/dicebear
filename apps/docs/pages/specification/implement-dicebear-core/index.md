@@ -57,10 +57,18 @@ function fnv1a_hash(input: string) -> uint32:
     return hash as unsigned 32-bit
 ```
 
-In JavaScript, `input.charCodeAt(i)` returns UTF-16 code units. In PHP,
-`mb_ord(mb_substr($input, $i, 1))` returns code points — for Basic
-Multilingual Plane characters (which covers all ASCII and most practical text),
-code units and code points are identical.
+In JavaScript, `input.charCodeAt(i)` returns UTF-16 code units directly.
+Languages without native UTF-16 strings must convert first — outside the
+Basic Multilingual Plane (e.g. emoji), code units and code points diverge,
+and using code points instead produces wrong hashes for those inputs. The
+PHP reference does the conversion explicitly:
+
+```php
+unpack('v*', mb_convert_encoding($input, 'UTF-16LE', 'UTF-8'))
+```
+
+Java and C# can iterate `string.charAt(i)` / `char` directly. For other
+languages, transcode to UTF-16 and read 16-bit units.
 
 **Reference (JS):**
 
@@ -116,6 +124,10 @@ Key details:
 - `Math.imul` performs 32-bit integer multiplication
 - `nextFloat()` returns a value in `[0, 1)` by dividing by `2^32`
 - The state is **stateful** — it advances with each call to `next()`
+- Languages with 64-bit integers but no native `uint32_t` (e.g. PHP, Lua)
+  must implement the 32-bit multiply manually: a naïve `uint32 * uint32`
+  exceeds `2^63 - 1` and silently overflows. The PHP reference splits one
+  operand into 16-bit halves; see [`Prng/Mulberry32.php::mul`](https://github.com/dicebear/dicebear/blob/10.x/src/php/core/src/Prng/Mulberry32.php).
 
 ### Key-based value generation
 
@@ -139,6 +151,12 @@ after.
 All selection methods **sort their inputs by string representation** using
 UTF-16 code unit comparison (JavaScript's default `.sort()` order) before
 operating on them. This ensures cross-language determinism.
+
+In practice, the only values ever sorted are component variant names and
+hex colour strings — both guaranteed to be ASCII. Implementations may use
+locale-independent byte comparison (`strcmp`-style) and stay parity-correct,
+even though the JavaScript reference compares full UTF-16 code units. The
+PHP reference does exactly this with `strcmp`.
 
 #### `pick(key, items) -> item | undefined`
 
@@ -280,6 +298,36 @@ For each color group (e.g. `skin`):
 
 The PRNG key for color selection is `{name}Color` (e.g. `skinColor`).
 
+#### WCAG 2.1 contrast ratio
+
+The contrast sort is the most likely source of subtle parity drift between
+ports — small differences in the linearization cutoff or the luminance
+coefficients change the ordering on certain palettes. Use these formulas
+exactly:
+
+```
+function linearize(channel: uint8) -> float:
+    s = channel / 255
+    if s <= 0.04045:
+        return s / 12.92
+    return ((s + 0.055) / 1.055) ^ 2.4
+
+function luminance(hex: string) -> float:
+    (r, g, b) = parseHex(hex)
+    return 0.2126 * linearize(r)
+         + 0.7152 * linearize(g)
+         + 0.0722 * linearize(b)
+
+function contrastRatio(a: hex, b: hex) -> float:
+    la = luminance(a)
+    lb = luminance(b)
+    return (max(la, lb) + 0.05) / (min(la, lb) + 0.05)
+```
+
+The cutoff is `0.04045`, the exponent is `2.4`, and the coefficients are
+`0.2126 / 0.7152 / 0.0722` for R/G/B respectively. Sorting is descending
+by `contrastRatio(candidate, refColor)`.
+
 ## SVG rendering pipeline
 
 The renderer walks the element tree and generates an SVG string. The
@@ -302,6 +350,13 @@ Walk the `canvas.elements` array recursively:
   the component is visible, render the variant's elements. Apply
   component-specific transforms (translate, rotate) as a wrapping `<g>`
   element.
+
+There is one special case: when an `element` has the name `defs`, the
+renderer **does not** emit a `<defs>` tag inline. Instead, each child of
+that element is rendered and pushed into the shared `<defs>` block that
+the renderer accumulates over the whole walk (alongside generated
+gradients and clip paths). This lets style definitions ship reusable
+fragments without breaking the single-`<defs>`-per-document invariant.
 
 ### 3. Transform order
 
@@ -342,6 +397,14 @@ Include a license comment from `meta` before the body content.
 When `idRandomization` is `true`, append a random suffix to all `id` attributes
 and update all references (`url(#...)`, `href="#..."`). This prevents ID
 collisions when multiple avatars are embedded in the same HTML document.
+
+The suffix **must be non-deterministic**: derive it from the host language's
+non-seeded RNG (`Math.random()` in JavaScript, `random_int()` in PHP), not
+from the DiceBear PRNG. Two avatars rendered with the same seed would
+otherwise still collide on their IDs, defeating the purpose of the feature.
+Because the randomized output is non-deterministic, it is excluded from
+parity testing — the avatar fixtures use the default of
+`idRandomization: false`.
 
 ## Gradient rendering
 
@@ -413,6 +476,15 @@ Start with `fnv1a.json` and `mulberry32.json` — these are pure functions and
 the easiest to debug. Once those are green, the `prng.json` cases will tell
 you whether your sort order, weighted-pick threshold, and Fisher–Yates loop
 match. Only then move on to the avatar fixtures, which compose everything.
+
+The `resolvedOptions` field on each avatar fixture contains only the options
+that were actually touched during resolution — unset options (`title`,
+`size` when not provided, etc.) do not appear. The JavaScript reference
+relies on `JSON.stringify()` dropping `undefined` values at the
+serialization boundary; the PHP reference filters `null` values explicitly
+in `Options::resolved()`. Both produce the same shape. A port that returns
+the full memo map verbatim will fail the comparison — strip unset entries
+before serializing.
 
 ### Regenerating the fixtures
 
