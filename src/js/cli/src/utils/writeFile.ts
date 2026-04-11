@@ -1,6 +1,10 @@
 import fs from 'fs-extra';
 import path from 'node:path';
 
+/**
+ * Writes a string or binary buffer to disk, refusing to overwrite an
+ * existing file. Creates intermediate directories as needed.
+ */
 export async function writeFile(
   filePath: string,
   content: string | ArrayBufferLike,

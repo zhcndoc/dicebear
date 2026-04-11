@@ -5,8 +5,12 @@ import chalk from 'chalk';
 import { getStyleCommandOptions } from './getStyleCommandOptions.js';
 import { handleStyleCommand } from './handleStyleCommand.js';
 
+/**
+ * Registers a `<name> [outputPath]` subcommand on the given yargs instance,
+ * wired up to render avatars for the given style.
+ */
 export function addStyleCommand(
-  cli: yargs.Argv<{}>,
+  cli: yargs.Argv<Record<string, unknown>>,
   name: string,
   style: Style,
 ) {

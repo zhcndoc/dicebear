@@ -32,6 +32,12 @@ export const toAvif: ToAvif = (avatar: Avatar, options: Options = {}) => {
   return toFormat(avatar, 'avif', options);
 };
 
+/**
+ * Node conversion entry point. Returns a {@link Result} with `toDataUri()`
+ * and `toArrayBuffer()` methods that lazily render the avatar via resvg +
+ * sharp, optionally embedding Exif metadata derived from the SVG's
+ * `<metadata>` block.
+ */
 function toFormat(
   avatar: Avatar,
   format: 'png' | 'jpeg' | 'webp' | 'avif',
@@ -48,6 +54,10 @@ function toFormat(
   };
 }
 
+/**
+ * Returns a `data:` URI for the rendered avatar. The `svg` format is
+ * fast-pathed; raster formats are base64-encoded.
+ */
 async function toDataUri(
   svg: string,
   format: 'svg' | 'png' | 'jpeg' | 'webp' | 'avif',
@@ -63,6 +73,10 @@ async function toDataUri(
   return `data:${getMimeType(format)};base64,${buffer.toString('base64')}`;
 }
 
+/**
+ * Returns the rasterized avatar as a raw `ArrayBuffer` by unwrapping the
+ * underlying Node `Buffer`.
+ */
 async function toArrayBuffer(
   rawSvg: string,
   format: 'png' | 'jpeg' | 'webp' | 'avif',
@@ -72,6 +86,10 @@ async function toArrayBuffer(
   return (await toBuffer(rawSvg, format, exif, options)).buffer;
 }
 
+/**
+ * Renders the SVG via resvg-js, optionally re-encodes through sharp for
+ * non-PNG formats, and writes Exif metadata using exiftool when present.
+ */
 async function toBuffer(
   rawSvg: string,
   format: 'png' | 'jpeg' | 'webp' | 'avif',
@@ -114,8 +132,13 @@ async function toBuffer(
   return buffer;
 }
 
-// https://www.iptc.org/std/photometadata/specification/IPTC-PhotoMetadata
-// https://developers.google.com/search/docs/appearance/structured-data/image-license-metadata
+/**
+ * Maps the SVG's embedded `<metadata>` block to an Exif tag set covering
+ * IPTC-PhotoMetadata and Google's image license metadata schemas.
+ *
+ * @see https://www.iptc.org/std/photometadata/specification/IPTC-PhotoMetadata
+ * @see https://developers.google.com/search/docs/appearance/structured-data/image-license-metadata
+ */
 function getExif(svg: string): Exif {
   const metadata = getMetadata(svg);
 

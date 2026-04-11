@@ -13,8 +13,13 @@ import { outputStyleLicenseBanner } from './outputStyleLicenseBanner.js';
 import { createRandomSeed } from './createRandomSeed.js';
 import { writeFile } from './writeFile.js';
 
+/**
+ * Handles a single style subcommand: renders the requested number of avatars
+ * in the chosen format, writes them to the output directory, and reports
+ * progress on a CLI progress bar.
+ */
 export async function handleStyleCommand(
-  argv: ArgumentsCamelCase<{}>,
+  argv: ArgumentsCamelCase<Record<string, unknown>>,
   name: string,
   style: Style,
 ) {

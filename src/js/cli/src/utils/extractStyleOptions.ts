@@ -1,6 +1,10 @@
 import { Style, OptionsDescriptor } from '@dicebear/core';
 
-// Parses ['variant01:2', 'variant03:1'] (array from yargs) into { variant01: 2, variant03: 1 }
+/**
+ * Parses `['variant01:2', 'variant03:1']` (yargs array form) into a
+ * `{ variant01: 2, variant03: 1 }` weight map. Entries without a colon
+ * default to weight `1`.
+ */
 function parseWeightedValue(value: string[]): Record<string, number> {
   const result: Record<string, number> = {};
 
@@ -15,7 +19,11 @@ function parseWeightedValue(value: string[]): Record<string, number> {
   return result;
 }
 
-// Parses "10,50" into [10, 50] for range values
+/**
+ * Parses a comma-separated string like `"10,50"` into a `[min, max]` tuple
+ * for range options. Passes the value through unchanged when it does not
+ * match the two-number form.
+ */
 function parseRangeValue(value: unknown): unknown {
   if (typeof value === 'string' && value.includes(',')) {
     const parts = value.split(',').map(Number);
@@ -28,8 +36,12 @@ function parseRangeValue(value: unknown): unknown {
   return value;
 }
 
-// Extracts only the style-relevant options from the yargs argv object,
-// filtering out CLI-specific keys (_, $0, outputPath, count, format, etc.).
+/**
+ * Extracts only the style-relevant options from the yargs argv object,
+ * filtering out CLI-specific keys (`_`, `$0`, `outputPath`, `count`,
+ * `format`, etc.) and converting weighted/range values into the shapes the
+ * core resolver expects.
+ */
 export function extractStyleOptions(
   argv: Record<string, unknown>,
   style: Style,

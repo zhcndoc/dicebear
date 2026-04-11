@@ -5,6 +5,10 @@ import * as fs from 'node:fs';
 
 const require = createRequire(import.meta.url);
 
+/**
+ * Loads every minified definition shipped by `@dicebear/definitions`, wraps
+ * each in a {@link Style}, and returns them keyed by style name.
+ */
 export function loadStyles(): Map<string, Style> {
   const definitionsDir = path.dirname(
     require.resolve('@dicebear/definitions/initials.json'),

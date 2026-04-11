@@ -1,6 +1,11 @@
 import { Style, OptionsDescriptor } from '@dicebear/core';
 import type { Options } from 'yargs';
 
+/**
+ * Builds the yargs options map for a single style command. Combines the
+ * shared CLI flags (`count`, `format`, `exif`, `json`) with one entry per
+ * field returned by the style's {@link OptionsDescriptor}.
+ */
 export function getStyleCommandOptions(style: Style): Record<string, Options> {
   const descriptor = new OptionsDescriptor(style).toJSON();
   const result: Record<string, Options> = {

@@ -2,6 +2,10 @@ import type { Style } from '@dicebear/core';
 import chalk from 'chalk';
 import chalkTemplate from 'chalk-template';
 
+/**
+ * Prints a colorized attribution banner with the style's source, creator,
+ * and license info to stdout. Skipped sections are omitted silently.
+ */
 export function outputStyleLicenseBanner(name: string, style: Style) {
   const meta = style.meta();
   const sourceName = meta.source().name();

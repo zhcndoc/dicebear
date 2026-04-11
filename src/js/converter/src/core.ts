@@ -1,6 +1,5 @@
 import type {
   Result,
-  Exif,
   Avatar,
   ToJpeg,
   ToPng,
@@ -27,6 +26,12 @@ export const toAvif: ToAvif = (avatar: Avatar, options: Options = {}) => {
   return toFormat(avatar, 'avif', options);
 };
 
+/**
+ * Browser conversion entry point. Returns a {@link Result} with `toDataUri()`
+ * and `toArrayBuffer()` methods that lazily render the avatar to the chosen
+ * raster format. Warns when `includeExif` is set, since Exif metadata is
+ * only supported by the Node build.
+ */
 function toFormat(
   avatar: Avatar,
   format: 'png' | 'jpeg' | 'webp' | 'avif',
@@ -47,6 +52,10 @@ function toFormat(
   };
 }
 
+/**
+ * Returns a `data:` URI for the rendered avatar. The `svg` format is
+ * fast-pathed; other formats go through a `<canvas>` rasterization step.
+ */
 async function toDataUri(
   svg: string,
   format: 'svg' | 'png' | 'jpeg' | 'webp' | 'avif',
@@ -61,6 +70,10 @@ async function toDataUri(
   return canvas.toDataURL(getMimeType(format));
 }
 
+/**
+ * Returns the rasterized avatar as a raw `ArrayBuffer` by routing the canvas
+ * through `canvas.toBlob`.
+ */
 async function toArrayBuffer(
   rawSvg: string,
   format: 'png' | 'jpeg' | 'webp' | 'avif',
@@ -70,13 +83,19 @@ async function toArrayBuffer(
 
   return await new Promise<ArrayBufferLike>((resolve, reject) => {
     canvas.toBlob((blob) => {
-      blob
-        ? resolve(blob.arrayBuffer())
-        : reject(new Error('Could not create blob'));
+      if (blob) {
+        resolve(blob.arrayBuffer());
+      } else {
+        reject(new Error('Could not create blob'));
+      }
     }, getMimeType(format));
   });
 }
 
+/**
+ * Renders the SVG into a fresh `<canvas>` of the requested size. JPEG output
+ * gets a white background fill so transparent regions don't render black.
+ */
 async function toCanvas(
   rawSvg: string,
   format: 'png' | 'jpeg' | 'webp' | 'avif',

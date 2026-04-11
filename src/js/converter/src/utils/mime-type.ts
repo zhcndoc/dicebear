@@ -1,3 +1,6 @@
+/**
+ * Returns the MIME type string for an avatar output format.
+ */
 export function getMimeType(
   format: 'svg' | 'png' | 'jpeg' | 'webp' | 'avif',
 ): string {

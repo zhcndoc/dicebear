@@ -17,6 +17,10 @@ const xmlRoundTripOptions = {
 const xmlRoundTripParser = new XMLParser(xmlRoundTripOptions);
 const xmlRoundTripBuilder = new XMLBuilder(xmlRoundTripOptions);
 
+/**
+ * Clamps a requested size into a sane integer range, falling back to
+ * `DEFAULT_SIZE` for non-finite or non-positive inputs.
+ */
 function sanitizeSize(size: number): number {
   if (!Number.isFinite(size) || size <= 0) {
     return DEFAULT_SIZE;
@@ -25,6 +29,10 @@ function sanitizeSize(size: number): number {
   return Math.floor(Math.min(size, MAX_SIZE));
 }
 
+/**
+ * Re-emits the SVG with explicit `width`/`height` attributes set to the
+ * sanitized size, so downstream rasterizers know how large to render.
+ */
 export function ensureSize(svg: string, size: number = DEFAULT_SIZE) {
   size = sanitizeSize(size);
 
@@ -42,6 +50,10 @@ export function ensureSize(svg: string, size: number = DEFAULT_SIZE) {
   return { svg, size };
 }
 
+/**
+ * Returns a non-empty string truncated to {@link MAX_METADATA_LENGTH}, or
+ * `undefined` for non-string or empty input.
+ */
 function sanitizeMetadataValue(value: unknown): string | undefined {
   if (typeof value !== 'string' || value.length === 0) {
     return undefined;
@@ -50,6 +62,10 @@ function sanitizeMetadataValue(value: unknown): string | undefined {
   return value.slice(0, MAX_METADATA_LENGTH);
 }
 
+/**
+ * Extracts the embedded RDF/Dublin Core metadata block from an avatar SVG
+ * into a flat {@link Metadata} object. Missing fields become `undefined`.
+ */
 export function getMetadata(svg: string): Metadata {
   const parser = new XMLParser();
   const xml = parser.parse(svg);
