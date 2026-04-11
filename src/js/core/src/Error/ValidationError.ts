@@ -3,6 +3,10 @@ export interface ValidationErrorDetail {
   readonly instancePath?: string;
 }
 
+/**
+ * Base class for schema validation errors. Carries the prefix in `message`
+ * and the per-field failures in {@link details}.
+ */
 export class ValidationError extends Error {
   readonly details: readonly ValidationErrorDetail[];
 

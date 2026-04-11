@@ -6,13 +6,25 @@ namespace DiceBear\Validator;
 
 use DiceBear\Error\OptionsValidationError;
 
+/**
+ * Validates avatar options against the shared `options.json` schema.
+ */
 class OptionsValidator extends AbstractValidator
 {
+    /**
+     * @inheritDoc
+     */
     protected static function schemaFile(): string
     {
         return 'options.json';
     }
 
+    /**
+     * @inheritDoc
+     *
+     * Empty arrays are coerced to `stdClass` so they validate as JSON objects
+     * rather than empty arrays.
+     */
     protected static function toObject(mixed $data): mixed
     {
         if (!is_array($data)) {
@@ -22,7 +34,9 @@ class OptionsValidator extends AbstractValidator
         return empty($data) ? new \stdClass() : json_decode(json_encode($data));
     }
 
-    /** @param list<array{message?: string, instancePath?: string}> $details */
+    /**
+     * @inheritDoc
+     */
     protected static function throwError(array $details): never
     {
         throw new OptionsValidationError($details);

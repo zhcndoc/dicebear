@@ -13,6 +13,12 @@ import { Initials } from './Utils/Initials.js';
 import { License } from './Utils/License.js';
 import { Xml } from './Utils/Xml.js';
 
+/**
+ * Walks a style's element tree and turns it into the final SVG markup.
+ *
+ * The renderer is single-use: it accumulates `<defs>` entries and per-render
+ * caches across method calls, so a fresh instance is required per avatar.
+ */
 export class Renderer {
   #style: Style;
   #options: Options;
@@ -25,6 +31,9 @@ export class Renderer {
     this.#options = options;
   }
 
+  /**
+   * Builds the complete SVG document for the avatar.
+   */
   render(): string {
     const canvas = this.#style.canvas();
     const background = this.#renderBackground(canvas);
@@ -81,6 +90,10 @@ export class Renderer {
     return svg;
   }
 
+  /**
+   * Wraps `body` in a flip transform when `flip` is set to anything other
+   * than `'none'`.
+   */
   #applyFlip(body: string, canvas: Canvas): string {
     const flip = this.#options.flip();
 
@@ -107,6 +120,10 @@ export class Renderer {
     return `<g transform="${transform}">${body}</g>`;
   }
 
+  /**
+   * Wraps `body` in a uniform scale transform around the canvas center when
+   * the option differs from `1`.
+   */
   #applyScale(body: string, canvas: Canvas): string {
     const scale = this.#options.scale();
 
@@ -120,6 +137,10 @@ export class Renderer {
     return `<g transform="translate(${cx}, ${cy}) scale(${scale}) translate(${-cx}, ${-cy})">${body}</g>`;
   }
 
+  /**
+   * Clips `body` to a rounded rectangle and registers the corresponding
+   * `clipPath` in `<defs>` when `borderRadius` is non-zero.
+   */
   #applyBorderRadius(body: string, canvas: Canvas): string {
     const radius = this.#options.borderRadius();
 
@@ -140,6 +161,10 @@ export class Renderer {
     return `<g clip-path="url(#${id})">${body}</g>`;
   }
 
+  /**
+   * Wraps `body` in a rotation around the canvas center when `rotate` is
+   * non-zero.
+   */
   #applyRotate(body: string, canvas: Canvas): string {
     const rotate = this.#options.rotate();
 
@@ -153,6 +178,11 @@ export class Renderer {
     return `<g transform="rotate(${rotate}, ${cx}, ${cy})">${body}</g>`;
   }
 
+  /**
+   * Wraps `body` in a translate transform when either `translateX` or
+   * `translateY` is non-zero. Offsets are interpreted as percentages of the
+   * canvas dimensions.
+   */
   #applyTranslate(body: string, canvas: Canvas): string {
     const tx = this.#options.translateX();
     const ty = this.#options.translateY();
@@ -167,6 +197,10 @@ export class Renderer {
     return `<g transform="translate(${x}, ${y})">${body}</g>`;
   }
 
+  /**
+   * Returns a `<rect>` filling the canvas with the resolved background color,
+   * or an empty string when no background colors are configured.
+   */
   #renderBackground(canvas: Canvas): string {
     const colors = this.#options.color('background');
 
@@ -177,10 +211,13 @@ export class Renderer {
     return `<rect width="${canvas.width()}" height="${canvas.height()}" fill="${Xml.escape(this.#resolveColorReference('background'))}"/>`;
   }
 
+  /**
+   * Suffixes every `id` declaration and reference with a random hex string
+   * so that multiple instances of the same avatar do not collide in a shared
+   * document. Uses `Math.random()` intentionally — a PRNG-derived suffix
+   * would produce the same ID for the same seed.
+   */
   #randomizeIds(svg: string): string {
-    // Uses Math.random() intentionally — a PRNG-based suffix would
-    // produce the same ID for the same seed, preventing two identical
-    // avatars from coexisting in the same document.
     const suffix = Math.floor(Math.random() * 0xffffff)
       .toString(16)
       .padStart(6, '0');
@@ -208,10 +245,16 @@ export class Renderer {
     );
   }
 
+  /**
+   * Renders a list of elements and concatenates their markup.
+   */
   #renderElements(elements: readonly Element[]): string {
     return elements.map((el) => this.#renderElement(el)).join('');
   }
 
+  /**
+   * Dispatches a single element to the renderer for its type.
+   */
   #renderElement(element: Element): string {
     switch (element.type()) {
       case 'element':
@@ -223,9 +266,14 @@ export class Renderer {
     }
   }
 
-  // Element names and attribute names are not escaped here — they are
-  // validated by StyleValidator against a strict allowlist schema
-  // (no <script>, no event handlers). Values are escaped via Xml.escape().
+  /**
+   * Renders an SVG element. The special `defs` name diverts children into the
+   * shared `<defs>` block.
+   *
+   * Element names and attribute names are not escaped here — they are
+   * validated by StyleValidator against a strict allowlist schema (no
+   * `<script>`, no event handlers). Values are escaped via `Xml.escape()`.
+   */
   #renderSvgElement(element: Element): string {
     const name = element.name();
 
@@ -258,12 +306,19 @@ export class Renderer {
     return `<${name}${attrs}>${children}</${name}>`;
   }
 
+  /**
+   * Renders a text element by escaping its resolved value.
+   */
   #renderTextElement(element: Element): string {
     const value = element.value();
 
     return value !== undefined ? Xml.escape(this.#resolveValue(value)) : '';
   }
 
+  /**
+   * Resolves a component reference to a chosen variant and renders its
+   * elements wrapped in any rotate/translate transforms.
+   */
   #renderComponentElement(element: Element): string {
     const value = element.value();
 
@@ -297,6 +352,10 @@ export class Renderer {
     return `<g transform="${transforms.join(' ')}">${body}</g>`;
   }
 
+  /**
+   * Returns the per-component SVG `transform` fragments derived from the
+   * component's translate and rotate options.
+   */
   #buildTransforms(componentName: string): string[] {
     const transforms: string[] = [];
     const translateX = this.#options.translateX(componentName);
@@ -322,6 +381,11 @@ export class Renderer {
     return transforms;
   }
 
+  /**
+   * Serializes an attribute map to a leading space-prefixed string suitable
+   * for inlining into a tag. Returns an empty string when there are no
+   * attributes to render.
+   */
   #renderAttributes(attributes: StyleDefinitionAttributes | undefined): string {
     if (!attributes) {
       return '';
@@ -344,6 +408,10 @@ export class Renderer {
     return ` ${parts.join(' ')}`;
   }
 
+  /**
+   * Resolves a single attribute value: literal strings pass through, color
+   * and variable references are dereferenced through the option resolver.
+   */
   #resolveAttributeValue(
     value:
       | string
@@ -361,6 +429,11 @@ export class Renderer {
     return this.#resolveVariable(value.value);
   }
 
+  /**
+   * Resolves a named color into either a hex string (solid fill / single
+   * color) or a `url(#…)` gradient reference, registering the gradient in
+   * `<defs>` as a side effect.
+   */
   #resolveColorReference(name: string): string {
     const colors = this.#options.color(name);
     const fill = this.#options.colorFill(name);
@@ -372,6 +445,10 @@ export class Renderer {
     return this.#buildGradientDef(name, colors);
   }
 
+  /**
+   * Builds the `<linearGradient>` or `<radialGradient>` for the given color
+   * definition, registers it in `<defs>`, and returns its `url(#…)` reference.
+   */
   #buildGradientDef(name: string, colors: readonly string[]): string {
     const fill = this.#options.colorFill(name);
     const rotation = this.#options.colorAngle(name);
@@ -395,6 +472,10 @@ export class Renderer {
     return `url(#${id})`;
   }
 
+  /**
+   * Resolves an element value to its final string form. Literal strings pass
+   * through; variable references are dereferenced.
+   */
   #resolveValue(value: StyleDefinitionElementValue): string {
     if (typeof value === 'string') {
       return value;
@@ -407,6 +488,9 @@ export class Renderer {
     return '';
   }
 
+  /**
+   * Resolves a built-in variable reference to its current value.
+   */
   #resolveVariable(name: StyleDefinitionVariableReference['value']): string {
     switch (name) {
       case 'initial':
@@ -420,10 +504,17 @@ export class Renderer {
     }
   }
 
+  /**
+   * Returns the seed-derived initials, cached after the first call.
+   */
   #initials(): string {
     return (this.#cachedInitials ??= Initials.fromSeed(this.#options.seed()));
   }
 
+  /**
+   * Returns the FNV-1a hex hash of the seed, cached after the first call. The
+   * value is used to derive stable but unique IDs for `<defs>` entries.
+   */
   #hashSeed(): string {
     return (this.#cachedSeedHash ??= Fnv1a.hex(this.#options.seed()));
   }

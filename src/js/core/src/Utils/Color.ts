@@ -1,5 +1,10 @@
+/**
+ * Color helpers used by the renderer and option resolver.
+ */
 export class Color {
-  // Normalizes any hex format to 6- or 8-digit lowercase with '#' prefix.
+  /**
+   * Normalizes any hex format to 6- or 8-digit lowercase with `#` prefix.
+   */
   static toHex(hex: string): string {
     const h = hex.replace(/^#/, '').toLowerCase();
 
@@ -14,13 +19,19 @@ export class Color {
     return '#' + h;
   }
 
-  // Like toHex, but strips the alpha channel to always return 6-digit hex.
+  /**
+   * Like {@link toHex}, but strips the alpha channel and always returns
+   * 6-digit hex.
+   */
   static toRgbHex(hex: string): string {
     const h = this.toHex(hex);
 
     return h.length > 7 ? h.slice(0, 7) : h;
   }
 
+  /**
+   * Parses a hex color into an `[r, g, b]` triple of 8-bit channel values.
+   */
   static parseHex(hex: string): [number, number, number] {
     const h = this.toHex(hex).slice(1);
 
@@ -31,8 +42,11 @@ export class Color {
     ];
   }
 
-  // WCAG 2.1 relative luminance with sRGB linearization.
-  // https://www.w3.org/WAI/GL/wiki/Relative_luminance
+  /**
+   * WCAG 2.1 relative luminance with sRGB linearization.
+   *
+   * @see https://www.w3.org/WAI/GL/wiki/Relative_luminance
+   */
   static luminance(hex: string): number {
     const rgb = this.parseHex(hex);
     const linearR = this.#linearize(rgb[0]);
@@ -42,8 +56,12 @@ export class Color {
     return 0.2126 * linearR + 0.7152 * linearG + 0.0722 * linearB;
   }
 
-  // Returns a new array sorted by descending contrast against the reference color.
-  // https://www.w3.org/WAI/GL/wiki/Contrast_ratio
+  /**
+   * Returns a new array sorted by descending contrast against the reference
+   * color.
+   *
+   * @see https://www.w3.org/WAI/GL/wiki/Contrast_ratio
+   */
   static sortByContrast(
     candidates: readonly string[],
     refColor: string,
@@ -62,8 +80,10 @@ export class Color {
     return withRatio.map((e) => e.color);
   }
 
-  // Returns a new array with excluded colors removed.
-  // Returns the original candidates if filtering would empty the list.
+  /**
+   * Returns a new array with excluded colors removed. Falls back to the
+   * original candidates when filtering would empty the list.
+   */
   static filterNotEqualTo(
     candidates: readonly string[],
     excluded: readonly string[],
@@ -76,6 +96,9 @@ export class Color {
     return filtered.length > 0 ? filtered : Array.from(candidates);
   }
 
+  /**
+   * Converts an 8-bit sRGB channel value into linear-light space.
+   */
   static #linearize(channel: number): number {
     const s = channel / 255;
 

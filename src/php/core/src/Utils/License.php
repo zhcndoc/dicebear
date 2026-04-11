@@ -6,8 +6,17 @@ namespace DiceBear\Utils;
 
 use DiceBear\Style\Meta;
 
+/**
+ * Builds attribution strings and embedded RDF/Dublin Core metadata from a
+ * style's {@see Meta} block.
+ */
 class License
 {
+    /**
+     * Returns a single-line attribution string suitable for `<title>` or
+     * `<desc>` content. Returns an empty string when no attribution data is
+     * available.
+     */
     public static function text(Meta $meta): string
     {
         $sourceName = $meta->source()->name();
@@ -48,6 +57,11 @@ class License
         return $result;
     }
 
+    /**
+     * Builds an embedded `<metadata>` block with Dublin Core terms describing
+     * the style's source, creator, license, and rights statement. Returns an
+     * empty string when no metadata fields are populated.
+     */
     public static function xml(Meta $meta): string
     {
         $title = $meta->source()->name();

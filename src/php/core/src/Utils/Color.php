@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace DiceBear\Utils;
 
+/**
+ * Color helpers used by the renderer and option resolver.
+ */
 class Color
 {
-    // Normalizes any hex format to 6- or 8-digit lowercase with '#' prefix.
+    /**
+     * Normalizes any hex format to 6- or 8-digit lowercase with `#` prefix.
+     */
     public static function toHex(string $hex): string
     {
         $normalized = strtolower(ltrim($hex, '#'));
@@ -22,7 +27,10 @@ class Color
         return '#' . $normalized;
     }
 
-    // Like toHex, but strips the alpha channel to always return 6-digit hex.
+    /**
+     * Like {@see toHex()}, but strips the alpha channel and always returns
+     * 6-digit hex.
+     */
     public static function toRgbHex(string $hex): string
     {
         $full = self::toHex($hex);
@@ -30,7 +38,11 @@ class Color
         return strlen($full) > 7 ? substr($full, 0, 7) : $full;
     }
 
-    /** @return array{0: int, 1: int, 2: int} */
+    /**
+     * Parses a hex color into an `[r, g, b]` triple of 8-bit channel values.
+     *
+     * @return array{0: int, 1: int, 2: int}
+     */
     public static function parseHex(string $hex): array
     {
         $digits = substr(self::toHex($hex), 1);
@@ -42,8 +54,11 @@ class Color
         ];
     }
 
-    // WCAG 2.1 relative luminance with sRGB linearization.
-    // https://www.w3.org/WAI/GL/wiki/Relative_luminance
+    /**
+     * WCAG 2.1 relative luminance with sRGB linearization.
+     *
+     * @see https://www.w3.org/WAI/GL/wiki/Relative_luminance
+     */
     public static function luminance(string $hex): float
     {
         $rgb = self::parseHex($hex);
@@ -54,10 +69,16 @@ class Color
         return 0.2126 * $linearR + 0.7152 * $linearG + 0.0722 * $linearB;
     }
 
-    // Returns a new array sorted by descending contrast against the reference color.
-    // https://www.w3.org/WAI/GL/wiki/Contrast_ratio
-    /** @param list<string> $candidates
-     *  @return list<string> */
+    /**
+     * Returns a new array sorted by descending contrast against the reference
+     * color.
+     *
+     * @see https://www.w3.org/WAI/GL/wiki/Contrast_ratio
+     *
+     * @param list<string> $candidates
+     *
+     * @return list<string>
+     */
     public static function sortByContrast(array $candidates, string $refColor): array
     {
         $refLum = self::luminance($refColor);
@@ -73,11 +94,15 @@ class Color
         return array_map(fn($entry) => $entry['color'], $withRatio);
     }
 
-    // Returns a new array with excluded colors removed.
-    // Returns the original candidates if filtering would empty the list.
-    /** @param list<string> $candidates
-     *  @param list<string> $excluded
-     *  @return list<string> */
+    /**
+     * Returns a new array with excluded colors removed. Falls back to the
+     * original candidates when filtering would empty the list.
+     *
+     * @param list<string> $candidates
+     * @param list<string> $excluded
+     *
+     * @return list<string>
+     */
     public static function filterNotEqualTo(array $candidates, array $excluded): array
     {
         $normalized = [];
@@ -93,6 +118,9 @@ class Color
         return count($filtered) > 0 ? $filtered : $candidates;
     }
 
+    /**
+     * Converts an 8-bit sRGB channel value into linear-light space.
+     */
     private static function linearize(int $channel): float
     {
         $srgb = $channel / 255;

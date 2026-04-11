@@ -1,7 +1,16 @@
 import type { Meta } from '../Style/Meta.js';
 import { Xml } from './Xml.js';
 
+/**
+ * Builds attribution strings and embedded RDF/Dublin Core metadata from a
+ * style's {@link Meta} block.
+ */
 export class License {
+  /**
+   * Returns a single-line attribution string suitable for `<title>` or
+   * `<desc>` content. Returns an empty string when no attribution data is
+   * available.
+   */
   static text(meta: Meta): string {
     const sourceName = meta.source().name();
     const sourceUrl = meta.source().url();
@@ -41,6 +50,11 @@ export class License {
     return result;
   }
 
+  /**
+   * Builds an embedded `<metadata>` block with Dublin Core terms describing
+   * the style's source, creator, license, and rights statement. Returns an
+   * empty string when no metadata fields are populated.
+   */
   static xml(meta: Meta): string {
     const title = meta.source().name();
     const creatorName = meta.creator().name();

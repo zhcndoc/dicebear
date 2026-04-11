@@ -10,6 +10,11 @@ import type {
   StyleOptions,
 } from './StyleOptions.js';
 
+/**
+ * Validates raw avatar options and resolves them deterministically against
+ * the style definition. Each accessor returns the resolved value for the
+ * current seed and memoizes it so that repeated calls cannot drift.
+ */
 export class Options<D = unknown> {
   #data: StyleOptions<D>;
   #style: Style<D>;
@@ -25,14 +30,25 @@ export class Options<D = unknown> {
     this.#prng = new Prng(this.seed());
   }
 
+  /**
+   * Returns the seed string, defaulting to an empty string when unset.
+   */
   seed(): string {
     return this.#memo('seed', () => this.#data.seed ?? '');
   }
 
+  /**
+   * Returns the requested output size in pixels, or `undefined` to keep the
+   * intrinsic viewBox dimensions.
+   */
   size(): number | undefined {
     return this.#memo('size', () => this.#data.size);
   }
 
+  /**
+   * Returns whether `<defs>` IDs should be suffixed with a random token to
+   * keep multiple inlined avatars from colliding.
+   */
   idRandomization(): boolean {
     return this.#memo(
       'idRandomization',
@@ -40,10 +56,17 @@ export class Options<D = unknown> {
     );
   }
 
+  /**
+   * Returns the accessible title, or `undefined` when unset.
+   */
   title(): string | undefined {
     return this.#memo('title', () => this.#data.title);
   }
 
+  /**
+   * Returns the resolved flip mode: `'none'`, `'horizontal'`, `'vertical'`,
+   * or `'both'`. Defaults to `'none'`.
+   */
   flip(): StyleOptionsFlipValue {
     return this.#memo(
       'flip',
@@ -51,6 +74,9 @@ export class Options<D = unknown> {
     );
   }
 
+  /**
+   * Returns the resolved font family, defaulting to `system-ui`.
+   */
   fontFamily(): string {
     return this.#memo(
       'fontFamily',
@@ -60,6 +86,9 @@ export class Options<D = unknown> {
     );
   }
 
+  /**
+   * Returns the resolved font weight, defaulting to `400`.
+   */
   fontWeight(): number {
     return this.#memo(
       'fontWeight',
@@ -69,6 +98,9 @@ export class Options<D = unknown> {
     );
   }
 
+  /**
+   * Returns the resolved uniform scale factor, defaulting to `1`.
+   */
   scale(): number {
     return this.#memo(
       'scale',
@@ -76,6 +108,9 @@ export class Options<D = unknown> {
     );
   }
 
+  /**
+   * Returns the resolved border-radius percentage (0–50), defaulting to `0`.
+   */
   borderRadius(): number {
     return this.#memo(
       'borderRadius',
@@ -87,12 +122,16 @@ export class Options<D = unknown> {
     );
   }
 
-  // Selects a variant for the given component. Depending on what was passed
-  // as `${name}Variant` in the input data:
-  // - undefined: PRNG picks from all style variants using their weights
-  // - string or string[]: PRNG picks from the given subset (weight 1 each)
-  // - Record<string, number>: PRNG picks using the provided weights
-  // Only variants that exist in the style definition are considered.
+  /**
+   * Selects a variant for the given component. Depending on what was passed
+   * as `${name}Variant` in the input data:
+   *
+   * - `undefined`: PRNG picks from all style variants using their weights.
+   * - `string` or `string[]`: PRNG picks from the given subset (weight 1 each).
+   * - `Record<string, number>`: PRNG picks using the provided weights.
+   *
+   * Only variants that exist in the style definition are considered.
+   */
   variant(name: string): string | undefined {
     return this.#memo(`${name}Variant`, () => {
       if (!this.#isVisible(name)) {
@@ -131,10 +170,18 @@ export class Options<D = unknown> {
     });
   }
 
+  /**
+   * Returns the resolved color stop list for the named color, suitable for
+   * solid fills (length 1) or gradients (length ≥ 2).
+   */
   color(name: string): readonly string[] {
     return this.#memo(`${name}Color`, () => this.#resolveColor(name));
   }
 
+  /**
+   * Returns the resolved fill type for the named color, defaulting to
+   * `'solid'`.
+   */
   colorFill(name: string): StyleOptionsColorFillValue {
     const key = `${name}ColorFill`;
 
@@ -148,6 +195,10 @@ export class Options<D = unknown> {
     });
   }
 
+  /**
+   * Returns the resolved gradient rotation angle (in degrees) for the named
+   * color, defaulting to `0`.
+   */
   colorAngle(name: string): number {
     const key = `${name}ColorAngle`;
 
@@ -158,26 +209,48 @@ export class Options<D = unknown> {
     });
   }
 
+  /**
+   * Returns the resolved rotation angle for the avatar root or the named
+   * component, defaulting to `0`.
+   */
   rotate(name?: string): number {
     return this.#numericComponentOption('rotate', name, (c) => c.rotate());
   }
 
+  /**
+   * Returns the resolved horizontal translation for the avatar root or the
+   * named component, defaulting to `0`.
+   */
   translateX(name?: string): number {
     return this.#numericComponentOption('translateX', name, (c) =>
       c.translate().x(),
     );
   }
 
+  /**
+   * Returns the resolved vertical translation for the avatar root or the
+   * named component, defaulting to `0`.
+   */
   translateY(name?: string): number {
     return this.#numericComponentOption('translateY', name, (c) =>
       c.translate().y(),
     );
   }
 
+  /**
+   * Returns a deep clone of every option that has been touched during this
+   * resolution. Only memoized values are included; unset options remain
+   * `undefined` and disappear on `JSON.stringify()`.
+   */
   resolved(): StyleOptions<D> {
     return structuredClone(this.#result) as StyleOptions<D>;
   }
 
+  /**
+   * Shared resolution path for the numeric component options
+   * (`rotate`/`translateX`/`translateY`). Falls back to the component-level
+   * defaults from the style definition when the option is unset.
+   */
   #numericComponentOption(
     option: string,
     name: string | undefined,
@@ -202,6 +275,10 @@ export class Options<D = unknown> {
     });
   }
 
+  /**
+   * Returns the visibility probability (0–100) for the named component,
+   * falling back to the component definition default of `100`.
+   */
   #probability(name: string): number {
     const raw = this.#get(`${name}Probability`) as number | undefined;
 
@@ -212,10 +289,16 @@ export class Options<D = unknown> {
     return this.#style.components().get(name)?.probability() ?? 100;
   }
 
+  /**
+   * Returns whether the named component should be rendered for this seed.
+   */
   #isVisible(name: string): boolean {
     return this.#prng.bool(`${name}Probability`, this.#probability(name));
   }
 
+  /**
+   * Returns the resolved number of gradient stops (≥ 2) for the named color.
+   */
   #colorFillStops(name: string): number {
     const raw = this.#get(`${name}ColorFillStops`) as
       | number
@@ -226,6 +309,11 @@ export class Options<D = unknown> {
     return this.#prng.integer(`${name}ColorFillStops`, values) ?? 2;
   }
 
+  /**
+   * Resolves a named color to its final stop list, applying contrast sorting
+   * and `notEqualTo` filtering from the style definition. Detects circular
+   * references between colors and throws {@link CircularColorReferenceError}.
+   */
   #resolveColor(name: string): readonly string[] {
     const raw = this.#get(`${name}Color`) as
       | string
@@ -289,10 +377,17 @@ export class Options<D = unknown> {
     return ordered.slice(0, stops);
   }
 
+  /**
+   * Returns a raw option value from the input data without resolution.
+   */
   #get(key: string): unknown {
     return (this.#data as Record<string, unknown>)[key];
   }
 
+  /**
+   * Resolves and caches an option under `key`, returning the cached value on
+   * subsequent calls.
+   */
   #memo<T>(key: string, compute: () => T): T {
     if (key in this.#result) {
       return this.#result[key] as T;
@@ -305,6 +400,9 @@ export class Options<D = unknown> {
     return value;
   }
 
+  /**
+   * Normalizes a scalar/array/undefined value into a readonly array.
+   */
   #toArray<T>(value: T | readonly T[] | undefined): readonly T[] {
     if (value === undefined) {
       return [];

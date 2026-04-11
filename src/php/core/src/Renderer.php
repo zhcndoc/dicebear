@@ -11,6 +11,12 @@ use DiceBear\Utils\Initials;
 use DiceBear\Utils\License;
 use DiceBear\Utils\Xml;
 
+/**
+ * Walks a style's element tree and turns it into the final SVG markup.
+ *
+ * The renderer is single-use: it accumulates `<defs>` entries and per-render
+ * caches across method calls, so a fresh instance is required per avatar.
+ */
 class Renderer
 {
     private Style $style;
@@ -26,6 +32,9 @@ class Renderer
         $this->options = $options;
     }
 
+    /**
+     * Builds the complete SVG document for the avatar.
+     */
     public function render(): string
     {
         $canvas = $this->style->canvas();
@@ -83,6 +92,10 @@ class Renderer
         return $svg;
     }
 
+    /**
+     * Wraps `$body` in a flip transform when `flip` is set to anything other
+     * than `'none'`.
+     */
     private function applyFlip(string $body, Canvas $canvas): string
     {
         $flip = $this->options->flip();
@@ -104,6 +117,10 @@ class Renderer
         return "<g transform=\"{$transform}\">{$body}</g>";
     }
 
+    /**
+     * Wraps `$body` in a uniform scale transform around the canvas center
+     * when the option differs from `1`.
+     */
     private function applyScale(string $body, Canvas $canvas): string
     {
         $scale = $this->options->scale();
@@ -118,6 +135,10 @@ class Renderer
         return "<g transform=\"translate({$cx}, {$cy}) scale({$scale}) translate(" . -$cx . ', ' . -$cy . ")\">{$body}</g>";
     }
 
+    /**
+     * Clips `$body` to a rounded rectangle and registers the corresponding
+     * `clipPath` in `<defs>` when `borderRadius` is non-zero.
+     */
     private function applyBorderRadius(string $body, Canvas $canvas): string
     {
         $radius = $this->options->borderRadius();
@@ -136,6 +157,10 @@ class Renderer
         return "<g clip-path=\"url(#{$id})\">{$body}</g>";
     }
 
+    /**
+     * Wraps `$body` in a rotation around the canvas center when `rotate` is
+     * non-zero.
+     */
     private function applyRotate(string $body, Canvas $canvas): string
     {
         $rotate = $this->options->rotate();
@@ -150,6 +175,11 @@ class Renderer
         return "<g transform=\"rotate({$rotate}, {$cx}, {$cy})\">{$body}</g>";
     }
 
+    /**
+     * Wraps `$body` in a translate transform when either `translateX` or
+     * `translateY` is non-zero. Offsets are interpreted as percentages of
+     * the canvas dimensions.
+     */
     private function applyTranslate(string $body, Canvas $canvas): string
     {
         $translateX = $this->options->translateX();
@@ -165,6 +195,10 @@ class Renderer
         return "<g transform=\"translate({$x}, {$y})\">{$body}</g>";
     }
 
+    /**
+     * Returns a `<rect>` filling the canvas with the resolved background
+     * color, or an empty string when no background colors are configured.
+     */
     private function renderBackground(Canvas $canvas): string
     {
         $colors = $this->options->color('background');
@@ -178,11 +212,14 @@ class Renderer
         return "<rect width=\"{$canvas->width()}\" height=\"{$canvas->height()}\" fill=\"{$fill}\"/>";
     }
 
+    /**
+     * Suffixes every `id` declaration and reference with a random hex string
+     * so that multiple instances of the same avatar do not collide in a
+     * shared document. Uses `random_int()` intentionally — a PRNG-derived
+     * suffix would produce the same ID for the same seed.
+     */
     private function randomizeIds(string $svg): string
     {
-        // Uses random_int() intentionally — a PRNG-based suffix would
-        // produce the same ID for the same seed, preventing two identical
-        // avatars from coexisting in the same document.
         $suffix = str_pad(dechex(random_int(0, 0xffffff)), 6, '0', STR_PAD_LEFT);
         $ids = [];
 
@@ -202,12 +239,19 @@ class Renderer
         }, $svg);
     }
 
-    /** @param list<Element> $elements */
+    /**
+     * Renders a list of elements and concatenates their markup.
+     *
+     * @param list<Element> $elements
+     */
     private function renderElements(array $elements): string
     {
         return implode('', array_map(fn($el) => $this->renderElement($el), $elements));
     }
 
+    /**
+     * Dispatches a single element to the renderer for its type.
+     */
     private function renderElement(Element $element): string
     {
         // @phpstan-ignore match.unhandled
@@ -218,9 +262,14 @@ class Renderer
         };
     }
 
-    // Element names and attribute names are not escaped here — they are
-    // validated by StyleValidator against a strict allowlist schema
-    // (no <script>, no event handlers). Values are escaped via Xml::escape().
+    /**
+     * Renders an SVG element. The special `defs` name diverts children into
+     * the shared `<defs>` block.
+     *
+     * Element names and attribute names are not escaped here — they are
+     * validated by StyleValidator against a strict allowlist schema (no
+     * `<script>`, no event handlers). Values are escaped via `Xml::escape()`.
+     */
     private function renderSvgElement(Element $element): string
     {
         $name = $element->name();
@@ -253,6 +302,9 @@ class Renderer
         return "<{$name}{$attrs}>{$children}</{$name}>";
     }
 
+    /**
+     * Renders a text element by escaping its resolved value.
+     */
     private function renderTextElement(Element $element): string
     {
         $value = $element->value();
@@ -260,6 +312,10 @@ class Renderer
         return $value !== null ? Xml::escape($this->resolveValue($value)) : '';
     }
 
+    /**
+     * Resolves a component reference to a chosen variant and renders its
+     * elements wrapped in any rotate/translate transforms.
+     */
     private function renderComponentElement(Element $element): string
     {
         $value = $element->value();
@@ -300,7 +356,12 @@ class Renderer
         return "<g transform=\"{$transform}\">{$body}</g>";
     }
 
-    /** @return list<string> */
+    /**
+     * Returns the per-component SVG `transform` fragments derived from the
+     * component's translate and rotate options.
+     *
+     * @return list<string>
+     */
     private function buildTransforms(string $componentName): array
     {
         $transforms = [];
@@ -328,7 +389,13 @@ class Renderer
         return $transforms;
     }
 
-    /** @param array<string, mixed>|null $attributes */
+    /**
+     * Serializes an attribute map to a leading space-prefixed string suitable
+     * for inlining into a tag. Returns an empty string when there are no
+     * attributes to render.
+     *
+     * @param array<string, mixed>|null $attributes
+     */
     private function renderAttributes(?array $attributes): string
     {
         if ($attributes === null) {
@@ -352,7 +419,12 @@ class Renderer
         return ' ' . implode(' ', $parts);
     }
 
-    /** @param string|array<string, mixed> $value */
+    /**
+     * Resolves a single attribute value: literal strings pass through, color
+     * and variable references are dereferenced through the option resolver.
+     *
+     * @param string|array<string, mixed> $value
+     */
     private function resolveAttributeValue(string|array $value): string
     {
         if (is_string($value)) {
@@ -366,6 +438,11 @@ class Renderer
         return $this->resolveVariable($value['value']);
     }
 
+    /**
+     * Resolves a named color into either a hex string (solid fill / single
+     * color) or a `url(#…)` gradient reference, registering the gradient in
+     * `<defs>` as a side effect.
+     */
     private function resolveColorReference(string $name): string
     {
         $colors = $this->options->color($name);
@@ -378,7 +455,13 @@ class Renderer
         return $this->buildGradientDef($name, $colors);
     }
 
-    /** @param list<string> $colors */
+    /**
+     * Builds the `<linearGradient>` or `<radialGradient>` for the given color
+     * definition, registers it in `<defs>`, and returns its `url(#…)`
+     * reference.
+     *
+     * @param list<string> $colors
+     */
     private function buildGradientDef(string $name, array $colors): string
     {
         $fill = $this->options->colorFill($name);
@@ -402,7 +485,12 @@ class Renderer
         return "url(#{$id})";
     }
 
-    /** @param string|array<string, mixed> $value */
+    /**
+     * Resolves an element value to its final string form. Literal strings
+     * pass through; variable references are dereferenced.
+     *
+     * @param string|array<string, mixed> $value
+     */
     private function resolveValue(string|array $value): string
     {
         if (is_string($value)) {
@@ -416,6 +504,9 @@ class Renderer
         return '';
     }
 
+    /**
+     * Resolves a built-in variable reference to its current value.
+     */
     private function resolveVariable(string $name): string
     {
         // @phpstan-ignore match.unhandled
@@ -427,11 +518,18 @@ class Renderer
         };
     }
 
+    /**
+     * Returns the seed-derived initials, cached after the first call.
+     */
     private function initials(): string
     {
         return $this->cachedInitials ??= Initials::fromSeed($this->options->seed());
     }
 
+    /**
+     * Returns the FNV-1a hex hash of the seed, cached after the first call.
+     * The value is used to derive stable but unique IDs for `<defs>` entries.
+     */
     private function hashSeed(): string
     {
         return $this->cachedSeedHash ??= Fnv1a::hex($this->options->seed());

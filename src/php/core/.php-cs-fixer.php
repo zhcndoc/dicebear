@@ -11,6 +11,8 @@ return (new PhpCsFixer\Config())
         'array_syntax' => ['syntax' => 'short'],
         'no_unused_imports' => true,
         'ordered_imports' => ['sort_algorithm' => 'alpha'],
+        'phpdoc_to_comment' => true,
+        'single_line_comment_style' => ['comment_types' => ['asterisk', 'hash']],
         'single_quote' => true,
         'trailing_comma_in_multiline' => true,
     ])

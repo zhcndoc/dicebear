@@ -1,7 +1,14 @@
-// @see https://www.regular-expressions.info/unicode.html
+/**
+ * Derives display initials from a seed string.
+ *
+ * @see https://www.regular-expressions.info/unicode.html
+ */
 export class Initials {
-  // Strips '@...' so email addresses yield a single initial instead
-  // of being treated as two words.
+  /**
+   * Returns one or two uppercase initials for the given seed. By default
+   * strips `@...` so email addresses yield a single initial instead of being
+   * treated as two words.
+   */
   static fromSeed(seed: string, discardAtSymbol = true): string {
     let input = seed;
 

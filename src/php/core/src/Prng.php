@@ -7,11 +7,13 @@ namespace DiceBear;
 use DiceBear\Prng\Fnv1a;
 use DiceBear\Prng\Mulberry32;
 
-// Key-based pseudorandom number generator.
-//
-// Each method takes a key that, combined with the seed, produces a
-// deterministic value. The same seed + key always yields the same result,
-// regardless of call order.
+/**
+ * Key-based pseudorandom number generator.
+ *
+ * Each method takes a key that, combined with the seed, produces a
+ * deterministic value. The same seed + key always yields the same result,
+ * regardless of call order.
+ */
 class Prng
 {
     private string $seed;
@@ -21,9 +23,17 @@ class Prng
         $this->seed = $seed;
     }
 
-    /** @template T
-     *  @param list<T> $items
-     *  @return T|null */
+    /**
+     * Picks a single item from `$items` deterministically. Returns `null`
+     * for an empty list. Items are sorted by their string representation
+     * before picking so that input order does not affect the result.
+     *
+     * @template T
+     *
+     * @param list<T> $items
+     *
+     * @return T|null
+     */
     public function pick(string $key, array $items): mixed
     {
         if (count($items) === 0) {
@@ -41,7 +51,13 @@ class Prng
         return $sorted[$index];
     }
 
-    /** @param list<array{0: mixed, 1: int|float}> $entries */
+    /**
+     * Picks an item from `$entries` proportional to its weight. When all
+     * weights are zero, falls back to an unweighted {@see pick()}. Returns
+     * `null` for an empty list.
+     *
+     * @param list<array{0: mixed, 1: int|float}> $entries
+     */
     public function weightedPick(string $key, array $entries): mixed
     {
         if (count($entries) === 0) {
@@ -70,12 +86,21 @@ class Prng
         return $sorted[count($sorted) - 1][0];
     }
 
+    /**
+     * Returns `true` with the given probability (0–100, default 50).
+     */
     public function bool(string $key, float $likelihood = 50): bool
     {
         return $this->getValue($key) * 100 < $likelihood;
     }
 
-    /** @param list<int|float> $values */
+    /**
+     * Returns a deterministic float in the closed range
+     * `[min($values), max($values)]`, rounded to four decimal places.
+     * Returns `null` for an empty list.
+     *
+     * @param list<int|float> $values
+     */
     public function float(string $key, array $values): ?float
     {
         if (count($values) === 0) {
@@ -88,7 +113,12 @@ class Prng
         return round(($min + $this->getValue($key) * ($max - $min)) * 10000) / 10000;
     }
 
-    /** @param list<int|float> $values */
+    /**
+     * Returns a deterministic integer in the closed range
+     * `[min($values), max($values)]`. Returns `null` for an empty list.
+     *
+     * @param list<int|float> $values
+     */
     public function integer(string $key, array $values): ?int
     {
         if (count($values) === 0) {
@@ -101,10 +131,15 @@ class Prng
         return (int) floor($this->getValue($key) * ($max - $min + 1)) + $min;
     }
 
-    // Fisher-Yates shuffle with chained Mulberry32 state.
-    /** @template T
-     *  @param list<T> $items
-     *  @return list<T> */
+    /**
+     * Fisher-Yates shuffle with chained Mulberry32 state.
+     *
+     * @template T
+     *
+     * @param list<T> $items
+     *
+     * @return list<T>
+     */
     public function shuffle(string $key, array $items): array
     {
         $result = $items;
@@ -121,14 +156,20 @@ class Prng
         return $result;
     }
 
+    /**
+     * Returns a single float in `[0, 1)` derived from `seed:key`. The same
+     * seed/key pair always produces the same value.
+     */
     public function getValue(string $key): float
     {
         return (new Mulberry32(Fnv1a::hash($this->seed . ':' . $key)))->nextFloat();
     }
 
-    // Cross-language deterministic sort. Uses strcmp (UTF-8 byte order)
-    // which matches JS UTF-16 code-unit order for ASCII values — the only
-    // values sorted in practice (variant names, hex colors).
+    /**
+     * Cross-language deterministic sort. Uses strcmp (UTF-8 byte order)
+     * which matches JS UTF-16 code-unit order for ASCII values — the only
+     * values sorted in practice (variant names, hex colors).
+     */
     private static function compareByCodePoint(mixed $a, mixed $b): int
     {
         return strcmp((string) $a, (string) $b);

@@ -10,6 +10,11 @@ use DiceBear\Style\Component;
 use DiceBear\Style\Meta;
 use DiceBear\Validator\StyleValidator;
 
+/**
+ * Validated, lazily-decomposed wrapper around a style definition. Construction
+ * runs the JSON Schema validator and stores a deep copy of the input so that
+ * later mutation of the source object cannot leak into the rendered avatar.
+ */
 class Style
 {
     /** @var array<string, mixed> */
@@ -28,38 +33,63 @@ class Style
         $this->data = is_array($data) ? $data : json_decode(json_encode($data), true);
     }
 
+    /**
+     * Returns the definition's `$id`, or `null` when not set.
+     */
     public function id(): ?string
     {
         return $this->data['$id'] ?? null;
     }
 
+    /**
+     * Returns the definition's `$schema` URI, or `null` when not set.
+     */
     public function schema(): ?string
     {
         return $this->data['$schema'] ?? null;
     }
 
+    /**
+     * Returns the definition's `$comment`, or `null` when not set.
+     */
     public function comment(): ?string
     {
         return $this->data['$comment'] ?? null;
     }
 
+    /**
+     * Returns the {@see Meta} view, lazily constructed on first access.
+     */
     public function meta(): Meta
     {
         return $this->meta ??= new Meta($this->data['meta'] ?? []);
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * Returns the root SVG attributes from the definition, defaulting to an
+     * empty array.
+     *
+     * @return array<string, mixed>
+     */
     public function attributes(): array
     {
         return $this->data['attributes'] ?? [];
     }
 
+    /**
+     * Returns the {@see Canvas} view, lazily constructed on first access.
+     */
     public function canvas(): Canvas
     {
         return $this->canvas ??= new Canvas($this->data['canvas']);
     }
 
-    /** @return array<string, Component> */
+    /**
+     * Returns a name → {@see Component} map for all defined components, built
+     * lazily on first access.
+     *
+     * @return array<string, Component>
+     */
     public function components(): array
     {
         if ($this->components === null) {
@@ -73,7 +103,12 @@ class Style
         return $this->components;
     }
 
-    /** @return array<string, Color> */
+    /**
+     * Returns a name → {@see Color} map for all defined colors, built lazily
+     * on first access.
+     *
+     * @return array<string, Color>
+     */
     public function colors(): array
     {
         if ($this->colors === null) {

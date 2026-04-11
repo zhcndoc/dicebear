@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace DiceBear\Utils;
 
+/**
+ * Minimal XML escaping helper for SVG/XML text and attribute content.
+ */
 class Xml
 {
     private const ENTITIES = [
@@ -14,6 +17,9 @@ class Xml
         '>' => '&gt;',
     ];
 
+    /**
+     * Returns `$value` with the five XML predefined entities escaped.
+     */
     public static function escape(string $value): string
     {
         return strtr($value, self::ENTITIES);

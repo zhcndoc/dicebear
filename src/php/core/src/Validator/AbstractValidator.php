@@ -8,19 +8,40 @@ use Composer\InstalledVersions;
 use Opis\JsonSchema\Errors\ValidationError as OpisValidationError;
 use Opis\JsonSchema\Validator;
 
+/**
+ * Base class for JSON Schema validators.
+ *
+ * Subclasses bind a schema file and convert input data into the shape Opis
+ * expects, then translate validation failures into a domain-specific error.
+ */
 abstract class AbstractValidator
 {
     private static ?Validator $validator = null;
     /** @var array<class-string, object> */
     private static array $schemas = [];
 
+    /**
+     * Returns the schema file name (relative to the schema package's `src/`).
+     */
     abstract protected static function schemaFile(): string;
 
+    /**
+     * Converts the input value to the structure expected by Opis JSON Schema.
+     */
     abstract protected static function toObject(mixed $data): mixed;
 
-    /** @param list<array{message?: string, instancePath?: string}> $details */
+    /**
+     * Throws the subclass-specific validation error.
+     *
+     * @param list<array{message?: string, instancePath?: string}> $details
+     */
     abstract protected static function throwError(array $details): never;
 
+    /**
+     * Validates the given data against the bound schema.
+     *
+     * Throws the subclass-specific validation error on failure.
+     */
     public static function validate(mixed $data): void
     {
         $result = self::validator()->validate(static::toObject($data), static::schema());
@@ -49,6 +70,9 @@ abstract class AbstractValidator
         return self::$validator;
     }
 
+    /**
+     * Returns the parsed schema, cached per concrete subclass.
+     */
     protected static function schema(): object
     {
         $key = static::class;
@@ -58,12 +82,20 @@ abstract class AbstractValidator
         );
     }
 
+    /**
+     * Resolves a schema file name to its absolute path inside dicebear/schema.
+     */
     private static function schemaPath(string $filename): string
     {
         return InstalledVersions::getInstallPath('dicebear/schema') . '/src/' . $filename;
     }
 
-    /** @param list<array{message?: string, instancePath?: string}> $details */
+    /**
+     * Walks an Opis validation error tree and flattens leaf errors into
+     * `[ message, instancePath ]` entries.
+     *
+     * @param list<array{message?: string, instancePath?: string}> $details
+     */
     private static function collectErrors(?OpisValidationError $error, array &$details): void
     {
         if ($error === null) {

@@ -1,3 +1,6 @@
+/**
+ * Minimal XML escaping helper for SVG/XML text and attribute content.
+ */
 export class Xml {
   static #entities: Record<string, string> = {
     '&': '&amp;',
@@ -12,6 +15,9 @@ export class Xml {
     'g',
   );
 
+  /**
+   * Returns `value` with the five XML predefined entities escaped.
+   */
   static escape(value: string): string {
     return value.replace(Xml.#pattern, (ch) => Xml.#entities[ch]);
   }

@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace DiceBear;
 
+/**
+ * Builds a descriptor of every option a given style accepts. Tooling such as
+ * the editor uses the result to render form controls and validation hints
+ * without having to introspect the style itself.
+ */
 class OptionsDescriptor
 {
     /** @var array<string, mixed> */
@@ -20,7 +25,11 @@ class OptionsDescriptor
         $this->style = $style;
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * Returns the descriptor, building it lazily on first call.
+     *
+     * @return array<string, mixed>
+     */
     public function toJSON(): array
     {
         $this->descriptor ??= $this->build();
@@ -28,7 +37,11 @@ class OptionsDescriptor
         return $this->descriptor;
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * Walks the style's components and colors and assembles the field map.
+     *
+     * @return array<string, mixed>
+     */
     private function build(): array
     {
         $result = [

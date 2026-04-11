@@ -44,6 +44,11 @@ export type FieldDescriptor =
 
 export type Descriptor = Record<string, FieldDescriptor>;
 
+/**
+ * Builds a descriptor of every option a given style accepts. Tooling such as
+ * the editor uses the result to render form controls and validation hints
+ * without having to introspect the style itself.
+ */
 export class OptionsDescriptor {
   static #rotateRange: RangeField = { type: 'range', min: -360, max: 360 };
   static #translateRange: RangeField = { type: 'range', min: -100, max: 100 };
@@ -55,12 +60,18 @@ export class OptionsDescriptor {
     this.#style = style;
   }
 
+  /**
+   * Returns a deep clone of the descriptor, building it lazily on first call.
+   */
   toJSON(): Descriptor {
     this.#descriptor ??= this.#build();
 
     return structuredClone(this.#descriptor);
   }
 
+  /**
+   * Walks the style's components and colors and assembles the field map.
+   */
   #build(): Descriptor {
     const result: Descriptor = {
       seed: { type: 'string' },
