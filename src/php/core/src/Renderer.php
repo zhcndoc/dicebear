@@ -54,6 +54,12 @@ class Renderer
             "viewBox=\"0 0 {$canvas->width()} {$canvas->height()}\"",
         ];
 
+        $rootAttributes = $this->renderAttributes($this->style->attributes());
+
+        if ($rootAttributes !== '') {
+            $attrs[] = ltrim($rootAttributes);
+        }
+
         if ($escapedTitle !== null) {
             $attrs[] = 'role="img"';
             $attrs[] = "aria-label=\"{$escapedTitle}\"";
