@@ -9,26 +9,12 @@ use DiceBear\Prng\Fnv1a;
 use DiceBear\Prng\Mulberry32;
 use PHPUnit\Framework\TestCase;
 
+// Known-value vectors (Fnv1a, Mulberry32, getValue) live in
+// tests/fixtures/parity/ and are exercised by ParityTest. This file keeps
+// only the PHP-side behavioral and edge-case tests.
 class PrngTest extends TestCase
 {
     // fnv1a
-
-    public function testFnv1aReturnsOffsetBasisForEmptyString(): void
-    {
-        $this->assertSame(0x811c9dc5, Fnv1a::hash(''));
-    }
-
-    public function testFnv1aHashesKnownValues(): void
-    {
-        $this->assertSame(0xe40c292c, Fnv1a::hash('a'));
-        $this->assertSame(0xe70c2de5, Fnv1a::hash('b'));
-        $this->assertSame(0xe60c2c52, Fnv1a::hash('c'));
-        $this->assertSame(0x4f9f2cab, Fnv1a::hash('hello'));
-        $this->assertSame(0xafd071e5, Fnv1a::hash('test'));
-        $this->assertSame(0xbf9cf968, Fnv1a::hash('foobar'));
-        $this->assertSame(0x7238631b, Fnv1a::hash('123'));
-        $this->assertSame(0x54d2afd4, Fnv1a::hash('dicebear'));
-    }
 
     public function testFnv1aProducesDifferentHashesForDifferentInputs(): void
     {
@@ -49,41 +35,12 @@ class PrngTest extends TestCase
 
     // fnv1aHex
 
-    public function testFnv1aHexReturns8CharHexString(): void
-    {
-        $this->assertSame('afd071e5', Fnv1a::hex('test'));
-        $this->assertSame('811c9dc5', Fnv1a::hex(''));
-        $this->assertSame('4f9f2cab', Fnv1a::hex('hello'));
-    }
-
     public function testFnv1aHexPadsTo8Characters(): void
     {
         $this->assertSame(8, strlen(Fnv1a::hex('test')));
     }
 
     // mulberry32
-
-    private static function mulberry32Step(int $seed): array
-    {
-        $mulberry = new Mulberry32($seed);
-
-        return [$mulberry->nextFloat(), $mulberry->state()];
-    }
-
-    public function testMulberry32ReturnsKnownValues(): void
-    {
-        $this->assertEqualsWithDelta([0.26642920868471265, 1831565813], self::mulberry32Step(0), 1e-15);
-        $this->assertEqualsWithDelta([0.6270739405881613, 1831565814], self::mulberry32Step(1), 1e-15);
-        $this->assertEqualsWithDelta([0.7342509443406016, 1831565815], self::mulberry32Step(2), 1e-15);
-        $this->assertEqualsWithDelta([0.6011037519201636, 1831565855], self::mulberry32Step(42), 1e-15);
-        $this->assertEqualsWithDelta([0.2043598669115454, 1831565913], self::mulberry32Step(100), 1e-15);
-    }
-
-    public function testMulberry32HandlesEdgeCaseSeeds(): void
-    {
-        $this->assertEqualsWithDelta([0.6112444521859288, -297265222], self::mulberry32Step(0x811c9dc5), 1e-15);
-        $this->assertEqualsWithDelta([0.8964226141106337, 1831565812], self::mulberry32Step(0xFFFFFFFF), 1e-15);
-    }
 
     public function testMulberry32ReturnsFloatInRange(): void
     {
@@ -98,48 +55,7 @@ class PrngTest extends TestCase
         }
     }
 
-    public function testMulberry32ChainedValues(): void
-    {
-        $mulberry = new Mulberry32(0);
-
-        $v0 = $mulberry->nextFloat();
-        $s0 = $mulberry->state();
-        $v1 = $mulberry->nextFloat();
-        $s1 = $mulberry->state();
-        $v2 = $mulberry->nextFloat();
-        $s2 = $mulberry->state();
-        $v3 = $mulberry->nextFloat();
-        $s3 = $mulberry->state();
-
-        $this->assertEqualsWithDelta([0.26642920868471265, 1831565813], [$v0, $s0], 1e-15);
-        $this->assertEqualsWithDelta([0.0003297457005828619, -631835670], [$v1, $s1], 1e-15);
-        $this->assertEqualsWithDelta([0.2232720274478197, 1199730143], [$v2, $s2], 1e-15);
-        $this->assertEqualsWithDelta([0.1462021479383111, -1263671340], [$v3, $s3], 1e-15);
-    }
-
     // getValue
-
-    public function testGetValueKnownValuesForSeedTest(): void
-    {
-        $prng = new Prng('test');
-
-        $this->assertEqualsWithDelta(0.5045499159023166, $prng->getValue('flip'), 1e-15);
-        $this->assertEqualsWithDelta(0.7226385520771146, $prng->getValue('scale'), 1e-15);
-        $this->assertEqualsWithDelta(0.22723248694092035, $prng->getValue('rotate'), 1e-15);
-        $this->assertEqualsWithDelta(0.6822192724794149, $prng->getValue('borderRadius'), 1e-15);
-        $this->assertEqualsWithDelta(0.49608885939233005, $prng->getValue('fontWeight'), 1e-15);
-    }
-
-    public function testGetValueKnownValuesForSeedHello(): void
-    {
-        $prng = new Prng('hello');
-
-        $this->assertEqualsWithDelta(0.7123338067904115, $prng->getValue('flip'), 1e-15);
-        $this->assertEqualsWithDelta(0.9537951212842017, $prng->getValue('scale'), 1e-15);
-        $this->assertEqualsWithDelta(0.1540700753685087, $prng->getValue('rotate'), 1e-15);
-        $this->assertEqualsWithDelta(0.6977770447265357, $prng->getValue('borderRadius'), 1e-15);
-        $this->assertEqualsWithDelta(0.9063334248494357, $prng->getValue('fontWeight'), 1e-15);
-    }
 
     public function testGetValueIsDeterministic(): void
     {
