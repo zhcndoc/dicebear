@@ -185,7 +185,10 @@ class Options
     /** @return array<string, mixed> */
     public function resolved(): array
     {
-        return $this->result;
+        // Hide unset options (size, title) so the public shape matches the
+        // JS reference, where these keys hold `undefined` and disappear on
+        // JSON.stringify().
+        return array_filter($this->result, static fn($v) => $v !== null);
     }
 
     private function numericComponentOption(string $option, ?string $name, callable $componentDefault): float
