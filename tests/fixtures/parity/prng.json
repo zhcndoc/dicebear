@@ -1,0 +1,531 @@
+{
+  "getValue": [
+    {
+      "seed": "test",
+      "key": "flip",
+      "result": 0.5045499159023166
+    },
+    {
+      "seed": "test",
+      "key": "scale",
+      "result": 0.7226385520771146
+    },
+    {
+      "seed": "test",
+      "key": "rotate",
+      "result": 0.22723248694092035
+    },
+    {
+      "seed": "test",
+      "key": "borderRadius",
+      "result": 0.6822192724794149
+    },
+    {
+      "seed": "test",
+      "key": "fontWeight",
+      "result": 0.49608885939233005
+    },
+    {
+      "seed": "hello",
+      "key": "flip",
+      "result": 0.7123338067904115
+    },
+    {
+      "seed": "hello",
+      "key": "eyesVariant",
+      "result": 0.0353052020072937
+    },
+    {
+      "seed": "dicebear",
+      "key": "colorFill",
+      "result": 0.19068189896643162
+    },
+    {
+      "seed": "日本語",
+      "key": "unicode-key",
+      "result": 0.5431328006088734
+    },
+    {
+      "seed": "",
+      "key": "empty-seed",
+      "result": 0.39638678822666407
+    }
+  ],
+  "pick": [
+    {
+      "seed": "test",
+      "key": "a",
+      "items": [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e"
+      ],
+      "result": "a"
+    },
+    {
+      "seed": "test",
+      "key": "b",
+      "items": [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e"
+      ],
+      "result": "d"
+    },
+    {
+      "seed": "test",
+      "key": "c",
+      "items": [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e"
+      ],
+      "result": "b"
+    },
+    {
+      "seed": "hello",
+      "key": "eyes",
+      "items": [
+        "blue",
+        "green",
+        "brown",
+        "hazel"
+      ],
+      "result": "blue"
+    },
+    {
+      "seed": "dicebear",
+      "key": "variant",
+      "items": [
+        "variant1",
+        "variant2",
+        "variant3"
+      ],
+      "result": "variant2"
+    },
+    {
+      "seed": "test",
+      "key": "single",
+      "items": [
+        "only"
+      ],
+      "result": "only"
+    },
+    {
+      "seed": "test",
+      "key": "a",
+      "items": [
+        "e",
+        "d",
+        "c",
+        "b",
+        "a"
+      ],
+      "result": "a"
+    }
+  ],
+  "weightedPick": [
+    {
+      "seed": "test",
+      "key": "k",
+      "entries": [
+        [
+          "a",
+          1
+        ],
+        [
+          "b",
+          4
+        ],
+        [
+          "c",
+          2
+        ]
+      ],
+      "result": "b"
+    },
+    {
+      "seed": "test",
+      "key": "l",
+      "entries": [
+        [
+          "a",
+          1
+        ],
+        [
+          "b",
+          4
+        ],
+        [
+          "c",
+          2
+        ]
+      ],
+      "result": "b"
+    },
+    {
+      "seed": "hello",
+      "key": "k",
+      "entries": [
+        [
+          "a",
+          1
+        ],
+        [
+          "b",
+          4
+        ],
+        [
+          "c",
+          2
+        ]
+      ],
+      "result": "b"
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "entries": [
+        [
+          "heavy",
+          100
+        ],
+        [
+          "light",
+          1
+        ]
+      ],
+      "result": "heavy"
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "entries": [
+        [
+          "rare",
+          0
+        ],
+        [
+          "common",
+          1
+        ]
+      ],
+      "result": "common"
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "entries": [
+        [
+          "c",
+          2
+        ],
+        [
+          "a",
+          1
+        ],
+        [
+          "b",
+          4
+        ]
+      ],
+      "result": "b"
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "entries": [
+        [
+          "only",
+          1
+        ]
+      ],
+      "result": "only"
+    }
+  ],
+  "bool": [
+    {
+      "seed": "test",
+      "key": "k",
+      "likelihood": 0,
+      "result": false
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "likelihood": 25,
+      "result": true
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "likelihood": 50,
+      "result": true
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "likelihood": 75,
+      "result": true
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "likelihood": 100,
+      "result": true
+    },
+    {
+      "seed": "hello",
+      "key": "flip",
+      "likelihood": 50,
+      "result": false
+    },
+    {
+      "seed": "dicebear",
+      "key": "flip",
+      "likelihood": 50,
+      "result": true
+    }
+  ],
+  "float": [
+    {
+      "seed": "test",
+      "key": "k",
+      "values": [
+        0,
+        1
+      ],
+      "result": 0.1722
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "values": [
+        -10,
+        10
+      ],
+      "result": -6.555
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "values": [
+        10,
+        20
+      ],
+      "result": 11.7225
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "values": [
+        20,
+        10
+      ],
+      "result": 11.7225
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "values": [
+        5,
+        20,
+        10
+      ],
+      "result": 7.5837
+    },
+    {
+      "seed": "hello",
+      "key": "scale",
+      "values": [
+        0.5,
+        1.5
+      ],
+      "result": 1.4538
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "values": [
+        42
+      ],
+      "result": 42
+    }
+  ],
+  "integer": [
+    {
+      "seed": "test",
+      "key": "k",
+      "values": [
+        1,
+        6
+      ],
+      "result": 2
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "values": [
+        0,
+        100
+      ],
+      "result": 17
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "values": [
+        -50,
+        50
+      ],
+      "result": -33
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "values": [
+        10,
+        1
+      ],
+      "result": 2
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "values": [
+        3,
+        10,
+        7
+      ],
+      "result": 4
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "values": [
+        5,
+        5
+      ],
+      "result": 5
+    },
+    {
+      "seed": "hello",
+      "key": "fontWeight",
+      "values": [
+        100,
+        900
+      ],
+      "result": 825
+    }
+  ],
+  "shuffle": [
+    {
+      "seed": "test",
+      "key": "k",
+      "items": [],
+      "result": []
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "items": [
+        "only"
+      ],
+      "result": [
+        "only"
+      ]
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "items": [
+        "a",
+        "b",
+        "c"
+      ],
+      "result": [
+        "b",
+        "c",
+        "a"
+      ]
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "items": [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ],
+      "result": [
+        "e",
+        "h",
+        "f",
+        "d",
+        "a",
+        "g",
+        "c",
+        "b"
+      ]
+    },
+    {
+      "seed": "hello",
+      "key": "k",
+      "items": [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ],
+      "result": [
+        "b",
+        "h",
+        "a",
+        "c",
+        "d",
+        "g",
+        "e",
+        "f"
+      ]
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "items": [
+        "h",
+        "g",
+        "f",
+        "e",
+        "d",
+        "c",
+        "b",
+        "a"
+      ],
+      "result": [
+        "e",
+        "h",
+        "f",
+        "d",
+        "a",
+        "g",
+        "c",
+        "b"
+      ]
+    }
+  ]
+}
