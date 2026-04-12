@@ -49,12 +49,13 @@ const canvasBackground = computed(() => `#${darkenColor(currentOptions.value.bac
 
 // Build style options from current options
 function buildStyleOptions(options: typeof currentOptions.value) {
-  const result: Record<string, unknown> = { seed: 'editorUser' };
+  const result: Record<string, unknown> = { seed: 'editorUser', glassesProbability: 0 };
   if (options.backgroundColor) result.backgroundColor = options.backgroundColor;
-  if (options.hair) result.hair = options.hair;
-  if (options.eyes) result.eyes = options.eyes;
-  if (options.nose) result.nose = options.nose;
-  if (options.mouth) result.mouth = options.mouth;
+  if (options.hair) result.hairVariant = options.hair;
+  if (options.eyes) result.eyesVariant = options.eyes;
+  if (options.nose) result.noseVariant = options.nose;
+  if (options.mouth) result.mouthVariant = options.mouth;
+
   return result;
 }
 
