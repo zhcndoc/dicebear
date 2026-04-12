@@ -12,6 +12,7 @@ export interface StatsData {
 interface ApiStats {
   monthlyRequests: number;
   monthlyTraffic: number;
+  monthlyNpmDownloads: number;
   monthLabel: string;
 }
 
@@ -48,11 +49,14 @@ async function doFetch() {
 
     const requests = lastCompleteMonth(data.requests);
     const traffic = lastCompleteMonth(data.traffic);
+    const npmDownloads = lastCompleteMonth(data.downloads.npm);
+
     if (!requests || !traffic) return;
 
     cached.value = {
       monthlyRequests: requests.total,
       monthlyTraffic: traffic.total,
+      monthlyNpmDownloads: npmDownloads?.total ?? 0,
       monthLabel: requests.label,
     };
   } catch (err) {

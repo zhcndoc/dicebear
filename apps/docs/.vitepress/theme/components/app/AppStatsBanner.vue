@@ -30,9 +30,9 @@ const metrics = computed(() => [
   },
   {
     icon: Download,
-    value: '120K+',
+    value: apiStats.value ? formatNumber(apiStats.value.monthlyNpmDownloads) : '500K+',
     label: 'npm Downloads',
-    description: 'Weekly package downloads across the DiceBear ecosystem.',
+    description: `Monthly npm downloads of the core package in ${monthLabel.value}.`,
     color: '#cb3837',
   },
 ]);
