@@ -10,8 +10,8 @@ const props = defineProps<{
   styleCamel: string;
 }>();
 
-const activeTab = ref<'api' | 'js' | 'cli'>('api');
-const tabs = ['api', 'js', 'cli'] as const;
+const activeTab = ref<'api' | 'js' | 'php' | 'cli'>('api');
+const tabs = ['api', 'js', 'php', 'cli'] as const;
 const activeTabIndex = computed(() => tabs.indexOf(activeTab.value));
 
 const apiExample = computed(() =>
@@ -28,6 +28,22 @@ const avatar = new Avatar(style, {
 });`
 );
 
+const phpExample = computed(() =>
+  `<?php
+
+use Composer\\InstalledVersions;
+use DiceBear\\Style;
+use DiceBear\\Avatar;
+
+$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$definition = json_decode(file_get_contents($basePath . '/src/${props.style}.json'), true);
+
+$style = new Style($definition);
+$avatar = new Avatar($style, [
+  'seed' => '${escapeJsString(props.seed)}'
+]);`
+);
+
 const cliExample = computed(() =>
   `npx dicebear ${props.style} --seed '${escapeShellArg(props.seed)}'`
 );
@@ -36,6 +52,7 @@ const docsLink = computed(() => {
   switch (activeTab.value) {
     case 'api': return '/how-to-use/http-api/';
     case 'js': return '/how-to-use/js-library/';
+    case 'php': return '/how-to-use/php-library/';
     case 'cli': return '/how-to-use/cli/';
     default: return '/introduction/';
   }
@@ -45,6 +62,7 @@ const docsLinkLabel = computed(() => {
   switch (activeTab.value) {
     case 'api': return 'Learn more about the HTTP API';
     case 'js': return 'Learn more about the JS Library';
+    case 'php': return 'Learn more about the PHP Library';
     case 'cli': return 'Learn more about the CLI';
     default: return 'Get started with DiceBear';
   }
@@ -63,14 +81,15 @@ const docsLinkLabel = computed(() => {
           :class="{ active: activeTab === tab }"
           @click="activeTab = tab"
         >
-          {{ tab === 'api' ? 'HTTP API' : tab === 'js' ? 'JS Library' : 'CLI' }}
+          {{ tab === 'api' ? 'HTTP API' : tab === 'js' ? 'JS Library' : tab === 'php' ? 'PHP Library' : 'CLI' }}
         </button>
       </div>
 
       <div class="app-seed-demo-code-body">
-        <UiCode v-if="activeTab === 'api'" :code="apiExample" class="app-seed-demo-code-block" />
-        <UiCode v-if="activeTab === 'js'" :code="jsExample" lang="js" class="app-seed-demo-code-block" />
-        <UiCode v-if="activeTab === 'cli'" :code="cliExample" class="app-seed-demo-code-block" />
+        <UiCode :code="apiExample" scroll-to-bottom class="app-seed-demo-code-block" :class="{ active: activeTab === 'api' }" />
+        <UiCode :code="jsExample" lang="js" scroll-to-bottom class="app-seed-demo-code-block" :class="{ active: activeTab === 'js' }" />
+        <UiCode :code="phpExample" lang="php" scroll-to-bottom class="app-seed-demo-code-block" :class="{ active: activeTab === 'php' }" />
+        <UiCode :code="cliExample" scroll-to-bottom class="app-seed-demo-code-block" :class="{ active: activeTab === 'cli' }" />
       </div>
     </div>
 
@@ -110,7 +129,7 @@ const docsLinkLabel = computed(() => {
       position: absolute;
       top: 4px;
       left: 4px;
-      width: calc((100% - 8px) / 3);
+      width: calc((100% - 8px) / 4);
       height: calc(100% - 8px);
       background: var(--vp-c-brand-soft);
       border-radius: var(--vp-radius-xs);
@@ -145,13 +164,17 @@ const docsLinkLabel = computed(() => {
 
   &-body {
     flex: 1;
-    display: flex;
-    flex-direction: column;
+    display: grid;
     min-width: 0;
   }
 
   &-block {
-    flex: 1;
+    grid-area: 1 / 1;
+    visibility: hidden;
+
+    &.active {
+      visibility: visible;
+    }
   }
 
   &-cta {

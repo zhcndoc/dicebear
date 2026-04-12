@@ -150,6 +150,33 @@ function getPlaceholderAvatar(userId) {
 }
 ```
 
+## With the PHP Library
+
+Use the PHP library for server-side rendering without an additional HTTP
+request. For full installation and API details, see the
+[PHP library documentation](/how-to-use/php-library/).
+
+```php
+<?php
+
+use Composer\InstalledVersions;
+use DiceBear\Style;
+use DiceBear\Avatar;
+
+$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$definition = json_decode(file_get_contents($basePath . '/src/thumbs.json'), true);
+
+$style = new Style($definition);
+
+function getPlaceholderAvatar(Style $style, string $userId): string {
+  return (string) new Avatar($style, [
+    'seed' => $userId,
+    'size' => 48,
+    'borderRadius' => 50,
+  ]);
+}
+```
+
 ## Choosing a Style
 
 Different styles suit different use cases. Click a style to see all available
@@ -165,6 +192,11 @@ loads:
 ```js
 // JS library
 new Avatar(thumbs, { seed: userId, size: 48, borderRadius: 50 });
+```
+
+```php
+// PHP library
+new Avatar($style, ['seed' => $userId, 'size' => 48, 'borderRadius' => 50]);
 ```
 
 ```

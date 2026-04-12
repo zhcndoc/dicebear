@@ -195,14 +195,50 @@ $avatar = new Avatar($style, [
 ]);
 ```
 
-### Circular avatar
+### Fixed size avatar
 
 ```php
+$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$definition = json_decode(file_get_contents($basePath . '/src/bottts.json'), true);
+
+$style = new Style($definition);
 $avatar = new Avatar($style, [
-  'seed' => 'Jane',
+  'seed' => 'robot-42',
   'size' => 128,
-  'borderRadius' => 50,
+  'borderRadius' => 50, // circular avatar
 ]);
+```
+
+### Avatar with transformations
+
+```php
+$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$definition = json_decode(file_get_contents($basePath . '/src/avataaars.json'), true);
+
+$style = new Style($definition);
+$avatar = new Avatar($style, [
+  'seed' => 'Jane Doe',
+  'flip' => 'horizontal',
+  'rotate' => 10,
+  'scale' => 90,
+  'translateY' => 5,
+]);
+```
+
+### Multiple avatars on the same page
+
+When rendering multiple avatars on the same page, use `idRandomization` to
+prevent SVG ID conflicts:
+
+```php
+$users = ['alice', 'bob', 'charlie'];
+
+$avatars = array_map(function (string $user) use ($style) {
+  return (string) new Avatar($style, [
+    'seed' => $user,
+    'idRandomization' => true,
+  ]);
+}, $users);
 ```
 
 ### Weighted variant selection

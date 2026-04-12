@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { Copy, Check } from '@lucide/vue';
 import { escapeHtml } from '@theme/utils/escape';
 
@@ -8,8 +8,10 @@ type Hljs = typeof import('highlight.js/lib/core').default;
 const props = defineProps<{
   lang?: string;
   code: string;
+  scrollToBottom?: boolean;
 }>();
 
+const preRef = ref<HTMLPreElement>();
 const codeHtml = ref(escapeHtml(props.code));
 const copied = ref(false);
 let timeout: ReturnType<typeof setTimeout> | null = null;
@@ -39,6 +41,12 @@ function loadHljs(): Promise<Hljs> {
 
     return core;
   })());
+}
+
+function scrollPreToBottom() {
+  if (props.scrollToBottom && preRef.value) {
+    preRef.value.scrollTop = preRef.value.scrollHeight;
+  }
 }
 
 function updateCodeHtml(instance?: Hljs) {
@@ -74,17 +82,21 @@ onMounted(async () => {
     const instance = await loadHljs();
     updateCodeHtml(instance);
   }
+
+  scrollPreToBottom();
 });
 
 watch(() => props.code, async () => {
   const instance = props.lang ? await loadHljs() : undefined;
   updateCodeHtml(instance);
+  await nextTick();
+  scrollPreToBottom();
 });
 </script>
 
 <template>
   <div class="ui-code">
-    <pre class="ui-code-text" v-html="codeHtml"></pre>
+    <pre ref="preRef" class="ui-code-text" v-html="codeHtml"></pre>
     <button class="ui-code-copy" @click="onCopy" :title="copied ? 'Copied!' : 'Copy'">
       <Check v-if="copied" :size="14" />
       <Copy v-else :size="14" />
@@ -99,6 +111,9 @@ watch(() => props.code, async () => {
   border-radius: var(--vp-radius-sm);
   padding: 14px 16px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 
   &-text {
     font-size: 13px;
@@ -108,7 +123,9 @@ watch(() => props.code, async () => {
     margin: 0;
     padding-right: 32px;
     white-space: pre;
-    overflow-x: auto;
+    overflow: auto;
+    flex: 1;
+    min-height: 0;
   }
 
   &-copy {

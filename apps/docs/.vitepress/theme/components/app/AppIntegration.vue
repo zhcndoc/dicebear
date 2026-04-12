@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Globe, Code, Terminal } from '@lucide/vue';
+import { Globe, MonitorSmartphone, Server, Terminal } from '@lucide/vue';
 import { UiContainer, UiSection, UiSectionHeader, UiCard, UiIconBox, UiCode } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
@@ -15,6 +15,20 @@ const style = new Style(lorelei);
 const svg = new Avatar(style, {
   seed: 'Mia',
 }).toString();`,
+  php: `<?php
+use Composer\\InstalledVersions;
+use DiceBear\\Style;
+use DiceBear\\Avatar;
+
+$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$definition = json_decode(
+  file_get_contents($basePath . '/src/lorelei.json'), true
+);
+
+$style = new Style($definition);
+$svg = (string) new Avatar($style, [
+  'seed' => 'Mia',
+]);`,
   api: `https://api.dicebear.com/10.x/lorelei/svg?seed=Mia`,
   cli: `npx dicebear lorelei --seed "Mia" --format svg`,
 };
@@ -35,29 +49,48 @@ const svg = new Avatar(style, {
         <template #headline>Integrate in <strong>Minutes</strong></template>
       </UiSectionHeader>
 
-      <!-- JS Library - Featured / Full Width -->
-      <div class="app-integration-featured app-integration-item" :style="{ animationDelay: '0s' }">
-        <UiCard padding="lg" radius="md" class="app-integration-card app-integration-card-featured">
-          <div class="app-integration-featured-layout">
+      <!-- JS & PHP Libraries - Side by Side -->
+      <div class="app-integration-grid app-integration-grid-libraries">
+        <div class="app-integration-item" :style="{ animationDelay: '0s' }">
+          <UiCard padding="lg" radius="md" class="app-integration-card">
             <div class="app-integration-card-header">
               <UiIconBox size="lg" color="#1689cc">
-                <Code />
+                <MonitorSmartphone />
               </UiIconBox>
               <h3 class="app-integration-title">JS Library</h3>
               <p class="app-integration-description">No data sent externally. Full control over your avatar creation with a simple API.</p>
-              <a href="/how-to-use/js-library/" class="app-integration-link">
-                Library Documentation &rarr;
-              </a>
             </div>
 
-            <UiCode :code="plainCode.js" lang="js" class="app-integration-code-block" />
-          </div>
-        </UiCard>
+            <UiCode :code="plainCode.js" lang="js" scroll-to-bottom class="app-integration-code-block" />
+
+            <a href="/how-to-use/js-library/" class="app-integration-link">
+              JS Documentation &rarr;
+            </a>
+          </UiCard>
+        </div>
+
+        <div class="app-integration-item" :style="{ animationDelay: '0.15s' }">
+          <UiCard padding="lg" radius="md" class="app-integration-card">
+            <div class="app-integration-card-header">
+              <UiIconBox size="lg" color="#7b83eb">
+                <Server />
+              </UiIconBox>
+              <h3 class="app-integration-title">PHP Library</h3>
+              <p class="app-integration-description">Server-side avatar generation for PHP 8.2+. The same API as the JS library.</p>
+            </div>
+
+            <UiCode :code="plainCode.php" lang="php" scroll-to-bottom class="app-integration-code-block" />
+
+            <a href="/how-to-use/php-library/" class="app-integration-link">
+              PHP Documentation &rarr;
+            </a>
+          </UiCard>
+        </div>
       </div>
 
       <!-- HTTP API & CLI - Side by Side -->
       <div class="app-integration-grid">
-        <div class="app-integration-item" :style="{ animationDelay: '0.15s' }">
+        <div class="app-integration-item" :style="{ animationDelay: '0.3s' }">
           <UiCard padding="lg" radius="md" class="app-integration-card">
             <div class="app-integration-card-header">
               <UiIconBox size="lg" color="#22c55e">
@@ -75,7 +108,7 @@ const svg = new Avatar(style, {
           </UiCard>
         </div>
 
-        <div class="app-integration-item" :style="{ animationDelay: '0.3s' }">
+        <div class="app-integration-item" :style="{ animationDelay: '0.45s' }">
           <UiCard padding="lg" radius="md" class="app-integration-card">
             <div class="app-integration-card-header">
               <UiIconBox size="lg" color="#a855f7">
@@ -132,31 +165,9 @@ const svg = new Avatar(style, {
     }
   }
 
-  /* Featured JS Library card */
-  &-featured {
+  /* Grid for JS & PHP Libraries */
+  &-grid-libraries {
     margin-bottom: 24px;
-
-    &-layout {
-      display: grid;
-      grid-template-columns: 1fr 1.4fr;
-      gap: 32px;
-      align-items: center;
-    }
-  }
-
-  &-card-featured {
-    .app-integration-card-header {
-      margin-bottom: 0;
-    }
-
-    .app-integration-code-block {
-      margin-bottom: 0;
-    }
-
-    .app-integration-link {
-      display: inline-block;
-      margin-top: 24px;
-    }
   }
 
   /* Grid for HTTP API & CLI */
@@ -222,21 +233,10 @@ const svg = new Avatar(style, {
 }
 @media (max-width: 1000px) {
   .app-integration {
-    &-featured-layout {
-      grid-template-columns: 1fr;
-    }
-
     &-grid {
       grid-template-columns: 1fr;
       max-width: 500px;
       margin: 0 auto;
-    }
-
-    &-featured {
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-      margin-bottom: 24px;
     }
   }
 }
