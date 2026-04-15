@@ -22,12 +22,12 @@ export interface StyleDefinitionMeta {
 
 export interface StyleDefinitionVariableReference {
   readonly type: 'variable';
-  readonly value: 'initial' | 'initials' | 'fontWeight' | 'fontFamily';
+  readonly name: 'initial' | 'initials' | 'fontWeight' | 'fontFamily';
 }
 
 export interface StyleDefinitionColorReference {
   readonly type: 'color';
-  readonly value: string;
+  readonly name: string;
 }
 
 export type StyleDefinitionColorAttributeValue =

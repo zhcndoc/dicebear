@@ -254,7 +254,7 @@ function avatarCases(extra) {
     },
     {
       id: 'size-scale-rotate',
-      options: { seed: 'parity-1', size: 256, scale: 80, rotate: 45 },
+      options: { seed: 'parity-1', size: 256, scale: 2, rotate: 45 },
     },
     {
       id: 'translate-border-flip',

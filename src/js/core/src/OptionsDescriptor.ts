@@ -51,7 +51,7 @@ export type Descriptor = Record<string, FieldDescriptor>;
  */
 export class OptionsDescriptor {
   static #rotateRange: RangeField = { type: 'range', min: -360, max: 360 };
-  static #translateRange: RangeField = { type: 'range', min: -100, max: 100 };
+  static #translateRange: RangeField = { type: 'range', min: -1000, max: 1000 };
 
   #descriptor?: Descriptor;
   #style: Style;
@@ -75,7 +75,7 @@ export class OptionsDescriptor {
   #build(): Descriptor {
     const result: Descriptor = {
       seed: { type: 'string' },
-      size: { type: 'number', min: 1 },
+      size: { type: 'number', min: 1, max: 4096 },
       idRandomization: { type: 'boolean' },
       title: { type: 'string' },
       flip: {
@@ -85,7 +85,7 @@ export class OptionsDescriptor {
       },
       fontFamily: { type: 'string', list: true },
       fontWeight: { type: 'number', min: 1, max: 1000, list: true },
-      scale: { type: 'range', min: 0 },
+      scale: { type: 'range', min: 0, max: 10 },
       borderRadius: { type: 'range', min: 0, max: 50 },
       rotate: OptionsDescriptor.#rotateRange,
       translateX: OptionsDescriptor.#translateRange,

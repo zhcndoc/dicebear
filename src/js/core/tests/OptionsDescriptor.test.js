@@ -39,14 +39,14 @@ describe('OptionsDescriptor', () => {
       const schema = new OptionsDescriptor(minimalStyle).toJSON();
 
       assert.deepEqual(schema.seed, { type: 'string' });
-      assert.deepEqual(schema.size, { type: 'number', min: 1 });
+      assert.deepEqual(schema.size, { type: 'number', min: 1, max: 4096 });
       assert.deepEqual(schema.idRandomization, { type: 'boolean' });
       assert.deepEqual(schema.flip, { type: 'enum', values: ['none', 'horizontal', 'vertical', 'both'], list: true });
-      assert.deepEqual(schema.scale, { type: 'range', min: 0 });
+      assert.deepEqual(schema.scale, { type: 'range', min: 0, max: 10 });
       assert.deepEqual(schema.borderRadius, { type: 'range', min: 0, max: 50 });
       assert.deepEqual(schema.rotate, { type: 'range', min: -360, max: 360 });
-      assert.deepEqual(schema.translateX, { type: 'range', min: -100, max: 100 });
-      assert.deepEqual(schema.translateY, { type: 'range', min: -100, max: 100 });
+      assert.deepEqual(schema.translateX, { type: 'range', min: -1000, max: 1000 });
+      assert.deepEqual(schema.translateY, { type: 'range', min: -1000, max: 1000 });
       assert.deepEqual(schema.fontFamily, { type: 'string', list: true });
       assert.deepEqual(schema.fontWeight, { type: 'number', min: 1, max: 1000, list: true });
     });

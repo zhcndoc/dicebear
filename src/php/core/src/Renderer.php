@@ -318,20 +318,20 @@ class Renderer
      */
     private function renderComponentElement(Element $element): string
     {
-        $value = $element->value();
+        $componentName = $element->name();
 
-        if (!is_string($value)) {
+        if (!is_string($componentName)) {
             return '';
         }
 
-        $variantName = $this->options->variant($value);
+        $variantName = $this->options->variant($componentName);
 
         if ($variantName === null) {
             return '';
         }
 
         $components = $this->style->components();
-        $component = $components[$value] ?? null;
+        $component = $components[$componentName] ?? null;
 
         if ($component === null) {
             return '';
@@ -345,7 +345,7 @@ class Renderer
         }
 
         $body = $this->renderElements($variant->elements());
-        $transforms = $this->buildTransforms($value);
+        $transforms = $this->buildTransforms($componentName);
 
         if (count($transforms) === 0) {
             return $body;
@@ -358,7 +358,9 @@ class Renderer
 
     /**
      * Returns the per-component SVG `transform` fragments derived from the
-     * component's translate and rotate options.
+     * component's translate and rotate options. Translate values are
+     * percentages of the component canvas dimensions, matching the
+     * semantics of the user-facing `translateX` / `translateY` options.
      *
      * @return list<string>
      */
@@ -369,18 +371,24 @@ class Renderer
         $translateY = $this->options->translateY($componentName);
         $rotate = $this->options->rotate($componentName);
 
+        if ($translateX === 0.0 && $translateY === 0.0 && $rotate === 0.0) {
+            return $transforms;
+        }
+
+        $components = $this->style->components();
+        $component = $components[$componentName] ?? null;
+
+        if ($component === null) {
+            return $transforms;
+        }
+
         if ($translateX !== 0.0 || $translateY !== 0.0) {
-            $transforms[] = "translate({$translateX}, {$translateY})";
+            $x = round(($translateX / 100) * $component->width(), 4);
+            $y = round(($translateY / 100) * $component->height(), 4);
+            $transforms[] = "translate({$x}, {$y})";
         }
 
         if ($rotate !== 0.0) {
-            $components = $this->style->components();
-            $component = $components[$componentName] ?? null;
-
-            if ($component === null) {
-                return $transforms;
-            }
-
             $cx = $component->width() / 2;
             $cy = $component->height() / 2;
             $transforms[] = "rotate({$rotate}, {$cx}, {$cy})";
@@ -432,10 +440,10 @@ class Renderer
         }
 
         if (($value['type'] ?? null) === 'color') {
-            return $this->resolveColorReference($value['value']);
+            return $this->resolveColorReference($value['name']);
         }
 
-        return $this->resolveVariable($value['value']);
+        return $this->resolveVariable($value['name']);
     }
 
     /**
@@ -498,7 +506,7 @@ class Renderer
         }
 
         if (($value['type'] ?? null) === 'variable') {
-            return $this->resolveVariable($value['value']);
+            return $this->resolveVariable($value['name']);
         }
 
         return '';

@@ -138,7 +138,7 @@ class RendererTest extends TestCase
                 'width' => 100, 'height' => 100,
                 'elements' => [
                     ['type' => 'element', 'name' => 'text', 'children' => [
-                        ['type' => 'text', 'value' => ['type' => 'variable', 'value' => 'initial']],
+                        ['type' => 'text', 'value' => ['type' => 'variable', 'name' => 'initial']],
                     ]],
                 ],
             ],
@@ -154,7 +154,7 @@ class RendererTest extends TestCase
                 'width' => 100, 'height' => 100,
                 'elements' => [
                     ['type' => 'element', 'name' => 'text', 'children' => [
-                        ['type' => 'text', 'value' => ['type' => 'variable', 'value' => 'initials']],
+                        ['type' => 'text', 'value' => ['type' => 'variable', 'name' => 'initials']],
                     ]],
                 ],
             ],
@@ -170,7 +170,7 @@ class RendererTest extends TestCase
                 'width' => 100, 'height' => 100,
                 'elements' => [
                     ['type' => 'element', 'name' => 'text', 'children' => [
-                        ['type' => 'text', 'value' => ['type' => 'variable', 'value' => 'initials']],
+                        ['type' => 'text', 'value' => ['type' => 'variable', 'name' => 'initials']],
                     ]],
                 ],
             ],
@@ -186,7 +186,7 @@ class RendererTest extends TestCase
                 'width' => 100, 'height' => 100,
                 'elements' => [
                     ['type' => 'element', 'name' => 'text', 'children' => [
-                        ['type' => 'text', 'value' => ['type' => 'variable', 'value' => 'initials']],
+                        ['type' => 'text', 'value' => ['type' => 'variable', 'name' => 'initials']],
                     ]],
                 ],
             ],
@@ -222,7 +222,7 @@ class RendererTest extends TestCase
             'eyesTranslateX' => 5,
             'eyesTranslateY' => 10,
         ]))->toString();
-        $this->assertStringContainsString('transform="translate(5, 10)"', $svg);
+        $this->assertStringContainsString('transform="translate(2.5, 5)"', $svg);
     }
 
     public function testComponentRotationWithCenter(): void
@@ -257,7 +257,7 @@ class RendererTest extends TestCase
             'canvas' => [
                 'width' => 100, 'height' => 100,
                 'elements' => [
-                    ['type' => 'element', 'name' => 'rect', 'attributes' => ['fill' => ['type' => 'color', 'value' => 'bg']]],
+                    ['type' => 'element', 'name' => 'rect', 'attributes' => ['fill' => ['type' => 'color', 'name' => 'bg']]],
                 ],
             ],
             'colors' => ['bg' => ['values' => ['#ff0000']]],
@@ -272,7 +272,7 @@ class RendererTest extends TestCase
             'canvas' => [
                 'width' => 100, 'height' => 100,
                 'elements' => [
-                    ['type' => 'element', 'name' => 'rect', 'attributes' => ['fill' => ['type' => 'color', 'value' => 'bg']]],
+                    ['type' => 'element', 'name' => 'rect', 'attributes' => ['fill' => ['type' => 'color', 'name' => 'bg']]],
                 ],
             ],
             'colors' => ['bg' => ['values' => ['#ff0000', '#0000ff']]],
@@ -291,7 +291,7 @@ class RendererTest extends TestCase
             'canvas' => [
                 'width' => 100, 'height' => 100,
                 'elements' => [
-                    ['type' => 'element', 'name' => 'rect', 'attributes' => ['fill' => ['type' => 'color', 'value' => 'bg']]],
+                    ['type' => 'element', 'name' => 'rect', 'attributes' => ['fill' => ['type' => 'color', 'name' => 'bg']]],
                 ],
             ],
             'colors' => ['bg' => ['values' => ['#ff0000', '#0000ff']]],
@@ -521,7 +521,7 @@ class RendererTest extends TestCase
             'canvas' => [
                 'width' => 100, 'height' => 100,
                 'elements' => [
-                    ['type' => 'element', 'name' => 'text', 'attributes' => ['font-family' => ['type' => 'variable', 'value' => 'fontFamily']], 'children' => [
+                    ['type' => 'element', 'name' => 'text', 'attributes' => ['font-family' => ['type' => 'variable', 'name' => 'fontFamily']], 'children' => [
                         ['type' => 'text', 'value' => 'Hello'],
                     ]],
                 ],
@@ -537,7 +537,7 @@ class RendererTest extends TestCase
             'canvas' => [
                 'width' => 100, 'height' => 100,
                 'elements' => [
-                    ['type' => 'element', 'name' => 'text', 'attributes' => ['font-weight' => ['type' => 'variable', 'value' => 'fontWeight']], 'children' => [
+                    ['type' => 'element', 'name' => 'text', 'attributes' => ['font-weight' => ['type' => 'variable', 'name' => 'fontWeight']], 'children' => [
                         ['type' => 'text', 'value' => 'Hello'],
                     ]],
                 ],
@@ -603,7 +603,7 @@ class RendererTest extends TestCase
         return new Style([
             'canvas' => [
                 'width' => 100, 'height' => 100,
-                'elements' => [['type' => 'component', 'value' => 'eyes']],
+                'elements' => [['type' => 'component', 'name' => 'eyes']],
             ],
             'components' => [
                 'eyes' => [

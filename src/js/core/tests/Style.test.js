@@ -30,11 +30,11 @@ const full = {
       },
       {
         type: 'component',
-        value: 'eyes',
+        name: 'eyes',
       },
       {
         type: 'text',
-        value: { type: 'variable', value: 'initials' },
+        value: { type: 'variable', name: 'initials' },
       },
     ],
   },
@@ -154,7 +154,7 @@ describe('Style', () => {
       assert.equal(style.canvas().elements()[0].type(), 'element');
       assert.equal(style.canvas().elements()[0].name(), 'rect');
       assert.equal(style.canvas().elements()[1].type(), 'component');
-      assert.equal(style.canvas().elements()[1].value(), 'eyes');
+      assert.equal(style.canvas().elements()[1].name(), 'eyes');
     });
 
     it('should return element children', () => {
@@ -181,7 +181,7 @@ describe('Style', () => {
       const el = style.canvas().elements()[2];
 
       assert.equal(el.type(), 'text');
-      assert.deepEqual(el.value(), { type: 'variable', value: 'initials' });
+      assert.deepEqual(el.value(), { type: 'variable', name: 'initials' });
     });
 
     it('should cache elements', () => {

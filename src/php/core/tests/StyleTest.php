@@ -40,11 +40,11 @@ class StyleTest extends TestCase
                     ],
                     [
                         'type' => 'component',
-                        'value' => 'eyes',
+                        'name' => 'eyes',
                     ],
                     [
                         'type' => 'text',
-                        'value' => ['type' => 'variable', 'value' => 'initials'],
+                        'value' => ['type' => 'variable', 'name' => 'initials'],
                     ],
                 ],
             ],
@@ -175,7 +175,7 @@ class StyleTest extends TestCase
         $this->assertSame('element', $style->canvas()->elements()[0]->type());
         $this->assertSame('rect', $style->canvas()->elements()[0]->name());
         $this->assertSame('component', $style->canvas()->elements()[1]->type());
-        $this->assertSame('eyes', $style->canvas()->elements()[1]->value());
+        $this->assertSame('eyes', $style->canvas()->elements()[1]->name());
     }
 
     public function testCanvasElementChildren(): void
@@ -201,7 +201,7 @@ class StyleTest extends TestCase
         $style = new Style(self::full());
         $el = $style->canvas()->elements()[2];
         $this->assertSame('text', $el->type());
-        $this->assertSame(['type' => 'variable', 'value' => 'initials'], $el->value());
+        $this->assertSame(['type' => 'variable', 'name' => 'initials'], $el->value());
     }
 
     public function testCanvasCachesElements(): void

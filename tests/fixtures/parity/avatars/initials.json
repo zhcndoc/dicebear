@@ -66,10 +66,10 @@
     "options": {
       "seed": "parity-1",
       "size": 256,
-      "scale": 80,
+      "scale": 2,
       "rotate": 45
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\" width=\"256\" height=\"256\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><rect width=\"100\" height=\"100\" fill=\"#347a9d\"/><g transform=\"rotate(45, 50, 50)\"><g transform=\"translate(50, 50) scale(80) translate(-50, -50)\"><text x=\"50%\" y=\"50%\" font-family=\"system-ui\" font-weight=\"400\" font-size=\"50\" fill=\"#ffffff\" text-anchor=\"middle\" dy=\"17.8\">PA</text></g></g></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\" width=\"256\" height=\"256\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><rect width=\"100\" height=\"100\" fill=\"#347a9d\"/><g transform=\"rotate(45, 50, 50)\"><g transform=\"translate(50, 50) scale(2) translate(-50, -50)\"><text x=\"50%\" y=\"50%\" font-family=\"system-ui\" font-weight=\"400\" font-size=\"50\" fill=\"#ffffff\" text-anchor=\"middle\" dy=\"17.8\">PA</text></g></g></svg>",
     "resolvedOptions": {
       "seed": "parity-1",
       "backgroundColorFill": "solid",
@@ -86,7 +86,7 @@
       "initialsTranslateX": 0,
       "initialsTranslateY": 0,
       "initialsRotate": 0,
-      "scale": 80,
+      "scale": 2,
       "flip": "none",
       "rotate": 45,
       "translateX": 0,

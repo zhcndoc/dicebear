@@ -320,19 +320,19 @@ export class Renderer {
    * elements wrapped in any rotate/translate transforms.
    */
   #renderComponentElement(element: Element): string {
-    const value = element.value();
+    const componentName = element.name();
 
-    if (typeof value !== 'string') {
+    if (typeof componentName !== 'string') {
       return '';
     }
 
-    const variantName = this.#options.variant(value);
+    const variantName = this.#options.variant(componentName);
 
     if (!variantName) {
       return '';
     }
 
-    const component = this.#style.components().get(value);
+    const component = this.#style.components().get(componentName);
     if (!component) {
       return '';
     }
@@ -343,7 +343,7 @@ export class Renderer {
     }
 
     const body = this.#renderElements(variant.elements());
-    const transforms = this.#buildTransforms(value);
+    const transforms = this.#buildTransforms(componentName);
 
     if (transforms.length === 0) {
       return body;
@@ -354,7 +354,9 @@ export class Renderer {
 
   /**
    * Returns the per-component SVG `transform` fragments derived from the
-   * component's translate and rotate options.
+   * component's translate and rotate options. Translate values are
+   * percentages of the component canvas dimensions, matching the
+   * semantics of the user-facing `translateX` / `translateY` options.
    */
   #buildTransforms(componentName: string): string[] {
     const transforms: string[] = [];
@@ -362,16 +364,23 @@ export class Renderer {
     const translateY = this.#options.translateY(componentName);
     const rotate = this.#options.rotate(componentName);
 
+    if (translateX === 0 && translateY === 0 && rotate === 0) {
+      return transforms;
+    }
+
+    const component = this.#style.components().get(componentName);
+    if (!component) {
+      return transforms;
+    }
+
     if (translateX !== 0 || translateY !== 0) {
-      transforms.push(`translate(${translateX}, ${translateY})`);
+      const x = Math.round((translateX / 100) * component.width() * 10000) / 10000;
+      const y = Math.round((translateY / 100) * component.height() * 10000) / 10000;
+
+      transforms.push(`translate(${x}, ${y})`);
     }
 
     if (rotate !== 0) {
-      const component = this.#style.components().get(componentName);
-      if (!component) {
-        return transforms;
-      }
-
       const cx = component.width() / 2;
       const cy = component.height() / 2;
 
@@ -423,10 +432,10 @@ export class Renderer {
     }
 
     if (value.type === 'color') {
-      return this.#resolveColorReference(value.value);
+      return this.#resolveColorReference(value.name);
     }
 
-    return this.#resolveVariable(value.value);
+    return this.#resolveVariable(value.name);
   }
 
   /**
@@ -482,7 +491,7 @@ export class Renderer {
     }
 
     if (value.type === 'variable') {
-      return this.#resolveVariable(value.value);
+      return this.#resolveVariable(value.name);
     }
 
     return '';
@@ -491,7 +500,7 @@ export class Renderer {
   /**
    * Resolves a built-in variable reference to its current value.
    */
-  #resolveVariable(name: StyleDefinitionVariableReference['value']): string {
+  #resolveVariable(name: StyleDefinitionVariableReference['name']): string {
     switch (name) {
       case 'initial':
         return this.#initials().charAt(0);

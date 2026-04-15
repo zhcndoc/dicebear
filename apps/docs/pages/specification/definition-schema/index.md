@@ -78,8 +78,8 @@ determine the `viewBox` of the generated SVG.
     "width": 100,
     "height": 100,
     "elements": [
-      { "type": "component", "value": "background" },
-      { "type": "component", "value": "face" }
+      { "type": "component", "name": "background" },
+      { "type": "component", "name": "face" }
     ]
   }
 }
@@ -107,7 +107,7 @@ Renders an SVG element like `<circle>`, `<path>`, `<g>`, etc.
     "cx": "50",
     "cy": "50",
     "r": "40",
-    "fill": { "type": "color", "value": "skin" }
+    "fill": { "type": "color", "name": "skin" }
   },
   "children": []
 }
@@ -135,7 +135,7 @@ Or with a variable:
 ```json
 {
   "type": "text",
-  "value": { "type": "variable", "value": "initials" }
+  "value": { "type": "variable", "name": "initials" }
 }
 ```
 
@@ -147,7 +147,7 @@ Core will select a variant based on the seed and options.
 ```json
 {
   "type": "component",
-  "value": "eyes"
+  "name": "eyes"
 }
 ```
 
@@ -189,8 +189,10 @@ variants that the PRNG can choose from.
 | `height`      | number | —       | Component canvas height (required)             |
 | `probability` | number | `100`   | Chance the component appears (0-100)           |
 | `rotate`      | array  | —       | `[min, max]` rotation range in degrees         |
-| `translate`   | object | —       | `{ x: [min, max], y: [min, max] }` offsets     |
+| `translate`   | object | —       | `{ x: [min, max], y: [min, max] }` offsets as a percentage of the component canvas dimensions (-200 to 200) |
 | `variants`    | object | —       | Named variant definitions (required)           |
+
+`translate.x` is expressed as a percentage of the component width and `translate.y` as a percentage of the component height. A value of `100` corresponds to one full canvas dimension, matching the semantics of the user-facing `translateX` / `translateY` options. The example above (`y: [-5, 5]`) therefore means "shift the component vertically by up to 5 % of its height in either direction".
 
 ### Variants
 
@@ -249,7 +251,7 @@ Attributes can reference color groups instead of hardcoding colors:
 
 ```json
 {
-  "fill": { "type": "color", "value": "skin" }
+  "fill": { "type": "color", "name": "skin" }
 }
 ```
 
@@ -270,7 +272,7 @@ Text content and certain attributes support variable references:
 ```json
 {
   "type": "text",
-  "value": { "type": "variable", "value": "initials" }
+  "value": { "type": "variable", "name": "initials" }
 }
 ```
 
@@ -309,12 +311,12 @@ A complete but minimal definition that renders a colored circle:
           "cx": "50",
           "cy": "50",
           "r": "45",
-          "fill": { "type": "color", "value": "background" }
+          "fill": { "type": "color", "name": "background" }
         }
       },
       {
         "type": "component",
-        "value": "face"
+        "name": "face"
       }
     ]
   },

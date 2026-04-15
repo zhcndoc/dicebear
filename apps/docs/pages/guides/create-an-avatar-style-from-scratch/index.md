@@ -30,7 +30,7 @@ A minimal style definition with a colored circle:
           "cx": "50",
           "cy": "50",
           "r": "45",
-          "fill": { "type": "color", "value": "background" }
+          "fill": { "type": "color", "name": "background" }
         }
       }
     ]
@@ -71,12 +71,12 @@ Let's add a face component with two variants:
           "cx": "50",
           "cy": "50",
           "r": "45",
-          "fill": { "type": "color", "value": "background" }
+          "fill": { "type": "color", "name": "background" }
         }
       },
       {
         "type": "component",
-        "value": "face"
+        "name": "face"
       }
     ]
   },
@@ -147,7 +147,7 @@ Let's add a face component with two variants:
 ```
 
 The `canvas.elements` array references the `face` component via
-`{ "type": "component", "value": "face" }`. The PRNG selects either the
+`{ "type": "component", "name": "face" }`. The PRNG selects either the
 `smile` or `neutral` variant.
 
 ## Multiple components
@@ -262,7 +262,7 @@ Use color references in SVG attributes to apply dynamic colors:
   "type": "element",
   "name": "circle",
   "attributes": {
-    "fill": { "type": "color", "value": "skin" }
+    "fill": { "type": "color", "name": "skin" }
   }
 }
 ```

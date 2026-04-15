@@ -159,7 +159,7 @@ describe('Renderer', () => {
               type: 'element',
               name: 'text',
               children: [
-                { type: 'text', value: { type: 'variable', value: 'initial' } },
+                { type: 'text', value: { type: 'variable', name: 'initial' } },
               ],
             },
           ],
@@ -181,7 +181,7 @@ describe('Renderer', () => {
               type: 'element',
               name: 'text',
               children: [
-                { type: 'text', value: { type: 'variable', value: 'initials' } },
+                { type: 'text', value: { type: 'variable', name: 'initials' } },
               ],
             },
           ],
@@ -203,7 +203,7 @@ describe('Renderer', () => {
               type: 'element',
               name: 'text',
               children: [
-                { type: 'text', value: { type: 'variable', value: 'initials' } },
+                { type: 'text', value: { type: 'variable', name: 'initials' } },
               ],
             },
           ],
@@ -225,7 +225,7 @@ describe('Renderer', () => {
               type: 'element',
               name: 'text',
               children: [
-                { type: 'text', value: { type: 'variable', value: 'initials' } },
+                { type: 'text', value: { type: 'variable', name: 'initials' } },
               ],
             },
           ],
@@ -244,7 +244,7 @@ describe('Renderer', () => {
         width: 100,
         height: 100,
         elements: [
-          { type: 'component', value: 'eyes' },
+          { type: 'component', name: 'eyes' },
         ],
       },
       components: {
@@ -295,7 +295,7 @@ describe('Renderer', () => {
         eyesTranslateY: 10,
       }).toString();
 
-      assert.ok(svg.includes('transform="translate(5, 10)"'));
+      assert.ok(svg.includes('transform="translate(2.5, 5)"'));
     });
 
     it('should apply rotation with center point', () => {
@@ -331,7 +331,7 @@ describe('Renderer', () => {
             {
               type: 'element',
               name: 'rect',
-              attributes: { fill: { type: 'color', value: 'bg' } },
+              attributes: { fill: { type: 'color', name: 'bg' } },
             },
           ],
         },
@@ -357,7 +357,7 @@ describe('Renderer', () => {
             {
               type: 'element',
               name: 'rect',
-              attributes: { fill: { type: 'color', value: 'bg' } },
+              attributes: { fill: { type: 'color', name: 'bg' } },
             },
           ],
         },
@@ -388,7 +388,7 @@ describe('Renderer', () => {
             {
               type: 'element',
               name: 'rect',
-              attributes: { fill: { type: 'color', value: 'bg' } },
+              attributes: { fill: { type: 'color', name: 'bg' } },
             },
           ],
         },
@@ -676,7 +676,7 @@ describe('Renderer', () => {
             {
               type: 'element',
               name: 'text',
-              attributes: { 'font-family': { type: 'variable', value: 'fontFamily' } },
+              attributes: { 'font-family': { type: 'variable', name: 'fontFamily' } },
               children: [
                 { type: 'text', value: 'Hello' },
               ],
@@ -699,7 +699,7 @@ describe('Renderer', () => {
             {
               type: 'element',
               name: 'text',
-              attributes: { 'font-weight': { type: 'variable', value: 'fontWeight' } },
+              attributes: { 'font-weight': { type: 'variable', name: 'fontWeight' } },
               children: [
                 { type: 'text', value: 'Hello' },
               ],

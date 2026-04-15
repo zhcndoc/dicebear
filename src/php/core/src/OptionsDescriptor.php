@@ -14,7 +14,7 @@ class OptionsDescriptor
     /** @var array<string, mixed> */
     private static array $rotateRange = ['type' => 'range', 'min' => -360, 'max' => 360];
     /** @var array<string, mixed> */
-    private static array $translateRange = ['type' => 'range', 'min' => -100, 'max' => 100];
+    private static array $translateRange = ['type' => 'range', 'min' => -1000, 'max' => 1000];
 
     /** @var array<string, mixed>|null */
     private ?array $descriptor = null;
@@ -46,7 +46,7 @@ class OptionsDescriptor
     {
         $result = [
             'seed' => ['type' => 'string'],
-            'size' => ['type' => 'number', 'min' => 1],
+            'size' => ['type' => 'number', 'min' => 1, 'max' => 4096],
             'idRandomization' => ['type' => 'boolean'],
             'title' => ['type' => 'string'],
             'flip' => [
@@ -56,7 +56,7 @@ class OptionsDescriptor
             ],
             'fontFamily' => ['type' => 'string', 'list' => true],
             'fontWeight' => ['type' => 'number', 'min' => 1, 'max' => 1000, 'list' => true],
-            'scale' => ['type' => 'range', 'min' => 0],
+            'scale' => ['type' => 'range', 'min' => 0, 'max' => 10],
             'borderRadius' => ['type' => 'range', 'min' => 0, 'max' => 50],
             'rotate' => self::$rotateRange,
             'translateX' => self::$translateRange,

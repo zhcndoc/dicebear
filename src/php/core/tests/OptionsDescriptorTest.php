@@ -50,14 +50,14 @@ class OptionsDescriptorTest extends TestCase
         $schema = (new OptionsDescriptor(self::minimalStyle()))->toJSON();
 
         $this->assertSame(['type' => 'string'], $schema['seed']);
-        $this->assertSame(['type' => 'number', 'min' => 1], $schema['size']);
+        $this->assertSame(['type' => 'number', 'min' => 1, 'max' => 4096], $schema['size']);
         $this->assertSame(['type' => 'boolean'], $schema['idRandomization']);
         $this->assertSame(['type' => 'enum', 'values' => ['none', 'horizontal', 'vertical', 'both'], 'list' => true], $schema['flip']);
-        $this->assertSame(['type' => 'range', 'min' => 0], $schema['scale']);
+        $this->assertSame(['type' => 'range', 'min' => 0, 'max' => 10], $schema['scale']);
         $this->assertSame(['type' => 'range', 'min' => 0, 'max' => 50], $schema['borderRadius']);
         $this->assertSame(['type' => 'range', 'min' => -360, 'max' => 360], $schema['rotate']);
-        $this->assertSame(['type' => 'range', 'min' => -100, 'max' => 100], $schema['translateX']);
-        $this->assertSame(['type' => 'range', 'min' => -100, 'max' => 100], $schema['translateY']);
+        $this->assertSame(['type' => 'range', 'min' => -1000, 'max' => 1000], $schema['translateX']);
+        $this->assertSame(['type' => 'range', 'min' => -1000, 'max' => 1000], $schema['translateY']);
         $this->assertSame(['type' => 'string', 'list' => true], $schema['fontFamily']);
         $this->assertSame(['type' => 'number', 'min' => 1, 'max' => 1000, 'list' => true], $schema['fontWeight']);
     }

@@ -169,8 +169,8 @@ $avatar = new Avatar($style, [
   'scale' => 90,                   // or [min, max] range
   'borderRadius' => 50,            // 0-50 (50 = circle)
   'size' => 128,
-  'translateX' => 0,               // -100 to 100
-  'translateY' => 0,               // -100 to 100
+  'translateX' => 0,               // -100 to 100 (percent of canvas)
+  'translateY' => 0,               // -100 to 100 (percent of canvas)
   'idRandomization' => true,
   'title' => 'User Avatar',
   'fontFamily' => 'Arial',         // or ['Arial', 'Helvetica']
