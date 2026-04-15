@@ -383,10 +383,12 @@ class Renderer
         }
 
         if ($translateX !== 0.0 || $translateY !== 0.0) {
-            // Mirror JS's Math.round(x * 10000) / 10000 pattern so parity holds
-            // on PHP 8.3, which predates the 8.4 round() rewrite.
-            $x = round(($translateX / 100) * $component->width() * 10000) / 10000;
-            $y = round(($translateY / 100) * $component->height() * 10000) / 10000;
+            // PHP's round() applies an internal pre-rounding step that nudges
+            // values like 355099.4999... up to 355100, diverging from JS's
+            // Math.round. Emulating Math.round via floor($v + 0.5) avoids the
+            // pre-rounding and keeps PHP 8.2–8.4 in parity with JS.
+            $x = floor((($translateX / 100) * $component->width() * 10000) + 0.5) / 10000;
+            $y = floor((($translateY / 100) * $component->height() * 10000) + 0.5) / 10000;
             $transforms[] = "translate({$x}, {$y})";
         }
 
