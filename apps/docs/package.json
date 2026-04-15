@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@dicebear/core": "10.0.0-rc.2",
-    "@dicebear/definitions": "^0.1.0",
+    "@dicebear/definitions": "^10.0.0-rc.4",
     "@fontsource-variable/figtree": "^5.2.10",
     "@lucide/vue": "^1.7.0",
     "@primeuix/themes": "^2.0.3",
