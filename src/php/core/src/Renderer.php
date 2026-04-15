@@ -383,8 +383,10 @@ class Renderer
         }
 
         if ($translateX !== 0.0 || $translateY !== 0.0) {
-            $x = round(($translateX / 100) * $component->width(), 4);
-            $y = round(($translateY / 100) * $component->height(), 4);
+            // Mirror JS's Math.round(x * 10000) / 10000 pattern so parity holds
+            // on PHP 8.3, which predates the 8.4 round() rewrite.
+            $x = round(($translateX / 100) * $component->width() * 10000) / 10000;
+            $y = round(($translateY / 100) * $component->height() * 10000) / 10000;
             $transforms[] = "translate({$x}, {$y})";
         }
 
