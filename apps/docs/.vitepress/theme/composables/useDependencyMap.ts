@@ -57,8 +57,8 @@ function collectVariantRefs(
   refs: VariantRefs,
 ) {
   for (const el of elements) {
-    if (el.type() === 'component' && typeof el.value() === 'string') {
-      refs.childComponents.push(el.value() as string);
+    if (el.type() === 'component' && typeof el.name() === 'string') {
+      refs.childComponents.push(el.name() as string);
     }
 
     const attrs = el.attributes();

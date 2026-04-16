@@ -56,6 +56,7 @@ export function getComponentVariantPreviewOptions(
 ): Record<string, unknown> {
   return {
     seed: 'JD',
+    backgroundColor: [],
     [`${componentName}Variant`]: variant,
     ...getComponentVisibilityOptions(componentName, allComponentNames, allDependencies),
   };

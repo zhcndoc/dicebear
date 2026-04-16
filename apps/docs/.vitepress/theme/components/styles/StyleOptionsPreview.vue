@@ -81,31 +81,50 @@ const previewDataUri = computed(() => {
   return undefined;
 });
 
+const isBackgroundPreview = computed(() => {
+  const t = previewTarget.value;
+
+  if (
+    t.type === 'color' ||
+    t.type === 'colorFill' ||
+    t.type === 'colorFillStops' ||
+    t.type === 'colorAngle'
+  ) {
+    return t.color === 'background';
+  }
+
+  return false;
+});
+
 const generalOptions = computed(() => {
   if (isComponentPreview.value) return undefined;
 
   const t = previewTarget.value;
+  let opts: Record<string, unknown>;
 
   if (t.type === 'general' || t.type === 'variant' || t.type === 'probability') {
-    return getAvatarPropertyPreviewOptions(props.name, props.value);
+    opts = getAvatarPropertyPreviewOptions(props.name, props.value);
+  } else {
+    const colorKey = `${t.color}Color`;
+    const fillKey = `${t.color}ColorFill`;
+    opts = { seed: 'JD' };
+
+    if (t.type === 'color') {
+      opts[colorKey] = [props.value];
+    } else {
+      const stops = t.type === 'colorFillStops' ? Number(props.value) || 2 : 2;
+
+      opts[colorKey] = padColors(resolveColors(t.color, styleColors.value), stops).slice(0, stops);
+      opts[fillKey] = t.type === 'colorFill' ? [props.value] : ['linear'];
+
+      if (t.type === 'colorFillStops') opts[`${t.color}ColorFillStops`] = [props.value];
+      if (t.type === 'colorAngle') opts[`${t.color}ColorAngle`] = [props.value];
+    }
   }
 
-  const colorKey = `${t.color}Color`;
-  const fillKey = `${t.color}ColorFill`;
-  const opts: Record<string, unknown> = { seed: 'JD' };
-
-  if (t.type === 'color') {
-    opts[colorKey] = [props.value];
-    return opts;
+  if (!isBackgroundPreview.value) {
+    opts.backgroundColor = [];
   }
-
-  const stops = t.type === 'colorFillStops' ? Number(props.value) || 2 : 2;
-
-  opts[colorKey] = padColors(resolveColors(t.color, styleColors.value), stops).slice(0, stops);
-  opts[fillKey] = t.type === 'colorFill' ? [props.value] : ['linear'];
-
-  if (t.type === 'colorFillStops') opts[`${t.color}ColorFillStops`] = [props.value];
-  if (t.type === 'colorAngle') opts[`${t.color}ColorAngle`] = [props.value];
 
   return opts;
 });

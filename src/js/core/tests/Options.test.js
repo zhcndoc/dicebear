@@ -431,13 +431,13 @@ describe('Options', () => {
       assert.equal(options.variant('eyes'), undefined);
     });
 
-    it('should reject an empty variant array at validation time', () => {
-      assert.throws(() => {
-        new Options(styleWithComponents, {
-          seed: 'empty-test',
-          eyesVariant: [],
-        });
+    it('should yield undefined variant for an empty variant array', () => {
+      const options = new Options(styleWithComponents, {
+        seed: 'empty-test',
+        eyesVariant: [],
       });
+
+      assert.equal(options.variant('eyes'), undefined);
     });
 
     it('should pick from style variants when no option is set', () => {

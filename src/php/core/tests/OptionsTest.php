@@ -447,13 +447,13 @@ class OptionsTest extends TestCase
         $this->assertNull($options->variant('eyes'));
     }
 
-    public function testEmptyVariantArrayRejectedAtValidation(): void
+    public function testEmptyVariantArrayYieldsNullVariant(): void
     {
-        $this->expectException(\DiceBear\Error\OptionsValidationError::class);
-        new Options(self::styleWithComponents(), [
+        $options = new Options(self::styleWithComponents(), [
             'seed' => 'empty-test',
             'eyesVariant' => [],
         ]);
+        $this->assertNull($options->variant('eyes'));
     }
 
     public function testPicksFromStyleVariantsWhenNoOption(): void

@@ -6,8 +6,8 @@ function collectChildComponents(
   result: Set<string>,
 ): void {
   for (const el of elements) {
-    if (el.type() === 'component' && typeof el.value() === 'string') {
-      result.add(el.value() as string);
+    if (el.type() === 'component' && typeof el.name() === 'string') {
+      result.add(el.name() as string);
     }
 
     collectChildComponents(el.children(), result);
@@ -54,7 +54,7 @@ export class ComponentPreview {
         canvas: {
           width: comp.width,
           height: comp.height,
-          elements: [{ type: 'component' as const, value: componentName }],
+          elements: [{ type: 'component' as const, name: componentName }],
         },
         attributes: def.attributes,
         components: def.components,
@@ -68,6 +68,7 @@ export class ComponentPreview {
     // text-driven colors render onto an empty <text> and stay invisible.
     const previewOptions: Record<string, unknown> = {
       seed: 'JD',
+      backgroundColor: [],
       [`${componentName}Probability`]: 100,
     };
 
