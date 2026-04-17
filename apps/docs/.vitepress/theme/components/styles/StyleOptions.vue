@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import { computed, nextTick, provide, ref, shallowRef } from 'vue';
-import { OptionsDescriptor, type Style } from '@dicebear/core';
+import { computed, nextTick, provide, ref, toRef } from 'vue';
 import { getScrollOffset, inBrowser } from 'vitepress';
-import { loadAvatarStyle, styleUsesVariable } from '@theme/utils/avatar/style';
-import { getStyleColorsMap } from '@theme/utils/avatar/colors';
-import { computedAsync, watchOnce } from '@vueuse/core';
+import { styleUsesVariable } from '@theme/utils/avatar/style';
+import { watchOnce } from '@vueuse/core';
 import { capitalCase } from 'change-case';
 import { Search } from '@lucide/vue';
 import InputText from 'primevue/inputtext';
 import StyleOptionsGroup from './StyleOptionsGroup.vue';
-import { ComponentPreview } from '@theme/utils/componentPreview';
+import { useStyleOptions } from '@theme/composables/useStyleOptions';
 import { componentNamesKey, styleColorsKey, componentPreviewKey, styleDefaultsKey } from './styleOptionsKeys';
 
 interface OptionGroup {
@@ -25,55 +23,39 @@ const props = defineProps<{
 
 const searchQuery = ref('');
 
-const loadedStyle = shallowRef<Style | null>(null);
-
-const styleData = computedAsync(async () => {
-  const style = await loadAvatarStyle(props.styleName);
-  loadedStyle.value = style;
-  const descriptor = new OptionsDescriptor(style).toJSON();
-  const componentNames = Array.from(style.components().keys()).sort((a, b) => a.localeCompare(b));
-  const colorNames = [
-    'background',
-    ...Array.from(style.colors().keys()).filter((n) => n !== 'background').sort((a, b) => a.localeCompare(b)),
-  ];
-
-  return { descriptor, componentNames, colorNames };
-}, null);
-
-const allComponentNames = computed(() => styleData.value?.componentNames ?? []);
-provide(componentNamesKey, allComponentNames);
-
-const preview = computed(() => loadedStyle.value ? new ComponentPreview(loadedStyle.value) : null);
-provide(componentPreviewKey, preview);
-
-const styleColors = computed<Record<string, string[]>>(() =>
-  loadedStyle.value ? getStyleColorsMap(loadedStyle.value) : {},
+const { loadedStyle, descriptor, componentNames, colorNames, styleColors, preview } = useStyleOptions(
+  toRef(() => props.styleName),
 );
+
+provide(componentNamesKey, componentNames);
+provide(componentPreviewKey, preview);
 provide(styleColorsKey, styleColors);
 
 const styleDefaults = computed<Record<string, unknown>>(() => {
-  if (!loadedStyle.value) return {};
+  if (!loadedStyle.value) {
+    return {};
+  }
 
-  const result: Record<string, unknown> = {};
-
-  // General option defaults (from Options.ts)
-  result.flip = 'none';
-  result.fontFamily = 'system-ui';
-  result.fontWeight = 400;
-  result.scale = 1;
-  result.borderRadius = 0;
-  result.rotate = 0;
-  result.translateX = 0;
-  result.translateY = 0;
-  result.idRandomization = false;
+  const result: Record<string, unknown> = {
+    flip: 'none',
+    fontFamily: 'system-ui',
+    fontWeight: 400,
+    scale: 1,
+    borderRadius: 0,
+    rotate: 0,
+    translateX: 0,
+    translateY: 0,
+    idRandomization: false,
+  };
 
   for (const [name, component] of loadedStyle.value.components()) {
     const variantDefaults: Record<string, number> = {};
+
     for (const [v, variant] of component.variants()) {
       variantDefaults[v] = variant.weight();
     }
-    result[`${name}Variant`] = variantDefaults;
 
+    result[`${name}Variant`] = variantDefaults;
     result[`${name}Probability`] = component.probability();
 
     const rotate = component.rotate();
@@ -95,6 +77,7 @@ const styleDefaults = computed<Record<string, unknown>>(() => {
 
   return result;
 });
+
 provide(styleDefaultsKey, styleDefaults);
 
 function isComponentOption(key: string, names: string[]): boolean {
@@ -131,21 +114,26 @@ function pick(source: Record<string, any>, keys: string[]): Record<string, any> 
 }
 
 const groups = computed<OptionGroup[]>(() => {
-  if (!styleData.value) return [];
+  if (!loadedStyle.value) {
+    return [];
+  }
 
-  const { descriptor, componentNames, colorNames } = styleData.value;
   const result: OptionGroup[] = [];
-
   const hiddenKeys = new Set<string>();
 
-  if (!styleUsesVariable(props.styleName, 'fontFamily')) hiddenKeys.add('fontFamily');
-  if (!styleUsesVariable(props.styleName, 'fontWeight')) hiddenKeys.add('fontWeight');
+  if (!styleUsesVariable(props.styleName, 'fontFamily')) {
+    hiddenKeys.add('fontFamily');
+  }
 
-  const generalKeys = Object.keys(descriptor).filter(
+  if (!styleUsesVariable(props.styleName, 'fontWeight')) {
+    hiddenKeys.add('fontWeight');
+  }
+
+  const generalKeys = Object.keys(descriptor.value).filter(
     (key) =>
       !hiddenKeys.has(key) &&
-      !isComponentOption(key, componentNames) &&
-      !isColorOption(key, colorNames),
+      !isComponentOption(key, componentNames.value) &&
+      !isColorOption(key, colorNames.value),
   );
 
   if (generalKeys.length > 0) {
@@ -153,12 +141,12 @@ const groups = computed<OptionGroup[]>(() => {
       id: 'general',
       label: 'General',
       category: 'general',
-      options: pick(descriptor, generalKeys),
+      options: pick(descriptor.value, generalKeys),
     });
   }
 
-  for (const name of componentNames) {
-    const keys = Object.keys(descriptor).filter((k) =>
+  for (const name of componentNames.value) {
+    const keys = Object.keys(descriptor.value).filter((k) =>
       isComponentOption(k, [name]),
     );
 
@@ -167,13 +155,13 @@ const groups = computed<OptionGroup[]>(() => {
         id: `component-${name}`,
         label: capitalCase(name),
         category: 'component',
-        options: pick(descriptor, keys),
+        options: pick(descriptor.value, keys),
       });
     }
   }
 
-  for (const name of colorNames) {
-    const keys = Object.keys(descriptor).filter((k) =>
+  for (const name of colorNames.value) {
+    const keys = Object.keys(descriptor.value).filter((k) =>
       isColorOption(k, [name]),
     );
 
@@ -182,7 +170,7 @@ const groups = computed<OptionGroup[]>(() => {
         id: `color-${name}`,
         label: `${capitalCase(name)} Color`,
         category: 'color',
-        options: pick(descriptor, keys),
+        options: pick(descriptor.value, keys),
       });
     }
   }
@@ -190,18 +178,14 @@ const groups = computed<OptionGroup[]>(() => {
   return result;
 });
 
-const totalOptionCount = computed(() => {
-  if (!styleData.value) return 0;
-
-  return Object.keys(styleData.value.descriptor).length;
-});
-
-const showSearch = computed(() => totalOptionCount.value > 15);
+const showSearch = computed(() => Object.keys(descriptor.value).length > 15);
 
 const filteredGroups = computed(() => {
   const query = searchQuery.value.trim().toLowerCase();
 
-  if (!query) return groups.value;
+  if (!query) {
+    return groups.value;
+  }
 
   return groups.value
     .map((group) => {
@@ -218,15 +202,21 @@ const filteredGroups = computed(() => {
 
 // Option cards render asynchronously, so the browser's initial hash-scroll
 // runs before the target anchors exist. Re-do the scroll once they're in.
-watchOnce(styleData, async (data) => {
-  if (!inBrowser || !data) return;
+watchOnce(loadedStyle, async (style) => {
+  if (!inBrowser || !style) {
+    return;
+  }
 
   const hash = window.location.hash;
-  if (!hash.startsWith('#options-')) return;
+
+  if (!hash.startsWith('#options-')) {
+    return;
+  }
 
   await nextTick();
 
   let id: string;
+
   try {
     id = decodeURIComponent(hash).slice(1);
   } catch {
@@ -234,7 +224,10 @@ watchOnce(styleData, async (data) => {
   }
 
   const target = document.getElementById(id);
-  if (!target) return;
+
+  if (!target) {
+    return;
+  }
 
   const top =
     window.scrollY +
@@ -246,7 +239,7 @@ watchOnce(styleData, async (data) => {
 </script>
 
 <template>
-  <div class="style-options" v-if="styleData">
+  <div class="style-options" v-if="loadedStyle">
     <div class="style-options-search" v-if="showSearch">
       <div class="style-options-search-wrapper">
         <Search :size="16" class="style-options-search-icon" />

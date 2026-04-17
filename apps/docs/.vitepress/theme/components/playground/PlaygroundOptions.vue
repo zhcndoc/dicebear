@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import { computed, inject, provide, ref, watch } from 'vue';
-import { OptionsDescriptor } from '@dicebear/core';
-import { loadAvatarStyle, styleUsesVariable } from '@theme/utils/avatar/style';
-import { getStyleColorsMap } from '@theme/utils/avatar/colors';
+import { styleUsesVariable } from '@theme/utils/avatar/style';
 import { webSafeFonts } from '@theme/utils/avatar/fonts';
-import { ComponentPreview } from '@theme/utils/componentPreview';
 import { componentPreviewKey } from '@theme/components/styles/styleOptionsKeys';
-import { computedAsync } from '@vueuse/core';
+import { useStyleOptions } from '@theme/composables/useStyleOptions';
 import { capitalCase } from 'change-case';
 import useStore from '@theme/stores/playground';
 import { storeToRefs } from 'pinia';
@@ -22,65 +19,6 @@ import PlaygroundComponentSection from './PlaygroundComponentSection.vue';
 import PlaygroundColorSection from './PlaygroundColorSection.vue';
 import PlaygroundTransformSection from './PlaygroundTransformSection.vue';
 import PlaygroundFontSection from './PlaygroundFontSection.vue';
-
-const seed = defineModel<string>('seed', { required: true });
-
-const store = useStore();
-const { avatarStyleName } = storeToRefs(store);
-
-const loadedStyle = computedAsync(async () => {
-  return await loadAvatarStyle(avatarStyleName.value);
-}, null);
-
-const descriptor = computed(() => {
-  if (!loadedStyle.value) return {};
-
-  return new OptionsDescriptor(loadedStyle.value).toJSON();
-});
-
-// Apply initial options (from fragment import) once after descriptor first loads
-const initialOptions = inject<import('vue').Ref<Record<string, unknown>>>('initialOptions', ref({}));
-const initialOptionsApplied = ref(false);
-
-watch(descriptor, (desc) => {
-  if (initialOptionsApplied.value || Object.keys(desc).length === 0) return;
-
-  initialOptionsApplied.value = true;
-
-  const opts = initialOptions.value;
-
-  if (Object.keys(opts).length > 0) {
-    if ('fontFamily' in opts) {
-      const allowed: readonly string[] = webSafeFonts;
-
-      if (typeof opts.fontFamily === 'string' && !allowed.includes(opts.fontFamily)) {
-        delete opts.fontFamily;
-      } else if (Array.isArray(opts.fontFamily)) {
-        opts.fontFamily = opts.fontFamily.filter((f: unknown) => typeof f === 'string' && allowed.includes(f));
-        if ((opts.fontFamily as string[]).length === 0) delete opts.fontFamily;
-      }
-    }
-
-    Object.assign(store.avatarStyleOptions, opts);
-  }
-}, { immediate: true });
-
-const defaultColors = computed<Record<string, string[]>>(() =>
-  loadedStyle.value ? getStyleColorsMap(loadedStyle.value) : {},
-);
-
-const hasFontFamily = computed(() =>
-  loadedStyle.value ? styleUsesVariable(avatarStyleName.value, 'fontFamily') : false,
-);
-
-const hasFontWeight = computed(() =>
-  loadedStyle.value ? styleUsesVariable(avatarStyleName.value, 'fontWeight') : false,
-);
-
-const preview = computed(() =>
-  loadedStyle.value ? new ComponentPreview(loadedStyle.value) : null,
-);
-provide(componentPreviewKey, preview);
 
 type ComponentInfo = {
   name: string;
@@ -105,6 +43,56 @@ type ColorInfo = {
   hasAngle: boolean;
   hasFillStops: boolean;
 };
+
+const seed = defineModel<string>('seed', { required: true });
+
+const store = useStore();
+const { avatarStyleName } = storeToRefs(store);
+
+const { loadedStyle, descriptor, styleColors, preview } = useStyleOptions(avatarStyleName);
+
+provide(componentPreviewKey, preview);
+
+const initialOptions = inject<import('vue').Ref<Record<string, unknown>>>('initialOptions', ref({}));
+const initialOptionsApplied = ref(false);
+
+watch(descriptor, (desc) => {
+  if (initialOptionsApplied.value || Object.keys(desc).length === 0) {
+    return;
+  }
+
+  initialOptionsApplied.value = true;
+
+  const opts = initialOptions.value;
+
+  if (Object.keys(opts).length === 0) {
+    return;
+  }
+
+  if ('fontFamily' in opts) {
+    const allowed: readonly string[] = webSafeFonts;
+
+    if (typeof opts.fontFamily === 'string' && !allowed.includes(opts.fontFamily)) {
+      delete opts.fontFamily;
+    } else if (Array.isArray(opts.fontFamily)) {
+      opts.fontFamily = opts.fontFamily.filter((f: unknown) => typeof f === 'string' && allowed.includes(f));
+
+      if ((opts.fontFamily as string[]).length === 0) {
+        delete opts.fontFamily;
+      }
+    }
+  }
+
+  Object.assign(store.avatarStyleOptions, opts);
+}, { immediate: true });
+
+const hasFontFamily = computed(() =>
+  loadedStyle.value ? styleUsesVariable(avatarStyleName.value, 'fontFamily') : false,
+);
+
+const hasFontWeight = computed(() =>
+  loadedStyle.value ? styleUsesVariable(avatarStyleName.value, 'fontWeight') : false,
+);
 
 const components = computed(() => {
   const result: ComponentInfo[] = [];
@@ -144,15 +132,20 @@ const allColors = computed(() => {
   const result: ColorInfo[] = [];
 
   for (const [key, field] of Object.entries(descriptor.value)) {
-    if (field.type !== 'color' || !key.endsWith('Color')) continue;
-    if (key.endsWith('ColorFill') || key.endsWith('ColorAngle') || key.endsWith('ColorFillStops')) continue;
+    if (field.type !== 'color' || !key.endsWith('Color')) {
+      continue;
+    }
+
+    if (key.endsWith('ColorFill') || key.endsWith('ColorAngle') || key.endsWith('ColorFillStops')) {
+      continue;
+    }
 
     const name = key.replace(/Color$/, '');
 
     result.push({
       name,
       key,
-      defaultValues: defaultColors.value[name] ?? [],
+      defaultValues: styleColors.value[name] ?? [],
       hasFill: `${key}Fill` in descriptor.value,
       hasAngle: `${key}Angle` in descriptor.value,
       hasFillStops: `${key}FillStops` in descriptor.value,
