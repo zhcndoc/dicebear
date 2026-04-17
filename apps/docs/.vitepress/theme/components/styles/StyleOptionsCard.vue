@@ -118,22 +118,33 @@ const skipPreview = computed(() =>
 const excludeHttpApi = computed(() => unsupportedHttpApiOptions.has(props.name));
 
 const possibleValues = computed(() => {
-  if (skipPreview.value) return [];
+  if (skipPreview.value) {
+    return [];
+  }
 
   return fieldValues.value.slice().sort(naturalSort);
 });
 
 const examples = computed<(string | number | boolean)[] | undefined>(() => {
-  if (skipPreview.value) return undefined;
-  if (isWeighted.value && fieldValues.value.length > 0) return undefined;
+  if (skipPreview.value) {
+    return undefined;
+  }
+
+  if (isWeighted.value && fieldValues.value.length > 0) {
+    return undefined;
+  }
 
   return getOptionExamples(props.name, colorExamples);
 });
 
-// Prefer curated examples, fall back to possible values
 const previewItems = computed(() => {
-  if (examples.value) return examples.value;
-  if (possibleValues.value.length > 0) return possibleValues.value;
+  if (examples.value) {
+    return examples.value;
+  }
+
+  if (possibleValues.value.length > 0) {
+    return possibleValues.value;
+  }
 
   return [];
 });
@@ -147,16 +158,35 @@ const codeExampleValue = computed(() => {
     return isList.value ? possibleValues.value.slice(0, 2) : possibleValues.value[0];
   }
 
-  if (fieldType.value === 'boolean') return true;
-  if (fieldType.value === 'color') return ['b6e3f4'];
+  if (fieldType.value === 'boolean') {
+    return true;
+  }
+
+  if (fieldType.value === 'color') {
+    return ['b6e3f4'];
+  }
+
   if (fieldType.value === 'number' || fieldType.value === 'range') {
     const dv = styleDefaults.value[props.name];
-    if (typeof dv === 'number') return dv;
-    if (fieldMin.value !== undefined) return fieldMin.value;
+
+    if (typeof dv === 'number') {
+      return dv;
+    }
+
+    if (fieldMin.value !== undefined) {
+      return fieldMin.value;
+    }
+
     return 0;
   }
-  if (props.name === 'title') return 'Avatar';
-  if (props.name === 'fontFamily') return 'Arial';
+
+  if (props.name === 'title') {
+    return 'Avatar';
+  }
+
+  if (props.name === 'fontFamily') {
+    return 'Arial';
+  }
 
   return undefined;
 });
