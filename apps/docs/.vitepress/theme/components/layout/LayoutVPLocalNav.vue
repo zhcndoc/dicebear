@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { useData } from 'vitepress';
 import { useLayout } from 'vitepress/theme';
 // @ts-expect-error vitepress does not ship types for its internal theme components
