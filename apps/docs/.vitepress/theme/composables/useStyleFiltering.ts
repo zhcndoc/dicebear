@@ -1,4 +1,4 @@
-import { ref, computed, Ref } from 'vue';
+import { ref, computed, type Ref } from 'vue';
 import { kebabCase, capitalCase } from 'change-case';
 import type { CustomStyleEntry } from '@theme/types';
 import {
@@ -44,7 +44,9 @@ export function useStyleFiltering(
       })
       .sort((a, b) => a.displayName.localeCompare(b.displayName));
 
-    if (!customStyles) return builtIn;
+    if (!customStyles) {
+      return builtIn;
+    }
 
     const custom = Object.entries(customStyles.value).map(([key, entry]) => ({
       name: key,

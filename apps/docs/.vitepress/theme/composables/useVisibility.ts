@@ -31,6 +31,7 @@ export function useVisibility(
       element = document.querySelector(target);
     } else if (isRef(target)) {
       const val = target.value;
+
       if (val instanceof Element) {
         element = val;
       } else if (val && '$el' in val) {
@@ -40,20 +41,23 @@ export function useVisibility(
       element = target();
     }
 
-    if (!element) return;
+    if (!element) {
+      return;
+    }
 
     observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
+        for (const entry of entries) {
           if (entry.isIntersecting) {
             isVisible.value = true;
+
             if (once && observer) {
               observer.disconnect();
             }
           } else if (!once) {
             isVisible.value = false;
           }
-        });
+        }
       },
       { threshold, rootMargin },
     );

@@ -1,11 +1,14 @@
 import { watch, onMounted, onUnmounted, type Ref } from 'vue';
 
+const LERP_FACTOR = 0.08;
+const INITIAL_POSITION = 0.5;
+
 export function useParallax(isVisible: Ref<boolean>) {
   let containerEl: HTMLElement | null = null;
-  let targetMouseX = 0.5;
-  let targetMouseY = 0.5;
-  let currentX = 0.5;
-  let currentY = 0.5;
+  let targetMouseX = INITIAL_POSITION;
+  let targetMouseY = INITIAL_POSITION;
+  let currentX = INITIAL_POSITION;
+  let currentY = INITIAL_POSITION;
   let animationFrameId: number | null = null;
 
   function setContainer(el: HTMLElement) {
@@ -25,9 +28,8 @@ export function useParallax(isVisible: Ref<boolean>) {
       return;
     }
 
-    const lerp = 0.08;
-    currentX += (targetMouseX - currentX) * lerp;
-    currentY += (targetMouseY - currentY) * lerp;
+    currentX += (targetMouseX - currentX) * LERP_FACTOR;
+    currentY += (targetMouseY - currentY) * LERP_FACTOR;
 
     if (containerEl) {
       containerEl.style.setProperty('--parallax-x', String(currentX));
@@ -44,11 +46,15 @@ export function useParallax(isVisible: Ref<boolean>) {
   }
 
   watch(isVisible, (visible) => {
-    if (visible) start();
+    if (visible) {
+      start();
+    }
   });
 
   onMounted(() => {
-    if (isVisible.value) start();
+    if (isVisible.value) {
+      start();
+    }
   });
 
   onUnmounted(() => {

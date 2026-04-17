@@ -1,5 +1,8 @@
 import { ref, onMounted } from 'vue';
 
+const STATS_API_URL = 'https://api.dicebear.com/stats.json';
+const MONTH_KEY_LENGTH = 7;
+
 export interface StatsData {
   requests: Record<string, number>;
   traffic: Record<string, number>;
@@ -24,13 +27,18 @@ export function lastCompleteMonth(
   daily: Record<string, number>,
 ): { total: number; label: string } | null {
   const monthly: Record<string, number> = {};
+
   for (const [date, value] of Object.entries(daily)) {
-    const key = date.slice(0, 7);
+    const key = date.slice(0, MONTH_KEY_LENGTH);
     monthly[key] = (monthly[key] || 0) + value;
   }
 
   const keys = Object.keys(monthly).sort();
-  if (keys.length < 2) return null;
+
+  if (keys.length < 2) {
+    return null;
+  }
+
   const lastKey = keys[keys.length - 2];
   const [y, m] = lastKey.split('-');
   const label = new Date(Number(y), Number(m) - 1).toLocaleDateString('en', {
@@ -43,7 +51,7 @@ export function lastCompleteMonth(
 
 async function doFetch() {
   try {
-    const res = await fetch('https://api.dicebear.com/stats.json');
+    const res = await fetch(STATS_API_URL);
     const data: StatsData = await res.json();
     rawData.value = data;
 
@@ -51,7 +59,9 @@ async function doFetch() {
     const traffic = lastCompleteMonth(data.traffic);
     const npmDownloads = lastCompleteMonth(data.downloads.npm);
 
-    if (!requests || !traffic) return;
+    if (!requests || !traffic) {
+      return;
+    }
 
     cached.value = {
       monthlyRequests: requests.total,
@@ -66,18 +76,20 @@ async function doFetch() {
   }
 }
 
+function ensureFetched() {
+  if (!cached.value && !fetching) {
+    fetching = doFetch();
+  }
+}
+
 export function useApiStats() {
-  onMounted(() => {
-    if (!cached.value && !fetching) fetching = doFetch();
-  });
+  onMounted(ensureFetched);
 
   return cached;
 }
 
 export function useApiStatsRaw() {
-  onMounted(() => {
-    if (!cached.value && !fetching) fetching = doFetch();
-  });
+  onMounted(ensureFetched);
 
   return rawData;
 }
