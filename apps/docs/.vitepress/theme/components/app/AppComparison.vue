@@ -1,132 +1,20 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Check, X } from '@lucide/vue';
-import { ThemeOptions } from '@theme/types';
 import { useData } from 'vitepress';
+import type { ThemeOptions } from '@theme/types';
 import { UiContainer, UiSection, UiSectionHeader, UiCard } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
+import { buildComparisonRows, comparisonServices } from '@theme/config/comparison';
 
 const { theme } = useData<ThemeOptions>();
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef, { threshold: 0.1 });
 
-const stars = theme.value.githubStars ?? {};
-const styleCount = Object.keys(theme.value.avatarStyles ?? {}).length;
-
-type CellValue = 'yes' | 'no' | string;
-
-interface ComparisonRow {
-  feature: string;
-  dicebear: CellValue;
-  avvvatars: CellValue;
-  jdenticon: CellValue;
-  multiavatar: CellValue;
-  boringAvatars: CellValue;
-}
-
-const rows: ComparisonRow[] = [
-  {
-    feature: 'GitHub Stars',
-    dicebear: stars['dicebear/dicebear'] || '8k+',
-    avvvatars: stars['nusu/avvvatars'] || '2k+',
-    jdenticon: stars['dmester/jdenticon'] || '1.7k+',
-    multiavatar: stars['multiavatar/Multiavatar'] || '1.9k+',
-    boringAvatars: stars['boringdesigners/boring-avatars'] || '6k+',
-  },
-  {
-    feature: 'Avatar Styles',
-    dicebear: `${styleCount}`,
-    avvvatars: '2',
-    jdenticon: '1',
-    multiavatar: '1',
-    boringAvatars: '6',
-  },
-  {
-    feature: 'Customizable Options',
-    dicebear: 'Extensive',
-    avvvatars: 'Limited',
-    jdenticon: 'Limited',
-    multiavatar: 'Limited',
-    boringAvatars: 'Extensive',
-  },
-  {
-    feature: 'HTTP API',
-    dicebear: 'free',
-    avvvatars: 'no',
-    jdenticon: 'no',
-    multiavatar: 'no',
-    boringAvatars: 'paid',
-  },
-  {
-    feature: 'CLI',
-    dicebear: 'yes',
-    avvvatars: 'no',
-    jdenticon: 'yes',
-    multiavatar: 'no',
-    boringAvatars: 'no',
-  },
-  {
-    feature: 'Languages',
-    dicebear: 'JS/TS',
-    avvvatars: 'JS/TS',
-    jdenticon: 'JS, .NET, PHP',
-    multiavatar: 'JS, PHP, Python',
-    boringAvatars: 'JS',
-  },
-  {
-    feature: 'Dependencies',
-    dicebear: '\u2013',
-    avvvatars: 'React',
-    jdenticon: '\u2013',
-    multiavatar: '\u2013',
-    boringAvatars: 'React',
-  },
-  {
-    feature: 'Output Formats',
-    dicebear: 'SVG, PNG, JPEG, WebP, AVIF',
-    avvvatars: 'SVG',
-    jdenticon: 'SVG, PNG',
-    multiavatar: 'SVG',
-    boringAvatars: 'SVG',
-  },
-  {
-    feature: 'Design License',
-    dicebear: 'Varies',
-    avvvatars: 'MIT',
-    jdenticon: 'MIT',
-    multiavatar: 'Custom',
-    boringAvatars: 'MIT',
-  },
-  {
-    feature: 'Open Source',
-    dicebear: 'yes',
-    avvvatars: 'yes',
-    jdenticon: 'yes',
-    multiavatar: 'yes',
-    boringAvatars: 'yes',
-  },
-  {
-    feature: 'Deterministic',
-    dicebear: 'yes',
-    avvvatars: 'yes',
-    jdenticon: 'yes',
-    multiavatar: 'yes',
-    boringAvatars: 'yes',
-  },
-];
-
-const services = [
-  { name: 'DiceBear', url: 'https://www.dicebear.com' },
-  { name: 'Boring Avatars', url: 'https://boringavatars.com' },
-  { name: 'Avvvatars', url: 'https://avvvatars.com' },
-  { name: 'Multiavatar', url: 'https://multiavatar.com' },
-  { name: 'Jdenticon', url: 'https://jdenticon.com' },
-];
-const serviceKeys: (keyof ComparisonRow)[] = ['dicebear', 'boringAvatars', 'avvvatars', 'multiavatar', 'jdenticon'];
-
-function getCellValue(row: ComparisonRow, key: keyof ComparisonRow): CellValue {
-  return row[key];
-}
+const rows = buildComparisonRows({
+  stars: theme.value.githubStars ?? {},
+  styleCount: Object.keys(theme.value.avatarStyles ?? {}).length,
+});
 </script>
 
 <template>
@@ -150,8 +38,8 @@ function getCellValue(row: ComparisonRow, key: keyof ComparisonRow): CellValue {
               <tr>
                 <th class="app-comparison-feature-col">Feature</th>
                 <th
-                  v-for="(service, index) in services"
-                  :key="index"
+                  v-for="(service, index) in comparisonServices"
+                  :key="service.key"
                   :class="{ 'app-comparison-highlight-col': index === 0 }"
                 >
                   <a :href="service.url" target="_blank" rel="noopener" class="app-comparison-service-link">{{ service.name }}</a>
@@ -162,23 +50,23 @@ function getCellValue(row: ComparisonRow, key: keyof ComparisonRow): CellValue {
               <tr v-for="(row, rowIndex) in rows" :key="rowIndex">
                 <td class="app-comparison-feature-col">{{ row.feature }}</td>
                 <td
-                  v-for="(key, colIndex) in serviceKeys"
-                  :key="key"
+                  v-for="(service, colIndex) in comparisonServices"
+                  :key="service.key"
                   :class="{ 'app-comparison-highlight-col': colIndex === 0 }"
                 >
-                  <span v-if="getCellValue(row, key) === 'yes'" class="app-comparison-cell-yes">
+                  <span v-if="row.values[service.key] === 'yes'" class="app-comparison-cell-yes">
                     <Check :size="18" />
                   </span>
-                  <span v-else-if="getCellValue(row, key) === 'free'" class="app-comparison-cell-free">
+                  <span v-else-if="row.values[service.key] === 'free'" class="app-comparison-cell-free">
                     Free
                   </span>
-                  <span v-else-if="getCellValue(row, key) === 'paid'" class="app-comparison-cell-paid">
+                  <span v-else-if="row.values[service.key] === 'paid'" class="app-comparison-cell-paid">
                     Paid
                   </span>
-                  <span v-else-if="getCellValue(row, key) === 'no'" class="app-comparison-cell-no">
+                  <span v-else-if="row.values[service.key] === 'no'" class="app-comparison-cell-no">
                     <X :size="18" />
                   </span>
-                  <span v-else class="app-comparison-cell-text">{{ getCellValue(row, key) }}</span>
+                  <span v-else class="app-comparison-cell-text">{{ row.values[service.key] }}</span>
                 </td>
               </tr>
             </tbody>
