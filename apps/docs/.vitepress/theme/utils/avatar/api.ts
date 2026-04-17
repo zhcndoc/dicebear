@@ -15,7 +15,10 @@ type ApiOptionValue =
   | { kind: 'string'; value: string };
 
 function classifyOptionValue(value: unknown): ApiOptionValue {
-  if (Array.isArray(value)) return { kind: 'array', values: value };
+  if (Array.isArray(value)) {
+    return { kind: 'array', values: value };
+  }
+
   if (
     typeof value === 'string' ||
     typeof value === 'number' ||
@@ -79,7 +82,9 @@ function shellQuote(value: string): string {
 // stay unquoted both as single values and inside arrays. Strings get
 // quoted defensively in case they contain spaces, semicolons, etc.
 function formatCliArg(value: unknown): string {
-  if (typeof value === 'number' || typeof value === 'boolean') return String(value);
+  if (typeof value === 'number' || typeof value === 'boolean') {
+    return String(value);
+  }
 
   return shellQuote(String(value));
 }

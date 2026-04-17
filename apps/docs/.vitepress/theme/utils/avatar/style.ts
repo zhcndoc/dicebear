@@ -128,14 +128,20 @@ export async function loadAvatarStyle(avatarStyle: string): Promise<Style> {
 }
 
 function scanForVariable(obj: unknown, variableName: string): boolean {
-  if (typeof obj !== 'object' || obj === null) return false;
+  if (typeof obj !== 'object' || obj === null) {
+    return false;
+  }
 
   const record = obj as Record<string, unknown>;
 
-  if (record.type === 'variable' && record.value === variableName) return true;
+  if (record.type === 'variable' && record.value === variableName) {
+    return true;
+  }
 
   for (const val of Object.values(record)) {
-    if (scanForVariable(val, variableName)) return true;
+    if (scanForVariable(val, variableName)) {
+      return true;
+    }
   }
 
   return false;
@@ -146,7 +152,9 @@ export function styleUsesVariable(avatarStyle: string, variableName: string): bo
   const key = definitionRawCache.has(name) ? name : avatarStyle;
   const raw = definitionRawCache.get(key);
 
-  if (!raw) return false;
+  if (!raw) {
+    return false;
+  }
 
   let perStyle = variableResultCache.get(key);
 
@@ -155,7 +163,9 @@ export function styleUsesVariable(avatarStyle: string, variableName: string): bo
     variableResultCache.set(key, perStyle);
   }
 
-  if (perStyle.has(variableName)) return perStyle.get(variableName)!;
+  if (perStyle.has(variableName)) {
+    return perStyle.get(variableName)!;
+  }
 
   const result = scanForVariable(raw, variableName);
 

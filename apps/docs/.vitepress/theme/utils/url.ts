@@ -5,9 +5,13 @@
  * schemes are dropped before they reach the DOM.
  */
 export function safeHttpUrl(url: string | undefined | null): string | undefined {
-  if (!url) return undefined;
+  if (!url) {
+    return undefined;
+  }
+
   try {
     const u = new URL(url);
+
     return u.protocol === 'http:' || u.protocol === 'https:' ? url : undefined;
   } catch {
     return undefined;
