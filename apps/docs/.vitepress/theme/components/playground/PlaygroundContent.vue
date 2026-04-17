@@ -9,6 +9,12 @@ import PlaygroundStyleSelect from './PlaygroundStyleSelect.vue';
 import useStore from '@theme/stores/playground';
 import { compressFragment, decompressFragment } from '@theme/utils/avatar/fragment';
 import Button from 'primevue/button';
+import { COPY_LINK_RESET_MS, FRAGMENT_PREFIX } from './constants';
+
+type FragmentPayload = {
+  style?: string;
+  options?: Record<string, unknown>;
+};
 
 const store = useStore();
 const { avatarStyleName, seed } = storeToRefs(store);
@@ -29,17 +35,15 @@ if (styleParam) {
   history.replaceState(null, '', window.location.pathname);
 }
 
-// Fragment import: read #data=... on init, overrides persisted state
 async function importFragment() {
   const hash = window.location.hash;
 
-  if (!hash.startsWith('#data=')) return;
+  if (!hash.startsWith(FRAGMENT_PREFIX)) {
+    return;
+  }
 
   try {
-    const payload = await decompressFragment(hash.slice('#data='.length)) as {
-      style?: string;
-      options?: Record<string, unknown>;
-    };
+    const payload = (await decompressFragment(hash.slice(FRAGMENT_PREFIX.length))) as FragmentPayload;
 
     store.resetOptions();
 
@@ -59,7 +63,6 @@ async function importFragment() {
 
 importFragment();
 
-// Provide initial options from fragment to PlaygroundOptions
 provide('initialOptions', initialOptions);
 
 const linkCopied = ref(false);
@@ -71,14 +74,16 @@ async function copyLink() {
   };
 
   const encoded = await compressFragment(payload);
-  const url = `${window.location.origin}${window.location.pathname}#data=${encoded}`;
+  const url = `${window.location.origin}${window.location.pathname}${FRAGMENT_PREFIX}${encoded}`;
 
   await navigator.clipboard.writeText(url);
 
   linkCopied.value = true;
-  setTimeout(() => { linkCopied.value = false; }, 2000);
-}
 
+  setTimeout(() => {
+    linkCopied.value = false;
+  }, COPY_LINK_RESET_MS);
+}
 </script>
 
 <template>

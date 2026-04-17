@@ -11,6 +11,7 @@ import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
 import Button from 'primevue/button';
 import Menu from 'primevue/menu';
+import { DIALOG_PREVIEW_AVATAR_SIZE, DOWNLOAD_AVATAR_SIZE } from './constants';
 
 const props = defineProps<{
   seed: string;
@@ -22,6 +23,7 @@ const menu = ref();
 function triggerDownload(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
+
   link.href = url;
   link.download = filename;
   link.click();
@@ -35,7 +37,7 @@ async function downloadSvg() {
   const avatarStyle = await loadAvatarStyle(store.avatarStyleName);
   const avatar = new Avatar(avatarStyle, clonePlain({
     ...options.value,
-    size: 512,
+    size: DOWNLOAD_AVATAR_SIZE,
   }));
 
   const blob = new Blob([avatar.toString()], { type: 'image/svg+xml' });
@@ -84,7 +86,7 @@ function onDownloadClick(e: Event) {
       <UiAvatar
         :style-name="store.avatarStyleName"
         :style-options="options"
-        :size="128"
+        :size="DIALOG_PREVIEW_AVATAR_SIZE"
         mode="library"
       />
     </div>

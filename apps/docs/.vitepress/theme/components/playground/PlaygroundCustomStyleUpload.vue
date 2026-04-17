@@ -8,6 +8,7 @@ import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';
 import { Upload } from '@lucide/vue';
+import { MAX_CUSTOM_STYLE_UPLOAD_BYTES } from './constants';
 
 const open = defineModel<boolean>('open', { required: true });
 
@@ -16,8 +17,6 @@ const emit = defineEmits<{
 }>();
 
 const store = useStore();
-
-const MAX_UPLOAD_SIZE = 1024 * 1024;
 
 const jsonInput = ref('');
 const styleName = ref('');
@@ -37,13 +36,21 @@ function extractName(definition: Record<string, unknown>): string {
 
   if (meta) {
     const source = meta.source as Record<string, unknown> | undefined;
-    if (source?.name && typeof source.name === 'string') return source.name;
+
+    if (source?.name && typeof source.name === 'string') {
+      return source.name;
+    }
 
     const creator = meta.creator as Record<string, unknown> | undefined;
-    if (creator?.name && typeof creator.name === 'string') return creator.name;
+
+    if (creator?.name && typeof creator.name === 'string') {
+      return creator.name;
+    }
   }
 
-  if (definition.$id && typeof definition.$id === 'string') return definition.$id;
+  if (definition.$id && typeof definition.$id === 'string') {
+    return definition.$id;
+  }
 
   return 'Custom Style';
 }
@@ -51,8 +58,9 @@ function extractName(definition: Record<string, unknown>): string {
 async function submit() {
   error.value = '';
 
-  if (new TextEncoder().encode(jsonInput.value).length > MAX_UPLOAD_SIZE) {
+  if (new TextEncoder().encode(jsonInput.value).length > MAX_CUSTOM_STYLE_UPLOAD_BYTES) {
     error.value = 'Style definition is too large (max 1 MB).';
+
     return;
   }
 
@@ -62,7 +70,6 @@ async function submit() {
     const parsed = JSON.parse(jsonInput.value);
     const name = styleName.value.trim() || extractName(parsed);
 
-    // Validate — Style constructor throws on invalid definitions
     new Style(parsed);
 
     const key = store.addCustomStyle(name, parsed);
@@ -88,11 +95,14 @@ async function onFileSelect(event: Event) {
 
   error.value = '';
 
-  if (!file) return;
+  if (!file) {
+    return;
+  }
 
-  if (file.size > MAX_UPLOAD_SIZE) {
+  if (file.size > MAX_CUSTOM_STYLE_UPLOAD_BYTES) {
     error.value = 'File is too large (max 1 MB).';
     input.value = '';
+
     return;
   }
 

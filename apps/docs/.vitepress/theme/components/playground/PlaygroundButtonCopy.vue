@@ -10,6 +10,7 @@ import PlaygroundDialog from './PlaygroundDialog.vue';
 import Button from 'primevue/button';
 import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
+import { DIALOG_PREVIEW_AVATAR_SIZE, DOWNLOAD_AVATAR_SIZE } from './constants';
 
 const props = defineProps<{
   seed: string;
@@ -23,7 +24,7 @@ async function onClick() {
   const avatarStyle = await loadAvatarStyle(store.avatarStyleName);
   const avatar = new Avatar(avatarStyle, clonePlain({
     ...options.value,
-    size: 512,
+    size: DOWNLOAD_AVATAR_SIZE,
   }));
 
   const successful = copy(avatar.toString());
@@ -49,7 +50,7 @@ async function onClick() {
       <UiAvatar
         :style-name="store.avatarStyleName"
         :style-options="options"
-        :size="128"
+        :size="DIALOG_PREVIEW_AVATAR_SIZE"
         mode="library"
       />
     </div>
