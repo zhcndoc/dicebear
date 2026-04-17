@@ -1,14 +1,26 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { kebabCase, camelCase, capitalCase } from 'change-case';
-import { Dice5, ChevronDown, Sparkles } from '@lucide/vue';
-import { UiAvatar, UiHeadline, UiDescription, UiBadge, UiContainer, UiSection, UiWindow } from '../ui';
+import { Sparkles } from '@lucide/vue';
+import { UiHeadline, UiDescription, UiBadge, UiContainer, UiSection, UiWindow } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 import { useAvatarStyleList, useAvatarStyleMeta } from '../../composables/avatar';
 import { formatLicenseName } from '../../utils/format';
 import { safeHttpUrl } from '../../utils/url';
 import AppSeedDemoCode from './AppSeedDemoCode.vue';
+import AppSeedDemoPreview from './AppSeedDemoPreview.vue';
+import AppSeedDemoControls from './AppSeedDemoControls.vue';
 import AppSeedDemoStylePicker from './AppSeedDemoStylePicker.vue';
+
+const DEFAULT_STYLE = 'lorelei';
+
+const SEED_CARDS = [
+  { name: 'Felix', emoji: 'F' },
+  { name: 'Aneka', emoji: 'A' },
+  { name: 'Milo', emoji: 'M' },
+  { name: 'Luna', emoji: 'L' },
+  { name: 'Sophie', emoji: 'S' },
+] as const;
 
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef);
@@ -16,40 +28,35 @@ const activeStyleIndex = ref(0);
 const styleDialogOpen = ref(false);
 
 const avatarStyleList = useAvatarStyleList();
-const currentStyle = computed(() => kebabCase(avatarStyleList.value[activeStyleIndex.value] || 'lorelei'));
-const currentStyleCamel = computed(() => camelCase(avatarStyleList.value[activeStyleIndex.value] || 'lorelei'));
-const currentStyleDisplay = computed(() => capitalCase(avatarStyleList.value[activeStyleIndex.value] || 'lorelei'));
+const activeStyleName = computed(() => avatarStyleList.value[activeStyleIndex.value] || DEFAULT_STYLE);
+const currentStyle = computed(() => kebabCase(activeStyleName.value));
+const currentStyleCamel = computed(() => camelCase(activeStyleName.value));
+const currentStyleDisplay = computed(() => capitalCase(activeStyleName.value));
 const currentStyleLink = computed(() => `/styles/${currentStyle.value}/`);
-const avatarStyleMeta = useAvatarStyleMeta(computed(() => avatarStyleList.value[activeStyleIndex.value] || 'lorelei'));
-
-// Preset seed cards to demonstrate determinism
-const seedCards = [
-  { name: 'Felix', emoji: 'F' },
-  { name: 'Aneka', emoji: 'A' },
-  { name: 'Milo', emoji: 'M' },
-  { name: 'Luna', emoji: 'L' },
-  { name: 'Sophie', emoji: 'S' },
-];
+const avatarStyleMeta = useAvatarStyleMeta(activeStyleName);
 
 const activeSeedIndex = ref<number | null>(0);
-const seed = ref(seedCards[0].name);
+const seed = ref<string>(SEED_CARDS[0].name);
 
 function selectSeed(index: number) {
   activeSeedIndex.value = index;
-  seed.value = seedCards[index].name;
+  seed.value = SEED_CARDS[index].name;
 }
 
-function onSeedInput(event: Event) {
-  const input = event.target as HTMLInputElement;
-  seed.value = input.value;
-  // Deselect card if typed seed doesn't match any preset
-  const matchIndex = seedCards.findIndex(c => c.name === input.value);
+function onSeedUpdate(value: string) {
+  seed.value = value;
+  const matchIndex = SEED_CARDS.findIndex((c) => c.name === value);
   activeSeedIndex.value = matchIndex >= 0 ? matchIndex : null;
 }
 
-const mainAvatarLink = computed(() =>
-  `https://api.dicebear.com/10.x/${currentStyle.value}/svg?seed=${encodeURIComponent(seed.value)}`
-);
+function randomizeSeed() {
+  const nextIndex = ((activeSeedIndex.value ?? -1) + 1) % SEED_CARDS.length;
+  selectSeed(nextIndex);
+}
+
+function selectStyle(index: number) {
+  activeStyleIndex.value = index;
+}
 
 const sourceUrl = computed(() => safeHttpUrl(avatarStyleMeta.value?.source));
 const homepageUrl = computed(() => safeHttpUrl(avatarStyleMeta.value?.homepage));
@@ -60,17 +67,8 @@ const allStyleAvatars = computed(() =>
     index,
     style: kebabCase(style),
     seed: seed.value,
-  }))
+  })),
 );
-
-function randomizeSeed() {
-  const nextIndex = ((activeSeedIndex.value ?? -1) + 1) % seedCards.length;
-  selectSeed(nextIndex);
-}
-
-function selectStyle(index: number) {
-  activeStyleIndex.value = index;
-}
 </script>
 
 <template>
@@ -94,56 +92,25 @@ function selectStyle(index: number) {
         </UiDescription>
       </div>
 
-      <!-- Interactive Demo -->
       <div class="app-seed-demo-window-wrapper">
         <UiWindow title="Seed Explorer">
           <div class="app-seed-demo-body">
-            <!-- Left: Avatar Showcase -->
             <div class="app-seed-demo-left">
-              <div class="app-seed-demo-showcase">
-                <div class="app-seed-demo-avatar-stage">
-                  <div class="app-seed-demo-avatar-glow"></div>
-                  <a :href="mainAvatarLink" target="_blank" rel="noopener"><UiAvatar :style-name="currentStyle" :style-options="{ seed, size: 256 }" alt="Avatar preview" class="app-seed-demo-avatar-main" mode="library" /></a>
-                </div>
-
-                <button class="app-seed-demo-style-picker-trigger" @click="styleDialogOpen = true">
-                  <span class="app-seed-demo-style-picker-label">Style</span>
-                  <span class="app-seed-demo-style-picker-value">{{ currentStyle }}</span>
-                  <ChevronDown :size="14" />
-                </button>
-
-                <div class="app-seed-demo-seed-display">
-                  <span class="app-seed-demo-seed-label">Seed</span>
-                  <input
-                    class="app-seed-demo-seed-input"
-                    :value="seed"
-                    @input="onSeedInput"
-                    placeholder="Enter a seed…"
-                    spellcheck="false"
-                    autocomplete="off"
-                  />
-                  <button class="app-seed-demo-dice-btn" @click="randomizeSeed" title="Next seed">
-                    <Dice5 :size="16" />
-                  </button>
-                </div>
-              </div>
-
-              <!-- Seed Cards -->
-              <div class="app-seed-demo-seeds">
-                <button
-                  v-for="(card, index) in seedCards"
-                  :key="card.name"
-                  class="app-seed-demo-seed-card"
-                  :class="{ active: index === activeSeedIndex }"
-                  @click="selectSeed(index)"
-                >
-                  <UiAvatar :style-name="currentStyle" :style-options="{ seed: card.name, size: 96 }" :alt="card.name" class="app-seed-demo-seed-card-avatar" />
-                  <span class="app-seed-demo-seed-card-name">{{ card.name }}</span>
-                </button>
-              </div>
+              <AppSeedDemoPreview
+                :style="currentStyle"
+                :model-value="seed"
+                @update:model-value="onSeedUpdate"
+                @open-style-picker="styleDialogOpen = true"
+                @randomize-seed="randomizeSeed"
+              />
+              <AppSeedDemoControls
+                :style="currentStyle"
+                :seed-cards="SEED_CARDS"
+                :active-seed-index="activeSeedIndex"
+                @select-seed="selectSeed"
+              />
             </div>
 
-            <!-- Right: Code Examples -->
             <AppSeedDemoCode :seed="seed" :style="currentStyle" :style-camel="currentStyleCamel" />
           </div>
         </UiWindow>
@@ -165,10 +132,8 @@ function selectStyle(index: number) {
           <template v-else>{{ formatLicenseName(avatarStyleMeta?.license?.name) }}</template>.
         </p>
       </div>
-
     </UiContainer>
 
-    <!-- Style Picker Dialog -->
     <AppSeedDemoStylePicker
       v-model:open="styleDialogOpen"
       :avatars="allStyleAvatars"
@@ -187,9 +152,7 @@ function selectStyle(index: number) {
   --app-seed-demo-avatar-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
   --app-seed-demo-card-avatar-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
-</style>
 
-<style lang="scss" scoped>
 .app-seed-demo {
   &-glow {
     background:
@@ -209,7 +172,6 @@ function selectStyle(index: number) {
     }
   }
 
-  /* Header */
   &-header {
     text-align: center;
     margin-bottom: 48px;
@@ -223,7 +185,6 @@ function selectStyle(index: number) {
     max-width: 540px;
   }
 
-  /* License */
   &-license {
     margin-top: 20px;
     font-size: 13px;
@@ -244,12 +205,10 @@ function selectStyle(index: number) {
     }
   }
 
-  /* Demo Window */
   &-window-wrapper {
     --window-radius: 20px;
   }
 
-  /* Style Picker & Seed Input: same width */
   &-style-picker-trigger,
   &-seed-display {
     width: 220px;
@@ -290,7 +249,6 @@ function selectStyle(index: number) {
     text-align: left;
   }
 
-  /* Body: horizontal split */
   &-body {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -413,7 +371,6 @@ function selectStyle(index: number) {
     }
   }
 
-  /* Seed Cards */
   &-seeds {
     display: flex;
     gap: 8px;
@@ -478,7 +435,6 @@ function selectStyle(index: number) {
   50% { transform: scale(1.15); opacity: 1; }
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .app-seed-demo {
     &-body {
