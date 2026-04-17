@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed, inject, ref, watch } from 'vue';
+import { computed, inject, provide, ref, watch } from 'vue';
 import { OptionsDescriptor } from '@dicebear/core';
 import { loadAvatarStyle, styleUsesVariable } from '@theme/utils/avatar/style';
-import { padColors, stripHash } from '@theme/utils/avatar/colors';
+import { getStyleColorsMap } from '@theme/utils/avatar/colors';
 import { webSafeFonts } from '@theme/utils/avatar/fonts';
-import { useDependencyMap, type ComponentDependency } from '@theme/composables/useDependencyMap';
+import { ComponentPreview } from '@theme/utils/componentPreview';
+import { componentPreviewKey } from '@theme/components/styles/styleOptionsKeys';
 import { computedAsync } from '@vueuse/core';
 import { capitalCase } from 'change-case';
 import useStore from '@theme/stores/playground';
@@ -64,17 +65,9 @@ watch(descriptor, (desc) => {
   }
 }, { immediate: true });
 
-const defaultColors = computed<Record<string, string[]>>(() => {
-  if (!loadedStyle.value) return {};
-
-  const result: Record<string, string[]> = {};
-
-  for (const [name, color] of loadedStyle.value.colors()) {
-    result[name] = padColors(color.values().map(stripHash));
-  }
-
-  return result;
-});
+const defaultColors = computed<Record<string, string[]>>(() =>
+  loadedStyle.value ? getStyleColorsMap(loadedStyle.value) : {},
+);
 
 const hasFontFamily = computed(() =>
   loadedStyle.value ? styleUsesVariable(avatarStyleName.value, 'fontFamily') : false,
@@ -84,7 +77,10 @@ const hasFontWeight = computed(() =>
   loadedStyle.value ? styleUsesVariable(avatarStyleName.value, 'fontWeight') : false,
 );
 
-const { componentDeps } = useDependencyMap(loadedStyle);
+const preview = computed(() =>
+  loadedStyle.value ? new ComponentPreview(loadedStyle.value) : null,
+);
+provide(componentPreviewKey, preview);
 
 type ComponentInfo = {
   name: string;
@@ -99,7 +95,6 @@ type ComponentInfo = {
   defaultTranslateY: readonly number[];
   hasNonDefaultWeights: boolean;
   defaultWeights: Record<string, number>;
-  dependency?: ComponentDependency;
 };
 
 type ColorInfo = {
@@ -137,7 +132,6 @@ const components = computed(() => {
       defaultWeights: comp
         ? Object.fromEntries([...comp.variants()].map(([name, v]) => [name, v.weight()]))
         : {},
-      dependency: componentDeps.value[name],
     });
   }
 
@@ -176,8 +170,6 @@ const sortedColors = computed(() => {
 
   return [...bg, ...rest];
 });
-
-const componentNames = computed(() => components.value.map((c) => c.name));
 
 function activeCount(comp: ComponentInfo): number {
   const val = store.avatarStyleOptions[`${comp.name}Variant`];
@@ -272,7 +264,6 @@ const onSeedFocus = (e: FocusEvent) => {
             <PlaygroundComponentSection
               :key="`${avatarStyleName}-${comp.name}`"
               :component-name="comp.name"
-              :all-component-names="componentNames"
               :variants="comp.variants"
               :has-probability="comp.hasProbability"
               :has-rotate="comp.hasRotate"
@@ -284,8 +275,6 @@ const onSeedFocus = (e: FocusEvent) => {
               :default-translate-y="comp.defaultTranslateY"
               :has-non-default-weights="comp.hasNonDefaultWeights"
               :default-weights="comp.defaultWeights"
-              :dependency="comp.dependency"
-              :all-dependencies="componentDeps"
             />
           </AccordionContent>
         </AccordionPanel>

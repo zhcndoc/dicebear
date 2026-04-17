@@ -3,15 +3,14 @@ import { computed, nextTick, provide, ref, shallowRef } from 'vue';
 import { OptionsDescriptor, type Style } from '@dicebear/core';
 import { getScrollOffset, inBrowser } from 'vitepress';
 import { loadAvatarStyle, styleUsesVariable } from '@theme/utils/avatar/style';
-import { stripHash } from '@theme/utils/avatar/colors';
+import { getStyleColorsMap } from '@theme/utils/avatar/colors';
 import { computedAsync, watchOnce } from '@vueuse/core';
 import { capitalCase } from 'change-case';
 import { Search } from '@lucide/vue';
 import InputText from 'primevue/inputtext';
 import StyleOptionsGroup from './StyleOptionsGroup.vue';
-import { useDependencyMap } from '@theme/composables/useDependencyMap';
 import { ComponentPreview } from '@theme/utils/componentPreview';
-import { componentDepsKey, componentNamesKey, styleColorsKey, componentPreviewKey, styleDefaultsKey } from './styleOptionsKeys';
+import { componentNamesKey, styleColorsKey, componentPreviewKey, styleDefaultsKey } from './styleOptionsKeys';
 
 interface OptionGroup {
   id: string;
@@ -41,26 +40,15 @@ const styleData = computedAsync(async () => {
   return { descriptor, componentNames, colorNames };
 }, null);
 
-const { componentDeps } = useDependencyMap(loadedStyle);
-
 const allComponentNames = computed(() => styleData.value?.componentNames ?? []);
 provide(componentNamesKey, allComponentNames);
-provide(componentDepsKey, componentDeps);
 
 const preview = computed(() => loadedStyle.value ? new ComponentPreview(loadedStyle.value) : null);
 provide(componentPreviewKey, preview);
 
-const styleColors = computed<Record<string, string[]>>(() => {
-  if (!loadedStyle.value) return {};
-
-  const result: Record<string, string[]> = {};
-
-  for (const [name, color] of loadedStyle.value.colors()) {
-    result[name] = color.values().map(stripHash);
-  }
-
-  return result;
-});
+const styleColors = computed<Record<string, string[]>>(() =>
+  loadedStyle.value ? getStyleColorsMap(loadedStyle.value) : {},
+);
 provide(styleColorsKey, styleColors);
 
 const styleDefaults = computed<Record<string, unknown>>(() => {

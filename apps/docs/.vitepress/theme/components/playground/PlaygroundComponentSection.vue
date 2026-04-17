@@ -1,19 +1,17 @@
 <script setup lang="ts">
+import { inject } from 'vue';
 import Slider from 'primevue/slider';
 import Button from 'primevue/button';
 import InputNumber from 'primevue/inputnumber';
 import { Weight } from '@lucide/vue';
-import { UiAvatar } from '../ui';
 import PlaygroundRangeField from './PlaygroundRangeField.vue';
 import useStore from '@theme/stores/playground';
 import { useRangeField } from '@theme/composables/useRangeField';
 import { useVariantWeights } from '@theme/composables/useVariantWeights';
-import { getComponentVariantPreviewOptions } from '@theme/utils/avatar/preview';
-import type { ComponentDependency } from '@theme/composables/useDependencyMap';
+import { componentPreviewKey, componentPreviewDefault } from '@theme/components/styles/styleOptionsKeys';
 
 const props = defineProps<{
   componentName: string;
-  allComponentNames: string[];
   variants: string[];
   hasProbability: boolean;
   hasRotate: boolean;
@@ -25,11 +23,10 @@ const props = defineProps<{
   defaultRotate: readonly number[];
   defaultTranslateX: readonly number[];
   defaultTranslateY: readonly number[];
-  dependency?: ComponentDependency;
-  allDependencies?: Record<string, ComponentDependency>;
 }>();
 
 const store = useStore();
+const preview = inject(componentPreviewKey, componentPreviewDefault);
 
 const {
   showWeights,
@@ -46,15 +43,6 @@ const {
   () => props.hasNonDefaultWeights,
   () => props.defaultWeights,
 );
-
-function variantPreviewOptions(variant: string) {
-  return getComponentVariantPreviewOptions(
-    props.componentName,
-    variant,
-    props.allComponentNames,
-    props.allDependencies ?? {},
-  );
-}
 
 const { singleComputed } = useRangeField(store.avatarStyleOptions);
 
@@ -75,7 +63,7 @@ const defaultTranslateYRange = props.defaultTranslateY.length === 2 ? props.defa
 
 <template>
   <div class="pg-comp-body">
-    <div class="pg-comp-variants" v-if="variants.length > 0">
+    <template v-if="variants.length > 0">
       <div class="pg-field-label">
         <span>Variants</span>
         <Button
@@ -102,11 +90,11 @@ const defaultTranslateYRange = props.defaultTranslateY.length === 2 ? props.defa
             :class="{ 'pg-comp-variant-btn-active': variantWeights[variant] !== undefined }"
             @click="toggleVariant(variant)"
           >
-            <UiAvatar
-              bare
-              :style-name="store.avatarStyleName"
-              :style-options="variantPreviewOptions(variant)"
-              mode="library"
+            <img
+              v-if="preview"
+              :src="preview.toDataUri(componentName, variant)"
+              alt=""
+              class="pg-comp-variant-img"
             />
           </button>
           <span class="pg-comp-variant-name">{{ variant }}</span>
@@ -124,7 +112,7 @@ const defaultTranslateYRange = props.defaultTranslateY.length === 2 ? props.defa
           />
         </div>
       </div>
-    </div>
+    </template>
 
     <div class="pg-field" v-if="hasProbability">
       <div class="pg-field-label">
@@ -214,6 +202,19 @@ const defaultTranslateYRange = props.defaultTranslateY.length === 2 ? props.defa
   &:hover {
     border-color: var(--p-primary-200);
   }
+}
+
+.pg-comp-variant-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  border-radius: 3px;
+  background: repeating-conic-gradient(
+      var(--ui-avatar-bg-1, rgba(0, 0, 0, 0.02)) 0% 25%,
+      var(--ui-avatar-bg-2, rgba(0, 0, 0, 0.07)) 0% 50%
+    )
+    50% / 12px 12px;
 }
 
 .pg-comp-variant-name {

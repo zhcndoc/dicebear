@@ -11,12 +11,10 @@ const props = withDefaults(
     styleOptions: Record<string, unknown>;
     mode?: 'library' | 'http-api';
     alt?: string;
-    bare?: boolean;
   }>(),
   {
     mode: 'http-api',
     alt: 'avatar',
-    bare: false,
   }
 );
 
@@ -41,7 +39,7 @@ const svg = computedAsync(() => {
 </script>
 
 <template>
-  <div class="ui-avatar" :class="{ 'ui-avatar-bare': bare }">
+  <div class="ui-avatar">
     <img :src="svg" v-if="svg" :alt="alt" loading="lazy" />
   </div>
 </template>
@@ -74,13 +72,6 @@ const svg = computedAsync(() => {
   img {
     height: 100%;
     width: 100%;
-  }
-
-  &-bare {
-    width: 100%;
-    height: auto;
-    border-radius: 0;
-    background: none;
   }
 }
 </style>

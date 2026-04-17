@@ -22,6 +22,8 @@ export class ComponentPreview {
   #style: Style;
   #definition: StyleDefinition;
   #syntheticStyleCache = new Map<string, Style>();
+  #childComponentsCache = new Map<string, Set<string>>();
+  #dataUriCache = new Map<string, string>();
 
   constructor(style: Style) {
     this.#style = style;
@@ -90,39 +92,59 @@ export class ComponentPreview {
     variantName: string,
     options?: Record<string, unknown>,
   ): string {
+    if (!options) {
+      const key = `${componentName}|${variantName}`;
+      const cached = this.#dataUriCache.get(key);
+
+      if (cached !== undefined) return cached;
+
+      const uri = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(this.toSvg(componentName, variantName))}`;
+
+      this.#dataUriCache.set(key, uri);
+
+      return uri;
+    }
+
     return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(this.toSvg(componentName, variantName, options))}`;
   }
 
   #findChildComponents(componentName: string, variantName: string): Set<string> {
+    const key = `${componentName}|${variantName}`;
+    const cached = this.#childComponentsCache.get(key);
+
+    if (cached) return cached;
+
     const result = new Set<string>();
     const component = this.#style.components().get(componentName);
     const variant = component?.variants().get(variantName);
 
-    if (!variant) return result;
+    if (variant) {
+      collectChildComponents(asElements(variant.elements()), result);
 
-    collectChildComponents(asElements(variant.elements()), result);
+      const queue = [...result];
 
-    const queue = [...result];
+      while (queue.length > 0) {
+        const childName = queue.pop()!;
+        const child = this.#style.components().get(childName);
 
-    while (queue.length > 0) {
-      const childName = queue.pop()!;
-      const child = this.#style.components().get(childName);
+        if (!child) continue;
 
-      if (!child) continue;
+        for (const [, childVariant] of child.variants()) {
+          const nested = new Set<string>();
 
-      for (const [, childVariant] of child.variants()) {
-        const nested = new Set<string>();
+          collectChildComponents(asElements(childVariant.elements()), nested);
 
-        collectChildComponents(asElements(childVariant.elements()), nested);
-
-        for (const name of nested) {
-          if (!result.has(name)) {
-            result.add(name);
-            queue.push(name);
+          for (const name of nested) {
+            if (!result.has(name)) {
+              result.add(name);
+              queue.push(name);
+            }
           }
         }
       }
     }
+
+    this.#childComponentsCache.set(key, result);
 
     return result;
   }

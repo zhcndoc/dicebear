@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, inject, ref } from 'vue';
+import { computed, inject } from 'vue';
 import { getAvatarPropertyPreviewOptions } from '@theme/utils/avatar/preview';
 import { padColors, resolveColors } from '@theme/utils/avatar/colors';
 import { UiAvatar } from '../ui';
-import { componentNamesKey, componentNamesDefault, styleColorsKey, styleColorsDefault, componentPreviewKey } from './styleOptionsKeys';
+import { componentNamesKey, componentNamesDefault, styleColorsKey, styleColorsDefault, componentPreviewKey, componentPreviewDefault } from './styleOptionsKeys';
 
 const props = defineProps<{
   styleName: string;
@@ -13,7 +13,7 @@ const props = defineProps<{
 
 const allComponentNames = inject(componentNamesKey, componentNamesDefault);
 const styleColors = inject(styleColorsKey, styleColorsDefault);
-const preview = inject(componentPreviewKey, ref(null));
+const preview = inject(componentPreviewKey, componentPreviewDefault);
 
 const previewTarget = computed(() => {
   const n = props.name;
