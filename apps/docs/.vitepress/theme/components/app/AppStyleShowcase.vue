@@ -11,21 +11,18 @@ const sectionRef = ref();
 const isVisible = useVisibility(sectionRef, { once: false, threshold: 0.1 });
 const avatarStyleList = useAvatarStyleList();
 
-const seeds = ['Felix', 'Aneka', 'Milo', 'Luna', 'Max', 'Sophie', 'Leo', 'Emma', 'Noah', 'Aria', 'Zoe', 'Oscar'];
+const SHOWCASE_SEEDS = [
+  'Felix', 'Aneka', 'Milo', 'Luna', 'Max', 'Sophie',
+  'Leo', 'Emma', 'Noah', 'Aria', 'Zoe', 'Oscar',
+];
 
 const showcaseAvatars = computed(() => {
   const prng = new Prando(42);
-  const avatars: Array<{ style: string; seed: string }> = [];
 
-  for (const style of avatarStyleList.value) {
-    const seed = seeds[prng.nextInt(0, seeds.length - 1)];
-    avatars.push({
-      style: kebabCase(style),
-      seed,
-    });
-  }
-
-  return avatars;
+  return avatarStyleList.value.map((style) => ({
+    style: kebabCase(style),
+    seed: SHOWCASE_SEEDS[prng.nextInt(0, SHOWCASE_SEEDS.length - 1)],
+  }));
 });
 
 const doubledAvatars = computed(() => [...showcaseAvatars.value, ...showcaseAvatars.value]);
