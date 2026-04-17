@@ -1,47 +1,11 @@
 <script setup lang="ts">
-import { useData, withBase } from 'vitepress';
 import { useLayout } from 'vitepress/theme';
-import { computed } from 'vue';
-import { siGithub, siFigma } from 'simple-icons';
-import { UiIcon } from '../ui';
-import type { AvatarStyleMeta, ThemeOptions } from '@theme/types';
-import { productLinks as exploreLinks, resourceLinks, legalLinks } from '../../config/footer-links';
-import { safeHttpUrl } from '@theme/utils/url';
+import LayoutFooterBrand from './LayoutFooterBrand.vue';
+import LayoutFooterLinks from './LayoutFooterLinks.vue';
+import LayoutFooterSponsor from './LayoutFooterSponsor.vue';
+import LayoutFooterCredits from './LayoutFooterCredits.vue';
 
-const { theme } = useData<ThemeOptions>();
 const { hasSidebar } = useLayout();
-
-const linkColumns = [
-  { title: 'Explore', links: exploreLinks },
-  { title: 'Resources', links: resourceLinks },
-  { title: 'Legal', links: legalLinks },
-] as const;
-
-const styles = computed(() => {
-  const result: AvatarStyleMeta[] = [];
-  const knownWork: string[] = [];
-
-  for (const val of Object.values(theme.value.avatarStyles)) {
-    if (
-      val.meta.creator === 'Florian Körner' ||
-      val.meta.creator === 'DiceBear'
-    ) {
-      continue;
-    }
-
-    if (val.meta.source) {
-      if (knownWork.includes(val.meta.source)) {
-        continue;
-      }
-
-      knownWork.push(val.meta.source);
-    }
-
-    result.push(val.meta);
-  }
-
-  return result;
-});
 </script>
 
 <template>
@@ -50,115 +14,13 @@ const styles = computed(() => {
 
     <div class="layout-footer-main">
       <div class="layout-footer-container">
-        <!-- Brand column -->
-        <div class="layout-footer-brand">
-          <a href="/" class="layout-footer-logo">
-            <img
-              class="layout-footer-logo-light"
-              :src="withBase('/logo.svg')"
-              alt="DiceBear"
-            />
-            <img
-              class="layout-footer-logo-dark"
-              :src="withBase('/logo-dark.svg')"
-              alt="DiceBear"
-            />
-          </a>
-          <p class="layout-footer-tagline">
-            Open source SVG avatar library and avatar API for designers and developers.
-          </p>
-
-          <!-- Social links -->
-          <div class="layout-footer-social">
-            <a
-              href="https://github.com/dicebear/dicebear"
-              target="_blank"
-              rel="me noopener"
-              aria-label="GitHub"
-              class="layout-footer-social-link"
-            >
-              <UiIcon :path="siGithub.path" />
-            </a>
-            <a
-              href="https://www.figma.com/@dicebear_com"
-              target="_blank"
-              rel="me noopener"
-              aria-label="Figma"
-              class="layout-footer-social-link"
-            >
-              <UiIcon :path="siFigma.path" />
-            </a>
-          </div>
-        </div>
-
-        <!-- Link columns -->
-        <div class="layout-footer-links">
-          <div v-for="column in linkColumns" :key="column.title" class="layout-footer-column">
-            <h3 class="layout-footer-column-title">{{ column.title }}</h3>
-            <ul class="layout-footer-column-list">
-              <li v-for="link in column.links" :key="link.label">
-                <a
-                  :href="link.href"
-                  :target="link.external ? '_blank' : undefined"
-                  :rel="link.external ? 'noopener noreferrer' : undefined"
-                  class="layout-footer-link"
-                >
-                  {{ link.label }}
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
+        <LayoutFooterBrand />
+        <LayoutFooterLinks />
       </div>
     </div>
 
-    <!-- Sponsor -->
-    <div class="layout-footer-sponsor">
-      <div class="layout-footer-container">
-        <div class="layout-footer-sponsor-inner">
-          <a
-            href="https://bunny.net/"
-            target="_blank"
-            rel="noopener sponsored"
-            class="layout-footer-sponsor-logo"
-          >
-            <img
-              class="layout-footer-sponsor-logo-light"
-              :src="withBase('/sponsors/bunny-light.svg')"
-              alt="bunny.net"
-            />
-            <img
-              class="layout-footer-sponsor-logo-dark"
-              :src="withBase('/sponsors/bunny-dark.svg')"
-              alt="bunny.net"
-            />
-          </a>
-          <span class="layout-footer-sponsor-meta">CDN sponsored by bunny.net · Advertisement</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Bottom bar -->
-    <div class="layout-footer-bottom">
-      <div class="layout-footer-container">
-        <div class="layout-footer-bottom-inner">
-          <p class="layout-footer-attributions">
-            <template v-for="(style, index) in styles" :key="style.source">
-              <a v-if="safeHttpUrl(style.source)" class="layout-footer-attribution-link" :href="safeHttpUrl(style.source)" target="_blank" rel="noopener">{{
-                style.title
-              }}</a>
-              <template v-else>{{ style.title }}</template>
-              by {{ style.creator }} /
-              <a v-if="safeHttpUrl(style.license?.url)" class="layout-footer-attribution-link" :href="safeHttpUrl(style.license?.url)" target="_blank" rel="noopener">{{
-                style.license?.name
-              }}</a>
-              <template v-else>{{ style.license?.name }}</template><template v-if="index < styles.length - 1">. </template>
-            </template>
-            — All avatars are remixes of the original works.
-          </p>
-        </div>
-      </div>
-    </div>
+    <LayoutFooterSponsor />
+    <LayoutFooterCredits />
   </footer>
 </template>
 
@@ -175,9 +37,7 @@ const styles = computed(() => {
   --layout-footer-sponsor-logo-light-display: inline-block;
   --layout-footer-sponsor-logo-dark-display: none;
 }
-</style>
 
-<style lang="scss" scoped>
 .layout-footer {
   position: relative;
   background: var(--vp-c-bg);
@@ -201,7 +61,6 @@ const styles = computed(() => {
     }
   }
 
-  // Main section
   &-main {
     padding: 64px 0 48px;
 
@@ -211,7 +70,6 @@ const styles = computed(() => {
     }
   }
 
-  // Brand
   &-brand {
     flex-shrink: 0;
     max-width: 260px;
@@ -268,7 +126,6 @@ const styles = computed(() => {
     }
   }
 
-  // Link columns
   &-links {
     display: flex;
     gap: 64px;
@@ -311,7 +168,6 @@ const styles = computed(() => {
     }
   }
 
-  // Sponsor
   &-sponsor {
     padding: 14px 0;
     border-top: 1px solid var(--vp-c-divider);
@@ -356,7 +212,6 @@ const styles = computed(() => {
     }
   }
 
-  // Bottom bar
   &-bottom {
     padding: 24px 0;
     border-top: 1px solid var(--vp-c-divider);
@@ -368,21 +223,6 @@ const styles = computed(() => {
     }
   }
 
-  &-credit-link {
-    color: var(--vp-c-text-2);
-    text-decoration: none;
-    transition: color var(--duration-fast) ease;
-
-    &:hover {
-      color: var(--vp-c-brand-1);
-    }
-
-    &::after {
-      display: none !important;
-    }
-  }
-
-  // Attributions
   &-attributions {
     margin: 0;
     font-size: 12px;
@@ -406,7 +246,6 @@ const styles = computed(() => {
     }
   }
 
-  // Responsive: with sidebar (sidebar adds ~300px)
   @media (min-width: 960px) {
     &-has-sidebar .layout-footer-main .layout-footer-container {
       flex-direction: column;
@@ -439,7 +278,6 @@ const styles = computed(() => {
     }
   }
 
-  // Responsive: without sidebar
   @media (max-width: 768px) {
     .layout-footer-main .layout-footer-container {
       flex-direction: column;
@@ -453,10 +291,6 @@ const styles = computed(() => {
     .layout-footer-links {
       justify-content: flex-start;
       gap: 40px;
-    }
-
-    .layout-footer-copyright {
-      flex-wrap: wrap;
     }
   }
 
