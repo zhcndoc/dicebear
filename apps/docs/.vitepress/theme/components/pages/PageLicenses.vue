@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useData } from 'vitepress';
-import { ThemeOptions } from '@theme/types';
+import type { ThemeOptions } from '@theme/types';
 import { kebabCase } from 'change-case';
 import { safeHttpUrl } from '@theme/utils/url';
 

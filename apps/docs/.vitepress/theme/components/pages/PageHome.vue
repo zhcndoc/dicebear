@@ -10,12 +10,12 @@ import AppStatsBanner from '../app/AppStatsBanner.vue';
 </script>
 
 <template>
-    <AppHero />
-    <AppSeedDemo />
-    <AppStyleShowcase />
-    <AppUseCases />
-    <AppStatsBanner />
-    <AppEditor />
-    <AppCreateStyle />
-    <AppOpenSource />
+  <AppHero />
+  <AppSeedDemo />
+  <AppStyleShowcase />
+  <AppUseCases />
+  <AppStatsBanner />
+  <AppEditor />
+  <AppCreateStyle />
+  <AppOpenSource />
 </template>

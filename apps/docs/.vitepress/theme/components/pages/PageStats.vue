@@ -9,6 +9,9 @@ import AppStatsGlobe from '../app/AppStatsGlobe.vue';
 import { useApiStatsRaw, lastCompleteMonth } from '../../composables/useApiStats';
 import { formatNumber, formatBytes } from '../../utils/format';
 
+const SECONDS_PER_DAY = 86400;
+const ROLLING_WINDOW_DAYS = 7;
+
 const stats = useApiStatsRaw();
 
 function aggregateDaily(data: Record<string, number>): {
@@ -16,11 +19,15 @@ function aggregateDaily(data: Record<string, number>): {
   values: number[];
 } {
   const entries = Object.entries(data).sort(([a], [b]) => a.localeCompare(b));
-  // exclude the last (potentially incomplete) day
-  if (entries.length > 1) entries.pop();
+
+  if (entries.length > 1) {
+    entries.pop();
+  }
+
   return {
     labels: entries.map(([k]) => {
       const d = new Date(k);
+
       return d.toLocaleDateString('en', { month: 'short', day: 'numeric' });
     }),
     values: entries.map(([, v]) => v),
@@ -28,12 +35,18 @@ function aggregateDaily(data: Record<string, number>): {
 }
 
 const requestsData = computed(() => {
-  if (!stats.value) return null;
+  if (!stats.value) {
+    return null;
+  }
+
   return aggregateDaily(stats.value.requests);
 });
 
 const downloadsData = computed(() => {
-  if (!stats.value) return null;
+  if (!stats.value) {
+    return null;
+  }
+
   return aggregateDaily(stats.value.downloads.npm);
 });
 
@@ -41,14 +54,19 @@ function averageWeekly(
   source: Record<string, [string, number][]>,
 ): { data: [string, number][]; label: string } | null {
   const keys = Object.keys(source).sort();
-  if (keys.length === 0) return null;
+
+  if (keys.length === 0) {
+    return null;
+  }
 
   const totals: Record<string, number> = {};
+
   for (const key of keys) {
     for (const [name, value] of source[key]) {
       totals[name] = (totals[name] || 0) + value;
     }
   }
+
   const count = keys.length;
   const averaged: [string, number][] = Object.entries(totals)
     .map(([name, sum]) => [name, sum / count] as [string, number])
@@ -56,53 +74,72 @@ function averageWeekly(
 
   const firstDate = new Date(keys[0]);
   const lastDate = new Date(keys[keys.length - 1]);
-  const fmt = (d: Date) =>
-    d.toLocaleDateString('en', { month: 'short', day: 'numeric' });
-  const label =
-    keys.length === 1 ? fmt(firstDate) : `${fmt(firstDate)} – ${fmt(lastDate)}`;
+  const fmt = (d: Date) => d.toLocaleDateString('en', { month: 'short', day: 'numeric' });
+  const label = keys.length === 1 ? fmt(firstDate) : `${fmt(firstDate)} – ${fmt(lastDate)}`;
 
   return { data: averaged, label };
 }
 
 const stylesData = computed(() => {
-  if (!stats.value) return null;
+  if (!stats.value) {
+    return null;
+  }
+
   return averageWeekly(stats.value.styles);
 });
 
 const versionsData = computed(() => {
-  if (!stats.value) return null;
+  if (!stats.value) {
+    return null;
+  }
+
   return averageWeekly(stats.value.versions);
 });
 
 const formatsData = computed(() => {
-  if (!stats.value) return null;
+  if (!stats.value) {
+    return null;
+  }
+
   return averageWeekly(stats.value.formats);
 });
 
 const showAllStyles = ref(false);
-
 const activeTab = ref<'api' | 'npm'>('api');
 
 const requestsPerSecond = computed(() => {
-  if (!stats.value) return 0;
-  const entries = Object.entries(stats.value.requests).sort(([a], [b]) =>
-    a.localeCompare(b),
-  );
-  if (entries.length < 2) return 0;
-  entries.pop(); // remove incomplete day
-  const last7 = entries.slice(-7);
-  const total = last7.reduce((sum, [, v]) => sum + v, 0);
-  const avgDaily = total / last7.length;
-  return avgDaily / 86400;
+  if (!stats.value) {
+    return 0;
+  }
+
+  const entries = Object.entries(stats.value.requests).sort(([a], [b]) => a.localeCompare(b));
+
+  if (entries.length < 2) {
+    return 0;
+  }
+
+  entries.pop();
+
+  const window = entries.slice(-ROLLING_WINDOW_DAYS);
+  const total = window.reduce((sum, [, v]) => sum + v, 0);
+  const avgDaily = total / window.length;
+
+  return avgDaily / SECONDS_PER_DAY;
 });
 
-
 const monthlyStats = computed(() => {
-  if (!stats.value) return null;
+  if (!stats.value) {
+    return null;
+  }
+
   const requests = lastCompleteMonth(stats.value.requests);
   const traffic = lastCompleteMonth(stats.value.traffic);
   const downloads = lastCompleteMonth(stats.value.downloads.npm);
-  if (!requests) return null;
+
+  if (!requests) {
+    return null;
+  }
+
   return {
     label: requests.label,
     requests: formatNumber(requests.total),
