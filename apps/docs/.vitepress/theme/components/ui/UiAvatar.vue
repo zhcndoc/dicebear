@@ -29,7 +29,10 @@ const svg = computedAsync(() => {
           new Avatar(avatarStyle, clonePlain(styleOptions)).toDataUri()
         )
         .catch((e) => {
-          if (import.meta.env.DEV) console.warn('Avatar render failed:', e);
+          if (import.meta.env.DEV) {
+            console.warn('Avatar render failed:', e);
+          }
+
           return undefined;
         });
     case 'http-api':
