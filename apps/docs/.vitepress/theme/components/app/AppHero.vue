@@ -1,182 +1,42 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { useThrottleFn } from '@vueuse/core';
-import { ThemeOptions } from '@theme/types';
-import { useData } from 'vitepress';
-import { kebabCase } from 'change-case';
-import Prando from 'prando';
-import { Play, ArrowRight, ChevronDown, Star } from '@lucide/vue';
-import { siGithub } from 'simple-icons';
-import { UiAvatar, UiButton, UiIcon } from '../ui';
+import { onMounted, ref } from 'vue';
+import { ChevronDown } from '@lucide/vue';
+import AppHeroBackground from './AppHeroBackground.vue';
+import AppHeroContent from './AppHeroContent.vue';
 import { useVisibility } from '../../composables/useVisibility';
-import { useTypewriter } from '../../composables/useTypewriter';
 import { useParallax } from '../../composables/useParallax';
-import { useAvatarStyleList } from '../../composables/avatar';
-
-const { theme } = useData<ThemeOptions>();
 
 const isVisible = useVisibility('.app-hero', { once: false, threshold: 0.1 });
-
-const avatarStyleList = useAvatarStyleList();
-
 const heroRef = ref<HTMLElement>();
 const { setContainer, handleMouseMove } = useParallax(isVisible);
 
-// Responsive grid size
-const screenSize = ref<'mobile' | 'tablet' | 'desktop'>('desktop');
-
-function updateScreenSize() {
-  const width = window.innerWidth;
-  if (width < 768) {
-    screenSize.value = 'mobile';
-  } else if (width < 1024) {
-    screenSize.value = 'tablet';
-  } else {
-    screenSize.value = 'desktop';
-  }
-}
-
-// Generate floating avatars for background with grid positioning
-const floatingAvatars = computed(() => {
-  const prng = new Prando(777);
-  const avatars = [];
-  const seeds = ['Luna', 'Max', 'Sophie', 'Felix', 'Emma', 'Leo', 'Mia', 'Noah', 'Aria', 'Liam', 'Zoe', 'Oscar', 'Ivy', 'Jack', 'Ruby', 'Finn'];
-  const styles = avatarStyleList.value;
-
-  const gridConfig = {
-    mobile: { cols: 5, rows: 5 },
-    tablet: { cols: 6, rows: 5 },
-    desktop: { cols: 7, rows: 6 },
-  };
-
-  const { cols, rows } = gridConfig[screenSize.value];
-
-  for (let row = 0; row < rows; row++) {
-    for (let col = 0; col < cols; col++) {
-      const i = row * cols + col;
-      const style = kebabCase(styles[i % styles.length]);
-      const seed = seeds[i % seeds.length];
-      const baseX = (col / cols) * 100 + (prng.next() * 10 - 5);
-      const baseY = (row / rows) * 100 + (prng.next() * 10 - 5);
-
-      avatars.push({
-        style,
-        seed,
-        x: baseX,
-        y: baseY,
-        size: 48 + prng.next() * 32,
-        delay: prng.next() * 3,
-        duration: 8 + prng.next() * 8,
-        parallaxFactor: 0.5 + prng.next() * 1.5,
-      });
-    }
-  }
-  return avatars;
-});
-
-const { displayedText } = useTypewriter([
-  'user profiles',
-  'chat applications',
-  'gaming platforms',
-  'social networks',
-  'team tools',
-  'any project',
-]);
-
 function scrollToContent() {
   const section = document.querySelector('.seed-demo');
+
   if (section) {
     section.scrollIntoView({ behavior: 'smooth' });
   }
 }
 
-const throttledUpdateScreenSize = useThrottleFn(updateScreenSize, 200);
-
 onMounted(() => {
-  updateScreenSize();
-  window.addEventListener('resize', throttledUpdateScreenSize);
   if (heroRef.value) {
     setContainer(heroRef.value);
   }
-});
-
-onUnmounted(() => {
-  window.removeEventListener('resize', throttledUpdateScreenSize);
 });
 </script>
 
 <template>
   <section ref="heroRef" class="app-hero" :class="{ 'app-hero--paused': !isVisible }" @mousemove="handleMouseMove">
-    <!-- Animated gradient background -->
     <div class="app-hero-gradient"></div>
 
-    <!-- Decorative geometric shapes -->
     <div class="app-hero-shape app-hero-shape-1"></div>
     <div class="app-hero-shape app-hero-shape-2"></div>
     <div class="app-hero-shape app-hero-shape-3"></div>
     <div class="app-hero-shape app-hero-shape-4"></div>
 
-    <!-- Floating avatars background with parallax -->
-    <div class="app-hero-bg">
-      <div
-        v-for="(avatar, index) in floatingAvatars"
-        :key="index"
-        class="app-hero-floating-avatar"
-        :style="{
-          left: `${avatar.x}%`,
-          top: `${avatar.y}%`,
-          width: `${avatar.size}px`,
-          height: `${avatar.size}px`,
-          animationDelay: `${avatar.delay}s`,
-          animationDuration: `${avatar.duration}s`,
-          '--parallax-factor': avatar.parallaxFactor,
-        }"
-      >
-        <UiAvatar :style-name="avatar.style" :style-options="{ seed: avatar.seed, size: 80 }" :alt="avatar.style" />
-      </div>
-    </div>
+    <AppHeroBackground />
+    <AppHeroContent />
 
-    <div class="app-hero-content">
-      <a
-        href="https://github.com/dicebear/dicebear"
-        target="_blank"
-        rel="noopener"
-        class="app-hero-badge"
-      >
-        <UiIcon :path="siGithub.path" :size="14" class="app-hero-badge-icon" />
-        <span>Open Source Avatar Library</span>
-        <span class="app-hero-badge-divider"></span>
-        <Star :size="13" class="app-hero-badge-star" />
-        <span class="app-hero-badge-count">{{ theme.githubStars?.['dicebear/dicebear'] || '8k+' }}</span>
-      </a>
-
-      <h1 class="app-hero-title">
-        <span class="app-hero-title-line">Unique Avatars for</span>
-        <span class="app-hero-title-dynamic">
-          <span class="app-hero-title-text">{{ displayedText }}</span>
-          <span class="app-hero-cursor"></span>
-        </span>
-      </h1>
-
-      <p class="app-hero-description">
-        DiceBear is a privacy-focused, open source avatar library with
-        <span class="app-hero-highlight" style="white-space: nowrap">30+ SVG styles</span>&nbsp;crafted by talented artists.
-        Generate deterministic profile pictures via API, JS&nbsp;library &amp; CLI.
-      </p>
-
-      <div class="app-hero-actions">
-        <UiButton href="/playground/" class="app-hero-btn-primary app-hero-action-btn">
-          <Play :size="20" />
-          Try Playground
-        </UiButton>
-        <UiButton href="/introduction/" variant="secondary" class="app-hero-action-btn">
-          Get Started
-          <ArrowRight :size="20" class="app-hero-arrow-icon" />
-        </UiButton>
-      </div>
-    </div>
-
-    <!-- Scroll indicator -->
     <button class="app-hero-scroll" @click="scrollToContent" aria-label="Scroll to content">
       <ChevronDown />
     </button>
@@ -202,9 +62,7 @@ onUnmounted(() => {
   --app-hero-badge-border: rgba(255, 255, 255, 0.1);
   --app-hero-star-color: #fbbf24;
 }
-</style>
 
-<style lang="scss" scoped>
 .app-hero {
   position: relative;
   min-height: calc(100vh - var(--vp-nav-height, 64px));
@@ -228,7 +86,6 @@ onUnmounted(() => {
     opacity: 0.2;
   }
 
-  /* Animated gradient background */
   &-gradient {
     position: absolute;
     inset: 0;
@@ -236,7 +93,6 @@ onUnmounted(() => {
     animation: app-hero-gradient-shift 20s ease-in-out infinite;
   }
 
-  /* Decorative geometric shapes */
   &-shape {
     position: absolute;
     border-radius: 50%;
@@ -282,7 +138,6 @@ onUnmounted(() => {
     }
   }
 
-  /* Floating avatars background */
   &-bg {
     position: absolute;
     inset: -10%;
@@ -310,7 +165,6 @@ onUnmounted(() => {
     }
   }
 
-  /* Content */
   &-content {
     position: relative;
     z-index: 1;
@@ -322,7 +176,6 @@ onUnmounted(() => {
     animation: fade-up var(--duration-reveal) var(--ease-smooth);
   }
 
-  /* Top badge with GitHub stars */
   &-badge {
     display: inline-flex;
     align-items: center;
@@ -445,7 +298,6 @@ onUnmounted(() => {
     font-size: 17px;
   }
 
-  /* Scroll indicator */
   &-scroll {
     position: absolute;
     bottom: 32px;
