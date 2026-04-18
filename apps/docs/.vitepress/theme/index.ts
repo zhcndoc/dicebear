@@ -25,6 +25,76 @@ const DiceBearPreset = definePreset(Aura, {
       900: '{sky.900}',
       950: '{sky.950}',
     },
+    colorScheme: {
+      light: {
+        surface: {
+          0: '#ffffff',
+          50: '{stone.50}',
+          100: '{stone.100}',
+          200: '{stone.200}',
+          300: '{stone.300}',
+          400: '{stone.400}',
+          500: '{stone.500}',
+          600: '{stone.600}',
+          700: '{stone.700}',
+          800: '{stone.800}',
+          900: '{stone.900}',
+          950: '{stone.950}',
+        },
+      },
+      dark: {
+        surface: {
+          0: '#ffffff',
+          50: '#f5f5f4',
+          100: '#e7e5e4',
+          200: '#d6d3d1',
+          300: '#a8a29e',
+          400: '#78716c',
+          500: '#57534e',
+          600: '#3f3f46',
+          700: '#2c2c32',
+          800: '#242429',
+          900: '#1a1a1e',
+          950: '#111115',
+        },
+      },
+    },
+  },
+  components: {
+    button: {
+      colorScheme: {
+        light: {
+          root: {
+            secondary: {
+              background: '#f0efed',
+              hoverBackground: '#e7e5e4',
+              activeBackground: '#d6d3d1',
+              borderColor: 'transparent',
+              hoverBorderColor: 'transparent',
+              activeBorderColor: 'transparent',
+              color: 'var(--vp-c-text-1)',
+              hoverColor: 'var(--vp-c-text-1)',
+              activeColor: 'var(--vp-c-text-1)',
+            },
+          },
+        },
+        dark: {
+          root: {
+            secondary: {
+              background: '#2f2f36',
+              hoverBackground: '#3a3a42',
+              activeBackground: '#48484f',
+              borderColor: 'transparent',
+              hoverBorderColor: 'transparent',
+              activeBorderColor: 'transparent',
+              color: 'var(--vp-c-text-1)',
+              hoverColor: 'var(--vp-c-text-1)',
+              activeColor: 'var(--vp-c-text-1)',
+            },
+          },
+        },
+      },
+    },
   },
 });
 
