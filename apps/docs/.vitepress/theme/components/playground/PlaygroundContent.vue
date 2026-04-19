@@ -5,7 +5,6 @@ import { kebabCase } from 'change-case';
 import { RotateCcw, Link } from '@lucide/vue';
 import PlaygroundOptions from './PlaygroundOptions.vue';
 import PlaygroundPreviewPanel from './PlaygroundPreviewPanel.vue';
-import PlaygroundStyleSelect from './PlaygroundStyleSelect.vue';
 import useStore from '@theme/stores/playground';
 import { compressFragment, decompressFragment } from '@theme/utils/avatar/fragment';
 import Button from 'primevue/button';
@@ -88,36 +87,36 @@ async function copyLink() {
 
 <template>
   <div class="pg">
-    <header class="pg-header">
-      <PlaygroundStyleSelect />
-
-      <div class="pg-header-actions">
-        <Button
-          :label="linkCopied ? 'Copied!' : 'Copy Link'"
-          severity="secondary"
-          :disabled="store.isCustomStyle"
-          v-tooltip="store.isCustomStyle ? 'Custom styles cannot be shared via link' : undefined"
-          @click="copyLink"
-        >
-          <template #icon>
-            <Link :size="15" />
-          </template>
-        </Button>
-        <Button
-          label="Reset"
-          severity="secondary"
-          @click="store.resetOptions"
-        >
-          <template #icon>
-            <RotateCcw :size="15" />
-          </template>
-        </Button>
-      </div>
-    </header>
-
     <div class="pg-body">
       <aside class="pg-sidebar">
-        <PlaygroundOptions v-model:seed="seed" />
+        <PlaygroundOptions v-model:seed="seed">
+          <template #style-actions>
+            <Button
+              :label="linkCopied ? 'Copied!' : 'Copy Link'"
+              severity="secondary"
+              variant="link"
+              size="small"
+              :disabled="store.isCustomStyle"
+              v-tooltip="store.isCustomStyle ? 'Custom styles cannot be shared via link' : undefined"
+              @click="copyLink"
+            >
+              <template #icon>
+                <Link :size="14" />
+              </template>
+            </Button>
+            <Button
+              label="Reset"
+              severity="secondary"
+              variant="link"
+              size="small"
+              @click="store.resetOptions"
+            >
+              <template #icon>
+                <RotateCcw :size="14" />
+              </template>
+            </Button>
+          </template>
+        </PlaygroundOptions>
       </aside>
       <main class="pg-main">
         <PlaygroundPreviewPanel :seed="seed" />
@@ -131,21 +130,6 @@ async function copyLink() {
   max-width: 1200px;
   margin: 0 auto;
   padding: 16px 24px 48px;
-}
-
-.pg-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 0;
-  margin-bottom: 20px;
-  border-bottom: 1px solid var(--pg-border);
-
-  &-actions {
-    display: flex;
-    gap: 8px;
-  }
 }
 
 .pg-body {
@@ -167,6 +151,7 @@ async function copyLink() {
     position: sticky;
     top: 80px;
     align-self: start;
+    padding-top: 12px;
   }
 
   @media (max-width: 860px) {

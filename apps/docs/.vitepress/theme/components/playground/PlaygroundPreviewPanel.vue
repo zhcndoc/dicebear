@@ -64,20 +64,39 @@ const styleOptions = computed(() => ({
       var(--vp-c-bg-soft) 0% 25%,
       var(--vp-c-bg) 0% 50%
     ) 50% / 20px 20px;
+
+  @media (max-width: 540px) {
+    padding: 24px 16px;
+  }
 }
 
 .pg-preview-avatar {
   --ui-avatar-bg-1: transparent;
   --ui-avatar-bg-2: transparent;
+
+  max-width: 100%;
+  height: auto;
+
+  @media (max-width: 540px) {
+    max-width: 220px;
+  }
+
+  :deep(svg),
+  :deep(img) {
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 .pg-preview-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   width: 100%;
 
   :deep(> *) {
-    flex: 1;
+    flex: 1 1 160px;
+    min-width: 0;
   }
 
   :deep(button) {

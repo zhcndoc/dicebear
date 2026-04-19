@@ -51,6 +51,14 @@
   --p-toolbar-color: var(--vp-c-text-1);
 }
 
+.p-button-outlined.p-button-secondary {
+  background: #ffffff;
+}
+
+.dark .p-button-outlined.p-button-secondary {
+  background: transparent;
+}
+
 /* ----------------------------------------------------------------
  * Playground shared field layout (used across Component/Color/Transform)
  * ---------------------------------------------------------------- */

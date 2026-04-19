@@ -19,6 +19,7 @@ import PlaygroundComponentSection from './PlaygroundComponentSection.vue';
 import PlaygroundColorSection from './PlaygroundColorSection.vue';
 import PlaygroundTransformSection from './PlaygroundTransformSection.vue';
 import PlaygroundFontSection from './PlaygroundFontSection.vue';
+import PlaygroundStyleSelect from './PlaygroundStyleSelect.vue';
 
 type ComponentInfo = {
   name: string;
@@ -198,52 +199,66 @@ const onSeedFocus = (e: FocusEvent) => {
 
 <template>
   <div class="pg-options">
-    <Accordion :multiple="true" :value="['__seed']" class="pg-options-accordion">
-      <AccordionPanel value="__seed">
-        <AccordionHeader>
-          <span class="pg-options-label">Seed</span>
-        </AccordionHeader>
-        <AccordionContent>
-          <div class="pg-options-seed-row">
-            <InputText
-              v-model="seed"
-              placeholder="Enter a seed"
-              class="pg-options-seed"
-              @focus="onSeedFocus"
-            />
-            <Button
-              severity="secondary"
-              v-tooltip="'Random seed'"
-              @click="randomizeSeed"
-            >
-              <Shuffle :size="16" />
-            </Button>
-          </div>
-          <p class="pg-options-seed-help">
-            The seed is the starting value used to generate the avatar.
-            <strong>The same seed always produces the same avatar</strong>, so you can reuse it whenever you need the
-            exact same result. For privacy, prefer an opaque identifier such as a random string or hashed user ID
-            instead of personal data like names or email addresses.
-          </p>
-        </AccordionContent>
-      </AccordionPanel>
-      <AccordionPanel v-if="hasFontFamily || hasFontWeight" value="__font">
-        <AccordionHeader>
-          <span class="pg-options-label">Font</span>
-        </AccordionHeader>
-        <AccordionContent>
-          <PlaygroundFontSection :key="avatarStyleName" :has-font-family="hasFontFamily" :has-font-weight="hasFontWeight" />
-        </AccordionContent>
-      </AccordionPanel>
-      <AccordionPanel value="__transform">
-        <AccordionHeader>
-          <span class="pg-options-label">Transform</span>
-        </AccordionHeader>
-        <AccordionContent>
-          <PlaygroundTransformSection :key="avatarStyleName" />
-        </AccordionContent>
-      </AccordionPanel>
-    </Accordion>
+    <div class="pg-options-group">
+      <div class="pg-options-group-title-row">
+        <h3 class="pg-options-group-title">Avatar Style</h3>
+        <div class="pg-options-group-actions">
+          <slot name="style-actions" />
+        </div>
+      </div>
+      <PlaygroundStyleSelect />
+    </div>
+
+    <div class="pg-options-group">
+      <h3 class="pg-options-group-title">General</h3>
+      <Accordion :multiple="true" :value="['__seed']" class="pg-options-accordion">
+        <AccordionPanel value="__seed">
+          <AccordionHeader>
+            <span class="pg-options-label">Seed</span>
+          </AccordionHeader>
+          <AccordionContent>
+            <div class="pg-options-seed-row">
+              <InputText
+                v-model="seed"
+                placeholder="Enter a seed"
+                class="pg-options-seed"
+                @focus="onSeedFocus"
+              />
+              <Button
+                severity="secondary"
+                variant="outlined"
+                v-tooltip="'Random seed'"
+                @click="randomizeSeed"
+              >
+                <Shuffle :size="16" />
+              </Button>
+            </div>
+            <p class="pg-options-seed-help">
+              The seed is the starting value used to generate the avatar.
+              <strong>The same seed always produces the same avatar</strong>, so you can reuse it whenever you need the
+              exact same result. For privacy, prefer an opaque identifier such as a random string or hashed user ID
+              instead of personal data like names or email addresses.
+            </p>
+          </AccordionContent>
+        </AccordionPanel>
+        <AccordionPanel v-if="hasFontFamily || hasFontWeight" value="__font">
+          <AccordionHeader>
+            <span class="pg-options-label">Font</span>
+          </AccordionHeader>
+          <AccordionContent>
+            <PlaygroundFontSection :key="avatarStyleName" :has-font-family="hasFontFamily" :has-font-weight="hasFontWeight" />
+          </AccordionContent>
+        </AccordionPanel>
+        <AccordionPanel value="__transform">
+          <AccordionHeader>
+            <span class="pg-options-label">Transform</span>
+          </AccordionHeader>
+          <AccordionContent>
+            <PlaygroundTransformSection :key="avatarStyleName" />
+          </AccordionContent>
+        </AccordionPanel>
+      </Accordion>
+    </div>
 
     <div class="pg-options-group" v-if="components.length > 0">
       <h3 class="pg-options-group-title">Components</h3>
@@ -314,11 +329,31 @@ const onSeedFocus = (e: FocusEvent) => {
     color: var(--vp-c-text-3);
     margin: 0 0 8px 2px;
   }
+
+  &-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+
+    .pg-options-group-title {
+      margin: 0 0 0 2px;
+    }
+  }
+
+  &-actions {
+    display: flex;
+    gap: 4px;
+
+    :deep(.p-button-link:hover .p-button-label) {
+      text-decoration: none;
+    }
+  }
 }
 
 .pg-options-accordion {
   border: 1px solid var(--pg-border);
-  border-radius: var(--vp-radius-sm);
+  border-radius: var(--vp-radius-xs);
   overflow: hidden;
 
   :deep(.p-accordionpanel:last-child) {

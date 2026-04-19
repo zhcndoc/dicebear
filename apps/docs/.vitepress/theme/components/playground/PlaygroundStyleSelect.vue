@@ -3,14 +3,14 @@ import { ref, computed } from 'vue';
 import { capitalCase } from 'change-case';
 import { useData } from 'vitepress';
 import { storeToRefs } from 'pinia';
-import { Search, X, Plus, Trash2, ChevronDown } from '@lucide/vue';
+import { Search, X, Plus, Trash2 } from '@lucide/vue';
+import ChevronRightIcon from '@primevue/icons/chevronright';
 import { useStyleFiltering } from '@theme/composables/useStyleFiltering';
 import useStore from '@theme/stores/playground';
 import { ThemeOptions } from '@theme/types';
 import { UiAvatar } from '../ui';
 import PlaygroundCustomStyleUpload from './PlaygroundCustomStyleUpload.vue';
 import Dialog from 'primevue/dialog';
-import Button from 'primevue/button';
 import Tag from 'primevue/tag';
 
 const store = useStore();
@@ -75,25 +75,30 @@ const currentDisplayName = computed(() => {
 </script>
 
 <template>
-  <Button
-    severity="secondary"
+  <button
+    type="button"
     class="pg-style-select-trigger"
     @click="open = true"
   >
-    <UiAvatar
-      :size="20"
-      :style-name="avatarStyleName"
-      :style-options="{ seed: 'JD' }"
-      mode="library"
-    />
-    <span class="pg-style-select-trigger-label">{{ currentDisplayName }}</span>
-    <ChevronDown :size="14" class="pg-style-select-trigger-chevron" />
-  </Button>
+    <span class="pg-style-select-trigger-avatar">
+      <UiAvatar
+        :size="40"
+        :style-name="avatarStyleName"
+        :style-options="{ seed: 'JD' }"
+        mode="library"
+      />
+    </span>
+
+    <span class="pg-style-select-trigger-name">{{ currentDisplayName }}</span>
+
+    <ChevronRightIcon class="pg-style-select-trigger-chevron" />
+  </button>
 
   <Dialog
     v-model:visible="open"
     modal
     :closable="true"
+    dismissable-mask
     header="Choose Avatar Style"
     :style="{ width: '900px' }"
     :pt="{ content: { class: 'pg-style-select-dialog-content' } }"
@@ -229,17 +234,54 @@ const currentDisplayName = computed(() => {
 .pg-style-select-trigger {
   display: flex;
   align-items: center;
-  gap: 8px;
-  min-width: 200px;
+  gap: 12px;
+  width: 100%;
+  padding: 8px 16px 8px 8px;
+  background: var(--p-content-background);
+  border: 1px solid var(--p-form-field-border-color);
+  border-radius: var(--vp-radius-xs);
+  color: var(--vp-c-text-1);
+  cursor: pointer;
+  text-align: left;
+  transition: background-color var(--duration-fast);
 
-  &-label {
+  &:hover {
+    background: var(--vp-c-bg-soft);
+  }
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--p-form-field-focus-border-color);
+  }
+
+  &-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    background: var(--vp-c-bg-soft);
+    border-radius: var(--vp-radius-xs);
+    overflow: hidden;
+  }
+
+  &-name {
     flex: 1;
-    text-align: left;
+    min-width: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--vp-c-text-1);
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   &-chevron {
     flex-shrink: 0;
     margin-left: auto;
+    color: var(--p-accordion-header-toggle-icon-color);
   }
 }
 

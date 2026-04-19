@@ -73,7 +73,7 @@ function onDownloadClick(e: Event) {
 </script>
 
 <template>
-  <Button :label="store.isCustomStyle ? 'Download SVG' : 'Download'" severity="secondary" @click="onDownloadClick">
+  <Button :label="store.isCustomStyle ? 'Download SVG' : 'Download'" severity="secondary" variant="outlined" @click="onDownloadClick">
     <template #icon>
       <Download :size="15" />
     </template>

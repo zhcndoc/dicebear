@@ -12,6 +12,12 @@ import Tooltip from 'primevue/tooltip';
 
 const DiceBearPreset = definePreset(Aura, {
   semantic: {
+    formField: {
+      borderRadius: 'var(--vp-radius-xs)',
+    },
+    content: {
+      borderRadius: 'var(--vp-radius-xs)',
+    },
     primary: {
       50: '{sky.50}',
       100: '{sky.100}',
@@ -64,33 +70,33 @@ const DiceBearPreset = definePreset(Aura, {
     button: {
       colorScheme: {
         light: {
-          root: {
+          outlined: {
             secondary: {
-              background: '#f0efed',
-              hoverBackground: '#e7e5e4',
-              activeBackground: '#d6d3d1',
-              borderColor: 'transparent',
-              hoverBorderColor: 'transparent',
-              activeBorderColor: 'transparent',
+              hoverBackground: 'var(--vp-c-bg-soft)',
+              activeBackground: 'var(--vp-c-bg-soft)',
+              borderColor: 'var(--p-form-field-border-color)',
               color: 'var(--vp-c-text-1)',
-              hoverColor: 'var(--vp-c-text-1)',
-              activeColor: 'var(--vp-c-text-1)',
             },
+          },
+          link: {
+            color: 'var(--vp-c-text-2)',
+            hoverColor: 'var(--vp-c-text-1)',
+            activeColor: 'var(--vp-c-text-1)',
           },
         },
         dark: {
-          root: {
+          outlined: {
             secondary: {
-              background: '#2f2f36',
-              hoverBackground: '#3a3a42',
-              activeBackground: '#48484f',
-              borderColor: 'transparent',
-              hoverBorderColor: 'transparent',
-              activeBorderColor: 'transparent',
+              hoverBackground: 'var(--vp-c-bg-soft)',
+              activeBackground: 'var(--vp-c-bg-soft)',
+              borderColor: 'var(--p-form-field-border-color)',
               color: 'var(--vp-c-text-1)',
-              hoverColor: 'var(--vp-c-text-1)',
-              activeColor: 'var(--vp-c-text-1)',
             },
+          },
+          link: {
+            color: 'var(--vp-c-text-2)',
+            hoverColor: 'var(--vp-c-text-1)',
+            activeColor: 'var(--vp-c-text-1)',
           },
         },
       },
