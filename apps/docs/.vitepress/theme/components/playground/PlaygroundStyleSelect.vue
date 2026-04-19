@@ -238,7 +238,7 @@ const currentDisplayName = computed(() => {
   width: 100%;
   padding: 8px 16px 8px 8px;
   background: var(--p-content-background);
-  border: 1px solid var(--p-form-field-border-color);
+  border: 1px solid var(--pg-border);
   border-radius: var(--vp-radius-xs);
   color: var(--vp-c-text-1);
   cursor: pointer;
