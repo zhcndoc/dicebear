@@ -40,3 +40,21 @@
   --vp-c-brand-3: var(--vp-c-indigo-3);
   --vp-c-brand-soft: var(--vp-c-indigo-soft);
 }
+
+/**
+ * App-wide muted foreground tokens.
+ *
+ * Intentionally detached from VitePress's --vp-c-text-2/3 so that stock theme
+ * surfaces (TOC, footer, tip boxes) keep their default contrast ramp, while
+ * opt-in elements (nav icons, Playground labels, code-block copy) can use a
+ * pair of per-mode-matched greys that stay equally legible in both themes.
+ */
+:root {
+  --ui-c-text-muted: #5f6370;
+  --ui-c-text-subtle: #8b8e98;
+}
+
+.dark {
+  --ui-c-text-muted: #c4c7d1;
+  --ui-c-text-subtle: #9ea2ac;
+}

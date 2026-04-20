@@ -111,6 +111,7 @@ async function copyLink() {
             severity="secondary"
             variant="link"
             size="small"
+            class="pg-field-reset"
             @click="store.resetOptions"
           >
             <template #icon>
@@ -169,6 +170,10 @@ async function copyLink() {
     display: flex;
     justify-content: flex-end;
     gap: 4px;
+
+    :deep(.p-button-link) {
+      color: var(--ui-c-text-muted);
+    }
 
     :deep(.p-button-link:hover .p-button-label) {
       text-decoration: none;

@@ -41,6 +41,16 @@ export function useRangeField(avatarStyleOptions: PlaygroundStoreOptions) {
     });
   }
 
+  function resetRangeField(key: string, defaultRange?: readonly number[]) {
+    delete avatarStyleOptions[key];
+
+    if (defaultRange && defaultRange.length === 2) {
+      rangeMode[key] = true;
+    } else {
+      delete rangeMode[key];
+    }
+  }
+
   function rangeComputed(key: string, fallback: number | readonly number[]) {
     return computed<[number, number]>({
       get: () => {
@@ -65,6 +75,7 @@ export function useRangeField(avatarStyleOptions: PlaygroundStoreOptions) {
     rangeMode,
     isRangeMode,
     toggleRangeMode,
+    resetRangeField,
     singleComputed,
     rangeComputed,
   };

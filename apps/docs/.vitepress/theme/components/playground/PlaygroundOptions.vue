@@ -321,7 +321,7 @@ const onSeedFocus = (e: FocusEvent) => {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--vp-c-text-3);
+    color: var(--ui-c-text-subtle);
     margin: 0 0 8px 2px;
   }
 }
@@ -360,6 +360,6 @@ const onSeedFocus = (e: FocusEvent) => {
   margin: 8px 0 0;
   font-size: 12px;
   line-height: 1.5;
-  color: var(--vp-c-text-2);
+  color: var(--ui-c-text-muted);
 }
 </style>

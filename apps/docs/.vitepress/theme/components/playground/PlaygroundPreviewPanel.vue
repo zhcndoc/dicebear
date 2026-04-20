@@ -108,7 +108,7 @@ const styleOptions = computed(() => ({
 .pg-preview-license {
   font-size: 13px;
   line-height: 1.5;
-  color: var(--vp-c-text-3);
+  color: var(--ui-c-text-subtle);
   text-align: center;
 }
 </style>

@@ -199,7 +199,7 @@ const canSubmit = computed(() => jsonInput.value.trim().length > 0 && !loading.v
 .pg-custom-upload-label {
   font-size: 13px;
   font-weight: 600;
-  color: var(--vp-c-text-2);
+  color: var(--ui-c-text-muted);
 }
 
 .pg-custom-upload-name {
@@ -226,7 +226,7 @@ const canSubmit = computed(() => jsonInput.value.trim().length > 0 && !loading.v
   }
 
   &::placeholder {
-    color: var(--vp-c-text-3);
+    color: var(--ui-c-text-subtle);
   }
 }
 
@@ -234,7 +234,7 @@ const canSubmit = computed(() => jsonInput.value.trim().length > 0 && !loading.v
   display: flex;
   align-items: center;
   gap: 12px;
-  color: var(--vp-c-text-3);
+  color: var(--ui-c-text-subtle);
   font-size: 13px;
 
   &::before,
@@ -256,7 +256,7 @@ const canSubmit = computed(() => jsonInput.value.trim().length > 0 && !loading.v
   border-radius: var(--vp-radius-xs);
   font-size: 13px;
   font-weight: 500;
-  color: var(--vp-c-text-2);
+  color: var(--ui-c-text-muted);
   cursor: pointer;
   transition: all var(--duration-fast);
 
@@ -278,7 +278,7 @@ const canSubmit = computed(() => jsonInput.value.trim().length > 0 && !loading.v
 .pg-custom-upload-notice {
   font-size: 13px;
   line-height: 1.5;
-  color: var(--vp-c-text-3);
+  color: var(--ui-c-text-subtle);
   text-align: center;
   margin: 0;
 }

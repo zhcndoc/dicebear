@@ -8,6 +8,7 @@ import useStore from '@theme/stores/playground';
 import { useRangeField } from '@theme/composables/useRangeField';
 import { stripHash } from '@theme/utils/avatar/colors';
 import PlaygroundColorPicker from './PlaygroundColorPicker.vue';
+import PlaygroundFieldReset from './PlaygroundFieldReset.vue';
 
 const props = defineProps<{
   colorName: string;
@@ -18,26 +19,29 @@ const props = defineProps<{
 }>();
 
 const store = useStore();
-const colorKey = computed(() => `${props.colorName}Color`);
 
+const colorKey = `${props.colorName}Color`;
+const fillKey = `${colorKey}Fill`;
+const angleKey = `${colorKey}Angle`;
+const fillStopsKey = `${colorKey}FillStops`;
 
 const colors = computed<string[]>({
   get: () => {
-    const val = store.avatarStyleOptions[colorKey.value];
+    const val = store.avatarStyleOptions[colorKey];
 
     if (Array.isArray(val)) return val;
 
     return props.defaultValues;
   },
   set: (val: string[]) => {
-    // If setting back to exactly the defaults, remove from store
-    if (
+    const matchesDefaults =
       val.length === props.defaultValues.length &&
-      val.every((v, i) => v === props.defaultValues[i])
-    ) {
-      delete store.avatarStyleOptions[colorKey.value];
+      val.every((v, i) => v === props.defaultValues[i]);
+
+    if (matchesDefaults) {
+      delete store.avatarStyleOptions[colorKey];
     } else {
-      store.avatarStyleOptions[colorKey.value] = [...val];
+      store.avatarStyleOptions[colorKey] = [...val];
     }
   },
 });
@@ -59,11 +63,6 @@ function removeColor(index: number) {
   colors.value = next;
 }
 
-
-const fillKey = computed(() => `${colorKey.value}Fill`);
-const angleKey = computed(() => `${colorKey.value}Angle`);
-const fillStopsKey = computed(() => `${colorKey.value}FillStops`);
-
 const fillOptions = [
   { label: 'Solid', value: 'solid' },
   { label: 'Linear', value: 'linear' },
@@ -72,7 +71,7 @@ const fillOptions = [
 
 const fill = computed({
   get: () => {
-    const val = store.avatarStyleOptions[fillKey.value];
+    const val = store.avatarStyleOptions[fillKey];
 
     if (Array.isArray(val)) return val[0] ?? 'solid';
 
@@ -80,25 +79,28 @@ const fill = computed({
   },
   set: (val: string) => {
     if (val === 'solid') {
-      delete store.avatarStyleOptions[fillKey.value];
+      delete store.avatarStyleOptions[fillKey];
     } else {
-      store.avatarStyleOptions[fillKey.value] = [val];
+      store.avatarStyleOptions[fillKey] = [val];
     }
   },
 });
 
-const { isRangeMode, toggleRangeMode, singleComputed, rangeComputed } = useRangeField(store.avatarStyleOptions);
+const { isRangeMode, toggleRangeMode, resetRangeField, singleComputed, rangeComputed } = useRangeField(store.avatarStyleOptions);
 
-const angleSingle = singleComputed(angleKey.value, 0);
-const angleRange = rangeComputed(angleKey.value, 0);
+const angleSingle = singleComputed(angleKey, 0);
+const angleRange = rangeComputed(angleKey, 0);
 
-const fillStopsSingle = singleComputed(fillStopsKey.value, 2);
-const fillStopsRange = rangeComputed(fillStopsKey.value, 2);
+const fillStopsSingle = singleComputed(fillStopsKey, 2);
+const fillStopsRange = rangeComputed(fillStopsKey, 2);
 </script>
 
 <template>
   <div class="pg-color">
-    <label class="pg-color-label">Color</label>
+    <div class="pg-color-label">
+      <span>Color</span>
+      <PlaygroundFieldReset v-if="store.isOptionSet(colorKey)" @click="store.resetOption(colorKey)" />
+    </div>
     <div class="pg-color-grid">
       <div
         v-for="(color, i) in colors"
@@ -120,7 +122,10 @@ const fillStopsRange = rangeComputed(fillStopsKey.value, 2);
 
     <template v-if="hasFill && colors.length > 0">
       <div class="pg-field">
-        <div class="pg-field-label">Fill</div>
+        <div class="pg-field-label">
+          <span>Fill</span>
+          <PlaygroundFieldReset v-if="store.isOptionSet(fillKey)" @click="store.resetOption(fillKey)" />
+        </div>
         <Select v-model="fill" :options="fillOptions" option-label="label" option-value="value" class="pg-color-fill-select" />
       </div>
 
@@ -136,6 +141,7 @@ const fillStopsRange = rangeComputed(fillStopsKey.value, 2);
           >
             <ArrowLeftRight :size="14" />
           </Button>
+          <PlaygroundFieldReset v-if="store.isOptionSet(angleKey)" @click="resetRangeField(angleKey)" />
           <span class="pg-field-value" v-if="isRangeMode(angleKey)">{{ angleRange[0] }}° — {{ angleRange[1] }}°</span>
           <span class="pg-field-value" v-else>{{ angleSingle }}°</span>
         </div>
@@ -155,6 +161,7 @@ const fillStopsRange = rangeComputed(fillStopsKey.value, 2);
           >
             <ArrowLeftRight :size="14" />
           </Button>
+          <PlaygroundFieldReset v-if="store.isOptionSet(fillStopsKey)" @click="resetRangeField(fillStopsKey)" />
           <span class="pg-field-value" v-if="isRangeMode(fillStopsKey)">{{ fillStopsRange[0] }} — {{ fillStopsRange[1] }}</span>
           <span class="pg-field-value" v-else>{{ fillStopsSingle }}</span>
         </div>
@@ -173,9 +180,12 @@ const fillStopsRange = rangeComputed(fillStopsKey.value, 2);
 }
 
 .pg-color-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 13px;
   font-weight: 600;
-  color: var(--vp-c-text-2);
+  color: var(--ui-c-text-muted);
 }
 
 .pg-color-grid {

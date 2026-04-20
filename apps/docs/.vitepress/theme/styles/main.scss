@@ -32,7 +32,7 @@
   align-items: center;
   gap: 6px;
   font-size: 13px;
-  color: var(--vp-c-text-2);
+  color: var(--ui-c-text-muted);
 }
 
 .pg-field-value {
@@ -44,6 +44,17 @@
   padding: 0 6px !important;
   min-width: 0 !important;
   height: 24px !important;
+}
+
+.pg-field-reset:hover,
+.pg-field-reset:focus-visible {
+  color: var(--p-red-500) !important;
+}
+
+.pg-field-reset:not(.p-button-link):hover,
+.pg-field-reset:not(.p-button-link):focus-visible {
+  background: color-mix(in srgb, var(--p-red-500) 12%, transparent) !important;
+  border-color: transparent !important;
 }
 
 /* ----------------------------------------------------------------

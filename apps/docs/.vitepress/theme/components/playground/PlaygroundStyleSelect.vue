@@ -309,7 +309,7 @@ const currentDisplayName = computed(() => {
   border: 1px solid var(--vp-c-border);
   border-radius: var(--vp-radius-xs);
   background: var(--vp-c-bg);
-  color: var(--vp-c-text-3);
+  color: var(--ui-c-text-subtle);
   transition: border-color var(--duration-fast);
 
   &:focus-within {
@@ -326,7 +326,7 @@ const currentDisplayName = computed(() => {
     outline: none;
 
     &::placeholder {
-      color: var(--vp-c-text-3);
+      color: var(--ui-c-text-subtle);
     }
   }
 }
@@ -341,7 +341,7 @@ const currentDisplayName = computed(() => {
   padding: 4px 12px;
   font-size: 13px;
   font-weight: 500;
-  color: var(--vp-c-text-2);
+  color: var(--ui-c-text-muted);
   background: var(--vp-c-bg-soft);
   border: 1px solid var(--vp-c-border);
   border-radius: var(--vp-radius-md);
@@ -368,7 +368,7 @@ const currentDisplayName = computed(() => {
     align-items: center;
     gap: 4px;
     border-style: dashed;
-    color: var(--vp-c-text-3);
+    color: var(--ui-c-text-subtle);
 
     &:hover {
       border-color: var(--vp-c-danger-1);
@@ -390,7 +390,7 @@ const currentDisplayName = computed(() => {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--vp-c-text-3);
+  color: var(--ui-c-text-subtle);
   margin: 0 0 8px;
 }
 
@@ -445,7 +445,7 @@ const currentDisplayName = computed(() => {
 
   &-creator {
     font-size: 12px;
-    color: var(--vp-c-text-3);
+    color: var(--ui-c-text-subtle);
   }
 
   &-delete {
@@ -463,7 +463,7 @@ const currentDisplayName = computed(() => {
     cursor: pointer;
     opacity: 0;
     transition: all var(--duration-fast);
-    color: var(--vp-c-text-3);
+    color: var(--ui-c-text-subtle);
 
     &:hover {
       color: var(--vp-c-danger-1);
@@ -494,7 +494,7 @@ const currentDisplayName = computed(() => {
       justify-content: center;
       border-radius: 50%;
       background: var(--vp-c-bg);
-      color: var(--vp-c-text-3);
+      color: var(--ui-c-text-subtle);
       transition: all var(--duration-fast);
     }
   }
@@ -508,7 +508,7 @@ const currentDisplayName = computed(() => {
 .pg-style-select-empty {
   text-align: center;
   padding: 40px;
-  color: var(--vp-c-text-3);
+  color: var(--ui-c-text-subtle);
   font-size: 14px;
 }
 

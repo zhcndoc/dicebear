@@ -89,7 +89,7 @@ function addPreset(hex: string) {
   background: var(--vp-c-bg-soft);
   border: 2px dashed var(--pg-border);
   border-radius: var(--vp-radius-xs);
-  color: var(--vp-c-text-3);
+  color: var(--ui-c-text-subtle);
   cursor: pointer;
 
   &:hover {
@@ -165,14 +165,14 @@ function addPreset(hex: string) {
 
   &-label {
     font-size: 12px;
-    color: var(--vp-c-text-3);
+    color: var(--ui-c-text-subtle);
     white-space: nowrap;
   }
 
   span {
     font-size: 12px;
     font-weight: 600;
-    color: var(--vp-c-text-2);
+    color: var(--ui-c-text-muted);
     min-width: 36px;
     text-align: right;
   }

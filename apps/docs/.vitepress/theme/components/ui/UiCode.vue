@@ -142,7 +142,7 @@ watch(() => props.code, async () => {
     border-radius: var(--vp-radius-xs);
     cursor: pointer;
     transition: all var(--duration-fast) ease;
-    color: var(--vp-c-text-3);
+    color: var(--ui-c-text-subtle);
 
     &:hover {
       background: var(--vp-c-brand-soft);

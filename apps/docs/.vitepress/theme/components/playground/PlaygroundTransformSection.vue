@@ -5,35 +5,42 @@ import SelectButton from 'primevue/selectbutton';
 import useStore from '@theme/stores/playground';
 import { useRangeField } from '@theme/composables/useRangeField';
 import PlaygroundRangeField from './PlaygroundRangeField.vue';
+import PlaygroundFieldReset from './PlaygroundFieldReset.vue';
 
 const store = useStore();
 const { singleComputed } = useRangeField(store.avatarStyleOptions);
+
+const flipKey = 'flip';
+const borderRadiusKey = 'borderRadius';
 
 const flipOptions = ['none', 'horizontal', 'vertical', 'both'];
 
 const flip = computed({
   get: () => {
-    const val = store.avatarStyleOptions['flip'];
+    const val = store.avatarStyleOptions[flipKey];
 
     return typeof val === 'string' ? val : 'none';
   },
   set: (val: string) => {
     if (val === 'none') {
-      delete store.avatarStyleOptions['flip'];
+      delete store.avatarStyleOptions[flipKey];
     } else {
-      store.avatarStyleOptions['flip'] = val;
+      store.avatarStyleOptions[flipKey] = val;
     }
   },
 });
 
-const borderRadius = singleComputed('borderRadius', 0);
+const borderRadius = singleComputed(borderRadiusKey, 0);
 </script>
 
 <template>
   <div class="pg-transform">
     <div class="pg-transform-body">
       <div class="pg-field">
-        <div class="pg-field-label">Flip</div>
+        <div class="pg-field-label">
+          <span>Flip</span>
+          <PlaygroundFieldReset v-if="store.isOptionSet(flipKey)" @click="store.resetOption(flipKey)" />
+        </div>
         <SelectButton v-model="flip" :options="flipOptions" :allow-empty="false" />
       </div>
 
@@ -59,6 +66,7 @@ const borderRadius = singleComputed('borderRadius', 0);
       <div class="pg-field">
         <div class="pg-field-label">
           <span>Border Radius</span>
+          <PlaygroundFieldReset v-if="store.isOptionSet(borderRadiusKey)" @click="store.resetOption(borderRadiusKey)" />
           <span class="pg-field-value">{{ borderRadius }}</span>
         </div>
         <Slider v-model="borderRadius" :min="0" :max="50" :step="1" />

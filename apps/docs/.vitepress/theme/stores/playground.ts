@@ -100,6 +100,14 @@ export default defineStore('playground', () => {
     seed.value = 'Felix';
   }
 
+  function resetOption(key: string) {
+    delete avatarStyleOptions.value[key];
+  }
+
+  function isOptionSet(key: string): boolean {
+    return key in avatarStyleOptions.value;
+  }
+
   watch(avatarStyleName, resetOptions);
 
   return {
@@ -113,5 +121,7 @@ export default defineStore('playground', () => {
     addCustomStyle,
     removeCustomStyle,
     resetOptions,
+    resetOption,
+    isOptionSet,
   };
 });

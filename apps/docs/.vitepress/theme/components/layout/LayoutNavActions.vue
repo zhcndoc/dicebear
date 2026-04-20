@@ -130,9 +130,9 @@ function openSearch() {
   width: 32px;
   height: 32px;
   border-radius: var(--vp-radius-xs);
-  border: 1px solid var(--vp-c-divider);
+  border: 1px solid var(--p-button-outlined-secondary-border-color);
   background: var(--vp-c-bg);
-  color: var(--vp-c-text-2);
+  color: var(--ui-c-text-muted);
   cursor: pointer;
   transition:
     border-color var(--duration-fast) var(--ease-smooth),

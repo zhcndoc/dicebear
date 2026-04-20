@@ -5,6 +5,7 @@ import Button from 'primevue/button';
 import InputNumber from 'primevue/inputnumber';
 import { Weight } from '@lucide/vue';
 import PlaygroundRangeField from './PlaygroundRangeField.vue';
+import PlaygroundFieldReset from './PlaygroundFieldReset.vue';
 import useStore from '@theme/stores/playground';
 import { useRangeField } from '@theme/composables/useRangeField';
 import { useVariantWeights } from '@theme/composables/useVariantWeights';
@@ -46,11 +47,13 @@ const {
 
 const { singleComputed } = useRangeField(store.avatarStyleOptions);
 
-const probability = singleComputed(`${props.componentName}Probability`, props.defaultProbability);
-
+const variantKey = `${props.componentName}Variant`;
+const probabilityKey = `${props.componentName}Probability`;
 const rotateKey = `${props.componentName}Rotate`;
 const translateXKey = `${props.componentName}TranslateX`;
 const translateYKey = `${props.componentName}TranslateY`;
+
+const probability = singleComputed(probabilityKey, props.defaultProbability);
 
 const defaultRotateFallback = props.defaultRotate.length === 1 ? props.defaultRotate[0] : 0;
 const defaultTranslateXFallback = props.defaultTranslateX.length === 1 ? props.defaultTranslateX[0] : 0;
@@ -59,6 +62,11 @@ const defaultTranslateYFallback = props.defaultTranslateY.length === 1 ? props.d
 const defaultRotateRange = props.defaultRotate.length === 2 ? props.defaultRotate : undefined;
 const defaultTranslateXRange = props.defaultTranslateX.length === 2 ? props.defaultTranslateX : undefined;
 const defaultTranslateYRange = props.defaultTranslateY.length === 2 ? props.defaultTranslateY : undefined;
+
+function resetVariants() {
+  store.resetOption(variantKey);
+  showWeights.value = props.hasNonDefaultWeights;
+}
 </script>
 
 <template>
@@ -77,6 +85,7 @@ const defaultTranslateYRange = props.defaultTranslateY.length === 2 ? props.defa
         </Button>
         <Button label="All" size="small" severity="secondary" @click="selectAll" class="pg-field-toggle" />
         <Button label="None" size="small" severity="secondary" @click="selectNone" class="pg-field-toggle" />
+        <PlaygroundFieldReset v-if="store.isOptionSet(variantKey)" @click="resetVariants" />
       </div>
       <div class="pg-comp-variants-grid">
         <div
@@ -117,6 +126,7 @@ const defaultTranslateYRange = props.defaultTranslateY.length === 2 ? props.defa
     <div class="pg-field" v-if="hasProbability">
       <div class="pg-field-label">
         <span>Probability</span>
+        <PlaygroundFieldReset v-if="store.isOptionSet(probabilityKey)" @click="store.resetOption(probabilityKey)" />
         <span class="pg-field-value">{{ probability }}%</span>
       </div>
       <Slider v-model="probability" :min="0" :max="100" :step="1" />
@@ -219,7 +229,7 @@ const defaultTranslateYRange = props.defaultTranslateY.length === 2 ? props.defa
 
 .pg-comp-variant-name {
   font-size: 9px;
-  color: var(--vp-c-text-3);
+  color: var(--ui-c-text-subtle);
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
