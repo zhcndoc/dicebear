@@ -200,12 +200,7 @@ const onSeedFocus = (e: FocusEvent) => {
 <template>
   <div class="pg-options">
     <div class="pg-options-group">
-      <div class="pg-options-group-title-row">
-        <h3 class="pg-options-group-title">Avatar Style</h3>
-        <div class="pg-options-group-actions">
-          <slot name="style-actions" />
-        </div>
-      </div>
+      <h3 class="pg-options-group-title">Avatar Style</h3>
       <PlaygroundStyleSelect />
     </div>
 
@@ -328,26 +323,6 @@ const onSeedFocus = (e: FocusEvent) => {
     letter-spacing: 0.08em;
     color: var(--vp-c-text-3);
     margin: 0 0 8px 2px;
-  }
-
-  &-title-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-
-    .pg-options-group-title {
-      margin: 0 0 0 2px;
-    }
-  }
-
-  &-actions {
-    display: flex;
-    gap: 4px;
-
-    :deep(.p-button-link:hover .p-button-label) {
-      text-decoration: none;
-    }
   }
 }
 

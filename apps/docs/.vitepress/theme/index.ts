@@ -18,6 +18,12 @@ const DiceBearPreset = definePreset(Aura, {
     content: {
       borderRadius: 'var(--vp-radius-xs)',
     },
+    text: {
+      color: 'var(--vp-c-text-1)',
+      hoverColor: 'var(--vp-c-text-1)',
+      mutedColor: 'var(--vp-c-text-2)',
+      hoverMutedColor: 'var(--vp-c-text-1)',
+    },
     primary: {
       50: '{sky.50}',
       100: '{sky.100}',
@@ -47,6 +53,13 @@ const DiceBearPreset = definePreset(Aura, {
           900: '{stone.900}',
           950: '{stone.950}',
         },
+        content: {
+          background: 'var(--vp-c-bg-elv)',
+          hoverBackground: 'var(--vp-c-bg-soft)',
+          borderColor: 'var(--pg-border)',
+          color: 'var(--vp-c-text-1)',
+          hoverColor: 'var(--vp-c-text-1)',
+        },
       },
       dark: {
         surface: {
@@ -62,6 +75,16 @@ const DiceBearPreset = definePreset(Aura, {
           800: '#242429',
           900: '#1a1a1e',
           950: '#111115',
+        },
+        content: {
+          background: 'var(--vp-c-bg)',
+          hoverBackground: 'var(--vp-c-bg-soft)',
+          borderColor: 'var(--pg-border)',
+          color: 'var(--vp-c-text-1)',
+          hoverColor: 'var(--vp-c-text-1)',
+        },
+        text: {
+          mutedColor: 'rgba(235, 235, 245, 0.78)',
         },
       },
     },
@@ -79,9 +102,9 @@ const DiceBearPreset = definePreset(Aura, {
             },
           },
           link: {
-            color: 'var(--vp-c-text-2)',
-            hoverColor: 'var(--vp-c-text-1)',
-            activeColor: 'var(--vp-c-text-1)',
+            color: 'var(--vp-c-text-1)',
+            hoverColor: 'var(--p-text-color)',
+            activeColor: 'var(--p-text-color)',
           },
         },
         dark: {
@@ -94,9 +117,9 @@ const DiceBearPreset = definePreset(Aura, {
             },
           },
           link: {
-            color: 'var(--vp-c-text-2)',
-            hoverColor: 'var(--vp-c-text-1)',
-            activeColor: 'var(--vp-c-text-1)',
+            color: 'var(--p-text-muted-color)',
+            hoverColor: 'var(--p-text-color)',
+            activeColor: 'var(--p-text-color)',
           },
         },
       },

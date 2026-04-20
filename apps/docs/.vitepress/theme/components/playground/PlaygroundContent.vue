@@ -89,36 +89,36 @@ async function copyLink() {
   <div class="pg">
     <div class="pg-body">
       <aside class="pg-sidebar">
-        <PlaygroundOptions v-model:seed="seed">
-          <template #style-actions>
-            <Button
-              :label="linkCopied ? 'Copied!' : 'Copy Link'"
-              severity="secondary"
-              variant="link"
-              size="small"
-              :disabled="store.isCustomStyle"
-              v-tooltip="store.isCustomStyle ? 'Custom styles cannot be shared via link' : undefined"
-              @click="copyLink"
-            >
-              <template #icon>
-                <Link :size="14" />
-              </template>
-            </Button>
-            <Button
-              label="Reset"
-              severity="secondary"
-              variant="link"
-              size="small"
-              @click="store.resetOptions"
-            >
-              <template #icon>
-                <RotateCcw :size="14" />
-              </template>
-            </Button>
-          </template>
-        </PlaygroundOptions>
+        <PlaygroundOptions v-model:seed="seed" />
       </aside>
       <main class="pg-main">
+        <div class="pg-main-actions">
+          <Button
+            :label="linkCopied ? 'Copied!' : 'Copy Link'"
+            severity="secondary"
+            variant="link"
+            size="small"
+            :disabled="store.isCustomStyle"
+            v-tooltip="store.isCustomStyle ? 'Custom styles cannot be shared via link' : undefined"
+            @click="copyLink"
+          >
+            <template #icon>
+              <Link :size="14" />
+            </template>
+          </Button>
+          <Button
+            label="Reset"
+            severity="secondary"
+            variant="link"
+            size="small"
+            @click="store.resetOptions"
+          >
+            <template #icon>
+              <RotateCcw :size="14" />
+            </template>
+          </Button>
+        </div>
+
         <PlaygroundPreviewPanel :seed="seed" />
       </main>
     </div>
@@ -144,18 +144,35 @@ async function copyLink() {
 
 .pg-sidebar {
   min-width: 0;
+
+  @media (min-width: 861px) {
+    padding-top: 10px;
+  }
 }
 
 .pg-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
   @media (min-width: 861px) {
     position: sticky;
     top: 80px;
     align-self: start;
-    padding-top: 12px;
   }
 
   @media (max-width: 860px) {
     order: -1;
+  }
+
+  &-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 4px;
+
+    :deep(.p-button-link:hover .p-button-label) {
+      text-decoration: none;
+    }
   }
 }
 </style>

@@ -240,13 +240,17 @@ const currentDisplayName = computed(() => {
   background: var(--p-content-background);
   border: 1px solid var(--pg-border);
   border-radius: var(--vp-radius-xs);
-  color: var(--vp-c-text-1);
+  color: var(--p-accordion-header-color);
   cursor: pointer;
   text-align: left;
-  transition: background-color var(--duration-fast);
+  transition: color var(--duration-fast);
 
   &:hover {
-    background: var(--vp-c-bg-soft);
+    color: var(--p-accordion-header-hover-color);
+  }
+
+  &:hover &-chevron {
+    color: var(--p-accordion-header-toggle-icon-hover-color);
   }
 
   &:focus-visible {
@@ -271,7 +275,6 @@ const currentDisplayName = computed(() => {
     min-width: 0;
     font-size: 14px;
     font-weight: 600;
-    color: var(--vp-c-text-1);
     line-height: 1.2;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -282,6 +285,7 @@ const currentDisplayName = computed(() => {
     flex-shrink: 0;
     margin-left: auto;
     color: var(--p-accordion-header-toggle-icon-color);
+    transition: color var(--duration-fast);
   }
 }
 
