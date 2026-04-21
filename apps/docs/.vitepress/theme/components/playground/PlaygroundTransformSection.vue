@@ -58,7 +58,7 @@ const borderRadius = singleComputed(borderRadiusKey, 0);
         label="Scale"
         option-key="scale"
         :min="0"
-        :max="2"
+        :max="10"
         :step="0.01"
         :default-single="1"
       />

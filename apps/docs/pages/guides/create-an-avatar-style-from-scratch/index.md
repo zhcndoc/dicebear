@@ -213,7 +213,7 @@ other weights are also `0`. Default weight is `1`.
 
 ### Component transforms
 
-Components can have default rotation and translation ranges:
+Components can have default rotation, translation, and scale ranges:
 
 ```json
 {
@@ -221,6 +221,7 @@ Components can have default rotation and translation ranges:
     "width": 80,
     "height": 40,
     "rotate": [-5, 5],
+    "scale": [0.95, 1.05],
     "translate": {
       "x": [-2, 2],
       "y": [-3, 3]

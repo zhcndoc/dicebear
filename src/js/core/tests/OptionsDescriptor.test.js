@@ -70,7 +70,14 @@ describe('OptionsDescriptor', () => {
       assert.ok('eyesRotate' in schema);
       assert.ok('eyesTranslateX' in schema);
       assert.ok('eyesTranslateY' in schema);
+      assert.ok('eyesScale' in schema);
       assert.ok('mouthVariant' in schema);
+    });
+
+    it('should constrain scale to 0-10', () => {
+      const schema = new OptionsDescriptor(fullStyle).toJSON();
+
+      assert.deepEqual(schema.eyesScale, { type: 'range', min: 0, max: 10 });
     });
 
     it('should include sorted variant names', () => {

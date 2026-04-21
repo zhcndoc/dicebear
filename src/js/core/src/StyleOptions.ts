@@ -80,7 +80,7 @@ type ComponentVariantOption<D, K extends string> =
   | readonly VariantNames<D, K>[]
   | Readonly<Partial<Record<VariantNames<D, K>, number>>>;
 
-// For each component C generates: Variant, Probability, Rotate, TranslateX/Y.
+// For each component C generates: Variant, Probability, Rotate, TranslateX/Y, Scale.
 type ComponentOptions<D, C extends string> = [C] extends [never]
   ? unknown
   : { readonly [K in C as `${K}Variant`]?: ComponentVariantOption<D, K> } & {
@@ -95,6 +95,8 @@ type ComponentOptions<D, C extends string> = [C] extends [never]
       readonly [K in C as `${K}TranslateY`]?:
         | number
         | readonly [number, number];
+    } & {
+      readonly [K in C as `${K}Scale`]?: number | readonly [number, number];
     };
 
 // For each color C generates: Color, ColorFill, ColorFillStops, ColorAngle.

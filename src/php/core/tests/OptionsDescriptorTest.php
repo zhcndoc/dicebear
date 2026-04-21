@@ -83,7 +83,14 @@ class OptionsDescriptorTest extends TestCase
         $this->assertArrayHasKey('eyesRotate', $schema);
         $this->assertArrayHasKey('eyesTranslateX', $schema);
         $this->assertArrayHasKey('eyesTranslateY', $schema);
+        $this->assertArrayHasKey('eyesScale', $schema);
         $this->assertArrayHasKey('mouthVariant', $schema);
+    }
+
+    public function testScaleConstraints(): void
+    {
+        $schema = (new OptionsDescriptor(self::fullStyle()))->toJSON();
+        $this->assertSame(['type' => 'range', 'min' => 0, 'max' => 10], $schema['eyesScale']);
     }
 
     public function testSortedVariantNames(): void

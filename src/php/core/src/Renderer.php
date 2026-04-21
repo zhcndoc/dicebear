@@ -358,9 +358,14 @@ class Renderer
 
     /**
      * Returns the per-component SVG `transform` fragments derived from the
-     * component's translate and rotate options. Translate values are
+     * component's translate, rotate, and scale options. Translate values are
      * percentages of the component canvas dimensions, matching the
      * semantics of the user-facing `translateX` / `translateY` options.
+     *
+     * The fragments are ordered so that, when joined into a single
+     * `transform` attribute, the scale is the rightmost (innermost)
+     * transform — applied first to a point, followed by rotate, then
+     * translate.
      *
      * @return list<string>
      */
@@ -370,8 +375,9 @@ class Renderer
         $translateX = $this->options->translateX($componentName);
         $translateY = $this->options->translateY($componentName);
         $rotate = $this->options->rotate($componentName);
+        $scale = $this->options->scale($componentName);
 
-        if ($translateX === 0.0 && $translateY === 0.0 && $rotate === 0.0) {
+        if ($translateX === 0.0 && $translateY === 0.0 && $rotate === 0.0 && $scale === 1.0) {
             return $transforms;
         }
 
@@ -381,6 +387,9 @@ class Renderer
         if ($component === null) {
             return $transforms;
         }
+
+        $cx = $component->width() / 2;
+        $cy = $component->height() / 2;
 
         if ($translateX !== 0.0 || $translateY !== 0.0) {
             // PHP's round() applies an internal pre-rounding step that nudges
@@ -393,9 +402,11 @@ class Renderer
         }
 
         if ($rotate !== 0.0) {
-            $cx = $component->width() / 2;
-            $cy = $component->height() / 2;
             $transforms[] = "rotate({$rotate}, {$cx}, {$cy})";
+        }
+
+        if ($scale !== 1.0) {
+            $transforms[] = "translate({$cx}, {$cy}) scale({$scale}) translate(" . -$cx . ', ' . -$cy . ')';
         }
 
         return $transforms;

@@ -105,14 +105,12 @@ class Options
     }
 
     /**
-     * Returns the resolved uniform scale factor, defaulting to `1`.
+     * Returns the resolved uniform scale factor for the avatar root or the
+     * named component, defaulting to `1`.
      */
-    public function scale(): float
+    public function scale(?string $name = null): float
     {
-        return $this->memo(
-            'scale',
-            fn() => $this->prng->float('scale', $this->toArray($this->data['scale'] ?? null)) ?? 1.0,
-        );
+        return $this->numericComponentOption('scale', $name, fn($c) => $c->scale(), 1.0);
     }
 
     /**
@@ -262,16 +260,17 @@ class Options
 
     /**
      * Shared resolution path for the numeric component options
-     * (`rotate`/`translateX`/`translateY`). Falls back to the component-level
-     * defaults from the style definition when the option is unset.
+     * (`rotate`/`translateX`/`translateY`/`scale`). Falls back to the
+     * component-level defaults from the style definition when the option is
+     * unset, and to `$defaultValue` when no definition default exists either.
      */
-    private function numericComponentOption(string $option, ?string $name, callable $componentDefault): float
+    private function numericComponentOption(string $option, ?string $name, callable $componentDefault, float $defaultValue = 0.0): float
     {
         $key = $name !== null
             ? $name . strtoupper($option[0]) . substr($option, 1)
             : $option;
 
-        return $this->memo($key, function () use ($key, $name, $componentDefault) {
+        return $this->memo($key, function () use ($key, $name, $componentDefault, $defaultValue) {
             $raw = $this->get($key);
 
             if ($raw === null && $name !== null) {
@@ -282,7 +281,7 @@ class Options
                 $values = $this->toArray($raw);
             }
 
-            return $this->prng->float($key, $values) ?? 0.0;
+            return $this->prng->float($key, $values) ?? $defaultValue;
         });
     }
 

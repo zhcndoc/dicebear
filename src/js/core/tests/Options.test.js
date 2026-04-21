@@ -396,6 +396,51 @@ describe('Options', () => {
       assert.ok(value >= 0 && value <= 4);
     });
 
+    it('should resolve component-specific scale', () => {
+      const options = new Options(minimalStyle, {
+        seed: 'transform-test',
+        eyesScale: [0.5, 2],
+      });
+
+      const value = options.scale('eyes');
+
+      assert.ok(value >= 0.5 && value <= 2);
+    });
+
+    it('should default component-specific scale to 1 when unset', () => {
+      const options = new Options(minimalStyle, { seed: 'scale-default' });
+
+      assert.equal(options.scale('eyes'), 1);
+    });
+
+    it('should default root scale to 1', () => {
+      const options = new Options(minimalStyle, { seed: 'root-scale' });
+
+      assert.equal(options.scale(), 1);
+    });
+
+    it('should resolve component-specific scale from style definition default', () => {
+      const styleWithScale = new Style({
+        canvas: { width: 100, height: 100, elements: [] },
+        components: {
+          eyes: {
+            width: 50,
+            height: 50,
+            scale: [0.9, 1.1],
+            variants: { open: { elements: [] } },
+          },
+        },
+      });
+
+      const options = new Options(styleWithScale, {
+        seed: 'definition-default',
+      });
+
+      const value = options.scale('eyes');
+
+      assert.ok(value >= 0.9 && value <= 1.1);
+    });
+
     it('should resolve root and component transforms independently', () => {
       const options = new Options(minimalStyle, {
         seed: 'independent-test',

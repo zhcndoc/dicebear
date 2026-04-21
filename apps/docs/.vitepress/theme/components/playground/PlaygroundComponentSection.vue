@@ -18,12 +18,14 @@ const props = defineProps<{
   hasRotate: boolean;
   hasTranslateX: boolean;
   hasTranslateY: boolean;
+  hasScale: boolean;
   hasNonDefaultWeights: boolean;
   defaultWeights: Record<string, number>;
   defaultProbability: number;
   defaultRotate: readonly number[];
   defaultTranslateX: readonly number[];
   defaultTranslateY: readonly number[];
+  defaultScale: readonly number[];
 }>();
 
 const store = useStore();
@@ -52,16 +54,19 @@ const probabilityKey = `${props.componentName}Probability`;
 const rotateKey = `${props.componentName}Rotate`;
 const translateXKey = `${props.componentName}TranslateX`;
 const translateYKey = `${props.componentName}TranslateY`;
+const scaleKey = `${props.componentName}Scale`;
 
 const probability = singleComputed(probabilityKey, props.defaultProbability);
 
 const defaultRotateFallback = props.defaultRotate.length === 1 ? props.defaultRotate[0] : 0;
 const defaultTranslateXFallback = props.defaultTranslateX.length === 1 ? props.defaultTranslateX[0] : 0;
 const defaultTranslateYFallback = props.defaultTranslateY.length === 1 ? props.defaultTranslateY[0] : 0;
+const defaultScaleFallback = props.defaultScale.length === 1 ? props.defaultScale[0] : 1;
 
 const defaultRotateRange = props.defaultRotate.length === 2 ? props.defaultRotate : undefined;
 const defaultTranslateXRange = props.defaultTranslateX.length === 2 ? props.defaultTranslateX : undefined;
 const defaultTranslateYRange = props.defaultTranslateY.length === 2 ? props.defaultTranslateY : undefined;
+const defaultScaleRange = props.defaultScale.length === 2 ? props.defaultScale : undefined;
 
 function resetVariants() {
   store.resetOption(variantKey);
@@ -166,6 +171,17 @@ function resetVariants() {
       unit="%"
       :default-single="defaultTranslateYFallback"
       :default-range="defaultTranslateYRange"
+    />
+
+    <PlaygroundRangeField
+      v-if="hasScale"
+      label="Scale"
+      :option-key="scaleKey"
+      :min="0"
+      :max="10"
+      :step="0.01"
+      :default-single="defaultScaleFallback"
+      :default-range="defaultScaleRange"
     />
   </div>
 </template>

@@ -45,6 +45,14 @@ export class Component {
   }
 
   /**
+   * Returns the scale range definition, or an empty list when the field is
+   * unset.
+   */
+  scale(): readonly number[] {
+    return this.#data.scale ?? [];
+  }
+
+  /**
    * Returns the translate descriptor, defaulting to an empty object when the
    * style definition omits the field.
    */

@@ -453,6 +453,48 @@ describe('Renderer', () => {
     });
   });
 
+  describe('component scale', () => {
+    const styleWithComponent = new Style({
+      canvas: {
+        width: 100,
+        height: 100,
+        elements: [{ type: 'component', name: 'eyes' }],
+      },
+      components: {
+        eyes: {
+          width: 50,
+          height: 50,
+          variants: { open: { elements: [{ type: 'element', name: 'rect' }] } },
+        },
+      },
+    });
+
+    it('should apply component-specific scale around component center', () => {
+      const svg = new Avatar(styleWithComponent, { eyesScale: 2 }).toString();
+
+      assert.ok(svg.includes('translate(25, 25) scale(2) translate(-25, -25)'));
+    });
+
+    it('should not apply component scale when 1', () => {
+      const svg = new Avatar(styleWithComponent, { eyesScale: 1 }).toString();
+
+      assert.ok(!svg.includes('scale('));
+    });
+
+    it('should place component scale after rotate in the transform attribute', () => {
+      const svg = new Avatar(styleWithComponent, {
+        eyesRotate: 45,
+        eyesScale: 2,
+      }).toString();
+
+      const rotateIndex = svg.indexOf('rotate(45');
+      const scaleIndex = svg.indexOf('scale(2)');
+
+      assert.ok(rotateIndex !== -1 && scaleIndex !== -1);
+      assert.ok(rotateIndex < scaleIndex);
+    });
+  });
+
   describe('borderRadius', () => {
     it('should apply border radius via clipPath', () => {
       const svg = new Avatar(minimalStyle, { borderRadius: 10 }).toString();

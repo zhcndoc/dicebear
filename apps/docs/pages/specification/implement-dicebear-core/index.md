@@ -277,6 +277,7 @@ For each component (e.g. `eyes`):
 | `eyesRotate`        | `eyesRotate`          | `float` from range or component default  |
 | `eyesTranslateX`    | `eyesTranslateX`      | `float` from range or component default  |
 | `eyesTranslateY`    | `eyesTranslateY`      | `float` from range or component default  |
+| `eyesScale`         | `eyesScale`           | `float` from range or component default, default `1` |
 
 If the probability check fails, the component is not rendered (variant returns
 `undefined`).

@@ -386,6 +386,47 @@ class OptionsTest extends TestCase
         $this->assertLessThanOrEqual(4, $value);
     }
 
+    public function testComponentSpecificScale(): void
+    {
+        $options = new Options(self::minimalStyle(), [
+            'seed' => 'transform-test',
+            'eyesScale' => [0.5, 2],
+        ]);
+        $value = $options->scale('eyes');
+        $this->assertGreaterThanOrEqual(0.5, $value);
+        $this->assertLessThanOrEqual(2.0, $value);
+    }
+
+    public function testComponentSpecificScaleDefaultsToOne(): void
+    {
+        $options = new Options(self::minimalStyle(), ['seed' => 'scale-default']);
+        $this->assertEqualsWithDelta(1.0, $options->scale('eyes'), 1e-10);
+    }
+
+    public function testRootScaleDefaultsToOne(): void
+    {
+        $options = new Options(self::minimalStyle(), ['seed' => 'root-scale']);
+        $this->assertEqualsWithDelta(1.0, $options->scale(), 1e-10);
+    }
+
+    public function testComponentScaleFromDefinitionDefault(): void
+    {
+        $style = new Style([
+            'canvas' => ['width' => 100, 'height' => 100, 'elements' => []],
+            'components' => [
+                'eyes' => [
+                    'width' => 50, 'height' => 50,
+                    'scale' => [0.9, 1.1],
+                    'variants' => ['open' => ['elements' => []]],
+                ],
+            ],
+        ]);
+        $options = new Options($style, ['seed' => 'definition-default']);
+        $value = $options->scale('eyes');
+        $this->assertGreaterThanOrEqual(0.9, $value);
+        $this->assertLessThanOrEqual(1.1, $value);
+    }
+
     public function testRootAndComponentTransformsIndependent(): void
     {
         $options = new Options(self::minimalStyle(), [

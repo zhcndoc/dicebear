@@ -66,6 +66,9 @@ const styleDefaults = computed<Record<string, unknown>>(() => {
 
     const ty = component.translate().y();
     result[`${name}TranslateY`] = ty.length === 2 ? ty : ty[0] ?? 0;
+
+    const scale = component.scale();
+    result[`${name}Scale`] = scale.length === 2 ? scale : scale[0] ?? 1;
   }
 
   for (const [name, values] of Object.entries(styleColors.value)) {
@@ -87,7 +90,8 @@ function isComponentOption(key: string, names: string[]): boolean {
       key === `${name}Probability` ||
       key === `${name}Rotate` ||
       key === `${name}TranslateX` ||
-      key === `${name}TranslateY`,
+      key === `${name}TranslateY` ||
+      key === `${name}Scale`,
   );
 }
 

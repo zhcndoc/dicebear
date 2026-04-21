@@ -105,6 +105,7 @@ export class OptionsDescriptor {
       result[`${name}Rotate`] = OptionsDescriptor.#rotateRange;
       result[`${name}TranslateX`] = OptionsDescriptor.#translateRange;
       result[`${name}TranslateY`] = OptionsDescriptor.#translateRange;
+      result[`${name}Scale`] = { type: 'range', min: 0, max: 10 };
     }
 
     for (const name of [...this.#style.colors().keys(), 'background']) {

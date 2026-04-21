@@ -345,6 +345,51 @@ class RendererTest extends TestCase
         $this->assertStringNotContainsString('scale(', $svg);
     }
 
+    // component scale
+
+    private static function styleWithComponent(): Style
+    {
+        return new Style([
+            'canvas' => [
+                'width' => 100, 'height' => 100,
+                'elements' => [['type' => 'component', 'name' => 'eyes']],
+            ],
+            'components' => [
+                'eyes' => [
+                    'width' => 50, 'height' => 50,
+                    'variants' => ['open' => ['elements' => [['type' => 'element', 'name' => 'rect']]]],
+                ],
+            ],
+        ]);
+    }
+
+    public function testComponentScaleTransform(): void
+    {
+        $svg = (new Avatar(self::styleWithComponent(), ['eyesScale' => 2]))->toString();
+        $this->assertStringContainsString('translate(25, 25) scale(2) translate(-25, -25)', $svg);
+    }
+
+    public function testNoComponentScaleWrapperWhenOne(): void
+    {
+        $svg = (new Avatar(self::styleWithComponent(), ['eyesScale' => 1]))->toString();
+        $this->assertStringNotContainsString('scale(', $svg);
+    }
+
+    public function testComponentScaleAfterRotateInTransformAttribute(): void
+    {
+        $svg = (new Avatar(self::styleWithComponent(), [
+            'eyesRotate' => 45,
+            'eyesScale' => 2,
+        ]))->toString();
+
+        $rotateIndex = strpos($svg, 'rotate(45');
+        $scaleIndex = strpos($svg, 'scale(2)');
+
+        $this->assertNotFalse($rotateIndex);
+        $this->assertNotFalse($scaleIndex);
+        $this->assertLessThan($scaleIndex, $rotateIndex);
+    }
+
     // borderRadius
 
     public function testBorderRadiusViaClipPath(): void

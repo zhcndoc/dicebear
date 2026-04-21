@@ -99,13 +99,11 @@ export class Options<D = unknown> {
   }
 
   /**
-   * Returns the resolved uniform scale factor, defaulting to `1`.
+   * Returns the resolved uniform scale factor for the avatar root or the
+   * named component, defaulting to `1`.
    */
-  scale(): number {
-    return this.#memo(
-      'scale',
-      () => this.#prng.float('scale', this.#toArray(this.#data.scale)) ?? 1,
-    );
+  scale(name?: string): number {
+    return this.#numericComponentOption('scale', name, (c) => c.scale(), 1);
   }
 
   /**
@@ -248,13 +246,15 @@ export class Options<D = unknown> {
 
   /**
    * Shared resolution path for the numeric component options
-   * (`rotate`/`translateX`/`translateY`). Falls back to the component-level
-   * defaults from the style definition when the option is unset.
+   * (`rotate`/`translateX`/`translateY`/`scale`). Falls back to the
+   * component-level defaults from the style definition when the option is
+   * unset, and to `defaultValue` when no definition default exists either.
    */
   #numericComponentOption(
     option: string,
     name: string | undefined,
     componentDefault: (c: Component) => readonly number[],
+    defaultValue: number = 0,
   ): number {
     const key = name
       ? `${name}${option.charAt(0).toUpperCase()}${option.slice(1)}`
@@ -271,7 +271,7 @@ export class Options<D = unknown> {
         values = this.#toArray(raw);
       }
 
-      return this.#prng.float(key, values) ?? 0;
+      return this.#prng.float(key, values) ?? defaultValue;
     });
   }
 

@@ -89,6 +89,7 @@ export interface StyleDefinitionComponent {
   readonly height: number;
   readonly probability?: number;
   readonly rotate?: readonly number[];
+  readonly scale?: readonly number[];
   readonly translate?: StyleDefinitionComponentTranslate;
   readonly variants: Readonly<Record<string, StyleDefinitionComponentVariant>>;
 }

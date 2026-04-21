@@ -14,7 +14,7 @@ export function getOptionDescription(name: string): string | undefined {
   if (name.match(/ColorFillStops$/)) return 'Number of color stops for gradient fills.';
   if (name.match(/ColorAngle$/)) return 'Rotation angle for gradient fills in degrees.';
   if (name === 'flip') return 'Mirror direction for the avatar.';
-  if (name === 'scale') return 'Scale factor. A value of 1 corresponds to the original size. As a range [min, max], the PRNG picks a value in between.';
+  if (name === 'scale' || name.match(/Scale$/)) return 'Scale factor. A value of 1 corresponds to the original size. As a range [min, max], the PRNG picks a value in between.';
   if (name === 'borderRadius') return 'Corner radius as a percentage. 0 = sharp corners, 50 = full circle.';
   if (name === 'rotate' || name.match(/Rotate$/)) return 'Rotation in degrees. As a range [min, max], the PRNG picks a value in between.';
   if (name === 'translateX' || name === 'translateY' || name.match(/TranslateX$/) || name.match(/TranslateY$/)) return 'Translation as a percentage of the canvas size. As a range [min, max], the PRNG picks a value in between.';

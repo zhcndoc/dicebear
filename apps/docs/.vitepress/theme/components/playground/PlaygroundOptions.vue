@@ -28,10 +28,12 @@ type ComponentInfo = {
   hasRotate: boolean;
   hasTranslateX: boolean;
   hasTranslateY: boolean;
+  hasScale: boolean;
   defaultProbability: number;
   defaultRotate: readonly number[];
   defaultTranslateX: readonly number[];
   defaultTranslateY: readonly number[];
+  defaultScale: readonly number[];
   hasNonDefaultWeights: boolean;
   defaultWeights: Record<string, number>;
 };
@@ -113,10 +115,12 @@ const components = computed(() => {
       hasRotate: `${name}Rotate` in descriptor.value,
       hasTranslateX: `${name}TranslateX` in descriptor.value,
       hasTranslateY: `${name}TranslateY` in descriptor.value,
+      hasScale: `${name}Scale` in descriptor.value,
       defaultProbability: comp?.probability() ?? 100,
       defaultRotate: comp?.rotate() ?? [],
       defaultTranslateX: comp?.translate().x() ?? [],
       defaultTranslateY: comp?.translate().y() ?? [],
+      defaultScale: comp?.scale() ?? [],
       hasNonDefaultWeights: comp ? [...comp.variants().values()].some((v) => v.weight() !== 1) : false,
       defaultWeights: comp
         ? Object.fromEntries([...comp.variants()].map(([name, v]) => [name, v.weight()]))
@@ -272,10 +276,12 @@ const onSeedFocus = (e: FocusEvent) => {
               :has-rotate="comp.hasRotate"
               :has-translate-x="comp.hasTranslateX"
               :has-translate-y="comp.hasTranslateY"
+              :has-scale="comp.hasScale"
               :default-probability="comp.defaultProbability"
               :default-rotate="comp.defaultRotate"
               :default-translate-x="comp.defaultTranslateX"
               :default-translate-y="comp.defaultTranslateY"
+              :default-scale="comp.defaultScale"
               :has-non-default-weights="comp.hasNonDefaultWeights"
               :default-weights="comp.defaultWeights"
             />

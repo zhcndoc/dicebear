@@ -77,6 +77,7 @@ class OptionsDescriptor
             $result["{$name}Rotate"] = self::$rotateRange;
             $result["{$name}TranslateX"] = self::$translateRange;
             $result["{$name}TranslateY"] = self::$translateRange;
+            $result["{$name}Scale"] = ['type' => 'range', 'min' => 0, 'max' => 10];
         }
 
         $colorNames = array_merge(array_keys($this->style->colors()), ['background']);

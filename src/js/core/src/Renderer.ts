@@ -354,17 +354,22 @@ export class Renderer {
 
   /**
    * Returns the per-component SVG `transform` fragments derived from the
-   * component's translate and rotate options. Translate values are
+   * component's translate, rotate, and scale options. Translate values are
    * percentages of the component canvas dimensions, matching the
    * semantics of the user-facing `translateX` / `translateY` options.
+   *
+   * The fragments are ordered so that, when joined into a single `transform`
+   * attribute, the scale is the rightmost (innermost) transform — applied
+   * first to a point, followed by rotate, then translate.
    */
   #buildTransforms(componentName: string): string[] {
     const transforms: string[] = [];
     const translateX = this.#options.translateX(componentName);
     const translateY = this.#options.translateY(componentName);
     const rotate = this.#options.rotate(componentName);
+    const scale = this.#options.scale(componentName);
 
-    if (translateX === 0 && translateY === 0 && rotate === 0) {
+    if (translateX === 0 && translateY === 0 && rotate === 0 && scale === 1) {
       return transforms;
     }
 
@@ -372,6 +377,9 @@ export class Renderer {
     if (!component) {
       return transforms;
     }
+
+    const cx = component.width() / 2;
+    const cy = component.height() / 2;
 
     if (translateX !== 0 || translateY !== 0) {
       const x = Math.round((translateX / 100) * component.width() * 10000) / 10000;
@@ -381,10 +389,11 @@ export class Renderer {
     }
 
     if (rotate !== 0) {
-      const cx = component.width() / 2;
-      const cy = component.height() / 2;
-
       transforms.push(`rotate(${rotate}, ${cx}, ${cy})`);
+    }
+
+    if (scale !== 1) {
+      transforms.push(`translate(${cx}, ${cy}) scale(${scale}) translate(${-cx}, ${-cy})`);
     }
 
     return transforms;
