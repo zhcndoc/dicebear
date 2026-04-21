@@ -351,10 +351,11 @@ const hasDetails = computed(() => {
 
 <style scoped lang="scss">
 .style-options-card {
-  border: 1px solid var(--vp-c-border);
-  border-radius: var(--vp-radius-sm);
+  border: 1px solid var(--pg-border);
+  border-radius: var(--vp-radius-xs);
   padding: 16px 20px;
   min-width: 0;
+  background: var(--p-content-background);
 
   &-header {
     display: flex;
@@ -389,7 +390,7 @@ const hasDetails = computed(() => {
 
   &-details {
     margin-top: 12px;
-    --p-accordion-panel-border-color: var(--vp-c-border);
+    --p-accordion-panel-border-color: var(--pg-border);
     --p-accordion-header-padding: 8px 0;
     --p-accordion-content-padding: 0;
     --p-accordion-header-background: transparent;

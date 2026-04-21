@@ -51,8 +51,9 @@ const examples = computed(() =>
 
 <style scoped lang="scss">
 .style-options-code-panel {
-  border: 1px solid var(--vp-c-border);
+  border: 1px solid var(--pg-border);
   border-radius: var(--vp-radius-xs);
+  background: var(--p-content-background);
   overflow: hidden;
 }
 </style>
