@@ -1,246 +1,54 @@
 ---
 title: Contribute to the Library | DiceBear
 description: >
-  Learn how to contribute an avatar style, improve an existing one, or
-  contribute to the DiceBear core packages.
+  Learn how to contribute an avatar style, improve an existing one, or work
+  on the DiceBear core packages.
 ---
 
 # Contribute to the library
 
-There are several ways you can contribute to this project. You can contribute an
-avatar style or improve an existing one. Or you add tests or update the
-[documentation](/guides/contribute-to-the-documentation/).
+DiceBear is maintained across several repositories on GitHub. Each repo
+has its own `CONTRIBUTING.md` with setup, scripts, testing, and release
+instructions. Pick the one that matches what you want to work on.
 
-## Requirements
+## Avatar styles
 
-- A GitHub account
-- Git installed (Learn how to install Git
-  [here](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git))
-- Node.js and NPM installed (Learn how to install Node.js
-  [here](https://nodejs.org/en/download/))
+New avatar styles and fixes to existing styles live in
+[`dicebear/definitions`](https://github.com/dicebear/definitions). Most
+styles are authored in Figma and exported with the
+[DiceBear Exporter](/guides/create-an-avatar-style-with-figma/) plugin,
+so the workflow there is not the usual "edit a JSON file" loop.
 
-## Set up project locally
+- [`CONTRIBUTING.md`](https://github.com/dicebear/definitions/blob/main/CONTRIBUTING.md)
+  in `dicebear/definitions`
 
-1. [Create a fork](https://help.github.com/en/articles/fork-a-repo) from the
-   [dicebear/dicebear](https://github.com/dicebear/dicebear) repository.
+## Core library, CLI, documentation, editor
 
-2. Clone the project:
+The JavaScript and PHP cores, the CLI, the VitePress documentation
+(including the Playground), and the standalone editor all live in the
+main [`dicebear/dicebear`](https://github.com/dicebear/dicebear)
+monorepo. See:
 
-   ```
-   git clone https://github.com/<YOUR_GITHUB_USERNAME>/dicebear.git
-   ```
+- [`CONTRIBUTING.md`](https://github.com/dicebear/dicebear/blob/10.x/CONTRIBUTING.md)
+  in `dicebear/dicebear`
 
-   If you've set up SSH, you can do this instead:
+It covers the monorepo layout, per-package workflow, cross-language
+parity tests for `@dicebear/core` / `dicebear/core`, and the release
+process.
 
-   ```
-   git clone git@github.com:<YOUR_GITHUB_USERNAME>/dicebear.git
-   ```
+## JSON Schema
 
-3. Install dependencies:
+The schema for avatar style definitions and runtime options is versioned
+separately in
+[`dicebear/schema`](https://github.com/dicebear/schema).
 
-   ```
-   cd dicebear
-   npm install
-   ```
+- [`CONTRIBUTING.md`](https://github.com/dicebear/schema/blob/main/CONTRIBUTING.md)
+  in `dicebear/schema`
 
-4. Create a build:
+## Figma exporter plugin
 
-   ```
-   npm run build
-   ```
+The Figma plugin that produces new avatar style definitions lives in
+[`dicebear/exporter-plugin-for-figma`](https://github.com/dicebear/exporter-plugin-for-figma).
 
-## Contributing an avatar style
-
-The [Figma Exporter](/guides/create-an-avatar-style-with-figma/) plugin is the
-easiest way to add an avatar style. Most avatar styles for DiceBear avatars were
-created this way. Alternatively, you can create an avatar style
-[from scratch](/guides/create-an-avatar-style-from-scratch/).
-
-Avatar styles are maintained in the following repository:
-[dicebear/definitions](https://github.com/dicebear/definitions).
-
-To contribute a new style or improve an existing one, please open an issue or
-pull request there.
-
-Place your avatar style in the following path:
-
-```
-src/<avatar-style>.json
-```
-
-### Verifying your changes
-
-You can test your new avatar style as follows:
-
-```
-npm install
-npm run build
-npm run test
-```
-
-The test creates multiple avatars under the path `tests/svg/<avatar-style>` and
-checks that the result has not changed when the test is called again. It should
-not change because the creation with seed must be deterministic.
-
-If you visually check the created avatars and find errors, you can correct your
-work and run the build and test again. But first delete the files in the
-directory.
-
-### Branching and committing
-
-Once you are happy with the changes, create a branch so you can commit the
-changes.
-
-```
-git checkout -b <YOUR_AVATAR_STYLE_NAME>
-```
-
-Afterwards you have to add your changes to the stage and commit them.
-
-```
-git add .
-git commit -m "Add: <YOUR_AVATAR_STYLE_NAME>"
-git push origin <YOUR_AVATAR_STYLE_NAME>
-```
-
-### Creating a Pull Request
-
-Follow
-[these instructions](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
-to create a Pull Request.
-
-## Contribute changes to an existing avatar style
-
-Usually the official avatar styles were created with our
-[Figma Exporter](/guides/create-an-avatar-style-with-figma/) plugin. You can
-find the Figma source files in the `figma` folder of the
-[dicebear/definitions](https://github.com/dicebear/definitions) repository. So
-if you want to customize an avatar style, it's best to do the customization
-directly in Figma.
-
-In order to edit the files in Figma, you must
-[duplicate](https://help.figma.com/hc/en-us/articles/360038511533-Duplicate-files)
-them. Otherwise, the steps are identical to those in
-[Contributing an avatar style](#contributing-an-avatar-style) with the
-difference that you are working on an existing avatar style.
-
-## Contribute to a package
-
-You want to contribute to a package, like `@dicebear/core` or the official CLI?
-All packages are written in [TypeScript](https://www.typescriptlang.org/) and
-you can find them in the `src/js` folder.
-
-### Verifying your changes
-
-You can test your changes as follows:
-
-```
-npm install
-npm run build --workspace <PACKAGE_NAME>
-npm run test --workspace <PACKAGE_NAME>
-```
-
-If you are working on the CLI, you can test your changes _after_ the build by
-calling the CLI script directly as follows:
-
-```
-node src/js/cli/bin/index.js <COMMAND>
-```
-
-#### Cross-language parity tests
-
-`@dicebear/core` and `dicebear/core` (PHP) must produce **byte-identical**
-output for the same inputs. This is enforced by a shared fixture suite at
-`tests/fixtures/parity/` that both implementations consume:
-
-- The JavaScript side runs as part of `npm run test --workspace @dicebear/core`
-  via `src/js/core/tests/Parity.test.js`.
-- The PHP side runs via `vendor/bin/phpunit` in `src/php/core/` through
-  `tests/ParityTest.php`.
-
-Coverage:
-
-- `Fnv1a` (hash + hex), `Mulberry32` (chained sequences), every `Prng` method
-- Full `Avatar.toString()` output for the `initials`, `thumbs`, `glass`, and
-  `notionists` styles, exercising seed, size, transforms, gradients, and
-  component-variant overrides
-
-If you change anything that affects rendering or the PRNG in
-`@dicebear/core`, regenerate the fixtures from the JS reference and commit
-the diff:
-
-```
-npm run fixtures:parity
-```
-
-The PHP suite will then fail loudly until the PHP side is brought back in
-sync — that is the intended signal. If you only intend to touch one
-language, expect to update both before your PR can be merged.
-
-When porting DiceBear to another language, the same fixtures are the
-canonical conformance test — see
-[Implement DiceBear Core](/specification/implement-dicebear-core/) for
-details.
-
-### Branching and committing
-
-Once you are happy with the changes, create a branch so you can commit the
-changes.
-
-```
-git checkout -b <YOUR_BRANCH>
-```
-
-Afterwards you have to add your changes to the stage and commit them.
-
-```
-git add .
-git commit -m "Change: <YOUR_CHANGES>"
-git push origin <YOUR_BRANCH>
-```
-
-### Creating a Pull Request
-
-Follow
-[these instructions](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
-to create a Pull Request.
-
-## Releasing new versions (maintainers only)
-
-::: info  
-Only maintainers with write access to the repository can release new versions.
-This section is documented here for completeness.  
-:::
-
-Releases are triggered by Git tags. The version script updates all package
-versions across the monorepo, creates a commit and a Git tag:
-
-```
-node scripts/version.mjs <version>
-```
-
-The version must be a valid [semver](https://semver.org/) version (e.g. `9.1.0`
-or `9.2.0-alpha.1`). The script will:
-
-1. Update the version in all `package.json` files across the workspace
-2. Update internal workspace dependency references
-3. Sync `package-lock.json`
-4. Create a Git commit and tag (e.g. `v9.1.0`)
-
-Afterwards, push the commit and tag to the remote:
-
-```
-git push && git push --tags
-```
-
-The Git tag triggers the
-[Publish](https://github.com/dicebear/dicebear/actions/workflows/publish.yml)
-GitHub Actions workflow, which:
-
-1. Runs the test suite on Node 20, 22, 24, and 25
-2. Builds all packages
-3. Determines the npm dist-tag:
-   - Tags containing `alpha`, `beta`, or `rc` are published as `next`
-   - All other tags are published as `latest` (configurable via the `.dist-tag`
-     file)
-4. Publishes all changed packages to npm
+- [`CONTRIBUTING.md`](https://github.com/dicebear/exporter-plugin-for-figma/blob/main/CONTRIBUTING.md)
+  in `dicebear/exporter-plugin-for-figma`
