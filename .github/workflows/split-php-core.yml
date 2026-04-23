@@ -22,7 +22,7 @@ jobs:
         with:
           package_directory: src/php/core
           repository_organization: dicebear
-          repository_name: php-core
+          repository_name: dicebear-php
           branch: ${{ github.ref_name }}
           user_name: dicebear-bot
           user_email: bot@dicebear.com
