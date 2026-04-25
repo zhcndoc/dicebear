@@ -44,9 +44,9 @@ export class ComponentPreview {
     options?: Record<string, unknown>,
   ): string {
     const def = this.#definition;
-    const comp = def.components?.[componentName];
+    const component = this.#style.components().get(componentName);
 
-    if (!comp) return '';
+    if (!component) return '';
 
     // Cache the Style per component to avoid repeated validation + cloning
     let syntheticStyle = this.#syntheticStyleCache.get(componentName);
@@ -54,8 +54,8 @@ export class ComponentPreview {
     if (!syntheticStyle) {
       syntheticStyle = new Style({
         canvas: {
-          width: comp.width,
-          height: comp.height,
+          width: component.width(),
+          height: component.height(),
           elements: [{ type: 'component' as const, name: componentName }],
         },
         attributes: def.attributes,
