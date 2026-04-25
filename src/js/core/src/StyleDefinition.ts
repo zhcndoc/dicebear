@@ -84,7 +84,7 @@ export interface StyleDefinitionComponentVariant {
   readonly weight?: number;
 }
 
-export interface StyleDefinitionComponent {
+export interface StyleDefinitionComponentBase {
   readonly width: number;
   readonly height: number;
   readonly probability?: number;
@@ -93,6 +93,18 @@ export interface StyleDefinitionComponent {
   readonly translate?: StyleDefinitionComponentTranslate;
   readonly variants: Readonly<Record<string, StyleDefinitionComponentVariant>>;
 }
+
+export interface StyleDefinitionComponentAlias {
+  readonly extends: string;
+  readonly probability?: number;
+  readonly rotate?: readonly number[];
+  readonly scale?: readonly number[];
+  readonly translate?: StyleDefinitionComponentTranslate;
+}
+
+export type StyleDefinitionComponent =
+  | StyleDefinitionComponentBase
+  | StyleDefinitionComponentAlias;
 
 export interface StyleDefinition {
   readonly $id?: string;

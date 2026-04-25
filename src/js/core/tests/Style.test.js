@@ -285,6 +285,109 @@ describe('Style', () => {
     });
   });
 
+  describe('component aliases', () => {
+    const aliasDefinition = {
+      canvas: { width: 100, height: 100, elements: [] },
+      components: {
+        eyes: {
+          width: 50,
+          height: 60,
+          probability: 80,
+          rotate: [-10, 10],
+          scale: [0.9, 1.1],
+          translate: { x: [-5, 5], y: [-2, 2] },
+          variants: {
+            open: { elements: [{ type: 'element', name: 'circle', attributes: { r: '5' } }] },
+            closed: { elements: [{ type: 'element', name: 'line', attributes: { x1: '0', x2: '10' } }] },
+          },
+        },
+        eyesRight: { extends: 'eyes' },
+        eyesRightOverridden: {
+          extends: 'eyes',
+          probability: 50,
+          rotate: [-20, 20],
+          scale: [1],
+          translate: { x: [0], y: [0] },
+        },
+      },
+    };
+
+    it('should expose aliases as map entries', () => {
+      const style = new Style(aliasDefinition);
+
+      assert.ok(style.components().has('eyesRight'));
+      assert.equal(style.components().get('eyesRight').extendsName(), 'eyes');
+      assert.equal(style.components().get('eyes').extendsName(), undefined);
+    });
+
+    it('should inherit width and height from the source', () => {
+      const alias = new Style(aliasDefinition).components().get('eyesRight');
+
+      assert.equal(alias.width(), 50);
+      assert.equal(alias.height(), 60);
+    });
+
+    it('should inherit variants from the source', () => {
+      const alias = new Style(aliasDefinition).components().get('eyesRight');
+
+      assert.deepEqual(Array.from(alias.variants().keys()), ['open', 'closed']);
+    });
+
+    it('should fall through to the source for probability/rotate/scale/translate', () => {
+      const alias = new Style(aliasDefinition).components().get('eyesRight');
+
+      assert.equal(alias.probability(), 80);
+      assert.deepEqual(alias.rotate(), [-10, 10]);
+      assert.deepEqual(alias.scale(), [0.9, 1.1]);
+      assert.deepEqual(alias.translate().x(), [-5, 5]);
+      assert.deepEqual(alias.translate().y(), [-2, 2]);
+    });
+
+    it('should honor per-instance overrides on the alias', () => {
+      const alias = new Style(aliasDefinition)
+        .components()
+        .get('eyesRightOverridden');
+
+      assert.equal(alias.probability(), 50);
+      assert.deepEqual(alias.rotate(), [-20, 20]);
+      assert.deepEqual(alias.scale(), [1]);
+      assert.deepEqual(alias.translate().x(), [0]);
+      assert.deepEqual(alias.translate().y(), [0]);
+    });
+
+    it('should reject extends pointing at an unknown component', () => {
+      assert.throws(
+        () =>
+          new Style({
+            canvas: { width: 100, height: 100, elements: [] },
+            components: {
+              eyesRight: { extends: 'missing' },
+            },
+          }),
+        StyleValidationError,
+      );
+    });
+
+    it('should reject extends pointing at another alias', () => {
+      assert.throws(
+        () =>
+          new Style({
+            canvas: { width: 100, height: 100, elements: [] },
+            components: {
+              eyes: {
+                width: 10,
+                height: 10,
+                variants: { open: { elements: [] } },
+              },
+              eyesRight: { extends: 'eyes' },
+              eyesRightAgain: { extends: 'eyesRight' },
+            },
+          }),
+        StyleValidationError,
+      );
+    });
+  });
+
   describe('colors', () => {
     it('should return colors as a Map', () => {
       const style = new Style(full);

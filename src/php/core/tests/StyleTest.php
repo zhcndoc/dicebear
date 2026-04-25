@@ -335,4 +335,104 @@ class StyleTest extends TestCase
         $style = new Style(self::full());
         $this->assertSame($style->colors(), $style->colors());
     }
+
+    // component aliases
+
+    private static function aliasDefinition(): array
+    {
+        return [
+            'canvas' => ['width' => 100, 'height' => 100, 'elements' => []],
+            'components' => [
+                'eyes' => [
+                    'width' => 50,
+                    'height' => 60,
+                    'probability' => 80,
+                    'rotate' => [-10, 10],
+                    'scale' => [0.9, 1.1],
+                    'translate' => ['x' => [-5, 5], 'y' => [-2, 2]],
+                    'variants' => [
+                        'open' => ['elements' => [['type' => 'element', 'name' => 'circle', 'attributes' => ['r' => '5']]]],
+                        'closed' => ['elements' => [['type' => 'element', 'name' => 'line', 'attributes' => ['x1' => '0', 'x2' => '10']]]],
+                    ],
+                ],
+                'eyesRight' => ['extends' => 'eyes'],
+                'eyesRightOverridden' => [
+                    'extends' => 'eyes',
+                    'probability' => 50,
+                    'rotate' => [-20, 20],
+                    'scale' => [1],
+                    'translate' => ['x' => [0], 'y' => [0]],
+                ],
+            ],
+        ];
+    }
+
+    public function testAliasExposedAsMapEntry(): void
+    {
+        $style = new Style(self::aliasDefinition());
+        $this->assertArrayHasKey('eyesRight', $style->components());
+        $this->assertSame('eyes', $style->components()['eyesRight']->extendsName());
+        $this->assertNull($style->components()['eyes']->extendsName());
+    }
+
+    public function testAliasInheritsWidthAndHeight(): void
+    {
+        $alias = (new Style(self::aliasDefinition()))->components()['eyesRight'];
+        $this->assertSame(50, $alias->width());
+        $this->assertSame(60, $alias->height());
+    }
+
+    public function testAliasInheritsVariants(): void
+    {
+        $alias = (new Style(self::aliasDefinition()))->components()['eyesRight'];
+        $this->assertSame(['open', 'closed'], array_keys($alias->variants()));
+    }
+
+    public function testAliasFallsThroughToSourceForFields(): void
+    {
+        $alias = (new Style(self::aliasDefinition()))->components()['eyesRight'];
+        $this->assertSame(80, $alias->probability());
+        $this->assertSame([-10, 10], $alias->rotate());
+        $this->assertSame([0.9, 1.1], $alias->scale());
+        $this->assertSame([-5, 5], $alias->translate()->x());
+        $this->assertSame([-2, 2], $alias->translate()->y());
+    }
+
+    public function testAliasHonorsPerInstanceOverrides(): void
+    {
+        $alias = (new Style(self::aliasDefinition()))->components()['eyesRightOverridden'];
+        $this->assertSame(50, $alias->probability());
+        $this->assertSame([-20, 20], $alias->rotate());
+        $this->assertSame([1], $alias->scale());
+        $this->assertSame([0], $alias->translate()->x());
+        $this->assertSame([0], $alias->translate()->y());
+    }
+
+    public function testAliasRejectsUnknownExtendsTarget(): void
+    {
+        $this->expectException(StyleValidationError::class);
+
+        new Style([
+            'canvas' => ['width' => 100, 'height' => 100, 'elements' => []],
+            'components' => ['eyesRight' => ['extends' => 'missing']],
+        ]);
+    }
+
+    public function testAliasRejectsAliasOfAlias(): void
+    {
+        $this->expectException(StyleValidationError::class);
+
+        new Style([
+            'canvas' => ['width' => 100, 'height' => 100, 'elements' => []],
+            'components' => [
+                'eyes' => [
+                    'width' => 10,
+                    'height' => 10,
+                    'variants' => ['open' => ['elements' => []]],
+                ],
+                'eyesRight' => ['extends' => 'eyes'],
+                'eyesRightAgain' => ['extends' => 'eyesRight'],
+            ],
+        ]);
+    }
 }

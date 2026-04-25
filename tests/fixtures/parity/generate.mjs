@@ -47,6 +47,36 @@ for (const name of STYLE_NAMES) {
   writeJson(join('styles', `${name}.json`), raw);
 }
 
+// Synthetic alias style: locks down the `extends` plumbing across both
+// runtimes. Two component slots in the canvas both reference the same alias
+// pair so that source vs. alias variant rolling is observable in the SVG.
+const aliasTest = {
+  canvas: {
+    width: 100,
+    height: 100,
+    elements: [
+      { type: 'component', name: 'eyes' },
+      { type: 'component', name: 'eyesRight' },
+    ],
+  },
+  components: {
+    eyes: {
+      width: 20,
+      height: 20,
+      variants: {
+        a: { elements: [{ type: 'element', name: 'circle', attributes: { id: 'a' } }] },
+        b: { elements: [{ type: 'element', name: 'circle', attributes: { id: 'b' } }] },
+        c: { elements: [{ type: 'element', name: 'circle', attributes: { id: 'c' } }] },
+        d: { elements: [{ type: 'element', name: 'circle', attributes: { id: 'd' } }] },
+        e: { elements: [{ type: 'element', name: 'circle', attributes: { id: 'e' } }] },
+      },
+    },
+    eyesRight: { extends: 'eyes' },
+  },
+};
+styles.aliasTest = aliasTest;
+writeJson(join('styles', 'aliasTest.json'), aliasTest);
+
 // ---------------------------------------------------------------------------
 // Fnv1a fixtures
 // ---------------------------------------------------------------------------
@@ -364,6 +394,34 @@ const avatarFixtures = {
       },
     },
   ]),
+  aliasTest: [
+    { id: 'plain-seed', options: { seed: 'parity-1' } },
+    { id: 'different-seed', options: { seed: 'parity-2' } },
+    {
+      id: 'fallthrough-variant',
+      options: { seed: 'parity-1', eyesVariant: 'b' },
+    },
+    {
+      id: 'override-variant',
+      options: {
+        seed: 'parity-1',
+        eyesVariant: 'b',
+        eyesRightVariant: 'd',
+      },
+    },
+    {
+      id: 'fallthrough-probability-zero',
+      options: { seed: 'parity-1', eyesProbability: 0 },
+    },
+    {
+      id: 'override-probability',
+      options: {
+        seed: 'parity-1',
+        eyesProbability: 0,
+        eyesRightProbability: 100,
+      },
+    },
+  ],
 };
 
 for (const [styleName, cases] of Object.entries(avatarFixtures)) {

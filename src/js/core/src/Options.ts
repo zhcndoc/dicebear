@@ -142,7 +142,7 @@ export class Options<D = unknown> {
         return undefined;
       }
 
-      const raw = this.#get(`${name}Variant`) as
+      const raw = this.#getWithAliasFallback(name, 'Variant') as
         | string
         | readonly string[]
         | Readonly<Record<string, number>>
@@ -256,12 +256,13 @@ export class Options<D = unknown> {
     componentDefault: (c: Component) => readonly number[],
     defaultValue: number = 0,
   ): number {
-    const key = name
-      ? `${name}${option.charAt(0).toUpperCase()}${option.slice(1)}`
-      : option;
+    const suffix = `${option.charAt(0).toUpperCase()}${option.slice(1)}`;
+    const key = name ? `${name}${suffix}` : option;
 
     return this.#memo(key, () => {
-      const raw = this.#get(key) as number | readonly number[] | undefined;
+      const raw = (
+        name ? this.#getWithAliasFallback(name, suffix) : this.#get(key)
+      ) as number | readonly number[] | undefined;
       let values: readonly number[];
 
       if (raw === undefined && name) {
@@ -280,7 +281,9 @@ export class Options<D = unknown> {
    * falling back to the component definition default of `100`.
    */
   #probability(name: string): number {
-    const raw = this.#get(`${name}Probability`) as number | undefined;
+    const raw = this.#getWithAliasFallback(name, 'Probability') as
+      | number
+      | undefined;
 
     if (raw !== undefined) {
       return raw;
@@ -382,6 +385,24 @@ export class Options<D = unknown> {
    */
   #get(key: string): unknown {
     return (this.#data as Record<string, unknown>)[key];
+  }
+
+  /**
+   * Reads `${name}${suffix}` from the input data. When the component is an
+   * alias and the alias-keyed value is unset, falls through to the source
+   * component's option (`${aliasOf}${suffix}`) so users only need to set
+   * the option once when they want both instances to share it.
+   */
+  #getWithAliasFallback(name: string, suffix: string): unknown {
+    const direct = this.#get(`${name}${suffix}`);
+
+    if (direct !== undefined) {
+      return direct;
+    }
+
+    const parent = this.#style.components().get(name)?.extendsName();
+
+    return parent ? this.#get(`${parent}${suffix}`) : undefined;
   }
 
   /**

@@ -1,0 +1,82 @@
+{
+  "canvas": {
+    "width": 100,
+    "height": 100,
+    "elements": [
+      {
+        "type": "component",
+        "name": "eyes"
+      },
+      {
+        "type": "component",
+        "name": "eyesRight"
+      }
+    ]
+  },
+  "components": {
+    "eyes": {
+      "width": 20,
+      "height": 20,
+      "variants": {
+        "a": {
+          "elements": [
+            {
+              "type": "element",
+              "name": "circle",
+              "attributes": {
+                "id": "a"
+              }
+            }
+          ]
+        },
+        "b": {
+          "elements": [
+            {
+              "type": "element",
+              "name": "circle",
+              "attributes": {
+                "id": "b"
+              }
+            }
+          ]
+        },
+        "c": {
+          "elements": [
+            {
+              "type": "element",
+              "name": "circle",
+              "attributes": {
+                "id": "c"
+              }
+            }
+          ]
+        },
+        "d": {
+          "elements": [
+            {
+              "type": "element",
+              "name": "circle",
+              "attributes": {
+                "id": "d"
+              }
+            }
+          ]
+        },
+        "e": {
+          "elements": [
+            {
+              "type": "element",
+              "name": "circle",
+              "attributes": {
+                "id": "e"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "eyesRight": {
+      "extends": "eyes"
+    }
+  }
+}

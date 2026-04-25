@@ -36,21 +36,29 @@ type ColorNames<D> = D extends {
 // calls options.color('background') when rendering.
 type AllColorNames<D> = ColorNames<D> | 'background';
 
-// Resolves variant names for component C; falls back to `string` when
+// Resolves variant names for component C, transparently following an
+// `extends` alias to the source component. Falls back to `string` when
 // the definition or the component is generic.
-type VariantNames<D, C extends string> = D extends {
+type ResolveComponent<D, C extends string> = D extends {
   components: Record<string, unknown>;
 }
   ? C extends keyof D['components']
-    ? D['components'][C] extends {
-        variants: Record<infer V extends string, unknown>;
-      }
-      ? string extends V
-        ? string
-        : V
-      : string
-    : string
-  : string;
+    ? D['components'][C] extends { extends: infer P extends string }
+      ? P extends keyof D['components']
+        ? D['components'][P]
+        : never
+      : D['components'][C]
+    : never
+  : never;
+
+type VariantNames<D, C extends string> =
+  ResolveComponent<D, C> extends {
+    variants: Record<infer V extends string, unknown>;
+  }
+    ? string extends V
+      ? string
+      : V
+    : string;
 
 type HasSpecificKeys<D> = [ComponentNames<D>] extends [never]
   ? [ColorNames<D>] extends [never]

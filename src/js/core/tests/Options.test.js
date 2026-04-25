@@ -1,10 +1,19 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { Style } from '../lib/index.js';
 import { Options } from '../lib/Options.js';
 import { OptionsValidationError } from '../lib/Error/OptionsValidationError.js';
 import { ValidationError } from '../lib/Error/ValidationError.js';
 import { CircularColorReferenceError } from '../lib/Error/CircularColorReferenceError.js';
+
+const aliasFixture = JSON.parse(
+  readFileSync(
+    join(import.meta.dirname, '..', '..', '..', '..', 'tests', 'fixtures', 'parity', 'styles', 'aliasTest.json'),
+    'utf8',
+  ),
+);
 
 const minimalStyle = new Style({
   canvas: { width: 100, height: 100, elements: [] },
@@ -450,6 +459,66 @@ describe('Options', () => {
 
       assert.equal(options.rotate(), 45);
       assert.notEqual(options.rotate('eyes'), 45);
+    });
+  });
+
+  describe('component aliases', () => {
+    const aliasStyle = new Style(aliasFixture);
+
+    it('should fall through eyesScale to the alias when only the source is set', () => {
+      const options = new Options(aliasStyle, {
+        seed: 'scale-fallthrough',
+        eyesScale: 1.5,
+      });
+
+      assert.equal(options.scale('eyesRight'), 1.5);
+    });
+
+    it('should override eyesRightScale on the alias', () => {
+      const options = new Options(aliasStyle, {
+        seed: 'scale-override',
+        eyesScale: 1.5,
+        eyesRightScale: 0.5,
+      });
+
+      assert.equal(options.scale('eyes'), 1.5);
+      assert.equal(options.scale('eyesRight'), 0.5);
+    });
+
+    it('should fall through eyesTranslateX to the alias', () => {
+      const options = new Options(aliasStyle, {
+        seed: 'translate-fallthrough',
+        eyesTranslateX: 7,
+      });
+
+      assert.equal(options.translateX('eyesRight'), 7);
+    });
+
+    it('should override eyesRightTranslateY on the alias', () => {
+      const options = new Options(aliasStyle, {
+        seed: 'translate-override',
+        eyesTranslateY: 4,
+        eyesRightTranslateY: -4,
+      });
+
+      assert.equal(options.translateY('eyes'), 4);
+      assert.equal(options.translateY('eyesRight'), -4);
+    });
+
+    it('should record alias keys separately in resolved()', () => {
+      const options = new Options(aliasStyle, {
+        seed: 'resolved-alias',
+        eyesVariant: 'a',
+        eyesRightVariant: 'b',
+      });
+
+      options.variant('eyes');
+      options.variant('eyesRight');
+
+      const resolved = options.resolved();
+
+      assert.equal(resolved.eyesVariant, 'a');
+      assert.equal(resolved.eyesRightVariant, 'b');
     });
   });
 

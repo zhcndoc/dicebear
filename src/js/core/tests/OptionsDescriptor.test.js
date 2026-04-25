@@ -1,6 +1,15 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { Style, OptionsDescriptor } from '../lib/index.js';
+
+const aliasFixture = JSON.parse(
+  readFileSync(
+    join(import.meta.dirname, '..', '..', '..', '..', 'tests', 'fixtures', 'parity', 'styles', 'aliasTest.json'),
+    'utf8',
+  ),
+);
 
 const minimalStyle = new Style({
   canvas: { width: 100, height: 100, elements: [] },
@@ -95,6 +104,19 @@ describe('OptionsDescriptor', () => {
       const schema = new OptionsDescriptor(fullStyle).toJSON();
 
       assert.deepEqual(schema.eyesProbability, { type: 'number', min: 0, max: 100 });
+    });
+
+    it('should generate alias options with the source component variants', () => {
+      const schema = new OptionsDescriptor(new Style(aliasFixture)).toJSON();
+
+      assert.deepEqual(schema.eyesRightVariant, {
+        type: 'enum',
+        values: ['a', 'b', 'c', 'd', 'e'],
+        list: true,
+        weighted: true,
+      });
+      assert.ok('eyesRightProbability' in schema);
+      assert.ok('eyesRightRotate' in schema);
     });
   });
 

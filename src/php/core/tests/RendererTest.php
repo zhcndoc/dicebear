@@ -678,4 +678,118 @@ class RendererTest extends TestCase
             ],
         ]);
     }
+
+    // component aliases
+
+    private static function aliasStyle(): Style
+    {
+        return new Style([
+            'canvas' => [
+                'width' => 100,
+                'height' => 100,
+                'elements' => [
+                    ['type' => 'component', 'name' => 'eyes'],
+                    ['type' => 'component', 'name' => 'eyesRight'],
+                ],
+            ],
+            'components' => [
+                'eyes' => [
+                    'width' => 20,
+                    'height' => 20,
+                    'variants' => [
+                        'a' => ['elements' => [['type' => 'element', 'name' => 'circle', 'attributes' => ['id' => 'a']]]],
+                        'b' => ['elements' => [['type' => 'element', 'name' => 'circle', 'attributes' => ['id' => 'b']]]],
+                        'c' => ['elements' => [['type' => 'element', 'name' => 'circle', 'attributes' => ['id' => 'c']]]],
+                        'd' => ['elements' => [['type' => 'element', 'name' => 'circle', 'attributes' => ['id' => 'd']]]],
+                        'e' => ['elements' => [['type' => 'element', 'name' => 'circle', 'attributes' => ['id' => 'e']]]],
+                    ],
+                ],
+                'eyesRight' => ['extends' => 'eyes'],
+            ],
+        ]);
+    }
+
+    public function testAliasGetsIndependentVariantPerSeed(): void
+    {
+        $differed = false;
+
+        foreach (['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'] as $seed) {
+            $svg = (new Avatar(self::aliasStyle(), ['seed' => $seed]))->toString();
+            preg_match_all('/<circle id="([a-z])"\\/>/', $svg, $matches);
+
+            if (count($matches[1]) === 2 && $matches[1][0] !== $matches[1][1]) {
+                $differed = true;
+                break;
+            }
+        }
+
+        $this->assertTrue($differed, 'expected at least one seed where alias picks a different variant than the source');
+    }
+
+    public function testAliasInheritsEyesVariantWhenOnlySourceIsSet(): void
+    {
+        $svg = (new Avatar(self::aliasStyle(), [
+            'seed' => 'fallthrough',
+            'eyesVariant' => 'b',
+        ]))->toString();
+
+        preg_match_all('/<circle id="([a-z])"\\/>/', $svg, $matches);
+        $this->assertSame(['b', 'b'], $matches[1]);
+    }
+
+    public function testAliasOverridesEyesVariantIndependently(): void
+    {
+        $svg = (new Avatar(self::aliasStyle(), [
+            'seed' => 'override',
+            'eyesVariant' => 'b',
+            'eyesRightVariant' => 'd',
+        ]))->toString();
+
+        preg_match_all('/<circle id="([a-z])"\\/>/', $svg, $matches);
+        $this->assertSame(['b', 'd'], $matches[1]);
+    }
+
+    public function testAliasFallsThroughEyesProbabilityByDefault(): void
+    {
+        $svg = (new Avatar(self::aliasStyle(), [
+            'seed' => 'probability-fallthrough',
+            'eyesProbability' => 0,
+        ]))->toString();
+
+        $this->assertStringNotContainsString('<circle', $svg);
+    }
+
+    public function testAliasOverridesProbabilityIndependently(): void
+    {
+        $svg = (new Avatar(self::aliasStyle(), [
+            'seed' => 'probability-override',
+            'eyesProbability' => 0,
+            'eyesRightProbability' => 100,
+        ]))->toString();
+
+        preg_match_all('/<circle id="[a-z]"\\/>/', $svg, $matches);
+        $this->assertCount(1, $matches[0]);
+    }
+
+    public function testAliasFallsThroughEyesRotateAndAllowsOverride(): void
+    {
+        $fallthrough = (new Avatar(self::aliasStyle(), [
+            'seed' => 'rotate-fallthrough',
+            'eyesVariant' => 'a',
+            'eyesRotate' => 30,
+        ]))->toString();
+
+        preg_match_all('/rotate\\(30, 10, 10\\)/', $fallthrough, $matches);
+        $this->assertCount(2, $matches[0]);
+
+        $override = (new Avatar(self::aliasStyle(), [
+            'seed' => 'rotate-override',
+            'eyesVariant' => 'a',
+            'eyesRotate' => 30,
+            'eyesRightRotate' => 60,
+        ]))->toString();
+
+        $this->assertStringContainsString('rotate(30, 10, 10)', $override);
+        $this->assertStringContainsString('rotate(60, 10, 10)', $override);
+    }
 }

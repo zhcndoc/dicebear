@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DiceBear;
 
+use DiceBear\Error\StyleValidationError;
 use DiceBear\Style\Canvas;
 use DiceBear\Style\Color;
 use DiceBear\Style\Component;
@@ -31,6 +32,8 @@ class Style
         StyleValidator::validate($data);
 
         $this->data = is_array($data) ? $data : json_decode(json_encode($data), true);
+
+        $this->validateAliases();
     }
 
     /**
@@ -92,15 +95,82 @@ class Style
      */
     public function components(): array
     {
-        if ($this->components === null) {
-            $this->components = [];
+        if ($this->components !== null) {
+            return $this->components;
+        }
 
-            foreach ($this->data['components'] ?? [] as $name => $data) {
+        $entries = $this->data['components'] ?? [];
+        $this->components = [];
+
+        foreach ($entries as $name => $data) {
+            if (!self::isAlias($data)) {
                 $this->components[$name] = new Component($data);
             }
         }
 
+        foreach ($entries as $name => $data) {
+            if (self::isAlias($data)) {
+                $this->components[$name] = new Component(
+                    $data,
+                    $this->components[$data['extends']] ?? null,
+                );
+            }
+        }
+
         return $this->components;
+    }
+
+    /**
+     * Verifies that every component declared via `extends` references an
+     * existing, non-alias component in the same `components` map. The schema
+     * itself cannot enforce cross-references between sibling keys.
+     */
+    private function validateAliases(): void
+    {
+        $components = $this->data['components'] ?? null;
+
+        if ($components === null) {
+            return;
+        }
+
+        $errors = [];
+
+        foreach ($components as $name => $data) {
+            if (!self::isAlias($data)) {
+                continue;
+            }
+
+            $target = $data['extends'];
+            $targetData = $components[$target] ?? null;
+
+            if ($targetData === null) {
+                $errors[] = [
+                    'instancePath' => "/components/{$name}/extends",
+                    'message' => "references unknown component \"{$target}\"",
+                ];
+
+                continue;
+            }
+
+            if (self::isAlias($targetData)) {
+                $errors[] = [
+                    'instancePath' => "/components/{$name}/extends",
+                    'message' => "references alias \"{$target}\" — alias chains are not allowed",
+                ];
+            }
+        }
+
+        if (count($errors) > 0) {
+            throw new StyleValidationError($errors);
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private static function isAlias(array $data): bool
+    {
+        return array_key_exists('extends', $data);
     }
 
     /**

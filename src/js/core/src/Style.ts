@@ -1,7 +1,9 @@
 import { StyleValidator } from './Validator/StyleValidator.js';
+import { StyleValidationError } from './Error/StyleValidationError.js';
 import type {
   StyleDefinition,
   StyleDefinitionAttributes,
+  StyleDefinitionComponent,
 } from './StyleDefinition.js';
 import { Meta } from './Style/Meta.js';
 import { Canvas } from './Style/Canvas.js';
@@ -26,6 +28,8 @@ export class Style<D = unknown> {
     StyleValidator.validate(data);
 
     this.#data = structuredClone(data) as StyleDefinition;
+
+    this.#validateAliases();
   }
 
   /**
@@ -87,14 +91,78 @@ export class Style<D = unknown> {
    * lazily on first access.
    */
   components(): ReadonlyMap<string, Component> {
-    this.#components ??= new Map(
-      Object.entries(this.#data.components ?? {}).map(([name, data]) => [
-        name,
-        new Component(data),
-      ]),
-    );
+    if (this.#components) {
+      return this.#components;
+    }
+
+    const entries = Object.entries(this.#data.components ?? {});
+    const map = new Map<string, Component>();
+
+    for (const [name, data] of entries) {
+      if (!Style.#isAlias(data)) {
+        map.set(name, new Component(data));
+      }
+    }
+
+    for (const [name, data] of entries) {
+      if (Style.#isAlias(data)) {
+        map.set(name, new Component(data, map.get(data.extends)));
+      }
+    }
+
+    this.#components = map;
 
     return this.#components;
+  }
+
+  /**
+   * Verifies that every component declared via `extends` references an
+   * existing, non-alias component in the same `components` map. The schema
+   * itself cannot enforce cross-references between sibling keys.
+   */
+  #validateAliases(): void {
+    const components = this.#data.components;
+
+    if (!components) {
+      return;
+    }
+
+    const errors: { instancePath: string; message: string }[] = [];
+
+    for (const [name, data] of Object.entries(components)) {
+      if (!Style.#isAlias(data)) {
+        continue;
+      }
+
+      const target = data.extends;
+      const targetData = components[target];
+
+      if (!targetData) {
+        errors.push({
+          instancePath: `/components/${name}/extends`,
+          message: `references unknown component "${target}"`,
+        });
+
+        continue;
+      }
+
+      if (Style.#isAlias(targetData)) {
+        errors.push({
+          instancePath: `/components/${name}/extends`,
+          message: `references alias "${target}" — alias chains are not allowed`,
+        });
+      }
+    }
+
+    if (errors.length > 0) {
+      throw new StyleValidationError(errors);
+    }
+  }
+
+  static #isAlias(
+    data: StyleDefinitionComponent,
+  ): data is Extract<StyleDefinitionComponent, { extends: string }> {
+    return 'extends' in data;
   }
 
   /**

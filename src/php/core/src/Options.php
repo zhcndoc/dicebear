@@ -148,7 +148,7 @@ class Options
                 return null;
             }
 
-            $raw = $this->get("{$name}Variant");
+            $raw = $this->getWithAliasFallback($name, 'Variant');
             $variants = $component->variants();
 
             if ($raw === null) {
@@ -266,12 +266,13 @@ class Options
      */
     private function numericComponentOption(string $option, ?string $name, callable $componentDefault, float $defaultValue = 0.0): float
     {
-        $key = $name !== null
-            ? $name . strtoupper($option[0]) . substr($option, 1)
-            : $option;
+        $suffix = strtoupper($option[0]) . substr($option, 1);
+        $key = $name !== null ? $name . $suffix : $option;
 
-        return $this->memo($key, function () use ($key, $name, $componentDefault, $defaultValue) {
-            $raw = $this->get($key);
+        return $this->memo($key, function () use ($key, $suffix, $name, $componentDefault, $defaultValue) {
+            $raw = $name !== null
+                ? $this->getWithAliasFallback($name, $suffix)
+                : $this->get($key);
 
             if ($raw === null && $name !== null) {
                 $components = $this->style->components();
@@ -291,7 +292,7 @@ class Options
      */
     private function probability(string $name): int|float
     {
-        $raw = $this->get("{$name}Probability");
+        $raw = $this->getWithAliasFallback($name, 'Probability');
 
         if ($raw !== null) {
             return $raw;
@@ -397,6 +398,26 @@ class Options
     private function get(string $key): mixed
     {
         return $this->data[$key] ?? null;
+    }
+
+    /**
+     * Reads `${name}${suffix}` from the input data. When the component is an
+     * alias and the alias-keyed value is unset, falls through to the source
+     * component's option (`${aliasOf}${suffix}`) so users only need to set
+     * the option once when they want both instances to share it.
+     */
+    private function getWithAliasFallback(string $name, string $suffix): mixed
+    {
+        $direct = $this->get("{$name}{$suffix}");
+
+        if ($direct !== null) {
+            return $direct;
+        }
+
+        $components = $this->style->components();
+        $parent = isset($components[$name]) ? $components[$name]->extendsName() : null;
+
+        return $parent !== null ? $this->get("{$parent}{$suffix}") : null;
     }
 
     /**

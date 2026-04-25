@@ -1,10 +1,19 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { Style, Avatar } from '../lib/index.js';
 
 const minimalStyle = new Style({
   canvas: { width: 100, height: 100, elements: [] },
 });
+
+const aliasFixture = JSON.parse(
+  readFileSync(
+    join(import.meta.dirname, '..', '..', '..', '..', 'tests', 'fixtures', 'parity', 'styles', 'aliasTest.json'),
+    'utf8',
+  ),
+);
 
 describe('Renderer', () => {
   describe('SVG wrapper', () => {
@@ -318,6 +327,87 @@ describe('Renderer', () => {
       }).toString();
 
       assert.ok(!svg.includes('<g'));
+    });
+  });
+
+  describe('component aliases', () => {
+    const aliasStyle = new Style(aliasFixture);
+
+    it('should give source and alias independent variants for the same seed', () => {
+      let differed = false;
+
+      for (const seed of ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']) {
+        const svg = new Avatar(aliasStyle, { seed }).toString();
+        const matches = svg.match(/<circle id="([a-z])"\/>/g) ?? [];
+
+        if (matches.length === 2 && matches[0] !== matches[1]) {
+          differed = true;
+          break;
+        }
+      }
+
+      assert.ok(differed, 'expected at least one seed where alias picks a different variant than the source');
+    });
+
+    it('should inherit eyesVariant on the alias when only the source is set', () => {
+      const svg = new Avatar(aliasStyle, {
+        seed: 'fallthrough',
+        eyesVariant: 'b',
+      }).toString();
+      const matches = [...svg.matchAll(/<circle id="([a-z])"\/>/g)].map((m) => m[1]);
+
+      assert.deepEqual(matches, ['b', 'b']);
+    });
+
+    it('should let the alias override eyesVariant independently', () => {
+      const svg = new Avatar(aliasStyle, {
+        seed: 'override',
+        eyesVariant: 'b',
+        eyesRightVariant: 'd',
+      }).toString();
+      const matches = [...svg.matchAll(/<circle id="([a-z])"\/>/g)].map((m) => m[1]);
+
+      assert.deepEqual(matches, ['b', 'd']);
+    });
+
+    it('should fall through eyesProbability to the alias by default', () => {
+      const svg = new Avatar(aliasStyle, {
+        seed: 'probability-fallthrough',
+        eyesProbability: 0,
+      }).toString();
+
+      assert.ok(!svg.includes('<circle'));
+    });
+
+    it('should let eyesRightProbability override the alias visibility', () => {
+      const svg = new Avatar(aliasStyle, {
+        seed: 'probability-override',
+        eyesProbability: 0,
+        eyesRightProbability: 100,
+      }).toString();
+      const matches = svg.match(/<circle id="[a-z]"\/>/g) ?? [];
+
+      assert.equal(matches.length, 1);
+    });
+
+    it('should fall through eyesRotate to the alias and let the alias override', () => {
+      const fallthrough = new Avatar(aliasStyle, {
+        seed: 'rotate-fallthrough',
+        eyesVariant: 'a',
+        eyesRotate: 30,
+      }).toString();
+
+      assert.equal((fallthrough.match(/rotate\(30, 10, 10\)/g) ?? []).length, 2);
+
+      const override = new Avatar(aliasStyle, {
+        seed: 'rotate-override',
+        eyesVariant: 'a',
+        eyesRotate: 30,
+        eyesRightRotate: 60,
+      }).toString();
+
+      assert.ok(override.includes('rotate(30, 10, 10)'));
+      assert.ok(override.includes('rotate(60, 10, 10)'));
     });
   });
 
