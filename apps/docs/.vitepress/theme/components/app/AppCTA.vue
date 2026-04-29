@@ -18,7 +18,7 @@ const apiStats = useApiStats();
 
 const requestsLabel = computed(() => {
   if (!apiStats.value) return null;
-  return `${formatNumber(apiStats.value.monthlyRequests)} requests in ${apiStats.value.monthLabel}`;
+  return `${formatNumber(apiStats.value.monthlyRequests)} 次请求，统计期：${apiStats.value.monthLabel}`;
 });
 
 const bgAvatars = computed(() => {
@@ -66,19 +66,19 @@ const bgAvatars = computed(() => {
       </div>
     </template>
     <UiContainer class="app-cta-container">
-      <UiBadge variant="orange">Get Started Today</UiBadge>
-      <UiHeadline>Ready to create <strong>amazing</strong> avatars?</UiHeadline>
+      <UiBadge variant="orange">立即开始</UiBadge>
+      <UiHeadline>准备好创建<strong>出色</strong>的头像了吗？</UiHeadline>
       <UiDescription class="app-cta-description">
-        Join thousands of developers using DiceBear. Create unique profile pictures — forever free.
+        加入成千上万正在使用 DiceBear 的开发者。创建独特的个人资料图片，而且永远免费。
       </UiDescription>
 
       <div class="app-cta-actions">
         <UiButton href="/playground/" class="app-cta-btn-primary">
           <Play :size="20" />
-          Open Playground
+          打开 Playground
         </UiButton>
         <UiButton href="/introduction/" variant="secondary">
-          Read the Docs
+          阅读文档
           <ArrowRight />
         </UiButton>
       </div>
@@ -91,7 +91,7 @@ const bgAvatars = computed(() => {
           class="app-cta-proof-link"
         >
           <UiIcon :path="siGithub.path" :size="16" />
-          <span>Star us on GitHub</span>
+          <span>在 GitHub 上给我们点星</span>
           <Star :size="14" class="app-cta-star-icon" />
         </a>
 

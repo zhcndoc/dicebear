@@ -1,10 +1,9 @@
 ---
 layout: page
-title: Avatar Styles – Browse 30+ Avatar Designs | DiceBear
+title: 头像风格 – 浏览 30+ 款头像设计 | DiceBear
 description: >
-  Browse 30+ styles and generate avatars with the DiceBear avatar library. From
-  abstract patterns to character designs — the perfect avatar generator for
-  profile pictures and user avatars.
+  浏览 30+ 款风格，并使用 DiceBear 头像库生成头像。从
+  抽象图案到角色设计——适合个人资料图片和用户头像的完美头像生成器。
 aside: false
 sidebar: false
 ---
@@ -22,10 +21,10 @@ const styleCount = computed(() => Object.keys(theme.value.avatarStyles).length);
 <UiContainer class="styles-page">
   <div class="styles-hero">
     <UiHeadline tag="h1" class="styles-title">
-      <strong>Styles</strong> Overview
+      <strong>风格</strong> 概览
     </UiHeadline>
     <UiDescription>
-      Browse our avatar library — from abstract patterns to lovingly designed characters. Every style is crafted by talented artists and ready to use as profile pictures in your projects.
+      浏览我们的头像库——从抽象图案到精心设计的角色。每种风格都由才华横溢的艺术家精心打造，可直接用作您项目中的个人资料图片。
     </UiDescription>
   </div>
 

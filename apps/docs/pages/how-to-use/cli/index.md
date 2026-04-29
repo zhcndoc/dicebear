@@ -1,167 +1,159 @@
 ---
-title: CLI – Generate Avatars from the Command Line | DiceBear
+title: CLI – 从命令行生成头像 | DiceBear
 description: >
-  Generate avatars in bulk with the DiceBear CLI. Free command-line avatar
-  generator for creating profile pictures and user placeholder images. All
-  styles supported.
+  使用 DiceBear CLI 批量生成头像。免费的命令行头像生成器，用于创建个人资料图片和用户占位图像。支持所有样式。
 ---
 
 # CLI
 
-With the CLI you can create thousands of avatars in no time!
+使用 CLI，你可以在极短时间内创建成千上万个头像！
 
-## Installation
+## 安装
 
-Make sure you have [Node.js](https://nodejs.org/en/) (version 22 or higher) and
-npm installed.
-
-```
-npm install dicebear --global
-```
-
-## Upgrade
-
-For the latest features and avatar styles, make sure you update the CLI
-regularly.
+请确保已安装 [Node.js](https://nodejs.org/en/)（版本 22 或更高）以及
+npm。
 
 ```
 npm install dicebear --global
 ```
 
-## Usage
+## 升级
 
-### Create an avatar
+为了获得最新功能和头像样式，请确保定期更新 CLI。
 
-Replace `<style>` with an avatar style name (camelCase) and `[outputPath]` with
-a target directory. If `[outputPath]` is omitted, the current directory is used
-as target directory.
+```
+npm install dicebear --global
+```
+
+## 用法
+
+### 创建一个头像
+
+将 `<style>` 替换为头像样式名称（camelCase），并将 `[outputPath]` 替换为
+目标目录。如果省略 `[outputPath]`，则使用当前目录作为目标目录。
 
 ```
 dicebear <style> [outputPath]
 ```
 
-For example, to create an avatar with the [lorelei](/styles/lorelei/) avatar
-style, use the following command:
+例如，要使用 [lorelei](/styles/lorelei/) 头像样式创建头像，请使用以下命令：
 
 ```
 dicebear lorelei ./avatars
 ```
 
-The avatar will be saved as `lorelei-0.svg` in the `./avatars` directory.
+头像将保存为 `lorelei-0.svg`，位于 `./avatars` 目录中。
 
 :::info
 
-We provide a large number of avatar styles from different artists. The avatar
-styles are licensed under different licenses that the artists can choose
-themselves. For a quick overview we have created an
-[license overview](/licenses/) for you.
+我们提供了来自不同艺术家的大量头像样式。这些头像样式采用不同的许可证，
+由艺术家自行选择。为了便于快速了解，我们为你创建了一个
+[许可证概览](/licenses/)。
 
 :::
 
-### Create multiple avatars
+### 创建多个头像
 
-You can also create multiple avatars at once! Just use the `--count` option.
-Replace `<count>` with the number of avatars to create.
+你也可以一次创建多个头像！只需使用 `--count` 选项。
+将 `<count>` 替换为要创建的头像数量。
 
 ```
 dicebear <style> [outputPath] --count <count>
 ```
 
-For example, to create 100 avatars:
+例如，创建 100 个头像：
 
 ```
 dicebear lorelei ./avatars --count 100
 ```
 
-This generates files named `lorelei-0.svg`, `lorelei-1.svg`, ...,
-`lorelei-99.svg`.
+这将生成名为 `lorelei-0.svg`、`lorelei-1.svg`、...、
+`lorelei-99.svg` 的文件。
 
 :::warning
 
-The `seed` option has no effect in combination with the `count` option. If
-`count` is greater than `1`, random values are generated and used as `seed` to
-make the avatars differ from each other.
+`seed` 选项与 `count` 选项一起使用时不会生效。如果
+`count` 大于 `1`，系统会生成随机值并将其用作 `seed`，
+以使头像彼此不同。
 
 :::
 
-:::tip Performance
+:::tip 性能
 
-The CLI uses parallel processing based on your CPU cores. Generating large
-batches of avatars is optimized for performance.
+CLI 会基于你的 CPU 核心数使用并行处理。生成大批量头像时已针对性能进行了优化。
 
 :::
 
-### Output formats
+### 输出格式
 
-You can create avatars in various formats using the `--format` option:
+你可以使用 `--format` 选项创建多种格式的头像：
 
-| Format | Description                        |
-| ------ | ---------------------------------- |
-| `svg`  | Scalable Vector Graphics (default) |
-| `png`  | PNG image                          |
-| `jpg`  | JPEG image                         |
-| `jpeg` | JPEG image (alias for jpg)         |
-| `webp` | WebP image                         |
-| `avif` | AVIF image                         |
-| `json` | JSON with avatar metadata          |
+| 格式 | 描述                           |
+| ---- | ------------------------------ |
+| `svg`  | 可缩放矢量图形（默认）         |
+| `png`  | PNG 图像                        |
+| `jpg`  | JPEG 图像                       |
+| `jpeg` | JPEG 图像（jpg 的别名）         |
+| `webp` | WebP 图像                       |
+| `avif` | AVIF 图像                       |
+| `json` | 包含头像元数据的 JSON           |
 
-Example:
+示例：
 
 ```
 dicebear lorelei ./avatars --format png
 ```
 
-#### Controlling the output image size
+#### 控制输出图像大小
 
-`--size` controls the output dimensions (width and height in pixels) for all
-formats. The default is `512`. For rasterized formats (PNG, JPEG, WebP, AVIF) the
-value is capped at `2048`.
+`--size` 用于控制所有格式的输出尺寸（宽度和高度，单位为像素）。默认值为 `512`。对于光栅格式（PNG、JPEG、WebP、AVIF），
+其值上限为 `2048`。
 
 ```
 dicebear lorelei ./avatars --format png --size 256
 ```
 
-#### Adding Exif metadata
+#### 添加 Exif 元数据
 
-When creating PNG, JPEG, WebP, or AVIF images, you can include Exif metadata:
+在创建 PNG、JPEG、WebP 或 AVIF 图像时，你可以包含 Exif 元数据：
 
 ```
 dicebear lorelei ./avatars --format png --exif
 ```
 
-#### Saving JSON alongside images
+#### 将 JSON 与图像一并保存
 
-You can save a JSON file with avatar metadata alongside each image:
+你可以为每张图像旁边保存一个包含头像元数据的 JSON 文件：
 
 ```
 dicebear lorelei ./avatars --format png --json
 ```
 
-This creates both `lorelei-0.png` and `lorelei-0.json` for each avatar.
+这会为每个头像同时创建 `lorelei-0.png` 和 `lorelei-0.json`。
 
-### Passing style options
+### 传递样式选项
 
-Each avatar style has its own customization options. To see all available
-options for a specific style, use `--help`:
+每种头像样式都有自己的自定义选项。要查看特定样式的所有可用
+选项，请使用 `--help`：
 
 ```
 dicebear lorelei --help
 ```
 
-Example output:
+示例输出：
 
 ```
 dicebear lorelei [outputPath]
 
-Generate "lorelei" avatar(s)
+生成 "lorelei" 头像
 
-Options:
-      --version            Show version number                         [boolean]
-      --help               Show help                                   [boolean]
-      --count              Defines how many avatars to create.          [number]
+选项:
+      --version            显示版本号                                 [boolean]
+      --help               显示帮助                                   [boolean]
+      --count              定义要创建的头像数量。                      [number]
       --format                [string] [choices: "svg", "png", "jpg", ...]
-      --exif               Include Exif Metadata                       [boolean]
-      --json               Save JSON file in addition to image file    [boolean]
+      --exif               包含 Exif 元数据                            [boolean]
+      --json               除图像文件外还保存 JSON 文件                 [boolean]
       --seed                                                            [string]
       --flip                                                            [string]
       --rotate                                                          [number]
@@ -175,37 +167,34 @@ Options:
       --title                                                           [string]
       --fontFamily                                                      [string]
       --fontWeight                                                      [number]
-      ... (style-specific options)
+      ... （样式特定选项）
 ```
 
-Example with options:
+带选项的示例：
 
 ```
 dicebear lorelei ./avatars --backgroundColor b6e3f4,c0aede,d1d4f9 --size 128
 ```
 
-### Output file naming
+### 输出文件命名
 
-Files are named using the pattern `{style}-{index}.{format}`:
+文件命名遵循以下模式：`{style}-{index}.{format}`：
 
 - `lorelei-0.svg`
 - `lorelei-1.png`
 - `avataaars-0.webp`
 
-The index starts at 0 and increments for each avatar created.
+索引从 0 开始，并在每创建一个头像后递增。
 
-:::warning File overwrite protection
+:::warning 文件覆盖保护
 
-The CLI will **not** overwrite existing files. If a file already exists at the
-target path, an error will be thrown. Make sure to use an empty directory or
-remove existing files before generating new avatars.
+CLI **不会** 覆盖现有文件。如果目标路径下已存在文件，将抛出错误。请确保使用空目录，或者在生成新头像之前删除现有文件。
 
 :::
 
-### License banner
+### 许可证横幅
 
-Before generating avatars, the CLI displays a license banner with information
-about the style's creator and license:
+在生成头像之前，CLI 会显示一个许可证横幅，其中包含样式创作者和许可证的信息：
 
 ```
 ----------------------------------------------------------------
@@ -216,9 +205,9 @@ License: CC0 1.0 - https://creativecommons.org/publicdomain/zero/1.0/
 ----------------------------------------------------------------
 ```
 
-### Show help
+### 显示帮助
 
-For general help and a list of all available styles:
+获取常规帮助和所有可用样式列表：
 
 ```
 dicebear --help
@@ -228,110 +217,108 @@ dicebear --help
 dicebear <command>
 
 Commands:
-  dicebear adventurer [outputPath]         Generate "adventurer" avatar(s)
-  dicebear adventurerNeutral [outputPath]  Generate "adventurerNeutral" avatar(s)
-  dicebear avataaars [outputPath]          Generate "avataaars" avatar(s)
-  dicebear avataaarsNeutral [outputPath]   Generate "avataaarsNeutral" avatar(s)
-  dicebear bigEars [outputPath]            Generate "bigEars" avatar(s)
-  dicebear bigEarsNeutral [outputPath]     Generate "bigEarsNeutral" avatar(s)
-  dicebear bigSmile [outputPath]           Generate "bigSmile" avatar(s)
-  dicebear bottts [outputPath]             Generate "bottts" avatar(s)
-  dicebear botttsNeutral [outputPath]      Generate "botttsNeutral" avatar(s)
-  dicebear croodles [outputPath]           Generate "croodles" avatar(s)
-  dicebear croodlesNeutral [outputPath]    Generate "croodlesNeutral" avatar(s)
-  dicebear dylan [outputPath]              Generate "dylan" avatar(s)
-  dicebear funEmoji [outputPath]           Generate "funEmoji" avatar(s)
-  dicebear glass [outputPath]              Generate "glass" avatar(s)
-  dicebear icons [outputPath]              Generate "icons" avatar(s)
-  dicebear identicon [outputPath]          Generate "identicon" avatar(s)
-  dicebear initials [outputPath]           Generate "initials" avatar(s)
-  dicebear lorelei [outputPath]            Generate "lorelei" avatar(s)
-  dicebear loreleiNeutral [outputPath]     Generate "loreleiNeutral" avatar(s)
-  dicebear micah [outputPath]              Generate "micah" avatar(s)
-  dicebear miniavs [outputPath]            Generate "miniavs" avatar(s)
-  dicebear notionists [outputPath]         Generate "notionists" avatar(s)
-  dicebear notionistsNeutral [outputPath]  Generate "notionistsNeutral" avatar(s)
-  dicebear openPeeps [outputPath]          Generate "openPeeps" avatar(s)
-  dicebear personas [outputPath]           Generate "personas" avatar(s)
-  dicebear pixelArt [outputPath]           Generate "pixelArt" avatar(s)
-  dicebear pixelArtNeutral [outputPath]    Generate "pixelArtNeutral" avatar(s)
-  dicebear rings [outputPath]              Generate "rings" avatar(s)
-  dicebear shapes [outputPath]             Generate "shapes" avatar(s)
-  dicebear thumbs [outputPath]             Generate "thumbs" avatar(s)
-  dicebear toonHead [outputPath]           Generate "toonHead" avatar(s)
+  dicebear adventurer [outputPath]         生成 "adventurer" 头像
+  dicebear adventurerNeutral [outputPath]  生成 "adventurerNeutral" 头像
+  dicebear avataaars [outputPath]          生成 "avataaars" 头像
+  dicebear avataaarsNeutral [outputPath]   生成 "avataaarsNeutral" 头像
+  dicebear bigEars [outputPath]            生成 "bigEars" 头像
+  dicebear bigEarsNeutral [outputPath]     生成 "bigEarsNeutral" 头像
+  dicebear bigSmile [outputPath]           生成 "bigSmile" 头像
+  dicebear bottts [outputPath]             生成 "bottts" 头像
+  dicebear botttsNeutral [outputPath]      生成 "botttsNeutral" 头像
+  dicebear croodles [outputPath]           生成 "croodles" 头像
+  dicebear croodlesNeutral [outputPath]    生成 "croodlesNeutral" 头像
+  dicebear dylan [outputPath]              生成 "dylan" 头像
+  dicebear funEmoji [outputPath]           生成 "funEmoji" 头像
+  dicebear glass [outputPath]              生成 "glass" 头像
+  dicebear icons [outputPath]              生成 "icons" 头像
+  dicebear identicon [outputPath]          生成 "identicon" 头像
+  dicebear initials [outputPath]           生成 "initials" 头像
+  dicebear lorelei [outputPath]            生成 "lorelei" 头像
+  dicebear loreleiNeutral [outputPath]     生成 "loreleiNeutral" 头像
+  dicebear micah [outputPath]              生成 "micah" 头像
+  dicebear miniavs [outputPath]            生成 "miniavs" 头像
+  dicebear notionists [outputPath]         生成 "notionists" 头像
+  dicebear notionistsNeutral [outputPath]  生成 "notionistsNeutral" 头像
+  dicebear openPeeps [outputPath]          生成 "openPeeps" 头像
+  dicebear personas [outputPath]           生成 "personas" 头像
+  dicebear pixelArt [outputPath]           生成 "pixelArt" 头像
+  dicebear pixelArtNeutral [outputPath]    生成 "pixelArtNeutral" 头像
+  dicebear rings [outputPath]              生成 "rings" 头像
+  dicebear shapes [outputPath]             生成 "shapes" 头像
+  dicebear thumbs [outputPath]             生成 "thumbs" 头像
+  dicebear toonHead [outputPath]           生成 "toonHead" 头像
 
 Options:
-  --version  Show version number                                       [boolean]
-  --help     Show help                                                 [boolean]
+  --version  显示版本号                                            [boolean]
+  --help     显示帮助                                               [boolean]
 ```
 
-## Custom styles
+## 自定义样式
 
-You can use any JSON [definition file](/specification/definition-schema/) as a
-style — including your own custom styles or styles exported from the
-[Figma plugin](/guides/create-an-avatar-style-with-figma/).
+你可以将任何 JSON [定义文件](/specification/definition-schema/) 作为
+样式使用——包括你自己的自定义样式，或从 [Figma 插件](/guides/create-an-avatar-style-with-figma/) 导出的样式。
 
-Just pass the path to the JSON file instead of a style name:
+只需传入 JSON 文件路径，而不是样式名称：
 
 ```
 dicebear ./my-style.json ./avatars
 ```
 
-All available options are automatically detected from the definition. Use
-`--help` to see them:
+所有可用选项都会根据定义自动检测。使用
+`--help` 查看它们：
 
 ```
 dicebear ./my-style.json --help
 ```
 
-Generate multiple avatars in PNG format:
+生成 PNG 格式的多个头像：
 
 ```
 dicebear ./my-style.json ./avatars --count 20 --format png
 ```
 
-## Examples
+## 示例
 
-### Generate a single avatar with a specific seed
+### 使用特定 seed 生成单个头像
 
 ```
 dicebear avataaars ./avatars --seed "john-doe"
 ```
 
-### Generate 50 PNG avatars with custom background
+### 生成 50 个带自定义背景的 PNG 头像
 
 ```
 dicebear bottts ./avatars --count 50 --format png --backgroundColor b6e3f4
 ```
 
-### Generate avatars with JSON metadata
+### 生成带 JSON 元数据的头像
 
 ```
 dicebear pixelArt ./avatars --count 10 --format webp --json
 ```
 
-### Generate initials avatar
+### 生成 initials 头像
 
 ```
 dicebear initials ./avatars --seed "John Doe"
 ```
 
-## Troubleshooting
+## 故障排除
 
-### "File already exists" error
+### “File already exists” 错误
 
-The CLI does not overwrite existing files. Either:
+CLI 不会覆盖现有文件。你可以：
 
-- Use an empty output directory
-- Delete existing files before regenerating
+- 使用空的输出目录
+- 在重新生成之前删除现有文件
 
-### Avatar style not found
+### 未找到头像样式
 
-Make sure you're using the correct camelCase style name. Run `dicebear --help`
-to see all available styles.
+请确保你使用的是正确的 camelCase 样式名称。运行 `dicebear --help`
+查看所有可用样式。
 
-### Permission denied
+### 权限被拒绝
 
-Make sure you have write permissions to the output directory. On Unix systems,
-you may need to adjust directory permissions or use `sudo` for global
-installation.
+请确保你对输出目录拥有写入权限。在 Unix 系统上，
+你可能需要调整目录权限，或者在全局安装时使用 `sudo`。

@@ -1,9 +1,8 @@
 ---
-title: Avataaars Neutral – Avatar Style | DiceBear
+title: Avataaars Neutral – 头像风格 | DiceBear
 description: >
-  Create Avataaars Neutral avatars with the DiceBear avatar library. Generate
-  unique profile pictures using our free avatar API or JavaScript avatar
-  library.
+  使用 DiceBear 头像库创建 Avataaars Neutral 头像。通过我们免费的头像 API
+  或 JavaScript 头像库生成独特的个人资料图片。
 ---
 
 <script setup lang="ts">
@@ -16,22 +15,20 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Avataaars Neutral
 
-Avataaars Neutral is the gender-neutral variant of the Avataaars vector avatar
-style, offering abstract character designs with extensive customization options
-for user profile icons.
+Avataaars Neutral 是 Avataaars 矢量头像风格的中性版本，为用户资料图标提供具有丰富自定义选项的抽象角色设计。
 
 <StylePreview styleName="avataaars-neutral" />
 
 <StyleDescription styleName="avataaars-neutral" />
 
-## Usage
+## 用法
 
 <StyleUsage styleName="avataaars-neutral" />
 
-## Options
+## 选项
 
 <StyleOptions styleName="avataaars-neutral" />
 
-## Details
+## 详情
 
 <StyleInfo styleName="avataaars-neutral" />

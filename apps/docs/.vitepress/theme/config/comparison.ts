@@ -73,9 +73,9 @@ export function buildComparisonRows({ stars, styleCount }: ComparisonContext): C
   };
 
   return [
-    { feature: 'GitHub Stars', values: githubStars },
+    { feature: 'GitHub 星标', values: githubStars },
     {
-      feature: 'Avatar Styles',
+      feature: '头像风格数量',
       values: {
         dicebear: `${styleCount}`,
         boringAvatars: '6',
@@ -85,17 +85,17 @@ export function buildComparisonRows({ stars, styleCount }: ComparisonContext): C
       },
     },
     {
-      feature: 'Customizable Options',
+      feature: '可自定义选项',
       values: {
-        dicebear: 'Extensive',
-        boringAvatars: 'Extensive',
-        avvvatars: 'Limited',
-        multiavatar: 'Limited',
-        jdenticon: 'Limited',
+        dicebear: '丰富',
+        boringAvatars: '丰富',
+        avvvatars: '有限',
+        multiavatar: '有限',
+        jdenticon: '有限',
       },
     },
     {
-      feature: 'HTTP API',
+      feature: 'HTTP 接口',
       values: {
         dicebear: 'free',
         boringAvatars: 'paid',
@@ -105,7 +105,7 @@ export function buildComparisonRows({ stars, styleCount }: ComparisonContext): C
       },
     },
     {
-      feature: 'CLI',
+      feature: '命令行',
       values: {
         dicebear: 'yes',
         boringAvatars: 'no',
@@ -115,47 +115,47 @@ export function buildComparisonRows({ stars, styleCount }: ComparisonContext): C
       },
     },
     {
-      feature: 'Languages',
+      feature: '语言支持',
       values: {
-        dicebear: 'JS/TS',
-        boringAvatars: 'JS',
-        avvvatars: 'JS/TS',
-        multiavatar: 'JS, PHP, Python',
-        jdenticon: 'JS, .NET, PHP',
+        dicebear: 'JavaScript/TypeScript',
+        boringAvatars: 'JavaScript',
+        avvvatars: 'JavaScript/TypeScript',
+        multiavatar: 'JavaScript、PHP、Python',
+        jdenticon: 'JavaScript、.NET、PHP',
       },
     },
     {
-      feature: 'Dependencies',
+      feature: '依赖项',
       values: {
-        dicebear: '\u2013',
+        dicebear: '无',
         boringAvatars: 'React',
         avvvatars: 'React',
-        multiavatar: '\u2013',
-        jdenticon: '\u2013',
+        multiavatar: '无',
+        jdenticon: '无',
       },
     },
     {
-      feature: 'Output Formats',
+      feature: '输出格式',
       values: {
-        dicebear: 'SVG, PNG, JPEG, WebP, AVIF',
+        dicebear: 'SVG、PNG、JPEG、WebP、AVIF',
         boringAvatars: 'SVG',
         avvvatars: 'SVG',
         multiavatar: 'SVG',
-        jdenticon: 'SVG, PNG',
+        jdenticon: 'SVG、PNG',
       },
     },
     {
-      feature: 'Design License',
+      feature: '设计许可',
       values: {
-        dicebear: 'Varies',
+        dicebear: '视风格而定',
         boringAvatars: 'MIT',
         avvvatars: 'MIT',
-        multiavatar: 'Custom',
+        multiavatar: '自定义',
         jdenticon: 'MIT',
       },
     },
     {
-      feature: 'Open Source',
+      feature: '开源',
       values: {
         dicebear: 'yes',
         boringAvatars: 'yes',
@@ -165,7 +165,7 @@ export function buildComparisonRows({ stars, styleCount }: ComparisonContext): C
       },
     },
     {
-      feature: 'Deterministic',
+      feature: '确定性',
       values: {
         dicebear: 'yes',
         boringAvatars: 'yes',

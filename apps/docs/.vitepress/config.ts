@@ -63,10 +63,11 @@ const thirdPartyScripts: HeadConfig[] = isProduction
   : [];
 
 export default defineConfig<ThemeOptions>({
-  title: 'DiceBear',
+  title: 'DiceBear 中文文档',
   description:
-    'DiceBear is a free, open source avatar library and avatar API with 30+ SVG styles. Generate profile pictures and user placeholder images for any project.',
+    'DiceBear 是一个免费、开源的头像库和头像 API，提供 30 多种 SVG 风格。可为任何项目生成个人资料图片和用户占位图像。',
   head: [
+    ['script', { async: '', src: 'https://www.zhcndoc.com/js/common.js' }],
     ['link', { rel: 'icon', type: 'image/png', href: '/favicon-96x96.png', sizes: '96x96' }],
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
     ['link', { rel: 'shortcut icon', href: '/favicon.ico' }],
@@ -83,9 +84,9 @@ export default defineConfig<ThemeOptions>({
         '@context': 'https://schema.org',
         '@type': 'WebSite',
         name: 'DiceBear',
-        url: 'https://www.dicebear.com',
+        url: 'https://dicebear.zhcndoc.com',
         description:
-          'DiceBear is a free, open source avatar library and Avatar API. Generate unique, deterministic SVG avatars and profile pictures with 30+ styles — privacy-focused and self-hostable.',
+          'DiceBear 是一个免费的开源头像库和头像 API。可生成独特、可预测的 SVG 头像和个人资料图片，拥有 30 多种风格——注重隐私且可自托管。',
       }),
     ],
     [
@@ -97,9 +98,9 @@ export default defineConfig<ThemeOptions>({
         name: 'DiceBear',
         applicationCategory: 'DeveloperApplication',
         operatingSystem: 'Any',
-        url: 'https://www.dicebear.com',
+        url: 'https://dicebear.zhcndoc.com',
         description:
-          'Privacy-focused, open source SVG avatar library with 30+ styles. Free Avatar API, JavaScript library, and CLI for generating deterministic profile pictures and user placeholder images.',
+          '注重隐私的开源 SVG 头像库，提供 30 多种样式。可用于生成确定性的个人资料图片和用户占位图像的免费 Avatar API、JavaScript 库和 CLI。',
         offers: {
           '@type': 'Offer',
           price: '0',
@@ -118,7 +119,7 @@ export default defineConfig<ThemeOptions>({
         .replace('index.md', '')
         .replace(/\.md$/, '');
 
-      const canonicalUrl = `https://www.dicebear.com/${canonicalPath}`;
+      const canonicalUrl = `https://dicebear.zhcndoc.com/${canonicalPath}`;
 
       result.push(['link', { rel: 'canonical', href: canonicalUrl }]);
 
@@ -131,7 +132,7 @@ export default defineConfig<ThemeOptions>({
       const pageDescription =
         ctx.pageData.frontmatter.description ||
         ctx.pageData.description ||
-        'DiceBear is a free, open source avatar library and Avatar API with 30+ SVG styles.';
+        'DiceBear 是一个免费的开源头像库和头像 API，拥有 30 多种 SVG 风格。';
 
       result.push(
         ['meta', { property: 'og:title', content: pageTitle }],
@@ -178,24 +179,25 @@ export default defineConfig<ThemeOptions>({
     },
     nav: [
       {
-        text: 'Documentation',
+        text: '文档',
         link: '/introduction/',
         activeMatch: '^/(introduction|how-to-use|guides|specification)',
       },
       {
-        text: 'Styles',
+        text: '风格',
         link: '/styles/',
         activeMatch: '^/styles',
       },
-      { text: 'Playground', link: '/playground/', activeMatch: '^/playground' },
-      { text: 'Stats', link: '/stats/', activeMatch: '^/stats' },
-      { text: 'Editor', link: 'https://editor.dicebear.com' },
+      { text: '游乐场', link: '/playground/', activeMatch: '^/playground' },
+      { text: '统计', link: '/stats/', activeMatch: '^/stats' },
+      { text: '简中文档', link: 'https://www.zhcndoc.com', target: '_blank' },
+      { text: '编辑器', link: 'https://editor.dicebear.com' },
     ],
     outline: [2, 2],
     socialLinks: [],
     editLink: {
       pattern:
-        'https://github.com/dicebear/dicebear/edit/10.x/apps/docs/pages/:path',
+        'https://github.com/zhcndoc/dicebear/edit/main/apps/docs/pages/:path',
     },
     sidebar: {
       '/introduction/': sidebarDocs,
@@ -206,7 +208,7 @@ export default defineConfig<ThemeOptions>({
     },
   },
   sitemap: {
-    hostname: 'https://www.dicebear.com',
+    hostname: 'https://dicebear.zhcndoc.com',
   },
   markdown: {},
 });

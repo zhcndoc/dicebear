@@ -25,10 +25,10 @@ const rows = buildComparisonRows({
     <UiContainer>
       <UiSectionHeader
         class="app-comparison-header"
-        badge="Comparison"
-        description="Every tool has its strengths. Choose what works best for your project."
+        badge="对比"
+        description="每个工具都有自己的优势，选择最适合你项目的方案。"
       >
-        <template #headline>How DiceBear <strong>Compares</strong></template>
+        <template #headline>DiceBear 的<strong>对比</strong>表现</template>
       </UiSectionHeader>
 
       <UiCard padding="md" radius="lg" class="app-comparison-table-card">
@@ -36,7 +36,7 @@ const rows = buildComparisonRows({
           <table class="app-comparison-table">
             <thead>
               <tr>
-                <th class="app-comparison-feature-col">Feature</th>
+                <th class="app-comparison-feature-col">功能</th>
                 <th
                   v-for="(service, index) in comparisonServices"
                   :key="service.key"
@@ -58,10 +58,10 @@ const rows = buildComparisonRows({
                     <Check :size="18" />
                   </span>
                   <span v-else-if="row.values[service.key] === 'free'" class="app-comparison-cell-free">
-                    Free
+                    免费
                   </span>
                   <span v-else-if="row.values[service.key] === 'paid'" class="app-comparison-cell-paid">
-                    Paid
+                    付费
                   </span>
                   <span v-else-if="row.values[service.key] === 'no'" class="app-comparison-cell-no">
                     <X :size="18" />
@@ -75,8 +75,8 @@ const rows = buildComparisonRows({
       </UiCard>
 
       <p class="app-comparison-note">
-        This comparison is based on publicly available information and may not reflect the latest updates.
-        Each tool has its own strengths &mdash; choose what works best for your project.
+        这个对比基于公开信息，可能无法完全反映最新变化。
+        每个工具都有自己的优势，请选择最适合你项目的方案。
       </p>
     </UiContainer>
   </UiSection>

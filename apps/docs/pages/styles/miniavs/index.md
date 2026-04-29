@@ -1,8 +1,8 @@
 ---
-title: Miniavs – Avatar Style | DiceBear
+title: Miniavs – 头像风格 | DiceBear
 description: >
-  Create Miniavs avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  使用 DiceBear 头像库创建 Miniavs 头像。通过我们免费的头像 API 或 JavaScript 头像库生成独特的
+  个人资料图片。
 ---
 
 <script setup lang="ts">
@@ -15,22 +15,20 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Miniavs
 
-Miniavs is a compact illustrated vector avatar style featuring small, detailed
-characters with a charming aesthetic. Generate distinctive, customizable
-profile icons for apps where compact display sizes are common.
+Miniavs 是一种紧凑的插画风矢量头像风格，具有小巧、细致的角色设计和迷人的美学。为应用程序生成独特、可自定义的个人资料图标，适用于常见于紧凑显示尺寸的场景。
 
 <StylePreview styleName="miniavs" />
 
 <StyleDescription styleName="miniavs" />
 
-## Usage
+## 用法
 
 <StyleUsage styleName="miniavs" />
 
-## Options
+## 选项
 
 <StyleOptions styleName="miniavs" />
 
-## Details
+## 详情
 
 <StyleInfo styleName="miniavs" />

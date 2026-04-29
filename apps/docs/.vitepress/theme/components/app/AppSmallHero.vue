@@ -9,9 +9,9 @@ withDefaults(defineProps<{
   headline?: string;
   description?: string;
 }>(), {
-  badge: 'Why DiceBear?',
-  headline: 'Avatars That Stand Out',
-  description: 'DiceBear is an open source avatar library that lets you generate unique, deterministic profile pictures in no time. Whether you need geometric shapes, cute characters, or pixel art — our privacy-focused SVG avatar library with 30+ styles brings your projects to life.',
+  badge: '为什么选择 DiceBear？',
+  headline: '让头像脱颖而出',
+  description: 'DiceBear 是一个开源头像库，能够快速生成独特且确定性的个人资料图片。无论你需要几何图形、可爱角色还是像素风格，这个注重隐私的 SVG 头像库都能用 30+ 种风格为你的项目增色。',
 });
 
 const sectionRef = ref();
@@ -44,10 +44,10 @@ const hasActions = computed(() => !!slots.actions);
           <div v-else class="app-small-hero-actions">
             <UiButton href="/playground/" class="app-small-hero-action-btn">
               <Play :size="20" />
-              Try Playground
+              试用 Playground
             </UiButton>
             <UiButton href="/styles/" variant="secondary" class="app-small-hero-action-btn">
-              Browse Styles
+              浏览风格
               <ArrowRight :size="20" class="app-small-hero-arrow-icon" />
             </UiButton>
           </div>

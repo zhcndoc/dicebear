@@ -1,8 +1,8 @@
 ---
-title: Notionists – Avatar Style | DiceBear
+title: Notionists – 头像风格 | DiceBear
 description: >
-  Create Notionists avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  使用 DiceBear 头像库创建 Notionists 头像。使用我们的免费头像 API 或 JavaScript 头像库生成独特的
+  个人资料图片。
 ---
 
 <script setup lang="ts">
@@ -15,22 +15,22 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Notionists
 
-Notionists is a clean, illustrative vector avatar style with a minimal,
-professional aesthetic. Generate polished, customizable SVG profile icons well
-suited for productivity tools and enterprise applications.
+Notionists 是一种简洁、插画风格的矢量头像样式，具有极简、
+专业的美学风格。生成精致、可定制的 SVG 个人资料图标，非常
+适合生产力工具和企业应用。
 
 <StylePreview styleName="notionists" />
 
 <StyleDescription styleName="notionists" />
 
-## Usage
+## 用法
 
 <StyleUsage styleName="notionists" />
 
-## Options
+## 选项
 
 <StyleOptions styleName="notionists" />
 
-## Details
+## 详情
 
 <StyleInfo styleName="notionists" />

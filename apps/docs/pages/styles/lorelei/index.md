@@ -1,8 +1,8 @@
 ---
-title: Lorelei – Avatar Style | DiceBear
+title: Lorelei – 头像风格 | DiceBear
 description: >
-  Create Lorelei avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  使用 DiceBear 头像库创建 Lorelei 头像。通过我们的免费头像 API 或 JavaScript 头像库生成独特的
+  个人资料图片。
 ---
 
 <script setup lang="ts">
@@ -15,22 +15,21 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Lorelei
 
-Lorelei is an elegant illustrated vector avatar style featuring expressive
-characters with detailed hair and facial features. Generate refined,
-customizable SVG profile icons for social applications and user accounts.
+Lorelei 是一种优雅的插画风矢量头像风格，具有富有表现力的角色，以及精致的
+头发和面部特征。为社交应用和用户账户生成精致、可自定义的 SVG 个人资料图标。
 
 <StylePreview styleName="lorelei" />
 
 <StyleDescription styleName="lorelei" />
 
-## Usage
+## 用法
 
 <StyleUsage styleName="lorelei" />
 
-## Options
+## 选项
 
 <StyleOptions styleName="lorelei" />
 
-## Details
+## 详情
 
 <StyleInfo styleName="lorelei" />

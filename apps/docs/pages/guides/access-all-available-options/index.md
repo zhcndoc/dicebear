@@ -1,14 +1,14 @@
 ---
-title: Access All Available Style Options Programmatically | DiceBear
+title: 以编程方式访问所有可用样式选项 | DiceBear
 description: >
-  Learn how to programmatically access all available options of a DiceBear
-  avatar style using the OptionsDescriptor class.
+  了解如何使用 OptionsDescriptor 类以编程方式访问 DiceBear
+  头像样式的所有可用选项。
 ---
 
-# How to programmatically access all available options of an avatar style?
+# 如何以编程方式访问头像样式的所有可用选项？
 
-Each avatar style has different options depending on its components and colors.
-The `OptionsDescriptor` class lets you discover all available options at runtime.
+每种头像样式都有不同的选项，具体取决于其组件和颜色。
+`OptionsDescriptor` 类可让你在运行时发现所有可用选项。
 
 ## JavaScript
 
@@ -38,12 +38,12 @@ $descriptor = new OptionsDescriptor($style);
 print_r($descriptor->toJSON());
 ```
 
-## Field descriptor types
+## 字段描述符类型
 
-The `toJSON()` method returns a map of option names to field descriptors. Each
-descriptor has a `type` and additional properties depending on the type:
+`toJSON()` 方法返回一个从选项名称到字段描述符的映射。每个
+描述符都有一个 `type`，以及根据类型不同而附加的属性：
 
-| Type      | Properties                        | Example option           |
+| 类型      | 属性                              | 示例选项                 |
 | --------- | --------------------------------- | ------------------------ |
 | `string`  | `list?`                           | `seed`, `fontFamily`     |
 | `number`  | `min?`, `max?`, `list?`           | `fontWeight`             |
@@ -52,6 +52,5 @@ descriptor has a `type` and additional properties depending on the type:
 | `color`   | `list?`                           | `*Color`                 |
 | `range`   | `min?`, `max?`                    | `rotate`, `borderRadius` |
 
-The `list` flag indicates the option accepts an array. The `weighted` flag
-(on enum fields) indicates the option accepts a `Record<string, number>` for
-weighted PRNG selection.
+`list` 标志表示该选项接受数组。`weighted` 标志
+（用于 enum 字段）表示该选项接受一个用于加权 PRNG 选择的 `Record<string, number>`。

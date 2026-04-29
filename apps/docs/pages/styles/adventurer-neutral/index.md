@@ -1,9 +1,8 @@
 ---
-title: Adventurer Neutral – Avatar Style | DiceBear
+title: Adventurer Neutral – 头像风格 | DiceBear
 description: >
-  Create Adventurer Neutral avatars with the DiceBear avatar library. Generate
-  unique profile pictures using our free avatar API or JavaScript avatar
-  library.
+  使用 DiceBear 头像库创建 Adventurer Neutral 头像。通过我们免费的头像 API 或 JavaScript 头像
+  库生成独特的个人资料图片。
 ---
 
 <script setup lang="ts">
@@ -16,22 +15,20 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Adventurer Neutral
 
-Adventurer Neutral is the gender-neutral variant of the Adventurer vector
-avatar style. It generates abstract, character-based customizable profile icons
-suitable for any audience.
+Adventurer Neutral 是 Adventurer 矢量头像风格的中性变体。它生成抽象的、基于角色的可自定义个人资料图标，适合任何受众。
 
 <StylePreview styleName="adventurer-neutral" />
 
 <StyleDescription styleName="adventurer-neutral" />
 
-## Usage
+## 用法
 
 <StyleUsage styleName="adventurer-neutral" />
 
-## Options
+## 选项
 
 <StyleOptions styleName="adventurer-neutral" />
 
-## Details
+## 详情
 
 <StyleInfo styleName="adventurer-neutral" />

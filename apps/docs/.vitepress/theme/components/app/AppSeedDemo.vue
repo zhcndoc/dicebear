@@ -81,19 +81,19 @@ const allStyleAvatars = computed(() =>
       <div class="app-seed-demo-header">
         <UiBadge variant="green">
           <Sparkles :size="16" />
-          Deterministic Avatars
+          确定性头像
         </UiBadge>
         <UiHeadline class="app-seed-demo-title">
-          Same Seed, Same Avatar.
-          <strong>Every Time.</strong>
+          相同种子，相同头像。
+          <strong>每一次都一致。</strong>
         </UiHeadline>
         <UiDescription class="app-seed-demo-subtitle">
-          Use any string as a seed — usernames, emails, IDs — and DiceBear generates the identical avatar consistently across all platforms.
+          任何字符串都可以作为种子，例如用户名、邮箱或 ID，DiceBear 都能在所有平台上稳定生成完全一致的头像。
         </UiDescription>
       </div>
 
       <div class="app-seed-demo-window-wrapper">
-        <UiWindow title="Seed Explorer">
+        <UiWindow title="种子演示器">
           <div class="app-seed-demo-body">
             <div class="app-seed-demo-left">
               <AppSeedDemoPreview
@@ -119,15 +119,16 @@ const allStyleAvatars = computed(() =>
           <a :href="currentStyleLink">{{ currentStyleDisplay }}</a>
           <template v-if="avatarStyleMeta?.creator !== 'DiceBear'">
             <template v-if="avatarStyleMeta?.license?.name !== 'MIT' && avatarStyleMeta?.title">
-              is a remix of
+              是以下作品的再创作：
             </template>
-            <template v-else> is based on </template>
+            <template v-else> 基于 </template>
             <a v-if="sourceUrl" :href="sourceUrl" target="_blank" rel="noopener noreferrer">{{ avatarStyleMeta?.title ?? 'Design' }}</a>
-            <template v-else>{{ avatarStyleMeta?.title ?? 'Design' }}</template>
+            <template v-else>{{ avatarStyleMeta?.title ?? '设计稿' }}</template>
           </template>
-          by
+          ，作者为
           <a v-if="homepageUrl" :href="homepageUrl" target="_blank" rel="noopener noreferrer">{{ avatarStyleMeta?.creator }}</a>
-          <template v-else>{{ avatarStyleMeta?.creator }}</template>, licensed under
+          <template v-else>{{ avatarStyleMeta?.creator }}</template>
+          ，许可证为
           <a v-if="licenseUrl" :href="licenseUrl" target="_blank" rel="noopener noreferrer">{{ formatLicenseName(avatarStyleMeta?.license?.name) }}</a>
           <template v-else>{{ formatLicenseName(avatarStyleMeta?.license?.name) }}</template>.
         </p>

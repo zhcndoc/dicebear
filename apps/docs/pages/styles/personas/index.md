@@ -1,8 +1,8 @@
 ---
-title: Personas – Avatar Style | DiceBear
+title: Personas – 头像风格 | DiceBear
 description: >
-  Create Personas avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  使用 DiceBear 头像库创建 Personas 头像。通过我们的免费头像 API 或 JavaScript 头像库生成独特的
+  个人资料图片。
 ---
 
 <script setup lang="ts">
@@ -15,22 +15,21 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Personas
 
-Personas is a modern illustrated vector avatar style with diverse, detailed
-character designs. Generate representative, customizable SVG profile icons that
-reflect a broad range of identities and appearances.
+Personas 是一种现代的插画风矢量头像风格，具有多样且细致的角色设计。生成具有代表性、可自定义的 SVG 个人资料图标，
+以反映广泛的身份与外貌特征。
 
 <StylePreview styleName="personas" />
 
 <StyleDescription styleName="personas" />
 
-## Usage
+## 用法
 
 <StyleUsage styleName="personas" />
 
-## Options
+## 选项
 
 <StyleOptions styleName="personas" />
 
-## Details
+## 详情
 
 <StyleInfo styleName="personas" />

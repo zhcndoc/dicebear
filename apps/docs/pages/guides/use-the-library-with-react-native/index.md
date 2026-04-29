@@ -1,24 +1,24 @@
 ---
-title: React Native Avatar Library – DiceBear
+title: React Native 头像库 – DiceBear
 description: >
-  Generate SVG user avatars in React Native using DiceBear. Integrate the
-  JavaScript avatar library or avatar API into your mobile app.
+  使用 DiceBear 在 React Native 中生成 SVG 用户头像。将
+  JavaScript 头像库或头像 API 集成到你的移动应用中。
 ---
 
-# React Native Avatar Library – Using DiceBear with React Native
+# React Native 头像库 – 在 React Native 中使用 DiceBear
 
-DiceBear can be used in React Native via the JavaScript library with an SVG
-renderer, or via the HTTP API's PNG format using the built-in `Image`
-component — no SVG library required for the API approach.
+DiceBear 可以通过带有 SVG
+渲染器的 JavaScript 库在 React Native 中使用，也可以通过内置的 `Image`
+组件使用 HTTP API 的 PNG 格式——对于 API 方式不需要 SVG 库。
 
-You can use DiceBear with [React Native](https://reactnative.dev/) either via
-the [JS-Library](/how-to-use/js-library/) or the
-[HTTP-API](/how-to-use/http-api/).
+你可以通过 [React Native](https://reactnative.dev/) 使用 DiceBear，方式可以是
+[JS-Library](/how-to-use/js-library/) 或
+[HTTP-API](/how-to-use/http-api/)。
 
-## With the JS library
+## 使用 JS 库
 
-You need an SVG library to render the avatars. In our example we use the package
-[react-native-svg](https://www.npmjs.com/package/react-native-svg).
+你需要一个 SVG 库来渲染头像。在我们的示例中，我们使用包
+[react-native-svg](https://www.npmjs.com/package/react-native-svg)。
 
 ```
 npm install react-native-svg
@@ -36,7 +36,7 @@ export default function UserAvatar({ seed = 'John Doe' }) {
     return new Avatar(lorelei, {
       seed,
       size: 128,
-      // ... other options
+      // ... 其他选项
     }).toString();
   }, [seed]);
 
@@ -48,10 +48,10 @@ export default function UserAvatar({ seed = 'John Doe' }) {
 }
 ```
 
-## With the HTTP API
+## 使用 HTTP API
 
-With the HTTP API you can use the PNG format and the built-in `Image` component
-without any additional dependencies.
+使用 HTTP API 时，你可以使用 PNG 格式和内置的 `Image` 组件，
+而无需任何额外依赖。
 
 ```jsx
 import { useMemo } from 'react';
@@ -62,7 +62,7 @@ export default function Avatar({ seed = 'John Doe' }) {
     const url = new URL('https://api.dicebear.com/10.x/lorelei/png');
     url.searchParams.set('seed', seed);
     url.searchParams.set('size', '128');
-    // ... other options
+    // ... 其他选项
     return url.href;
   }, [seed]);
 

@@ -11,13 +11,13 @@ import AppCTA from '../app/AppCTA.vue';
 </script>
 
 <template>
-  <AppSmallHero>
+  <AppSmallHero badge="特性">
     <template #aside>
       <AppHeroAsideUserList />
     </template>
   </AppSmallHero>
-  <AppHighlights badge="Features">
-    <template #headline>Everything You <strong>Need</strong></template>
+  <AppHighlights badge="特性">
+    <template #headline>你需要的<strong>一切</strong></template>
   </AppHighlights>
   <AppIntegration />
   <AppFrameworks />

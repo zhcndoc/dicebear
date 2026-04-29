@@ -1,17 +1,16 @@
 ---
-title: Converter – Convert SVG Avatars to PNG, JPEG & More | DiceBear
+title: Converter – 将 SVG 头像转换为 PNG、JPEG 等格式 | DiceBear
 description: >
-  Learn how to use the DiceBear Converter library in your project to convert SVG
-  to PNG or JPEG. Works in the browser and in Node.js!
+  了解如何在你的项目中使用 DiceBear Converter 库，将 SVG
+  转换为 PNG 或 JPEG。可在浏览器和 Node.js 中使用！
 ---
 
 # Converter
 
-Sometimes you need the avatar in a different format than SVG. For this we have
-created a package called `@dicebear/converter` which can convert the avatar to
-PNG, JPEG, WebP, and AVIF.
+有时你需要的头像格式不是 SVG。为此我们创建了一个名为 `@dicebear/converter` 的包，它可以将头像转换为
+PNG、JPEG、WebP 和 AVIF。
 
-## Installation
+## 安装
 
 ```
 npm install @dicebear/converter
@@ -19,16 +18,14 @@ npm install @dicebear/converter
 
 ::: tip
 
-You don't need to install the core library `@dicebear/core` to use the converter
-package. While it is optimized for DiceBear, it can also be used with SVGs from
-other sources.
+使用转换器包时，你不需要安装核心库 `@dicebear/core`。虽然它是为 DiceBear 优化的，但也可以与来自
+其他来源的 SVG 一起使用。
 
 :::
 
-## Usage
+## 用法
 
-Although the converter can be used without the core library, we use it in our
-example to create the avatar.
+虽然转换器可以在不依赖核心库的情况下使用，但在我们的示例中，我们使用它来创建头像。
 
 ```js
 import { toPng } from '@dicebear/converter';
@@ -37,35 +34,35 @@ import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
 const avatar = new Avatar(lorelei, {
   seed: 'John Doe',
-  // ... other options
+  // ... 其他选项
 });
 
 const png = toPng(avatar);
 const dataUri = await png.toDataUri();
 ```
 
-## Supported formats
+## 支持的格式
 
-| Format | Function | Browser | Node.js | Notes                                 |
-| ------ | -------- | ------- | ------- | ------------------------------------- |
-| PNG    | `toPng`  | Yes     | Yes     | Full support                          |
-| JPEG   | `toJpeg` | Yes     | Yes     | Full support                          |
-| WebP   | `toWebp` | Yes\*   | Yes     | Unsupported browsers fall back to PNG |
-| AVIF   | `toAvif` | Yes\*   | Yes     | Unsupported browsers fall back to PNG |
+| 格式   | 函数      | 浏览器 | Node.js | 说明                                 |
+| ------ | --------- | ------ | ------- | ------------------------------------ |
+| PNG    | `toPng`   | 是     | 是      | 完全支持                             |
+| JPEG   | `toJpeg`  | 是     | 是      | 完全支持                             |
+| WebP   | `toWebp`  | 是\*   | 是      | 不支持的浏览器会回退到 PNG           |
+| AVIF   | `toAvif`  | 是\*   | 是      | 不支持的浏览器会回退到 PNG           |
 
-\* WebP is supported in all modern browsers. AVIF support varies - check
-[caniuse.com](https://caniuse.com/avif) for current browser compatibility.
+\* WebP 在所有现代浏览器中都受支持。AVIF 支持因浏览器而异 - 请查看
+[caniuse.com](https://caniuse.com/avif) 了解当前浏览器兼容性。
 
-## Methods
+## 方法
 
 ### `toPng(svg, options)`
 
-**Return type:** Object with [.toDataUri()](#todatauri) and
-[.toArrayBuffer()](#toarraybuffer) methods.
+**返回类型：** 包含 [.toDataUri()](#todatauri) 和
+[.toArrayBuffer()](#toarraybuffer) 方法的对象。
 
-Converts the avatar from SVG to PNG. Expects an SVG `string` or an `object` with
-`toString` method as first argument. Expects an optional `options` argument of
-type `object`. See [options](#options) for more information.
+将头像从 SVG 转换为 PNG。第一个参数期望传入 SVG `string` 或带有
+`toString` 方法的 `object`。还可选择性地传入类型为 `object` 的 `options` 参数。更多信息请参见
+[选项](#options)。
 
 <!-- prettier-ignore -->
 ```js
@@ -74,18 +71,18 @@ import { toPng } from '@dicebear/converter';
 const svg = '<svg>...</svg>';
 
 const png = toPng(svg, {
-  // ... options
+  // ... 选项
 });
 ```
 
 ### `toJpeg(svg, options)`
 
-**Return type:** Object with [.toDataUri()](#todatauri) and
-[.toArrayBuffer()](#toarraybuffer) methods.
+**返回类型：** 包含 [.toDataUri()](#todatauri) 和
+[.toArrayBuffer()](#toarraybuffer) 方法的对象。
 
-Converts the avatar from SVG to JPEG. Expects an SVG `string` or an `object`
-with `toString` method as first argument. Expects an optional `options` argument
-of type `object`. See [options](#options) for more information.
+将头像从 SVG 转换为 JPEG。第一个参数期望传入 SVG `string` 或带有
+`toString` 方法的 `object`。还可选择性地传入类型为 `object` 的 `options` 参数。更多信息请参见
+[选项](#options)。
 
 <!-- prettier-ignore -->
 ```js
@@ -94,18 +91,18 @@ import { toJpeg } from '@dicebear/converter';
 const svg = '<svg>...</svg>';
 
 const jpeg = toJpeg(svg, {
-  // ... options
+  // ... 选项
 });
 ```
 
 ### `toWebp(svg, options)`
 
-**Return type:** Object with [.toDataUri()](#todatauri) and
-[.toArrayBuffer()](#toarraybuffer) methods.
+**返回类型：** 包含 [.toDataUri()](#todatauri) 和
+[.toArrayBuffer()](#toarraybuffer) 方法的对象。
 
-Converts the avatar from SVG to WebP. Expects an SVG `string` or an `object`
-with `toString` method as first argument. Expects an optional `options` argument
-of type `object`. See [options](#options) for more information.
+将头像从 SVG 转换为 WebP。第一个参数期望传入 SVG `string` 或带有
+`toString` 方法的 `object`。还可选择性地传入类型为 `object` 的 `options` 参数。更多信息请参见
+[选项](#options)。
 
 <!-- prettier-ignore -->
 ```js
@@ -114,28 +111,26 @@ import { toWebp } from '@dicebear/converter';
 const svg = '<svg>...</svg>';
 
 const webp = toWebp(svg, {
-  // ... options
+  // ... 选项
 });
 ```
 
-::: warning Limited browser support
+::: warning 浏览器支持有限
 
-This function uses an HTML canvas element in the browser and is dependent on the
-browser being able to export the canvas as WebP. If the browser does not support
-WebP, PNG is used as a fallback. See
-[MDN web docs](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob)
-for browser compatibility.
+此函数在浏览器中使用 HTML canvas 元素，并依赖浏览器能够将 canvas 导出为 WebP。如果浏览器不支持
+WebP，则会回退使用 PNG。有关浏览器兼容性，请参见
+[MDN web docs](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob)。
 
 :::
 
 ### `toAvif(svg, options)`
 
-**Return type:** Object with [.toDataUri()](#todatauri) and
-[.toArrayBuffer()](#toarraybuffer) methods.
+**返回类型：** 包含 [.toDataUri()](#todatauri) 和
+[.toArrayBuffer()](#toarraybuffer) 方法的对象。
 
-Converts the avatar from SVG to AVIF. Expects an SVG `string` or an `object`
-with `toString` method as first argument. Expects an optional `options` argument
-of type `object`. See [options](#options) for more information.
+将头像从 SVG 转换为 AVIF。第一个参数期望传入 SVG `string` 或带有
+`toString` 方法的 `object`。还可选择性地传入类型为 `object` 的 `options` 参数。更多信息请参见
+[选项](#options)。
 
 <!-- prettier-ignore -->
 ```js
@@ -144,27 +139,24 @@ import { toAvif } from '@dicebear/converter';
 const svg = '<svg>...</svg>';
 
 const avif = toAvif(svg, {
-  // ... options
+  // ... 选项
 });
 ```
 
-::: warning Limited browser support
+::: warning 浏览器支持有限
 
-This function uses an HTML canvas element in the browser and is dependent on the
-browser being able to export the canvas as AVIF. If the browser does not support
-AVIF, PNG is used as a fallback. See
-[MDN web docs](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob)
-for browser compatibility.
+此函数在浏览器中使用 HTML canvas 元素，并依赖浏览器能够将 canvas 导出为 AVIF。如果浏览器不支持
+AVIF，则会回退使用 PNG。有关浏览器兼容性，请参见
+[MDN web docs](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob)。
 
 :::
 
 ### `.toDataUri()`
 
-**Return type:** `Promise<string>`
+**返回类型：** `Promise<string>`
 
-Returns the image as a
-[data URI](https://en.wikipedia.org/wiki/Data_URI_scheme). This is useful for
-embedding the image directly in HTML or CSS.
+返回图片的
+[data URI](https://en.wikipedia.org/wiki/Data_URI_scheme)。这对于直接在 HTML 或 CSS 中嵌入图片很有用。
 
 ```js
 import { toPng } from '@dicebear/converter';
@@ -172,20 +164,20 @@ import { toPng } from '@dicebear/converter';
 const svg = '<svg>...</svg>';
 
 const png = toPng(svg, {
-  // ... options
+  // ... 选项
 });
 const dataUri = await png.toDataUri(); // [!code focus]
 
-// Use in HTML: <img src={dataUri} alt="Avatar" />
+// 在 HTML 中使用：<img src={dataUri} alt="Avatar" />
 ```
 
 ### `.toArrayBuffer()`
 
-**Return type:** `Promise<ArrayBuffer>`
+**返回类型：** `Promise<ArrayBuffer>`
 
-Converts the image to an
-[ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer).
-This is useful for saving files or sending binary data.
+将图片转换为
+[ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer)。
+这对于保存文件或发送二进制数据很有用。
 
 ```js
 import { toPng } from '@dicebear/converter';
@@ -193,30 +185,29 @@ import { toPng } from '@dicebear/converter';
 const svg = '<svg>...</svg>';
 
 const png = toPng(svg, {
-  // ... options
+  // ... 选项
 });
 const buffer = await png.toArrayBuffer(); // [!code focus]
 ```
 
-## Options 
+## 选项 
 
-| Option        | Type       | Default | Environment       | Description                               |
-| ------------- | ---------- | ------- | ----------------- | ----------------------------------------- |
-| `size`        | `number`   | `512`   | Browser + Node.js | Output image size in pixels (max: `2048`) |
-| `fonts`       | `string[]` | `[]`    | Node.js           | Paths to custom font files                |
-| `includeExif` | `boolean`  | `false` | Node.js           | Include metadata in output image          |
+| 选项          | 类型       | 默认值   | 环境              | 描述                                  |
+| ------------- | ---------- | ------- | ----------------- | ------------------------------------- |
+| `size`        | `number`   | `512`   | Browser + Node.js | 输出图像尺寸（像素）（最大：`2048`）  |
+| `fonts`       | `string[]` | `[]`    | Node.js           | 自定义字体文件路径                    |
+| `includeExif` | `boolean`  | `false` | Node.js           | 在输出图像中包含元数据                |
 
 ### size
 
-**Type:** `number`
+**类型：** `number`
 
-**Default:** `512`
+**默认值：** `512`
 
-**Maximum:** `2048`
+**最大值：** `2048`
 
-Controls the width and height of the rasterized output image in pixels. The
-output is always square. Values above `2048` are clamped to `2048`. Invalid
-values (`NaN`, `<= 0`, `Infinity`) fall back to `512`.
+控制光栅化输出图像的宽度和高度，单位为像素。输出始终是正方形。高于 `2048` 的值会被限制为 `2048`。无效值
+（`NaN`、`<= 0`、`Infinity`）会回退到 `512`。
 
 
 ```js
@@ -227,15 +218,14 @@ const png = toPng(svg, {
 });
 ```
 
-### fonts <Badge type="warning" text="Node.js only" />
+### fonts <Badge type="warning" text="仅 Node.js" />
 
-**Type:** `string[]`
+**类型：** `string[]`
 
-**Default:** `[]`
+**默认值：** `[]`
 
-An array of paths to font files which should be used to render the avatar. If
-not set, the system fonts will be used. This is particularly useful for the
-[initials](/styles/initials/) style or other styles that render text.
+一个字体文件路径数组，这些字体将用于渲染头像。如果未设置，将使用系统字体。这对于
+[initials](/styles/initials/) 样式或其他渲染文本的样式尤其有用。
 
 ```js
 import { toPng } from '@dicebear/converter';
@@ -245,23 +235,22 @@ const png = toPng(svg, {
 });
 ```
 
-### includeExif <Badge type="warning" text="Node.js only" />
+### includeExif <Badge type="warning" text="仅 Node.js" />
 
-**Type:** `boolean`
+**类型：** `boolean`
 
-**Default:** `false`
+**默认值：** `false`
 
-If set to `true`, the converter will try to read the metadata from the SVG and
-add it to the output image as Exif metadata. This is useful for preserving
-license and attribution information.
+如果设置为 `true`，转换器会尝试从 SVG 中读取元数据，并将其作为 Exif 元数据添加到输出图像中。这对于保留
+许可和署名信息很有用。
 
-The following metadata is extracted and embedded:
+会提取并嵌入以下元数据：
 
-- **Title** - Avatar style title
-- **Source** - Source URL
-- **Creator** - Artist/creator name
-- **License** - License information
-- **Copyright** - Copyright notice
+- **标题** - 头像样式标题
+- **来源** - 源 URL
+- **创建者** - 艺术家/创建者名称
+- **许可证** - 许可证信息
+- **版权** - 版权声明
 
 ```js
 import { toPng } from '@dicebear/converter';
@@ -273,23 +262,21 @@ const png = toPng(svg, {
 
 ::: warning
 
-This uses an `exiftool` singleton which needs to be exited manually when your
-application terminates. See the
-[exiftool-vendored documentation](https://www.npmjs.com/package/exiftool-vendored)
-for more information.
+这使用了一个 `exiftool` 单例，需要在应用程序终止时手动退出。更多信息请参见
+[exiftool-vendored documentation](https://www.npmjs.com/package/exiftool-vendored)。
 
 ```js
 import { exiftool } from 'exiftool-vendored';
 
-// When your application exits:
+// 当你的应用程序退出时：
 await exiftool.end();
 ```
 
 :::
 
-## Examples
+## 示例
 
-### Convert DiceBear avatar to PNG
+### 将 DiceBear 头像转换为 PNG
 
 ```js
 import { Avatar } from '@dicebear/core';
@@ -304,11 +291,11 @@ const avatar = new Avatar(lorelei, {
 const png = toPng(avatar);
 const dataUri = await png.toDataUri();
 
-// Use in browser
+// 在浏览器中使用
 document.querySelector('img').src = dataUri;
 ```
 
-### Save avatar to file (Node.js)
+### 将头像保存到文件（Node.js）
 
 ```js
 import { Avatar } from '@dicebear/core';
@@ -326,7 +313,7 @@ const buffer = await png.toArrayBuffer();
 await writeFile('avatar.png', Buffer.from(buffer));
 ```
 
-### Convert with Exif metadata (Node.js)
+### 使用 Exif 元数据进行转换（Node.js）
 
 ```js
 import { Avatar } from '@dicebear/core';
@@ -346,11 +333,11 @@ const png = toPng(avatar, {
 const buffer = await png.toArrayBuffer();
 await writeFile('avatar.png', Buffer.from(buffer));
 
-// Important: Close exiftool when done
+// 重要：完成后关闭 exiftool
 await exiftool.end();
 ```
 
-### Use with custom fonts (Node.js)
+### 使用自定义字体（Node.js）
 
 ```js
 import { Avatar } from '@dicebear/core';
@@ -368,7 +355,7 @@ const png = toPng(avatar, {
 const dataUri = await png.toDataUri();
 ```
 
-### Convert with a custom size
+### 使用自定义尺寸进行转换
 
 ```js
 import { Avatar } from '@dicebear/core';
@@ -381,7 +368,7 @@ const png = toPng(avatar, { size: 128 });
 const dataUri = await png.toDataUri();
 ```
 
-### Convert any SVG (without DiceBear)
+### 转换任意 SVG（不使用 DiceBear）
 
 ```js
 import { toPng } from '@dicebear/converter';
@@ -398,7 +385,7 @@ const dataUri = await png.toDataUri();
 
 ## TypeScript
 
-The library is fully typed:
+该库具有完整的类型支持：
 
 ```ts
 import { toPng, toJpeg, toWebp, toAvif } from '@dicebear/converter';

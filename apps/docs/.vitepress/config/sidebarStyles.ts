@@ -4,7 +4,7 @@ import avatarStyles from './avatarStyles';
 
 const sidebar: DefaultTheme.SidebarItem[] = [
   {
-    text: 'Styles',
+    text: '头像风格',
     items: Object.keys(avatarStyles)
       .sort((a, b) => a.localeCompare(b))
       .map((styleName) => ({

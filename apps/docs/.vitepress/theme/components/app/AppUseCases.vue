@@ -10,48 +10,48 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
 const useCases = [
   {
     icon: CircleUser,
-    title: 'User Profiles',
-    description: 'Give every user a unique avatar from day one. No upload needed.',
+    title: '用户资料',
+    description: '从第一天起就为每个用户提供独一无二的头像，无需上传。',
     color: '#6366f1',
     avatars: ['alex', 'jamie', 'taylor'],
     style: 'avataaars',
   },
   {
     icon: MessageCircle,
-    title: 'Chat Applications',
-    description: 'Instantly recognizable participants in conversations.',
+    title: '聊天应用',
+    description: '让对话中的参与者一眼可识别。',
     color: '#22c55e',
     avatars: ['chat1', 'chat2', 'chat3'],
     style: 'thumbs',
   },
   {
     icon: Gamepad2,
-    title: 'Gaming',
-    description: 'Generate unique player identities and NPC characters.',
+    title: '游戏',
+    description: '生成独特的玩家身份和 NPC 角色。',
     color: '#f59e0b',
     avatars: ['player1', 'player2', 'player3'],
     style: 'bottts',
   },
   {
     icon: MessagesSquare,
-    title: 'Forums & Communities',
-    description: 'Distinct identities that help build community trust.',
+    title: '论坛与社区',
+    description: '通过鲜明身份帮助建立社区信任。',
     color: '#ec4899',
     avatars: ['user1', 'user2', 'user3'],
     style: 'lorelei',
   },
   {
     icon: Users,
-    title: 'Team Tools',
-    description: 'Visual distinction for team members in collaborative apps.',
+    title: '团队工具',
+    description: '在协作应用中，让团队成员在视觉上更易区分。',
     color: '#14b8a6',
     avatars: ['team1', 'team2', 'team3'],
     style: 'notionists',
   },
   {
     icon: Mountain,
-    title: 'Placeholder Images',
-    description: 'Beautiful user placeholder images as default profile pictures while users set up their profiles.',
+    title: '占位图片',
+    description: '在用户设置资料之前，用精美的默认头像作为占位图。',
     color: '#8b5cf6',
     avatars: ['default1', 'default2', 'default3'],
     style: 'shapes',
@@ -68,10 +68,10 @@ const useCases = [
     <UiContainer>
       <UiSectionHeader
         class="app-use-cases-header"
-        badge="Use Cases"
-        description="From startups to enterprises, DiceBear powers random user avatars across all kinds of products."
+        badge="使用场景"
+        description="从初创公司到大型企业，DiceBear 为各种产品提供随机用户头像。"
       >
-        <template #headline>Built for <strong>Every</strong> Application</template>
+        <template #headline>为<strong>每一个</strong>应用而生</template>
       </UiSectionHeader>
 
       <div class="app-use-cases-grid">

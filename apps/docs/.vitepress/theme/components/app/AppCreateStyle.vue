@@ -9,16 +9,16 @@ const isVisible = useVisibility(sectionRef);
 
 const steps = [
   {
-    title: 'Design in Figma',
-    description: 'Create your avatar components visually. Group colors and parts using our simple naming conventions.',
+    title: '在 Figma 中设计',
+    description: '通过可视化方式创建头像组件，并用简单命名约定组织颜色与部件。',
   },
   {
-    title: 'Export with Plugin',
-    description: 'Use the DiceBear Figma plugin to configure options and export your style as a ready-to-use package.',
+    title: '使用插件导出',
+    description: '使用 DiceBear Figma 插件配置选项，并将风格导出为可直接使用的包。',
   },
   {
-    title: 'Build & Use',
-    description: 'Run npm install and npm run build. Your custom style is ready to generate avatars.',
+    title: '构建并使用',
+    description: '运行 npm install 和 npm run build，你的自定义风格就可以开始生成头像。',
   },
 ];
 </script>
@@ -32,11 +32,11 @@ const steps = [
 
     <UiContainer class="app-create-style-container">
       <UiSectionHeader
-        badge="For Artists"
+        badge="适合创作者"
         badge-variant="green"
-        description="Design your avatar style visually in Figma. Our plugin handles the technical export – no coding required."
+        description="在 Figma 中可视化设计头像风格，导出细节由插件处理，无需编写代码。"
       >
-        <template #headline>Create Your Own Style<br /><strong>with Figma</strong></template>
+        <template #headline>用 Figma 创建<br /><strong>属于你的风格</strong></template>
       </UiSectionHeader>
 
       <div class="app-create-style-grid">
@@ -60,11 +60,11 @@ const steps = [
 
           <div class="app-create-style-actions">
             <UiButton href="/guides/create-an-avatar-style-with-figma/">
-              Read the Figma Guide
+              阅读 Figma 指南
               <ArrowRight :size="20" />
             </UiButton>
             <UiButton href="https://www.figma.com/community/plugin/1005765655729342787" variant="secondary" target="_blank">
-              Get the Plugin
+              获取插件
               <ArrowRight :size="20" />
             </UiButton>
           </div>
@@ -76,35 +76,35 @@ const steps = [
               <div class="app-create-style-figma-layers">
                 <div class="app-create-style-layer-group">
                   <span class="app-create-style-layer-icon app-create-style-layer-icon-folder"></span>
-                  <span>face</span>
+                  <span>脸部</span>
                 </div>
                 <div class="app-create-style-layer-item">
                   <span class="app-create-style-layer-icon app-create-style-layer-icon-component"></span>
-                  <span>face/round</span>
+                  <span>脸部/圆形</span>
                 </div>
                 <div class="app-create-style-layer-item">
                   <span class="app-create-style-layer-icon app-create-style-layer-icon-component"></span>
-                  <span>face/oval</span>
+                  <span>脸部/椭圆</span>
                 </div>
                 <div class="app-create-style-layer-group">
                   <span class="app-create-style-layer-icon app-create-style-layer-icon-folder"></span>
-                  <span>eyes</span>
+                  <span>眼睛</span>
                 </div>
                 <div class="app-create-style-layer-item">
                   <span class="app-create-style-layer-icon app-create-style-layer-icon-component"></span>
-                  <span>eyes/happy</span>
+                  <span>眼睛/开心</span>
                 </div>
                 <div class="app-create-style-layer-item active">
                   <span class="app-create-style-layer-icon app-create-style-layer-icon-component"></span>
-                  <span>eyes/wink</span>
+                  <span>眼睛/眨眼</span>
                 </div>
                 <div class="app-create-style-layer-group">
                   <span class="app-create-style-layer-icon app-create-style-layer-icon-folder"></span>
-                  <span>mouth</span>
+                  <span>嘴巴</span>
                 </div>
                 <div class="app-create-style-layer-item">
                   <span class="app-create-style-layer-icon app-create-style-layer-icon-component"></span>
-                  <span>mouth/smile</span>
+                  <span>嘴巴/微笑</span>
                 </div>
               </div>
             </div>

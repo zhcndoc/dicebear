@@ -1,8 +1,8 @@
 ---
-title: Rings – Avatar Style | DiceBear
+title: Rings – 头像风格 | DiceBear
 description: >
-  Create Rings avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  使用 DiceBear 头像库创建 Rings 头像。使用我们的免费头像 API 或 JavaScript 头像库生成独特的
+  个人资料图片。
 ---
 
 <script setup lang="ts">
@@ -15,22 +15,22 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Rings
 
-Rings is a geometric abstract vector avatar style featuring interlocking ring
-patterns. Generate unique, algorithmic customizable profile icons with a clean,
-modern design suitable for any application.
+Rings 是一种几何抽象矢量头像风格，具有相互交织的环形
+图案。生成独特的、算法驱动且可自定义的个人资料图标，采用简洁、
+现代的设计，适用于任何应用程序。
 
 <StylePreview styleName="rings" />
 
 <StyleDescription styleName="rings" />
 
-## Usage
+## 用法
 
 <StyleUsage styleName="rings" />
 
-## Options
+## 选项
 
 <StyleOptions styleName="rings" />
 
-## Details
+## 详情
 
 <StyleInfo styleName="rings" />

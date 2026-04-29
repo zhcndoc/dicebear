@@ -1,20 +1,16 @@
 ---
-title: Contribute to the Documentation | DiceBear
+title: 贡献文档 | DiceBear
 description: >
-  Pointer to the contribution guide for the DiceBear documentation site
-  at dicebear.com.
+  指向 DiceBear 文档站点
+  在 dicebear.com 上的贡献指南。
 ---
 
-# Contribute to the documentation
+# 贡献文档
 
-This documentation site is a [VitePress](https://vitepress.vuejs.org/)
-app under `apps/docs/` in the main
-[`dicebear/dicebear`](https://github.com/dicebear/dicebear) monorepo.
-Every page has an "Edit this page on GitHub" link at the bottom that
-opens the corresponding source file.
+这个文档站点是主 [`dicebear/dicebear`](https://github.com/dicebear/dicebear) monorepo 中 `apps/docs/` 下的一个 [VitePress](https://vitepress.vuejs.org/) 应用。
+每个页面底部都有一个“在 GitHub 上编辑此页面”的链接，
+点击后会打开对应的源文件。
 
-Setup and workflow instructions live in the monorepo's contribution
-guide:
+设置和工作流程说明位于 monorepo 的贡献指南中：
 
-- [Documentation changes section](https://github.com/dicebear/dicebear/blob/10.x/CONTRIBUTING.md#documentation-changes-appsdocs)
-  in `dicebear/dicebear/CONTRIBUTING.md`
+- [`dicebear/dicebear/CONTRIBUTING.md` 中的文档更改部分](https://github.com/dicebear/dicebear/blob/10.x/CONTRIBUTING.md#documentation-changes-appsdocs)

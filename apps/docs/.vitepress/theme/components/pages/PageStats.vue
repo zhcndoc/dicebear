@@ -28,7 +28,7 @@ function aggregateDaily(data: Record<string, number>): {
     labels: entries.map(([k]) => {
       const d = new Date(k);
 
-      return d.toLocaleDateString('en', { month: 'short', day: 'numeric' });
+      return d.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
     }),
     values: entries.map(([, v]) => v),
   };
@@ -74,7 +74,7 @@ function averageWeekly(
 
   const firstDate = new Date(keys[0]);
   const lastDate = new Date(keys[keys.length - 1]);
-  const fmt = (d: Date) => d.toLocaleDateString('en', { month: 'short', day: 'numeric' });
+  const fmt = (d: Date) => d.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
   const label = keys.length === 1 ? fmt(firstDate) : `${fmt(firstDate)} – ${fmt(lastDate)}`;
 
   return { data: averaged, label };
@@ -150,28 +150,28 @@ const monthlyStats = computed(() => {
 </script>
 
 <template>
-  <AppSmallHero badge="Statistics">
-    <template #headline>Billions of Avatars.<br><strong>One API.</strong></template>
-    <template #description>Every avatar generated through our HTTP-API is tracked anonymously. This page gives you a transparent look at real usage data — updated daily, broken down by requests, traffic, styles, and more.</template>
+  <AppSmallHero badge="统计">
+    <template #headline>数十亿头像。<br><strong>一个 API。</strong></template>
+    <template #description>通过我们的 HTTP API 生成的每个头像都会匿名记录。这一页展示真实使用数据，按请求、流量、风格等维度每日更新。</template>
     <template #actions><!-- no actions --></template>
     <template #below-actions>
       <div v-if="monthlyStats" class="page-stats-hero-kpis">
         <p class="page-stats-hero-kpis-label">
-          Statistics from {{ monthlyStats.label }}
+          {{ monthlyStats.label }} 的统计数据
         </p>
         <div class="page-stats-hero-kpis-row">
           <div class="page-stats-hero-kpi">
             <span class="page-stats-hero-kpi-value">{{
               monthlyStats.requests
             }}</span>
-            <span class="page-stats-hero-kpi-label">API Requests</span>
+            <span class="page-stats-hero-kpi-label">API 请求</span>
           </div>
           <div class="page-stats-hero-kpi-divider"></div>
           <div v-if="monthlyStats.traffic" class="page-stats-hero-kpi">
             <span class="page-stats-hero-kpi-value">{{
               monthlyStats.traffic
             }}</span>
-            <span class="page-stats-hero-kpi-label">Data Served</span>
+            <span class="page-stats-hero-kpi-label">数据传输</span>
           </div>
           <div
             v-if="monthlyStats.downloads"
@@ -181,7 +181,7 @@ const monthlyStats = computed(() => {
             <span class="page-stats-hero-kpi-value">{{
               monthlyStats.downloads
             }}</span>
-            <span class="page-stats-hero-kpi-label">npm Downloads</span>
+            <span class="page-stats-hero-kpi-label">npm 下载量</span>
           </div>
         </div>
       </div>
@@ -196,10 +196,10 @@ const monthlyStats = computed(() => {
   <UiSection divider>
     <UiContainer>
       <UiSectionHeader
-        badge="Daily Trends"
-        description="Daily request and download volumes — toggle between the HTTP API and npm packages."
+        badge="每日趋势"
+        description="每日请求和下载量，可在 HTTP API 与 npm 包之间切换。"
       >
-        <template #headline>Usage Over <strong>Time</strong></template>
+        <template #headline>随<strong>时间</strong>变化的使用情况</template>
       </UiSectionHeader>
 
       <div class="page-stats-tabs">
@@ -207,13 +207,13 @@ const monthlyStats = computed(() => {
           :class="{ active: activeTab === 'api' }"
           @click="activeTab = 'api'"
         >
-          HTTP API
+          HTTP 接口
         </button>
         <button
           :class="{ active: activeTab === 'npm' }"
           @click="activeTab = 'npm'"
         >
-          npm
+          npm 包
         </button>
       </div>
 
@@ -222,7 +222,7 @@ const monthlyStats = computed(() => {
           v-if="requestsData && activeTab === 'api'"
           class="page-stats-chart-card"
         >
-          <h3 class="page-stats-chart-title">API Requests</h3>
+          <h3 class="page-stats-chart-title">API 请求</h3>
           <AppStatsChart
             :labels="requestsData.labels"
             :values="requestsData.values"
@@ -235,7 +235,7 @@ const monthlyStats = computed(() => {
           v-if="downloadsData && activeTab === 'npm'"
           class="page-stats-chart-card"
         >
-          <h3 class="page-stats-chart-title">Package Downloads</h3>
+          <h3 class="page-stats-chart-title">包下载量</h3>
           <AppStatsChart
             :labels="downloadsData.labels"
             :values="downloadsData.values"
@@ -250,16 +250,16 @@ const monthlyStats = computed(() => {
   <UiSection divider>
     <UiContainer>
       <UiSectionHeader
-        badge="Breakdown"
-        description="Based on API request data — which styles, versions, and output formats are used most."
+        badge="细分数据"
+        description="基于 API 请求数据，展示最常用的风格、版本和输出格式。"
       >
-        <template #headline>Usage <strong>Details</strong></template>
+        <template #headline>使用<strong>明细</strong></template>
       </UiSectionHeader>
 
       <ClientOnly>
         <UiCard v-if="stylesData" class="page-stats-styles-card">
           <h3 class="page-stats-chart-title">
-            Popular Styles
+            热门风格
             <span class="page-stats-chart-subtitle">{{
               stylesData.label
             }}</span>
@@ -273,14 +273,14 @@ const monthlyStats = computed(() => {
             class="page-stats-show-all"
             @click="showAllStyles = !showAllStyles"
           >
-            {{ showAllStyles ? 'Show Top 10' : 'Show All' }}
+            {{ showAllStyles ? '仅看前 10 项' : '查看全部' }}
           </button>
         </UiCard>
 
         <div class="page-stats-pies">
           <UiCard v-if="versionsData" class="page-stats-pie-card">
             <h3 class="page-stats-chart-title">
-              API Versions
+              API 版本
               <span class="page-stats-chart-subtitle">{{
                 versionsData.label
               }}</span>
@@ -290,7 +290,7 @@ const monthlyStats = computed(() => {
 
           <UiCard v-if="formatsData" class="page-stats-pie-card">
             <h3 class="page-stats-chart-title">
-              Output Formats
+              输出格式
               <span class="page-stats-chart-subtitle">{{
                 formatsData.label
               }}</span>

@@ -2,27 +2,27 @@ import { DefaultTheme } from 'vitepress';
 
 const sidebar: DefaultTheme.SidebarItem[] = [
   {
-    text: 'Introduction',
-    items: [{ text: 'What is DiceBear?', link: '/introduction/' }],
+    text: '介绍',
+    items: [{ text: '什么是 DiceBear？', link: '/introduction/' }],
   },
   {
-    text: 'How to use',
+    text: '使用方式',
     items: [
       {
-        text: 'JS Library',
+        text: 'JS 库',
         link: '/how-to-use/js-library/',
         items: [
-          { text: 'Core', link: '/how-to-use/js-library/' },
-          { text: 'Converter', link: '/how-to-use/js-library/converter/' },
+          { text: '核心', link: '/how-to-use/js-library/' },
+          { text: '转换器', link: '/how-to-use/js-library/converter/' },
         ],
       },
-      { text: 'PHP Library', link: '/how-to-use/php-library/' },
-      { text: 'HTTP-API', link: '/how-to-use/http-api/' },
+      { text: 'PHP 库', link: '/how-to-use/php-library/' },
+      { text: 'HTTP API', link: '/how-to-use/http-api/' },
       { text: 'CLI', link: '/how-to-use/cli/' },
     ],
   },
   {
-    text: 'Frameworks',
+    text: '框架',
     items: [
       {
         text: 'Angular',
@@ -47,70 +47,70 @@ const sidebar: DefaultTheme.SidebarItem[] = [
     ],
   },
   {
-    text: 'Custom Styles',
+    text: '自定义风格',
     items: [
       {
-        text: 'With Figma',
+        text: '使用 Figma',
         link: '/guides/create-an-avatar-style-with-figma/',
       },
       {
-        text: 'From Scratch',
+        text: '从零开始',
         link: '/guides/create-an-avatar-style-from-scratch/',
       },
     ],
   },
   {
-    text: 'Specification',
+    text: '规范',
     items: [
       {
-        text: 'Definition Schema',
+        text: '定义模式',
         link: '/specification/definition-schema/',
       },
       {
-        text: 'Implement DiceBear Core',
+        text: '实现 DiceBear Core',
         link: '/specification/implement-dicebear-core/',
       },
     ],
   },
   {
-    text: 'Use Cases',
+    text: '使用场景',
     items: [
       {
-        text: 'Avatar Placeholder',
+        text: '头像占位符',
         link: '/guides/use-as-avatar-placeholder/',
       },
       {
-        text: 'Gravatar Default Image',
+        text: 'Gravatar 默认头像',
         link: '/guides/use-the-http-api-as-gravatar-default-image/',
       },
       {
-        text: 'Self-host the HTTP-API',
+        text: '自托管 HTTP API',
         link: '/guides/host-the-http-api-yourself/',
       },
     ],
   },
   {
-    text: 'Advanced',
+    text: '进阶',
     items: [
       {
-        text: 'Access Style Options',
+        text: '访问风格选项',
         link: '/guides/access-all-available-options/',
       },
       {
-        text: 'Unique Avatar Count',
+        text: '唯一头像数量',
         link: '/guides/how-many-unique-avatars/',
       },
     ],
   },
   {
-    text: 'Contributing',
+    text: '参与贡献',
     items: [
       {
-        text: 'Documentation',
+        text: '文档',
         link: '/guides/contribute-to-the-documentation/',
       },
       {
-        text: 'Editor',
+        text: '编辑器',
         link: '/guides/contribute-to-the-editor/',
       },
       {
@@ -118,7 +118,7 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         link: '/guides/contribute-to-the-api/',
       },
       {
-        text: 'Library',
+        text: '核心库',
         link: '/guides/contribute-to-the-library/',
       },
     ],

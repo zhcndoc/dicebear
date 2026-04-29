@@ -230,6 +230,13 @@ const { hasSidebar } = useLayout();
     line-height: 1.7;
   }
 
+  &-attribution-links {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
   &-attribution-link {
     color: var(--vp-c-text-2);
     text-decoration: none;

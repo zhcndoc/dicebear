@@ -1,9 +1,8 @@
 ---
-title: Pixel Art Neutral – Avatar Style | DiceBear
+title: 像素艺术中性 – 头像风格 | DiceBear
 description: >
-  Create Pixel Art Neutral avatars with the DiceBear avatar library. Generate
-  unique profile pictures using our free avatar API or JavaScript avatar
-  library.
+  使用 DiceBear 头像库创建像素艺术中性头像。通过我们的免费头像 API 或 JavaScript 头像
+  库生成独特的个人资料图片。
 ---
 
 <script setup lang="ts">
@@ -14,24 +13,22 @@ import StyleUsage from "@theme/components/styles/StyleUsage.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
-# Pixel Art Neutral
+# 像素艺术中性
 
-Pixel Art Neutral is the gender-neutral variant of the Pixel Art vector avatar
-style, offering abstract pixel-based customizable profile icons in a retro
-aesthetic.
+像素艺术中性是像素艺术矢量头像风格的中性变体，提供具有复古美学、可自定义的抽象像素风个人资料图标。
 
 <StylePreview styleName="pixel-art-neutral" />
 
 <StyleDescription styleName="pixel-art-neutral" />
 
-## Usage
+## 用法
 
 <StyleUsage styleName="pixel-art-neutral" />
 
-## Options
+## 选项
 
 <StyleOptions styleName="pixel-art-neutral" />
 
-## Details
+## 详情
 
 <StyleInfo styleName="pixel-art-neutral" />

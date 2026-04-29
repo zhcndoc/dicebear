@@ -10,9 +10,9 @@ withDefaults(defineProps<{
   headline?: string;
   description?: string;
 }>(), {
-  badge: 'Why DiceBear?',
-  headline: 'Built for Developers, Loved by Users',
-  description: 'Everything you need to create beautiful, unique avatars for your applications.',
+  badge: '为什么选择 DiceBear？',
+  headline: '为开发者而生，受用户喜爱',
+  description: '你需要的一切，都能用来为应用创建美观且独特的头像。',
 });
 
 const sectionRef = ref();
@@ -21,38 +21,38 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
 const highlights = [
   {
     icon: Target,
-    title: 'Deterministic Avatars',
-    description: 'Same seed always generates the same avatar. Perfect for user profiles and consistent identities.',
+    title: '确定性头像',
+    description: '相同的 seed 总会生成相同的头像，非常适合用户资料和稳定身份。',
     color: '#1689cc',
   },
   {
     icon: Palette,
-    title: '30+ Avatar Styles',
-    description: 'Carefully crafted styles from talented artists. Characters, abstract, pixel art, and more.',
+    title: '30+ 种头像风格',
+    description: '来自优秀创作者的精心设计风格，涵盖人物、抽象、像素艺术等。',
     color: '#a855f7',
   },
   {
     icon: Globe,
-    title: 'Free Avatar API',
-    description: 'Our profile picture API handles millions of daily requests. Global CDN delivers random user avatars in milliseconds.',
+    title: '免费头像 API',
+    description: '我们的头像 API 每天处理数百万请求，全球 CDN 可在毫秒级交付头像。',
     color: '#22c55e',
   },
   {
     icon: Zap,
-    title: 'JS Library & CLI',
-    description: 'No data sent to external servers. Full control over avatar generation in your app.',
+    title: 'JS 库与 CLI',
+    description: '不会向外部服务器发送数据。在你的应用中完全掌控头像生成。',
     color: '#f59e0b',
   },
   {
     icon: SlidersHorizontal,
-    title: 'Fully Customizable',
-    description: 'Colors, accessories, backgrounds, and more. Fine-tune every detail to match your brand.',
+    title: '高度可定制',
+    description: '颜色、配饰、背景等等都可以调节，精细匹配你的品牌。',
     color: '#ec4899',
   },
   {
     iconPath: siGithub.path,
-    title: '100% Open Source',
-    description: 'MIT licensed core, transparent development. Contribute, fork, or self-host with confidence.',
+    title: '100% 开源',
+    description: '核心代码采用 MIT 许可，开发过程透明。你可以放心贡献、分叉或自托管。',
     color: 'var(--vp-c-text-1)',
   },
 ];

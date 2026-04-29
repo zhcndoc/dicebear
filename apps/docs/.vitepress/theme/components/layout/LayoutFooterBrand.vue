@@ -19,7 +19,7 @@ import { UiIcon } from '../ui';
       />
     </a>
     <p class="layout-footer-tagline">
-      Open source SVG avatar library and avatar API for designers and developers.
+      面向设计师和开发者的开源 SVG 头像库与头像 API。
     </p>
 
     <div class="layout-footer-social">

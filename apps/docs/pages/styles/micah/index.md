@@ -1,8 +1,8 @@
 ---
-title: Micah – Avatar Style | DiceBear
+title: Micah – 头像风格 | DiceBear
 description: >
-  Create Micah avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  使用 DiceBear 头像库创建 Micah 头像。通过我们免费的头像 API 或 JavaScript 头像库生成独特的
+  个人资料图片。
 ---
 
 <script setup lang="ts">
@@ -15,22 +15,21 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Micah
 
-Micah is a vibrant illustrated vector avatar style with flat-design characters
-and bold color combinations. Generate striking, customizable SVG profile icons
-for modern web and mobile applications.
+Micah 是一种充满活力的插画风矢量头像风格，采用扁平化设计角色
+和大胆的配色组合。为现代 Web 和移动应用生成醒目、可自定义的 SVG 个人资料图标。
 
 <StylePreview styleName="micah" />
 
 <StyleDescription styleName="micah" />
 
-## Usage
+## 用法
 
 <StyleUsage styleName="micah" />
 
-## Options
+## 选项
 
 <StyleOptions styleName="micah" />
 
-## Details
+## 详情
 
 <StyleInfo styleName="micah" />

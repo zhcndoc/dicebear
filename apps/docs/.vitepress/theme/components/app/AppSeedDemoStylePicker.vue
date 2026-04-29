@@ -22,8 +22,8 @@ function onSelect(index: number) {
 <template>
   <PlaygroundDialog :open="open" @update:open="$emit('update:open', $event)" max-width="640px">
     <div class="app-seed-demo-style-picker">
-      <h3 class="app-seed-demo-style-picker-title">Choose Avatar Style</h3>
-      <p class="app-seed-demo-style-picker-subtitle">Select a style to preview with your current seed</p>
+      <h3 class="app-seed-demo-style-picker-title">选择头像风格</h3>
+      <p class="app-seed-demo-style-picker-subtitle">选择一个风格，用当前种子预览效果</p>
       <div class="app-seed-demo-style-picker-grid">
         <button
           v-for="avatar in avatars"

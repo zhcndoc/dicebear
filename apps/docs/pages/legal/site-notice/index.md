@@ -1,6 +1,6 @@
 ---
-title: Site Notice
+title: 网站声明
 editLink: false
 aside: false
-sidebarMenuLabel: Language
+sidebarMenuLabel: 语言
 ---

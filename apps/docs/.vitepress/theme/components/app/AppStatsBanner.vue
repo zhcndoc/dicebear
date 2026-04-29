@@ -17,22 +17,22 @@ const metrics = computed(() => [
   {
     icon: Activity,
     value: apiStats.value ? formatNumber(apiStats.value.monthlyRequests) : '1B+',
-    label: 'API Requests',
-    description: `Avatars generated via our HTTP-API in ${monthLabel.value} alone.`,
+    label: 'API 请求',
+    description: `${monthLabel.value} 内仅通过 HTTP API 生成的头像数量。`,
     color: '#1689cc',
   },
   {
     icon: Server,
     value: apiStats.value ? formatBytes(apiStats.value.monthlyTraffic) : '3TB+',
-    label: 'Data Served',
-    description: `Total traffic delivered through our global CDN in ${monthLabel.value}.`,
+    label: '数据传输',
+    description: `${monthLabel.value} 内通过全球 CDN 传输的总流量。`,
     color: '#22c55e',
   },
   {
     icon: Download,
     value: apiStats.value ? formatNumber(apiStats.value.monthlyNpmDownloads) : '500K+',
-    label: 'npm Downloads',
-    description: `Monthly npm downloads of the core package in ${monthLabel.value}.`,
+    label: 'npm 下载量',
+    description: `${monthLabel.value} 内核心包的月度 npm 下载量。`,
     color: '#cb3837',
   },
 ]);
@@ -46,10 +46,10 @@ const metrics = computed(() => [
     <UiContainer>
       <UiSectionHeader
         class="app-stats-banner-header"
-        badge="Trusted at Scale"
-        description="Real usage data from our HTTP-API and npm packages — updated daily."
+        badge="大规模验证"
+        description="来自 HTTP API 和 npm 包的真实使用数据，每日更新。"
       >
-        <template #headline>Billions of avatars. <strong>One API.</strong></template>
+        <template #headline>数十亿头像。<strong>一个 API。</strong></template>
       </UiSectionHeader>
 
       <div class="app-stats-banner-grid">
@@ -72,7 +72,7 @@ const metrics = computed(() => [
 
       <div class="app-stats-banner-action">
         <UiButton href="/stats/" variant="secondary">
-          View Live Statistics
+          查看实时统计
           <ArrowRight :size="18" />
         </UiButton>
       </div>

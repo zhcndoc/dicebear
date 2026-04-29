@@ -1,8 +1,8 @@
 ---
 title: Adventurer – Avatar Style | DiceBear
 description: >
-  Create Adventurer avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  使用 DiceBear 头像库创建 Adventurer 头像。通过我们的免费头像 API 或 JavaScript 头像库生成独特的
+  个人资料图片。
 ---
 
 <script setup lang="ts">
@@ -15,23 +15,22 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Adventurer
 
-Adventurer is a charming illustrated vector avatar style featuring colorful
-cartoon characters with customizable hair, eyes, and accessories. Use it to
-generate friendly, customizable profile icons for games, social networks, and
-user profiles.
+Adventurer 是一种迷人的插画风矢量头像样式，具有色彩丰富的
+卡通角色，可自定义发型、眼睛和配饰。可用于为游戏、社交网络和
+用户资料生成友好、可定制的个人头像图标。
 
 <StylePreview styleName="adventurer" />
 
 <StyleDescription styleName="adventurer" />
 
-## Usage
+## 用法
 
 <StyleUsage styleName="adventurer" />
 
-## Options
+## 选项
 
 <StyleOptions styleName="adventurer" />
 
-## Details
+## 详情
 
 <StyleInfo styleName="adventurer" />

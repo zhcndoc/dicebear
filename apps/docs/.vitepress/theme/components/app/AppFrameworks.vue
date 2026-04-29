@@ -23,10 +23,10 @@ const frameworks = [
     </template>
     <UiContainer class="app-frameworks-container">
       <UiSectionHeader
-        badge="Framework Support"
-        description="Use DiceBear with React, Vue, Svelte, Angular and more. Simply use our HTTP-API as image source or install the JS-library."
+        badge="框架支持"
+        description="在 React、Vue、Svelte、Angular 等框架中使用 DiceBear。你可以把 HTTP 接口作为图片来源，也可以直接安装 JS 库。"
       >
-        <template #headline>Works with Your <strong>Favorite</strong> Framework</template>
+        <template #headline>适配你<strong>最喜欢</strong>的框架</template>
       </UiSectionHeader>
 
       <div class="app-frameworks-grid">

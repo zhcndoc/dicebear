@@ -32,7 +32,7 @@ function onSeedInput(event: Event) {
         <UiAvatar
           :style-name="style"
           :style-options="{ seed, size: 256 }"
-          alt="Avatar preview"
+          alt="头像预览"
           class="app-seed-demo-avatar-main"
           mode="library"
         />
@@ -40,22 +40,22 @@ function onSeedInput(event: Event) {
     </div>
 
     <button class="app-seed-demo-style-picker-trigger" @click="emit('openStylePicker')">
-      <span class="app-seed-demo-style-picker-label">Style</span>
+      <span class="app-seed-demo-style-picker-label">风格</span>
       <span class="app-seed-demo-style-picker-value">{{ style }}</span>
       <ChevronDown :size="14" />
     </button>
 
     <div class="app-seed-demo-seed-display">
-      <span class="app-seed-demo-seed-label">Seed</span>
+      <span class="app-seed-demo-seed-label">种子</span>
       <input
         class="app-seed-demo-seed-input"
         :value="seed"
         @input="onSeedInput"
-        placeholder="Enter a seed…"
+        placeholder="输入一个种子…"
         spellcheck="false"
         autocomplete="off"
       />
-      <button class="app-seed-demo-dice-btn" @click="emit('randomizeSeed')" title="Next seed">
+      <button class="app-seed-demo-dice-btn" @click="emit('randomizeSeed')" title="下一个种子">
         <Dice5 :size="16" />
       </button>
     </div>

@@ -1,27 +1,23 @@
 ---
 title: PHP Avatar Library | DiceBear
 description: >
-  Use the DiceBear PHP library to generate SVG profile pictures on the server.
-  PHP 8.2+ with an API identical to the JavaScript library.
+  使用 DiceBear PHP 库在服务器端生成 SVG 头像。
+  支持 PHP 8.2+，API 与 JavaScript 库完全一致。
 ---
 
 # PHP Avatar Library
 
-The PHP library provides an API identical to the
-[JavaScript library](/how-to-use/js-library/). It requires PHP 8.2 or higher.
-The same seed and style definition will produce byte-identical SVGs in both
-implementations.
+PHP 库提供了与 [JavaScript library](/how-to-use/js-library/) 完全一致的 API。它需要 PHP 8.2 或更高版本。相同的 seed 和样式定义在两种实现中都会生成字节级一致的 SVG。
 
-## Installation
+## 安装
 
-You need two packages: the core library `dicebear/core` and the avatar style
-definitions `dicebear/definitions`.
+你需要两个包：核心库 `dicebear/core` 和头像样式定义 `dicebear/definitions`。
 
 ```
 composer require dicebear/core dicebear/definitions
 ```
 
-## Usage
+## 使用
 
 ```php
 <?php
@@ -36,28 +32,23 @@ $definition = json_decode(file_get_contents($basePath . '/src/lorelei.json'), tr
 $style = new Style($definition);
 $avatar = new Avatar($style, [
   'seed' => 'John Doe',
-  // ... other options
+  // ... 其他选项
 ]);
 
 $svg = (string) $avatar;
 ```
 
-Each avatar style comes with several options. You can find them on the details
-page of each [avatar style](/styles/).
+每种头像样式都带有多个选项。你可以在每个 [头像样式](/styles/) 的详情页找到它们。
 
 :::info
 
-We provide a large number of avatar styles from different artists. The avatar
-styles are licensed under different licenses that the artists can choose
-themselves. For a quick overview we have created an
-[license overview](/licenses/) for you.
+我们提供了来自不同艺术家的大量头像样式。这些头像样式使用不同的许可证，艺术家可以自行选择。为了让你快速了解，我们为你创建了一个 [许可证概览](/licenses/)。
 
 :::
 
-## Deterministic avatars
+## 确定性头像
 
-The `seed` option is the key to generating deterministic avatars. The same seed
-will always produce the same avatar:
+`seed` 选项是生成确定性头像的关键。相同的 seed 总会生成相同的头像：
 
 ```php
 $avatar1 = new Avatar($style, ['seed' => 'user-123']);
@@ -66,25 +57,23 @@ $avatar2 = new Avatar($style, ['seed' => 'user-123']);
 (string) $avatar1 === (string) $avatar2; // true
 ```
 
-## Classes
+## 类
 
 ### `Avatar`
 
-The main class for generating avatars. Accepts a `Style` instance (or raw
-definition array) and optional options.
+用于生成头像的主要类。接受一个 `Style` 实例（或原始定义数组）以及可选选项。
 
 ```php
 use DiceBear\Avatar;
 
 $avatar = new Avatar($style, [
-  // ... options
+  // ... 选项
 ]);
 ```
 
 ### `Style`
 
-An immutable wrapper around a style definition. Reuse it when generating
-multiple avatars from the same style.
+对样式定义的不可变包装。用于从同一样式生成多个头像时复用它。
 
 ```php
 use DiceBear\Style;
@@ -98,8 +87,7 @@ $avatar2 = new Avatar($style, ['seed' => 'Bob']);
 
 ### `OptionsDescriptor`
 
-Describes all valid options for a given style. Useful for building UIs or
-validating user input.
+描述给定样式的所有有效选项。适用于构建 UI 或验证用户输入。
 
 ```php
 use DiceBear\Style;
@@ -109,28 +97,27 @@ $descriptor = new OptionsDescriptor(new Style($definition));
 $fields = $descriptor->toJSON();
 ```
 
-## Methods
+## 方法
 
 ### `__toString()` / `toString()`
 
-**Return type:** `string`
+**返回类型：** `string`
 
-Returns the avatar as SVG in XML format. The `__toString()` magic method allows
-using the avatar directly in string contexts.
+以 XML 格式返回 SVG 头像。`__toString()` 魔术方法允许在字符串上下文中直接使用头像对象。
 
 ```php
 $avatar = new Avatar($style, ['seed' => 'John Doe']);
 
 $svg = (string) $avatar;
-// or
+// 或
 $svg = $avatar->toString();
 ```
 
 ### `toJSON()`
 
-**Return type:** `array{svg: string, options: array}`
+**返回类型：** `array{svg: string, options: array}`
 
-Returns an associative array with the SVG and the resolved options.
+返回一个包含 SVG 和已解析选项的关联数组。
 
 ```php
 $avatar = new Avatar($style, ['seed' => 'John Doe']);
@@ -143,23 +130,21 @@ $json = $avatar->toJSON();
 
 ### `toDataUri()`
 
-**Return type:** `string`
+**返回类型：** `string`
 
-Returns the avatar as [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
+以 [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme) 形式返回头像。
 
 ```php
 $avatar = new Avatar($style, ['seed' => 'John Doe']);
 
 $dataUri = $avatar->toDataUri();
 
-// <img src="<?= $dataUri ?>" alt="Avatar" />
+// <img src="<?= $dataUri ?>" alt="头像" />
 ```
 
-## Core options
+## 核心选项
 
-The core options are identical to the JavaScript library. See the
-[JS Library core options](/how-to-use/js-library/#core-options) for the full
-reference. Here are the options in PHP syntax:
+核心选项与 JavaScript 库完全一致。完整参考请参见 [JS Library core options](/how-to-use/js-library/#core-options)。以下是 PHP 语法中的选项：
 
 ```php
 $avatar = new Avatar($style, [
@@ -172,7 +157,7 @@ $avatar = new Avatar($style, [
   'translateX' => 0,               // -100 to 100 (percent of canvas)
   'translateY' => 0,               // -100 to 100 (percent of canvas)
   'idRandomization' => true,
-  'title' => 'User Avatar',
+  'title' => '用户头像',
   'fontFamily' => 'Arial',         // or ['Arial', 'Helvetica']
   'fontWeight' => 700,             // 1-1000
   'backgroundColor' => ['#b6e3f4', '#c0aede'],
@@ -180,13 +165,11 @@ $avatar = new Avatar($style, [
 ]);
 ```
 
-Dynamic component and color options also work the same way. See the
-[JS Library documentation](/how-to-use/js-library/#dynamic-component-options)
-for all available patterns.
+动态组件和颜色选项的工作方式也相同。请参见 [JS Library documentation](/how-to-use/js-library/#dynamic-component-options) 了解所有可用模式。
 
-## Examples
+## 示例
 
-### Avatar with custom background
+### 自定义背景的头像
 
 ```php
 $avatar = new Avatar($style, [
@@ -195,7 +178,7 @@ $avatar = new Avatar($style, [
 ]);
 ```
 
-### Fixed size avatar
+### 固定尺寸头像
 
 ```php
 $basePath = InstalledVersions::getInstallPath('dicebear/definitions');
@@ -205,11 +188,11 @@ $style = new Style($definition);
 $avatar = new Avatar($style, [
   'seed' => 'robot-42',
   'size' => 128,
-  'borderRadius' => 50, // circular avatar
+  'borderRadius' => 50, // 圆形头像
 ]);
 ```
 
-### Avatar with transformations
+### 带变换效果的头像
 
 ```php
 $basePath = InstalledVersions::getInstallPath('dicebear/definitions');
@@ -225,10 +208,9 @@ $avatar = new Avatar($style, [
 ]);
 ```
 
-### Multiple avatars on the same page
+### 同一页面上的多个头像
 
-When rendering multiple avatars on the same page, use `idRandomization` to
-prevent SVG ID conflicts:
+在同一页面渲染多个头像时，使用 `idRandomization` 来防止 SVG ID 冲突：
 
 ```php
 $users = ['alice', 'bob', 'charlie'];
@@ -241,7 +223,7 @@ $avatars = array_map(function (string $user) use ($style) {
 }, $users);
 ```
 
-### Weighted variant selection
+### 加权变体选择
 
 ```php
 $avatar = new Avatar($style, [

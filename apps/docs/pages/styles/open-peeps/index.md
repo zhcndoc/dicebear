@@ -1,8 +1,8 @@
 ---
-title: Open Peeps – Avatar Style | DiceBear
+title: Open Peeps – 头像样式 | DiceBear
 description: >
-  Create Open Peeps avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  使用 DiceBear 头像库创建 Open Peeps 头像。通过我们的免费头像 API 或 JavaScript 头像库生成独特的
+  个人资料图片。
 ---
 
 <script setup lang="ts">
@@ -15,22 +15,20 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Open Peeps
 
-Open Peeps is a hand-drawn illustration vector avatar style featuring diverse
-human figures with mix-and-match components. Generate inclusive, expressive
-customizable SVG profile icons for community platforms and social apps.
+Open Peeps 是一种手绘插画风格的矢量头像，具有多样化的人物形象和可自由组合的组件。生成包容、富有表现力且可自定义的 SVG 个人资料图标，适用于社区平台和社交应用。
 
 <StylePreview styleName="open-peeps" />
 
 <StyleDescription styleName="open-peeps" />
 
-## Usage
+## 用法
 
 <StyleUsage styleName="open-peeps" />
 
-## Options
+## 选项
 
 <StyleOptions styleName="open-peeps" />
 
-## Details
+## 详情
 
 <StyleInfo styleName="open-peeps" />

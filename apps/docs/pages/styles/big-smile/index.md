@@ -1,8 +1,8 @@
 ---
-title: Big Smile – Avatar Style | DiceBear
+title: Big Smile – 头像风格 | DiceBear
 description: >
-  Create Big Smile avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  使用 DiceBear 头像库创建 Big Smile 头像。通过我们的免费头像 API 或 JavaScript 头像库生成独特的
+  个人资料图片。
 ---
 
 <script setup lang="ts">
@@ -15,22 +15,20 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Big Smile
 
-Big Smile is a friendly vector avatar style featuring characters with
-expressive, prominent smiles. Generate warm, customizable SVG profile icons
-that stand out in user feeds and comment sections.
+Big Smile 是一种友好的矢量头像风格，特色是带有富有表现力、醒目笑容的角色。生成温暖、可自定义的 SVG 个人资料图标，在用户信息流和评论区中格外醒目。
 
 <StylePreview styleName="big-smile" />
 
 <StyleDescription styleName="big-smile" />
 
-## Usage
+## 用法
 
 <StyleUsage styleName="big-smile" />
 
-## Options
+## 选项
 
 <StyleOptions styleName="big-smile" />
 
-## Details
+## 详情
 
 <StyleInfo styleName="big-smile" />

@@ -71,11 +71,11 @@ const scatteredAvatars = computed(() => {
         </div>
       </div>
 
-      <UiHeadline>Free and <strong>Open Source</strong>.<br />Forever.</UiHeadline>
+      <UiHeadline>免费且<strong>开源</strong>。<br />永远如此。</UiHeadline>
 
       <UiDescription class="app-open-source-description">
-        DiceBear is built in the open. Our core library is MIT licensed, and we believe
-        in transparent development. Join thousands of developers who already love DiceBear.
+        DiceBear 在开放环境中构建。核心库采用 MIT 许可，我们相信透明开发。
+        加入已经喜爱 DiceBear 的成千上万开发者。
       </UiDescription>
 
       <!-- Star counter with social proof -->
@@ -83,7 +83,7 @@ const scatteredAvatars = computed(() => {
         <a href="https://github.com/dicebear/dicebear" target="_blank" rel="noopener" class="app-open-source-star-count">
           <Star :size="24" class="app-open-source-star-filled" />
           <span class="app-open-source-star-number">{{ theme.githubStars?.['dicebear/dicebear'] || '8k+' }}</span>
-          <span class="app-open-source-star-text">stars on GitHub</span>
+          <span class="app-open-source-star-text">GitHub 星标</span>
         </a>
       </div>
 
@@ -95,7 +95,7 @@ const scatteredAvatars = computed(() => {
           class="app-open-source-star-btn"
         >
           <UiIcon :path="siGithub.path" :size="20" />
-          Star on GitHub
+          在 GitHub 上点星
         </UiButton>
         <UiButton
           href="/guides/contribute-to-the-library/"
@@ -103,7 +103,7 @@ const scatteredAvatars = computed(() => {
           class="app-open-source-contribute"
         >
           <Heart :size="20" class="app-open-source-heart-icon" />
-          Contribute
+          参与贡献
         </UiButton>
       </div>
     </UiContainer>

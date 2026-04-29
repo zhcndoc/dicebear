@@ -1,54 +1,35 @@
 ---
-title: Contribute to the Library | DiceBear
+title: 为库做贡献 | DiceBear
 description: >
-  Learn how to contribute an avatar style, improve an existing one, or work
-  on the DiceBear core packages.
+  了解如何为头像风格做贡献、改进现有风格，或参与 DiceBear 核心包的开发。
 ---
 
-# Contribute to the library
+# 为库做贡献
 
-DiceBear is maintained across several repositories on GitHub. Each repo
-has its own `CONTRIBUTING.md` with setup, scripts, testing, and release
-instructions. Pick the one that matches what you want to work on.
+DiceBear 在 GitHub 上由多个仓库共同维护。每个仓库都有自己的 `CONTRIBUTING.md`，其中包含设置、脚本、测试和发布说明。请选择与你想要参与的内容相匹配的仓库。
 
-## Avatar styles
+## 头像风格
 
-New avatar styles and fixes to existing styles live in
-[`dicebear/definitions`](https://github.com/dicebear/definitions). Most
-styles are authored in Figma and exported with the
-[DiceBear Exporter](/guides/create-an-avatar-style-with-figma/) plugin,
-so the workflow there is not the usual "edit a JSON file" loop.
+新的头像风格以及现有风格的修复都位于 [`dicebear/definitions`](https://github.com/dicebear/definitions)。大多数风格都是在 Figma 中制作，并通过 [DiceBear Exporter](/guides/create-an-avatar-style-with-figma/) 插件导出，因此那里的工作流程并不是通常那种“编辑 JSON 文件”的循环。
 
-- [`CONTRIBUTING.md`](https://github.com/dicebear/definitions/blob/main/CONTRIBUTING.md)
-  in `dicebear/definitions`
+- `dicebear/definitions` 中的 [`CONTRIBUTING.md`](https://github.com/dicebear/definitions/blob/main/CONTRIBUTING.md)
 
-## Core library, CLI, documentation, editor
+## 核心库、CLI、文档、编辑器
 
-The JavaScript and PHP cores, the CLI, the VitePress documentation
-(including the Playground), and the standalone editor all live in the
-main [`dicebear/dicebear`](https://github.com/dicebear/dicebear)
-monorepo. See:
+JavaScript 和 PHP 核心、CLI、VitePress 文档（包括 Playground）以及独立编辑器都位于主 [`dicebear/dicebear`](https://github.com/dicebear/dicebear) 单仓库中。请参见：
 
-- [`CONTRIBUTING.md`](https://github.com/dicebear/dicebear/blob/10.x/CONTRIBUTING.md)
-  in `dicebear/dicebear`
+- `dicebear/dicebear` 中的 [`CONTRIBUTING.md`](https://github.com/dicebear/dicebear/blob/10.x/CONTRIBUTING.md)
 
-It covers the monorepo layout, per-package workflow, cross-language
-parity tests for `@dicebear/core` / `dicebear/core`, and the release
-process.
+其中涵盖了单仓库布局、按包的工作流程、`@dicebear/core` / `dicebear/core` 的跨语言一致性测试，以及发布流程。
 
 ## JSON Schema
 
-The schema for avatar style definitions and runtime options is versioned
-separately in
-[`dicebear/schema`](https://github.com/dicebear/schema).
+头像风格定义和运行时选项的 schema 会单独进行版本管理，位于 [`dicebear/schema`](https://github.com/dicebear/schema)。
 
-- [`CONTRIBUTING.md`](https://github.com/dicebear/schema/blob/main/CONTRIBUTING.md)
-  in `dicebear/schema`
+- `dicebear/schema` 中的 [`CONTRIBUTING.md`](https://github.com/dicebear/schema/blob/main/CONTRIBUTING.md)
 
-## Figma exporter plugin
+## Figma 导出插件
 
-The Figma plugin that produces new avatar style definitions lives in
-[`dicebear/exporter-plugin-for-figma`](https://github.com/dicebear/exporter-plugin-for-figma).
+用于生成新头像风格定义的 Figma 插件位于 [`dicebear/exporter-plugin-for-figma`](https://github.com/dicebear/exporter-plugin-for-figma)。
 
-- [`CONTRIBUTING.md`](https://github.com/dicebear/exporter-plugin-for-figma/blob/main/CONTRIBUTING.md)
-  in `dicebear/exporter-plugin-for-figma`
+- `dicebear/exporter-plugin-for-figma` 中的 [`CONTRIBUTING.md`](https://github.com/dicebear/exporter-plugin-for-figma/blob/main/CONTRIBUTING.md)

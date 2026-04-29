@@ -1,8 +1,8 @@
 ---
-title: Croodles – Avatar Style | DiceBear
+title: Croodles – 头像风格 | DiceBear
 description: >
-  Create Croodles avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  使用 DiceBear 头像库创建 Croodles 头像。使用我们的免费头像 API 或 JavaScript 头像库生成独特的
+  个人资料图片。
 ---
 
 <script setup lang="ts">
@@ -15,22 +15,21 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Croodles
 
-Croodles is a hand-drawn doodle vector avatar style with a sketchy, organic
-feel. Generate quirky, customizable profile icons that stand out with an
-artistic, informal aesthetic.
+Croodles 是一种手绘涂鸦矢量头像风格，带有随性、自然的
+感觉。生成古灵精怪、可自定义的个人资料图标，以艺术化、非正式的美学风格脱颖而出。
 
 <StylePreview styleName="croodles" />
 
 <StyleDescription styleName="croodles" />
 
-## Usage
+## 用法
 
 <StyleUsage styleName="croodles" />
 
-## Options
+## 选项
 
 <StyleOptions styleName="croodles" />
 
-## Details
+## 详情
 
 <StyleInfo styleName="croodles" />

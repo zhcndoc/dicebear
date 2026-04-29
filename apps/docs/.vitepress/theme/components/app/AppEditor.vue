@@ -8,7 +8,7 @@ const sectionRef = ref();
 const isVisible = useVisibility(sectionRef);
 
 // Tab configuration
-const tabs = ['Background', 'Hair', 'Eyes', 'Nose', 'Mouth'];
+const tabs = ['背景', '头发', '眼睛', '鼻子', '嘴巴'];
 const activeTab = ref(0);
 
 // Current avatar options
@@ -99,18 +99,18 @@ function selectItem(id: string) {
 const features = [
   {
     icon: MousePointerClick,
-    title: 'No Coding Required',
-    description: 'Click to customize hair, eyes, accessories, and more.',
+    title: '无需写代码',
+    description: '点击即可自定义头发、眼睛、配饰等。',
   },
   {
     icon: Palette,
-    title: 'Endless Combinations',
-    description: 'Mix and match colors and styles to create your unique look.',
+    title: '无限组合',
+    description: '自由混合颜色和风格，打造独特外观。',
   },
   {
     icon: Download,
-    title: 'Download as PNG',
-    description: 'Save your avatar and use it anywhere you like.',
+    title: '下载为 PNG',
+    description: '保存头像并在任何地方使用。',
   },
 ];
 </script>
@@ -163,11 +163,11 @@ const features = [
       </div>
 
       <div class="app-editor-content">
-        <UiBadge variant="brand">Visual Editor</UiBadge>
-        <UiHeadline class="app-editor-title-text">Avatar Maker <strong>Without Code</strong></UiHeadline>
+        <UiBadge variant="brand">可视化编辑器</UiBadge>
+        <UiHeadline class="app-editor-title-text">无需代码的<strong>头像制作器</strong></UiHeadline>
         <UiDescription class="app-editor-description">
-          No developer? No problem! Our avatar maker lets anyone create custom profile pictures
-          without writing a single line of code. Just pick, click, and download.
+          不会开发也没关系！任何人都可以用头像制作器创建自定义个人资料图片，
+          无需编写任何代码，只需选择、点击并下载。
         </UiDescription>
 
         <div class="app-editor-features">
@@ -189,7 +189,7 @@ const features = [
 
         <div class="app-editor-actions">
           <UiButton href="https://editor.dicebear.com" :external="true">
-            Open Editor
+            打开编辑器
             <ArrowRight :size="20" />
           </UiButton>
         </div>

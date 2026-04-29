@@ -14,9 +14,9 @@ const apiStats = useApiStats();
 const monthLabel = computed(() => apiStats.value?.monthLabel ?? 'Month');
 
 const stats = computed(() => [
-  { value: apiStats.value ? formatNumber(apiStats.value.monthlyRequests) : '1B+', label: `Requests in ${monthLabel.value}`, icon: Globe },
-  { value: apiStats.value ? formatBytes(apiStats.value.monthlyTraffic) : '3TB+', label: `Data Served in ${monthLabel.value}`, icon: Server },
-  { value: '85%+', label: 'Cache Hit Rate', icon: Zap },
+  { value: apiStats.value ? formatNumber(apiStats.value.monthlyRequests) : '1B+', label: `${monthLabel.value} 请求量`, icon: Globe },
+  { value: apiStats.value ? formatBytes(apiStats.value.monthlyTraffic) : '3TB+', label: `${monthLabel.value} 数据传输`, icon: Server },
+  { value: '85%+', label: '缓存命中率', icon: Zap },
 ]);
 </script>
 
@@ -28,10 +28,10 @@ const stats = computed(() => [
     <UiContainer>
       <UiSectionHeader
         class="app-cdn-header"
-        badge="Content Delivery Network"
-        description="Our HTTP-API is powered by a global CDN — delivering avatars with low latency, high reliability, and completely free of charge."
+        badge="内容分发网络"
+        description="我们的 HTTP 接口由全球 CDN 驱动，低延迟、高可靠，而且完全免费。"
       >
-        <template #headline>Lightning fast, <strong>globally delivered</strong></template>
+        <template #headline>极速传输，<strong>全球交付</strong></template>
       </UiSectionHeader>
 
       <div class="app-cdn-content">
@@ -57,9 +57,8 @@ const stats = computed(() => [
                   />
                 </a>
                 <p class="app-cdn-description">
-                  bunny.net sponsors the CDN infrastructure for our HTTP-API.
-                  This allows us to serve avatars globally with low latency
-                  &mdash; completely free of charge for you.
+                  bunny.net 为我们的 HTTP 接口赞助 CDN 基础设施。
+                  这让我们可以以低延迟向全球提供头像，并且对你完全免费。
                 </p>
                 <a
                   href="https://bunny.net/"
@@ -67,9 +66,9 @@ const stats = computed(() => [
                   target="_blank"
                   rel="noopener sponsored"
                 >
-                  Visit bunny.net &rarr;
+                  访问 bunny.net &rarr;
                 </a>
-                <span class="app-cdn-ad">Advertisement</span>
+                <span class="app-cdn-ad">广告</span>
               </div>
             </div>
 

@@ -1,22 +1,22 @@
 ---
-title: Svelte Avatar Library – DiceBear Integration
+title: Svelte 头像库 – DiceBear 集成
 description: >
-  Use DiceBear to generate SVG profile pictures in Svelte via the JavaScript
-  avatar library or avatar API.
+  在 Svelte 中通过 JavaScript 头像库或头像 API 使用 DiceBear 生成 SVG 个人资料图片。
 ---
 
-# Svelte Avatar Library – Using DiceBear with Svelte
+# Svelte 头像库 – 在 Svelte 中使用 DiceBear
 
-DiceBear works with both Svelte 4 and Svelte 5. Use `$derived` (Svelte 5) or
-reactive statements (Svelte 4) to keep SVG profile pictures in sync with prop
-changes — via the JS library for client-side generation or the HTTP API for a
-zero-dependency approach.
+DiceBear 可同时用于 Svelte 4 和 Svelte 5。使用 `$derived`（Svelte 5）或
+响应式语句（Svelte 4）让 SVG 个人资料图片与属性
+变化保持同步——可通过 JS 库在客户端生成，或使用 HTTP API 采用
+零依赖方案。
 
-You can use DiceBear with Svelte either via the
-[JS-Library](/how-to-use/js-library/) or the
-[HTTP-API](/how-to-use/http-api/).
+你可以通过
+[JS-Library](/how-to-use/js-library/) 或
+[HTTP-API](/how-to-use/http-api/)
+在 Svelte 中使用 DiceBear。
 
-## With the JS library
+## 使用 JS 库
 
 ::: code-group
 
@@ -31,12 +31,12 @@ You can use DiceBear with Svelte either via the
     new Avatar(lorelei, {
       seed,
       size: 128,
-      // ... other options
+      // ... 其他选项
     }).toDataUri()
   );
 </script>
 
-<img src={avatar} alt="Avatar" />
+<img src={avatar} alt="头像" />
 ```
 
 ```svelte [Svelte 4]
@@ -49,16 +49,16 @@ You can use DiceBear with Svelte either via the
   $: avatar = new Avatar(lorelei, {
     seed,
     size: 128,
-    // ... other options
+    // ... 其他选项
   }).toDataUri();
 </script>
 
-<img src={avatar} alt="Avatar" />
+<img src={avatar} alt="头像" />
 ```
 
 :::
 
-## With the HTTP API
+## 使用 HTTP API
 
 ::: code-group
 
@@ -70,12 +70,12 @@ You can use DiceBear with Svelte either via the
     const url = new URL('https://api.dicebear.com/10.x/lorelei/svg');
     url.searchParams.set('seed', seed);
     url.searchParams.set('size', '128');
-    // ... other options
+    // ... 其他选项
     return url.href;
   });
 </script>
 
-<img src={src} alt="Avatar" />
+<img src={src} alt="头像" />
 ```
 
 ```svelte [Svelte 4]
@@ -88,12 +88,12 @@ You can use DiceBear with Svelte either via the
     const url = new URL('https://api.dicebear.com/10.x/lorelei/svg');
     url.searchParams.set('seed', seed);
     url.searchParams.set('size', '128');
-    // ... other options
+    // ... 其他选项
     src = url.href;
   }
 </script>
 
-<img src={src} alt="Avatar" />
+<img src={src} alt="头像" />
 ```
 
 :::

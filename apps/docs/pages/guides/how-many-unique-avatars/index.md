@@ -1,18 +1,17 @@
 ---
-title: How Many Unique Avatars Are Possible? | DiceBear
+title: 有多少种唯一头像是可能的？ | DiceBear
 description: >
-  Find out how many unique avatar combinations are possible for each DiceBear
-  avatar style with the default configuration.
+  了解在默认配置下，每种 DiceBear
+  头像风格可能有多少种唯一头像组合。
 ---
 
-# How many unique avatars are possible per avatar style?
+# 每种头像风格可能有多少种唯一头像？
 
-The number of unique avatars possible depends heavily on the configuration.
-Depending on the configuration, there can be significantly more or significantly
-fewer unique avatars. Therefore, we will concentrate on the default
-configuration for the calculation.
+唯一头像的数量在很大程度上取决于配置。
+根据不同的配置，唯一头像的数量可能会明显更多或明显更少。
+因此，我们将计算重点放在默认配置上。
 
-| Style                |                Unique Avatars |
+| 风格                 |                唯一头像数量 |
 | -------------------- | ----------------------------: |
 | Adventurer           |                 4.419.792.000 |
 | Adventurer Neutral   |                       280.800 |
@@ -39,8 +38,7 @@ configuration for the calculation.
 | Shapes               | 1.212.439.363.614.480.000.000 |
 | Thumbs               |             3.518.430.498.000 |
 
-Calculation errors cannot be excluded. The calculations can therefore be viewed
-in this document:
-[DiceBear / Number of unique avatars](https://docs.google.com/spreadsheets/d/1pm8X3XUR3UOgXz7THbnwy94mWH-JQUWC8ZPHMHyKqAc/edit?usp=sharing).
-If you find an error or have questions, please feel free to open a
-[discussion](https://github.com/orgs/dicebear/discussions) on GitHub.
+计算错误不能完全排除。因此，这些计算可以在本文档中查看：
+[DiceBear / 唯一头像数量](https://docs.google.com/spreadsheets/d/1pm8X3XUR3UOgXz7THbnwy94mWH-JQUWC8ZPHMHyKqAc/edit?usp=sharing)。
+如果你发现错误或有疑问，欢迎在 GitHub 上打开一个
+[讨论](https://github.com/orgs/dicebear/discussions)。

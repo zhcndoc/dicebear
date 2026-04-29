@@ -1,21 +1,20 @@
 ---
-title: Create an Avatar Style from Scratch | DiceBear
+title: 从零创建头像风格 | DiceBear
 description: >
-  Learn how to create a DiceBear avatar style from scratch by writing a JSON
-  definition file. No Figma or design tools required.
+  了解如何通过编写 JSON 定义文件，从零创建一个 DiceBear 头像风格。无需 Figma 或设计工具。
 ---
 
-# Create an avatar style from scratch
+# 从零创建头像风格
 
-We highly recommend our
-[Figma plugin](/guides/create-an-avatar-style-with-figma/) to create an avatar
-style. Most of DiceBear's official avatar styles were created with the plugin.
-But you can also create an avatar style by writing a JSON
-[definition file](/specification/definition-schema/) by hand.
+我们强烈推荐使用我们的
+[Figma 插件](/guides/create-an-avatar-style-with-figma/) 来创建头像
+风格。DiceBear 的大多数官方头像风格都是使用该插件创建的。
+不过，你也可以通过手动编写 JSON
+[定义文件](/specification/definition-schema/) 来创建头像风格。
 
-## Minimal example
+## 最小示例
 
-A minimal style definition with a colored circle:
+一个带有彩色圆形的最小风格定义：
 
 ```json
 {
@@ -43,20 +42,19 @@ A minimal style definition with a colored circle:
 }
 ```
 
-Save this as `my-style.json` and test it:
+将其保存为 `my-style.json` 并进行测试：
 
 ```
 dicebear ./my-style.json ./output --count 5
 ```
 
-The PRNG picks a different background color for each seed.
+PRNG 会为每个种子选择不同的背景颜色。
 
-## Adding components
+## 添加组件
 
-Components are the randomizable parts of your avatar. Each component has
-multiple variants that the PRNG can choose from.
+组件是头像中可随机化的部分。每个组件都有多个变体，PRNG 可以从中选择。
 
-Let's add a face component with two variants:
+让我们添加一个带有两个变体的 face 组件：
 
 ```json
 {
@@ -146,14 +144,13 @@ Let's add a face component with two variants:
 }
 ```
 
-The `canvas.elements` array references the `face` component via
-`{ "type": "component", "name": "face" }`. The PRNG selects either the
-`smile` or `neutral` variant.
+`canvas.elements` 数组通过
+`{ "type": "component", "name": "face" }` 引用了 `face` 组件。PRNG 会选择
+`smile` 或 `neutral` 变体之一。
 
-## Multiple components
+## 多个组件
 
-You can add as many components as you like. Each component is independent — the
-PRNG selects a variant for each one separately.
+你可以添加任意多个组件。每个组件彼此独立——PRNG 会分别为每个组件选择一个变体。
 
 ```json
 {
@@ -188,15 +185,15 @@ PRNG selects a variant for each one separately.
 }
 ```
 
-### Probability
+### 概率
 
-The `probability` property (0-100) controls how often a component appears.
-In the example above, `accessories` only appears in ~30% of generated avatars.
-Default is `100` (always visible).
+`probability` 属性（0-100）控制组件出现的频率。
+在上面的示例中，`accessories` 只会出现在大约 30% 的生成头像中。
+默认值为 `100`（始终可见）。
 
-### Variant weights
+### 变体权重
 
-Control how often specific variants are selected:
+控制特定变体被选中的频率：
 
 ```json
 {
@@ -208,12 +205,11 @@ Control how often specific variants are selected:
 }
 ```
 
-Higher weight = more likely to be selected. Weight `0` is only chosen when all
-other weights are also `0`. Default weight is `1`.
+权重越高 = 被选中的可能性越大。只有当其他所有权重也都是 `0` 时，权重为 `0` 的项才会被选中。默认权重为 `1`。
 
-### Component transforms
+### 组件变换
 
-Components can have default rotation, translation, and scale ranges:
+组件可以有默认的旋转、平移和缩放范围：
 
 ```json
 {
@@ -231,10 +227,9 @@ Components can have default rotation, translation, and scale ranges:
 }
 ```
 
-## Color palettes
+## 颜色调色板
 
-Colors can be referenced from element attributes. The PRNG picks a value from
-the palette for each avatar.
+可以在元素属性中引用颜色。PRNG 会为每个头像从调色板中选择一个值。
 
 ```json
 {
@@ -254,9 +249,9 @@ the palette for each avatar.
 }
 ```
 
-### Color references
+### 颜色引用
 
-Use color references in SVG attributes to apply dynamic colors:
+在 SVG 属性中使用颜色引用以应用动态颜色：
 
 ```json
 {
@@ -268,18 +263,15 @@ Use color references in SVG attributes to apply dynamic colors:
 }
 ```
 
-### Color constraints
+### 颜色约束
 
-**`notEqualTo`** prevents two color groups from selecting the same color. In the
-example above, `hair` will never be the same color as `skin`.
+**`notEqualTo`** 可防止两个颜色组选择相同的颜色。在上面的示例中，`hair` 的颜色永远不会与 `skin` 相同。
 
-**`contrastTo`** picks the color with the highest contrast ratio against the
-referenced color group. This is useful for ensuring text is readable against a
-background.
+**`contrastTo`** 会选择与所引用颜色组相比对比度最高的颜色。这有助于确保文本在背景上可读。
 
-## Metadata
+## 元数据
 
-Add metadata to your definition for license attribution:
+为你的定义添加元数据以进行许可证署名：
 
 ```json
 {
@@ -287,28 +279,28 @@ Add metadata to your definition for license attribution:
     "license": {
       "name": "CC BY 4.0",
       "url": "https://creativecommons.org/licenses/by/4.0/",
-      "text": "Full license text..."
+      "text": "完整许可证文本..."
     },
     "creator": {
-      "name": "Your Name",
+      "name": "你的名字",
       "url": "https://your-website.com"
     },
     "source": {
-      "name": "My Style",
+      "name": "我的风格",
       "url": "https://github.com/your/repo"
     }
   }
 }
 ```
 
-This metadata appears in:
-- The license comment inside generated SVGs
-- The CLI license banner
-- The documentation (if your style is added to the official collection)
+这些元数据会出现在：
+- 生成的 SVG 内部的许可证注释中
+- CLI 许可证横幅中
+- 文档中（如果你的风格被添加到官方集合中）
 
-## Schema validation
+## 模式验证
 
-Add the `$schema` property to enable validation in your editor:
+添加 `$schema` 属性以在你的编辑器中启用验证：
 
 ```json
 {
@@ -317,19 +309,18 @@ Add the `$schema` property to enable validation in your editor:
 }
 ```
 
-Most editors (VS Code, WebStorm, etc.) will provide autocompletion and inline
-validation for your definition file.
+大多数编辑器（VS Code、WebStorm 等）都会为你的定义文件提供自动补全和行内验证。
 
-## Testing
+## 测试
 
-### With the CLI
+### 使用 CLI
 
 ```
 dicebear ./my-style.json ./output --count 10
 dicebear ./my-style.json ./output --seed "Alice" --format png
 ```
 
-### With the JS Library
+### 使用 JS 库
 
 ```js
 import { Avatar } from '@dicebear/core';
@@ -339,7 +330,7 @@ const avatar = new Avatar(definition, { seed: 'test' });
 console.log(avatar.toString());
 ```
 
-### With the PHP Library
+### 使用 PHP 库
 
 ```php
 use DiceBear\Avatar;
@@ -349,12 +340,8 @@ $avatar = new Avatar($definition, ['seed' => 'test']);
 echo (string) $avatar;
 ```
 
-## Next steps
+## 下一步
 
-- See the [Definition Schema Reference](/specification/definition-schema/) for
-  the complete specification
-- Browse the
-  [official definitions](https://github.com/dicebear/definitions) for
-  real-world examples
-- Use the [Figma plugin](/guides/create-an-avatar-style-with-figma/) for a
-  visual workflow
+- 查看 [定义模式参考](/specification/definition-schema/) 以获取完整规范
+- 浏览 [官方定义](https://github.com/dicebear/definitions) 以查看真实世界示例
+- 使用 [Figma 插件](/guides/create-an-avatar-style-with-figma/) 进行可视化工作流

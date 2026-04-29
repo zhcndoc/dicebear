@@ -1,8 +1,8 @@
 ---
-title: Glass – Avatar Style | DiceBear
+title: Glass – 头像风格 | DiceBear
 description: >
-  Create Glass avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  使用 DiceBear 头像库创建 Glass 头像。通过我们的免费头像 API 或 JavaScript 头像库生成独特的
+  个人资料图片。
 ---
 
 <script setup lang="ts">
@@ -15,22 +15,22 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Glass
 
-Glass is an abstract vector avatar style featuring translucent, geometric
-glass-effect shapes. Generate modern, design-forward customizable profile icons
-for apps with a premium aesthetic.
+Glass 是一种抽象的矢量头像风格，具有半透明、几何化的
+玻璃效果形状。为应用程序生成现代、注重设计且可自定义的个人资料图标，
+呈现高级美感。
 
 <StylePreview styleName="glass" />
 
 <StyleDescription styleName="glass" />
 
-## Usage
+## 用法
 
 <StyleUsage styleName="glass" />
 
-## Options
+## 选项
 
 <StyleOptions styleName="glass" />
 
-## Details
+## 详情
 
 <StyleInfo styleName="glass" />

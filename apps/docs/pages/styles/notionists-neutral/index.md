@@ -1,9 +1,8 @@
 ---
-title: Notionists Neutral – Avatar Style | DiceBear
+title: Notionists Neutral – 头像风格 | DiceBear
 description: >
-  Create Notionists Neutral avatars with the DiceBear avatar library. Generate
-  unique profile pictures using our free avatar API or JavaScript avatar
-  library.
+  使用 DiceBear 头像库创建 Notionists Neutral 头像。通过我们的免费头像 API 或 JavaScript 头像
+  库生成独特的个人资料图片。
 ---
 
 <script setup lang="ts">
@@ -16,22 +15,20 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Notionists Neutral
 
-Notionists Neutral is the gender-neutral variant of the Notionists vector
-avatar style, delivering abstract, professional customizable profile icons for
-inclusive platforms.
+Notionists Neutral 是 Notionists 向量头像风格的中性版本，为包容性平台提供抽象、专业且可自定义的个人资料图标。
 
 <StylePreview styleName="notionists-neutral" />
 
 <StyleDescription styleName="notionists-neutral" />
 
-## Usage
+## 用法
 
 <StyleUsage styleName="notionists-neutral" />
 
-## Options
+## 选项
 
 <StyleOptions styleName="notionists-neutral" />
 
-## Details
+## 详细信息
 
 <StyleInfo styleName="notionists-neutral" />

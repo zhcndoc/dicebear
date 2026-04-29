@@ -43,10 +43,10 @@ $svg = (string) new Avatar($style, [
     <UiContainer>
       <UiSectionHeader
         class="app-integration-header"
-        badge="Easy to Use"
-        description="Choose the integration that works best for your project."
+        badge="易于使用"
+        description="选择最适合你项目的集成方式。"
       >
-        <template #headline>Integrate in <strong>Minutes</strong></template>
+        <template #headline>几分钟内完成<strong>集成</strong></template>
       </UiSectionHeader>
 
       <!-- JS & PHP Libraries - Side by Side -->
@@ -57,14 +57,14 @@ $svg = (string) new Avatar($style, [
               <UiIconBox size="lg" color="#1689cc">
                 <MonitorSmartphone />
               </UiIconBox>
-              <h3 class="app-integration-title">JS Library</h3>
-              <p class="app-integration-description">No data sent externally. Full control over your avatar creation with a simple API.</p>
+              <h3 class="app-integration-title">JS 库</h3>
+              <p class="app-integration-description">不会向外部发送数据。通过简单的 API 完全掌控头像生成。</p>
             </div>
 
             <UiCode :code="plainCode.js" lang="js" scroll-to-bottom class="app-integration-code-block" />
 
             <a href="/how-to-use/js-library/" class="app-integration-link">
-              JS Documentation &rarr;
+              JS 文档 &rarr;
             </a>
           </UiCard>
         </div>
@@ -75,20 +75,20 @@ $svg = (string) new Avatar($style, [
               <UiIconBox size="lg" color="#7b83eb">
                 <Server />
               </UiIconBox>
-              <h3 class="app-integration-title">PHP Library</h3>
-              <p class="app-integration-description">Server-side avatar generation for PHP 8.2+. The same API as the JS library.</p>
+              <h3 class="app-integration-title">PHP 库</h3>
+              <p class="app-integration-description">适用于 PHP 8.2+ 的服务端头像生成，与 JS 库拥有相同的 API。</p>
             </div>
 
             <UiCode :code="plainCode.php" lang="php" scroll-to-bottom class="app-integration-code-block" />
 
             <a href="/how-to-use/php-library/" class="app-integration-link">
-              PHP Documentation &rarr;
+              PHP 文档 &rarr;
             </a>
           </UiCard>
         </div>
       </div>
 
-      <!-- HTTP API & CLI - Side by Side -->
+      <!-- HTTP 接口与命令行 - 并排展示 -->
       <div class="app-integration-grid">
         <div class="app-integration-item" :style="{ animationDelay: '0.3s' }">
           <UiCard padding="lg" radius="md" class="app-integration-card">
@@ -96,14 +96,14 @@ $svg = (string) new Avatar($style, [
               <UiIconBox size="lg" color="#22c55e">
                 <Globe />
               </UiIconBox>
-              <h3 class="app-integration-title">Avatar API</h3>
-              <p class="app-integration-description">Free avatar API for profile pictures. Handles millions of requests daily via global CDN.</p>
+              <h3 class="app-integration-title">头像 API</h3>
+              <p class="app-integration-description">免费的头像 API，用于个人资料图片。通过全球 CDN 每天处理数百万请求。</p>
             </div>
 
             <UiCode :code="plainCode.api" class="app-integration-code-block" />
 
             <a href="/how-to-use/http-api/" class="app-integration-link">
-              API Documentation &rarr;
+              API 文档 &rarr;
             </a>
           </UiCard>
         </div>
@@ -114,14 +114,14 @@ $svg = (string) new Avatar($style, [
               <UiIconBox size="lg" color="#a855f7">
                 <Terminal />
               </UiIconBox>
-              <h3 class="app-integration-title">CLI</h3>
-              <p class="app-integration-description">Generate avatars from the command line. Perfect for scripts and automation.</p>
+              <h3 class="app-integration-title">命令行</h3>
+              <p class="app-integration-description">从命令行生成头像，非常适合脚本和自动化场景。</p>
             </div>
 
             <UiCode :code="plainCode.cli" class="app-integration-code-block" />
 
             <a href="/how-to-use/cli/" class="app-integration-link">
-              CLI Documentation &rarr;
+              命令行文档 &rarr;
             </a>
           </UiCard>
         </div>

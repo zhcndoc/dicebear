@@ -141,15 +141,15 @@ onUnmounted(() => {
     </template>
     <UiContainer class="app-style-showcase-header">
       <UiSectionHeader
-        badge="Explore the Collection"
-        description="From cute characters to abstract patterns, pixel art to professional illustrations. Our avatar library features styles crafted by talented artists and designers."
+        badge="探索风格合集"
+        description="从可爱角色到抽象图案，从像素艺术到专业插画，我们的头像库汇集了众多设计师与艺术家的作品。"
       >
-        <template #headline><strong>30+</strong> Unique Avatar Styles</template>
+        <template #headline><strong>30+</strong> 种独特头像风格</template>
       </UiSectionHeader>
     </UiContainer>
 
     <div class="app-style-showcase-outer">
-      <button class="app-style-showcase-scroll-btn app-style-showcase-scroll-btn-left" @click="scrollLeft" aria-label="Scroll left">
+      <button class="app-style-showcase-scroll-btn app-style-showcase-scroll-btn-left" @click="scrollLeft" aria-label="向左滚动">
         <ArrowLeft />
       </button>
 
@@ -181,14 +181,14 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <button class="app-style-showcase-scroll-btn app-style-showcase-scroll-btn-right" @click="scrollRight" aria-label="Scroll right">
+      <button class="app-style-showcase-scroll-btn app-style-showcase-scroll-btn-right" @click="scrollRight" aria-label="向右滚动">
         <ArrowRight />
       </button>
     </div>
 
     <UiContainer class="app-style-showcase-cta">
       <UiButton href="/styles/">
-        Browse All Styles
+        浏览全部风格
         <ArrowRight :size="20" />
       </UiButton>
     </UiContainer>

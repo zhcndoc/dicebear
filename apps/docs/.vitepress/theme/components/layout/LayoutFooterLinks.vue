@@ -2,9 +2,9 @@
 import { productLinks, resourceLinks, legalLinks } from '../../config/footer-links';
 
 const columns = [
-  { title: 'Explore', links: productLinks },
-  { title: 'Resources', links: resourceLinks },
-  { title: 'Legal', links: legalLinks },
+  { title: '精选', links: productLinks },
+  { title: '资源', links: resourceLinks },
+  { title: '法律', links: legalLinks },
 ] as const;
 </script>
 

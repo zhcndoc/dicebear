@@ -25,33 +25,33 @@ const styles = theme.value.avatarStyles;
     </thead>
     <tbody>
       <tr v-if="style.meta.title">
-        <td>Title</td>
+        <td>标题</td>
         <td>{{ style.meta.title }}</td>
       </tr>
       <tr v-if="style.meta.creator">
-        <td>Creator</td>
+        <td>作者</td>
         <td>{{ style.meta.creator }}</td>
       </tr>
       <tr v-if="style.meta.source">
-        <td>Source</td>
+        <td>来源</td>
         <td>
           <a v-if="safeHttpUrl(style.meta.source)" :href="safeHttpUrl(style.meta.source)" target="_blank" rel="noopener noreferrer">{{ style.meta.source }}</a>
           <template v-else>{{ style.meta.source }}</template>
         </td>
       </tr>
       <tr v-if="style.meta.homepage">
-        <td>Homepage</td>
+        <td>主页</td>
         <td>
           <a v-if="safeHttpUrl(style.meta.homepage)" :href="safeHttpUrl(style.meta.homepage)" target="_blank" rel="noopener noreferrer">{{ style.meta.homepage }}</a>
           <template v-else>{{ style.meta.homepage }}</template>
         </td>
       </tr>
       <tr v-if="style.meta.license?.name">
-        <td>License Name</td>
+        <td>许可证名称</td>
         <td>{{ style.meta.license?.name }}</td>
       </tr>
       <tr v-if="style.meta.license?.url">
-        <td>License URL</td>
+        <td>许可证地址</td>
         <td>
           <a v-if="safeHttpUrl(style.meta.license?.url)" :href="safeHttpUrl(style.meta.license?.url)" target="_blank" rel="noopener noreferrer">{{
             style.meta.license?.url

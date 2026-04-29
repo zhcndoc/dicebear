@@ -1,8 +1,7 @@
 ---
-title: Thumbs – Avatar Style | DiceBear
+title: Thumbs – 头像风格 | DiceBear
 description: >
-  Create Thumbs avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  使用 DiceBear 头像库创建 Thumbs 头像。通过我们的免费头像 API 或 JavaScript 头像库生成独特的个人资料图片。
 ---
 
 <script setup lang="ts">
@@ -15,22 +14,20 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Thumbs
 
-Thumbs is a playful vector avatar style featuring stylized thumb characters
-with simple, expressive faces. Generate charming, customizable SVG profile
-icons with a fun, approachable aesthetic.
+Thumbs 是一种俏皮的矢量头像风格，以带有简单、富有表现力面孔的风格化拇指角色为特色。生成迷人、可自定义的 SVG 个人资料图标，呈现有趣、平易近人的美学风格。
 
 <StylePreview styleName="thumbs" />
 
 <StyleDescription styleName="thumbs" />
 
-## Usage
+## 用法
 
 <StyleUsage styleName="thumbs" />
 
-## Options
+## 选项
 
 <StyleOptions styleName="thumbs" />
 
-## Details
+## 详情
 
 <StyleInfo styleName="thumbs" />

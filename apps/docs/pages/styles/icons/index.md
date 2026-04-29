@@ -1,8 +1,8 @@
 ---
-title: Icons – Avatar Style | DiceBear
+title: 图标 – 头像风格 | DiceBear
 description: >
-  Create Icons avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  使用 DiceBear 头像库创建 Icons 头像。通过我们的免费头像 API 或 JavaScript 头像库生成独特的
+  个人资料图片。
 ---
 
 <script setup lang="ts">
@@ -13,24 +13,24 @@ import StyleUsage from "@theme/components/styles/StyleUsage.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
-# Icons
+# 图标
 
-Icons is a geometric vector avatar style built from simple, recognizable icon
-shapes. Generate clean, scalable customizable profile icons ideal for
-dashboards, admin panels, and enterprise tools.
+Icons 是一种几何矢量头像风格，由简单、易识别的图标
+形状构成。生成干净、可缩放、可自定义的个人资料图标，非常适合
+仪表盘、管理面板和企业工具。
 
 <StylePreview styleName="icons" />
 
 <StyleDescription styleName="icons" />
 
-## Usage
+## 用法
 
 <StyleUsage styleName="icons" />
 
-## Options
+## 选项
 
 <StyleOptions styleName="icons" />
 
-## Details
+## 详情
 
 <StyleInfo styleName="icons" />

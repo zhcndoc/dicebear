@@ -20,10 +20,9 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
           <UiIconBox size="lg" color="#f59e0b">
             <Star />
           </UiIconBox>
-          <h3 class="app-open-source-cards-title">Open Source</h3>
+          <h3 class="app-open-source-cards-title">开源</h3>
           <p class="app-open-source-cards-text">
-            We believe in open source. All our code is available on GitHub. Feel free to contribute,
-            fork, or simply use it with confidence.
+            我们相信开源。所有代码都可以在 GitHub 上找到。欢迎贡献、分叉，或者放心直接使用。
           </p>
           <div class="app-open-source-cards-actions">
             <UiButton
@@ -33,11 +32,11 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
               class="app-open-source-cards-action-btn"
             >
               <UiIcon :path="siGithub.path" :size="20" />
-              Star on GitHub
+              在 GitHub 上点星
             </UiButton>
             <UiButton href="/guides/contribute-to-the-library/" variant="secondary" class="app-open-source-cards-action-btn">
               <Heart />
-              Contribute
+              参与贡献
             </UiButton>
           </div>
         </UiCard>
@@ -46,14 +45,14 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
           <UiIconBox size="lg" color="#22c55e">
             <Scale />
           </UiIconBox>
-          <h3 class="app-open-source-cards-title">License</h3>
+          <h3 class="app-open-source-cards-title">许可证</h3>
           <p class="app-open-source-cards-text">
-            Our code is MIT licensed. The avatar styles are licensed under different licenses
-            chosen by the artists. Check out the overview for details.
+            我们的代码采用 MIT 许可。头像风格则使用由创作者选择的不同许可证，
+            详情请查看总览页面。
           </p>
           <div class="app-open-source-cards-actions">
             <UiButton href="/licenses/" variant="secondary" class="app-open-source-cards-action-btn app-open-source-cards-license-btn">
-              License Overview
+              许可证总览
               <ArrowRight :size="20" />
             </UiButton>
           </div>

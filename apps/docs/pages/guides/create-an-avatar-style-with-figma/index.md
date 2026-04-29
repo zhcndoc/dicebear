@@ -1,117 +1,99 @@
 ---
-title: Create an Avatar Style with Figma | DiceBear
+title: 使用 Figma 创建头像样式 | DiceBear
 description: >
-  Step-by-step guide to creating a custom DiceBear avatar style using the
-  DiceBear Figma Exporter plugin.
+  使用 DiceBear Figma Exporter 插件创建自定义 DiceBear 头像样式的分步指南。
 ---
 
-# Create an avatar style with Figma
+# 使用 Figma 创建头像样式
 
-Our [Figma plugin](https://www.figma.com/community/plugin/1005765655729342787)
-is the easiest way to create an avatar style for DiceBear. The following
-tutorial requires basic knowledge about [Figma](https://www.figma.com/).
+我们的 [Figma 插件](https://www.figma.com/community/plugin/1005765655729342787)
+是为 DiceBear 创建头像样式的最简单方法。以下教程需要对 [Figma](https://www.figma.com/) 有基础了解。
 
-## Step 1
+## 第 1 步
 
-If you want DiceBear to dynamically change colors in your avatar, you have to
-create the colors in Figma as
-[locale style](https://help.figma.com/hc/en-us/articles/360039820134-Manage-and-share-styles).
-Arrange the colors in
-[groups](https://help.figma.com/hc/en-us/articles/360039820134-Manage-and-share-styles#Manage_styles).
-Name them according to the following pattern: `<group>/<option-name>`. For
-example, `skin/light`.
+如果你希望 DiceBear 动态更改头像中的颜色，你必须在 Figma 中将颜色创建为
+[本地样式](https://help.figma.com/hc/en-us/articles/360039820134-Manage-and-share-styles)。
+将颜色整理到[组](https://help.figma.com/hc/en-us/articles/360039820134-Manage-and-share-styles#Manage_styles)中。
+按照以下格式命名：`<group>/<option-name>`。例如，`skin/light`。
 
-You will use the locale styles later to colorize paths. DiceBear will then
-change the colors of the paths within a group depending on the seed and color
-settings. For the names of `<group>` and `<option-name>` you can use
-alphanumeric characters as well as hyphens.
+稍后你将使用本地样式为路径着色。然后 DiceBear 会根据 seed 和颜色设置，改变同一组内路径的颜色。对于 `<group>` 和 `<option-name>` 的名称，你可以使用字母数字字符以及连字符。
 
-In the following example you can see how this could look like:
+在以下示例中，你可以看到它可能的样子：
 
 <video src="/guides/create-an-avatar-style-with-figma/1.mp4" controls muted></video>
 
-## Step 2
+## 第 2 步
 
-Now assign a color from the created groups to your paths that will be colored
-dynamically. Which color from a group does not matter. The important thing is
-that the group is correct.
+现在为你想要动态着色的路径分配一个来自已创建组的颜色。组中的具体颜色并不重要。重要的是组是正确的。
 
 <video src="/guides/create-an-avatar-style-with-figma/2.mp4" controls muted></video>
 
-## Step 3
+## 第 3 步
 
-Create the individual parts of your avatar as
-[components](https://help.figma.com/hc/en-us/articles/360038662654-Guide-to-components-in-Figma).
-Again, use the `<group>/<option-name>` naming pattern to create groups.
+将头像的各个独立部分创建为
+[组件](https://help.figma.com/hc/en-us/articles/360038662654-Guide-to-components-in-Figma)。
+同样，使用 `<group>/<option-name>` 命名模式来创建组。
 
-Identical to the colors, DiceBear will later (taking into account the seed and
-the settings) select a component from a group and put it into the avatar.
+与颜色类似，DiceBear 之后会（结合 seed 和设置）从某个组中选择一个组件并将其放入头像中。
 
 <video src="/guides/create-an-avatar-style-with-figma/3.mp4" controls muted></video>
 
-## Step 4
+## 第 4 步
 
-Make sure that each component in a group has the same dimensions.
+确保同一组中的每个组件具有相同的尺寸。
 
 <video src="/guides/create-an-avatar-style-with-figma/4.mp4" controls muted></video>
 
-## Step 5
+## 第 5 步
 
-Create as many color and component groups as you like. Then you can bring all
-the components together.
+创建任意数量的颜色组和组件组。然后你就可以把所有组件组合起来。
 
-To do this,
-[create a frame](https://help.figma.com/hc/en-us/articles/360041539473-Frames-in-Figma)
-and make sure that the width and height are identical. From the Assets tab, drag
-one instance from each component group into the frame.
+为此，
+[创建一个画板](https://help.figma.com/hc/en-us/articles/360041539473-Frames-in-Figma)
+并确保宽度和高度相同。从 Assets 选项卡中，将每个组件组中的一个实例拖入画板。
 
 <video src="/guides/create-an-avatar-style-with-figma/5.mp4" controls muted></video>
 
-## Step 6
+## 第 6 步
 
-Search now for the
+现在搜索
 [DiceBear Exporter](https://www.figma.com/community/plugin/1005765655729342787)
-plugin. Make sure you have selected the frame and start the plugin.
+插件。确保你已选中画板并启动插件。
 
-A dialog will open where you can make all kinds of settings. For example the
-name of your avatar style, the license or the probability with which the
-components will appear in your avatar later.
+将会打开一个对话框，你可以在其中进行各种设置。例如头像样式的名称、许可证，或者组件在头像中后续出现的概率。
 
-The settings are automatically saved to your frame. Once you are happy with your
-settings, you can export your avatar style.
+这些设置会自动保存到你的画板中。一旦你对设置满意，就可以导出你的头像样式。
 
 <video src="/guides/create-an-avatar-style-with-figma/6.mp4" controls muted></video>
 
 ::: tip
 
-Make sure you select version **10.x** in the export settings. This guide covers
-version 10.x.
+请确保在导出设置中选择 **10.x** 版本。本指南适用于 10.x 版本。
 
-![You can find the version option in the "General" tab](/guides/create-an-avatar-style-with-figma/version-hint.png)
+![你可以在“通用”选项卡中找到版本选项](/guides/create-an-avatar-style-with-figma/version-hint.png)
 
 :::
 
-## Step 7
+## 第 7 步
 
-The plugin exports a JSON file — your
-[style definition](/specification/definition-schema/). This file is ready to use
-immediately. No build step required.
+该插件会导出一个 JSON 文件——你的
+[样式定义](/specification/definition-schema/)。这个文件可以立即使用。
+无需构建步骤。
 
-You can test your style right away with the [CLI](/how-to-use/cli/):
+你可以立即使用 [CLI](/how-to-use/cli/) 测试你的样式：
 
 ```
 dicebear ./your-style.json ./test-output --count 10
 ```
 
-This generates 10 sample avatars in the `./test-output` directory.
+这会在 `./test-output` 目录中生成 10 个示例头像。
 
-## Step 8
+## 第 8 步
 
-Congratulations! You can now use your avatar style with the
-[JS Library](/how-to-use/js-library/), the
-[PHP Library](/how-to-use/php-library/), or the [CLI](/how-to-use/cli/).
+恭喜！你现在可以在
+[JS Library](/how-to-use/js-library/)、[PHP Library](/how-to-use/php-library/) 或 [CLI](/how-to-use/cli/) 中使用你的头像样式了。
 
-### With the JS Library
+### 使用 JS Library
 
 ```js
 import { Avatar } from '@dicebear/core';
@@ -119,11 +101,11 @@ import definition from './your-style.json' with { type: 'json' };
 
 const avatar = new Avatar(definition, {
   seed: 'dicebear',
-  // ... other options
+  // ... 其他选项
 });
 ```
 
-### With the PHP Library
+### 使用 PHP Library
 
 ```php
 use DiceBear\Avatar;
@@ -132,11 +114,11 @@ $definition = json_decode(file_get_contents('./your-style.json'), true);
 
 $avatar = new Avatar($definition, [
   'seed' => 'dicebear',
-  // ... other options
+  // ... 其他选项
 ]);
 ```
 
-### With the CLI
+### 使用 CLI
 
 ```
 dicebear ./your-style.json ./avatars --seed "dicebear" --format png
@@ -144,8 +126,8 @@ dicebear ./your-style.json ./avatars --seed "dicebear" --format png
 
 ::: tip
 
-The CLI automatically detects all available options from your style definition.
-Use `--help` with your definition file to see them:
+CLI 会自动检测你的样式定义中所有可用的选项。
+使用你的定义文件配合 `--help` 查看它们：
 
 ```
 dicebear ./your-style.json --help

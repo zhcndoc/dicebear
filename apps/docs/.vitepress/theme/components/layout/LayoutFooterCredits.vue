@@ -40,13 +40,17 @@ const styles = computed(() => {
               style.title
             }}</a>
             <template v-else>{{ style.title }}</template>
-            by {{ style.creator }} /
+            作者 {{ style.creator }} /
             <a v-if="safeHttpUrl(style.license?.url)" class="layout-footer-attribution-link" :href="safeHttpUrl(style.license?.url)" target="_blank" rel="noopener">{{
               style.license?.name
             }}</a>
             <template v-else>{{ style.license?.name }}</template><template v-if="index < styles.length - 1">. </template>
           </template>
-          — All avatars are remixes of the original works.
+          - 所有头像都是对原始作品的再创作。
+        </p>
+        <p class="layout-footer-attributions layout-footer-attribution-links">
+          <a target="_blank" href="https://www.zhcndoc.com" rel="noopener" class="layout-footer-attribution-link">简中文档</a>
+          <a target="_blank" href="https://beian.miit.gov.cn" rel="nofollow noopener" class="layout-footer-attribution-link">沪ICP备2024070610号-3</a>
         </p>
       </div>
     </div>

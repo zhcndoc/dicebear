@@ -1,8 +1,8 @@
 ---
-title: Fun Emoji – Avatar Style | DiceBear
+title: Fun Emoji – 头像风格 | DiceBear
 description: >
-  Create Fun Emoji avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  使用 DiceBear 头像库创建 Fun Emoji 头像。通过我们的免费头像 API 或 JavaScript 头像库生成独一无二的
+  个人资料图片。
 ---
 
 <script setup lang="ts">
@@ -15,22 +15,20 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Fun Emoji
 
-Fun Emoji is a vector avatar style based on colorful, expressive emoji
-characters. Generate playful, instantly recognizable customizable profile icons
-for chat apps, social networks, and messaging platforms.
+Fun Emoji 是一种基于色彩丰富、富有表现力的 emoji 字符的矢量头像风格。为聊天应用、社交网络和消息平台生成有趣、可立即识别且可自定义的个人资料图标。
 
 <StylePreview styleName="fun-emoji" />
 
 <StyleDescription styleName="fun-emoji" />
 
-## Usage
+## 用法
 
 <StyleUsage styleName="fun-emoji" />
 
-## Options
+## 选项
 
 <StyleOptions styleName="fun-emoji" />
 
-## Details
+## 详情
 
 <StyleInfo styleName="fun-emoji" />

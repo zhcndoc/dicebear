@@ -1,22 +1,21 @@
 ---
-title: Vue Avatar Library – DiceBear Integration
+title: Vue 头像库 – DiceBear 集成
 description: >
-  Add DiceBear SVG avatars to Vue 3 projects via the JavaScript avatar library
-  or avatar API. Includes TypeScript support.
+  通过 JavaScript 头像库或头像 API 将 DiceBear SVG 头像添加到 Vue 3 项目中。
+  支持 TypeScript。
 ---
 
-# Vue Avatar Library – Using DiceBear with Vue
+# Vue 头像库 – 在 Vue 中使用 DiceBear
 
-DiceBear pairs well with Vue's reactivity model. Wrap avatar generation in a
-`computed` property to keep profile pictures in sync with reactive data — via
-the JS library for full control, or the HTTP API for a lightweight,
-dependency-free approach.
+DiceBear 与 Vue 的响应式模型配合得很好。将头像生成包装在
+`computed` 属性中，以使头像与响应式数据保持同步——可通过 JS 库获得完全控制，
+或通过 HTTP API 采用轻量级、无依赖的方法。
 
-You can use DiceBear with Vue either via the
-[JS-Library](/how-to-use/js-library/) or the
-[HTTP-API](/how-to-use/http-api/).
+你可以通过
+[JS-Library](/how-to-use/js-library/) 或
+[HTTP-API](/how-to-use/http-api/) 在 Vue 中使用 DiceBear。
 
-## With the JS library
+## 使用 JS 库
 
 ```vue
 <script setup>
@@ -32,17 +31,17 @@ const avatar = computed(() =>
   new Avatar(lorelei, {
     seed: props.seed,
     size: 128,
-    // ... other options
+    // ... 其他选项
   }).toDataUri()
 );
 </script>
 
 <template>
-  <img :src="avatar" alt="Avatar" />
+  <img :src="avatar" alt="头像" />
 </template>
 ```
 
-## With the HTTP API
+## 使用 HTTP API
 
 ```vue
 <script setup>
@@ -56,12 +55,12 @@ const src = computed(() => {
   const url = new URL('https://api.dicebear.com/10.x/lorelei/svg');
   url.searchParams.set('seed', props.seed);
   url.searchParams.set('size', '128');
-  // ... other options
+  // ... 其他选项
   return url.href;
 });
 </script>
 
 <template>
-  <img :src="src" alt="Avatar" />
+  <img :src="src" alt="头像" />
 </template>
 ```

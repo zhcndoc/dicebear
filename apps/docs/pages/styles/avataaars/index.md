@@ -1,8 +1,8 @@
 ---
-title: Avataaars – Avatar Style | DiceBear
+title: Avataaars – 头像风格 | DiceBear
 description: >
-  Create Avataaars avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  使用 DiceBear 头像库创建 Avataaars 头像。通过我们的免费头像 API 或 JavaScript 头像库生成独特的
+  个人资料图片。
 ---
 
 <script setup lang="ts">
@@ -15,22 +15,20 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Avataaars
 
-Avataaars is a popular cartoon vector avatar style with a wide range of
-customizable facial features, hairstyles, and clothing options. Generate
-distinctive SVG profile icons for user accounts and social applications.
+Avataaars 是一种流行的卡通矢量头像风格，提供丰富的可自定义面部特征、发型和服装选项。可为用户账号和社交应用生成独特的 SVG 个人资料图标。
 
 <StylePreview styleName="avataaars" />
 
 <StyleDescription styleName="avataaars" />
 
-## Usage
+## 用法
 
 <StyleUsage styleName="avataaars" />
 
-## Options
+## 选项
 
 <StyleOptions styleName="avataaars" />
 
-## Details
+## 详情
 
 <StyleInfo styleName="avataaars" />
