@@ -28,12 +28,14 @@ export function useRangeField(avatarStyleOptions: PlaygroundStoreOptions) {
     }
   }
 
-  function singleComputed(key: string, fallback: number) {
+  function singleComputed(key: string, fallback: number | (() => number)) {
+    const resolve = typeof fallback === 'function' ? fallback : () => fallback;
+
     return computed({
       get: () => {
         const val = avatarStyleOptions[key];
 
-        return typeof val === 'number' ? val : fallback;
+        return typeof val === 'number' ? val : resolve();
       },
       set: (val: number) => {
         avatarStyleOptions[key] = val;
@@ -51,7 +53,12 @@ export function useRangeField(avatarStyleOptions: PlaygroundStoreOptions) {
     }
   }
 
-  function rangeComputed(key: string, fallback: number | readonly number[]) {
+  function rangeComputed(
+    key: string,
+    fallback: number | readonly number[] | (() => number | readonly number[]),
+  ) {
+    const resolve = typeof fallback === 'function' ? fallback : () => fallback;
+
     return computed<[number, number]>({
       get: () => {
         const val = avatarStyleOptions[key];
@@ -59,11 +66,13 @@ export function useRangeField(avatarStyleOptions: PlaygroundStoreOptions) {
         if (Array.isArray(val) && val.length === 2) return [val[0], val[1]] as [number, number];
         if (typeof val === 'number') return [val, val] as [number, number];
 
-        if (Array.isArray(fallback) && fallback.length === 2) return [fallback[0], fallback[1]] as [number, number];
+        const fb = resolve();
 
-        const fb = typeof fallback === 'number' ? fallback : 0;
+        if (Array.isArray(fb) && fb.length === 2) return [fb[0], fb[1]] as [number, number];
 
-        return [fb, fb] as [number, number];
+        const single = typeof fb === 'number' ? fb : 0;
+
+        return [single, single] as [number, number];
       },
       set: (val: [number, number]) => {
         avatarStyleOptions[key] = [val[0], val[1]];

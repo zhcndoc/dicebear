@@ -22,7 +22,9 @@ export function useVariantWeights(
   componentName: Ref<string> | (() => string),
   variants: Ref<string[]> | (() => string[]),
   hasNonDefaultWeights: Ref<boolean> | (() => boolean),
-  defaultWeights: Ref<Record<string, number>> | (() => Record<string, number>),
+  defaultWeights:
+    | Ref<Record<string, number | undefined>>
+    | (() => Record<string, number | undefined>),
 ) {
   const getName = typeof componentName === 'function' ? componentName : () => componentName.value;
   const getVariants = typeof variants === 'function' ? variants : () => variants.value;
@@ -53,7 +55,7 @@ export function useVariantWeights(
       if (val === undefined) {
         const defaults = getDefaultWeights();
 
-        return Object.fromEntries(currentVariants.map((v) => [v, defaults[v] ?? 1]));
+        return Object.fromEntries(currentVariants.map((v) => [v, v in defaults ? defaults[v] : 1]));
       }
 
       if (Array.isArray(val)) {
@@ -74,7 +76,7 @@ export function useVariantWeights(
       const currentVariants = getVariants();
       const defined = Object.entries(weights).filter(([, w]) => w !== undefined) as [string, number][];
       const defaults = getDefaultWeights();
-      const allDefault = defined.length === currentVariants.length && defined.every(([name, w]) => w === (defaults[name] ?? 1));
+      const allDefault = currentVariants.every((v) => weights[v] === (v in defaults ? defaults[v] : 1));
 
       if (allDefault) {
         delete avatarStyleOptions[variantKey.value];

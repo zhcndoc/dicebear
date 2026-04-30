@@ -23,6 +23,8 @@ import PlaygroundStyleSelect from './PlaygroundStyleSelect.vue';
 
 type ComponentInfo = {
   name: string;
+  extendsName: string | undefined;
+  usedByAliases: string[];
   variants: string[];
   hasProbability: boolean;
   hasRotate: boolean;
@@ -35,7 +37,7 @@ type ComponentInfo = {
   defaultTranslateY: readonly number[];
   defaultScale: readonly number[];
   hasNonDefaultWeights: boolean;
-  defaultWeights: Record<string, number>;
+  defaultWeights: Record<string, number | undefined>;
 };
 
 type ColorInfo = {
@@ -97,8 +99,89 @@ const hasFontWeight = computed(() =>
   loadedStyle.value ? styleUsesVariable(avatarStyleName.value, 'fontWeight') : false,
 );
 
+function effectiveSingle(parentName: string | undefined, suffix: string, fallback: readonly number[]): readonly number[] {
+  if (parentName === undefined) {
+    return fallback;
+  }
+
+  const sourceOverride = store.avatarStyleOptions[`${parentName}${suffix}`];
+
+  if (typeof sourceOverride === 'number') {
+    return [sourceOverride];
+  }
+
+  if (Array.isArray(sourceOverride)) {
+    return sourceOverride as readonly number[];
+  }
+
+  return fallback;
+}
+
+function effectiveProbability(parentName: string | undefined, fallback: number): number {
+  if (parentName === undefined) {
+    return fallback;
+  }
+
+  const sourceOverride = store.avatarStyleOptions[`${parentName}Probability`];
+
+  return typeof sourceOverride === 'number' ? sourceOverride : fallback;
+}
+
+function effectiveWeights(
+  parentName: string | undefined,
+  variantNames: readonly string[],
+  fallback: Record<string, number>,
+): Record<string, number | undefined> {
+  if (parentName === undefined) {
+    return fallback;
+  }
+
+  const override = store.avatarStyleOptions[`${parentName}Variant`];
+
+  if (override === undefined) {
+    return fallback;
+  }
+
+  if (Array.isArray(override)) {
+    return Object.fromEntries(variantNames.map((v) => [v, (override as string[]).includes(v) ? 1 : undefined]));
+  }
+
+  if (typeof override === 'string') {
+    return Object.fromEntries(variantNames.map((v) => [v, v === override ? 1 : undefined]));
+  }
+
+  if (typeof override === 'object' && override !== null) {
+    const obj = override as Record<string, number>;
+
+    return Object.fromEntries(variantNames.map((v) => [v, v in obj ? obj[v] : undefined]));
+  }
+
+  return { ...fallback };
+}
+
 const components = computed(() => {
   const result: ComponentInfo[] = [];
+  const aliasOf = new Map<string, string[]>();
+
+  for (const [key, field] of Object.entries(descriptor.value)) {
+    if (!key.endsWith('Variant') || field.type !== 'enum' || !field.weighted) {
+      continue;
+    }
+
+    const name = key.replace(/Variant$/, '');
+    const parent = loadedStyle.value?.components().get(name)?.extendsName();
+
+    if (parent !== undefined) {
+      const list = aliasOf.get(parent) ?? [];
+
+      list.push(name);
+      aliasOf.set(parent, list);
+    }
+  }
+
+  for (const list of aliasOf.values()) {
+    list.sort((a, b) => a.localeCompare(b));
+  }
 
   for (const [key, field] of Object.entries(descriptor.value)) {
     if (!key.endsWith('Variant') || field.type !== 'enum' || !field.weighted) {
@@ -107,24 +190,31 @@ const components = computed(() => {
 
     const name = key.replace(/Variant$/, '');
     const comp = loadedStyle.value?.components().get(name);
+    const extendsName = comp?.extendsName();
+    const variantNames = (field.values as string[]) ?? [];
+    const definitionWeights = comp
+      ? Object.fromEntries([...comp.variants()].map(([n, v]) => [n, v.weight()]))
+      : {};
+    const defaultWeights = effectiveWeights(extendsName, variantNames, definitionWeights);
+    const hasNonDefaultWeights = Object.values(defaultWeights).some((w) => w !== undefined && w !== 1);
 
     result.push({
       name,
-      variants: (field.values as string[]) ?? [],
+      extendsName,
+      usedByAliases: aliasOf.get(name) ?? [],
+      variants: variantNames,
       hasProbability: `${name}Probability` in descriptor.value,
       hasRotate: `${name}Rotate` in descriptor.value,
       hasTranslateX: `${name}TranslateX` in descriptor.value,
       hasTranslateY: `${name}TranslateY` in descriptor.value,
       hasScale: `${name}Scale` in descriptor.value,
-      defaultProbability: comp?.probability() ?? 100,
-      defaultRotate: comp?.rotate() ?? [],
-      defaultTranslateX: comp?.translate().x() ?? [],
-      defaultTranslateY: comp?.translate().y() ?? [],
-      defaultScale: comp?.scale() ?? [],
-      hasNonDefaultWeights: comp ? [...comp.variants().values()].some((v) => v.weight() !== 1) : false,
-      defaultWeights: comp
-        ? Object.fromEntries([...comp.variants()].map(([name, v]) => [name, v.weight()]))
-        : {},
+      defaultProbability: effectiveProbability(extendsName, comp?.probability() ?? 100),
+      defaultRotate: effectiveSingle(extendsName, 'Rotate', comp?.rotate() ?? []),
+      defaultTranslateX: effectiveSingle(extendsName, 'TranslateX', comp?.translate().x() ?? []),
+      defaultTranslateY: effectiveSingle(extendsName, 'TranslateY', comp?.translate().y() ?? []),
+      defaultScale: effectiveSingle(extendsName, 'Scale', comp?.scale() ?? []),
+      hasNonDefaultWeights,
+      defaultWeights,
     });
   }
 
@@ -265,12 +355,19 @@ const onSeedFocus = (e: FocusEvent) => {
         <AccordionPanel v-for="comp in components" :key="`${avatarStyleName}-${comp.name}`" :value="comp.name">
           <AccordionHeader>
             <span class="pg-options-label">{{ capitalCase(comp.name) }}</span>
+            <span
+              v-if="comp.extendsName"
+              v-tooltip="`Alias of ${comp.extendsName} — inherits variants and dimensions`"
+              class="pg-options-alias-hint"
+            >↳ {{ comp.extendsName }}</span>
             <Tag :value="`${activeCount(comp)}/${comp.variants.length}`" severity="secondary" class="pg-options-tag" />
           </AccordionHeader>
           <AccordionContent>
             <PlaygroundComponentSection
               :key="`${avatarStyleName}-${comp.name}`"
               :component-name="comp.name"
+              :extends-name="comp.extendsName"
+              :used-by-aliases="comp.usedByAliases"
               :variants="comp.variants"
               :has-probability="comp.hasProbability"
               :has-rotate="comp.hasRotate"
@@ -350,6 +447,14 @@ const onSeedFocus = (e: FocusEvent) => {
 
 .pg-options-tag {
   margin-right: 8px;
+}
+
+.pg-options-alias-hint {
+  margin-right: 8px;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--ui-c-text-subtle);
+  white-space: nowrap;
 }
 
 .pg-options-seed-row {

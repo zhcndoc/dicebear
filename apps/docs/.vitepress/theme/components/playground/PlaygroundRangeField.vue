@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import Slider from 'primevue/slider';
 import Button from 'primevue/button';
 import { ArrowLeftRight } from '@lucide/vue';
@@ -26,14 +26,26 @@ const props = withDefaults(
 const store = useStore();
 const { rangeMode, isRangeMode, toggleRangeMode, resetRangeField, singleComputed, rangeComputed } = useRangeField(store.avatarStyleOptions);
 
-const hasDefaultRange = props.defaultRange?.length === 2;
+watch(
+  () => props.defaultRange?.length === 2,
+  (hasDefaultRange) => {
+    const localOverride = store.avatarStyleOptions[props.optionKey];
 
-if (hasDefaultRange) {
-  rangeMode[props.optionKey] = true;
-}
+    if (localOverride !== undefined) {
+      return;
+    }
 
-const singleVal = singleComputed(props.optionKey, props.defaultSingle);
-const rangeVal = rangeComputed(props.optionKey, props.defaultRange ?? props.defaultSingle);
+    if (hasDefaultRange) {
+      rangeMode[props.optionKey] = true;
+    } else {
+      delete rangeMode[props.optionKey];
+    }
+  },
+  { immediate: true },
+);
+
+const singleVal = singleComputed(props.optionKey, () => props.defaultSingle);
+const rangeVal = rangeComputed(props.optionKey, () => props.defaultRange ?? props.defaultSingle);
 
 const displayRange = computed<[number, number]>(() => {
   const [a, b] = rangeVal.value;
