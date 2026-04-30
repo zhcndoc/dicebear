@@ -3,34 +3,84 @@ import { computed, ref } from 'vue';
 import { UiSection, UiContainer, UiSectionHeader, UiCard } from '../ui';
 import AppSmallHero from '../app/AppSmallHero.vue';
 import AppStatsChart from '../app/AppStatsChart.vue';
-import AppStatsPieChart from '../app/AppStatsPieChart.vue';
-import AppStatsBarChart from '../app/AppStatsBarChart.vue';
+import AppStatsMultiLineChart from '../app/AppStatsMultiLineChart.vue';
 import AppStatsGlobe from '../app/AppStatsGlobe.vue';
 import { useApiStatsRaw, lastCompleteMonth } from '../../composables/useApiStats';
 import { formatNumber, formatBytes } from '../../utils/format';
 
 const SECONDS_PER_DAY = 86400;
 const ROLLING_WINDOW_DAYS = 7;
+const TOP_STYLES = 10;
 
 const stats = useApiStatsRaw();
 
-function aggregateDaily(data: Record<string, number>): {
+function fmtDay(d: Date): string {
+  return d.toLocaleDateString('en', { month: 'short', day: 'numeric' });
+}
+
+function weekStartKey(dateStr: string): string {
+  const d = new Date(`${dateStr}T00:00:00Z`);
+  const dow = d.getUTCDay();
+  const offset = (dow + 6) % 7;
+
+  d.setUTCDate(d.getUTCDate() - offset);
+
+  return d.toISOString().slice(0, 10);
+}
+
+function fmtWeekRange(weekStartStr: string): string {
+  const start = new Date(weekStartStr);
+  const end = new Date(start.getTime() + 6 * SECONDS_PER_DAY * 1000);
+
+  if (start.getMonth() === end.getMonth()) {
+    return `${fmtDay(start)}–${end.getDate()}`;
+  }
+
+  return `${fmtDay(start)} – ${fmtDay(end)}`;
+}
+
+function completeWeeks(dayKeys: string[], weekOrder: string[]): string[] {
+  if (weekOrder.length === 0) {
+    return weekOrder;
+  }
+
+  const firstDow = new Date(`${dayKeys[0]}T00:00:00Z`).getUTCDay();
+  const lastDow = new Date(`${dayKeys[dayKeys.length - 1]}T00:00:00Z`).getUTCDay();
+  const start = firstDow !== 1 ? 1 : 0;
+  const end = lastDow !== 0 ? weekOrder.length - 1 : weekOrder.length;
+
+  return weekOrder.slice(start, end);
+}
+
+function aggregateWeekly(data: Record<string, number>): {
   labels: string[];
   values: number[];
 } {
-  const entries = Object.entries(data).sort(([a], [b]) => a.localeCompare(b));
+  const dayKeys = Object.keys(data).sort();
 
-  if (entries.length > 1) {
-    entries.pop();
+  if (dayKeys.length === 0) {
+    return { labels: [], values: [] };
   }
 
-  return {
-    labels: entries.map(([k]) => {
-      const d = new Date(k);
+  const sums: Record<string, number> = {};
+  const weekOrder: string[] = [];
 
-      return d.toLocaleDateString('en', { month: 'short', day: 'numeric' });
-    }),
-    values: entries.map(([, v]) => v),
+  for (const dayKey of dayKeys) {
+    const wk = weekStartKey(dayKey);
+
+    if (sums[wk] === undefined) {
+      sums[wk] = 0;
+      weekOrder.push(wk);
+    }
+
+    sums[wk] += data[dayKey];
+  }
+
+  const weeks = completeWeeks(dayKeys, weekOrder);
+
+  return {
+    labels: weeks.map((k) => fmtWeekRange(k)),
+    values: weeks.map((week) => sums[week]),
   };
 }
 
@@ -39,7 +89,7 @@ const requestsData = computed(() => {
     return null;
   }
 
-  return aggregateDaily(stats.value.requests);
+  return aggregateWeekly(stats.value.requests);
 });
 
 const downloadsData = computed(() => {
@@ -47,37 +97,79 @@ const downloadsData = computed(() => {
     return null;
   }
 
-  return aggregateDaily(stats.value.downloads.npm);
+  return aggregateWeekly(stats.value.downloads.npm);
 });
 
-function averageWeekly(
+function buildSeries(
   source: Record<string, [string, number][]>,
-): { data: [string, number][]; label: string } | null {
-  const keys = Object.keys(source).sort();
+): { labels: string[]; series: Array<{ name: string; values: number[] }> } | null {
+  const dayKeys = Object.keys(source).sort();
 
-  if (keys.length === 0) {
+  if (dayKeys.length === 0) {
+    return null;
+  }
+
+  const sums: Record<string, Record<string, number>> = {};
+  const dayCount: Record<string, number> = {};
+  const weekOrder: string[] = [];
+
+  for (const dayKey of dayKeys) {
+    const wk = weekStartKey(dayKey);
+
+    if (!sums[wk]) {
+      sums[wk] = {};
+      dayCount[wk] = 0;
+      weekOrder.push(wk);
+    }
+
+    dayCount[wk] += 1;
+
+    for (const [name, value] of source[dayKey]) {
+      sums[wk][name] = (sums[wk][name] ?? 0) + value;
+    }
+  }
+
+  const weeks = completeWeeks(dayKeys, weekOrder);
+
+  if (weeks.length === 0) {
     return null;
   }
 
   const totals: Record<string, number> = {};
 
-  for (const key of keys) {
-    for (const [name, value] of source[key]) {
-      totals[name] = (totals[name] || 0) + value;
+  for (const week of weeks) {
+    const count = dayCount[week] || 1;
+
+    for (const [name, sum] of Object.entries(sums[week])) {
+      totals[name] = (totals[name] ?? 0) + sum / count;
     }
   }
 
-  const count = keys.length;
-  const averaged: [string, number][] = Object.entries(totals)
-    .map(([name, sum]) => [name, sum / count] as [string, number])
-    .sort(([, a], [, b]) => b - a);
+  const ranked = Object.keys(totals).sort((a, b) => totals[b] - totals[a]);
 
-  const firstDate = new Date(keys[0]);
-  const lastDate = new Date(keys[keys.length - 1]);
-  const fmt = (d: Date) => d.toLocaleDateString('en', { month: 'short', day: 'numeric' });
-  const label = keys.length === 1 ? fmt(firstDate) : `${fmt(firstDate)} – ${fmt(lastDate)}`;
+  if (ranked.length === 0) {
+    return null;
+  }
 
-  return { data: averaged, label };
+  const labels = weeks.map((k) => fmtWeekRange(k));
+  const series = ranked.map((name) => ({
+    name,
+    values: weeks.map((week) => (sums[week][name] ?? 0) / (dayCount[week] || 1)),
+  }));
+
+  return { labels, series };
+}
+
+function formatPercent(value: number): string {
+  if (value === 0) {
+    return '0%';
+  }
+
+  if (value < 0.1) {
+    return '<0.1%';
+  }
+
+  return `${value.toFixed(1)}%`;
 }
 
 const stylesData = computed(() => {
@@ -85,7 +177,7 @@ const stylesData = computed(() => {
     return null;
   }
 
-  return averageWeekly(stats.value.styles);
+  return buildSeries(stats.value.styles);
 });
 
 const versionsData = computed(() => {
@@ -93,7 +185,7 @@ const versionsData = computed(() => {
     return null;
   }
 
-  return averageWeekly(stats.value.versions);
+  return buildSeries(stats.value.versions);
 });
 
 const formatsData = computed(() => {
@@ -101,7 +193,7 @@ const formatsData = computed(() => {
     return null;
   }
 
-  return averageWeekly(stats.value.formats);
+  return buildSeries(stats.value.formats);
 });
 
 const showAllStyles = ref(false);
@@ -196,8 +288,8 @@ const monthlyStats = computed(() => {
   <UiSection divider>
     <UiContainer>
       <UiSectionHeader
-        badge="Daily Trends"
-        description="Daily request and download volumes — toggle between the HTTP API and npm packages."
+        badge="Weekly Trends"
+        description="Weekly request and download volumes — toggle between the HTTP API and npm packages."
       >
         <template #headline>Usage Over <strong>Time</strong></template>
       </UiSectionHeader>
@@ -258,44 +350,42 @@ const monthlyStats = computed(() => {
 
       <ClientOnly>
         <UiCard v-if="stylesData" class="page-stats-styles-card">
-          <h3 class="page-stats-chart-title">
-            Popular Styles
-            <span class="page-stats-chart-subtitle">{{
-              stylesData.label
-            }}</span>
-          </h3>
-          <AppStatsBarChart
-            :data="
-              showAllStyles ? stylesData.data : stylesData.data.slice(0, 10)
+          <h3 class="page-stats-chart-title">Popular Styles</h3>
+          <AppStatsMultiLineChart
+            :labels="stylesData.labels"
+            :series="
+              showAllStyles
+                ? stylesData.series
+                : stylesData.series.slice(0, TOP_STYLES)
             "
+            :format-value="formatPercent"
           />
           <button
+            v-if="stylesData.series.length > TOP_STYLES"
             class="page-stats-show-all"
             @click="showAllStyles = !showAllStyles"
           >
-            {{ showAllStyles ? 'Show Top 10' : 'Show All' }}
+            {{ showAllStyles ? `Show Top ${TOP_STYLES}` : 'Show All' }}
           </button>
         </UiCard>
 
-        <div class="page-stats-pies">
-          <UiCard v-if="versionsData" class="page-stats-pie-card">
-            <h3 class="page-stats-chart-title">
-              API Versions
-              <span class="page-stats-chart-subtitle">{{
-                versionsData.label
-              }}</span>
-            </h3>
-            <AppStatsPieChart :data="versionsData.data" />
+        <div class="page-stats-breakdown-grid">
+          <UiCard v-if="versionsData">
+            <h3 class="page-stats-chart-title">API Versions</h3>
+            <AppStatsMultiLineChart
+              :labels="versionsData.labels"
+              :series="versionsData.series"
+              :format-value="formatPercent"
+            />
           </UiCard>
 
-          <UiCard v-if="formatsData" class="page-stats-pie-card">
-            <h3 class="page-stats-chart-title">
-              Output Formats
-              <span class="page-stats-chart-subtitle">{{
-                formatsData.label
-              }}</span>
-            </h3>
-            <AppStatsPieChart :data="formatsData.data" />
+          <UiCard v-if="formatsData">
+            <h3 class="page-stats-chart-title">Output Formats</h3>
+            <AppStatsMultiLineChart
+              :labels="formatsData.labels"
+              :series="formatsData.series"
+              :format-value="formatPercent"
+            />
           </UiCard>
         </div>
       </ClientOnly>
@@ -401,12 +491,6 @@ const monthlyStats = computed(() => {
   margin-bottom: 24px;
 }
 
-.page-stats-chart-subtitle {
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--vp-c-text-2);
-}
-
 .page-stats-show-all {
   display: block;
   margin: 16px auto 0;
@@ -430,7 +514,7 @@ const monthlyStats = computed(() => {
   margin-bottom: 32px;
 }
 
-.page-stats-pies {
+.page-stats-breakdown-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 32px;
@@ -459,7 +543,7 @@ const monthlyStats = computed(() => {
     align-items: center;
   }
 
-  .page-stats-pies {
+  .page-stats-breakdown-grid {
     grid-template-columns: 1fr;
   }
 }
