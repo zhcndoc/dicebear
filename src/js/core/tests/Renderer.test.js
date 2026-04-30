@@ -286,6 +286,19 @@ describe('Renderer', () => {
       assert.ok(!svg.includes('<line'));
     });
 
+    it('should put the variant body in <defs> and reference it via <use>', () => {
+      const svg = new Avatar(styleWithComponents, {
+        seed: 'test',
+        eyesVariant: 'open',
+      }).toString();
+
+      const idMatch = svg.match(/<g id="(eyes-open-[a-f0-9]+)"><circle r="5"\/><\/g>/);
+
+      assert.ok(idMatch, 'expected variant body wrapped in <g id="…"> inside <defs>');
+      assert.ok(svg.includes('<defs>'));
+      assert.ok(svg.includes(`<use href="#${idMatch[1]}"/>`));
+    });
+
     it('should skip component with probability 0', () => {
       const svg = new Avatar(styleWithComponents, {
         seed: 'test',
@@ -294,9 +307,10 @@ describe('Renderer', () => {
 
       assert.ok(!svg.includes('<circle'));
       assert.ok(!svg.includes('<line'));
+      assert.ok(!svg.includes('<use'));
     });
 
-    it('should apply transforms', () => {
+    it('should apply transforms on the <use> element', () => {
       const svg = new Avatar(styleWithComponents, {
         seed: 'test',
         eyesVariant: 'open',
@@ -304,20 +318,20 @@ describe('Renderer', () => {
         eyesTranslateY: 10,
       }).toString();
 
-      assert.ok(svg.includes('transform="translate(2.5, 5)"'));
+      assert.ok(svg.includes('<use transform="translate(2.5, 5)" href="#eyes-open-'));
     });
 
-    it('should apply rotation with center point', () => {
+    it('should apply rotation with center point on the <use> element', () => {
       const svg = new Avatar(styleWithComponents, {
         seed: 'test',
         eyesVariant: 'open',
         eyesRotate: 45,
       }).toString();
 
-      assert.ok(svg.includes('rotate(45, 25, 25)'));
+      assert.ok(svg.includes('<use transform="rotate(45, 25, 25)" href="#eyes-open-'));
     });
 
-    it('should not wrap in g when no transforms', () => {
+    it('should omit the transform attribute when no transforms apply', () => {
       const svg = new Avatar(styleWithComponents, {
         seed: 'test',
         eyesVariant: 'open',
@@ -326,7 +340,41 @@ describe('Renderer', () => {
         eyesTranslateY: 0,
       }).toString();
 
-      assert.ok(!svg.includes('<g'));
+      assert.ok(svg.includes('<use href="#eyes-open-'));
+      assert.ok(!/<use[^>]*\btransform=/.test(svg));
+    });
+
+    it('should deduplicate identical component references via shared <defs>', () => {
+      const style = new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            { type: 'component', name: 'eyes' },
+            { type: 'component', name: 'eyes' },
+          ],
+        },
+        components: {
+          eyes: {
+            width: 50,
+            height: 50,
+            variants: {
+              open: { elements: [{ type: 'element', name: 'circle', attributes: { r: '5' } }] },
+            },
+          },
+        },
+      });
+
+      const svg = new Avatar(style, {
+        seed: 'test',
+        eyesVariant: 'open',
+      }).toString();
+
+      const circleMatches = svg.match(/<circle r="5"\/>/g) ?? [];
+      const useMatches = svg.match(/<use href="#eyes-open-[a-f0-9]+"\/>/g) ?? [];
+
+      assert.equal(circleMatches.length, 1, 'variant body must appear only once');
+      assert.equal(useMatches.length, 2, 'each component reference becomes its own <use>');
     });
   });
 
@@ -349,14 +397,17 @@ describe('Renderer', () => {
       assert.ok(differed, 'expected at least one seed where alias picks a different variant than the source');
     });
 
-    it('should inherit eyesVariant on the alias when only the source is set', () => {
+    it('should inherit eyesVariant on the alias and share the same <defs> entry', () => {
       const svg = new Avatar(aliasStyle, {
         seed: 'fallthrough',
         eyesVariant: 'b',
       }).toString();
-      const matches = [...svg.matchAll(/<circle id="([a-z])"\/>/g)].map((m) => m[1]);
+      const circles = [...svg.matchAll(/<circle id="([a-z])"\/>/g)].map((m) => m[1]);
+      const uses = [...svg.matchAll(/<use href="#(eyes-[a-z]-[a-f0-9]+)"\/>/g)].map((m) => m[1]);
 
-      assert.deepEqual(matches, ['b', 'b']);
+      assert.deepEqual(circles, ['b'], 'variant body is registered once');
+      assert.equal(uses.length, 2, 'both component slots reference the body');
+      assert.equal(uses[0], uses[1], 'both <use> elements share the same href');
     });
 
     it('should let the alias override eyesVariant independently', () => {

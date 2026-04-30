@@ -4,7 +4,7 @@
     "options": {
       "seed": "parity-1"
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><circle id=\"c\"/><circle id=\"b\"/></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><g id=\"eyes-c-10868c7e\"><circle id=\"c\"/></g><g id=\"eyes-b-10868c7e\"><circle id=\"b\"/></g></defs><use href=\"#eyes-c-10868c7e\"/><use href=\"#eyes-b-10868c7e\"/></svg>",
     "resolvedOptions": {
       "seed": "parity-1",
       "backgroundColorFill": "solid",
@@ -33,7 +33,7 @@
     "options": {
       "seed": "parity-2"
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><circle id=\"a\"/><circle id=\"a\"/></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><g id=\"eyes-a-0f868aeb\"><circle id=\"a\"/></g></defs><use href=\"#eyes-a-0f868aeb\"/><use href=\"#eyes-a-0f868aeb\"/></svg>",
     "resolvedOptions": {
       "seed": "parity-2",
       "backgroundColorFill": "solid",
@@ -63,7 +63,7 @@
       "seed": "parity-1",
       "eyesVariant": "b"
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><circle id=\"b\"/><circle id=\"b\"/></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><g id=\"eyes-b-10868c7e\"><circle id=\"b\"/></g></defs><use href=\"#eyes-b-10868c7e\"/><use href=\"#eyes-b-10868c7e\"/></svg>",
     "resolvedOptions": {
       "seed": "parity-1",
       "backgroundColorFill": "solid",
@@ -94,7 +94,7 @@
       "eyesVariant": "b",
       "eyesRightVariant": "d"
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><circle id=\"b\"/><circle id=\"d\"/></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><g id=\"eyes-b-10868c7e\"><circle id=\"b\"/></g><g id=\"eyes-d-10868c7e\"><circle id=\"d\"/></g></defs><use href=\"#eyes-b-10868c7e\"/><use href=\"#eyes-d-10868c7e\"/></svg>",
     "resolvedOptions": {
       "seed": "parity-1",
       "backgroundColorFill": "solid",
@@ -145,7 +145,7 @@
       "eyesProbability": 0,
       "eyesRightProbability": 100
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><circle id=\"b\"/></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><g id=\"eyes-b-10868c7e\"><circle id=\"b\"/></g></defs><use href=\"#eyes-b-10868c7e\"/></svg>",
     "resolvedOptions": {
       "seed": "parity-1",
       "backgroundColorFill": "solid",

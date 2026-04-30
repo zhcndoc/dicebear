@@ -313,8 +313,11 @@ class Renderer
     }
 
     /**
-     * Resolves a component reference to a chosen variant and renders its
-     * elements wrapped in any rotate/translate transforms.
+     * Resolves a component reference to a chosen variant and emits a `<use>`
+     * pointing at a `<defs>` entry that holds the variant body. Aliases of the
+     * same source component sharing a variant — and identical components
+     * referenced more than once — therefore produce a single `<defs>` entry
+     * referenced by every `<use>`, never duplicated SVG markup.
      */
     private function renderComponentElement(Element $element): string
     {
@@ -344,16 +347,21 @@ class Renderer
             return '';
         }
 
-        $body = $this->renderElements($variant->elements());
-        $transforms = $this->buildTransforms($componentName);
+        $sourceName = $component->extendsName() ?? $componentName;
+        $id = "{$sourceName}-{$variantName}-{$this->hashSeed()}";
 
-        if (count($transforms) === 0) {
-            return $body;
+        if (!array_key_exists($id, $this->defs)) {
+            $body = $this->renderElements($variant->elements());
+
+            $this->defs[$id] = "<g id=\"{$id}\">{$body}</g>";
         }
 
-        $transform = implode(' ', $transforms);
+        $transforms = $this->buildTransforms($componentName);
+        $transformAttr = count($transforms) > 0
+            ? ' transform="' . implode(' ', $transforms) . '"'
+            : '';
 
-        return "<g transform=\"{$transform}\">{$body}</g>";
+        return "<use{$transformAttr} href=\"#{$id}\"/>";
     }
 
     /**

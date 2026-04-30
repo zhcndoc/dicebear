@@ -1,6 +1,6 @@
 {
-  "$id": "https://cdn.hopjs.net/npm/@dicebear/definitions@10.0.0-rc.2/dist/initials.min.json",
-  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@0.11.0/dist/definition.min.json",
+  "$id": "https://cdn.hopjs.net/npm/@dicebear/definitions@10.0.0-rc.5/dist/initials.min.json",
+  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@0.13.0/dist/definition.min.json",
   "meta": {
     "license": {
       "name": "CC0 1.0",

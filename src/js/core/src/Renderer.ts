@@ -316,8 +316,11 @@ export class Renderer {
   }
 
   /**
-   * Resolves a component reference to a chosen variant and renders its
-   * elements wrapped in any rotate/translate transforms.
+   * Resolves a component reference to a chosen variant and emits a `<use>`
+   * pointing at a `<defs>` entry that holds the variant body. Aliases of the
+   * same source component sharing a variant — and identical components
+   * referenced more than once — therefore produce a single `<defs>` entry
+   * referenced by every `<use>`, never duplicated SVG markup.
    */
   #renderComponentElement(element: Element): string {
     const componentName = element.name();
@@ -342,14 +345,20 @@ export class Renderer {
       return '';
     }
 
-    const body = this.#renderElements(variant.elements());
-    const transforms = this.#buildTransforms(componentName);
+    const sourceName = component.extendsName() ?? componentName;
+    const id = `${sourceName}-${variantName}-${this.#hashSeed()}`;
 
-    if (transforms.length === 0) {
-      return body;
+    if (!this.#defs.has(id)) {
+      const body = this.#renderElements(variant.elements());
+
+      this.#defs.set(id, `<g id="${id}">${body}</g>`);
     }
 
-    return `<g transform="${transforms.join(' ')}">${body}</g>`;
+    const transforms = this.#buildTransforms(componentName);
+    const transformAttr =
+      transforms.length > 0 ? ` transform="${transforms.join(' ')}"` : '';
+
+    return `<use${transformAttr} href="#${id}"/>`;
   }
 
   /**
