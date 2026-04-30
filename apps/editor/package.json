@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@dicebear/core": "10.0.0-rc.2",
-    "@dicebear/definitions": "^10.0.0-rc.4",
+    "@dicebear/definitions": "^10.0.0-rc.5",
     "@primeuix/themes": "^2.0.3",
     "@vueuse/core": "^14.2.0",
     "change-case": "^5.4.4",
