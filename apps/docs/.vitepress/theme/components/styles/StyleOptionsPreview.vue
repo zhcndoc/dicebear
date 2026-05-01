@@ -75,25 +75,14 @@ const previewDataUri = computed(() => {
   if (t.type === 'probability') {
     const firstVariant = p.firstVariant(t.component);
     if (!firstVariant) return undefined;
-    return p.toDataUri(t.component, firstVariant, { [props.name]: props.value });
+
+    return p.toDataUri(t.component, firstVariant, {
+      [props.name]: props.value,
+      backgroundColor: resolveColors('background', styleColors.value),
+    });
   }
 
   return undefined;
-});
-
-const isBackgroundPreview = computed(() => {
-  const t = previewTarget.value;
-
-  if (
-    t.type === 'color' ||
-    t.type === 'colorFill' ||
-    t.type === 'colorFillStops' ||
-    t.type === 'colorAngle'
-  ) {
-    return t.color === 'background';
-  }
-
-  return false;
 });
 
 const generalOptions = computed(() => {
@@ -122,7 +111,7 @@ const generalOptions = computed(() => {
     }
   }
 
-  if (!isBackgroundPreview.value) {
+  if (t.type === 'variant') {
     opts.backgroundColor = [];
   }
 
