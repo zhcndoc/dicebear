@@ -136,21 +136,18 @@ class Renderer
     }
 
     /**
-     * Clips `$body` to a rounded rectangle and registers the corresponding
-     * `clipPath` in `<defs>` when `borderRadius` is non-zero.
+     * Clips `$body` to the canvas rectangle (rounded when `borderRadius` is
+     * non-zero) and registers the corresponding `clipPath` in `<defs>`. The
+     * clip is always applied so transformed content cannot bleed past the
+     * canvas bounds, regardless of the consumer's `overflow` setting.
      */
     private function applyBorderRadius(string $body, Canvas $canvas): string
     {
         $radius = $this->options->borderRadius();
-
-        if ($radius === 0.0) {
-            return $body;
-        }
+        $id = 'clip-' . $this->hashSeed();
 
         $rx = ($radius / 100) * $canvas->width();
         $ry = ($radius / 100) * $canvas->height();
-
-        $id = 'clip-' . $this->hashSeed();
 
         $this->defs[$id] = "<clipPath id=\"{$id}\"><rect width=\"{$canvas->width()}\" height=\"{$canvas->height()}\" rx=\"{$rx}\" ry=\"{$ry}\"/></clipPath>";
 

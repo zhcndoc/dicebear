@@ -59,9 +59,10 @@ describe('Renderer', () => {
 
     it('should not include size when not set', () => {
       const svg = new Avatar(minimalStyle).toString();
+      const openTag = svg.slice(0, svg.indexOf('>') + 1);
 
-      assert.ok(!svg.includes('width='));
-      assert.ok(!svg.includes('height='));
+      assert.ok(!openTag.includes('width='));
+      assert.ok(!openTag.includes('height='));
     });
   });
 
@@ -646,10 +647,13 @@ describe('Renderer', () => {
       assert.ok(svg.includes('clip-path="url(#clip-'));
     });
 
-    it('should not apply border radius when 0', () => {
+    it('should still apply a square clipPath when border radius is 0', () => {
       const svg = new Avatar(minimalStyle, { borderRadius: 0 }).toString();
 
-      assert.ok(!svg.includes('clipPath'));
+      assert.ok(svg.includes('<clipPath id="clip-'));
+      assert.ok(svg.includes('rx="0"'));
+      assert.ok(svg.includes('ry="0"'));
+      assert.ok(svg.includes('clip-path="url(#clip-'));
     });
   });
 
@@ -744,7 +748,9 @@ describe('Renderer', () => {
     it('should not render background without colors', () => {
       const svg = new Avatar(minimalStyle).toString();
 
-      assert.ok(!svg.includes('<rect'));
+      // The clipPath wrapper always emits a <rect>; only the background
+      // <rect> carries a fill attribute, so check for that specifically.
+      assert.ok(!/<rect[^>]*\sfill=/.test(svg));
     });
   });
 

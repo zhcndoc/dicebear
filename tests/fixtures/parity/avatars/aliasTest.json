@@ -4,7 +4,7 @@
     "options": {
       "seed": "parity-1"
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><g id=\"eyes-c-10868c7e\"><circle id=\"c\"/></g><g id=\"eyes-b-10868c7e\"><circle id=\"b\"/></g></defs><use href=\"#eyes-c-10868c7e\"/><use href=\"#eyes-b-10868c7e\"/></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><g id=\"eyes-c-10868c7e\"><circle id=\"c\"/></g><g id=\"eyes-b-10868c7e\"><circle id=\"b\"/></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><use href=\"#eyes-c-10868c7e\"/><use href=\"#eyes-b-10868c7e\"/></g></svg>",
     "resolvedOptions": {
       "seed": "parity-1",
       "backgroundColorFill": "solid",
@@ -33,7 +33,7 @@
     "options": {
       "seed": "parity-2"
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><g id=\"eyes-a-0f868aeb\"><circle id=\"a\"/></g></defs><use href=\"#eyes-a-0f868aeb\"/><use href=\"#eyes-a-0f868aeb\"/></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><g id=\"eyes-a-0f868aeb\"><circle id=\"a\"/></g><clipPath id=\"clip-0f868aeb\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-0f868aeb)\"><use href=\"#eyes-a-0f868aeb\"/><use href=\"#eyes-a-0f868aeb\"/></g></svg>",
     "resolvedOptions": {
       "seed": "parity-2",
       "backgroundColorFill": "solid",
@@ -63,7 +63,7 @@
       "seed": "parity-1",
       "eyesVariant": "b"
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><g id=\"eyes-b-10868c7e\"><circle id=\"b\"/></g></defs><use href=\"#eyes-b-10868c7e\"/><use href=\"#eyes-b-10868c7e\"/></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><g id=\"eyes-b-10868c7e\"><circle id=\"b\"/></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><use href=\"#eyes-b-10868c7e\"/><use href=\"#eyes-b-10868c7e\"/></g></svg>",
     "resolvedOptions": {
       "seed": "parity-1",
       "backgroundColorFill": "solid",
@@ -94,7 +94,7 @@
       "eyesVariant": "b",
       "eyesRightVariant": "d"
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><g id=\"eyes-b-10868c7e\"><circle id=\"b\"/></g><g id=\"eyes-d-10868c7e\"><circle id=\"d\"/></g></defs><use href=\"#eyes-b-10868c7e\"/><use href=\"#eyes-d-10868c7e\"/></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><g id=\"eyes-b-10868c7e\"><circle id=\"b\"/></g><g id=\"eyes-d-10868c7e\"><circle id=\"d\"/></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><use href=\"#eyes-b-10868c7e\"/><use href=\"#eyes-d-10868c7e\"/></g></svg>",
     "resolvedOptions": {
       "seed": "parity-1",
       "backgroundColorFill": "solid",
@@ -124,7 +124,7 @@
       "seed": "parity-1",
       "eyesProbability": 0
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"></g></svg>",
     "resolvedOptions": {
       "seed": "parity-1",
       "backgroundColorFill": "solid",
@@ -145,7 +145,7 @@
       "eyesProbability": 0,
       "eyesRightProbability": 100
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><g id=\"eyes-b-10868c7e\"><circle id=\"b\"/></g></defs><use href=\"#eyes-b-10868c7e\"/></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><g id=\"eyes-b-10868c7e\"><circle id=\"b\"/></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><use href=\"#eyes-b-10868c7e\"/></g></svg>",
     "resolvedOptions": {
       "seed": "parity-1",
       "backgroundColorFill": "solid",

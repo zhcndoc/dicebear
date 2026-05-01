@@ -59,8 +59,9 @@ class RendererTest extends TestCase
     public function testSizeNotIncludedWhenNotSet(): void
     {
         $svg = (new Avatar(self::minimalStyle()))->toString();
-        $this->assertStringNotContainsString('width=', $svg);
-        $this->assertStringNotContainsString('height=', $svg);
+        $openTag = substr($svg, 0, strpos($svg, '>') + 1);
+        $this->assertStringNotContainsString('width=', $openTag);
+        $this->assertStringNotContainsString('height=', $openTag);
     }
 
     // element rendering
@@ -446,10 +447,13 @@ class RendererTest extends TestCase
         $this->assertStringContainsString('clip-path="url(#clip-', $svg);
     }
 
-    public function testNoBorderRadiusWhen0(): void
+    public function testStillAppliesSquareClipPathWhenBorderRadiusIs0(): void
     {
         $svg = (new Avatar(self::minimalStyle(), ['borderRadius' => 0]))->toString();
-        $this->assertStringNotContainsString('clipPath', $svg);
+        $this->assertStringContainsString('<clipPath id="clip-', $svg);
+        $this->assertStringContainsString('rx="0"', $svg);
+        $this->assertStringContainsString('ry="0"', $svg);
+        $this->assertStringContainsString('clip-path="url(#clip-', $svg);
     }
 
     // idRandomization
@@ -511,7 +515,9 @@ class RendererTest extends TestCase
     public function testNoBackgroundWithoutColors(): void
     {
         $svg = (new Avatar(self::minimalStyle()))->toString();
-        $this->assertStringNotContainsString('<rect', $svg);
+        // The clipPath wrapper always emits a <rect>; only the background
+        // <rect> carries a fill attribute, so check for that specifically.
+        $this->assertDoesNotMatchRegularExpression('/<rect[^>]*\sfill=/', $svg);
     }
 
     // global transforms

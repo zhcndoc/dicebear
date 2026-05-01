@@ -138,16 +138,13 @@ export class Renderer {
   }
 
   /**
-   * Clips `body` to a rounded rectangle and registers the corresponding
-   * `clipPath` in `<defs>` when `borderRadius` is non-zero.
+   * Clips `body` to the canvas rectangle (rounded when `borderRadius` is
+   * non-zero) and registers the corresponding `clipPath` in `<defs>`. The
+   * clip is always applied so transformed content cannot bleed past the
+   * canvas bounds, regardless of the consumer's `overflow` setting.
    */
   #applyBorderRadius(body: string, canvas: Canvas): string {
     const radius = this.#options.borderRadius();
-
-    if (radius === 0) {
-      return body;
-    }
-
     const id = `clip-${this.#hashSeed()}`;
 
     const rx = (radius / 100) * canvas.width();
