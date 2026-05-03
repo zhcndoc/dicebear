@@ -10,15 +10,7 @@
       "backgroundColorFill": "solid",
       "backgroundColor": [],
       "eyesVariant": "c",
-      "eyesTranslateX": 0,
-      "eyesTranslateY": 0,
-      "eyesRotate": 0,
-      "eyesScale": 1,
       "eyesRightVariant": "b",
-      "eyesRightTranslateX": 0,
-      "eyesRightTranslateY": 0,
-      "eyesRightRotate": 0,
-      "eyesRightScale": 1,
       "scale": 1,
       "flip": "none",
       "rotate": 0,
@@ -39,15 +31,7 @@
       "backgroundColorFill": "solid",
       "backgroundColor": [],
       "eyesVariant": "a",
-      "eyesTranslateX": 0,
-      "eyesTranslateY": 0,
-      "eyesRotate": 0,
-      "eyesScale": 1,
       "eyesRightVariant": "a",
-      "eyesRightTranslateX": 0,
-      "eyesRightTranslateY": 0,
-      "eyesRightRotate": 0,
-      "eyesRightScale": 1,
       "scale": 1,
       "flip": "none",
       "rotate": 0,
@@ -58,7 +42,7 @@
     }
   },
   {
-    "id": "fallthrough-variant",
+    "id": "source-variant",
     "options": {
       "seed": "parity-1",
       "eyesVariant": "b"
@@ -69,15 +53,7 @@
       "backgroundColorFill": "solid",
       "backgroundColor": [],
       "eyesVariant": "b",
-      "eyesTranslateX": 0,
-      "eyesTranslateY": 0,
-      "eyesRotate": 0,
-      "eyesScale": 1,
       "eyesRightVariant": "b",
-      "eyesRightTranslateX": 0,
-      "eyesRightTranslateY": 0,
-      "eyesRightRotate": 0,
-      "eyesRightScale": 1,
       "scale": 1,
       "flip": "none",
       "rotate": 0,
@@ -88,38 +64,7 @@
     }
   },
   {
-    "id": "override-variant",
-    "options": {
-      "seed": "parity-1",
-      "eyesVariant": "b",
-      "eyesRightVariant": "d"
-    },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><g id=\"eyes-b-10868c7e\"><circle id=\"b\"/></g><g id=\"eyes-d-10868c7e\"><circle id=\"d\"/></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><use href=\"#eyes-b-10868c7e\"/><use href=\"#eyes-d-10868c7e\"/></g></svg>",
-    "resolvedOptions": {
-      "seed": "parity-1",
-      "backgroundColorFill": "solid",
-      "backgroundColor": [],
-      "eyesVariant": "b",
-      "eyesTranslateX": 0,
-      "eyesTranslateY": 0,
-      "eyesRotate": 0,
-      "eyesScale": 1,
-      "eyesRightVariant": "d",
-      "eyesRightTranslateX": 0,
-      "eyesRightTranslateY": 0,
-      "eyesRightRotate": 0,
-      "eyesRightScale": 1,
-      "scale": 1,
-      "flip": "none",
-      "rotate": 0,
-      "translateX": 0,
-      "translateY": 0,
-      "borderRadius": 0,
-      "idRandomization": false
-    }
-  },
-  {
-    "id": "fallthrough-probability-zero",
+    "id": "source-probability-zero",
     "options": {
       "seed": "parity-1",
       "eyesProbability": 0
@@ -129,32 +74,6 @@
       "seed": "parity-1",
       "backgroundColorFill": "solid",
       "backgroundColor": [],
-      "scale": 1,
-      "flip": "none",
-      "rotate": 0,
-      "translateX": 0,
-      "translateY": 0,
-      "borderRadius": 0,
-      "idRandomization": false
-    }
-  },
-  {
-    "id": "override-probability",
-    "options": {
-      "seed": "parity-1",
-      "eyesProbability": 0,
-      "eyesRightProbability": 100
-    },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><g id=\"eyes-b-10868c7e\"><circle id=\"b\"/></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><use href=\"#eyes-b-10868c7e\"/></g></svg>",
-    "resolvedOptions": {
-      "seed": "parity-1",
-      "backgroundColorFill": "solid",
-      "backgroundColor": [],
-      "eyesRightVariant": "b",
-      "eyesRightTranslateX": 0,
-      "eyesRightTranslateY": 0,
-      "eyesRightRotate": 0,
-      "eyesRightScale": 1,
       "scale": 1,
       "flip": "none",
       "rotate": 0,

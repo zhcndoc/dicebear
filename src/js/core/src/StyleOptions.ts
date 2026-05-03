@@ -88,23 +88,30 @@ type ComponentVariantOption<D, K extends string> =
   | readonly VariantNames<D, K>[]
   | Readonly<Partial<Record<VariantNames<D, K>, number>>>;
 
-// For each component C generates: Variant, Probability, Rotate, TranslateX/Y, Scale.
+// True when component C is declared as an alias (`{ extends: ... }`).
+// Aliases have no own user options — their values come from the source component.
+type IsAlias<D, C extends string> = D extends {
+  components: Record<string, unknown>;
+}
+  ? C extends keyof D['components']
+    ? D['components'][C] extends { extends: string }
+      ? true
+      : false
+    : false
+  : false;
+
+// For each non-alias component C generates: Variant, Probability.
+// Aliases are filtered out — they expose no own keys.
 type ComponentOptions<D, C extends string> = [C] extends [never]
   ? unknown
-  : { readonly [K in C as `${K}Variant`]?: ComponentVariantOption<D, K> } & {
-      readonly [K in C as `${K}Probability`]?: number;
+  : {
+      readonly [K in C as IsAlias<D, K> extends true
+        ? never
+        : `${K}Variant`]?: ComponentVariantOption<D, K>;
     } & {
-      readonly [K in C as `${K}Rotate`]?: number | readonly [number, number];
-    } & {
-      readonly [K in C as `${K}TranslateX`]?:
-        | number
-        | readonly [number, number];
-    } & {
-      readonly [K in C as `${K}TranslateY`]?:
-        | number
-        | readonly [number, number];
-    } & {
-      readonly [K in C as `${K}Scale`]?: number | readonly [number, number];
+      readonly [K in C as IsAlias<D, K> extends true
+        ? never
+        : `${K}Probability`]?: number;
     };
 
 // For each color C generates: Color, ColorFill, ColorFillStops, ColorAngle.

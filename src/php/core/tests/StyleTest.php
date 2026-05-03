@@ -356,13 +356,6 @@ class StyleTest extends TestCase
                     ],
                 ],
                 'eyesRight' => ['extends' => 'eyes'],
-                'eyesRightOverridden' => [
-                    'extends' => 'eyes',
-                    'probability' => 50,
-                    'rotate' => [-20, 20],
-                    'scale' => [1],
-                    'translate' => ['x' => [0], 'y' => [0]],
-                ],
             ],
         ];
     }
@@ -388,7 +381,7 @@ class StyleTest extends TestCase
         $this->assertSame(['open', 'closed'], array_keys($alias->variants()));
     }
 
-    public function testAliasFallsThroughToSourceForFields(): void
+    public function testAliasDelegatesProbabilityRotateScaleTranslateToSource(): void
     {
         $alias = (new Style(self::aliasDefinition()))->components()['eyesRight'];
         $this->assertSame(80, $alias->probability());
@@ -396,16 +389,6 @@ class StyleTest extends TestCase
         $this->assertSame([0.9, 1.1], $alias->scale());
         $this->assertSame([-5, 5], $alias->translate()->x());
         $this->assertSame([-2, 2], $alias->translate()->y());
-    }
-
-    public function testAliasHonorsPerInstanceOverrides(): void
-    {
-        $alias = (new Style(self::aliasDefinition()))->components()['eyesRightOverridden'];
-        $this->assertSame(50, $alias->probability());
-        $this->assertSame([-20, 20], $alias->rotate());
-        $this->assertSame([1], $alias->scale());
-        $this->assertSame([0], $alias->translate()->x());
-        $this->assertSame([0], $alias->translate()->y());
     }
 
     public function testAliasRejectsUnknownExtendsTarget(): void

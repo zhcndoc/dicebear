@@ -76,17 +76,17 @@ describe('OptionsDescriptor', () => {
 
       assert.ok('eyesVariant' in schema);
       assert.ok('eyesProbability' in schema);
-      assert.ok('eyesRotate' in schema);
-      assert.ok('eyesTranslateX' in schema);
-      assert.ok('eyesTranslateY' in schema);
-      assert.ok('eyesScale' in schema);
+      assert.ok(!('eyesRotate' in schema));
+      assert.ok(!('eyesTranslateX' in schema));
+      assert.ok(!('eyesTranslateY' in schema));
+      assert.ok(!('eyesScale' in schema));
       assert.ok('mouthVariant' in schema);
     });
 
-    it('should constrain scale to 0-10', () => {
+    it('should constrain root scale to 0-10', () => {
       const schema = new OptionsDescriptor(fullStyle).toJSON();
 
-      assert.deepEqual(schema.eyesScale, { type: 'range', min: 0, max: 10 });
+      assert.deepEqual(schema.scale, { type: 'range', min: 0, max: 10 });
     });
 
     it('should include sorted variant names', () => {
@@ -106,17 +106,12 @@ describe('OptionsDescriptor', () => {
       assert.deepEqual(schema.eyesProbability, { type: 'number', min: 0, max: 100 });
     });
 
-    it('should generate alias options with the source component variants', () => {
+    it('should not emit any options for alias components', () => {
       const schema = new OptionsDescriptor(new Style(aliasFixture)).toJSON();
 
-      assert.deepEqual(schema.eyesRightVariant, {
-        type: 'enum',
-        values: ['a', 'b', 'c', 'd', 'e'],
-        list: true,
-        weighted: true,
-      });
-      assert.ok('eyesRightProbability' in schema);
-      assert.ok('eyesRightRotate' in schema);
+      assert.ok(!('eyesRightVariant' in schema));
+      assert.ok(!('eyesRightProbability' in schema));
+      assert.ok(!('eyesRightRotate' in schema));
     });
   });
 

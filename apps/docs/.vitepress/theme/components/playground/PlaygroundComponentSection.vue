@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { inject, computed } from 'vue';
-import { capitalCase } from 'change-case';
+import { inject } from 'vue';
 import Slider from 'primevue/slider';
 import Button from 'primevue/button';
 import InputNumber from 'primevue/inputnumber';
 import { Weight } from '@lucide/vue';
-import PlaygroundRangeField from './PlaygroundRangeField.vue';
 import PlaygroundFieldReset from './PlaygroundFieldReset.vue';
 import useStore from '@theme/stores/playground';
 import { useRangeField } from '@theme/composables/useRangeField';
@@ -14,25 +12,12 @@ import { componentPreviewKey, componentPreviewDefault } from '@theme/components/
 
 const props = defineProps<{
   componentName: string;
-  extendsName?: string;
-  usedByAliases?: readonly string[];
   variants: string[];
   hasProbability: boolean;
-  hasRotate: boolean;
-  hasTranslateX: boolean;
-  hasTranslateY: boolean;
-  hasScale: boolean;
   hasNonDefaultWeights: boolean;
-  defaultWeights: Record<string, number | undefined>;
+  defaultWeights: Record<string, number>;
   defaultProbability: number;
-  defaultRotate: readonly number[];
-  defaultTranslateX: readonly number[];
-  defaultTranslateY: readonly number[];
-  defaultScale: readonly number[];
 }>();
-
-const aliasLabel = computed(() => (props.extendsName ? capitalCase(props.extendsName) : ''));
-const usedByLabels = computed(() => (props.usedByAliases ?? []).map((a) => capitalCase(a)));
 
 const store = useStore();
 const preview = inject(componentPreviewKey, componentPreviewDefault);
@@ -57,38 +42,8 @@ const { singleComputed } = useRangeField(store.avatarStyleOptions);
 
 const variantKey = `${props.componentName}Variant`;
 const probabilityKey = `${props.componentName}Probability`;
-const rotateKey = `${props.componentName}Rotate`;
-const translateXKey = `${props.componentName}TranslateX`;
-const translateYKey = `${props.componentName}TranslateY`;
-const scaleKey = `${props.componentName}Scale`;
 
 const probability = singleComputed(probabilityKey, () => props.defaultProbability);
-
-const defaultRotateFallback = computed(() =>
-  props.defaultRotate.length === 1 ? props.defaultRotate[0] : 0,
-);
-const defaultTranslateXFallback = computed(() =>
-  props.defaultTranslateX.length === 1 ? props.defaultTranslateX[0] : 0,
-);
-const defaultTranslateYFallback = computed(() =>
-  props.defaultTranslateY.length === 1 ? props.defaultTranslateY[0] : 0,
-);
-const defaultScaleFallback = computed(() =>
-  props.defaultScale.length === 1 ? props.defaultScale[0] : 1,
-);
-
-const defaultRotateRange = computed(() =>
-  props.defaultRotate.length === 2 ? props.defaultRotate : undefined,
-);
-const defaultTranslateXRange = computed(() =>
-  props.defaultTranslateX.length === 2 ? props.defaultTranslateX : undefined,
-);
-const defaultTranslateYRange = computed(() =>
-  props.defaultTranslateY.length === 2 ? props.defaultTranslateY : undefined,
-);
-const defaultScaleRange = computed(() =>
-  props.defaultScale.length === 2 ? props.defaultScale : undefined,
-);
 
 function resetVariants() {
   store.resetOption(variantKey);
@@ -98,19 +53,6 @@ function resetVariants() {
 
 <template>
   <div class="pg-comp-body">
-    <p v-if="extendsName" class="pg-comp-info pg-comp-info-alias">
-      Inherits from <strong>{{ aliasLabel }}</strong>. Override values to deviate; reset to inherit again.
-    </p>
-    <p
-      v-else-if="usedByLabels.length > 0"
-      class="pg-comp-info pg-comp-info-source"
-    >
-      Used by
-      <template v-for="(label, i) in usedByLabels" :key="label">
-        <strong>{{ label }}</strong><template v-if="i < usedByLabels.length - 1">, </template>
-      </template>. Changes here propagate to these aliases unless they override.
-    </p>
-
     <template v-if="variants.length > 0">
       <div class="pg-field-label">
         <span>Variants</span>
@@ -171,53 +113,6 @@ function resetVariants() {
       </div>
       <Slider v-model="probability" :min="0" :max="100" :step="1" />
     </div>
-
-    <PlaygroundRangeField
-      v-if="hasRotate"
-      label="Rotate"
-      :option-key="rotateKey"
-      :min="-360"
-      :max="360"
-      :step="1"
-      unit="°"
-      :default-single="defaultRotateFallback"
-      :default-range="defaultRotateRange"
-    />
-
-    <PlaygroundRangeField
-      v-if="hasTranslateX"
-      label="Translate X"
-      :option-key="translateXKey"
-      :min="-100"
-      :max="100"
-      :step="1"
-      unit="%"
-      :default-single="defaultTranslateXFallback"
-      :default-range="defaultTranslateXRange"
-    />
-
-    <PlaygroundRangeField
-      v-if="hasTranslateY"
-      label="Translate Y"
-      :option-key="translateYKey"
-      :min="-100"
-      :max="100"
-      :step="1"
-      unit="%"
-      :default-single="defaultTranslateYFallback"
-      :default-range="defaultTranslateYRange"
-    />
-
-    <PlaygroundRangeField
-      v-if="hasScale"
-      label="Scale"
-      :option-key="scaleKey"
-      :min="0"
-      :max="10"
-      :step="0.01"
-      :default-single="defaultScaleFallback"
-      :default-range="defaultScaleRange"
-    />
   </div>
 </template>
 
@@ -226,30 +121,6 @@ function resetVariants() {
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
-
-.pg-comp-info {
-  margin: 0;
-  padding: 8px 10px;
-  border-radius: var(--vp-radius-xs);
-  font-size: 12px;
-  line-height: 1.5;
-  color: var(--ui-c-text-muted);
-
-  strong {
-    color: var(--ui-c-text);
-    font-weight: 600;
-  }
-
-  &-alias {
-    background: var(--vp-c-brand-soft);
-    border-left: 3px solid var(--p-primary-color);
-  }
-
-  &-source {
-    background: var(--vp-c-bg-soft);
-    border-left: 3px solid var(--vp-c-divider);
-  }
 }
 
 .pg-comp-variants-grid {

@@ -93,6 +93,10 @@ export class OptionsDescriptor {
     };
 
     for (const [name, component] of this.#style.components()) {
+      if (component.extendsName() !== undefined) {
+        continue;
+      }
+
       const variants = Array.from(component.variants().keys()).sort();
 
       result[`${name}Variant`] = {
@@ -102,10 +106,6 @@ export class OptionsDescriptor {
         weighted: true,
       };
       result[`${name}Probability`] = { type: 'number', min: 0, max: 100 };
-      result[`${name}Rotate`] = OptionsDescriptor.#rotateRange;
-      result[`${name}TranslateX`] = OptionsDescriptor.#translateRange;
-      result[`${name}TranslateY`] = OptionsDescriptor.#translateRange;
-      result[`${name}Scale`] = { type: 'range', min: 0, max: 10 };
     }
 
     for (const name of [...this.#style.colors().keys(), 'background']) {

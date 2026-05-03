@@ -229,26 +229,41 @@ class RendererTest extends TestCase
         $this->assertStringNotContainsString('<use', $svg);
     }
 
-    public function testComponentTransforms(): void
+    public function testComponentTransformsFromDefinition(): void
     {
-        $style = $this->styleWithComponents();
-        $svg = (new Avatar($style, [
-            'seed' => 'test',
-            'eyesVariant' => 'open',
-            'eyesTranslateX' => 5,
-            'eyesTranslateY' => 10,
-        ]))->toString();
+        $style = new Style([
+            'canvas' => [
+                'width' => 100, 'height' => 100,
+                'elements' => [['type' => 'component', 'name' => 'eyes']],
+            ],
+            'components' => [
+                'eyes' => [
+                    'width' => 50, 'height' => 50,
+                    'translate' => ['x' => [5], 'y' => [10]],
+                    'variants' => ['open' => ['elements' => [['type' => 'element', 'name' => 'circle', 'attributes' => ['r' => '5']]]]],
+                ],
+            ],
+        ]);
+        $svg = (new Avatar($style, ['seed' => 'test']))->toString();
         $this->assertStringContainsString('<use transform="translate(2.5, 5)" href="#eyes-open-', $svg);
     }
 
-    public function testComponentRotationWithCenter(): void
+    public function testComponentRotationFromDefinitionWithCenter(): void
     {
-        $style = $this->styleWithComponents();
-        $svg = (new Avatar($style, [
-            'seed' => 'test',
-            'eyesVariant' => 'open',
-            'eyesRotate' => 45,
-        ]))->toString();
+        $style = new Style([
+            'canvas' => [
+                'width' => 100, 'height' => 100,
+                'elements' => [['type' => 'component', 'name' => 'eyes']],
+            ],
+            'components' => [
+                'eyes' => [
+                    'width' => 50, 'height' => 50,
+                    'rotate' => [45],
+                    'variants' => ['open' => ['elements' => [['type' => 'element', 'name' => 'circle', 'attributes' => ['r' => '5']]]]],
+                ],
+            ],
+        ]);
+        $svg = (new Avatar($style, ['seed' => 'test']))->toString();
         $this->assertStringContainsString('<use transform="rotate(45, 25, 25)" href="#eyes-open-', $svg);
     }
 
@@ -258,9 +273,6 @@ class RendererTest extends TestCase
         $svg = (new Avatar($style, [
             'seed' => 'test',
             'eyesVariant' => 'open',
-            'eyesRotate' => 0,
-            'eyesTranslateX' => 0,
-            'eyesTranslateY' => 0,
         ]))->toString();
 
         $this->assertStringContainsString('<use href="#eyes-open-', $svg);
@@ -393,7 +405,10 @@ class RendererTest extends TestCase
 
     // component scale
 
-    private static function styleWithComponent(): Style
+    /**
+     * @param array<string, mixed> $extras
+     */
+    private static function styleWithComponent(array $extras = []): Style
     {
         return new Style([
             'canvas' => [
@@ -401,32 +416,33 @@ class RendererTest extends TestCase
                 'elements' => [['type' => 'component', 'name' => 'eyes']],
             ],
             'components' => [
-                'eyes' => [
-                    'width' => 50, 'height' => 50,
-                    'variants' => ['open' => ['elements' => [['type' => 'element', 'name' => 'rect']]]],
-                ],
+                'eyes' => array_merge(
+                    ['width' => 50, 'height' => 50],
+                    $extras,
+                    ['variants' => ['open' => ['elements' => [['type' => 'element', 'name' => 'rect']]]]],
+                ),
             ],
         ]);
     }
 
-    public function testComponentScaleTransform(): void
+    public function testComponentScaleFromDefinition(): void
     {
-        $svg = (new Avatar(self::styleWithComponent(), ['eyesScale' => 2]))->toString();
+        $svg = (new Avatar(self::styleWithComponent(['scale' => [2]]), ['seed' => 'test']))->toString();
         $this->assertStringContainsString('translate(25, 25) scale(2) translate(-25, -25)', $svg);
     }
 
-    public function testNoComponentScaleWrapperWhenOne(): void
+    public function testNoComponentScaleWrapperWhenDefinitionIsOne(): void
     {
-        $svg = (new Avatar(self::styleWithComponent(), ['eyesScale' => 1]))->toString();
+        $svg = (new Avatar(self::styleWithComponent(), ['seed' => 'test']))->toString();
         $this->assertStringNotContainsString('scale(', $svg);
     }
 
     public function testComponentScaleAfterRotateInTransformAttribute(): void
     {
-        $svg = (new Avatar(self::styleWithComponent(), [
-            'eyesRotate' => 45,
-            'eyesScale' => 2,
-        ]))->toString();
+        $svg = (new Avatar(
+            self::styleWithComponent(['rotate' => [45], 'scale' => [2]]),
+            ['seed' => 'test'],
+        ))->toString();
 
         $rotateIndex = strpos($svg, 'rotate(45');
         $scaleIndex = strpos($svg, 'scale(2)');
@@ -792,19 +808,7 @@ class RendererTest extends TestCase
         $this->assertSame($uses[1][0], $uses[1][1], 'both <use> elements share the same href');
     }
 
-    public function testAliasOverridesEyesVariantIndependently(): void
-    {
-        $svg = (new Avatar(self::aliasStyle(), [
-            'seed' => 'override',
-            'eyesVariant' => 'b',
-            'eyesRightVariant' => 'd',
-        ]))->toString();
-
-        preg_match_all('/<circle id="([a-z])"\\/>/', $svg, $matches);
-        $this->assertSame(['b', 'd'], $matches[1]);
-    }
-
-    public function testAliasFallsThroughEyesProbabilityByDefault(): void
+    public function testAliasPropagatesEyesProbability(): void
     {
         $svg = (new Avatar(self::aliasStyle(), [
             'seed' => 'probability-fallthrough',
@@ -814,37 +818,18 @@ class RendererTest extends TestCase
         $this->assertStringNotContainsString('<circle', $svg);
     }
 
-    public function testAliasOverridesProbabilityIndependently(): void
+    public function testAliasSilentlyIgnoresAliasKeyedOptions(): void
     {
-        $svg = (new Avatar(self::aliasStyle(), [
-            'seed' => 'probability-override',
-            'eyesProbability' => 0,
-            'eyesRightProbability' => 100,
-        ]))->toString();
-
-        preg_match_all('/<circle id="[a-z]"\\/>/', $svg, $matches);
-        $this->assertCount(1, $matches[0]);
-    }
-
-    public function testAliasFallsThroughEyesRotateAndAllowsOverride(): void
-    {
-        $fallthrough = (new Avatar(self::aliasStyle(), [
-            'seed' => 'rotate-fallthrough',
+        $without = (new Avatar(self::aliasStyle(), [
+            'seed' => 'ignore-alias-key',
             'eyesVariant' => 'a',
-            'eyesRotate' => 30,
         ]))->toString();
-
-        preg_match_all('/rotate\\(30, 10, 10\\)/', $fallthrough, $matches);
-        $this->assertCount(2, $matches[0]);
-
-        $override = (new Avatar(self::aliasStyle(), [
-            'seed' => 'rotate-override',
+        $with = (new Avatar(self::aliasStyle(), [
+            'seed' => 'ignore-alias-key',
             'eyesVariant' => 'a',
-            'eyesRotate' => 30,
-            'eyesRightRotate' => 60,
+            'eyesRightVariant' => 'd',
         ]))->toString();
 
-        $this->assertStringContainsString('rotate(30, 10, 10)', $override);
-        $this->assertStringContainsString('rotate(60, 10, 10)', $override);
+        $this->assertSame($without, $with);
     }
 }

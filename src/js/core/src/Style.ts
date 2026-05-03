@@ -100,13 +100,13 @@ export class Style<D = unknown> {
 
     for (const [name, data] of entries) {
       if (!Style.#isAlias(data)) {
-        map.set(name, new Component(data));
+        map.set(name, new Component(name, data));
       }
     }
 
     for (const [name, data] of entries) {
       if (Style.#isAlias(data)) {
-        map.set(name, new Component(data, map.get(data.extends)));
+        map.set(name, new Component(name, data, map.get(data.extends)));
       }
     }
 

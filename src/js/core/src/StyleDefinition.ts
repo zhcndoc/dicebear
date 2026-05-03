@@ -96,10 +96,6 @@ export interface StyleDefinitionComponentBase {
 
 export interface StyleDefinitionComponentAlias {
   readonly extends: string;
-  readonly probability?: number;
-  readonly rotate?: readonly number[];
-  readonly scale?: readonly number[];
-  readonly translate?: StyleDefinitionComponentTranslate;
 }
 
 export type StyleDefinitionComponent =

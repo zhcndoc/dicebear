@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watch } from 'vue';
+import { computed } from 'vue';
 import Slider from 'primevue/slider';
 import Button from 'primevue/button';
 import { ArrowLeftRight } from '@lucide/vue';
@@ -16,7 +16,6 @@ const props = withDefaults(
     step: number;
     unit?: string;
     defaultSingle: number;
-    defaultRange?: readonly number[];
   }>(),
   {
     unit: '',
@@ -24,28 +23,10 @@ const props = withDefaults(
 );
 
 const store = useStore();
-const { rangeMode, isRangeMode, toggleRangeMode, resetRangeField, singleComputed, rangeComputed } = useRangeField(store.avatarStyleOptions);
-
-watch(
-  () => props.defaultRange?.length === 2,
-  (hasDefaultRange) => {
-    const localOverride = store.avatarStyleOptions[props.optionKey];
-
-    if (localOverride !== undefined) {
-      return;
-    }
-
-    if (hasDefaultRange) {
-      rangeMode[props.optionKey] = true;
-    } else {
-      delete rangeMode[props.optionKey];
-    }
-  },
-  { immediate: true },
-);
+const { isRangeMode, toggleRangeMode, resetRangeField, singleComputed, rangeComputed } = useRangeField(store.avatarStyleOptions);
 
 const singleVal = singleComputed(props.optionKey, () => props.defaultSingle);
-const rangeVal = rangeComputed(props.optionKey, () => props.defaultRange ?? props.defaultSingle);
+const rangeVal = rangeComputed(props.optionKey, () => props.defaultSingle);
 
 const displayRange = computed<[number, number]>(() => {
   const [a, b] = rangeVal.value;
@@ -67,7 +48,7 @@ const displayRange = computed<[number, number]>(() => {
       >
         <ArrowLeftRight :size="14" />
       </Button>
-      <PlaygroundFieldReset v-if="store.isOptionSet(optionKey)" @click="resetRangeField(optionKey, defaultRange)" />
+      <PlaygroundFieldReset v-if="store.isOptionSet(optionKey)" @click="resetRangeField(optionKey)" />
       <span class="pg-field-value" v-if="isRangeMode(optionKey)">{{ displayRange[0] }}{{ unit }} — {{ displayRange[1] }}{{ unit }}</span>
       <span class="pg-field-value" v-else>{{ singleVal }}{{ unit }}</span>
     </div>

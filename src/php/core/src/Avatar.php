@@ -17,15 +17,16 @@ class Avatar
     private array $resolvedOptions;
 
     /**
-     * @param array<string, mixed> $options
+     * @param array<string, mixed> $optionsInput
      */
-    public function __construct(mixed $style, array $options = [])
+    public function __construct(mixed $styleInput, array $optionsInput = [])
     {
-        $resolvedStyle = $style instanceof Style ? $style : new Style($style);
-        $resolvedOptions = new Options($resolvedStyle, $options);
+        $style = $styleInput instanceof Style ? $styleInput : new Style($styleInput);
+        $options = new Options($optionsInput);
+        $resolver = new Resolver($style, $options);
 
-        $this->svg = (new Renderer($resolvedStyle, $resolvedOptions))->render();
-        $this->resolvedOptions = $resolvedOptions->resolved();
+        $this->svg = (new Renderer($style, $resolver))->render();
+        $this->resolvedOptions = $resolver->resolved();
     }
 
     public function __toString(): string

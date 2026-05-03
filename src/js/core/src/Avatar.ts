@@ -1,5 +1,6 @@
 import { Style } from './Style.js';
 import { Options } from './Options.js';
+import { Resolver } from './Resolver.js';
 import { Renderer } from './Renderer.js';
 import type { StyleOptions } from './StyleOptions.js';
 
@@ -20,12 +21,13 @@ export class Avatar<D = unknown> {
   #svg: string;
   #resolvedOptions: StyleOptions<UnwrapStyle<D>>;
 
-  constructor(style: D, options?: StyleOptions<UnwrapStyle<D>>) {
-    const resolvedStyle = style instanceof Style ? style : new Style(style);
-    const resolvedOptions = new Options(resolvedStyle, options ?? {});
+  constructor(styleInput: D, optionsInput?: StyleOptions<UnwrapStyle<D>>) {
+    const style = styleInput instanceof Style ? styleInput : new Style(styleInput);
+    const options = new Options<UnwrapStyle<D>>(optionsInput);
+    const resolver = new Resolver(style, options);
 
-    this.#svg = new Renderer(resolvedStyle, resolvedOptions).render();
-    this.#resolvedOptions = resolvedOptions.resolved();
+    this.#svg = new Renderer(style, resolver).render();
+    this.#resolvedOptions = resolver.resolved();
   }
 
   /**

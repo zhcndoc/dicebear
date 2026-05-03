@@ -43,14 +43,9 @@ export function useRangeField(avatarStyleOptions: PlaygroundStoreOptions) {
     });
   }
 
-  function resetRangeField(key: string, defaultRange?: readonly number[]) {
+  function resetRangeField(key: string) {
     delete avatarStyleOptions[key];
-
-    if (defaultRange && defaultRange.length === 2) {
-      rangeMode[key] = true;
-    } else {
-      delete rangeMode[key];
-    }
+    delete rangeMode[key];
   }
 
   function rangeComputed(

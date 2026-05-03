@@ -398,28 +398,12 @@ const avatarFixtures = {
     { id: 'plain-seed', options: { seed: 'parity-1' } },
     { id: 'different-seed', options: { seed: 'parity-2' } },
     {
-      id: 'fallthrough-variant',
+      id: 'source-variant',
       options: { seed: 'parity-1', eyesVariant: 'b' },
     },
     {
-      id: 'override-variant',
-      options: {
-        seed: 'parity-1',
-        eyesVariant: 'b',
-        eyesRightVariant: 'd',
-      },
-    },
-    {
-      id: 'fallthrough-probability-zero',
+      id: 'source-probability-zero',
       options: { seed: 'parity-1', eyesProbability: 0 },
-    },
-    {
-      id: 'override-probability',
-      options: {
-        seed: 'parity-1',
-        eyesProbability: 0,
-        eyesRightProbability: 100,
-      },
     },
   ],
 };

@@ -20,16 +20,16 @@ use DiceBear\Utils\Xml;
 class Renderer
 {
     private Style $style;
-    private Options $options;
+    private Resolver $resolver;
     /** @var array<string, string> */
     private array $defs = [];
     private ?string $cachedSeedHash = null;
     private ?string $cachedInitials = null;
 
-    public function __construct(Style $style, Options $options)
+    public function __construct(Style $style, Resolver $resolver)
     {
         $this->style = $style;
-        $this->options = $options;
+        $this->resolver = $resolver;
     }
 
     /**
@@ -53,9 +53,9 @@ class Renderer
         $defs = count($this->defs) > 0
             ? '<defs>' . implode('', array_values($this->defs)) . '</defs>'
             : '';
-        $size = $this->options->size();
+        $size = $this->resolver->size();
 
-        $title = $this->options->title();
+        $title = $this->resolver->title();
         $escapedTitle = $title !== null ? Xml::escape($title) : null;
 
         $attrs = [
@@ -85,7 +85,7 @@ class Renderer
 
         $svg = '<svg ' . implode(' ', $attrs) . '>' . $metadata . $defs . $titleElement . $body . '</svg>';
 
-        if ($this->options->idRandomization()) {
+        if ($this->resolver->idRandomization()) {
             $svg = $this->randomizeIds($svg);
         }
 
@@ -98,7 +98,7 @@ class Renderer
      */
     private function applyFlip(string $body, Canvas $canvas): string
     {
-        $flip = $this->options->flip();
+        $flip = $this->resolver->flip();
 
         if ($flip === 'none') {
             return $body;
@@ -123,7 +123,7 @@ class Renderer
      */
     private function applyScale(string $body, Canvas $canvas): string
     {
-        $scale = $this->options->scale();
+        $scale = $this->resolver->scale();
 
         if ($scale === 1.0) {
             return $body;
@@ -143,7 +143,7 @@ class Renderer
      */
     private function applyBorderRadius(string $body, Canvas $canvas): string
     {
-        $radius = $this->options->borderRadius();
+        $radius = $this->resolver->borderRadius();
         $id = 'clip-' . $this->hashSeed();
 
         $rx = ($radius / 100) * $canvas->width();
@@ -160,7 +160,7 @@ class Renderer
      */
     private function applyRotate(string $body, Canvas $canvas): string
     {
-        $rotate = $this->options->rotate();
+        $rotate = $this->resolver->rotate();
 
         if ($rotate === 0.0) {
             return $body;
@@ -179,8 +179,8 @@ class Renderer
      */
     private function applyTranslate(string $body, Canvas $canvas): string
     {
-        $translateX = $this->options->translateX();
-        $translateY = $this->options->translateY();
+        $translateX = $this->resolver->translateX();
+        $translateY = $this->resolver->translateY();
 
         if ($translateX === 0.0 && $translateY === 0.0) {
             return $body;
@@ -198,7 +198,7 @@ class Renderer
      */
     private function renderBackground(Canvas $canvas): string
     {
-        $colors = $this->options->color('background');
+        $colors = $this->resolver->color('background');
 
         if (count($colors) === 0) {
             return '';
@@ -324,7 +324,7 @@ class Renderer
             return '';
         }
 
-        $variantName = $this->options->variant($componentName);
+        $variantName = $this->resolver->variant($componentName);
 
         if ($variantName === null) {
             return '';
@@ -344,8 +344,7 @@ class Renderer
             return '';
         }
 
-        $sourceName = $component->extendsName() ?? $componentName;
-        $id = "{$sourceName}-{$variantName}-{$this->hashSeed()}";
+        $id = "{$component->sourceName()}-{$variantName}-{$this->hashSeed()}";
 
         if (!array_key_exists($id, $this->defs)) {
             $body = $this->renderElements($variant->elements());
@@ -353,7 +352,7 @@ class Renderer
             $this->defs[$id] = "<g id=\"{$id}\">{$body}</g>";
         }
 
-        $transforms = $this->buildTransforms($componentName);
+        $transforms = $this->buildTransforms($component);
         $transformAttr = count($transforms) > 0
             ? ' transform="' . implode(' ', $transforms) . '"'
             : '';
@@ -374,25 +373,16 @@ class Renderer
      *
      * @return list<string>
      */
-    private function buildTransforms(string $componentName): array
+    private function buildTransforms(Style\Component $component): array
     {
-        $transforms = [];
-        $translateX = $this->options->translateX($componentName);
-        $translateY = $this->options->translateY($componentName);
-        $rotate = $this->options->rotate($componentName);
-        $scale = $this->options->scale($componentName);
+        ['rotate' => $rotate, 'translateX' => $translateX, 'translateY' => $translateY, 'scale' => $scale] =
+            $this->resolver->componentTransform($component->name());
 
         if ($translateX === 0.0 && $translateY === 0.0 && $rotate === 0.0 && $scale === 1.0) {
-            return $transforms;
+            return [];
         }
 
-        $components = $this->style->components();
-        $component = $components[$componentName] ?? null;
-
-        if ($component === null) {
-            return $transforms;
-        }
-
+        $transforms = [];
         $cx = $component->width() / 2;
         $cy = $component->height() / 2;
 
@@ -473,14 +463,14 @@ class Renderer
      */
     private function resolveColorReference(string $name): string
     {
-        $colors = $this->options->color($name);
-        $fill = $this->options->colorFill($name);
+        $colors = $this->resolver->color($name);
+        $fill = $this->resolver->colorFill($name);
 
         if ($fill === 'solid' || count($colors) <= 1) {
             return $colors[0] ?? 'none';
         }
 
-        return $this->buildGradientDef($name, $colors);
+        return $this->buildGradientDef($name, $colors, $fill);
     }
 
     /**
@@ -490,10 +480,9 @@ class Renderer
      *
      * @param list<string> $colors
      */
-    private function buildGradientDef(string $name, array $colors): string
+    private function buildGradientDef(string $name, array $colors, string $fill): string
     {
-        $fill = $this->options->colorFill($name);
-        $rotation = $this->options->colorAngle($name);
+        $rotation = $this->resolver->colorAngle($name);
         $id = "{$name}-color-{$this->hashSeed()}";
         $tag = $fill === 'linear' ? 'linearGradient' : 'radialGradient';
         $rotateAttr = $rotation !== 0.0
@@ -541,8 +530,8 @@ class Renderer
         return match ($name) {
             'initial' => mb_substr($this->initials(), 0, 1),
             'initials' => $this->initials(),
-            'fontWeight' => (string) $this->options->fontWeight(),
-            'fontFamily' => $this->options->fontFamily(),
+            'fontWeight' => (string) $this->resolver->fontWeight(),
+            'fontFamily' => $this->resolver->fontFamily(),
         };
     }
 
@@ -551,7 +540,7 @@ class Renderer
      */
     private function initials(): string
     {
-        return $this->cachedInitials ??= Initials::fromSeed($this->options->seed());
+        return $this->cachedInitials ??= Initials::fromSeed($this->resolver->seed());
     }
 
     /**
@@ -560,6 +549,6 @@ class Renderer
      */
     private function hashSeed(): string
     {
-        return $this->cachedSeedHash ??= Fnv1a::hex($this->options->seed());
+        return $this->cachedSeedHash ??= Fnv1a::hex($this->resolver->seed());
     }
 }

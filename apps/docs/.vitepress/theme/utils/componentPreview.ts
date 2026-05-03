@@ -76,14 +76,10 @@ export class ComponentPreview {
 
     const children = this.#findChildComponents(componentName, variantName);
 
-    for (const [name] of this.#style.components()) {
+    for (const name of this.#style.components().keys()) {
       if (name !== componentName && !children.has(name)) {
         previewOptions[`${name}Probability`] = 0;
       }
-
-      previewOptions[`${name}Rotate`] = 0;
-      previewOptions[`${name}TranslateX`] = 0;
-      previewOptions[`${name}TranslateY`] = 0;
     }
 
     Object.assign(previewOptions, options);
