@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { computed, inject, provide, ref, watch } from 'vue';
+import { computed, provide } from 'vue';
 import { styleUsesVariable } from '@theme/utils/avatar/style';
-import { webSafeFonts } from '@theme/utils/avatar/fonts';
 import { componentPreviewKey } from '@theme/components/styles/styleOptionsKeys';
 import { useStyleOptions } from '@theme/composables/useStyleOptions';
 import { capitalCase } from 'change-case';
@@ -47,39 +46,6 @@ const { avatarStyleName } = storeToRefs(store);
 const { loadedStyle, descriptor, styleColors, preview } = useStyleOptions(avatarStyleName);
 
 provide(componentPreviewKey, preview);
-
-const initialOptions = inject<import('vue').Ref<Record<string, unknown>>>('initialOptions', ref({}));
-const initialOptionsApplied = ref(false);
-
-watch(descriptor, (desc) => {
-  if (initialOptionsApplied.value || Object.keys(desc).length === 0) {
-    return;
-  }
-
-  initialOptionsApplied.value = true;
-
-  const opts = initialOptions.value;
-
-  if (Object.keys(opts).length === 0) {
-    return;
-  }
-
-  if ('fontFamily' in opts) {
-    const allowed: readonly string[] = webSafeFonts;
-
-    if (typeof opts.fontFamily === 'string' && !allowed.includes(opts.fontFamily)) {
-      delete opts.fontFamily;
-    } else if (Array.isArray(opts.fontFamily)) {
-      opts.fontFamily = opts.fontFamily.filter((f: unknown) => typeof f === 'string' && allowed.includes(f));
-
-      if ((opts.fontFamily as string[]).length === 0) {
-        delete opts.fontFamily;
-      }
-    }
-  }
-
-  Object.assign(store.avatarStyleOptions, opts);
-}, { immediate: true });
 
 const hasFontFamily = computed(() =>
   loadedStyle.value ? styleUsesVariable(avatarStyleName.value, 'fontFamily') : false,
