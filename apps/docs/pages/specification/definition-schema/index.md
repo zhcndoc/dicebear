@@ -299,7 +299,7 @@ A complete but minimal definition that renders a colored circle:
 
 ```json
 {
-  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@0.14.0/dist/definition.min.json",
+  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@0.14.1/dist/definition.min.json",
   "canvas": {
     "width": 100,
     "height": 100,
