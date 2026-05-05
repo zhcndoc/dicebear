@@ -10,8 +10,8 @@
     "preview": "vitepress preview ."
   },
   "dependencies": {
-    "@dicebear/core": "10.0.0-rc.2",
-    "@dicebear/definitions": "^10.0.0-rc.5",
+    "@dicebear/core": "10.0.0-rc.3",
+    "@dicebear/definitions": "^10.0.0-rc.6",
     "@fontsource-variable/figtree": "^5.2.10",
     "@lucide/vue": "^1.7.0",
     "@primeuix/themes": "^2.0.3",
