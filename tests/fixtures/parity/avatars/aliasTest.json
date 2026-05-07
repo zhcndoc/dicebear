@@ -6,7 +6,6 @@
     },
     "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><g id=\"eyes-c-10868c7e\"><circle id=\"c\"/></g><g id=\"eyes-b-10868c7e\"><circle id=\"b\"/></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><use href=\"#eyes-c-10868c7e\"/><use href=\"#eyes-b-10868c7e\"/></g></svg>",
     "resolvedOptions": {
-      "seed": "parity-1",
       "backgroundColorFill": "solid",
       "backgroundColor": [],
       "eyesVariant": "c",
@@ -27,7 +26,6 @@
     },
     "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><g id=\"eyes-a-0f868aeb\"><circle id=\"a\"/></g><clipPath id=\"clip-0f868aeb\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-0f868aeb)\"><use href=\"#eyes-a-0f868aeb\"/><use href=\"#eyes-a-0f868aeb\"/></g></svg>",
     "resolvedOptions": {
-      "seed": "parity-2",
       "backgroundColorFill": "solid",
       "backgroundColor": [],
       "eyesVariant": "a",
@@ -49,7 +47,6 @@
     },
     "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><g id=\"eyes-b-10868c7e\"><circle id=\"b\"/></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><use href=\"#eyes-b-10868c7e\"/><use href=\"#eyes-b-10868c7e\"/></g></svg>",
     "resolvedOptions": {
-      "seed": "parity-1",
       "backgroundColorFill": "solid",
       "backgroundColor": [],
       "eyesVariant": "b",
@@ -71,7 +68,6 @@
     },
     "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"></g></svg>",
     "resolvedOptions": {
-      "seed": "parity-1",
       "backgroundColorFill": "solid",
       "backgroundColor": [],
       "scale": 1,

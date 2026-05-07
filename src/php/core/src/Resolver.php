@@ -33,7 +33,8 @@ class Resolver
 
     public function seed(): string
     {
-        return $this->memo('seed', fn() => $this->options->seed() ?? '');
+        // Not memoized so the raw seed stays out of {@see resolved}.
+        return $this->options->seed() ?? '';
     }
 
     public function size(): ?int
@@ -211,8 +212,9 @@ class Resolver
      * Returns every value that has been touched during this resolution. Only
      * memoized non-null entries are included; unset entries are filtered out
      * to mirror the JS shape, where they would disappear on `JSON.stringify()`.
-     * Per-component transform values from {@see componentTransform} are
-     * intentionally not memoized and therefore do not appear in the snapshot.
+     * Per-component transform values from {@see componentTransform} and the
+     * user-supplied {@see seed} are intentionally not memoized and therefore
+     * do not appear in the snapshot.
      *
      * @return array<string, mixed>
      */

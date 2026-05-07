@@ -31,7 +31,8 @@ export class Resolver<D = unknown> {
   }
 
   seed(): string {
-    return this.#memo('seed', () => this.#options.seed() ?? '');
+    // Not memoized so the raw seed stays out of {@link resolved}.
+    return this.#options.seed() ?? '';
   }
 
   size(): number | undefined {
@@ -186,8 +187,8 @@ export class Resolver<D = unknown> {
    * Returns every value that has been touched during this resolution. Only
    * memoized entries are included; unset options remain `undefined` and
    * disappear on `JSON.stringify()`. Per-component transform values from
-   * {@link componentTransform} are intentionally not memoized and therefore
-   * do not appear in the snapshot.
+   * {@link componentTransform} and the user-supplied {@link seed} are
+   * intentionally not memoized and therefore do not appear in the snapshot.
    *
    * The returned object aliases the internal cache; callers that need
    * isolation (e.g. {@link Avatar.toJSON}) clone it themselves.

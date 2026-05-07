@@ -78,10 +78,18 @@ class AvatarTest extends TestCase
         $avatar = new Avatar($style, ['seed' => 'test']);
 
         $json1 = $avatar->toJSON();
-        $json1['options']['seed'] = 'modified';
-
         $json2 = $avatar->toJSON();
-        $this->assertSame('test', $json2['options']['seed']);
+        $json1['options']['injected'] = 'modified';
+
+        $this->assertArrayNotHasKey('injected', $json2['options']);
+    }
+
+    public function testToJsonDoesNotIncludeSeed(): void
+    {
+        $style = new Style(self::minimalStyleData());
+        $avatar = new Avatar($style, ['seed' => 'test']);
+
+        $this->assertArrayNotHasKey('seed', $avatar->toJSON()['options']);
     }
 
     // toDataUri

@@ -579,9 +579,17 @@ class ResolverTest extends TestCase
         $resolver->scale();
 
         $resolved = $resolver->resolved();
-        $this->assertSame('test', $resolved['seed']);
         $this->assertContains($resolved['flip'], ['horizontal', 'vertical', 'none']);
         $this->assertIsNumeric($resolved['scale']);
+    }
+
+    public function testResolvedDoesNotIncludeSeed(): void
+    {
+        $resolver = self::makeResolver(self::minimalStyle(), ['seed' => 'test']);
+
+        $resolver->seed();
+
+        $this->assertArrayNotHasKey('seed', $resolver->resolved());
     }
 
     public function testResolvedMemoized(): void

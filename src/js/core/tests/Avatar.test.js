@@ -61,12 +61,17 @@ describe('Avatar', () => {
     it('should return a deep copy of options', () => {
       const avatar = new Avatar(minimalStyle, { seed: 'test' });
       const json1 = avatar.toJSON();
-
-      json1.options.seed = 'modified';
-
       const json2 = avatar.toJSON();
 
-      assert.equal(json2.options.seed, 'test');
+      json1.options.injected = 'modified';
+
+      assert.equal('injected' in json2.options, false);
+    });
+
+    it('should not include the seed in options', () => {
+      const avatar = new Avatar(minimalStyle, { seed: 'test' });
+
+      assert.ok(!('seed' in avatar.toJSON().options));
     });
   });
 

@@ -606,9 +606,16 @@ describe('Resolver', () => {
 
       const resolved = resolver.resolved();
 
-      assert.equal(resolved.seed, 'test');
       assert.ok(['horizontal', 'vertical', 'none'].includes(resolved.flip));
       assert.equal(typeof resolved.scale, 'number');
+    });
+
+    it('should not include the seed', () => {
+      const resolver = makeResolver(minimalStyle, { seed: 'test' });
+
+      resolver.seed();
+
+      assert.ok(!('seed' in resolver.resolved()));
     });
 
     it('should include variant values', () => {
