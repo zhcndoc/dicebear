@@ -1,28 +1,9 @@
 import { Style, Avatar, type StyleDefinition } from '@dicebear/core';
-import { type DefinitionElement } from './definitionElement';
-
-function collectChildComponents(
-  elements: readonly DefinitionElement[],
-  result: Set<string>,
-): void {
-  for (const el of elements) {
-    if (el.type() === 'component' && typeof el.name() === 'string') {
-      result.add(el.name() as string);
-    }
-
-    collectChildComponents(el.children(), result);
-  }
-}
-
-function asElements(elements: readonly unknown[]): readonly DefinitionElement[] {
-  return elements as readonly DefinitionElement[];
-}
 
 export class ComponentPreview {
   #style: Style;
   #definition: StyleDefinition;
   #syntheticStyleCache = new Map<string, Style>();
-  #childComponentsCache = new Map<string, Set<string>>();
   #dataUriCache = new Map<string, string>();
 
   constructor(style: Style) {
@@ -52,6 +33,22 @@ export class ComponentPreview {
     let syntheticStyle = this.#syntheticStyleCache.get(componentName);
 
     if (!syntheticStyle) {
+      // Strip scale/translate/rotate so the component renders centered
+      // on its own preview canvas instead of being offset for the full
+      // avatar canvas it was authored for.
+      const sourceName = component.sourceName();
+      const sanitizedComponents = { ...def.components };
+      const target = sanitizedComponents[sourceName];
+
+      if (target && !('extends' in target)) {
+        sanitizedComponents[sourceName] = {
+          width: target.width,
+          height: target.height,
+          probability: target.probability,
+          variants: target.variants,
+        };
+      }
+
       syntheticStyle = new Style({
         canvas: {
           width: component.width(),
@@ -59,7 +56,7 @@ export class ComponentPreview {
           elements: [{ type: 'component' as const, name: componentName }],
         },
         attributes: def.attributes,
-        components: def.components,
+        components: sanitizedComponents,
         colors: def.colors,
       });
       this.#syntheticStyleCache.set(componentName, syntheticStyle);
@@ -73,14 +70,6 @@ export class ComponentPreview {
       backgroundColor: [],
       [`${componentName}Probability`]: 100,
     };
-
-    const children = this.#findChildComponents(componentName, variantName);
-
-    for (const name of this.#style.components().keys()) {
-      if (name !== componentName && !children.has(name)) {
-        previewOptions[`${name}Probability`] = 0;
-      }
-    }
 
     Object.assign(previewOptions, options);
     previewOptions[`${componentName}Variant`] = variantName;
@@ -107,46 +96,5 @@ export class ComponentPreview {
     }
 
     return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(this.toSvg(componentName, variantName, options))}`;
-  }
-
-  #findChildComponents(componentName: string, variantName: string): Set<string> {
-    const key = `${componentName}|${variantName}`;
-    const cached = this.#childComponentsCache.get(key);
-
-    if (cached) return cached;
-
-    const result = new Set<string>();
-    const component = this.#style.components().get(componentName);
-    const variant = component?.variants().get(variantName);
-
-    if (variant) {
-      collectChildComponents(asElements(variant.elements()), result);
-
-      const queue = [...result];
-
-      while (queue.length > 0) {
-        const childName = queue.pop()!;
-        const child = this.#style.components().get(childName);
-
-        if (!child) continue;
-
-        for (const [, childVariant] of child.variants()) {
-          const nested = new Set<string>();
-
-          collectChildComponents(asElements(childVariant.elements()), nested);
-
-          for (const name of nested) {
-            if (!result.has(name)) {
-              result.add(name);
-              queue.push(name);
-            }
-          }
-        }
-      }
-    }
-
-    this.#childComponentsCache.set(key, result);
-
-    return result;
   }
 }
