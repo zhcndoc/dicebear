@@ -21,16 +21,26 @@ function parseWeightedValue(value: string[]): Record<string, number> {
 
 /**
  * Parses a comma-separated string like `"10,50"` into a `[min, max]` tuple
- * for range options. Passes the value through unchanged when it does not
- * match the two-number form.
+ * for range options, or a single numeric string like `"50"` into a number.
+ * Passes the value through unchanged when it matches neither form.
  */
 function parseRangeValue(value: unknown): unknown {
-  if (typeof value === 'string' && value.includes(',')) {
-    const parts = value.split(',').map(Number);
+  if (typeof value !== 'string' || value.trim() === '') {
+    return value;
+  }
 
-    if (parts.length === 2 && parts.every((n) => !isNaN(n))) {
-      return parts;
-    }
+  const parts = value.split(',').map((part) => Number(part.trim()));
+
+  if (!parts.every((n) => !isNaN(n))) {
+    return value;
+  }
+
+  if (parts.length === 1) {
+    return parts[0];
+  }
+
+  if (parts.length === 2) {
+    return parts;
   }
 
   return value;
