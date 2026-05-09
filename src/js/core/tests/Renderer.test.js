@@ -59,9 +59,10 @@ describe('Renderer', () => {
 
     it('should not include size when not set', () => {
       const svg = new Avatar(minimalStyle).toString();
+      const openTag = svg.slice(0, svg.indexOf('>') + 1);
 
-      assert.ok(!svg.includes('width='));
-      assert.ok(!svg.includes('height='));
+      assert.ok(!openTag.includes('width='));
+      assert.ok(!openTag.includes('height='));
     });
   });
 
@@ -286,6 +287,19 @@ describe('Renderer', () => {
       assert.ok(!svg.includes('<line'));
     });
 
+    it('should put the variant body in <defs> and reference it via <use>', () => {
+      const svg = new Avatar(styleWithComponents, {
+        seed: 'test',
+        eyesVariant: 'open',
+      }).toString();
+
+      const idMatch = svg.match(/<g id="(eyes-open-[a-f0-9]+)"><circle r="5"\/><\/g>/);
+
+      assert.ok(idMatch, 'expected variant body wrapped in <g id="…"> inside <defs>');
+      assert.ok(svg.includes('<defs>'));
+      assert.ok(svg.includes(`<use href="#${idMatch[1]}"/>`));
+    });
+
     it('should skip component with probability 0', () => {
       const svg = new Avatar(styleWithComponents, {
         seed: 'test',
@@ -294,39 +308,94 @@ describe('Renderer', () => {
 
       assert.ok(!svg.includes('<circle'));
       assert.ok(!svg.includes('<line'));
+      assert.ok(!svg.includes('<use'));
     });
 
-    it('should apply transforms', () => {
+    it('should apply translate from the component definition on the <use> element', () => {
+      const styleWithTranslate = new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [{ type: 'component', name: 'eyes' }],
+        },
+        components: {
+          eyes: {
+            width: 50,
+            height: 50,
+            translate: { x: [5], y: [10] },
+            variants: { open: { elements: [{ type: 'element', name: 'circle', attributes: { r: '5' } }] } },
+          },
+        },
+      });
+
+      const svg = new Avatar(styleWithTranslate, { seed: 'test' }).toString();
+
+      assert.ok(svg.includes('<use transform="translate(2.5, 5)" href="#eyes-open-'));
+    });
+
+    it('should apply rotation from the component definition with center point', () => {
+      const styleWithRotate = new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [{ type: 'component', name: 'eyes' }],
+        },
+        components: {
+          eyes: {
+            width: 50,
+            height: 50,
+            rotate: [45],
+            variants: { open: { elements: [{ type: 'element', name: 'circle', attributes: { r: '5' } }] } },
+          },
+        },
+      });
+
+      const svg = new Avatar(styleWithRotate, { seed: 'test' }).toString();
+
+      assert.ok(svg.includes('<use transform="rotate(45, 25, 25)" href="#eyes-open-'));
+    });
+
+    it('should omit the transform attribute when no transforms apply', () => {
       const svg = new Avatar(styleWithComponents, {
         seed: 'test',
         eyesVariant: 'open',
-        eyesTranslateX: 5,
-        eyesTranslateY: 10,
       }).toString();
 
-      assert.ok(svg.includes('transform="translate(2.5, 5)"'));
+      assert.ok(svg.includes('<use href="#eyes-open-'));
+      assert.ok(!/<use[^>]*\btransform=/.test(svg));
     });
 
-    it('should apply rotation with center point', () => {
-      const svg = new Avatar(styleWithComponents, {
+    it('should deduplicate identical component references via shared <defs>', () => {
+      const style = new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            { type: 'component', name: 'eyes' },
+            { type: 'component', name: 'eyes' },
+          ],
+        },
+        components: {
+          eyes: {
+            width: 50,
+            height: 50,
+            variants: {
+              open: { elements: [{ type: 'element', name: 'circle', attributes: { r: '5' } }] },
+            },
+          },
+        },
+      });
+
+      const svg = new Avatar(style, {
         seed: 'test',
         eyesVariant: 'open',
-        eyesRotate: 45,
       }).toString();
 
-      assert.ok(svg.includes('rotate(45, 25, 25)'));
-    });
+      const circleMatches = svg.match(/<circle r="5"\/>/g) ?? [];
+      const useMatches = svg.match(/<use href="#eyes-open-[a-f0-9]+"\/>/g) ?? [];
 
-    it('should not wrap in g when no transforms', () => {
-      const svg = new Avatar(styleWithComponents, {
-        seed: 'test',
-        eyesVariant: 'open',
-        eyesRotate: 0,
-        eyesTranslateX: 0,
-        eyesTranslateY: 0,
-      }).toString();
-
-      assert.ok(!svg.includes('<g'));
+      assert.equal(circleMatches.length, 1, 'variant body must appear only once');
+      assert.equal(useMatches.length, 2, 'each component reference becomes its own <use>');
     });
   });
 
@@ -349,28 +418,20 @@ describe('Renderer', () => {
       assert.ok(differed, 'expected at least one seed where alias picks a different variant than the source');
     });
 
-    it('should inherit eyesVariant on the alias when only the source is set', () => {
+    it('should inherit eyesVariant on the alias and share the same <defs> entry', () => {
       const svg = new Avatar(aliasStyle, {
         seed: 'fallthrough',
         eyesVariant: 'b',
       }).toString();
-      const matches = [...svg.matchAll(/<circle id="([a-z])"\/>/g)].map((m) => m[1]);
+      const circles = [...svg.matchAll(/<circle id="([a-z])"\/>/g)].map((m) => m[1]);
+      const uses = [...svg.matchAll(/<use href="#(eyes-[a-z]-[a-f0-9]+)"\/>/g)].map((m) => m[1]);
 
-      assert.deepEqual(matches, ['b', 'b']);
+      assert.deepEqual(circles, ['b'], 'variant body is registered once');
+      assert.equal(uses.length, 2, 'both component slots reference the body');
+      assert.equal(uses[0], uses[1], 'both <use> elements share the same href');
     });
 
-    it('should let the alias override eyesVariant independently', () => {
-      const svg = new Avatar(aliasStyle, {
-        seed: 'override',
-        eyesVariant: 'b',
-        eyesRightVariant: 'd',
-      }).toString();
-      const matches = [...svg.matchAll(/<circle id="([a-z])"\/>/g)].map((m) => m[1]);
-
-      assert.deepEqual(matches, ['b', 'd']);
-    });
-
-    it('should fall through eyesProbability to the alias by default', () => {
+    it('should propagate eyesProbability to the alias', () => {
       const svg = new Avatar(aliasStyle, {
         seed: 'probability-fallthrough',
         eyesProbability: 0,
@@ -379,35 +440,18 @@ describe('Renderer', () => {
       assert.ok(!svg.includes('<circle'));
     });
 
-    it('should let eyesRightProbability override the alias visibility', () => {
-      const svg = new Avatar(aliasStyle, {
-        seed: 'probability-override',
-        eyesProbability: 0,
-        eyesRightProbability: 100,
-      }).toString();
-      const matches = svg.match(/<circle id="[a-z]"\/>/g) ?? [];
-
-      assert.equal(matches.length, 1);
-    });
-
-    it('should fall through eyesRotate to the alias and let the alias override', () => {
-      const fallthrough = new Avatar(aliasStyle, {
-        seed: 'rotate-fallthrough',
+    it('should silently ignore options keyed against an alias component', () => {
+      const svgWithoutAliasKey = new Avatar(aliasStyle, {
+        seed: 'ignore-alias-key',
         eyesVariant: 'a',
-        eyesRotate: 30,
       }).toString();
-
-      assert.equal((fallthrough.match(/rotate\(30, 10, 10\)/g) ?? []).length, 2);
-
-      const override = new Avatar(aliasStyle, {
-        seed: 'rotate-override',
+      const svgWithAliasKey = new Avatar(aliasStyle, {
+        seed: 'ignore-alias-key',
         eyesVariant: 'a',
-        eyesRotate: 30,
-        eyesRightRotate: 60,
+        eyesRightVariant: 'd',
       }).toString();
 
-      assert.ok(override.includes('rotate(30, 10, 10)'));
-      assert.ok(override.includes('rotate(60, 10, 10)'));
+      assert.equal(svgWithoutAliasKey, svgWithAliasKey);
     });
   });
 
@@ -544,38 +588,40 @@ describe('Renderer', () => {
   });
 
   describe('component scale', () => {
-    const styleWithComponent = new Style({
-      canvas: {
-        width: 100,
-        height: 100,
-        elements: [{ type: 'component', name: 'eyes' }],
-      },
-      components: {
-        eyes: {
-          width: 50,
-          height: 50,
-          variants: { open: { elements: [{ type: 'element', name: 'rect' }] } },
+    const buildStyle = (componentExtras = {}) =>
+      new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [{ type: 'component', name: 'eyes' }],
         },
-      },
-    });
+        components: {
+          eyes: {
+            width: 50,
+            height: 50,
+            ...componentExtras,
+            variants: { open: { elements: [{ type: 'element', name: 'rect' }] } },
+          },
+        },
+      });
 
-    it('should apply component-specific scale around component center', () => {
-      const svg = new Avatar(styleWithComponent, { eyesScale: 2 }).toString();
+    it('should apply component scale from definition around component center', () => {
+      const svg = new Avatar(buildStyle({ scale: [2] }), { seed: 'test' }).toString();
 
       assert.ok(svg.includes('translate(25, 25) scale(2) translate(-25, -25)'));
     });
 
-    it('should not apply component scale when 1', () => {
-      const svg = new Avatar(styleWithComponent, { eyesScale: 1 }).toString();
+    it('should not apply component scale when definition default is 1', () => {
+      const svg = new Avatar(buildStyle(), { seed: 'test' }).toString();
 
       assert.ok(!svg.includes('scale('));
     });
 
     it('should place component scale after rotate in the transform attribute', () => {
-      const svg = new Avatar(styleWithComponent, {
-        eyesRotate: 45,
-        eyesScale: 2,
-      }).toString();
+      const svg = new Avatar(
+        buildStyle({ rotate: [45], scale: [2] }),
+        { seed: 'test' },
+      ).toString();
 
       const rotateIndex = svg.indexOf('rotate(45');
       const scaleIndex = svg.indexOf('scale(2)');
@@ -595,10 +641,13 @@ describe('Renderer', () => {
       assert.ok(svg.includes('clip-path="url(#clip-'));
     });
 
-    it('should not apply border radius when 0', () => {
+    it('should still apply a square clipPath when border radius is 0', () => {
       const svg = new Avatar(minimalStyle, { borderRadius: 0 }).toString();
 
-      assert.ok(!svg.includes('clipPath'));
+      assert.ok(svg.includes('<clipPath id="clip-'));
+      assert.ok(svg.includes('rx="0"'));
+      assert.ok(svg.includes('ry="0"'));
+      assert.ok(svg.includes('clip-path="url(#clip-'));
     });
   });
 
@@ -693,7 +742,9 @@ describe('Renderer', () => {
     it('should not render background without colors', () => {
       const svg = new Avatar(minimalStyle).toString();
 
-      assert.ok(!svg.includes('<rect'));
+      // The clipPath wrapper always emits a <rect>; only the background
+      // <rect> carries a fill attribute, so check for that specifically.
+      assert.ok(!/<rect[^>]*\sfill=/.test(svg));
     });
   });
 

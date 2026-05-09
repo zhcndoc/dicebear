@@ -9,20 +9,29 @@ import { ComponentVariant } from './ComponentVariant.js';
  * Read-only view over an entry in a style definition's `components` block.
  *
  * An entry is either a base component with its own dimensions and variants
- * or an alias declared via `extends`. Aliases inherit `width`, `height`,
- * and `variants` from the source component; per-instance overrides for
- * `probability`, `rotate`, `scale`, and `translate` fall through to the
- * source when omitted on the alias.
+ * or an alias declared via `extends`. Aliases are pure references — they
+ * inherit dimensions, variants, and all transforms from the source.
  */
 export class Component {
   #data: StyleDefinitionComponent;
+  #name: string;
   #source?: Component;
   #translate?: ComponentTranslate;
   #variants?: ReadonlyMap<string, ComponentVariant>;
 
-  constructor(data: StyleDefinitionComponent, source?: Component) {
+  constructor(name: string, data: StyleDefinitionComponent, source?: Component) {
     this.#data = data;
+    this.#name = name;
     this.#source = source;
+  }
+
+  /**
+   * Returns the entry's own name as declared in the style definition. For
+   * aliases this is the alias key, not the source component's name (use
+   * {@link sourceName} for the canonical user-option key prefix).
+   */
+  name(): string {
+    return this.#name;
   }
 
   /**
@@ -31,6 +40,14 @@ export class Component {
    */
   extendsName(): string | undefined {
     return 'extends' in this.#data ? this.#data.extends : undefined;
+  }
+
+  /**
+   * Returns the canonical user-option key prefix: the source component's
+   * name when this entry is an alias, otherwise the entry's own name.
+   */
+  sourceName(): string {
+    return this.extendsName() ?? this.#name;
   }
 
   /**
@@ -50,60 +67,48 @@ export class Component {
   }
 
   /**
-   * Returns the probability (0–100) that this component is rendered. Falls
-   * back to the source component's probability for aliases when the alias
-   * does not set its own override; defaults to 100 (always visible).
+   * Returns the probability (0–100) that this component is rendered.
+   * Aliases delegate to the source; defaults to 100 (always visible).
    */
   probability(): number {
-    if (this.#data.probability !== undefined) {
-      return this.#data.probability;
+    if (this.#source) {
+      return this.#source.probability();
     }
 
-    return this.#source ? this.#source.probability() : 100;
+    return this.#asBase().probability ?? 100;
   }
 
   /**
-   * Returns the rotation range definition. Falls back to the source
-   * component's range for aliases when the alias does not set its own
-   * override; returns an empty list when neither is set.
+   * Returns the rotation range definition. Aliases delegate to the source.
    */
   rotate(): readonly number[] {
-    if (this.#data.rotate !== undefined) {
-      return this.#data.rotate;
+    if (this.#source) {
+      return this.#source.rotate();
     }
 
-    return this.#source ? this.#source.rotate() : [];
+    return this.#asBase().rotate ?? [];
   }
 
   /**
-   * Returns the scale range definition. Falls back to the source
-   * component's range for aliases when the alias does not set its own
-   * override; returns an empty list when neither is set.
+   * Returns the scale range definition. Aliases delegate to the source.
    */
   scale(): readonly number[] {
-    if (this.#data.scale !== undefined) {
-      return this.#data.scale;
+    if (this.#source) {
+      return this.#source.scale();
     }
 
-    return this.#source ? this.#source.scale() : [];
+    return this.#asBase().scale ?? [];
   }
 
   /**
-   * Returns the translate descriptor. Falls back to the source component's
-   * descriptor for aliases when the alias does not set its own override.
+   * Returns the translate descriptor. Aliases delegate to the source.
    */
   translate(): ComponentTranslate {
-    if (this.#data.translate !== undefined) {
-      this.#translate ??= new ComponentTranslate(this.#data.translate);
-
-      return this.#translate;
-    }
-
     if (this.#source) {
       return this.#source.translate();
     }
 
-    this.#translate ??= new ComponentTranslate({});
+    this.#translate ??= new ComponentTranslate(this.#asBase().translate ?? {});
 
     return this.#translate;
   }

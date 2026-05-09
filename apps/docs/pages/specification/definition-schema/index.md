@@ -1,5 +1,5 @@
 ---
-title: Definition Schema Reference | DiceBear
+title: 定义 Schema 参考 | DiceBear
 description: >
   DiceBear 头像样式定义 schema 的完整参考。了解
   样式定义如何使用 canvas、components、colors 和 metadata 进行结构化组织。
@@ -298,7 +298,7 @@ PRNG 可以选择的变体。
 
 ```json
 {
-  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@0.9.0/dist/definition.min.json",
+  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@0.14.1/dist/definition.min.json",
   "canvas": {
     "width": 100,
     "height": 100,

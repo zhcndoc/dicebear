@@ -4,7 +4,6 @@ import Slider from 'primevue/slider';
 import Button from 'primevue/button';
 import InputNumber from 'primevue/inputnumber';
 import { Weight } from '@lucide/vue';
-import PlaygroundRangeField from './PlaygroundRangeField.vue';
 import PlaygroundFieldReset from './PlaygroundFieldReset.vue';
 import useStore from '@theme/stores/playground';
 import { useRangeField } from '@theme/composables/useRangeField';
@@ -15,17 +14,9 @@ const props = defineProps<{
   componentName: string;
   variants: string[];
   hasProbability: boolean;
-  hasRotate: boolean;
-  hasTranslateX: boolean;
-  hasTranslateY: boolean;
-  hasScale: boolean;
   hasNonDefaultWeights: boolean;
   defaultWeights: Record<string, number>;
   defaultProbability: number;
-  defaultRotate: readonly number[];
-  defaultTranslateX: readonly number[];
-  defaultTranslateY: readonly number[];
-  defaultScale: readonly number[];
 }>();
 
 const store = useStore();
@@ -51,22 +42,8 @@ const { singleComputed } = useRangeField(store.avatarStyleOptions);
 
 const variantKey = `${props.componentName}Variant`;
 const probabilityKey = `${props.componentName}Probability`;
-const rotateKey = `${props.componentName}Rotate`;
-const translateXKey = `${props.componentName}TranslateX`;
-const translateYKey = `${props.componentName}TranslateY`;
-const scaleKey = `${props.componentName}Scale`;
 
-const probability = singleComputed(probabilityKey, props.defaultProbability);
-
-const defaultRotateFallback = props.defaultRotate.length === 1 ? props.defaultRotate[0] : 0;
-const defaultTranslateXFallback = props.defaultTranslateX.length === 1 ? props.defaultTranslateX[0] : 0;
-const defaultTranslateYFallback = props.defaultTranslateY.length === 1 ? props.defaultTranslateY[0] : 0;
-const defaultScaleFallback = props.defaultScale.length === 1 ? props.defaultScale[0] : 1;
-
-const defaultRotateRange = props.defaultRotate.length === 2 ? props.defaultRotate : undefined;
-const defaultTranslateXRange = props.defaultTranslateX.length === 2 ? props.defaultTranslateX : undefined;
-const defaultTranslateYRange = props.defaultTranslateY.length === 2 ? props.defaultTranslateY : undefined;
-const defaultScaleRange = props.defaultScale.length === 2 ? props.defaultScale : undefined;
+const probability = singleComputed(probabilityKey, () => props.defaultProbability);
 
 function resetVariants() {
   store.resetOption(variantKey);
@@ -136,53 +113,6 @@ function resetVariants() {
       </div>
       <Slider v-model="probability" :min="0" :max="100" :step="1" />
     </div>
-
-    <PlaygroundRangeField
-      v-if="hasRotate"
-      label="Rotate"
-      :option-key="rotateKey"
-      :min="-360"
-      :max="360"
-      :step="1"
-      unit="°"
-      :default-single="defaultRotateFallback"
-      :default-range="defaultRotateRange"
-    />
-
-    <PlaygroundRangeField
-      v-if="hasTranslateX"
-      label="Translate X"
-      :option-key="translateXKey"
-      :min="-100"
-      :max="100"
-      :step="1"
-      unit="%"
-      :default-single="defaultTranslateXFallback"
-      :default-range="defaultTranslateXRange"
-    />
-
-    <PlaygroundRangeField
-      v-if="hasTranslateY"
-      label="Translate Y"
-      :option-key="translateYKey"
-      :min="-100"
-      :max="100"
-      :step="1"
-      unit="%"
-      :default-single="defaultTranslateYFallback"
-      :default-range="defaultTranslateYRange"
-    />
-
-    <PlaygroundRangeField
-      v-if="hasScale"
-      label="Scale"
-      :option-key="scaleKey"
-      :min="0"
-      :max="10"
-      :step="0.01"
-      :default-single="defaultScaleFallback"
-      :default-range="defaultScaleRange"
-    />
   </div>
 </template>
 

@@ -1,6 +1,7 @@
 import type { Style } from './Style.js';
-import type { Options } from './Options.js';
+import type { Resolver } from './Resolver.js';
 import type { Canvas } from './Style/Canvas.js';
+import type { Component } from './Style/Component.js';
 import type { Element } from './Style/Element.js';
 import type {
   StyleDefinitionColorReference,
@@ -8,6 +9,7 @@ import type {
   StyleDefinitionVariableReference,
   StyleDefinitionElementValue,
 } from './StyleDefinition.js';
+import type { StyleOptionsColorFillValue } from './StyleOptions.js';
 import { Fnv1a } from './Prng/Fnv1a.js';
 import { Initials } from './Utils/Initials.js';
 import { License } from './Utils/License.js';
@@ -21,14 +23,14 @@ import { Xml } from './Utils/Xml.js';
  */
 export class Renderer {
   #style: Style;
-  #options: Options;
+  #resolver: Resolver;
   #defs = new Map<string, string>();
   #cachedSeedHash?: string;
   #cachedInitials?: string;
 
-  constructor(style: Style, options: Options) {
+  constructor(style: Style, resolver: Resolver) {
     this.#style = style;
-    this.#options = options;
+    this.#resolver = resolver;
   }
 
   /**
@@ -52,9 +54,9 @@ export class Renderer {
       this.#defs.size > 0
         ? `<defs>${Array.from(this.#defs.values()).join('')}</defs>`
         : '';
-    const size = this.#options.size();
+    const size = this.#resolver.size();
 
-    const title = this.#options.title();
+    const title = this.#resolver.title();
     const escapedTitle = title !== undefined ? Xml.escape(title) : undefined;
 
     const attrs = [
@@ -83,7 +85,7 @@ export class Renderer {
 
     let svg = `<svg ${attrs.join(' ')}>${metadata}${defs}${titleElement}${body}</svg>`;
 
-    if (this.#options.idRandomization()) {
+    if (this.#resolver.idRandomization()) {
       svg = this.#randomizeIds(svg);
     }
 
@@ -95,7 +97,7 @@ export class Renderer {
    * than `'none'`.
    */
   #applyFlip(body: string, canvas: Canvas): string {
-    const flip = this.#options.flip();
+    const flip = this.#resolver.flip();
 
     if (flip === 'none') {
       return body;
@@ -125,7 +127,7 @@ export class Renderer {
    * the option differs from `1`.
    */
   #applyScale(body: string, canvas: Canvas): string {
-    const scale = this.#options.scale();
+    const scale = this.#resolver.scale();
 
     if (scale === 1) {
       return body;
@@ -138,16 +140,13 @@ export class Renderer {
   }
 
   /**
-   * Clips `body` to a rounded rectangle and registers the corresponding
-   * `clipPath` in `<defs>` when `borderRadius` is non-zero.
+   * Clips `body` to the canvas rectangle (rounded when `borderRadius` is
+   * non-zero) and registers the corresponding `clipPath` in `<defs>`. The
+   * clip is always applied so transformed content cannot bleed past the
+   * canvas bounds, regardless of the consumer's `overflow` setting.
    */
   #applyBorderRadius(body: string, canvas: Canvas): string {
-    const radius = this.#options.borderRadius();
-
-    if (radius === 0) {
-      return body;
-    }
-
+    const radius = this.#resolver.borderRadius();
     const id = `clip-${this.#hashSeed()}`;
 
     const rx = (radius / 100) * canvas.width();
@@ -166,7 +165,7 @@ export class Renderer {
    * non-zero.
    */
   #applyRotate(body: string, canvas: Canvas): string {
-    const rotate = this.#options.rotate();
+    const rotate = this.#resolver.rotate();
 
     if (rotate === 0) {
       return body;
@@ -184,8 +183,8 @@ export class Renderer {
    * canvas dimensions.
    */
   #applyTranslate(body: string, canvas: Canvas): string {
-    const tx = this.#options.translateX();
-    const ty = this.#options.translateY();
+    const tx = this.#resolver.translateX();
+    const ty = this.#resolver.translateY();
 
     if (tx === 0 && ty === 0) {
       return body;
@@ -202,7 +201,7 @@ export class Renderer {
    * or an empty string when no background colors are configured.
    */
   #renderBackground(canvas: Canvas): string {
-    const colors = this.#options.color('background');
+    const colors = this.#resolver.color('background');
 
     if (colors.length === 0) {
       return '';
@@ -316,8 +315,11 @@ export class Renderer {
   }
 
   /**
-   * Resolves a component reference to a chosen variant and renders its
-   * elements wrapped in any rotate/translate transforms.
+   * Resolves a component reference to a chosen variant and emits a `<use>`
+   * pointing at a `<defs>` entry that holds the variant body. Aliases of the
+   * same source component sharing a variant — and identical components
+   * referenced more than once — therefore produce a single `<defs>` entry
+   * referenced by every `<use>`, never duplicated SVG markup.
    */
   #renderComponentElement(element: Element): string {
     const componentName = element.name();
@@ -326,30 +328,37 @@ export class Renderer {
       return '';
     }
 
-    const variantName = this.#options.variant(componentName);
+    const variantName = this.#resolver.variant(componentName);
 
     if (!variantName) {
       return '';
     }
 
     const component = this.#style.components().get(componentName);
+
     if (!component) {
       return '';
     }
 
     const variant = component.variants().get(variantName);
+
     if (!variant) {
       return '';
     }
 
-    const body = this.#renderElements(variant.elements());
-    const transforms = this.#buildTransforms(componentName);
+    const id = `${component.sourceName()}-${variantName}-${this.#hashSeed()}`;
 
-    if (transforms.length === 0) {
-      return body;
+    if (!this.#defs.has(id)) {
+      const body = this.#renderElements(variant.elements());
+
+      this.#defs.set(id, `<g id="${id}">${body}</g>`);
     }
 
-    return `<g transform="${transforms.join(' ')}">${body}</g>`;
+    const transforms = this.#buildTransforms(component);
+    const transformAttr =
+      transforms.length > 0 ? ` transform="${transforms.join(' ')}"` : '';
+
+    return `<use${transformAttr} href="#${id}"/>`;
   }
 
   /**
@@ -362,22 +371,15 @@ export class Renderer {
    * attribute, the scale is the rightmost (innermost) transform — applied
    * first to a point, followed by rotate, then translate.
    */
-  #buildTransforms(componentName: string): string[] {
-    const transforms: string[] = [];
-    const translateX = this.#options.translateX(componentName);
-    const translateY = this.#options.translateY(componentName);
-    const rotate = this.#options.rotate(componentName);
-    const scale = this.#options.scale(componentName);
+  #buildTransforms(component: Component): string[] {
+    const { rotate, translateX, translateY, scale } =
+      this.#resolver.componentTransform(component.name());
 
     if (translateX === 0 && translateY === 0 && rotate === 0 && scale === 1) {
-      return transforms;
+      return [];
     }
 
-    const component = this.#style.components().get(componentName);
-    if (!component) {
-      return transforms;
-    }
-
+    const transforms: string[] = [];
     const cx = component.width() / 2;
     const cy = component.height() / 2;
 
@@ -453,23 +455,26 @@ export class Renderer {
    * `<defs>` as a side effect.
    */
   #resolveColorReference(name: string): string {
-    const colors = this.#options.color(name);
-    const fill = this.#options.colorFill(name);
+    const colors = this.#resolver.color(name);
+    const fill = this.#resolver.colorFill(name);
 
     if (fill === 'solid' || colors.length <= 1) {
       return colors[0] ?? 'none';
     }
 
-    return this.#buildGradientDef(name, colors);
+    return this.#buildGradientDef(name, colors, fill);
   }
 
   /**
    * Builds the `<linearGradient>` or `<radialGradient>` for the given color
    * definition, registers it in `<defs>`, and returns its `url(#…)` reference.
    */
-  #buildGradientDef(name: string, colors: readonly string[]): string {
-    const fill = this.#options.colorFill(name);
-    const rotation = this.#options.colorAngle(name);
+  #buildGradientDef(
+    name: string,
+    colors: readonly string[],
+    fill: StyleOptionsColorFillValue,
+  ): string {
+    const rotation = this.#resolver.colorAngle(name);
     const id = `${name}-color-${this.#hashSeed()}`;
     const tag = fill === 'linear' ? 'linearGradient' : 'radialGradient';
     const rotateAttr =
@@ -516,9 +521,9 @@ export class Renderer {
       case 'initials':
         return this.#initials();
       case 'fontWeight':
-        return String(this.#options.fontWeight());
+        return String(this.#resolver.fontWeight());
       case 'fontFamily':
-        return this.#options.fontFamily();
+        return this.#resolver.fontFamily();
     }
   }
 
@@ -526,7 +531,7 @@ export class Renderer {
    * Returns the seed-derived initials, cached after the first call.
    */
   #initials(): string {
-    return (this.#cachedInitials ??= Initials.fromSeed(this.#options.seed()));
+    return (this.#cachedInitials ??= Initials.fromSeed(this.#resolver.seed()));
   }
 
   /**
@@ -534,6 +539,6 @@ export class Renderer {
    * value is used to derive stable but unique IDs for `<defs>` entries.
    */
   #hashSeed(): string {
-    return (this.#cachedSeedHash ??= Fnv1a.hex(this.#options.seed()));
+    return (this.#cachedSeedHash ??= Fnv1a.hex(this.#resolver.seed()));
   }
 }

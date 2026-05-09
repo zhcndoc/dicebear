@@ -4,444 +4,174 @@ declare(strict_types=1);
 
 namespace DiceBear;
 
-use DiceBear\Error\CircularColorReferenceError;
-use DiceBear\Utils\Color as ColorUtil;
 use DiceBear\Validator\OptionsValidator;
 
 /**
- * Validates raw avatar options and resolves them deterministically against
- * the style definition. Each accessor returns the resolved value for the
- * current seed and memoizes it so that repeated calls cannot drift.
+ * Validates the raw user-supplied options and exposes them through typed
+ * accessors. Each accessor returns the user's input in a normalized form
+ * (always a list for options that accept either a scalar or a list, or
+ * `null` when the option is not set), so consumers — chiefly
+ * {@see Resolver} — never have to do their own normalization.
+ *
+ * Resolution against the style definition and the PRNG happens in
+ * {@see Resolver}; this class is purely about reading user input.
  */
 class Options
 {
     /** @var array<string, mixed> */
     private array $data;
-    private Style $style;
-    private Prng $prng;
-    /** @var list<string> */
-    private array $colorResolving = [];
-    /** @var array<string, mixed> */
-    private array $result = [];
 
     /**
      * @param array<string, mixed> $data
      */
-    public function __construct(Style $style, array $data)
+    public function __construct(array $data = [])
     {
         OptionsValidator::validate($data);
 
         $this->data = $data;
-        $this->style = $style;
-        $this->prng = new Prng($this->seed());
     }
 
-    /**
-     * Returns the seed string, defaulting to an empty string when unset.
-     */
-    public function seed(): string
+    public function seed(): ?string
     {
-        return $this->memo('seed', fn() => $this->data['seed'] ?? '');
+        return $this->data['seed'] ?? null;
     }
 
-    /**
-     * Returns the requested output size in pixels, or `null` to keep the
-     * intrinsic viewBox dimensions.
-     */
     public function size(): ?int
     {
-        return $this->memo('size', fn() => $this->data['size'] ?? null);
+        return $this->data['size'] ?? null;
     }
 
-    /**
-     * Returns whether `<defs>` IDs should be suffixed with a random token to
-     * keep multiple inlined avatars from colliding.
-     */
-    public function idRandomization(): bool
+    public function idRandomization(): ?bool
     {
-        return $this->memo('idRandomization', fn() => $this->data['idRandomization'] ?? false);
+        return $this->data['idRandomization'] ?? null;
     }
 
-    /**
-     * Returns the accessible title, or `null` when unset.
-     */
     public function title(): ?string
     {
-        return $this->memo('title', fn() => $this->data['title'] ?? null);
+        return $this->data['title'] ?? null;
     }
 
-    /**
-     * Returns the resolved flip mode: `'none'`, `'horizontal'`, `'vertical'`,
-     * or `'both'`. Defaults to `'none'`.
-     */
-    public function flip(): string
+    /** @return list<string> */
+    public function flip(): array
     {
-        return $this->memo(
-            'flip',
-            fn() => $this->prng->pick('flip', $this->toArray($this->data['flip'] ?? null)) ?? 'none',
-        );
+        return $this->asArray($this->data['flip'] ?? null);
     }
 
-    /**
-     * Returns the resolved font family, defaulting to `system-ui`.
-     */
-    public function fontFamily(): string
+    /** @return list<string> */
+    public function fontFamily(): array
     {
-        return $this->memo(
-            'fontFamily',
-            fn() => $this->prng->pick('fontFamily', $this->toArray($this->data['fontFamily'] ?? null)) ?? 'system-ui',
-        );
+        return $this->asArray($this->data['fontFamily'] ?? null);
     }
 
-    /**
-     * Returns the resolved font weight, defaulting to `400`.
-     */
-    public function fontWeight(): int|float
+    /** @return list<int|float> */
+    public function fontWeight(): array
     {
-        return $this->memo(
-            'fontWeight',
-            fn() => $this->prng->pick('fontWeight', $this->toArray($this->data['fontWeight'] ?? null)) ?? 400,
-        );
+        return $this->asArray($this->data['fontWeight'] ?? null);
     }
 
-    /**
-     * Returns the resolved uniform scale factor for the avatar root or the
-     * named component, defaulting to `1`.
-     */
-    public function scale(?string $name = null): float
+    /** @return list<int|float> */
+    public function scale(): array
     {
-        return $this->numericComponentOption('scale', $name, fn($c) => $c->scale(), 1.0);
+        return $this->asArray($this->data['scale'] ?? null);
     }
 
-    /**
-     * Returns the resolved border-radius percentage (0–50), defaulting to `0`.
-     */
-    public function borderRadius(): float
+    /** @return list<int|float> */
+    public function borderRadius(): array
     {
-        return $this->memo(
-            'borderRadius',
-            fn() => $this->prng->float('borderRadius', $this->toArray($this->data['borderRadius'] ?? null)) ?? 0.0,
-        );
+        return $this->asArray($this->data['borderRadius'] ?? null);
+    }
+
+    /** @return list<int|float> */
+    public function rotate(): array
+    {
+        return $this->asArray($this->data['rotate'] ?? null);
+    }
+
+    /** @return list<int|float> */
+    public function translateX(): array
+    {
+        return $this->asArray($this->data['translateX'] ?? null);
+    }
+
+    /** @return list<int|float> */
+    public function translateY(): array
+    {
+        return $this->asArray($this->data['translateY'] ?? null);
     }
 
     /**
-     * Selects a variant for the given component. Depending on what was passed
-     * as `${name}Variant` in the input data:
+     * Returns the user-set variant constraint for `$name`:
+     * - `null` when the user did not set `${name}Variant`,
+     * - `list<string>` when the user gave a string or string list,
+     * - associative `array<string, int|float>` when the user gave a weighted map.
      *
-     * - `null`: PRNG picks from all style variants using their weights.
-     * - `string` or `string[]`: PRNG picks from the given subset (weight 1 each).
-     * - assoc array: PRNG picks using the provided weights.
-     *
-     * Only variants that exist in the style definition are considered.
+     * @return list<string>|array<string, int|float>|null
      */
-    public function variant(string $name): ?string
+    public function componentVariant(string $name): ?array
     {
-        return $this->memo("{$name}Variant", function () use ($name) {
-            if (!$this->isVisible($name)) {
-                return null;
-            }
-
-            $components = $this->style->components();
-            $component = $components[$name] ?? null;
-
-            if ($component === null) {
-                return null;
-            }
-
-            $raw = $this->getWithAliasFallback($name, 'Variant');
-            $variants = $component->variants();
-
-            if ($raw === null) {
-                $entries = [];
-                foreach ($variants as $v => $variant) {
-                    $entries[] = [$v, $variant->weight()];
-                }
-            } elseif (is_string($raw) || array_is_list($raw)) {
-                $arr = $this->toArray($raw);
-                $entries = [];
-                foreach ($arr as $v) {
-                    if (isset($variants[$v])) {
-                        $entries[] = [$v, 1];
-                    }
-                }
-            } else {
-                // Associative array with weights
-                $entries = [];
-                foreach ($raw as $v => $weight) {
-                    if (isset($variants[$v])) {
-                        $entries[] = [$v, $weight];
-                    }
-                }
-            }
-
-            return $this->prng->weightedPick("{$name}Variant", $entries);
-        });
-    }
-
-    /**
-     * Returns the resolved color stop list for the named color, suitable for
-     * solid fills (length 1) or gradients (length ≥ 2).
-     *
-     * @return list<string>
-     */
-    public function color(string $name): array
-    {
-        return $this->memo("{$name}Color", fn() => $this->resolveColor($name));
-    }
-
-    /**
-     * Returns the resolved fill type for the named color, defaulting to
-     * `'solid'`.
-     */
-    public function colorFill(string $name): string
-    {
-        $key = "{$name}ColorFill";
-
-        return $this->memo($key, function () use ($key) {
-            $raw = $this->get($key);
-
-            return $this->prng->pick($key, $this->toArray($raw)) ?? 'solid';
-        });
-    }
-
-    /**
-     * Returns the resolved gradient rotation angle (in degrees) for the named
-     * color, defaulting to `0`.
-     */
-    public function colorAngle(string $name): float
-    {
-        $key = "{$name}ColorAngle";
-
-        return $this->memo($key, function () use ($key) {
-            $raw = $this->get($key);
-
-            return $this->prng->float($key, $this->toArray($raw)) ?? 0.0;
-        });
-    }
-
-    /**
-     * Returns the resolved rotation angle for the avatar root or the named
-     * component, defaulting to `0`.
-     */
-    public function rotate(?string $name = null): float
-    {
-        return $this->numericComponentOption('rotate', $name, fn($c) => $c->rotate());
-    }
-
-    /**
-     * Returns the resolved horizontal translation for the avatar root or the
-     * named component, defaulting to `0`.
-     */
-    public function translateX(?string $name = null): float
-    {
-        return $this->numericComponentOption('translateX', $name, fn($c) => $c->translate()->x());
-    }
-
-    /**
-     * Returns the resolved vertical translation for the avatar root or the
-     * named component, defaulting to `0`.
-     */
-    public function translateY(?string $name = null): float
-    {
-        return $this->numericComponentOption('translateY', $name, fn($c) => $c->translate()->y());
-    }
-
-    /**
-     * Returns every option that has been touched during this resolution. Only
-     * memoized non-null values are included; unset options are filtered out
-     * to mirror the JS shape, where they would disappear on `JSON.stringify()`.
-     *
-     * @return array<string, mixed>
-     */
-    public function resolved(): array
-    {
-        return array_filter($this->result, static fn($v) => $v !== null);
-    }
-
-    /**
-     * Shared resolution path for the numeric component options
-     * (`rotate`/`translateX`/`translateY`/`scale`). Falls back to the
-     * component-level defaults from the style definition when the option is
-     * unset, and to `$defaultValue` when no definition default exists either.
-     */
-    private function numericComponentOption(string $option, ?string $name, callable $componentDefault, float $defaultValue = 0.0): float
-    {
-        $suffix = strtoupper($option[0]) . substr($option, 1);
-        $key = $name !== null ? $name . $suffix : $option;
-
-        return $this->memo($key, function () use ($key, $suffix, $name, $componentDefault, $defaultValue) {
-            $raw = $name !== null
-                ? $this->getWithAliasFallback($name, $suffix)
-                : $this->get($key);
-
-            if ($raw === null && $name !== null) {
-                $components = $this->style->components();
-                $component = $components[$name] ?? null;
-                $values = $component !== null ? $componentDefault($component) : [];
-            } else {
-                $values = $this->toArray($raw);
-            }
-
-            return $this->prng->float($key, $values) ?? $defaultValue;
-        });
-    }
-
-    /**
-     * Returns the visibility probability (0–100) for the named component,
-     * falling back to the component definition default of `100`.
-     */
-    private function probability(string $name): int|float
-    {
-        $raw = $this->getWithAliasFallback($name, 'Probability');
-
-        if ($raw !== null) {
-            return $raw;
-        }
-
-        $components = $this->style->components();
-
-        return isset($components[$name]) ? $components[$name]->probability() : 100;
-    }
-
-    /**
-     * Returns whether the named component should be rendered for this seed.
-     */
-    private function isVisible(string $name): bool
-    {
-        return $this->prng->bool("{$name}Probability", $this->probability($name));
-    }
-
-    /**
-     * Returns the resolved number of gradient stops (≥ 2) for the named
-     * color.
-     */
-    private function colorFillStops(string $name): int
-    {
-        $raw = $this->get("{$name}ColorFillStops");
-        $values = $this->toArray($raw);
-
-        return $this->prng->integer("{$name}ColorFillStops", $values) ?? 2;
-    }
-
-    /**
-     * Resolves a named color to its final stop list, applying contrast
-     * sorting and `notEqualTo` filtering from the style definition. Detects
-     * circular references between colors and throws
-     * {@see CircularColorReferenceError}.
-     *
-     * @return list<string>
-     */
-    private function resolveColor(string $name): array
-    {
-        $raw = $this->get("{$name}Color");
-        $styleColors = $this->style->colors();
-        $styleColor = $styleColors[$name] ?? null;
+        $raw = $this->dynamic($name . 'Variant');
 
         if ($raw === null) {
-            $source = $styleColor !== null ? $styleColor->values() : [];
-        } else {
-            $source = $this->toArray($raw);
+            return null;
         }
 
-        $candidates = array_map(fn($c) => ColorUtil::toHex($c), $source);
-        $fill = $this->colorFill($name);
-        $stops = $fill === 'solid' ? 1 : $this->colorFillStops($name);
-
-        if ($styleColor === null) {
-            return array_slice($this->prng->shuffle("{$name}Color", $candidates), 0, $stops);
+        if (is_string($raw) || (is_array($raw) && array_is_list($raw))) {
+            /** @var list<string> */
+            return $this->asArray($raw);
         }
 
-        // Detect circular references (e.g. a.contrastTo = b, b.contrastTo = a)
-        if (in_array($name, $this->colorResolving, true)) {
-            throw new CircularColorReferenceError(array_merge($this->colorResolving, [$name]));
-        }
+        /** @var array<string, int|float> */
+        return $raw;
+    }
 
-        $this->colorResolving[] = $name;
-        $contrastTo = $styleColor->contrastTo();
-        $notEqualTo = $styleColor->notEqualTo();
-
-        try {
-            if ($contrastTo !== null) {
-                $refColor = $this->color($contrastTo)[0] ?? null;
-
-                if ($refColor !== null) {
-                    $candidates = ColorUtil::sortByContrast($candidates, $refColor);
-                }
-            }
-
-            if (count($notEqualTo) > 0) {
-                $excluded = [];
-
-                foreach ($notEqualTo as $ref) {
-                    foreach ($this->color($ref) as $color) {
-                        $excluded[] = $color;
-                    }
-                }
-
-                $candidates = ColorUtil::filterNotEqualTo($candidates, $excluded);
-            }
-        } finally {
-            array_pop($this->colorResolving);
-        }
-
-        // Skip shuffle when sorted by contrast to preserve the ordering
-        $ordered = $contrastTo !== null
-            ? $candidates
-            : $this->prng->shuffle("{$name}Color", $candidates);
-
-        return array_slice($ordered, 0, $stops);
+    public function componentProbability(string $name): int|float|null
+    {
+        return $this->dynamic($name . 'Probability');
     }
 
     /**
-     * Returns a raw option value from the input data without resolution.
+     * Asymmetric on purpose: returns `null` (rather than `[]`) when
+     * `${name}Color` is unset so the resolver can fall back to the style
+     * definition's color values.
+     *
+     * @return list<string>|null
      */
-    private function get(string $key): mixed
+    public function color(string $name): ?array
+    {
+        $raw = $this->dynamic($name . 'Color');
+
+        return $raw === null ? null : $this->asArray($raw);
+    }
+
+    /** @return list<string> */
+    public function colorFill(string $name): array
+    {
+        return $this->asArray($this->dynamic($name . 'ColorFill'));
+    }
+
+    /** @return list<int|float> */
+    public function colorAngle(string $name): array
+    {
+        return $this->asArray($this->dynamic($name . 'ColorAngle'));
+    }
+
+    /** @return list<int|float> */
+    public function colorFillStops(string $name): array
+    {
+        return $this->asArray($this->dynamic($name . 'ColorFillStops'));
+    }
+
+    /**
+     * Returns the raw value of a dynamic-key option (e.g. `${name}Color`)
+     * untouched. Used for keys that vary by component or color name.
+     */
+    private function dynamic(string $key): mixed
     {
         return $this->data[$key] ?? null;
     }
 
-    /**
-     * Reads `${name}${suffix}` from the input data. When the component is an
-     * alias and the alias-keyed value is unset, falls through to the source
-     * component's option (`${aliasOf}${suffix}`) so users only need to set
-     * the option once when they want both instances to share it.
-     */
-    private function getWithAliasFallback(string $name, string $suffix): mixed
-    {
-        $direct = $this->get("{$name}{$suffix}");
-
-        if ($direct !== null) {
-            return $direct;
-        }
-
-        $components = $this->style->components();
-        $parent = isset($components[$name]) ? $components[$name]->extendsName() : null;
-
-        return $parent !== null ? $this->get("{$parent}{$suffix}") : null;
-    }
-
-    /**
-     * Resolves and caches an option under `$key`, returning the cached value
-     * on subsequent calls.
-     */
-    private function memo(string $key, callable $compute): mixed
-    {
-        if (array_key_exists($key, $this->result)) {
-            return $this->result[$key];
-        }
-
-        $value = $compute();
-        $this->result[$key] = $value;
-
-        return $value;
-    }
-
-    /**
-     * Normalizes a scalar/null/array value into a list.
-     *
-     * @return list<mixed>
-     */
-    private function toArray(mixed $value): array
+    /** @return list<mixed> */
+    private function asArray(mixed $value): array
     {
         if ($value === null) {
             return [];

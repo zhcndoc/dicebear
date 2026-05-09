@@ -302,13 +302,6 @@ describe('Style', () => {
           },
         },
         eyesRight: { extends: 'eyes' },
-        eyesRightOverridden: {
-          extends: 'eyes',
-          probability: 50,
-          rotate: [-20, 20],
-          scale: [1],
-          translate: { x: [0], y: [0] },
-        },
       },
     };
 
@@ -333,7 +326,7 @@ describe('Style', () => {
       assert.deepEqual(Array.from(alias.variants().keys()), ['open', 'closed']);
     });
 
-    it('should fall through to the source for probability/rotate/scale/translate', () => {
+    it('should delegate probability/rotate/scale/translate to the source', () => {
       const alias = new Style(aliasDefinition).components().get('eyesRight');
 
       assert.equal(alias.probability(), 80);
@@ -343,16 +336,25 @@ describe('Style', () => {
       assert.deepEqual(alias.translate().y(), [-2, 2]);
     });
 
-    it('should honor per-instance overrides on the alias', () => {
-      const alias = new Style(aliasDefinition)
-        .components()
-        .get('eyesRightOverridden');
-
-      assert.equal(alias.probability(), 50);
-      assert.deepEqual(alias.rotate(), [-20, 20]);
-      assert.deepEqual(alias.scale(), [1]);
-      assert.deepEqual(alias.translate().x(), [0]);
-      assert.deepEqual(alias.translate().y(), [0]);
+    it('should reject definition-level overrides on alias components', () => {
+      assert.throws(
+        () =>
+          new Style({
+            canvas: { width: 100, height: 100, elements: [] },
+            components: {
+              eyes: {
+                width: 50,
+                height: 50,
+                variants: { open: { elements: [] } },
+              },
+              eyesRight: {
+                extends: 'eyes',
+                probability: 50,
+              },
+            },
+          }),
+        StyleValidationError,
+      );
     });
 
     it('should reject extends pointing at an unknown component', () => {

@@ -104,13 +104,14 @@ class Style
 
         foreach ($entries as $name => $data) {
             if (!self::isAlias($data)) {
-                $this->components[$name] = new Component($data);
+                $this->components[$name] = new Component($name, $data);
             }
         }
 
         foreach ($entries as $name => $data) {
             if (self::isAlias($data)) {
                 $this->components[$name] = new Component(
+                    $name,
                     $data,
                     $this->components[$data['extends']] ?? null,
                 );

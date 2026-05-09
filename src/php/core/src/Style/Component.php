@@ -8,10 +8,8 @@ namespace DiceBear\Style;
  * Read-only view over an entry in a style definition's `components` block.
  *
  * An entry is either a base component with its own dimensions and variants
- * or an alias declared via `extends`. Aliases inherit `width`, `height`,
- * and `variants` from the source component; per-instance overrides for
- * `probability`, `rotate`, `scale`, and `translate` fall through to the
- * source when omitted on the alias.
+ * or an alias declared via `extends`. Aliases are pure references — they
+ * inherit dimensions, variants, and all transforms from the source.
  */
 class Component
 {
@@ -23,9 +21,20 @@ class Component
      * @param array<string, mixed> $data
      */
     public function __construct(
+        private readonly string $name,
         private readonly array $data,
         private readonly ?Component $source = null,
     ) {}
+
+    /**
+     * Returns the entry's own name as declared in the style definition. For
+     * aliases this is the alias key, not the source component's name (use
+     * {@see sourceName} for the canonical user-option key prefix).
+     */
+    public function name(): string
+    {
+        return $this->name;
+    }
 
     /**
      * Returns the source component name when this entry is an alias, or
@@ -34,6 +43,15 @@ class Component
     public function extendsName(): ?string
     {
         return $this->data['extends'] ?? null;
+    }
+
+    /**
+     * Returns the canonical user-option key prefix: the source component's
+     * name when this entry is an alias, otherwise the entry's own name.
+     */
+    public function sourceName(): string
+    {
+        return $this->extendsName() ?? $this->name;
     }
 
     /**
@@ -55,66 +73,56 @@ class Component
     }
 
     /**
-     * Returns the probability (0–100) that this component is rendered. Falls
-     * back to the source component's probability for aliases when the alias
-     * does not set its own override; defaults to 100 (always visible).
+     * Returns the probability (0–100) that this component is rendered.
+     * Aliases delegate to the source; defaults to 100 (always visible).
      */
     public function probability(): int|float
     {
-        if (array_key_exists('probability', $this->data)) {
-            return $this->data['probability'];
+        if ($this->source !== null) {
+            return $this->source->probability();
         }
 
-        return $this->source !== null ? $this->source->probability() : 100;
+        return $this->data['probability'] ?? 100;
     }
 
     /**
-     * Returns the rotation range definition. Falls back to the source
-     * component's range for aliases when the alias does not set its own
-     * override; returns an empty list when neither is set.
+     * Returns the rotation range definition. Aliases delegate to the source.
      *
      * @return list<int|float>
      */
     public function rotate(): array
     {
-        if (array_key_exists('rotate', $this->data)) {
-            return $this->data['rotate'];
+        if ($this->source !== null) {
+            return $this->source->rotate();
         }
 
-        return $this->source !== null ? $this->source->rotate() : [];
+        return $this->data['rotate'] ?? [];
     }
 
     /**
-     * Returns the scale range definition. Falls back to the source
-     * component's range for aliases when the alias does not set its own
-     * override; returns an empty list when neither is set.
+     * Returns the scale range definition. Aliases delegate to the source.
      *
      * @return list<int|float>
      */
     public function scale(): array
     {
-        if (array_key_exists('scale', $this->data)) {
-            return $this->data['scale'];
+        if ($this->source !== null) {
+            return $this->source->scale();
         }
 
-        return $this->source !== null ? $this->source->scale() : [];
+        return $this->data['scale'] ?? [];
     }
 
     /**
-     * Returns the translate descriptor. Falls back to the source component's
-     * descriptor for aliases when the alias does not set its own override.
+     * Returns the translate descriptor. Aliases delegate to the source.
      */
     public function translate(): ComponentTranslate
     {
-        if (array_key_exists('translate', $this->data)) {
-            return $this->translate ??= new ComponentTranslate($this->data['translate']);
-        }
-
         if ($this->source !== null) {
             return $this->source->translate();
         }
 
-        return $this->translate ??= new ComponentTranslate([]);
+        return $this->translate ??= new ComponentTranslate($this->data['translate'] ?? []);
     }
 
     /**

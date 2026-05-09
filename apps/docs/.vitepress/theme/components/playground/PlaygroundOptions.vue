@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { computed, inject, provide, ref, watch } from 'vue';
+import { computed, provide } from 'vue';
 import { styleUsesVariable } from '@theme/utils/avatar/style';
-import { webSafeFonts } from '@theme/utils/avatar/fonts';
 import { componentPreviewKey } from '@theme/components/styles/styleOptionsKeys';
 import { useStyleOptions } from '@theme/composables/useStyleOptions';
 import { capitalCase } from 'change-case';
@@ -25,15 +24,7 @@ type ComponentInfo = {
   name: string;
   variants: string[];
   hasProbability: boolean;
-  hasRotate: boolean;
-  hasTranslateX: boolean;
-  hasTranslateY: boolean;
-  hasScale: boolean;
   defaultProbability: number;
-  defaultRotate: readonly number[];
-  defaultTranslateX: readonly number[];
-  defaultTranslateY: readonly number[];
-  defaultScale: readonly number[];
   hasNonDefaultWeights: boolean;
   defaultWeights: Record<string, number>;
 };
@@ -56,39 +47,6 @@ const { loadedStyle, descriptor, styleColors, preview } = useStyleOptions(avatar
 
 provide(componentPreviewKey, preview);
 
-const initialOptions = inject<import('vue').Ref<Record<string, unknown>>>('initialOptions', ref({}));
-const initialOptionsApplied = ref(false);
-
-watch(descriptor, (desc) => {
-  if (initialOptionsApplied.value || Object.keys(desc).length === 0) {
-    return;
-  }
-
-  initialOptionsApplied.value = true;
-
-  const opts = initialOptions.value;
-
-  if (Object.keys(opts).length === 0) {
-    return;
-  }
-
-  if ('fontFamily' in opts) {
-    const allowed: readonly string[] = webSafeFonts;
-
-    if (typeof opts.fontFamily === 'string' && !allowed.includes(opts.fontFamily)) {
-      delete opts.fontFamily;
-    } else if (Array.isArray(opts.fontFamily)) {
-      opts.fontFamily = opts.fontFamily.filter((f: unknown) => typeof f === 'string' && allowed.includes(f));
-
-      if ((opts.fontFamily as string[]).length === 0) {
-        delete opts.fontFamily;
-      }
-    }
-  }
-
-  Object.assign(store.avatarStyleOptions, opts);
-}, { immediate: true });
-
 const hasFontFamily = computed(() =>
   loadedStyle.value ? styleUsesVariable(avatarStyleName.value, 'fontFamily') : false,
 );
@@ -99,32 +57,30 @@ const hasFontWeight = computed(() =>
 
 const components = computed(() => {
   const result: ComponentInfo[] = [];
+  const style = loadedStyle.value;
 
+  // OptionsDescriptor already filters out alias components, so every
+  // `*Variant` enum here is guaranteed to be a non-alias source.
   for (const [key, field] of Object.entries(descriptor.value)) {
     if (!key.endsWith('Variant') || field.type !== 'enum' || !field.weighted) {
       continue;
     }
 
     const name = key.replace(/Variant$/, '');
-    const comp = loadedStyle.value?.components().get(name);
+    const comp = style?.components().get(name);
+    const variantNames = (field.values as string[]) ?? [];
+    const defaultWeights = comp
+      ? Object.fromEntries([...comp.variants()].map(([n, v]) => [n, v.weight()]))
+      : {};
+    const hasNonDefaultWeights = Object.values(defaultWeights).some((w) => w !== 1);
 
     result.push({
       name,
-      variants: (field.values as string[]) ?? [],
+      variants: variantNames,
       hasProbability: `${name}Probability` in descriptor.value,
-      hasRotate: `${name}Rotate` in descriptor.value,
-      hasTranslateX: `${name}TranslateX` in descriptor.value,
-      hasTranslateY: `${name}TranslateY` in descriptor.value,
-      hasScale: `${name}Scale` in descriptor.value,
       defaultProbability: comp?.probability() ?? 100,
-      defaultRotate: comp?.rotate() ?? [],
-      defaultTranslateX: comp?.translate().x() ?? [],
-      defaultTranslateY: comp?.translate().y() ?? [],
-      defaultScale: comp?.scale() ?? [],
-      hasNonDefaultWeights: comp ? [...comp.variants().values()].some((v) => v.weight() !== 1) : false,
-      defaultWeights: comp
-        ? Object.fromEntries([...comp.variants()].map(([name, v]) => [name, v.weight()]))
-        : {},
+      hasNonDefaultWeights,
+      defaultWeights,
     });
   }
 
@@ -273,15 +229,7 @@ const onSeedFocus = (e: FocusEvent) => {
               :component-name="comp.name"
               :variants="comp.variants"
               :has-probability="comp.hasProbability"
-              :has-rotate="comp.hasRotate"
-              :has-translate-x="comp.hasTranslateX"
-              :has-translate-y="comp.hasTranslateY"
-              :has-scale="comp.hasScale"
               :default-probability="comp.defaultProbability"
-              :default-rotate="comp.defaultRotate"
-              :default-translate-x="comp.defaultTranslateX"
-              :default-translate-y="comp.defaultTranslateY"
-              :default-scale="comp.defaultScale"
               :has-non-default-weights="comp.hasNonDefaultWeights"
               :default-weights="comp.defaultWeights"
             />

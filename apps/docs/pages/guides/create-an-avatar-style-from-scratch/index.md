@@ -304,7 +304,7 @@ PRNG 会为每个种子选择不同的背景颜色。
 
 ```json
 {
-  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@0.9.0/dist/definition.min.json",
+  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@0.14.1/dist/definition.min.json",
   "canvas": { ... }
 }
 ```

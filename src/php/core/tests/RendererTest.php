@@ -59,8 +59,9 @@ class RendererTest extends TestCase
     public function testSizeNotIncludedWhenNotSet(): void
     {
         $svg = (new Avatar(self::minimalStyle()))->toString();
-        $this->assertStringNotContainsString('width=', $svg);
-        $this->assertStringNotContainsString('height=', $svg);
+        $openTag = substr($svg, 0, strpos($svg, '>') + 1);
+        $this->assertStringNotContainsString('width=', $openTag);
+        $this->assertStringNotContainsString('height=', $openTag);
     }
 
     // element rendering
@@ -205,48 +206,105 @@ class RendererTest extends TestCase
         $this->assertStringNotContainsString('<line', $svg);
     }
 
+    public function testRegistersVariantBodyInDefsAndReferencesItViaUse(): void
+    {
+        $style = $this->styleWithComponents();
+        $svg = (new Avatar($style, ['seed' => 'test', 'eyesVariant' => 'open']))->toString();
+
+        $this->assertSame(
+            1,
+            preg_match('/<g id="(eyes-open-[a-f0-9]+)"><circle r="5"\\/><\\/g>/', $svg, $idMatch),
+            'expected variant body wrapped in <g id="…"> inside <defs>',
+        );
+        $this->assertStringContainsString('<defs>', $svg);
+        $this->assertStringContainsString("<use href=\"#{$idMatch[1]}\"/>", $svg);
+    }
+
     public function testSkipsComponentWithProbabilityZero(): void
     {
         $style = $this->styleWithComponents();
         $svg = (new Avatar($style, ['seed' => 'test', 'eyesProbability' => 0]))->toString();
         $this->assertStringNotContainsString('<circle', $svg);
         $this->assertStringNotContainsString('<line', $svg);
+        $this->assertStringNotContainsString('<use', $svg);
     }
 
-    public function testComponentTransforms(): void
+    public function testComponentTransformsFromDefinition(): void
+    {
+        $style = new Style([
+            'canvas' => [
+                'width' => 100, 'height' => 100,
+                'elements' => [['type' => 'component', 'name' => 'eyes']],
+            ],
+            'components' => [
+                'eyes' => [
+                    'width' => 50, 'height' => 50,
+                    'translate' => ['x' => [5], 'y' => [10]],
+                    'variants' => ['open' => ['elements' => [['type' => 'element', 'name' => 'circle', 'attributes' => ['r' => '5']]]]],
+                ],
+            ],
+        ]);
+        $svg = (new Avatar($style, ['seed' => 'test']))->toString();
+        $this->assertStringContainsString('<use transform="translate(2.5, 5)" href="#eyes-open-', $svg);
+    }
+
+    public function testComponentRotationFromDefinitionWithCenter(): void
+    {
+        $style = new Style([
+            'canvas' => [
+                'width' => 100, 'height' => 100,
+                'elements' => [['type' => 'component', 'name' => 'eyes']],
+            ],
+            'components' => [
+                'eyes' => [
+                    'width' => 50, 'height' => 50,
+                    'rotate' => [45],
+                    'variants' => ['open' => ['elements' => [['type' => 'element', 'name' => 'circle', 'attributes' => ['r' => '5']]]]],
+                ],
+            ],
+        ]);
+        $svg = (new Avatar($style, ['seed' => 'test']))->toString();
+        $this->assertStringContainsString('<use transform="rotate(45, 25, 25)" href="#eyes-open-', $svg);
+    }
+
+    public function testOmitsTransformAttributeWithoutComponentTransforms(): void
     {
         $style = $this->styleWithComponents();
         $svg = (new Avatar($style, [
             'seed' => 'test',
             'eyesVariant' => 'open',
-            'eyesTranslateX' => 5,
-            'eyesTranslateY' => 10,
         ]))->toString();
-        $this->assertStringContainsString('transform="translate(2.5, 5)"', $svg);
+
+        $this->assertStringContainsString('<use href="#eyes-open-', $svg);
+        $this->assertSame(0, preg_match('/<use[^>]*\\btransform=/', $svg));
     }
 
-    public function testComponentRotationWithCenter(): void
+    public function testDeduplicatesIdenticalComponentReferences(): void
     {
-        $style = $this->styleWithComponents();
-        $svg = (new Avatar($style, [
-            'seed' => 'test',
-            'eyesVariant' => 'open',
-            'eyesRotate' => 45,
-        ]))->toString();
-        $this->assertStringContainsString('rotate(45, 25, 25)', $svg);
-    }
+        $style = new Style([
+            'canvas' => [
+                'width' => 100,
+                'height' => 100,
+                'elements' => [
+                    ['type' => 'component', 'name' => 'eyes'],
+                    ['type' => 'component', 'name' => 'eyes'],
+                ],
+            ],
+            'components' => [
+                'eyes' => [
+                    'width' => 50,
+                    'height' => 50,
+                    'variants' => [
+                        'open' => ['elements' => [['type' => 'element', 'name' => 'circle', 'attributes' => ['r' => '5']]]],
+                    ],
+                ],
+            ],
+        ]);
 
-    public function testNoGWrapperWithoutTransforms(): void
-    {
-        $style = $this->styleWithComponents();
-        $svg = (new Avatar($style, [
-            'seed' => 'test',
-            'eyesVariant' => 'open',
-            'eyesRotate' => 0,
-            'eyesTranslateX' => 0,
-            'eyesTranslateY' => 0,
-        ]))->toString();
-        $this->assertStringNotContainsString('<g', $svg);
+        $svg = (new Avatar($style, ['seed' => 'test', 'eyesVariant' => 'open']))->toString();
+
+        $this->assertSame(1, preg_match_all('/<circle r="5"\\/>/', $svg), 'variant body must appear only once');
+        $this->assertSame(2, preg_match_all('/<use href="#eyes-open-[a-f0-9]+"\\/>/', $svg), 'each component reference becomes its own <use>');
     }
 
     // color rendering
@@ -347,7 +405,10 @@ class RendererTest extends TestCase
 
     // component scale
 
-    private static function styleWithComponent(): Style
+    /**
+     * @param array<string, mixed> $extras
+     */
+    private static function styleWithComponent(array $extras = []): Style
     {
         return new Style([
             'canvas' => [
@@ -355,32 +416,33 @@ class RendererTest extends TestCase
                 'elements' => [['type' => 'component', 'name' => 'eyes']],
             ],
             'components' => [
-                'eyes' => [
-                    'width' => 50, 'height' => 50,
-                    'variants' => ['open' => ['elements' => [['type' => 'element', 'name' => 'rect']]]],
-                ],
+                'eyes' => array_merge(
+                    ['width' => 50, 'height' => 50],
+                    $extras,
+                    ['variants' => ['open' => ['elements' => [['type' => 'element', 'name' => 'rect']]]]],
+                ),
             ],
         ]);
     }
 
-    public function testComponentScaleTransform(): void
+    public function testComponentScaleFromDefinition(): void
     {
-        $svg = (new Avatar(self::styleWithComponent(), ['eyesScale' => 2]))->toString();
+        $svg = (new Avatar(self::styleWithComponent(['scale' => [2]]), ['seed' => 'test']))->toString();
         $this->assertStringContainsString('translate(25, 25) scale(2) translate(-25, -25)', $svg);
     }
 
-    public function testNoComponentScaleWrapperWhenOne(): void
+    public function testNoComponentScaleWrapperWhenDefinitionIsOne(): void
     {
-        $svg = (new Avatar(self::styleWithComponent(), ['eyesScale' => 1]))->toString();
+        $svg = (new Avatar(self::styleWithComponent(), ['seed' => 'test']))->toString();
         $this->assertStringNotContainsString('scale(', $svg);
     }
 
     public function testComponentScaleAfterRotateInTransformAttribute(): void
     {
-        $svg = (new Avatar(self::styleWithComponent(), [
-            'eyesRotate' => 45,
-            'eyesScale' => 2,
-        ]))->toString();
+        $svg = (new Avatar(
+            self::styleWithComponent(['rotate' => [45], 'scale' => [2]]),
+            ['seed' => 'test'],
+        ))->toString();
 
         $rotateIndex = strpos($svg, 'rotate(45');
         $scaleIndex = strpos($svg, 'scale(2)');
@@ -401,10 +463,13 @@ class RendererTest extends TestCase
         $this->assertStringContainsString('clip-path="url(#clip-', $svg);
     }
 
-    public function testNoBorderRadiusWhen0(): void
+    public function testStillAppliesSquareClipPathWhenBorderRadiusIs0(): void
     {
         $svg = (new Avatar(self::minimalStyle(), ['borderRadius' => 0]))->toString();
-        $this->assertStringNotContainsString('clipPath', $svg);
+        $this->assertStringContainsString('<clipPath id="clip-', $svg);
+        $this->assertStringContainsString('rx="0"', $svg);
+        $this->assertStringContainsString('ry="0"', $svg);
+        $this->assertStringContainsString('clip-path="url(#clip-', $svg);
     }
 
     // idRandomization
@@ -466,7 +531,9 @@ class RendererTest extends TestCase
     public function testNoBackgroundWithoutColors(): void
     {
         $svg = (new Avatar(self::minimalStyle()))->toString();
-        $this->assertStringNotContainsString('<rect', $svg);
+        // The clipPath wrapper always emits a <rect>; only the background
+        // <rect> carries a fill attribute, so check for that specifically.
+        $this->assertDoesNotMatchRegularExpression('/<rect[^>]*\sfill=/', $svg);
     }
 
     // global transforms
@@ -726,30 +793,22 @@ class RendererTest extends TestCase
         $this->assertTrue($differed, 'expected at least one seed where alias picks a different variant than the source');
     }
 
-    public function testAliasInheritsEyesVariantWhenOnlySourceIsSet(): void
+    public function testAliasInheritsEyesVariantAndSharesDefsEntry(): void
     {
         $svg = (new Avatar(self::aliasStyle(), [
             'seed' => 'fallthrough',
             'eyesVariant' => 'b',
         ]))->toString();
 
-        preg_match_all('/<circle id="([a-z])"\\/>/', $svg, $matches);
-        $this->assertSame(['b', 'b'], $matches[1]);
+        preg_match_all('/<circle id="([a-z])"\\/>/', $svg, $circles);
+        preg_match_all('/<use href="#(eyes-[a-z]-[a-f0-9]+)"\\/>/', $svg, $uses);
+
+        $this->assertSame(['b'], $circles[1], 'variant body is registered once');
+        $this->assertCount(2, $uses[1], 'both component slots reference the body');
+        $this->assertSame($uses[1][0], $uses[1][1], 'both <use> elements share the same href');
     }
 
-    public function testAliasOverridesEyesVariantIndependently(): void
-    {
-        $svg = (new Avatar(self::aliasStyle(), [
-            'seed' => 'override',
-            'eyesVariant' => 'b',
-            'eyesRightVariant' => 'd',
-        ]))->toString();
-
-        preg_match_all('/<circle id="([a-z])"\\/>/', $svg, $matches);
-        $this->assertSame(['b', 'd'], $matches[1]);
-    }
-
-    public function testAliasFallsThroughEyesProbabilityByDefault(): void
+    public function testAliasPropagatesEyesProbability(): void
     {
         $svg = (new Avatar(self::aliasStyle(), [
             'seed' => 'probability-fallthrough',
@@ -759,37 +818,18 @@ class RendererTest extends TestCase
         $this->assertStringNotContainsString('<circle', $svg);
     }
 
-    public function testAliasOverridesProbabilityIndependently(): void
+    public function testAliasSilentlyIgnoresAliasKeyedOptions(): void
     {
-        $svg = (new Avatar(self::aliasStyle(), [
-            'seed' => 'probability-override',
-            'eyesProbability' => 0,
-            'eyesRightProbability' => 100,
-        ]))->toString();
-
-        preg_match_all('/<circle id="[a-z]"\\/>/', $svg, $matches);
-        $this->assertCount(1, $matches[0]);
-    }
-
-    public function testAliasFallsThroughEyesRotateAndAllowsOverride(): void
-    {
-        $fallthrough = (new Avatar(self::aliasStyle(), [
-            'seed' => 'rotate-fallthrough',
+        $without = (new Avatar(self::aliasStyle(), [
+            'seed' => 'ignore-alias-key',
             'eyesVariant' => 'a',
-            'eyesRotate' => 30,
         ]))->toString();
-
-        preg_match_all('/rotate\\(30, 10, 10\\)/', $fallthrough, $matches);
-        $this->assertCount(2, $matches[0]);
-
-        $override = (new Avatar(self::aliasStyle(), [
-            'seed' => 'rotate-override',
+        $with = (new Avatar(self::aliasStyle(), [
+            'seed' => 'ignore-alias-key',
             'eyesVariant' => 'a',
-            'eyesRotate' => 30,
-            'eyesRightRotate' => 60,
+            'eyesRightVariant' => 'd',
         ]))->toString();
 
-        $this->assertStringContainsString('rotate(30, 10, 10)', $override);
-        $this->assertStringContainsString('rotate(60, 10, 10)', $override);
+        $this->assertSame($without, $with);
     }
 }
