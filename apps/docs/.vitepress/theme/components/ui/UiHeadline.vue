@@ -35,7 +35,7 @@ defineProps<{
   letter-spacing: -0.035em;
   text-wrap: balance;
   --hl-from: var(--vp-c-brand-1);
-  --hl-to: var(--vp-c-purple-1);
+  --hl-to: var(--vp-c-pink-2);
   --hl-display: inline;
 
   @media (max-width: 640px) {
@@ -44,8 +44,7 @@ defineProps<{
 
   :deep(strong) {
     display: var(--hl-display, inline);
-    background: linear-gradient(135deg, var(--hl-from) 0%, var(--hl-to) 50%, var(--vp-c-coral-2, var(--vp-c-red-2)) 100%);
-    background-size: 200% auto;
+    background: linear-gradient(120deg, var(--hl-from) 0%, var(--hl-to) 100%);
     font-weight: 800;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;

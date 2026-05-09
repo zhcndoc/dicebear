@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { ChevronDown } from '@lucide/vue';
-import AppHeroBackground from './AppHeroBackground.vue';
 import AppHeroContent from './AppHeroContent.vue';
+import AppHeroSwarm from './AppHeroSwarm.vue';
 import { useVisibility } from '../../composables/useVisibility';
 import { useParallax } from '../../composables/useParallax';
 
@@ -11,10 +11,10 @@ const heroRef = ref<HTMLElement>();
 const { setContainer, handleMouseMove } = useParallax(isVisible);
 
 function scrollToContent() {
-  const section = document.querySelector('.seed-demo');
+  const next = heroRef.value?.nextElementSibling;
 
-  if (section) {
-    section.scrollIntoView({ behavior: 'smooth' });
+  if (next) {
+    next.scrollIntoView({ behavior: 'smooth' });
   }
 }
 
@@ -34,8 +34,10 @@ onMounted(() => {
     <div class="app-hero-shape app-hero-shape-3"></div>
     <div class="app-hero-shape app-hero-shape-4"></div>
 
-    <AppHeroBackground />
-    <AppHeroContent />
+    <div class="app-hero-grid">
+      <AppHeroContent />
+      <AppHeroSwarm />
+    </div>
 
     <button class="app-hero-scroll" @click="scrollToContent" aria-label="Scroll to content">
       <ChevronDown />
@@ -46,8 +48,8 @@ onMounted(() => {
 <style lang="scss">
 :root {
   --app-hero-gradient:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(14, 165, 233, 0.12), transparent),
-    radial-gradient(ellipse 60% 40% at 80% 50%, rgba(124, 58, 237, 0.08), transparent),
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59, 130, 246, 0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 50%, rgba(236, 72, 153, 0.08), transparent),
     radial-gradient(ellipse 60% 40% at 20% 80%, rgba(20, 184, 166, 0.06), transparent);
   --app-hero-badge-bg: rgba(255, 255, 255, 0.8);
   --app-hero-badge-border: rgba(0, 0, 0, 0.08);
@@ -55,8 +57,8 @@ onMounted(() => {
 }
 .dark {
   --app-hero-gradient:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(14, 165, 233, 0.15), transparent),
-    radial-gradient(ellipse 60% 40% at 80% 50%, rgba(124, 58, 237, 0.1), transparent),
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59, 130, 246, 0.15), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 50%, rgba(236, 72, 153, 0.10), transparent),
     radial-gradient(ellipse 60% 40% at 20% 80%, rgba(20, 184, 166, 0.08), transparent);
   --app-hero-badge-bg: rgba(35, 35, 40, 0.85);
   --app-hero-badge-border: rgba(255, 255, 255, 0.1);
@@ -74,16 +76,23 @@ onMounted(() => {
 
   &--paused {
     .app-hero-gradient,
-    .app-hero-cursor,
     .app-hero-scroll,
     .app-hero-title-text,
-    .app-hero-shape {
+    .app-hero-shape,
+    .app-hero-swarm-tile {
       animation-play-state: paused;
     }
   }
 
-  &:hover .app-hero-bg {
-    opacity: 0.2;
+  &-grid {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1180px;
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 64px;
+    align-items: center;
   }
 
   &-gradient {
@@ -113,7 +122,7 @@ onMounted(() => {
       height: 350px;
       bottom: -5%;
       left: -3%;
-      background: radial-gradient(circle, color-mix(in srgb, var(--vp-c-purple-1) 8%, transparent) 0%, transparent 70%);
+      background: radial-gradient(circle, color-mix(in srgb, var(--vp-c-pink-2) 8%, transparent) 0%, transparent 70%);
       animation: shape-float 22s ease-in-out infinite reverse;
     }
 
@@ -132,36 +141,9 @@ onMounted(() => {
       height: 160px;
       top: 20%;
       right: 12%;
-      background: radial-gradient(circle, color-mix(in srgb, var(--vp-c-coral-2, var(--vp-c-yellow-2)) 8%, transparent) 0%, transparent 70%);
+      background: radial-gradient(circle, color-mix(in srgb, var(--vp-c-pink-2) 8%, transparent) 0%, transparent 70%);
       animation: shape-float 20s ease-in-out infinite;
       animation-delay: -10s;
-    }
-  }
-
-  &-bg {
-    position: absolute;
-    inset: -10%;
-    overflow: hidden;
-    opacity: 0.15;
-    pointer-events: none;
-    transition: opacity var(--duration-mid) ease;
-  }
-
-  &-floating-avatar {
-    position: absolute;
-    border-radius: var(--vp-radius-md);
-    overflow: hidden;
-    will-change: transform;
-    contain: layout style paint;
-    transform: translate(
-      calc((var(--parallax-x, 0.5) - 0.5) * 30px * var(--parallax-factor, 1)),
-      calc((var(--parallax-y, 0.5) - 0.5) * 30px * var(--parallax-factor, 1))
-    );
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
     }
   }
 
@@ -170,9 +152,8 @@ onMounted(() => {
     z-index: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    max-width: 900px;
+    align-items: flex-start;
+    text-align: left;
     animation: fade-up var(--duration-reveal) var(--ease-smooth);
   }
 
@@ -228,46 +209,25 @@ onMounted(() => {
 
   &-title {
     margin: 0 0 28px;
-    line-height: 1.1;
+    line-height: 1.02;
+    letter-spacing: -0.035em;
     animation: fade-up var(--duration-reveal) var(--ease-smooth) 0.2s both;
 
     &-line {
       display: block;
-      font-size: clamp(48px, 8vw, 80px);
+      font-size: clamp(44px, 6vw, 68px);
       font-weight: 800;
       color: var(--vp-c-text-1);
-      letter-spacing: -0.04em;
-      margin-bottom: 8px;
-    }
-
-    &-dynamic {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: clamp(48px, 8vw, 80px);
-      font-weight: 800;
-      min-height: 1.2em;
     }
 
     &-text {
-      background: linear-gradient(135deg, var(--vp-c-brand-1) 0%, var(--vp-c-purple-1) 40%, var(--vp-c-coral-2, var(--vp-c-red-2)) 80%, var(--vp-c-brand-1) 100%);
+      background: linear-gradient(120deg, var(--vp-c-brand-1) 0%, var(--vp-c-pink-2) 50%, var(--vp-c-brand-1) 100%);
       background-size: 300% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       animation: app-hero-gradient-text 6s linear infinite;
-      white-space: nowrap;
     }
-  }
-
-  &-cursor {
-    display: inline-block;
-    width: 4px;
-    height: 0.85em;
-    background: var(--vp-c-brand-1);
-    margin-left: 4px;
-    border-radius: 2px;
-    animation: app-hero-cursor-blink 1s step-end infinite;
   }
 
   &-description {
@@ -275,9 +235,7 @@ onMounted(() => {
     color: var(--vp-c-text-2);
     line-height: 1.7;
     margin: 0 0 40px;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+    max-width: 540px;
     animation: fade-up var(--duration-reveal) var(--ease-smooth) 0.3s both;
   }
 
@@ -288,7 +246,7 @@ onMounted(() => {
 
   &-actions {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 16px;
     animation: fade-up var(--duration-reveal) var(--ease-smooth) 0.4s both;
   }
@@ -352,12 +310,6 @@ onMounted(() => {
   }
 }
 
-@keyframes app-hero-cursor-blink {
-  50% {
-    opacity: 0;
-  }
-}
-
 @keyframes app-hero-bounce {
   0%, 100% {
     transform: translateX(-50%) translateY(0);
@@ -376,14 +328,42 @@ onMounted(() => {
   }
 }
 
+@media (max-width: 960px) {
+  .app-hero {
+    &-grid {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+
+    &-content {
+      align-items: center;
+      text-align: center;
+    }
+
+    &-title {
+      &-dynamic {
+        justify-content: center;
+      }
+    }
+
+    &-description {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    &-actions {
+      justify-content: center;
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .app-hero {
     min-height: auto;
     padding: 100px 16px 80px;
 
     &-title {
-      &-line,
-      &-dynamic {
+      &-line {
         font-size: clamp(36px, 8vw, 48px);
       }
     }

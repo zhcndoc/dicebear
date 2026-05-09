@@ -84,7 +84,7 @@ const allStyleAvatars = computed(() =>
           Deterministic Avatars
         </UiBadge>
         <UiHeadline class="app-seed-demo-title">
-          Same Seed, Same Avatar.
+          Same Seed, Same Avatar.<br>
           <strong>Every Time.</strong>
         </UiHeadline>
         <UiDescription class="app-seed-demo-subtitle">

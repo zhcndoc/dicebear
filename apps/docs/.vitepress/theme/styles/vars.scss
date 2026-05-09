@@ -1,15 +1,25 @@
 :root {
-  --vp-c-indigo-1: #0284c7;
-  --vp-c-indigo-2: #0ea5e9;
-  --vp-c-indigo-3: #38bdf8;
-  --vp-c-indigo-soft: rgba(14, 165, 233, 0.14);
+  --vp-c-indigo-1: #2563eb;
+  --vp-c-indigo-2: #3b82f6;
+  --vp-c-indigo-3: #60a5fa;
+  --vp-c-indigo-soft: rgba(59, 130, 246, 0.14);
+
+  --vp-c-pink-1: #db2777;
+  --vp-c-pink-2: #ec4899;
+  --vp-c-pink-3: #f472b6;
+  --vp-c-pink-soft: rgba(236, 72, 153, 0.14);
 }
 
 .dark {
-  --vp-c-indigo-1: #38bdf8;
-  --vp-c-indigo-2: #0ea5e9;
-  --vp-c-indigo-3: #0284c7;
-  --vp-c-indigo-soft: rgba(56, 189, 248, 0.16);
+  --vp-c-indigo-1: #60a5fa;
+  --vp-c-indigo-2: #3b82f6;
+  --vp-c-indigo-3: #2563eb;
+  --vp-c-indigo-soft: rgba(96, 165, 250, 0.16);
+
+  --vp-c-pink-1: #f472b6;
+  --vp-c-pink-2: #ec4899;
+  --vp-c-pink-3: #db2777;
+  --vp-c-pink-soft: rgba(244, 114, 182, 0.16);
 }
 
 /**
@@ -39,6 +49,11 @@
   --vp-c-brand-2: var(--vp-c-indigo-2);
   --vp-c-brand-3: var(--vp-c-indigo-3);
   --vp-c-brand-soft: var(--vp-c-indigo-soft);
+
+  --vp-font-family-base:
+    'Inter Variable', 'Inter', ui-sans-serif, system-ui, -apple-system,
+    'Segoe UI', Roboto, sans-serif;
+  --vp-font-family-heading: var(--vp-font-family-base);
 }
 
 /**

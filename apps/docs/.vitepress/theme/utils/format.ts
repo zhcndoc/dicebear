@@ -1,22 +1,39 @@
-export function formatNumber(value: number): string {
-  if (value >= 1e12) return `${(value / 1e12).toFixed(1)}T`;
-  if (value >= 1e9) return `${(value / 1e9).toFixed(1)}B`;
-  if (value >= 1e6) return `${(value / 1e6).toFixed(0)}M`;
-  if (value >= 1e3) return `${(value / 1e3).toFixed(0)}K`;
+export interface NumberParts {
+  value: string;
+  unit: string;
+}
 
-  return value.toLocaleString('en');
+export function formatNumberParts(value: number): NumberParts {
+  if (value >= 1e12) return { value: (value / 1e12).toFixed(1), unit: 'T' };
+  if (value >= 1e9)  return { value: (value / 1e9).toFixed(1),  unit: 'B' };
+  if (value >= 1e6)  return { value: (value / 1e6).toFixed(0),  unit: 'M' };
+  if (value >= 1e3)  return { value: (value / 1e3).toFixed(0),  unit: 'K' };
+
+  return { value: value.toLocaleString('en'), unit: '' };
+}
+
+export function formatNumber(value: number): string {
+  const { value: v, unit } = formatNumberParts(value);
+
+  return `${v}${unit}`;
+}
+
+export function formatBytesParts(bytes: number): NumberParts {
+  if (bytes >= 1e12) return { value: (bytes / 1e12).toFixed(1), unit: 'TB' };
+  if (bytes >= 1e9)  return { value: (bytes / 1e9).toFixed(0),  unit: 'GB' };
+  if (bytes >= 1e6)  return { value: (bytes / 1e6).toFixed(0),  unit: 'MB' };
+
+  return { value: String(bytes), unit: '' };
+}
+
+export function formatBytes(bytes: number): string {
+  const { value, unit } = formatBytesParts(bytes);
+
+  return `${value}${unit}`;
 }
 
 export function formatLicenseName(name: string | undefined): string {
   return name?.replace(/\.$/, '') ?? '';
-}
-
-export function formatBytes(bytes: number): string {
-  if (bytes >= 1e12) return `${(bytes / 1e12).toFixed(1)}TB`;
-  if (bytes >= 1e9) return `${(bytes / 1e9).toFixed(0)}GB`;
-  if (bytes >= 1e6) return `${(bytes / 1e6).toFixed(0)}MB`;
-
-  return `${bytes}`;
 }
 
 export function formatStars(count: number): string {

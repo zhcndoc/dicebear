@@ -4,19 +4,8 @@ import { Play, ArrowRight, Star } from '@lucide/vue';
 import { siGithub } from 'simple-icons';
 import type { ThemeOptions } from '@theme/types';
 import { UiButton, UiIcon } from '../ui';
-import { useTypewriter } from '../../composables/useTypewriter';
-
-const TYPEWRITER_PHRASES = [
-  'user profiles',
-  'chat applications',
-  'gaming platforms',
-  'social networks',
-  'team tools',
-  'any project',
-];
 
 const { theme } = useData<ThemeOptions>();
-const { displayedText } = useTypewriter(TYPEWRITER_PHRASES);
 </script>
 
 <template>
@@ -35,11 +24,8 @@ const { displayedText } = useTypewriter(TYPEWRITER_PHRASES);
     </a>
 
     <h1 class="app-hero-title">
-      <span class="app-hero-title-line">Unique Avatars for</span>
-      <span class="app-hero-title-dynamic">
-        <span class="app-hero-title-text">{{ displayedText }}</span>
-        <span class="app-hero-cursor"></span>
-      </span>
+      <span class="app-hero-title-line">Pick a seed.</span>
+      <span class="app-hero-title-line">Get an <span class="app-hero-title-text">avatar</span>.</span>
     </h1>
 
     <p class="app-hero-description">
