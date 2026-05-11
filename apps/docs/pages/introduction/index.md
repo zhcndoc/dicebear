@@ -45,7 +45,7 @@ const highlights = [
   },
   {
     icon: Palette,
-    title: 'Designer',
+    title: 'Editor',
     description:
       'Use the interactive Editor to browse all avatar styles, customize options, and export avatars — no code required.',
     color: '#ec4899',

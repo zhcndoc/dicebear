@@ -65,7 +65,7 @@ const thirdPartyScripts: HeadConfig[] = isProduction
 export default defineConfig<ThemeOptions>({
   title: 'DiceBear',
   description:
-    'DiceBear is a free, open source avatar library and avatar API with 30+ SVG styles. Generate profile pictures and user placeholder images for any project.',
+    'DiceBear is a free, open source avatar library and avatar API with 30+ avatar styles. Generate profile pictures and user placeholder images for any project.',
   head: [
     ['link', { rel: 'icon', type: 'image/png', href: '/favicon-96x96.png', sizes: '96x96' }],
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
@@ -131,7 +131,7 @@ export default defineConfig<ThemeOptions>({
       const pageDescription =
         ctx.pageData.frontmatter.description ||
         ctx.pageData.description ||
-        'DiceBear is a free, open source avatar library and Avatar API with 30+ SVG styles.';
+        'DiceBear is a free, open source avatar library and Avatar API with 30+ avatar styles.';
 
       result.push(
         ['meta', { property: 'og:title', content: pageTitle }],
