@@ -23,6 +23,7 @@ const visible = computed({
     v-model:visible="visible"
     modal
     :closable="true"
+    dismissable-mask
     :header="header || ' '"
     :style="{ width: maxWidth || '540px' }"
     :pt="{

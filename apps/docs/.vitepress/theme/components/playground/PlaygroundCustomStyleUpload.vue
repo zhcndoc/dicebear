@@ -123,6 +123,7 @@ const canSubmit = computed(() => jsonInput.value.trim().length > 0 && !loading.v
     v-model:visible="open"
     modal
     :closable="true"
+    dismissable-mask
     header="Add Custom Style"
     :style="{ width: '600px' }"
     :pt="{ content: { class: 'pg-custom-upload-dialog-content' } }"
