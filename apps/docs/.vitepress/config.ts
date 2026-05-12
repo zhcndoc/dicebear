@@ -179,6 +179,7 @@ export default defineConfig<ThemeOptions>({
       provider: 'local',
     },
     nav: [
+      { text: 'Playground', link: '/playground/', activeMatch: '^/playground' },
       {
         text: 'Documentation',
         link: '/introduction/',
@@ -189,8 +190,6 @@ export default defineConfig<ThemeOptions>({
         link: '/styles/',
         activeMatch: '^/styles',
       },
-      { text: 'Playground', link: '/playground/', activeMatch: '^/playground' },
-      { text: 'Stats', link: '/stats/', activeMatch: '^/stats' },
       { text: 'Editor', link: 'https://editor.dicebear.com' },
     ],
     outline: [2, 2],
