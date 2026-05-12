@@ -76,8 +76,9 @@ function url(tile: Tile): string {
   box-shadow:
     var(--vp-shadow-3),
     0 0 0 1px var(--vp-c-divider);
-  animation: app-hero-swarm-bob 6s ease-in-out infinite;
-  animation-delay: var(--tile-delay, 0s);
+  animation:
+    app-hero-swarm-fade var(--duration-reveal) var(--ease-smooth) var(--tile-fade-delay, 0s) both,
+    app-hero-swarm-bob 6s ease-in-out var(--tile-delay, 0s) infinite;
   will-change: translate;
   contain: layout paint;
 
@@ -94,6 +95,7 @@ function url(tile: Tile): string {
     --tile-top: 50%;
     --tile-translate: translate(-50%, -50%);
     --tile-rotate: -3deg;
+    --tile-fade-delay: 0.2s;
     z-index: 3;
   }
 
@@ -102,6 +104,7 @@ function url(tile: Tile): string {
     --tile-left: 4%;
     --tile-top: 8%;
     --tile-rotate: -8deg;
+    --tile-fade-delay: 0.35s;
   }
 
   &--2 {
@@ -109,6 +112,7 @@ function url(tile: Tile): string {
     --tile-right: 8%;
     --tile-top: 4%;
     --tile-rotate: 6deg;
+    --tile-fade-delay: 0.45s;
   }
 
   &--3 {
@@ -116,6 +120,7 @@ function url(tile: Tile): string {
     --tile-right: 0;
     --tile-bottom: 8%;
     --tile-rotate: 4deg;
+    --tile-fade-delay: 0.55s;
   }
 
   &--4 {
@@ -123,6 +128,7 @@ function url(tile: Tile): string {
     --tile-left: 2%;
     --tile-bottom: 14%;
     --tile-rotate: -5deg;
+    --tile-fade-delay: 0.65s;
   }
 
   &--5 {
@@ -130,12 +136,18 @@ function url(tile: Tile): string {
     --tile-left: 24%;
     --tile-bottom: 0;
     --tile-rotate: 8deg;
+    --tile-fade-delay: 0.75s;
   }
 }
 
 @keyframes app-hero-swarm-bob {
   0%, 100% { translate: 0 0; }
   50%      { translate: 0 -8px; }
+}
+
+@keyframes app-hero-swarm-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 @media (max-width: 960px) {
