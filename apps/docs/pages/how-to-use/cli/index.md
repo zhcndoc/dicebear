@@ -228,37 +228,39 @@ dicebear --help
 dicebear <command>
 
 Commands:
-  dicebear adventurer [outputPath]         Generate "adventurer" avatar(s)
-  dicebear adventurerNeutral [outputPath]  Generate "adventurerNeutral" avatar(s)
-  dicebear avataaars [outputPath]          Generate "avataaars" avatar(s)
-  dicebear avataaarsNeutral [outputPath]   Generate "avataaarsNeutral" avatar(s)
-  dicebear bigEars [outputPath]            Generate "bigEars" avatar(s)
-  dicebear bigEarsNeutral [outputPath]     Generate "bigEarsNeutral" avatar(s)
-  dicebear bigSmile [outputPath]           Generate "bigSmile" avatar(s)
-  dicebear bottts [outputPath]             Generate "bottts" avatar(s)
-  dicebear botttsNeutral [outputPath]      Generate "botttsNeutral" avatar(s)
-  dicebear croodles [outputPath]           Generate "croodles" avatar(s)
-  dicebear croodlesNeutral [outputPath]    Generate "croodlesNeutral" avatar(s)
-  dicebear dylan [outputPath]              Generate "dylan" avatar(s)
-  dicebear funEmoji [outputPath]           Generate "funEmoji" avatar(s)
-  dicebear glass [outputPath]              Generate "glass" avatar(s)
-  dicebear icons [outputPath]              Generate "icons" avatar(s)
-  dicebear identicon [outputPath]          Generate "identicon" avatar(s)
-  dicebear initials [outputPath]           Generate "initials" avatar(s)
-  dicebear lorelei [outputPath]            Generate "lorelei" avatar(s)
-  dicebear loreleiNeutral [outputPath]     Generate "loreleiNeutral" avatar(s)
-  dicebear micah [outputPath]              Generate "micah" avatar(s)
-  dicebear miniavs [outputPath]            Generate "miniavs" avatar(s)
-  dicebear notionists [outputPath]         Generate "notionists" avatar(s)
-  dicebear notionistsNeutral [outputPath]  Generate "notionistsNeutral" avatar(s)
-  dicebear openPeeps [outputPath]          Generate "openPeeps" avatar(s)
-  dicebear personas [outputPath]           Generate "personas" avatar(s)
-  dicebear pixelArt [outputPath]           Generate "pixelArt" avatar(s)
-  dicebear pixelArtNeutral [outputPath]    Generate "pixelArtNeutral" avatar(s)
-  dicebear rings [outputPath]              Generate "rings" avatar(s)
-  dicebear shapes [outputPath]             Generate "shapes" avatar(s)
-  dicebear thumbs [outputPath]             Generate "thumbs" avatar(s)
-  dicebear toonHead [outputPath]           Generate "toonHead" avatar(s)
+  dicebear adventurer [outputPath]          Generate "adventurer" avatar(s)
+  dicebear adventurer-neutral [outputPath]  Generate "adventurer-neutral" avatar(s)
+  dicebear avataaars [outputPath]           Generate "avataaars" avatar(s)
+  dicebear avataaars-neutral [outputPath]   Generate "avataaars-neutral" avatar(s)
+  dicebear big-ears [outputPath]            Generate "big-ears" avatar(s)
+  dicebear big-ears-neutral [outputPath]    Generate "big-ears-neutral" avatar(s)
+  dicebear big-smile [outputPath]           Generate "big-smile" avatar(s)
+  dicebear bottts [outputPath]              Generate "bottts" avatar(s)
+  dicebear bottts-neutral [outputPath]      Generate "bottts-neutral" avatar(s)
+  dicebear croodles [outputPath]            Generate "croodles" avatar(s)
+  dicebear croodles-neutral [outputPath]    Generate "croodles-neutral" avatar(s)
+  dicebear dylan [outputPath]               Generate "dylan" avatar(s)
+  dicebear fun-emoji [outputPath]           Generate "fun-emoji" avatar(s)
+  dicebear glass [outputPath]               Generate "glass" avatar(s)
+  dicebear icons [outputPath]               Generate "icons" avatar(s)
+  dicebear identicon [outputPath]           Generate "identicon" avatar(s)
+  dicebear initial-face [outputPath]        Generate "initial-face" avatar(s)
+  dicebear initials [outputPath]            Generate "initials" avatar(s)
+  dicebear lorelei [outputPath]             Generate "lorelei" avatar(s)
+  dicebear lorelei-neutral [outputPath]     Generate "lorelei-neutral" avatar(s)
+  dicebear micah [outputPath]               Generate "micah" avatar(s)
+  dicebear miniavs [outputPath]             Generate "miniavs" avatar(s)
+  dicebear notionists [outputPath]          Generate "notionists" avatar(s)
+  dicebear notionists-neutral [outputPath]  Generate "notionists-neutral" avatar(s)
+  dicebear open-peeps [outputPath]          Generate "open-peeps" avatar(s)
+  dicebear personas [outputPath]            Generate "personas" avatar(s)
+  dicebear pixel-art [outputPath]           Generate "pixel-art" avatar(s)
+  dicebear pixel-art-neutral [outputPath]   Generate "pixel-art-neutral" avatar(s)
+  dicebear rings [outputPath]               Generate "rings" avatar(s)
+  dicebear shape-grid [outputPath]          Generate "shape-grid" avatar(s)
+  dicebear shapes [outputPath]              Generate "shapes" avatar(s)
+  dicebear thumbs [outputPath]              Generate "thumbs" avatar(s)
+  dicebear toon-head [outputPath]           Generate "toon-head" avatar(s)
 
 Options:
   --version  Show version number                                       [boolean]
@@ -307,7 +309,7 @@ dicebear bottts ./avatars --count 50 --format png --backgroundColor b6e3f4
 ### Generate avatars with JSON metadata
 
 ```
-dicebear pixelArt ./avatars --count 10 --format webp --json
+dicebear pixel-art ./avatars --count 10 --format webp --json
 ```
 
 ### Generate initials avatar

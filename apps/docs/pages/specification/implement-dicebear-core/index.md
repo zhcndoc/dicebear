@@ -249,55 +249,99 @@ which creates a fresh PRNG for each key.
 The `Options` class resolves raw user options into concrete values used by the
 renderer. Each resolution uses the PRNG with a specific key.
 
-### Seed
-
-The seed defaults to `''` (empty string) if not provided.
-
 ### Core options
 
-| Option             | PRNG key           | Resolution                                   |
-| ------------------ | ------------------ | -------------------------------------------- |
-| `flip`             | `flip`             | `pick` from `['none', 'horizontal', 'vertical', 'both']` |
-| `rotate`           | `rotate`           | `float` from range, default `0`              |
-| `scale`            | `scale`            | `float` from range, default `1`              |
-| `borderRadius`     | `borderRadius`     | `float` from range, default `0`              |
-| `translateX`       | `translateX`       | `float` from range, default `0`              |
-| `translateY`       | `translateY`       | `float` from range, default `0`              |
-| `fontFamily`       | `fontFamily`       | `pick` from array, default `'system-ui'`     |
-| `fontWeight`       | `fontWeight`       | `pick` from array, default `400`             |
+| Option            | PRNG key       | Resolution                                                              |
+| ----------------- | -------------- | ----------------------------------------------------------------------- |
+| `seed`            | —              | Literal string; defaults to `''` if not provided. Not memoized.         |
+| `size`            | —              | Literal number; defaults to unset (renderer omits `width`/`height`).    |
+| `idRandomization` | —              | Boolean; defaults to `false`. Uses host RNG, not the DiceBear PRNG.     |
+| `title`           | —              | Literal string; defaults to unset (omits `<title>`, uses `aria-hidden`). |
+| `flip`            | `flip`         | `pick` from `['none', 'horizontal', 'vertical', 'both']`, default `'none'` |
+| `rotate`          | `rotate`       | `float` from range, default `0`                                         |
+| `scale`           | `scale`        | `float` from range, default `1`                                         |
+| `borderRadius`    | `borderRadius` | `float` from range, default `0`                                         |
+| `translateX`      | `translateX`   | `float` from range, default `0`                                         |
+| `translateY`      | `translateY`   | `float` from range, default `0`                                         |
+| `fontFamily`      | `fontFamily`   | `pick` from array, default `'system-ui'`                                |
+| `fontWeight`      | `fontWeight`   | `pick` from array, default `400`                                        |
+
+Options with no PRNG key are read directly from the user input. The rest
+sample from a user-supplied range/list under the given key, falling back to
+the listed default.
 
 ### Component options
 
-For each component (e.g. `eyes`):
+For each component (e.g. `eyes`) the user can supply exactly two options:
 
-| Option              | PRNG key              | Resolution                               |
-| ------------------- | --------------------- | ---------------------------------------- |
-| `eyesProbability`   | `eyesProbability`     | `bool` with likelihood, default `100`    |
-| `eyesVariant`       | `eyesVariant`         | `weightedPick` from variants             |
-| `eyesRotate`        | `eyesRotate`          | `float` from range or component default  |
-| `eyesTranslateX`    | `eyesTranslateX`      | `float` from range or component default  |
-| `eyesTranslateY`    | `eyesTranslateY`      | `float` from range or component default  |
-| `eyesScale`         | `eyesScale`           | `float` from range or component default, default `1` |
+| Option              | PRNG key            | Resolution                               |
+| ------------------- | ------------------- | ---------------------------------------- |
+| `eyesProbability`   | `eyesProbability`   | `bool` with likelihood, default from the component's `probability` (or `100` if unset) |
+| `eyesVariant`       | `eyesVariant`       | `weightedPick` from the component's variants |
 
 If the probability check fails, the component is not rendered (variant returns
 `undefined`).
 
+For **component aliases** (declared via `extends` in the definition), the
+options behave differently: aliases reuse the source component's
+`${sourceName}Probability` user option, and they do not expose their own
+`${aliasName}Probability`. The `${aliasName}Variant` option, however, is
+unique to each alias — the PRNG samples a fresh variant per alias.
+
+### Per-component transforms (render-time)
+
+Each component reference also has a rotation, two translations, and a scale
+applied at render time. These are **not user options** — they are sampled per
+render from the component definition's `rotate`/`translate`/`scale` ranges and
+**never appear in `resolvedOptions`**. Implementations that round-trip user
+input must not expose them.
+
+| Value         | PRNG key            | Sampling                                                            |
+| ------------- | ------------------- | ------------------------------------------------------------------- |
+| rotate        | `eyesRotate`        | `float` from `component.rotate`, default `0`                        |
+| translateX    | `eyesTranslateX`    | `float` from `component.translate.x`, default `0`                   |
+| translateY    | `eyesTranslateY`    | `float` from `component.translate.y`, default `0`                   |
+| scale         | `eyesScale`         | `float` from `component.scale`, default `1`                         |
+
+The translate values are percentages of the **component's own** `width` and
+`height` (not the avatar canvas). Multiply by the component dimension, then
+round to four decimal places (`round(x * 10000) / 10000`). The transform
+center `(cx, cy)` for rotate and scale is the component's own center —
+`(width / 2, height / 2)`.
+
+In the emitted SVG, the values appear in a single `transform=""` attribute on
+the `<use>` element, in this textual order (read left to right):
+
+```
+transform="translate(tx, ty) rotate(angle, cx, cy) translate(cx, cy) scale(s) translate(-cx, -cy)"
+```
+
+Any segment whose value is the identity (`tx=ty=0`, `angle=0`, `s=1`) is
+omitted; if all segments are identity, the `transform` attribute is omitted
+entirely.
+
 ### Color options
 
-For each color group (e.g. `skin`):
+For each color group declared in the definition — **plus** an implicit
+`background` group — the user can supply four options:
 
-1. Get candidate colors from user option (`skinColor`) or style definition
+| Option                  | Type                                   | PRNG key                | Notes                                              |
+| ----------------------- | -------------------------------------- | ----------------------- | -------------------------------------------------- |
+| `${name}Color`          | hex string or list                     | `${name}Color`          | Candidate colors (overrides the definition palette) |
+| `${name}ColorFill`      | enum `solid` / `linear` / `radial`     | `${name}ColorFill`      | Picks one when supplied as a list, default `solid` |
+| `${name}ColorFillStops` | range (min 2)                          | `${name}ColorFillStops` | Number of gradient stops; ignored when fill is `solid`, default `2` |
+| `${name}ColorAngle`     | range -360…360                         | `${name}ColorAngle`     | Gradient rotation, default `0`                     |
+
+Resolution for each group:
+
+1. Get candidate colors from the user option (`${name}Color`) or fall back to the style definition's palette
 2. Normalize all colors to hex
-3. Determine number of stops: `1` if fill is `solid`, else from
-   `skinColorFillStops` (PRNG integer, default `2`)
+3. Determine number of stops: `1` if fill is `solid`, else sample `${name}ColorFillStops` (PRNG `integer`, default `2`)
 4. Apply constraints from the style definition:
-   - **`contrastTo`**: Sort candidates by WCAG 2.1 contrast ratio (descending)
-     against the referenced color — do not shuffle
+   - **`contrastTo`**: Sort candidates by WCAG 2.1 contrast ratio (descending) against the referenced color — do not shuffle
    - **`notEqualTo`**: Filter out colors already selected for referenced groups
 5. If no `contrastTo` constraint: shuffle candidates
-6. Slice to number of stops
-
-The PRNG key for color selection is `{name}Color` (e.g. `skinColor`).
+6. Slice to the number of stops
 
 #### WCAG 2.1 contrast ratio
 
@@ -348,56 +392,118 @@ Walk the `canvas.elements` array recursively:
   variable references in attribute values.
 - **`text`**: Render as escaped text content. Resolve variable references.
 - **`component`**: Look up the selected variant (from options resolution). If
-  the component is visible, render the variant's elements. Apply
-  component-specific transforms (translate, rotate) as a wrapping `<g>`
-  element.
+  the component is visible, emit a `<use>` element pointing at a `<defs>`
+  entry that holds the variant body — see below.
 
-There is one special case: when an `element` has the name `defs`, the
-renderer **does not** emit a `<defs>` tag inline. Instead, each child of
-that element is rendered and pushed into the shared `<defs>` block that
-the renderer accumulates over the whole walk (alongside generated
-gradients and clip paths). This lets style definitions ship reusable
-fragments without breaking the single-`<defs>`-per-document invariant.
+When an `element` has the name `defs`, the renderer **does not** emit a
+`<defs>` tag inline. Instead, each child of that element is rendered and
+pushed into the shared `<defs>` block that the renderer accumulates over
+the whole walk (alongside generated gradients, clip paths, and component
+variant bodies). This lets style definitions ship reusable fragments
+without breaking the single-`<defs>`-per-document invariant.
+
+#### Component rendering
+
+A component reference is never inlined. The first time the renderer
+encounters a `(component, variant)` pair, it:
+
+1. Renders the variant's element tree.
+2. Wraps it in `<g id="{sourceName}-{variantName}-{seedHash}">…</g>` and
+   appends it to the shared `<defs>` block. `sourceName` is the *source*
+   component name — for an alias declared via `extends`, this is the name
+   of the component the alias points to, so every alias referencing the
+   same source shares a single `<defs>` entry.
+3. At the call site, emits `<use transform="…" href="#{id}"/>` (transform
+   omitted when all per-component transforms are identity — see
+   [Per-component transforms](#per-component-transforms-render-time)).
+
+`seedHash` is the FNV-1a hex hash of the seed, lowercased and zero-padded to
+8 characters.
 
 ### 3. Transform order
 
-Wrap the rendered body in nested `<g>` elements in this order (outermost first):
+The body (background plus rendered elements) is wrapped in nested `<g>`
+elements. The list below is **outermost → innermost** — the border-radius
+clip is always emitted, the others only when their value is non-identity.
 
-1. **Border radius** — clip path with rounded rectangle
-2. **Translate** — `translate(dx, dy)` where
-   `dx = (translateX / 100) * canvas.width`,
-   `dy = (translateY / 100) * canvas.height`
-3. **Rotate** — `rotate(angle, cx, cy)` around canvas center
-4. **Flip** — depends on mode:
-   - `none`: no transform
+1. **Border radius (always)** — register a `<clipPath id="clip-{seedHash}">`
+   in `<defs>` containing a `<rect width="{w}" height="{h}" rx="{rx}" ry="{ry}"/>`
+   where `rx = (borderRadius / 100) * canvas.width` and
+   `ry = (borderRadius / 100) * canvas.height`. Wrap the body in
+   `<g clip-path="url(#clip-{seedHash})">`. **This wrap is emitted even
+   when `borderRadius` is `0`** (with `rx="0" ry="0"`) so that transformed
+   content cannot bleed past the canvas bounds.
+2. **Translate** (skip if both are `0`) — `<g transform="translate(dx, dy)">`
+   where `dx = (translateX / 100) * canvas.width` and
+   `dy = (translateY / 100) * canvas.height`.
+3. **Rotate** (skip if `0`) — `<g transform="rotate(angle, cx, cy)">` around
+   canvas center, `cx = width / 2`, `cy = height / 2`.
+4. **Flip** (skip if `none`) — depends on mode:
    - `horizontal`: `translate(width, 0) scale(-1, 1)`
    - `vertical`: `translate(0, height) scale(1, -1)`
    - `both`: `translate(width, height) scale(-1, -1)`
-5. **Scale** — `translate(cx, cy) scale(s) translate(-cx, -cy)` where
-   `cx = width / 2`, `cy = height / 2`
+5. **Scale** (skip if `1`) — `<g transform="translate(cx, cy) scale(s) translate(-cx, -cy)">`
+   where `cx = width / 2`, `cy = height / 2`.
+
+Because border-radius is always wrapping the body, the rendered SVG always
+contains a `<defs>` block with at least the `<clipPath>` entry.
 
 ### 4. SVG root element
 
-The root `<svg>` element includes:
+The root `<svg>` element's attributes, in this order:
 
-- `xmlns="http://www.w3.org/2000/svg"`
-- `viewBox="0 0 {width} {height}"`
-- `width` and `height` attributes (if `size` option is set)
-- Global `attributes` from the style definition
-- `role="img"` and `aria-label="{title}"` if `title` is set
-- `aria-hidden="true"` if no `title` is set
+1. `xmlns="http://www.w3.org/2000/svg"`
+2. `viewBox="0 0 {width} {height}"`
+3. Global `attributes` from the style definition (each escaped via `Xml.escape`)
+4. Either `role="img" aria-label="{title}"` (when `title` is set, escaped) or `aria-hidden="true"`
+5. `width="{size}"` and `height="{size}"` (only when the `size` option is set)
 
-If a `title` is set, include a `<title>` element as the first child.
+Its children, in this exact order:
 
-Include any `<defs>` (gradients, clip paths) after the title.
+1. `<metadata>` — the Dublin Core / RDF block from `meta` (see below); omitted entirely if `meta` is empty.
+2. `<defs>` — the accumulated definitions (clip path, gradients, component variant bodies). Always present in practice because the border-radius clip is always registered.
+3. `<title>` — only when the `title` option is set. Contents are escaped.
+4. The transformed body from the previous step.
 
-Include a license comment from `meta` before the body content.
+#### `<metadata>` block
+
+The license/attribution metadata is emitted as a real `<metadata>` element
+with RDF / Dublin Core terms — **not** as an HTML comment:
+
+```xml
+<metadata xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:dc="http://purl.org/dc/elements/1.1/"
+          xmlns:dcterms="http://purl.org/dc/terms/">
+  <rdf:RDF>
+    <rdf:Description>
+      <dc:title>{source.name}</dc:title>
+      <dc:creator>{creator.name}</dc:creator>
+      <dc:source xsi:type="dcterms:URI">{source.url}</dc:source>
+      <dcterms:license xsi:type="dcterms:URI">{license.url}</dcterms:license>
+      <dc:rights>{attribution text}</dc:rights>
+    </rdf:Description>
+  </rdf:RDF>
+</metadata>
+```
+
+Each `dc:*` / `dcterms:*` field is only included when the corresponding
+`meta` field is populated; if no field is populated, the `<metadata>`
+element is omitted entirely. All text content is XML-escaped. The
+`<dc:rights>` value is a single-line attribution string composed from
+`source`, `creator`, and `license` (prefixed with `Remix of ` unless the
+style is MIT-licensed, authored by DiceBear itself, or has no
+`source.name`).
 
 ### 5. ID randomization
 
-When `idRandomization` is `true`, append a random suffix to all `id` attributes
-and update all references (`url(#...)`, `href="#..."`). This prevents ID
-collisions when multiple avatars are embedded in the same HTML document.
+When `idRandomization` is `true`, append a random suffix to every existing
+`id` attribute and update every matching reference. The replacement patterns
+are `id="…"`, `url(#…)`, and `href="#…"` — each occurrence is rewritten to
+`{original}-{suffix}`.
+
+The suffix format is **6 lowercase hex characters**, left-padded with zeros:
+in JavaScript, `Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0')`.
 
 The suffix **must be non-deterministic**: derive it from the host language's
 non-seeded RNG (`Math.random()` in JavaScript, `random_int()` in PHP), not

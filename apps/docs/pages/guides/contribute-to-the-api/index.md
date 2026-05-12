@@ -15,7 +15,7 @@ The contribution guide, including local setup, the test suite, the
 Docker-based production image, and the release process, lives alongside
 the code:
 
-- [`CONTRIBUTING.md`](https://github.com/dicebear/api/blob/main/CONTRIBUTING.md)
+- [`CONTRIBUTING.md`](https://github.com/dicebear/api/blob/4.x/CONTRIBUTING.md)
   in `dicebear/api`
 
 For hosting the API yourself (as opposed to working on its source),

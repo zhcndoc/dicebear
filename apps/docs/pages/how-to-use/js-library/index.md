@@ -39,7 +39,7 @@ import { Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
 const avatar = new Avatar(lorelei, {
-  seed: 'John Doe',
+  seed: 'John',
   // ... other options
 });
 
@@ -153,7 +153,7 @@ import { Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
 const avatar = new Avatar(lorelei, {
-  seed: 'John Doe',
+  seed: 'John',
   // ... other options
 });
 
@@ -163,7 +163,7 @@ const json = avatar.toJSON(); // [!code focus]
 // {
 //   svg: '<svg>...</svg>',
 //   options: {
-//     seed: 'John Doe',
+//     seed: 'John',
 //     // ... resolved options
 //   }
 // }
@@ -181,7 +181,7 @@ import { Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
 const avatar = new Avatar(lorelei, {
-  seed: 'John Doe',
+  seed: 'John',
   // ... other options
 });
 
@@ -203,8 +203,8 @@ These options are available for all avatar styles:
 | `scale`             | `number \| [min, max]`                            | `1`         | Scale the avatar                                 |
 | `borderRadius`      | `number \| [min, max]`                            | `0`         | Border radius (0-50 percent, 50 = circle)        |
 | `size`              | `number`                                          | _undefined_ | Fixed size in pixels                             |
-| `translateX`        | `number \| [min, max]`                            | `0`         | Horizontal translation (-100 to 100 percent)     |
-| `translateY`        | `number \| [min, max]`                            | `0`         | Vertical translation (-100 to 100 percent)       |
+| `translateX`        | `number \| [min, max]`                            | `0`         | Horizontal translation as a percentage of the canvas width (-1000 to 1000) |
+| `translateY`        | `number \| [min, max]`                            | `0`         | Vertical translation as a percentage of the canvas height (-1000 to 1000)  |
 | `idRandomization`   | `boolean`                                         | `false`     | Randomize SVG element IDs                        |
 | `title`             | `string`                                          | _undefined_ | Accessible title for the SVG                     |
 | `fontFamily`        | `string \| string[]`                              | `'system-ui'` | Font family for text-based styles              |
@@ -212,25 +212,30 @@ These options are available for all avatar styles:
 
 ### Background options
 
+These options are available for every style — even ones that don't declare a
+`background` color group in their definition.
+
 | Option                    | Type                                    | Default     | Description                                |
 | ------------------------- | --------------------------------------- | ----------- | ------------------------------------------ |
 | `backgroundColor`         | `string \| string[]`                    | _undefined_ | Background colors (hex with #)             |
 | `backgroundColorFill`     | `'solid' \| 'linear' \| 'radial'`      | `'solid'`   | Background fill type                       |
-| `backgroundColorFillStops`| `number \| [min, max]`                  | _undefined_ | Number of gradient stops                   |
-| `backgroundColorAngle`    | `number \| [min, max]`                  | _undefined_ | Gradient angle (-360 to 360 degrees)       |
+| `backgroundColorFillStops`| `number \| [min, max]`                  | `2`         | Number of gradient stops; ignored when fill is `solid` |
+| `backgroundColorAngle`    | `number \| [min, max]`                  | `0`         | Gradient angle (-360 to 360 degrees)       |
 
 ### Dynamic component options
 
 For each component in a style (e.g. `eyes`, `mouth`, `hair`), the following
 options are available:
 
-| Pattern                   | Type                                   | Description                              |
-| ------------------------- | -------------------------------------- | ---------------------------------------- |
-| `{component}Variant`      | `string \| string[] \| Record<string, number>` | Select specific variants or set weights |
-| `{component}Probability`  | `number`                               | Visibility probability (0-100)           |
-| `{component}Rotate`       | `number \| [min, max]`                 | Component rotation (-360 to 360)         |
-| `{component}TranslateX`   | `number \| [min, max]`                 | Component horizontal offset (-100 to 100)|
-| `{component}TranslateY`   | `number \| [min, max]`                 | Component vertical offset (-100 to 100)  |
+| Pattern                   | Type                                            | Description                              |
+| ------------------------- | ----------------------------------------------- | ---------------------------------------- |
+| `{component}Variant`      | `string \| string[] \| Record<string, number>` | Select specific variants or set weights  |
+| `{component}Probability`  | `number`                                        | Visibility probability (0-100)           |
+
+A component's rotation, translation, and scale are sampled at render time from
+the component definition and are **not** user options — there are no
+`{component}Rotate`, `{component}TranslateX`, `{component}TranslateY`, or
+`{component}Scale` options.
 
 ### Dynamic color options
 
@@ -253,7 +258,7 @@ import { Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
 const avatar = new Avatar(lorelei, {
-  seed: 'John Doe',
+  seed: 'John',
   backgroundColor: ['#b6e3f4', '#c0aede', '#d1d4f9'],
   // ... other options
 });
@@ -280,7 +285,7 @@ import { Avatar } from '@dicebear/core';
 import avataaars from '@dicebear/definitions/avataaars.json' with { type: 'json' };
 
 const avatar = new Avatar(avataaars, {
-  seed: 'Jane Doe',
+  seed: 'Jane',
   flip: 'horizontal',
   rotate: 10,
   scale: 90,
@@ -318,7 +323,7 @@ import { Avatar } from '@dicebear/core';
 import avataaars from '@dicebear/definitions/avataaars.json' with { type: 'json' };
 
 const avatar = new Avatar(avataaars, {
-  seed: 'John Doe',
+  seed: 'John',
   topVariant: { short01: 2, short02: 2, long01: 1 },
   // ... other options
 });
@@ -334,7 +339,7 @@ import type { StyleOptions, StyleDefinition } from '@dicebear/core';
 import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
 const avatar = new Avatar(lorelei, {
-  seed: 'John Doe',
+  seed: 'John',
   backgroundColor: ['#b6e3f4'],
   // ... other options
 });
