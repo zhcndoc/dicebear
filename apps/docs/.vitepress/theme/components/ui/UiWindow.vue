@@ -7,11 +7,7 @@ defineProps<{
 <template>
   <div class="ui-window">
     <div class="ui-window-header">
-      <div class="ui-window-dots">
-        <span class="ui-window-dot ui-window-dot-red"></span>
-        <span class="ui-window-dot ui-window-dot-yellow"></span>
-        <span class="ui-window-dot ui-window-dot-green"></span>
-      </div>
+      <span v-if="title" class="ui-window-accent" aria-hidden="true"></span>
       <span v-if="title" class="ui-window-title">{{ title }}</span>
       <div class="ui-window-header-actions">
         <slot name="header-actions" />
@@ -25,33 +21,42 @@ defineProps<{
 
 <style lang="scss">
 :root {
-  --ui-window-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.15), 0 8px 24px -8px rgba(0, 0, 0, 0.08);
+  --ui-window-border-color: rgba(0, 0, 0, 0.1);
+  --ui-window-divider-color: rgba(0, 0, 0, 0.05);
+  --ui-window-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 18px 40px -16px rgba(0, 0, 0, 0.14);
 }
 .dark {
-  --ui-window-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.5), 0 8px 24px -8px rgba(0, 0, 0, 0.3);
+  --ui-window-border-color: rgba(255, 255, 255, 0.07);
+  --ui-window-divider-color: rgba(255, 255, 255, 0.04);
+  --ui-window-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    0 8px 24px -16px rgba(0, 0, 0, 0.35);
 }
 </style>
 
 <style lang="scss" scoped>
 .ui-window {
   position: relative;
-  border-radius: var(--window-radius, var(--vp-radius-lg));
+  border-radius: var(--window-radius, var(--vp-radius-md));
   overflow: hidden;
   background: var(--vp-c-bg-elv);
-  box-shadow:
-    0 0 0 1px var(--vp-c-border),
-    var(--ui-window-shadow);
-  transition: box-shadow var(--duration-mid) var(--ease-smooth);
+  border: 1px solid var(--ui-window-border-color);
+  box-shadow: var(--ui-window-shadow);
+  transition:
+    box-shadow var(--duration-mid) var(--ease-smooth),
+    border-color var(--duration-mid) var(--ease-smooth);
 
   &-header {
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding: 16px 20px;
+    gap: 10px;
+    padding: 14px 18px;
     position: relative;
     z-index: 1;
     background: var(--vp-c-bg-soft);
-    border-bottom: 1px solid var(--vp-c-border);
+    border-bottom: 1px solid var(--ui-window-divider-color);
 
     &-actions {
       display: flex;
@@ -60,19 +65,13 @@ defineProps<{
     }
   }
 
-  &-dots {
-    display: flex;
-    gap: 8px;
-  }
-
-  &-dot {
-    width: 12px;
-    height: 12px;
+  &-accent {
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-
-    &-red { background: #ff5f57; }
-    &-yellow { background: #febc2e; }
-    &-green { background: #28c840; }
+    background: var(--vp-c-brand-1);
+    box-shadow: 0 0 0 3px var(--vp-c-brand-soft);
+    flex-shrink: 0;
   }
 
   &-title {
@@ -80,7 +79,8 @@ defineProps<{
     font-size: 13px;
     font-weight: 600;
     font-family: var(--vp-font-family-base);
-    color: var(--vp-c-text-2);
+    color: var(--vp-c-text-1);
+    letter-spacing: -0.005em;
   }
 
   &-body {
