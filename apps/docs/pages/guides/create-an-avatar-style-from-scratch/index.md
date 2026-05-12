@@ -302,7 +302,8 @@ Add metadata to your definition for license attribution:
 ```
 
 This metadata appears in:
-- The license comment inside generated SVGs
+- The `<metadata>` RDF block inside generated SVGs (Dublin Core terms; see the
+  [Core implementation spec](/specification/implement-dicebear-core/#metadata-block))
 - The CLI license banner
 - The documentation (if your style is added to the official collection)
 

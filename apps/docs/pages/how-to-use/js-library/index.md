@@ -200,7 +200,7 @@ These options are available for all avatar styles:
 | `seed`              | `string`                                          | `''`        | Seed for deterministic generation                |
 | `flip`              | `'none' \| 'horizontal' \| 'vertical' \| 'both'` | `'none'`    | Flip the avatar                                  |
 | `rotate`            | `number \| [min, max]`                            | `0`         | Rotate the avatar (-360 to 360 degrees)          |
-| `scale`             | `number \| [min, max]`                            | `1`         | Scale the avatar                                 |
+| `scale`             | `number \| [min, max]`                            | `1`         | Uniform scale factor around the canvas center (0 to 10; `1` is original size) |
 | `borderRadius`      | `number \| [min, max]`                            | `0`         | Border radius (0-50 percent, 50 = circle)        |
 | `size`              | `number`                                          | _undefined_ | Fixed size in pixels                             |
 | `translateX`        | `number \| [min, max]`                            | `0`         | Horizontal translation as a percentage of the canvas width (-1000 to 1000) |
@@ -288,7 +288,7 @@ const avatar = new Avatar(avataaars, {
   seed: 'Jane',
   flip: 'horizontal',
   rotate: 10,
-  scale: 90,
+  scale: 0.9,
   translateY: 5,
   // ... other options
 });
@@ -328,6 +328,28 @@ const avatar = new Avatar(avataaars, {
   // ... other options
 });
 ```
+
+## Accessibility
+
+By default the generated `<svg>` element is `aria-hidden="true"` — assistive
+technology skips it. This is the right default for purely decorative
+avatars next to a username.
+
+When the avatar conveys identity on its own (e.g. it is the only thing in a
+link, or has no visible label), set the `title` option. The renderer emits
+`role="img" aria-label="…"` on the root element **and** a `<title>` child,
+so screen readers announce the value:
+
+```js
+const avatar = new Avatar(lorelei, {
+  seed: 'Alice',
+  title: 'Avatar for Alice',
+});
+```
+
+If you embed the SVG inside an `<img>` (via `toDataUri()`), use the `<img>`
+element's `alt` attribute instead — the SVG's internal `title` is not read
+by assistive technology when the SVG is loaded as an image.
 
 ## TypeScript
 

@@ -30,7 +30,7 @@ import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
   template: `<img [src]="avatarUrl()" alt="Avatar" />`,
 })
 export class AvatarComponent {
-  seed = input('John Doe');
+  seed = input('Alice');
 
   avatarUrl = computed(() =>
     new Avatar(lorelei, {
@@ -53,7 +53,7 @@ import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
   template: `<img [src]="avatarUrl" alt="Avatar" />`,
 })
 export class AvatarComponent implements OnChanges {
-  @Input() seed: string = 'John Doe';
+  @Input() seed: string = 'Alice';
   avatarUrl: string = '';
 
   ngOnChanges() {
@@ -80,7 +80,7 @@ import { Component, input, computed } from '@angular/core';
   template: `<img [src]="avatarUrl()" alt="Avatar" />`,
 })
 export class AvatarComponent {
-  seed = input('John Doe');
+  seed = input('Alice');
 
   avatarUrl = computed(() => {
     const url = new URL('https://api.dicebear.com/10.x/lorelei/svg');
@@ -101,7 +101,7 @@ import { Component, Input, OnChanges } from '@angular/core';
   template: `<img [src]="avatarUrl" alt="Avatar" />`,
 })
 export class AvatarComponent implements OnChanges {
-  @Input() seed: string = 'John Doe';
+  @Input() seed: string = 'Alice';
   avatarUrl: string = '';
 
   ngOnChanges() {

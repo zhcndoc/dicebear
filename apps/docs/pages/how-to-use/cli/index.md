@@ -32,9 +32,10 @@ npm install dicebear --global
 
 ### Create an avatar
 
-Replace `<style>` with an avatar style name (camelCase) and `[outputPath]` with
-a target directory. If `[outputPath]` is omitted, the current directory is used
-as target directory.
+Replace `<style>` with an avatar style name (lowercase, kebab-case for
+multi-word styles — e.g. `lorelei`, `pixel-art`, `adventurer-neutral`) and
+`[outputPath]` with a target directory. If `[outputPath]` is omitted, the
+current directory is used as target directory.
 
 ```
 dicebear <style> [outputPath]
@@ -315,7 +316,7 @@ dicebear pixel-art ./avatars --count 10 --format webp --json
 ### Generate initials avatar
 
 ```
-dicebear initials ./avatars --seed "John Doe"
+dicebear initials ./avatars --seed "Alice"
 ```
 
 ## Troubleshooting
@@ -329,8 +330,9 @@ The CLI does not overwrite existing files. Either:
 
 ### Avatar style not found
 
-Make sure you're using the correct camelCase style name. Run `dicebear --help`
-to see all available styles.
+Style names are lowercase, with hyphens for multi-word styles
+(e.g. `pixel-art`, `adventurer-neutral`). Run `dicebear --help` to see all
+available styles.
 
 ### Permission denied
 

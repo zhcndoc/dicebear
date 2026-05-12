@@ -35,7 +35,7 @@ $definition = json_decode(file_get_contents($basePath . '/src/lorelei.json'), tr
 
 $style = new Style($definition);
 $avatar = new Avatar($style, [
-  'seed' => 'John Doe',
+  'seed' => 'Alice',
   // ... other options
 ]);
 
@@ -119,7 +119,7 @@ Returns the avatar as SVG in XML format. The `__toString()` magic method allows
 using the avatar directly in string contexts.
 
 ```php
-$avatar = new Avatar($style, ['seed' => 'John Doe']);
+$avatar = new Avatar($style, ['seed' => 'Alice']);
 
 $svg = (string) $avatar;
 // or
@@ -133,12 +133,12 @@ $svg = $avatar->toString();
 Returns an associative array with the SVG and the resolved options.
 
 ```php
-$avatar = new Avatar($style, ['seed' => 'John Doe']);
+$avatar = new Avatar($style, ['seed' => 'Alice']);
 
 $json = $avatar->toJSON();
 
 // $json['svg']     → '<svg>...</svg>'
-// $json['options'] → ['seed' => 'John Doe', ...]
+// $json['options'] → ['seed' => 'Alice', ...]
 ```
 
 ### `toDataUri()`
@@ -148,7 +148,7 @@ $json = $avatar->toJSON();
 Returns the avatar as [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
 
 ```php
-$avatar = new Avatar($style, ['seed' => 'John Doe']);
+$avatar = new Avatar($style, ['seed' => 'Alice']);
 
 $dataUri = $avatar->toDataUri();
 
@@ -163,14 +163,14 @@ reference. Here are the options in PHP syntax:
 
 ```php
 $avatar = new Avatar($style, [
-  'seed' => 'John Doe',
-  'flip' => 'horizontal',         // 'none', 'horizontal', 'vertical', 'both'
-  'rotate' => 10,                  // or [min, max] range
-  'scale' => 90,                   // or [min, max] range
+  'seed' => 'Alice',
+  'flip' => 'horizontal',          // 'none', 'horizontal', 'vertical', 'both'
+  'rotate' => 10,                  // -360 to 360, or [min, max] range
+  'scale' => 0.9,                  // 0 to 10 (1 = original), or [min, max] range
   'borderRadius' => 50,            // 0-50 (50 = circle)
   'size' => 128,
-  'translateX' => 0,               // -100 to 100 (percent of canvas)
-  'translateY' => 0,               // -100 to 100 (percent of canvas)
+  'translateX' => 0,               // -1000 to 1000 (percent of canvas width)
+  'translateY' => 0,               // -1000 to 1000 (percent of canvas height)
   'idRandomization' => true,
   'title' => 'User Avatar',
   'fontFamily' => 'Arial',         // or ['Arial', 'Helvetica']
@@ -190,7 +190,7 @@ for all available patterns.
 
 ```php
 $avatar = new Avatar($style, [
-  'seed' => 'John Doe',
+  'seed' => 'Alice',
   'backgroundColor' => ['#b6e3f4', '#c0aede', '#d1d4f9'],
 ]);
 ```
@@ -217,10 +217,10 @@ $definition = json_decode(file_get_contents($basePath . '/src/avataaars.json'), 
 
 $style = new Style($definition);
 $avatar = new Avatar($style, [
-  'seed' => 'Jane Doe',
+  'seed' => 'Jane',
   'flip' => 'horizontal',
   'rotate' => 10,
-  'scale' => 90,
+  'scale' => 0.9,
   'translateY' => 5,
 ]);
 ```
@@ -245,7 +245,7 @@ $avatars = array_map(function (string $user) use ($style) {
 
 ```php
 $avatar = new Avatar($style, [
-  'seed' => 'John Doe',
+  'seed' => 'Alice',
   'topVariant' => ['short01' => 2, 'short02' => 2, 'long01' => 1],
 ]);
 ```

@@ -31,7 +31,7 @@ const exampleJsLibraryInstall = computed(() => {
 
 const exampleJsLibraryUsage = computed(() => {
   return `import { Style, Avatar } from '@dicebear/core';
-import definition from '@dicebear/definitions/${kebabCase(props.styleName)}.json';
+import definition from '@dicebear/definitions/${kebabCase(props.styleName)}.json' with { type: 'json' };
 
 const style = new Style(definition);
 const avatar = new Avatar(style, {

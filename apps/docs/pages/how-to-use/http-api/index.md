@@ -47,7 +47,9 @@ avatar placeholder API — no authentication required.
 ## Usage
 
 Use the following address and replace `<styleName>` with your preferred avatar
-style (camelCase). Every official [avatar style](/styles/) is supported.
+style. Style names are lowercase, with hyphens for multi-word styles — e.g.
+`lorelei`, `pixel-art`, `adventurer-neutral`. Every official
+[avatar style](/styles/) is supported.
 
 ```
 https://api.dicebear.com/10.x/<styleName>/svg

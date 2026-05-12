@@ -25,7 +25,7 @@ You can use DiceBear with Svelte either via the
   import { Avatar } from '@dicebear/core';
   import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
-  let { seed = 'John Doe' } = $props();
+  let { seed = 'Alice' } = $props();
 
   const avatar = $derived(
     new Avatar(lorelei, {
@@ -44,7 +44,7 @@ You can use DiceBear with Svelte either via the
   import { Avatar } from '@dicebear/core';
   import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
-  export let seed = 'John Doe';
+  export let seed = 'Alice';
 
   $: avatar = new Avatar(lorelei, {
     seed,
@@ -64,7 +64,7 @@ You can use DiceBear with Svelte either via the
 
 ```svelte [Svelte 5]
 <script>
-  let { seed = 'John Doe' } = $props();
+  let { seed = 'Alice' } = $props();
 
   const src = $derived.by(() => {
     const url = new URL('https://api.dicebear.com/10.x/lorelei/svg');
@@ -80,7 +80,7 @@ You can use DiceBear with Svelte either via the
 
 ```svelte [Svelte 4]
 <script>
-  export let seed = 'John Doe';
+  export let seed = 'Alice';
 
   let src = '';
 

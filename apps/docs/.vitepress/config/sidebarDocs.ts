@@ -29,6 +29,14 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         link: '/guides/use-the-library-with-angular/',
       },
       {
+        text: 'Next.js',
+        link: '/guides/use-the-library-with-next-js/',
+      },
+      {
+        text: 'Nuxt',
+        link: '/guides/use-the-library-with-nuxt/',
+      },
+      {
         text: 'React',
         link: '/guides/use-the-library-with-react/',
       },
