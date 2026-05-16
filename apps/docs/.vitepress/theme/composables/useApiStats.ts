@@ -23,9 +23,14 @@ const cached = ref<ApiStats | null>(null);
 const rawData = ref<StatsData | null>(null);
 let fetching: Promise<void> | null = null;
 
-export function lastCompleteMonth(
+export interface MonthlyEntry {
+  key: string;
+  total: number;
+}
+
+export function aggregateMonthly(
   daily: Record<string, number>,
-): { total: number; label: string } | null {
+): MonthlyEntry[] {
   const monthly: Record<string, number> = {};
 
   for (const [date, value] of Object.entries(daily)) {
@@ -33,20 +38,33 @@ export function lastCompleteMonth(
     monthly[key] = (monthly[key] || 0) + value;
   }
 
-  const keys = Object.keys(monthly).sort();
+  return Object.entries(monthly)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([key, total]) => ({ key, total }));
+}
 
-  if (keys.length < 2) {
+export function formatMonthKey(
+  key: string,
+  options: Intl.DateTimeFormatOptions,
+): string {
+  const [y, m] = key.split('-');
+
+  return new Date(Number(y), Number(m) - 1).toLocaleDateString('en', options);
+}
+
+export function lastCompleteMonth(
+  daily: Record<string, number>,
+): { total: number; label: string } | null {
+  const months = aggregateMonthly(daily);
+
+  if (months.length < 2) {
     return null;
   }
 
-  const lastKey = keys[keys.length - 2];
-  const [y, m] = lastKey.split('-');
-  const label = new Date(Number(y), Number(m) - 1).toLocaleDateString('en', {
-    month: 'short',
-    year: 'numeric',
-  });
+  const last = months[months.length - 2];
+  const label = formatMonthKey(last.key, { month: 'short', year: 'numeric' });
 
-  return { total: monthly[lastKey], label };
+  return { total: last.total, label };
 }
 
 async function doFetch() {

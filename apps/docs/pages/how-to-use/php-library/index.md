@@ -31,7 +31,7 @@ $definition = json_decode(file_get_contents($basePath . '/src/lorelei.json'), tr
 
 $style = new Style($definition);
 $avatar = new Avatar($style, [
-  'seed' => 'John Doe',
+  'seed' => 'Alice',
   // ... 其他选项
 ]);
 
@@ -106,7 +106,7 @@ $fields = $descriptor->toJSON();
 以 XML 格式返回 SVG 头像。`__toString()` 魔术方法允许在字符串上下文中直接使用头像对象。
 
 ```php
-$avatar = new Avatar($style, ['seed' => 'John Doe']);
+$avatar = new Avatar($style, ['seed' => 'Alice']);
 
 $svg = (string) $avatar;
 // 或
@@ -120,12 +120,12 @@ $svg = $avatar->toString();
 返回一个包含 SVG 和已解析选项的关联数组。
 
 ```php
-$avatar = new Avatar($style, ['seed' => 'John Doe']);
+$avatar = new Avatar($style, ['seed' => 'Alice']);
 
 $json = $avatar->toJSON();
 
 // $json['svg']     → '<svg>...</svg>'
-// $json['options'] → ['seed' => 'John Doe', ...]
+// $json['options'] → ['seed' => 'Alice', ...]
 ```
 
 ### `toDataUri()`
@@ -135,7 +135,7 @@ $json = $avatar->toJSON();
 以 [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme) 形式返回头像。
 
 ```php
-$avatar = new Avatar($style, ['seed' => 'John Doe']);
+$avatar = new Avatar($style, ['seed' => 'Alice']);
 
 $dataUri = $avatar->toDataUri();
 
@@ -148,17 +148,17 @@ $dataUri = $avatar->toDataUri();
 
 ```php
 $avatar = new Avatar($style, [
-  'seed' => 'John Doe',
-  'flip' => 'horizontal',         // 'none', 'horizontal', 'vertical', 'both'
-  'rotate' => 10,                  // or [min, max] range
-  'scale' => 90,                   // or [min, max] range
+  'seed' => 'Alice',
+  'flip' => 'horizontal',          // 'none', 'horizontal', 'vertical', 'both'
+  'rotate' => 10,                  // -360 to 360, or [min, max] range
+  'scale' => 0.9,                  // 0 to 10 (1 = original), or [min, max] range
   'borderRadius' => 50,            // 0-50 (50 = circle)
   'size' => 128,
-  'translateX' => 0,               // -100 to 100 (percent of canvas)
-  'translateY' => 0,               // -100 to 100 (percent of canvas)
+  'translateX' => 0,               // -1000 to 1000 (percent of canvas width)
+  'translateY' => 0,               // -1000 to 1000 (percent of canvas height)
   'idRandomization' => true,
   'title' => '用户头像',
-  'fontFamily' => 'Arial',         // or ['Arial', 'Helvetica']
+  'fontFamily' => 'Arial',         // 或 ['Arial', 'Helvetica']
   'fontWeight' => 700,             // 1-1000
   'backgroundColor' => ['#b6e3f4', '#c0aede'],
   'backgroundColorFill' => 'solid', // 'solid', 'linear', 'radial'
@@ -173,7 +173,7 @@ $avatar = new Avatar($style, [
 
 ```php
 $avatar = new Avatar($style, [
-  'seed' => 'John Doe',
+  'seed' => 'Alice',
   'backgroundColor' => ['#b6e3f4', '#c0aede', '#d1d4f9'],
 ]);
 ```
@@ -200,10 +200,10 @@ $definition = json_decode(file_get_contents($basePath . '/src/avataaars.json'), 
 
 $style = new Style($definition);
 $avatar = new Avatar($style, [
-  'seed' => 'Jane Doe',
+  'seed' => 'Jane',
   'flip' => 'horizontal',
   'rotate' => 10,
-  'scale' => 90,
+  'scale' => 0.9,
   'translateY' => 5,
 ]);
 ```
@@ -227,7 +227,7 @@ $avatars = array_map(function (string $user) use ($style) {
 
 ```php
 $avatar = new Avatar($style, [
-  'seed' => 'John Doe',
+  'seed' => 'Alice',
   'topVariant' => ['short01' => 2, 'short02' => 2, 'long01' => 1],
 ]);
 ```

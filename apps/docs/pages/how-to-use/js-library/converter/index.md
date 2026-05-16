@@ -33,7 +33,7 @@ import { Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
 const avatar = new Avatar(lorelei, {
-  seed: 'John Doe',
+  seed: 'Alice',
   // ... 其他选项
 });
 
@@ -284,7 +284,7 @@ import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 
 const avatar = new Avatar(lorelei, {
-  seed: 'John Doe',
+  seed: 'Alice',
   backgroundColor: ['#b6e3f4'],
 });
 
@@ -323,7 +323,7 @@ import { exiftool } from 'exiftool-vendored';
 import { writeFile } from 'node:fs/promises';
 
 const avatar = new Avatar(lorelei, {
-  seed: 'John Doe',
+  seed: 'Alice',
 });
 
 const png = toPng(avatar, {
@@ -345,7 +345,7 @@ import initials from '@dicebear/definitions/initials.json' with { type: 'json' }
 import { toPng } from '@dicebear/converter';
 
 const avatar = new Avatar(initials, {
-  seed: 'John Doe',
+  seed: 'Alice',
 });
 
 const png = toPng(avatar, {
@@ -362,7 +362,7 @@ import { Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 
-const avatar = new Avatar(lorelei, { seed: 'John Doe' });
+const avatar = new Avatar(lorelei, { seed: 'Alice' });
 
 const png = toPng(avatar, { size: 128 });
 const dataUri = await png.toDataUri();

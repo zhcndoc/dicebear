@@ -293,8 +293,9 @@ PRNG 会为每个种子选择不同的背景颜色。
 }
 ```
 
-这些元数据会出现在：
-- 生成的 SVG 内部的许可证注释中
+此元数据会出现在：
+- 生成的 SVG 内部的 `<metadata>` RDF 块中（Dublin Core terms；参见
+  [核心实现规范](/specification/implement-dicebear-core/#metadata-block)）
 - CLI 许可证横幅中
 - 文档中（如果你的风格被添加到官方集合中）
 

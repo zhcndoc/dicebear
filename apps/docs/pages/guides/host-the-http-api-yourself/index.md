@@ -16,7 +16,7 @@ description: >
 自行托管 HTTP API 最简单的方法是使用 docker 镜像。你可以在 [Docker Hub](https://hub.docker.com/r/dicebear/api) 上找到该镜像。
 
 ```
-docker run --tmpfs /run --tmpfs /tmp -p 3000:3000 -i -t dicebear/api:3
+docker run --tmpfs /run --tmpfs /tmp -p 3000:3000 -i -t dicebear/api:4
 ```
 
 或者你也可以使用 `docker-compose.yml` 来配置 HTTP API，并通过
@@ -25,7 +25,7 @@ docker run --tmpfs /run --tmpfs /tmp -p 3000:3000 -i -t dicebear/api:3
 ```
 services:
   dicebear:
-    image: dicebear/api:3
+    image: dicebear/api:4
     restart: always
     ports:
       - '3000:3000'
@@ -53,39 +53,34 @@ HTTP API 支持以下环境变量：
 
 | 变量 | 默认值 | 描述 |
 | --- | --- | --- |
-| `PORT` | `3000` | 监听的端口。 |
-| `HOST` | `0.0.0.0` | 要绑定的主机（默认绑定所有 IPv4 地址）。 |
+| `PORT` | `3000` | 监听端口。 |
+| `HOST` | `0.0.0.0` | 绑定的主机（默认绑定所有 IPv4 地址）。 |
 | `LOGGER` | `0` | 启用请求日志记录器（1 = 开启，0 = 关闭）。 |
+| `WORKERS` | `1` | Node.js 工作线程数量。 |
+| `VERSIONS` | `10` | 以逗号分隔的受支持 DiceBear 主版本列表。 |
+| `CACHE_CONTROL_AVATARS` | `31536000` | 头像响应的缓存时长，单位为秒（1 年）。 |
 | `PNG` | `1` | 启用 PNG 端点（1 = 开启，0 = 关闭）。 |
 | `PNG_SIZE_MIN` | `1` | 允许的最小 PNG 尺寸，单位为 px。 |
-| `PNG_SIZE_MAX` | `128` | 允许的最大 PNG 尺寸，单位为 px。 |
+| `PNG_SIZE_MAX` | `256` | 允许的最大 PNG 尺寸，单位为 px。 |
 | `PNG_SIZE_DEFAULT` | `128` | 默认 PNG 尺寸，单位为 px。 |
-| `PNG_EXIF` | `1` | 为 PNG 启用 EXIF 元数据（1 = 开启，0 = 关闭）。需要 Perl 和 procps。 |
+| `PNG_EXIF` | `1` | 为 PNG 启用 EXIF 元数据（1 = 开启，0 = 关闭）。 |
 | `JPEG` | `1` | 启用 JPEG 端点（1 = 开启，0 = 关闭）。 |
 | `JPEG_SIZE_MIN` | `1` | 允许的最小 JPEG 尺寸，单位为 px。 |
-| `JPEG_SIZE_MAX` | `128` | 允许的最大 JPEG 尺寸，单位为 px。 |
+| `JPEG_SIZE_MAX` | `256` | 允许的最大 JPEG 尺寸，单位为 px。 |
 | `JPEG_SIZE_DEFAULT` | `128` | 默认 JPEG 尺寸，单位为 px。 |
-| `JPEG_EXIF` | `1` | 为 JPEG 启用 EXIF 元数据（1 = 开启，0 = 关闭）。需要 Perl 和 procps。 |
+| `JPEG_EXIF` | `1` | 为 JPEG 启用 EXIF 元数据（1 = 开启，0 = 关闭）。 |
 | `WEBP` | `1` | 启用 WebP 端点（1 = 开启，0 = 关闭）。 |
 | `WEBP_SIZE_MIN` | `1` | 允许的最小 WebP 尺寸，单位为 px。 |
-| `WEBP_SIZE_MAX` | `128` | 允许的最大 WebP 尺寸，单位为 px。 |
+| `WEBP_SIZE_MAX` | `256` | 允许的最大 WebP 尺寸，单位为 px。 |
 | `WEBP_SIZE_DEFAULT` | `128` | 默认 WebP 尺寸，单位为 px。 |
-| `WEBP_EXIF` | `1` | 为 WebP 启用 EXIF 元数据（1 = 开启，0 = 关闭）。需要 Perl 和 procps。 |
+| `WEBP_EXIF` | `1` | 为 WebP 启用 EXIF 元数据（1 = 开启，0 = 关闭）。 |
 | `AVIF` | `1` | 启用 AVIF 端点（1 = 开启，0 = 关闭）。 |
 | `AVIF_SIZE_MIN` | `1` | 允许的最小 AVIF 尺寸，单位为 px。 |
-| `AVIF_SIZE_MAX` | `128` | 允许的最大 AVIF 尺寸，单位为 px。 |
+| `AVIF_SIZE_MAX` | `256` | 允许的最大 AVIF 尺寸，单位为 px。 |
 | `AVIF_SIZE_DEFAULT` | `128` | 默认 AVIF 尺寸，单位为 px。 |
-| `AVIF_EXIF` | `1` | 为 AVIF 启用 EXIF 元数据（1 = 开启，0 = 关闭）。需要 Perl 和 procps。 |
+| `AVIF_EXIF` | `1` | 为 AVIF 启用 EXIF 元数据（1 = 开启，0 = 关闭）。 |
 | `JSON` | `1` | 启用 JSON 端点（1 = 开启，0 = 关闭）。 |
 | `INITIALS_FILTER` | `1` | 将渲染头像中被屏蔽的文本替换为 `*`（1 = 开启，0 = 关闭）。 |
-| `VERSIONS` | `5,6,7,8,9,10` | 以逗号分隔的受支持 DiceBear 主版本列表。 |
-| `CACHE_CONTROL_AVATARS` | `31536000` | 头像响应的缓存时长，单位为秒（1 年）。 |
-| `WORKERS` | `1` | Node.js worker 线程数量。 |
 | `QUERY_STRING_ARRAY_LIMIT_MIN` | `20` | 每个数组参数允许的最少值数量。 |
 | `EXCLUDED_OPTIONS` | `idRandomization,fontFamily,fontWeight,title` | 以逗号分隔的要排除的选项名称列表。 |
-| `QUERY_STRING_PARAMETER_LIMIT_MIN` | `100` | 允许的查询字符串参数最少数量。 |
-
-:::info EXIF 元数据
-`*_EXIF` 变量需要安装 [Perl](https://www.npmjs.com/package/exiftool-vendored#installation)
-和 [procps](https://www.npmjs.com/package/exiftool-vendored#this-package-requires-procps)。
-:::
+| `QUERY_STRING_PARAMETER_LIMIT_MIN` | `100` | 允许的最少查询字符串参数数量。 |

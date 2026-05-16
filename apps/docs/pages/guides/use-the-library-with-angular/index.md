@@ -1,10 +1,10 @@
 ---
-title: Angular Avatar Library – DiceBear 集成
+title: Angular 头像库 – DiceBear 集成
 description: >
   通过 JavaScript avatar 库或 avatar API，将 DiceBear 的 SVG 头像集成到 Angular 应用中。
 ---
 
-# Angular Avatar Library – 在 Angular 中使用 DiceBear
+# Angular 头像库 – 在 Angular 中使用 DiceBear
 
 DiceBear 可以通过 Signals（Angular 17+）或 `OnChanges` 生命周期钩子集成到 Angular 组件中。使用 JavaScript 库可在客户端生成 SVG 头像，或者使用 HTTP API 作为一个简单的 `<img>` 来源，无需额外依赖。
 
@@ -24,7 +24,7 @@ import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
   template: `<img [src]="avatarUrl()" alt="头像" />`,
 })
 export class AvatarComponent {
-  seed = input('John Doe');
+  seed = input('Alice');
 
   avatarUrl = computed(() =>
     new Avatar(lorelei, {
@@ -47,7 +47,7 @@ import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
   template: `<img [src]="avatarUrl" alt="头像" />`,
 })
 export class AvatarComponent implements OnChanges {
-  @Input() seed: string = 'John Doe';
+  @Input() seed: string = 'Alice';
   avatarUrl: string = '';
 
   ngOnChanges() {
@@ -74,7 +74,7 @@ import { Component, input, computed } from '@angular/core';
   template: `<img [src]="avatarUrl()" alt="头像" />`,
 })
 export class AvatarComponent {
-  seed = input('John Doe');
+  seed = input('Alice');
 
   avatarUrl = computed(() => {
     const url = new URL('https://api.dicebear.com/10.x/lorelei/svg');
@@ -95,7 +95,7 @@ import { Component, Input, OnChanges } from '@angular/core';
   template: `<img [src]="avatarUrl" alt="头像" />`,
 })
 export class AvatarComponent implements OnChanges {
-  @Input() seed: string = 'John Doe';
+  @Input() seed: string = 'Alice';
   avatarUrl: string = '';
 
   ngOnChanges() {

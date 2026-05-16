@@ -5,6 +5,7 @@ import { ThemeOptions } from '@theme/types';
 import sidebarDocs from './config/sidebarDocs';
 import sidebarStyles from './config/sidebarStyles';
 import avatarStyles from './config/avatarStyles';
+import avatarUniqueCounts from './config/avatarUniqueCounts';
 import { formatStars } from './theme/utils/format';
 
 async function fetchGitHubStars(
@@ -65,7 +66,7 @@ const thirdPartyScripts: HeadConfig[] = isProduction
 export default defineConfig<ThemeOptions>({
   title: 'DiceBear 中文文档',
   description:
-    'DiceBear 是一个免费、开源的头像库和头像 API，提供 30 多种 SVG 风格。可为任何项目生成个人资料图片和用户占位图像。',
+    'DiceBear 是一个免费、开源的头像库和头像 API，提供 30 多种 avatar 风格。可为任何项目生成个人资料图片和用户占位图像。',
   head: [
     ['script', { async: '', src: 'https://www.zhcndoc.com/js/common.js' }],
     ['link', { rel: 'icon', type: 'image/png', href: '/favicon-96x96.png', sizes: '96x96' }],
@@ -132,7 +133,7 @@ export default defineConfig<ThemeOptions>({
       const pageDescription =
         ctx.pageData.frontmatter.description ||
         ctx.pageData.description ||
-        'DiceBear 是一个免费的开源头像库和头像 API，拥有 30 多种 SVG 风格。';
+        'DiceBear 是一个免费的开源头像库和头像 API，拥有 30 多种 avatar 风格。';
 
       result.push(
         ['meta', { property: 'og:title', content: pageTitle }],
@@ -167,6 +168,7 @@ export default defineConfig<ThemeOptions>({
   },
   themeConfig: {
     avatarStyles,
+    avatarUniqueCounts,
     githubStars,
     siteTitle: '',
     logo: {
@@ -178,6 +180,7 @@ export default defineConfig<ThemeOptions>({
       provider: 'local',
     },
     nav: [
+      { text: '演示', link: '/playground/', activeMatch: '^/playground' },
       {
         text: '文档',
         link: '/introduction/',
@@ -188,10 +191,8 @@ export default defineConfig<ThemeOptions>({
         link: '/styles/',
         activeMatch: '^/styles',
       },
-      { text: '游乐场', link: '/playground/', activeMatch: '^/playground' },
-      { text: '统计', link: '/stats/', activeMatch: '^/stats' },
+      { text: 'Editor', link: 'https://editor.dicebear.com' },
       { text: '简中文档', link: 'https://www.zhcndoc.com', target: '_blank' },
-      { text: '编辑器', link: 'https://editor.dicebear.com' },
     ],
     outline: [2, 2],
     socialLinks: [],

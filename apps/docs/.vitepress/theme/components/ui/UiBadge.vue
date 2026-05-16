@@ -25,7 +25,7 @@ defineProps<{
   margin-bottom: 24px;
 
   &-brand {
-    background: linear-gradient(135deg, color-mix(in srgb, var(--vp-c-brand-1) 15%, transparent), color-mix(in srgb, var(--vp-c-purple-1) 12%, transparent));
+    background: linear-gradient(120deg, color-mix(in srgb, var(--vp-c-brand-1) 15%, transparent), color-mix(in srgb, var(--vp-c-pink-2) 12%, transparent));
     color: var(--vp-c-brand-1);
   }
 

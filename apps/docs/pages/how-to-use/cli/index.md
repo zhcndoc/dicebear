@@ -29,8 +29,9 @@ npm install dicebear --global
 
 ### 创建一个头像
 
-将 `<style>` 替换为头像样式名称（camelCase），并将 `[outputPath]` 替换为
-目标目录。如果省略 `[outputPath]`，则使用当前目录作为目标目录。
+将 `<style>` 替换为头像样式名称（小写，多个单词时使用 kebab-case —
+例如 `lorelei`、`pixel-art`、`adventurer-neutral`），并将 `[outputPath]`
+替换为目标目录。如果省略 `[outputPath]`，则使用当前目录作为目标目录。
 
 ```
 dicebear <style> [outputPath]
@@ -217,37 +218,39 @@ dicebear --help
 dicebear <command>
 
 Commands:
-  dicebear adventurer [outputPath]         生成 "adventurer" 头像
-  dicebear adventurerNeutral [outputPath]  生成 "adventurerNeutral" 头像
-  dicebear avataaars [outputPath]          生成 "avataaars" 头像
-  dicebear avataaarsNeutral [outputPath]   生成 "avataaarsNeutral" 头像
-  dicebear bigEars [outputPath]            生成 "bigEars" 头像
-  dicebear bigEarsNeutral [outputPath]     生成 "bigEarsNeutral" 头像
-  dicebear bigSmile [outputPath]           生成 "bigSmile" 头像
-  dicebear bottts [outputPath]             生成 "bottts" 头像
-  dicebear botttsNeutral [outputPath]      生成 "botttsNeutral" 头像
-  dicebear croodles [outputPath]           生成 "croodles" 头像
-  dicebear croodlesNeutral [outputPath]    生成 "croodlesNeutral" 头像
-  dicebear dylan [outputPath]              生成 "dylan" 头像
-  dicebear funEmoji [outputPath]           生成 "funEmoji" 头像
-  dicebear glass [outputPath]              生成 "glass" 头像
-  dicebear icons [outputPath]              生成 "icons" 头像
-  dicebear identicon [outputPath]          生成 "identicon" 头像
-  dicebear initials [outputPath]           生成 "initials" 头像
-  dicebear lorelei [outputPath]            生成 "lorelei" 头像
-  dicebear loreleiNeutral [outputPath]     生成 "loreleiNeutral" 头像
-  dicebear micah [outputPath]              生成 "micah" 头像
-  dicebear miniavs [outputPath]            生成 "miniavs" 头像
-  dicebear notionists [outputPath]         生成 "notionists" 头像
-  dicebear notionistsNeutral [outputPath]  生成 "notionistsNeutral" 头像
-  dicebear openPeeps [outputPath]          生成 "openPeeps" 头像
-  dicebear personas [outputPath]           生成 "personas" 头像
-  dicebear pixelArt [outputPath]           生成 "pixelArt" 头像
-  dicebear pixelArtNeutral [outputPath]    生成 "pixelArtNeutral" 头像
-  dicebear rings [outputPath]              生成 "rings" 头像
-  dicebear shapes [outputPath]             生成 "shapes" 头像
-  dicebear thumbs [outputPath]             生成 "thumbs" 头像
-  dicebear toonHead [outputPath]           生成 "toonHead" 头像
+  dicebear adventurer [outputPath]          生成 "adventurer" 头像
+  dicebear adventurer-neutral [outputPath]  生成 "adventurer-neutral" 头像
+  dicebear avataaars [outputPath]           生成 "avataaars" 头像
+  dicebear avataaars-neutral [outputPath]   生成 "avataaars-neutral" 头像
+  dicebear big-ears [outputPath]            生成 "big-ears" 头像
+  dicebear big-ears-neutral [outputPath]    生成 "big-ears-neutral" 头像
+  dicebear big-smile [outputPath]           生成 "big-smile" 头像
+  dicebear bottts [outputPath]              生成 "bottts" 头像
+  dicebear bottts-neutral [outputPath]      生成 "bottts-neutral" 头像
+  dicebear croodles [outputPath]            生成 "croodles" 头像
+  dicebear croodles-neutral [outputPath]    生成 "croodles-neutral" 头像
+  dicebear dylan [outputPath]               生成 "dylan" 头像
+  dicebear fun-emoji [outputPath]           生成 "fun-emoji" 头像
+  dicebear glass [outputPath]               生成 "glass" 头像
+  dicebear icons [outputPath]               生成 "icons" 头像
+  dicebear identicon [outputPath]           生成 "identicon" 头像
+  dicebear initial-face [outputPath]        生成 "initial-face" 头像
+  dicebear initials [outputPath]            生成 "initials" 头像
+  dicebear lorelei [outputPath]             生成 "lorelei" 头像
+  dicebear lorelei-neutral [outputPath]     生成 "lorelei-neutral" 头像
+  dicebear micah [outputPath]               生成 "micah" 头像
+  dicebear miniavs [outputPath]             生成 "miniavs" 头像
+  dicebear notionists [outputPath]          生成 "notionists" 头像
+  dicebear notionists-neutral [outputPath]  生成 "notionists-neutral" 头像
+  dicebear open-peeps [outputPath]          生成 "open-peeps" 头像
+  dicebear personas [outputPath]            生成 "personas" 头像
+  dicebear pixel-art [outputPath]           生成 "pixel-art" 头像
+  dicebear pixel-art-neutral [outputPath]   生成 "pixel-art-neutral" 头像
+  dicebear rings [outputPath]               生成 "rings" 头像
+  dicebear shape-grid [outputPath]          生成 "shape-grid" 头像
+  dicebear shapes [outputPath]              生成 "shapes" 头像
+  dicebear thumbs [outputPath]              生成 "thumbs" 头像
+  dicebear toon-head [outputPath]           生成 "toon-head" 头像
 
 Options:
   --version  显示版本号                                            [boolean]
@@ -295,13 +298,13 @@ dicebear bottts ./avatars --count 50 --format png --backgroundColor b6e3f4
 ### 生成带 JSON 元数据的头像
 
 ```
-dicebear pixelArt ./avatars --count 10 --format webp --json
+dicebear pixel-art ./avatars --count 10 --format webp --json
 ```
 
 ### 生成 initials 头像
 
 ```
-dicebear initials ./avatars --seed "John Doe"
+dicebear initials ./avatars --seed "Alice"
 ```
 
 ## 故障排除
@@ -315,8 +318,9 @@ CLI 不会覆盖现有文件。你可以：
 
 ### 未找到头像样式
 
-请确保你使用的是正确的 camelCase 样式名称。运行 `dicebear --help`
-查看所有可用样式。
+样式名称为小写，多词样式使用连字符
+（例如 `pixel-art`、`adventurer-neutral`）。运行 `dicebear --help` 查看所有
+可用样式。
 
 ### 权限被拒绝
 

@@ -22,7 +22,7 @@ import { useMemo } from 'react';
 import { Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
-export default function UserAvatar({ seed = 'John Doe' }) {
+export default function UserAvatar({ seed = 'Alice' }) {
   const avatar = useMemo(() => {
     return new Avatar(lorelei, {
       seed,
@@ -40,7 +40,7 @@ export default function UserAvatar({ seed = 'John Doe' }) {
 ```jsx
 import { useMemo } from 'react';
 
-export default function Avatar({ seed = 'John Doe' }) {
+export default function Avatar({ seed = 'Alice' }) {
   const avatar = useMemo(() => {
     const url = new URL('https://api.dicebear.com/10.x/lorelei/svg');
     url.searchParams.set('seed', seed);

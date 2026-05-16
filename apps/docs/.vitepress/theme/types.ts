@@ -19,8 +19,14 @@ export type AvatarStyle = {
 
 export type AvatarStyles = Record<string, AvatarStyle>;
 
+export type AvatarUniqueCount = {
+  display: string;
+  log10: number;
+};
+
 export type ThemeOptions = {
   avatarStyles: AvatarStyles;
+  avatarUniqueCounts: Record<string, AvatarUniqueCount>;
   githubStars: Record<string, string>;
 } & DefaultTheme.Config;
 

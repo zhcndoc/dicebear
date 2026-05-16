@@ -9,18 +9,11 @@ import { formatLicenseName } from '../../utils/format';
 import { safeHttpUrl } from '../../utils/url';
 import AppSeedDemoCode from './AppSeedDemoCode.vue';
 import AppSeedDemoPreview from './AppSeedDemoPreview.vue';
-import AppSeedDemoControls from './AppSeedDemoControls.vue';
 import AppSeedDemoStylePicker from './AppSeedDemoStylePicker.vue';
 
 const DEFAULT_STYLE = 'lorelei';
 
-const SEED_CARDS = [
-  { name: 'Felix', emoji: 'F' },
-  { name: 'Aneka', emoji: 'A' },
-  { name: 'Milo', emoji: 'M' },
-  { name: 'Luna', emoji: 'L' },
-  { name: 'Sophie', emoji: 'S' },
-] as const;
+const RANDOM_SEEDS: readonly string[] = ['Felix', 'Aneka', 'Milo', 'Luna', 'Sophie'];
 
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef);
@@ -35,23 +28,16 @@ const currentStyleDisplay = computed(() => capitalCase(activeStyleName.value));
 const currentStyleLink = computed(() => `/styles/${currentStyle.value}/`);
 const avatarStyleMeta = useAvatarStyleMeta(activeStyleName);
 
-const activeSeedIndex = ref<number | null>(0);
-const seed = ref<string>(SEED_CARDS[0].name);
-
-function selectSeed(index: number) {
-  activeSeedIndex.value = index;
-  seed.value = SEED_CARDS[index].name;
-}
+const seed = ref<string>(RANDOM_SEEDS[0]);
 
 function onSeedUpdate(value: string) {
   seed.value = value;
-  const matchIndex = SEED_CARDS.findIndex((c) => c.name === value);
-  activeSeedIndex.value = matchIndex >= 0 ? matchIndex : null;
 }
 
 function randomizeSeed() {
-  const nextIndex = ((activeSeedIndex.value ?? -1) + 1) % SEED_CARDS.length;
-  selectSeed(nextIndex);
+  const currentIndex = RANDOM_SEEDS.indexOf(seed.value);
+  const nextIndex = (currentIndex + 1) % RANDOM_SEEDS.length;
+  seed.value = RANDOM_SEEDS[nextIndex];
 }
 
 function selectStyle(index: number) {
@@ -84,7 +70,7 @@ const allStyleAvatars = computed(() =>
           确定性头像
         </UiBadge>
         <UiHeadline class="app-seed-demo-title">
-          相同种子，相同头像。
+          相同种子，相同头像。<br>
           <strong>每一次都一致。</strong>
         </UiHeadline>
         <UiDescription class="app-seed-demo-subtitle">
@@ -95,21 +81,13 @@ const allStyleAvatars = computed(() =>
       <div class="app-seed-demo-window-wrapper">
         <UiWindow title="种子演示器">
           <div class="app-seed-demo-body">
-            <div class="app-seed-demo-left">
-              <AppSeedDemoPreview
-                :style="currentStyle"
-                :model-value="seed"
-                @update:model-value="onSeedUpdate"
-                @open-style-picker="styleDialogOpen = true"
-                @randomize-seed="randomizeSeed"
-              />
-              <AppSeedDemoControls
-                :style="currentStyle"
-                :seed-cards="SEED_CARDS"
-                :active-seed-index="activeSeedIndex"
-                @select-seed="selectSeed"
-              />
-            </div>
+            <AppSeedDemoPreview
+              :style="currentStyle"
+              :model-value="seed"
+              @update:model-value="onSeedUpdate"
+              @open-style-picker="styleDialogOpen = true"
+              @randomize-seed="randomizeSeed"
+            />
 
             <AppSeedDemoCode :seed="seed" :style="currentStyle" :style-camel="currentStyleCamel" />
           </div>
@@ -147,11 +125,9 @@ const allStyleAvatars = computed(() =>
 <style lang="scss">
 :root {
   --app-seed-demo-avatar-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
-  --app-seed-demo-card-avatar-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 .dark {
   --app-seed-demo-avatar-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-  --app-seed-demo-card-avatar-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .app-seed-demo {
@@ -206,10 +182,6 @@ const allStyleAvatars = computed(() =>
     }
   }
 
-  &-window-wrapper {
-    --window-radius: 20px;
-  }
-
   &-style-picker-trigger,
   &-seed-display {
     width: 220px;
@@ -256,14 +228,8 @@ const allStyleAvatars = computed(() =>
     min-height: 420px;
   }
 
-  &-left {
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-  }
-
   &-showcase {
-    flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -372,63 +338,6 @@ const allStyleAvatars = computed(() =>
     }
   }
 
-  &-seeds {
-    display: flex;
-    gap: 8px;
-    padding: 8px;
-    background: var(--vp-c-bg-soft);
-    border-top: 1px solid var(--vp-c-border);
-  }
-
-  &-seed-card {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    padding: 12px 4px;
-    border: none;
-    border-radius: var(--vp-radius-sm);
-    background: transparent;
-    cursor: pointer;
-    transition: all var(--duration-mid) var(--ease-spring);
-
-    &:hover {
-      background: var(--vp-c-bg);
-
-      .app-seed-demo-seed-card-name {
-        color: var(--vp-c-text-1);
-      }
-    }
-
-    &.active {
-      background: var(--vp-c-brand-soft);
-
-      .app-seed-demo-seed-card-avatar {
-        transform: scale(1.1);
-      }
-
-      .app-seed-demo-seed-card-name {
-        color: var(--vp-c-brand-1);
-      }
-    }
-
-    &-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: var(--vp-radius-sm);
-      border: 2px solid transparent;
-      transition: all var(--duration-fast) var(--ease-smooth);
-      box-shadow: var(--app-seed-demo-card-avatar-shadow);
-    }
-
-    &-name {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--vp-c-text-3);
-      transition: color var(--duration-fast) ease;
-    }
-  }
 }
 
 @keyframes app-seed-demo-glow-pulse {
@@ -456,20 +365,6 @@ const allStyleAvatars = computed(() =>
       width: 110px;
       height: 110px;
     }
-
-    &-seed-card-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: var(--vp-radius-xs);
-    }
-
-    &-seed-card {
-      padding: 10px 4px;
-    }
-
-    &-seed-card-name {
-      font-size: 10px;
-    }
   }
 }
 
@@ -489,22 +384,6 @@ const allStyleAvatars = computed(() =>
     &-avatar-glow {
       width: 100px;
       height: 100px;
-    }
-
-    &-seeds {
-      gap: 0;
-      padding: 4px;
-    }
-
-    &-seed-card {
-      padding: 8px 2px;
-      gap: 4px;
-    }
-
-    &-seed-card-avatar {
-      width: 30px;
-      height: 30px;
-      border-radius: var(--vp-radius-xs);
     }
   }
 }

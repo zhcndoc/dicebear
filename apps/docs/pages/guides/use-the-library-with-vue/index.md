@@ -24,7 +24,7 @@ import { Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
 const props = defineProps({
-  seed: { type: String, default: 'John Doe' },
+  seed: { type: String, default: 'Alice' },
 });
 
 const avatar = computed(() =>
@@ -48,7 +48,7 @@ const avatar = computed(() =>
 import { computed } from 'vue';
 
 const props = defineProps({
-  seed: { type: String, default: 'John Doe' },
+  seed: { type: String, default: 'Alice' },
 });
 
 const src = computed(() => {

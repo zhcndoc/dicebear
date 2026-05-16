@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { ArrowRight } from '@lucide/vue';
+import { Play } from '@lucide/vue';
 import { UiButton, UiCode } from '../ui';
 import { escapeJsString, escapeShellArg } from '../../utils/escape';
 
@@ -48,25 +48,7 @@ const cliExample = computed(() =>
   `npx dicebear ${props.style} --seed '${escapeShellArg(props.seed)}'`
 );
 
-const docsLink = computed(() => {
-  switch (activeTab.value) {
-    case 'api': return '/how-to-use/http-api/';
-    case 'js': return '/how-to-use/js-library/';
-    case 'php': return '/how-to-use/php-library/';
-    case 'cli': return '/how-to-use/cli/';
-    default: return '/introduction/';
-  }
-});
-
-const docsLinkLabel = computed(() => {
-  switch (activeTab.value) {
-    case 'api': return 'Learn more about the HTTP API';
-    case 'js': return 'Learn more about the JS Library';
-    case 'php': return 'Learn more about the PHP Library';
-    case 'cli': return 'Learn more about the CLI';
-    default: return 'Get started with DiceBear';
-  }
-});
+const playgroundLink = '/playground/';
 </script>
 
 <template>
@@ -94,9 +76,9 @@ const docsLinkLabel = computed(() => {
     </div>
 
     <div class="app-seed-demo-code-cta">
-      <UiButton :href="docsLink" variant="primary" class="app-seed-demo-code-cta-btn">
-        {{ docsLinkLabel }}
-        <ArrowRight :size="20" />
+      <UiButton :href="playgroundLink" variant="primary" class="app-seed-demo-code-cta-btn">
+        <Play :size="20" />
+        Open Playground
       </UiButton>
     </div>
   </div>
@@ -106,7 +88,7 @@ const docsLinkLabel = computed(() => {
 .app-seed-demo-code {
   display: flex;
   flex-direction: column;
-  border-left: 1px solid var(--vp-c-border);
+  border-left: 1px solid var(--ui-window-divider-color);
   min-width: 0;
 
   &-wrapper {
@@ -184,10 +166,6 @@ const docsLinkLabel = computed(() => {
       width: 100%;
       justify-content: center;
       font-size: 13px;
-
-      &:hover svg {
-        transform: translateX(4px);
-      }
     }
   }
 }
@@ -195,7 +173,7 @@ const docsLinkLabel = computed(() => {
 @media (max-width: 768px) {
   .app-seed-demo-code {
     border-left: none;
-    border-top: 1px solid var(--vp-c-border);
+    border-top: 1px solid var(--ui-window-divider-color);
   }
 }
 

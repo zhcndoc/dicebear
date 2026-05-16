@@ -43,7 +43,7 @@ const highlights = [
   },
   {
     icon: Palette,
-    title: '设计器',
+    title: 'Editor',
     description:
       '使用交互式编辑器浏览所有头像风格，自定义选项并导出头像——无需编写代码。',
     color: '#ec4899',

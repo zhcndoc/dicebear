@@ -14,8 +14,8 @@ description: >
 贡献指南，包括本地设置、测试套件、基于 Docker 的生产镜像以及发布流程，都与
 代码放在一起：
 
-- [`CONTRIBUTING.md`](https://github.com/dicebear/api/blob/main/CONTRIBUTING.md)
-  位于 `dicebear/api`
+- [`CONTRIBUTING.md`](https://github.com/dicebear/api/blob/4.x/CONTRIBUTING.md)
+  在 `dicebear/api` 中
 
 如果你是要自行托管该 API（而不是参与其源码开发），
 请参见[自行托管 HTTP API](/guides/host-the-http-api-yourself/)。

@@ -30,7 +30,7 @@ import { Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
 const avatar = new Avatar(lorelei, {
-  seed: 'John Doe',
+  seed: 'John',
   // ... 其他选项
 });
 
@@ -134,7 +134,7 @@ import { Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
 const avatar = new Avatar(lorelei, {
-  seed: 'John Doe',
+  seed: 'John',
   // ... 其他选项
 });
 
@@ -144,7 +144,7 @@ const json = avatar.toJSON(); // [!code focus]
 // {
 //   svg: '<svg>...</svg>',
 //   options: {
-//     seed: 'John Doe',
+//     seed: 'John',
 //     // ... 已解析选项
 //   }
 // }
@@ -162,8 +162,8 @@ import { Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
 const avatar = new Avatar(lorelei, {
-  seed: 'John Doe',
-  // ... 其他选项
+  seed: 'John',
+  // ... other options
 });
 
 const dataUri = avatar.toDataUri(); // [!code focus]
@@ -176,41 +176,44 @@ const dataUri = avatar.toDataUri(); // [!code focus]
 
 这些选项适用于所有头像样式：
 
-| 选项                | 类型                                              | 默认值      | 描述                                         |
-| ------------------- | ------------------------------------------------- | ----------- | -------------------------------------------- |
-| `seed`              | `string`                                          | `''`        | 用于确定性生成的种子                           |
-| `flip`              | `'none' \| 'horizontal' \| 'vertical' \| 'both'` | `'none'`    | 翻转头像                                     |
-| `rotate`            | `number \| [min, max]`                            | `0`         | 旋转头像（-360 到 360 度）                     |
-| `scale`             | `number \| [min, max]`                            | `1`         | 缩放头像                                     |
-| `borderRadius`      | `number \| [min, max]`                            | `0`         | 圆角半径（0-50%，50 = 圆形）                   |
-| `size`              | `number`                                          | _undefined_ | 固定像素尺寸                                 |
-| `translateX`        | `number \| [min, max]`                            | `0`         | 水平平移（-100 到 100 百分比）                |
-| `translateY`        | `number \| [min, max]`                            | `0`         | 垂直平移（-100 到 100 百分比）                |
-| `idRandomization`   | `boolean`                                         | `false`     | 随机化 SVG 元素 ID                           |
-| `title`             | `string`                                          | _undefined_ | SVG 的可访问标题                             |
-| `fontFamily`        | `string \| string[]`                              | `'system-ui'` | 文本类样式的字体族                        |
-| `fontWeight`        | `number \| number[]`                              | `400`       | 文本类样式的字体粗细（1-1000）                |
+| Option              | Type                                              | Default     | Description                                      |
+| ------------------- | ------------------------------------------------- | ----------- | ------------------------------------------------ |
+| `seed`              | `string`                                          | `''`        | 用于确定性生成的种子                            |
+| `flip`              | `'none' \| 'horizontal' \| 'vertical' \| 'both'` | `'none'`    | 翻转头像                                        |
+| `rotate`            | `number \| [min, max]`                            | `0`         | 旋转头像（-360 到 360 度）                      |
+| `scale`             | `number \| [min, max]`                            | `1`         | 围绕画布中心的统一缩放因子（0 到 10；`1` 为原始尺寸） |
+| `borderRadius`      | `number \| [min, max]`                            | `0`         | 边框圆角（0-50 百分比，50 = 圆形）             |
+| `size`              | `number`                                          | _undefined_ | 像素中的固定尺寸                                |
+| `translateX`        | `number \| [min, max]`                            | `0`         | 作为画布宽度百分比的水平平移（-1000 到 1000）   |
+| `translateY`        | `number \| [min, max]`                            | `0`         | 作为画布高度百分比的垂直平移（-1000 到 1000）   |
+| `idRandomization`   | `boolean`                                         | `false`     | 随机化 SVG 元素 ID                              |
+| `title`             | `string`                                          | _undefined_ | SVG 的无障碍标题                               |
+| `fontFamily`        | `string \| string[]`                              | `'system-ui'` | 文本样式的字体族                            |
+| `fontWeight`        | `number \| number[]`                              | `400`       | 文本样式的字体粗细（1-1000）                   |
 
 ### 背景选项
 
-| 选项                      | 类型                                    | 默认值      | 描述                                |
-| ------------------------- | --------------------------------------- | ----------- | ----------------------------------- |
-| `backgroundColor`         | `string \| string[]`                    | _undefined_ | 背景颜色（带 # 的十六进制）           |
-| `backgroundColorFill`     | `'solid' \| 'linear' \| 'radial'`      | `'solid'`   | 背景填充类型                          |
-| `backgroundColorFillStops`| `number \| [min, max]`                  | _undefined_ | 渐变色标数量                          |
-| `backgroundColorAngle`    | `number \| [min, max]`                  | _undefined_ | 渐变角度（-360 到 360 度）            |
+这些选项适用于每种样式——即使其定义中没有声明 `background` 颜色组。
+
+| Option                    | Type                                    | Default     | Description                                |
+| ------------------------- | --------------------------------------- | ----------- | ------------------------------------------ |
+| `backgroundColor`         | `string \| string[]`                    | _undefined_ | 背景颜色（带 # 的十六进制）                |
+| `backgroundColorFill`     | `'solid' \| 'linear' \| 'radial'`      | `'solid'`   | 背景填充类型                              |
+| `backgroundColorFillStops`| `number \| [min, max]`                  | `2`         | 渐变色标数量；当填充为 `solid` 时忽略      |
+| `backgroundColorAngle`    | `number \| [min, max]`                  | `0`         | 渐变角度（-360 到 360 度）                 |
 
 ### 动态组件选项
 
 对于样式中的每个组件（例如 `eyes`、`mouth`、`hair`），都可使用以下选项：
 
-| 模式                      | 类型                                   | 描述                              |
-| ------------------------- | -------------------------------------- | --------------------------------- |
-| `{component}Variant`      | `string \| string[] \| Record<string, number>` | 选择特定变体或设置权重 |
-| `{component}Probability`  | `number`                               | 可见概率（0-100）                   |
-| `{component}Rotate`       | `number \| [min, max]`                 | 组件旋转（-360 到 360）             |
-| `{component}TranslateX`   | `number \| [min, max]`                 | 组件水平偏移（-100 到 100）         |
-| `{component}TranslateY`   | `number \| [min, max]`                 | 组件垂直偏移（-100 到 100）         |
+| Pattern                   | Type                                            | Description                              |
+| ------------------------- | ----------------------------------------------- | ---------------------------------------- |
+| `{component}Variant`      | `string \| string[] \| Record<string, number>` | 选择特定变体或设置权重                   |
+| `{component}Probability`  | `number`                                        | 可见性概率（0-100）                      |
+
+组件的旋转、平移和缩放会在渲染时根据组件定义进行采样，且**不是**用户选项——不存在
+`{component}Rotate`、`{component}TranslateX`、`{component}TranslateY` 或
+`{component}Scale` 选项。
 
 ### 动态颜色选项
 
@@ -221,7 +224,7 @@ const dataUri = avatar.toDataUri(); // [!code focus]
 | `{color}Color`            | `string \| string[]`                    | 覆盖颜色调色板（带 # 的十六进制）   |
 | `{color}ColorFill`        | `'solid' \| 'linear' \| 'radial'`      | 颜色填充类型                        |
 | `{color}ColorFillStops`   | `number \| [min, max]`                  | 渐变色标数量                        |
-| `{color}ColorAngle`       | `number \| [min, max]`                  | 渐变角度（-360 到 360 度）          |
+| `{color}ColorAngle`       | `number \| [min, max]`       | 渐变角度（-360 到 360 度）          |
 
 ## 示例
 
@@ -232,7 +235,7 @@ import { Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
 const avatar = new Avatar(lorelei, {
-  seed: 'John Doe',
+  seed: 'John',
   backgroundColor: ['#b6e3f4', '#c0aede', '#d1d4f9'],
   // ... 其他选项
 });
@@ -259,10 +262,10 @@ import { Avatar } from '@dicebear/core';
 import avataaars from '@dicebear/definitions/avataaars.json' with { type: 'json' };
 
 const avatar = new Avatar(avataaars, {
-  seed: 'Jane Doe',
+  seed: 'Jane',
   flip: 'horizontal',
   rotate: 10,
-  scale: 90,
+  scale: 0.9,
   translateY: 5,
   // ... 其他选项
 });
@@ -296,11 +299,26 @@ import { Avatar } from '@dicebear/core';
 import avataaars from '@dicebear/definitions/avataaars.json' with { type: 'json' };
 
 const avatar = new Avatar(avataaars, {
-  seed: 'John Doe',
+  seed: 'John',
   topVariant: { short01: 2, short02: 2, long01: 1 },
   // ... 其他选项
 });
 ```
+
+## 可访问性
+
+默认情况下，生成的 `<svg>` 元素会被设置为 `aria-hidden="true"` —— 辅助技术会跳过它。对于用户名旁边纯装饰性的头像来说，这是正确的默认设置。
+
+当头像本身传达身份信息时（例如，它是链接中的唯一内容，或者没有可见标签），请设置 `title` 选项。渲染器会在根元素上输出 `role="img" aria-label="…"`，并且还会生成一个 `<title>` 子元素，因此屏幕阅读器会播报该值：
+
+```js
+const avatar = new Avatar(lorelei, {
+  seed: 'Alice',
+  title: 'Alice 的头像',
+});
+```
+
+如果你将 SVG 嵌入到 `<img>` 中（通过 `toDataUri()`），请改用 `<img>` 元素的 `alt` 属性 —— 当 SVG 作为图像加载时，辅助技术不会读取 SVG 内部的 `title`。
 
 ## TypeScript
 
@@ -312,7 +330,7 @@ import type { StyleOptions, StyleDefinition } from '@dicebear/core';
 import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
 
 const avatar = new Avatar(lorelei, {
-  seed: 'John Doe',
+  seed: 'John',
   backgroundColor: ['#b6e3f4'],
   // ... 其他选项
 });

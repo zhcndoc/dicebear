@@ -44,7 +44,7 @@ const fileFormats = [
 
 ## 用法
 
-使用以下地址，并将 `<styleName>` 替换为你喜欢的头像样式（camelCase）。支持所有官方 [头像样式](/styles/)。
+使用以下地址，并将 `<styleName>` 替换为你偏好的头像样式。样式名称使用小写，多个单词之间用连字符连接——例如：`lorelei`、`pixel-art`、`adventurer-neutral`。所有官方[头像样式](/styles/)都受支持。
 
 ```
 https://api.dicebear.com/10.x/<styleName>/svg

@@ -231,53 +231,89 @@ function shuffle(seed, key, items):
 
 `Options` 类会将原始用户选项解析为渲染器使用的具体值。每次解析都会使用带有特定 key 的 PRNG。
 
-### Seed
+### Core options
 
-如果未提供，seed 默认为 `''`（空字符串）。
+| Option            | PRNG key       | Resolution                                                              |
+| ----------------- | -------------- | ----------------------------------------------------------------------- |
+| `seed`            | —              | 字面字符串；如果未提供，默认为 `''`。不做缓存。         |
+| `size`            | —              | 字面数字；默认未设置（渲染器会省略 `width`/`height`）。    |
+| `idRandomization` | —              | 布尔值；默认为 `false`。使用宿主 RNG，而不是 DiceBear PRNG。     |
+| `title`           | —              | 字面字符串；默认未设置（省略 `<title>`，使用 `aria-hidden`）。 |
+| `flip`            | `flip`         | 从 `['none', 'horizontal', 'vertical', 'both']` 中 `pick`，默认 `'none'` |
+| `rotate`          | `rotate`       | 范围内的 `float`，默认 `0`                                         |
+| `scale`           | `scale`        | 范围内的 `float`，默认 `1`                                         |
+| `borderRadius`    | `borderRadius` | 范围内的 `float`，默认 `0`                                         |
+| `translateX`      | `translateX`   | 范围内的 `float`，默认 `0`                                         |
+| `translateY`      | `translateY`   | 范围内的 `float`，默认 `0`                                         |
+| `fontFamily`      | `fontFamily`   | 从数组中 `pick`，默认 `'system-ui'`                                |
+| `fontWeight`      | `fontWeight`   | 从数组中 `pick`，默认 `400`                                        |
 
-### 核心选项
-
-| 选项               | PRNG key          | 解析方式                                       |
-| ------------------ | ----------------- | -------------------------------------------- |
-| `flip`             | `flip`             | 从 `['none', 'horizontal', 'vertical', 'both']` 中 `pick` |
-| `rotate`           | `rotate`          | 从范围内 `float`，默认 `0`              |
-| `scale`            | `scale`           | 从范围内 `float`，默认 `1`              |
-| `borderRadius`     | `borderRadius`     | 从范围内 `float`，默认 `0`              |
-| `translateX`       | `translateX`      | 从范围内 `float`，默认 `0`              |
-| `translateY`       | `translateY`      | 从范围内 `float`，默认 `0`              |
-| `fontFamily`       | `fontFamily`      | 从数组中 `pick`，默认 `'system-ui'`     |
-| `fontWeight`       | `fontWeight`      | 从数组中 `pick`，默认 `400`             |
+没有 PRNG key 的选项会直接从用户输入中读取。其余选项则会在给定 key 下，从用户提供的范围/列表中采样，并回退到列出的默认值。
 
 ### 组件选项
 
-对于每个组件（例如 `eyes`）：
+对于每个组件（例如 `eyes`），用户可以提供恰好两个选项：
 
-| 选项                | PRNG key              | 解析方式                               |
-| ------------------- | --------------------- | -------------------------------------- |
-| `eyesProbability`   | `eyesProbability`     | 带概率的 `bool`，默认 `100`    |
-| `eyesVariant`       | `eyesVariant`         | 从变体中 `weightedPick`             |
-| `eyesRotate`        | `eyesRotate`          | 从范围或组件默认值中 `float`  |
-| `eyesTranslateX`    | `eyesTranslateX`      | 从范围或组件默认值中 `float`  |
-| `eyesTranslateY`    | `eyesTranslateY`      | 从范围或组件默认值中 `float`  |
-| `eyesScale`         | `eyesScale`           | 从范围或组件默认值中 `float`，默认 `1` |
+| Option              | PRNG key            | Resolution                               |
+| ------------------- | ------------------- | ---------------------------------------- |
+| `eyesProbability`   | `eyesProbability`   | 具有给定概率的 `bool`，默认来自组件的 `probability`（若未设置则为 `100`） |
+| `eyesVariant`       | `eyesVariant`       | 从组件的 variants 中 `weightedPick` |
 
 如果概率检查失败，则组件不会被渲染（variant 返回 `undefined`）。
 
+对于 **组件别名**（在定义中通过 `extends` 声明），选项的行为不同：别名会复用源组件的
+`${sourceName}Probability` 用户选项，并且不会暴露自己的
+`${aliasName}Probability`。不过，`${aliasName}Variant` 选项
+对每个别名都是唯一的——PRNG 会为每个别名采样一个新的 variant。
+
+### 每个组件的变换（渲染时）
+
+每个组件引用在渲染时还会应用旋转、两个平移和缩放。
+这些都 **不是用户选项**——它们会在每次渲染时从组件定义的 `rotate`/`translate`/`scale` 范围中采样，
+并且 **永远不会出现在 `resolvedOptions` 中**。实现如果要对用户输入进行往返处理，也不得暴露它们。
+
+| Value         | PRNG key            | Sampling                                                            |
+| ------------- | ------------------- | ------------------------------------------------------------------- |
+| rotate        | `eyesRotate`        | 来自 `component.rotate` 的 `float`，默认 `0`                        |
+| translateX    | `eyesTranslateX`    | 来自 `component.translate.x` 的 `float`，默认 `0`                   |
+| translateY    | `eyesTranslateY`    | 来自 `component.translate.y` 的 `float`，默认 `0`                   |
+| scale         | `eyesScale`         | 来自 `component.scale` 的 `float`，默认 `1`                         |
+
+translate 值是 **组件自身** `width` 和 `height` 的百分比（不是头像画布的百分比）。
+先乘以组件尺寸，然后四舍五入到小数点后四位（`round(x * 10000) / 10000`）。用于 rotate 和 scale 的变换中心 `(cx, cy)` 是组件自身的中心——
+`(width / 2, height / 2)`。
+
+在输出的 SVG 中，这些值会作为一个单独的 `transform=""` 属性出现在
+`<use>` 元素上，且文本顺序如下（从左到右读取）：
+
+```
+transform="translate(tx, ty) rotate(angle, cx, cy) translate(cx, cy) scale(s) translate(-cx, -cy)"
+```
+
+任何值为恒等变换的片段（`tx=ty=0`、`angle=0`、`s=1`）都会被省略；如果所有片段都是恒等变换，则整个 `transform` 属性完全省略。
+
 ### 颜色选项
 
-对于每个颜色组（例如 `skin`）：
+对于定义中声明的每个颜色组——**加上**一个隐式的
+`background` 组——用户可以提供四个选项：
 
-1. 从用户选项（`skinColor`）或样式定义中获取候选颜色
+| Option                  | Type                                   | PRNG key                | Notes                                              |
+| ----------------------- | -------------------------------------- | ----------------------- | -------------------------------------------------- |
+| `${name}Color`          | 十六进制字符串或列表                     | `${name}Color`          | 候选颜色（覆盖定义中的调色板） |
+| `${name}ColorFill`      | 枚举 `solid` / `linear` / `radial`     | `${name}ColorFill`      | 当作为列表提供时选取一个，默认 `solid`      |
+| `${name}ColorFillStops` | 范围（最小 2）                          | `${name}ColorFillStops` | 渐变停靠点数量；当填充为 `solid` 时忽略，默认 `2` |
+| `${name}ColorAngle`     | 范围 -360…360                         | `${name}ColorAngle`     | 渐变旋转角度，默认 `0`                     |
+
+每个组的解析规则：
+
+1. 从用户选项（`${name}Color`）中获取候选颜色，或回退到样式定义的调色板
 2. 将所有颜色标准化为十六进制
-3. 确定 stop 数量：如果 fill 是 `solid`，则为 `1`，否则取自
-   `skinColorFillStops`（PRNG 整数，默认 `2`）
+3. 确定停靠点数量：如果填充为 `solid` 则为 `1`，否则采样 `${name}ColorFillStops`（PRNG `integer`，默认 `2`）
 4. 应用样式定义中的约束：
-   - **`contrastTo`**：按相对于引用颜色的 WCAG 2.1 对比度（降序）对候选项排序——不要洗牌
-   - **`notEqualTo`**：过滤掉已为引用组选择的颜色
-5. 如果没有 `contrastTo` 约束：洗牌候选项
-6. 截取到 stop 数量
-
-颜色选择所使用的 PRNG key 是 `{name}Color`（例如 `skinColor`）。
+   - **`contrastTo`**：按与引用颜色的 WCAG 2.1 对比度比值（降序）对候选项排序——不要洗牌
+   - **`notEqualTo`**：过滤掉已为被引用组选中的颜色
+5. 如果没有 `contrastTo` 约束：对候选项洗牌
+6. 截取到停靠点数量
 
 #### WCAG 2.1 对比度
 
@@ -317,49 +353,83 @@ function contrastRatio(a: hex, b: hex) -> float:
 
 递归遍历 `canvas.elements` 数组：
 
-- **`element`**：作为带属性的 SVG 标签渲染。解析属性值中的颜色引用和变量引用。
-- **`text`**：作为转义后的文本内容渲染。解析变量引用。
-- **`component`**：查找所选变体（来自选项解析）。如果组件可见，则渲染该变体的元素。将组件特定的变换（translate、rotate）作为包裹的 `<g>` 元素应用。
+- **`element`**: 以带属性的 SVG 标签形式渲染。解析属性值中的颜色引用和变量引用。
+- **`text`**: 以转义后的文本内容渲染。解析变量引用。
+- **`component`**: 查找所选变体（来自选项解析）。如果组件可见，则发出一个 `<use>` 元素，指向一个保存该变体主体的 `<defs>` 条目——见下文。
 
-有一个特殊情况：当 `element` 的名称是 `defs` 时，渲染器**不会**内联输出 `<defs>` 标签。相反，该元素的每个子元素都会被渲染并推入渲染器在整个遍历过程中累积的共享 `<defs>` 块中（以及生成的渐变和裁剪路径）。这使得样式定义可以提供可复用片段，而不会破坏每个文档只包含一个 `<defs>` 的不变式。
+当某个 `element` 的名称为 `defs` 时，渲染器**不会**内联发出 `<defs>` 标签。相反，该元素的每个子元素都会被渲染，并推送到渲染器在整个遍历过程中累积的共享 `<defs>` 块中（连同生成的渐变、裁剪路径和组件变体主体一起）。这使得样式定义可以携带可复用片段，而不会破坏“每个文档仅一个 `<defs>`”的不变量。
+
+#### 组件渲染
+
+组件引用绝不会内联。渲染器第一次遇到某个 `(component, variant)` 对时，它会：
+
+1. 渲染该变体的元素树。
+2. 将其包装在 `<g id="{sourceName}-{variantName}-{seedHash}">…</g>` 中，并追加到共享的 `<defs>` 块。`sourceName` 是 *源* 组件名称——对于通过 `extends` 声明的别名来说，这是该别名指向的组件名称，因此引用同一源的每个别名都会共享一个 `<defs>` 条目。
+3. 在调用位置发出 `<use transform="…" href="#{id}"/>`（当所有按组件变换都为恒等时会省略 transform——见 [按组件变换](#per-component-transforms-render-time)）。
+
+`seedHash` 是 seed 的 FNV-1a 十六进制哈希，小写并左侧零填充至 8 个字符。
 
 ### 3. 变换顺序
 
-按以下顺序将渲染后的主体包裹在嵌套的 `<g>` 元素中（最外层优先）：
+主体（背景加上已渲染元素）会被包裹在嵌套的 `<g>` 元素中。下面的列表顺序为 **最外层 → 最内层** —— 圆角裁剪始终会发出，其余仅在其值非恒等时才会发出。
 
-1. **圆角半径** — 使用圆角矩形的裁剪路径
-2. **平移** — `translate(dx, dy)`，其中
-   `dx = (translateX / 100) * canvas.width`,
-   `dy = (translateY / 100) * canvas.height`
-3. **旋转** — 围绕画布中心的 `rotate(angle, cx, cy)`
-4. **翻转** — 取决于模式：
-   - `none`：无变换
-   - `horizontal`：`translate(width, 0) scale(-1, 1)`
-   - `vertical`：`translate(0, height) scale(1, -1)`
-   - `both`：`translate(width, height) scale(-1, -1)`
-5. **缩放** — `translate(cx, cy) scale(s) translate(-cx, -cy)`，其中
-   `cx = width / 2`，`cy = height / 2`
+1. **边框圆角（始终）** — 在 `<defs>` 中注册一个 `<clipPath id="clip-{seedHash}">`，其中包含一个 `<rect width="{w}" height="{h}" rx="{rx}" ry="{ry}"/>`，这里 `rx = (borderRadius / 100) * canvas.width` 且 `ry = (borderRadius / 100) * canvas.height`。将主体包裹在 `<g clip-path="url(#clip-{seedHash})">` 中。**即使 `borderRadius` 为 `0`，此包裹也会发出**（此时 `rx="0" ry="0"`），以确保被变换的内容不会溢出画布边界。
+2. **平移**（若二者均为 `0` 则跳过）— `<g transform="translate(dx, dy)">`，其中 `dx = (translateX / 100) * canvas.width` 且 `dy = (translateY / 100) * canvas.height`。
+3. **旋转**（若为 `0` 则跳过）— 围绕画布中心的 `<g transform="rotate(angle, cx, cy)">`，`cx = width / 2`，`cy = height / 2`。
+4. **翻转**（若为 `none` 则跳过）— 取决于模式：
+   - `horizontal`: `translate(width, 0) scale(-1, 1)`
+   - `vertical`: `translate(0, height) scale(1, -1)`
+   - `both`: `translate(width, height) scale(-1, -1)`
+5. **缩放**（若为 `1` 则跳过）— `<g transform="translate(cx, cy) scale(s) translate(-cx, -cy)">`
+   其中 `cx = width / 2`，`cy = height / 2`。
+
+由于边框圆角始终包裹主体，渲染后的 SVG 总会包含一个 `<defs>` 块，并且至少有一条 `<clipPath>` 条目。
 
 ### 4. SVG 根元素
 
-根 `<svg>` 元素包含：
+根 `<svg>` 元素的属性，按此顺序：
 
-- `xmlns="http://www.w3.org/2000/svg"`
-- `viewBox="0 0 {width} {height}"`
-- `width` 和 `height` 属性（如果设置了 `size` 选项）
-- 来自样式定义的全局 `attributes`
-- 如果设置了 `title`，则包含 `role="img"` 和 `aria-label="{title}"`
-- 如果未设置 `title`，则包含 `aria-hidden="true"`
+1. `xmlns="http://www.w3.org/2000/svg"`
+2. `viewBox="0 0 {width} {height}"`
+3. 来自样式定义的全局 `attributes`（每个都通过 `Xml.escape` 转义）
+4. 要么是 `role="img" aria-label="{title}"`（当设置了 `title` 时，且已转义），要么是 `aria-hidden="true"`
+5. `width="{size}"` 和 `height="{size}"`（仅在设置了 `size` 选项时）
 
-如果设置了 `title`，请将 `<title>` 元素作为第一个子元素包含进来。
+其子元素，按这个精确顺序：
 
-将任何 `<defs>`（渐变、裁剪路径）放在 title 之后。
+1. `<metadata>` — 来自 `meta` 的 Dublin Core / RDF 块（见下文）；如果 `meta` 为空，则整个省略。
+2. `<defs>` — 累积的定义（裁剪路径、渐变、组件变体主体）。实际上总是存在，因为边框圆角裁剪总会被注册。
+3. `<title>` — 仅在设置了 `title` 选项时。内容会被转义。
+4. 来自上一步的变换后主体。
 
-在主体内容之前包含来自 `meta` 的许可证注释。
+#### `<metadata>` 块
+
+许可证/署名元数据会作为真实的 `<metadata>` 元素发出，并使用 RDF / Dublin Core 术语——**不是**作为 HTML 注释：
+
+```xml
+<metadata xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:dc="http://purl.org/dc/elements/1.1/"
+          xmlns:dcterms="http://purl.org/dc/terms/">
+  <rdf:RDF>
+    <rdf:Description>
+      <dc:title>{source.name}</dc:title>
+      <dc:creator>{creator.name}</dc:creator>
+      <dc:source xsi:type="dcterms:URI">{source.url}</dc:source>
+      <dcterms:license xsi:type="dcterms:URI">{license.url}</dcterms:license>
+      <dc:rights>{署名文本}</dc:rights>
+    </rdf:Description>
+  </rdf:RDF>
+</metadata>
+```
+
+每个 `dc:*` / `dcterms:*` 字段仅在对应的 `meta` 字段有值时才会包含；如果没有任何字段有值，则整个 `<metadata>` 元素会被省略。所有文本内容都会进行 XML 转义。`<dc:rights>` 的值是一个单行署名字符串，由 `source`、`creator` 和 `license` 组成（除非样式采用 MIT 许可证、由 DiceBear 自身编写，或者没有 `source.name`，否则前面会加上 `Remix of `）。
 
 ### 5. ID 随机化
 
-当 `idRandomization` 为 `true` 时，为所有 `id` 属性追加一个随机后缀，并更新所有引用（`url(#...)`、`href="#..."`）。这可以防止在同一 HTML 文档中嵌入多个头像时发生 ID 冲突。
+当 `idRandomization` 为 `true` 时，会在每个现有的 `id` 属性后追加一个随机后缀，并更新每个匹配的引用。替换模式包括 `id="…"`, `url(#…)` 和 `href="#…"`——每次出现都会被重写为 `{original}-{suffix}`。
+
+后缀格式为 **6 个小写十六进制字符**，左侧用零填充：在 JavaScript 中是 `Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0')`。
 
 该后缀**必须是非确定性的**：它应当来自宿主语言的非种子 RNG（JavaScript 中的 `Math.random()`，PHP 中的 `random_int()`），而不是来自 DiceBear PRNG。否则，使用相同种子渲染的两个头像仍会在 ID 上冲突，从而破坏该特性的目的。由于随机化输出是非确定性的，它被排除在一致性测试之外——头像 fixtures 使用默认的 `idRandomization: false`。
 
