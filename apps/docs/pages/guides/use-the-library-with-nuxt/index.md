@@ -29,7 +29,7 @@ hydrates without re-running the renderer on the client.
 <script setup lang="ts">
 import { computed } from 'vue';
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 const props = defineProps<{ seed?: string }>();
 
@@ -68,7 +68,7 @@ seed validation:
 ```ts
 // server/api/avatar/[seed].get.ts
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 export default defineEventHandler((event) => {
   const seed = getRouterParam(event, 'seed') ?? '';
@@ -90,7 +90,7 @@ multiple components ask for it), wrap generation in `useAsyncData`:
 ```vue
 <script setup lang="ts">
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 const props = defineProps<{ seed: string }>();
 

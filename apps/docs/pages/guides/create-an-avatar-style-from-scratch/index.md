@@ -355,7 +355,7 @@ echo (string) $avatar;
 - See the [Definition Schema Reference](/specification/definition-schema/) for
   the complete specification
 - Browse the
-  [official definitions](https://github.com/dicebear/definitions) for
+  [official definitions](https://github.com/dicebear/styles) for
   real-world examples
 - Use the [Figma plugin](/guides/create-an-avatar-style-with-figma/) for a
   visual workflow

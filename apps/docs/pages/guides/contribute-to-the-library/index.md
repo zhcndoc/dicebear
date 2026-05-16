@@ -14,13 +14,13 @@ instructions. Pick the one that matches what you want to work on.
 ## Avatar styles
 
 New avatar styles and fixes to existing styles live in
-[`dicebear/definitions`](https://github.com/dicebear/definitions). Most
+[`dicebear/styles`](https://github.com/dicebear/styles). Most
 styles are authored in Figma and exported with the
 [DiceBear Exporter](/guides/create-an-avatar-style-with-figma/) plugin,
 so the workflow there is not the usual "edit a JSON file" loop.
 
-- [`CONTRIBUTING.md`](https://github.com/dicebear/definitions/blob/main/CONTRIBUTING.md)
-  in `dicebear/definitions`
+- [`CONTRIBUTING.md`](https://github.com/dicebear/styles/blob/main/CONTRIBUTING.md)
+  in `dicebear/styles`
 
 ## Core library, CLI, documentation, editor
 

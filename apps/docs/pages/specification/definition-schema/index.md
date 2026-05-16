@@ -459,4 +459,4 @@ The schema files are:
 | Package              | npm                    | Composer                |
 | -------------------- | ---------------------- | ----------------------- |
 | Schema               | `@dicebear/schema`     | `dicebear/schema`       |
-| Definitions          | `@dicebear/definitions`| `dicebear/definitions`  |
+| Definitions          | `@dicebear/styles`| `dicebear/styles`  |

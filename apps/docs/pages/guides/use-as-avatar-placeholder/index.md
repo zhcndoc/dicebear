@@ -139,7 +139,7 @@ details, see the [JavaScript library documentation](/how-to-use/js-library/).
 
 ```js
 import { Avatar } from '@dicebear/core';
-import thumbs from '@dicebear/definitions/thumbs.json' with { type: 'json' };
+import thumbs from '@dicebear/styles/thumbs.json' with { type: 'json' };
 
 function getPlaceholderAvatar(userId) {
   return new Avatar(thumbs, {
@@ -163,7 +163,7 @@ use Composer\InstalledVersions;
 use DiceBear\Style;
 use DiceBear\Avatar;
 
-$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$basePath = InstalledVersions::getInstallPath('dicebear/styles');
 $definition = json_decode(file_get_contents($basePath . '/src/thumbs.json'), true);
 
 $style = new Style($definition);

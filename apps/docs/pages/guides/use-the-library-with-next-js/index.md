@@ -28,7 +28,7 @@ on the server and inline it as a [data URI](https://en.wikipedia.org/wiki/Data_U
 ```tsx
 // app/components/UserAvatar.tsx
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 export function UserAvatar({ seed = 'Alice' }: { seed?: string }) {
   const dataUri = new Avatar(lorelei, {
@@ -52,7 +52,7 @@ avatar is only re-derived when the seed changes.
 
 import { useMemo } from 'react';
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 export function UserAvatarClient({ seed = 'Alice' }: { seed?: string }) {
   const dataUri = useMemo(
@@ -92,7 +92,7 @@ Expose DiceBear behind your own URL — useful for caching with custom
 ```ts
 // app/api/avatar/[seed]/route.ts
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 export async function GET(
   _request: Request,
@@ -123,7 +123,7 @@ pattern. Server-side generation through `getServerSideProps` or
 // pages/profile.tsx
 import type { GetServerSideProps } from 'next';
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 type Props = { avatar: string };
 

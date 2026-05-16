@@ -23,10 +23,10 @@ if you are new to ESM packages.
 ## Installation
 
 You need two packages: the core library `@dicebear/core` and the avatar style
-definitions `@dicebear/definitions`.
+definitions `@dicebear/styles`.
 
 ```
-npm install @dicebear/core @dicebear/definitions
+npm install @dicebear/core @dicebear/styles
 ```
 
 ## Usage
@@ -36,7 +36,7 @@ more avatar styles [here](/styles/).
 
 ```js
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 const avatar = new Avatar(lorelei, {
   seed: 'John',
@@ -76,7 +76,7 @@ will always produce the same avatar, making it perfect for user profiles:
 
 ```js
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 // These will always produce the same avatar
 const avatar1 = new Avatar(lorelei, { seed: 'user-123' });
@@ -94,7 +94,7 @@ instance) and optional options.
 
 ```js
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 const avatar = new Avatar(lorelei, { // [!code focus:3]
   // ... options
@@ -108,7 +108,7 @@ the same parsed style across multiple avatars without re-parsing each time.
 
 ```js
 import { Style, Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 const style = new Style(lorelei); // [!code focus:4]
 
@@ -132,7 +132,7 @@ Returns the avatar as SVG in XML format.
 
 ```js
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 const avatar = new Avatar(lorelei, {
   // ... options
@@ -150,7 +150,7 @@ generate the avatar.
 
 ```js
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 const avatar = new Avatar(lorelei, {
   seed: 'John',
@@ -178,7 +178,7 @@ This is useful for embedding the avatar directly in HTML or CSS.
 
 ```js
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 const avatar = new Avatar(lorelei, {
   seed: 'John',
@@ -255,7 +255,7 @@ following options are available:
 
 ```js
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 const avatar = new Avatar(lorelei, {
   seed: 'John',
@@ -268,7 +268,7 @@ const avatar = new Avatar(lorelei, {
 
 ```js
 import { Avatar } from '@dicebear/core';
-import bottts from '@dicebear/definitions/bottts.json' with { type: 'json' };
+import bottts from '@dicebear/styles/bottts.json' with { type: 'json' };
 
 const avatar = new Avatar(bottts, {
   seed: 'robot-42',
@@ -282,7 +282,7 @@ const avatar = new Avatar(bottts, {
 
 ```js
 import { Avatar } from '@dicebear/core';
-import avataaars from '@dicebear/definitions/avataaars.json' with { type: 'json' };
+import avataaars from '@dicebear/styles/avataaars.json' with { type: 'json' };
 
 const avatar = new Avatar(avataaars, {
   seed: 'Jane',
@@ -301,7 +301,7 @@ prevent SVG ID conflicts:
 
 ```js
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 const users = ['alice', 'bob', 'charlie'];
 
@@ -320,7 +320,7 @@ You can influence the PRNG to prefer certain variants by passing a weight map:
 
 ```js
 import { Avatar } from '@dicebear/core';
-import avataaars from '@dicebear/definitions/avataaars.json' with { type: 'json' };
+import avataaars from '@dicebear/styles/avataaars.json' with { type: 'json' };
 
 const avatar = new Avatar(avataaars, {
   seed: 'John',
@@ -358,7 +358,7 @@ The library is fully typed. You can import types for better IDE support:
 ```ts
 import { Avatar, Style } from '@dicebear/core';
 import type { StyleOptions, StyleDefinition } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 const avatar = new Avatar(lorelei, {
   seed: 'John',

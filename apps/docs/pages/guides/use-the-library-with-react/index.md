@@ -21,7 +21,7 @@ You can use DiceBear with React either via the
 ```jsx
 import { useMemo } from 'react';
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 export default function UserAvatar({ seed = 'Alice' }) {
   const avatar = useMemo(() => {

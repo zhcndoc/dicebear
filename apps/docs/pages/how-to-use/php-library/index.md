@@ -15,10 +15,10 @@ implementations.
 ## Installation
 
 You need two packages: the core library `dicebear/core` and the avatar style
-definitions `dicebear/definitions`.
+definitions `dicebear/styles`.
 
 ```
-composer require dicebear/core dicebear/definitions
+composer require dicebear/core dicebear/styles
 ```
 
 ## Usage
@@ -30,7 +30,7 @@ use Composer\InstalledVersions;
 use DiceBear\Style;
 use DiceBear\Avatar;
 
-$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$basePath = InstalledVersions::getInstallPath('dicebear/styles');
 $definition = json_decode(file_get_contents($basePath . '/src/lorelei.json'), true);
 
 $style = new Style($definition);
@@ -198,7 +198,7 @@ $avatar = new Avatar($style, [
 ### Fixed size avatar
 
 ```php
-$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$basePath = InstalledVersions::getInstallPath('dicebear/styles');
 $definition = json_decode(file_get_contents($basePath . '/src/bottts.json'), true);
 
 $style = new Style($definition);
@@ -212,7 +212,7 @@ $avatar = new Avatar($style, [
 ### Avatar with transformations
 
 ```php
-$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$basePath = InstalledVersions::getInstallPath('dicebear/styles');
 $definition = json_decode(file_get_contents($basePath . '/src/avataaars.json'), true);
 
 $style = new Style($definition);

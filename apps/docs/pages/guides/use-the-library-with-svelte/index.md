@@ -23,7 +23,7 @@ You can use DiceBear with Svelte either via the
 ```svelte [Svelte 5]
 <script>
   import { Avatar } from '@dicebear/core';
-  import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+  import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
   let { seed = 'Alice' } = $props();
 
@@ -42,7 +42,7 @@ You can use DiceBear with Svelte either via the
 ```svelte [Svelte 4]
 <script>
   import { Avatar } from '@dicebear/core';
-  import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+  import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
   export let seed = 'Alice';
 

@@ -14,7 +14,7 @@ The `OptionsDescriptor` class lets you discover all available options at runtime
 
 ```js
 import { Style, OptionsDescriptor } from '@dicebear/core';
-import definition from '@dicebear/definitions/micah.json' with { type: 'json' };
+import definition from '@dicebear/styles/micah.json' with { type: 'json' };
 
 const style = new Style(definition);
 const descriptor = new OptionsDescriptor(style);
@@ -29,7 +29,7 @@ use Composer\InstalledVersions;
 use DiceBear\Style;
 use DiceBear\OptionsDescriptor;
 
-$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$basePath = InstalledVersions::getInstallPath('dicebear/styles');
 $definition = json_decode(file_get_contents($basePath . '/src/micah.json'), true);
 
 $style = new Style($definition);

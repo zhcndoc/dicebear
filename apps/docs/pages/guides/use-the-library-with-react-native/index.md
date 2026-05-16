@@ -28,7 +28,7 @@ npm install react-native-svg
 import { useMemo } from 'react';
 import { View } from 'react-native';
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 import { SvgXml } from 'react-native-svg';
 
 export default function UserAvatar({ seed = 'Alice' }) {
