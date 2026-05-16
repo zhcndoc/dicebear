@@ -160,7 +160,7 @@ class Prng
     public function shuffle(string $key, array $items): array
     {
         if (count($items) <= 1) {
-            return array_values($items);
+            return $items;
         }
 
         $result = self::uniqueByCodePoint($items);
