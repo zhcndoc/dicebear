@@ -75,32 +75,47 @@ describe('Options', () => {
     });
   });
 
-  describe('top-level array normalization', () => {
-    it('should normalize a scalar value to a one-element array', () => {
-      const options = new Options({ flip: 'horizontal', scale: 1.5 });
+  describe('top-level normalization', () => {
+    it('should normalize a scalar list option to a one-element array', () => {
+      const options = new Options({ flip: 'horizontal' });
 
       assert.deepEqual(options.flip(), ['horizontal']);
-      assert.deepEqual(options.scale(), [1.5]);
     });
 
-    it('should pass an array through unchanged', () => {
-      const options = new Options({ flip: ['horizontal', 'vertical'], scale: [0.8, 1.2] });
+    it('should pass a list option array through unchanged', () => {
+      const options = new Options({ flip: ['horizontal', 'vertical'] });
 
       assert.deepEqual(options.flip(), ['horizontal', 'vertical']);
-      assert.deepEqual(options.scale(), [0.8, 1.2]);
     });
 
-    it('should return an empty array when unset', () => {
+    it('should normalize a scalar range option to a fixed-value range', () => {
+      const options = new Options({ scale: 1.5 });
+
+      assert.deepEqual(options.scale(), { min: 1.5, max: 1.5 });
+    });
+
+    it('should normalize a tuple range option to a min/max range', () => {
+      const options = new Options({ scale: [0.8, 1.2] });
+
+      assert.deepEqual(options.scale(), { min: 0.8, max: 1.2 });
+    });
+
+    it('should return undefined for unset range options', () => {
+      const options = new Options({});
+
+      assert.equal(options.scale(), undefined);
+      assert.equal(options.borderRadius(), undefined);
+      assert.equal(options.rotate(), undefined);
+      assert.equal(options.translateX(), undefined);
+      assert.equal(options.translateY(), undefined);
+    });
+
+    it('should return empty arrays for unset list options', () => {
       const options = new Options({});
 
       assert.deepEqual(options.flip(), []);
       assert.deepEqual(options.fontFamily(), []);
       assert.deepEqual(options.fontWeight(), []);
-      assert.deepEqual(options.scale(), []);
-      assert.deepEqual(options.borderRadius(), []);
-      assert.deepEqual(options.rotate(), []);
-      assert.deepEqual(options.translateX(), []);
-      assert.deepEqual(options.translateY(), []);
     });
   });
 
@@ -159,7 +174,7 @@ describe('Options', () => {
   });
 
   describe('colorFill / colorAngle / colorFillStops', () => {
-    it('should normalize all three to arrays', () => {
+    it('should normalize all three correctly', () => {
       const options = new Options({
         skinColorFill: 'linear',
         skinColorAngle: 45,
@@ -167,16 +182,16 @@ describe('Options', () => {
       });
 
       assert.deepEqual(options.colorFill('skin'), ['linear']);
-      assert.deepEqual(options.colorAngle('skin'), [45]);
-      assert.deepEqual(options.colorFillStops('skin'), [2, 4]);
+      assert.deepEqual(options.colorAngle('skin'), { min: 45, max: 45 });
+      assert.deepEqual(options.colorFillStops('skin'), { min: 2, max: 4 });
     });
 
-    it('should return empty arrays when unset', () => {
+    it('should return defaults when unset', () => {
       const options = new Options({});
 
       assert.deepEqual(options.colorFill('skin'), []);
-      assert.deepEqual(options.colorAngle('skin'), []);
-      assert.deepEqual(options.colorFillStops('skin'), []);
+      assert.equal(options.colorAngle('skin'), undefined);
+      assert.equal(options.colorFillStops('skin'), undefined);
     });
   });
 });

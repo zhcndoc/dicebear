@@ -24,7 +24,7 @@ const definitionsDir = join(
   'dist',
 );
 
-const STYLE_NAMES = ['initials', 'thumbs', 'glass', 'notionists'];
+const STYLE_NAMES = ['initials', 'thumbs', 'glass', 'notionists', 'shape-grid'];
 
 function writeJson(relPath, data) {
   const filePath = join(import.meta.dirname, relPath);
@@ -46,36 +46,6 @@ for (const name of STYLE_NAMES) {
   styles[name] = raw;
   writeJson(join('styles', `${name}.json`), raw);
 }
-
-// Synthetic alias style: locks down the `extends` plumbing across both
-// runtimes. Two component slots in the canvas both reference the same alias
-// pair so that source vs. alias variant rolling is observable in the SVG.
-const aliasTest = {
-  canvas: {
-    width: 100,
-    height: 100,
-    elements: [
-      { type: 'component', name: 'eyes' },
-      { type: 'component', name: 'eyesRight' },
-    ],
-  },
-  components: {
-    eyes: {
-      width: 20,
-      height: 20,
-      variants: {
-        a: { elements: [{ type: 'element', name: 'circle', attributes: { id: 'a' } }] },
-        b: { elements: [{ type: 'element', name: 'circle', attributes: { id: 'b' } }] },
-        c: { elements: [{ type: 'element', name: 'circle', attributes: { id: 'c' } }] },
-        d: { elements: [{ type: 'element', name: 'circle', attributes: { id: 'd' } }] },
-        e: { elements: [{ type: 'element', name: 'circle', attributes: { id: 'e' } }] },
-      },
-    },
-    eyesRight: { extends: 'eyes' },
-  },
-};
-styles.aliasTest = aliasTest;
-writeJson(join('styles', 'aliasTest.json'), aliasTest);
 
 // ---------------------------------------------------------------------------
 // Fnv1a fixtures
@@ -175,6 +145,9 @@ const pickCases = [
   { seed: 'test', key: 'single', items: ['only'] },
   // pre-shuffled order to verify that sorting normalizes input
   { seed: 'test', key: 'a', items: ['e', 'd', 'c', 'b', 'a'] },
+  // duplicates must be collapsed — same result as the unique set
+  { seed: 'test', key: 'a', items: ['a', 'a', 'b', 'b', 'c', 'c', 'd', 'd', 'e', 'e'] },
+  { seed: 'test', key: 'single', items: ['only', 'only', 'only'] },
 ];
 for (const c of pickCases) {
   prngFixtures.pick.push({
@@ -192,6 +165,8 @@ const weightedPickCases = [
   // order-independence: same expected result as the first entry above
   { seed: 'test', key: 'k', entries: [['c', 2], ['a', 1], ['b', 4]] },
   { seed: 'test', key: 'k', entries: [['only', 1]] },
+  // duplicates: first occurrence's weight wins, later duplicates are ignored
+  { seed: 'test', key: 'k', entries: [['a', 1], ['a', 100], ['b', 4], ['c', 2]] },
 ];
 for (const c of weightedPickCases) {
   prngFixtures.weightedPick.push({
@@ -217,34 +192,37 @@ for (const c of boolCases) {
 }
 
 const floatCases = [
-  { seed: 'test', key: 'k', values: [0, 1] },
-  { seed: 'test', key: 'k', values: [-10, 10] },
-  { seed: 'test', key: 'k', values: [10, 20] },
-  { seed: 'test', key: 'k', values: [20, 10] }, // reversed
-  { seed: 'test', key: 'k', values: [5, 20, 10] }, // multi-value
-  { seed: 'hello', key: 'scale', values: [0.5, 1.5] },
-  { seed: 'test', key: 'k', values: [42] }, // single
+  { seed: 'test', key: 'k', range: { min: 0, max: 1 } },
+  { seed: 'test', key: 'k', range: { min: -10, max: 10 } },
+  { seed: 'test', key: 'k', range: { min: 10, max: 20 } },
+  { seed: 'test', key: 'k', range: { min: 20, max: 10 } }, // reversed
+  { seed: 'test', key: 'k', range: { min: 0, max: 100, step: 5 } }, // stepped
+  { seed: 'test', key: 'k', range: { min: 3, max: 23, step: 5 } }, // stepped, min not on step grid
+  { seed: 'parity-step', key: 'k', range: { min: -10, max: 10, step: 2.5 } }, // stepped, float step
+  { seed: 'test', key: 'k', range: { min: 10, max: 20, step: 0 } }, // step 0 → continuous
+  { seed: 'hello', key: 'scale', range: { min: 0.5, max: 1.5 } },
+  { seed: 'test', key: 'k', range: { min: 42, max: 42 } }, // fixed
 ];
 for (const c of floatCases) {
   prngFixtures.float.push({
     ...c,
-    result: new Prng(c.seed).float(c.key, c.values),
+    result: new Prng(c.seed).float(c.key, c.range),
   });
 }
 
 const integerCases = [
-  { seed: 'test', key: 'k', values: [1, 6] },
-  { seed: 'test', key: 'k', values: [0, 100] },
-  { seed: 'test', key: 'k', values: [-50, 50] },
-  { seed: 'test', key: 'k', values: [10, 1] }, // reversed
-  { seed: 'test', key: 'k', values: [3, 10, 7] }, // multi-value
-  { seed: 'test', key: 'k', values: [5, 5] }, // min == max
-  { seed: 'hello', key: 'fontWeight', values: [100, 900] },
+  { seed: 'test', key: 'k', range: { min: 1, max: 6 } },
+  { seed: 'test', key: 'k', range: { min: 0, max: 100 } },
+  { seed: 'test', key: 'k', range: { min: -50, max: 50 } },
+  { seed: 'test', key: 'k', range: { min: 10, max: 1 } }, // reversed
+  { seed: 'test', key: 'k', range: { min: 3, max: 10, step: 7 } }, // step ignored
+  { seed: 'test', key: 'k', range: { min: 5, max: 5 } }, // min == max
+  { seed: 'hello', key: 'fontWeight', range: { min: 100, max: 900 } },
 ];
 for (const c of integerCases) {
   prngFixtures.integer.push({
     ...c,
-    result: new Prng(c.seed).integer(c.key, c.values),
+    result: new Prng(c.seed).integer(c.key, c.range),
   });
 }
 
@@ -256,6 +234,8 @@ const shuffleCases = [
   { seed: 'hello', key: 'k', items: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] },
   // pre-shuffled order to verify that sorting normalizes input
   { seed: 'test', key: 'k', items: ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'] },
+  // duplicates collapse — output length matches unique-set length
+  { seed: 'test', key: 'k', items: ['a', 'a', 'b', 'b', 'c', 'c'] },
 ];
 for (const c of shuffleCases) {
   prngFixtures.shuffle.push({
@@ -394,18 +374,20 @@ const avatarFixtures = {
       },
     },
   ]),
-  aliasTest: [
-    { id: 'plain-seed', options: { seed: 'parity-1' } },
-    { id: 'different-seed', options: { seed: 'parity-2' } },
+  'shape-grid': avatarCases([
     {
-      id: 'source-variant',
-      options: { seed: 'parity-1', eyesVariant: 'b' },
+      id: 'rows-variant-pinned',
+      options: { seed: 'parity-1', rowsVariant: ['rows04'] },
     },
     {
-      id: 'source-probability-zero',
-      options: { seed: 'parity-1', eyesProbability: 0 },
+      id: 'shape-variant-pinned',
+      options: { seed: 'parity-1', shapeVariant: ['square'] },
     },
-  ],
+    {
+      id: 'shape-probability-zero',
+      options: { seed: 'parity-1', shapeProbability: 0 },
+    },
+  ]),
 };
 
 for (const [styleName, cases] of Object.entries(avatarFixtures)) {

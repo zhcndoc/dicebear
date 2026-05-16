@@ -1,5 +1,6 @@
 import { Fnv1a } from './Prng/Fnv1a.js';
 import { Mulberry32 } from './Prng/Mulberry32.js';
+import type { Range } from './StyleDefinition.js';
 
 /**
  * Key-based pseudorandom number generator.
@@ -17,8 +18,9 @@ export class Prng {
 
   /**
    * Picks a single item from `items` deterministically. Returns `undefined`
-   * for an empty list. Items are sorted by their string representation
-   * before picking so that input order does not affect the result.
+   * for an empty list. Duplicate values (by string representation) are
+   * collapsed before picking so that input order and duplication do not
+   * affect the result.
    */
   pick<T>(key: string, items: readonly T[]): T | undefined {
     if (items.length === 0) {
@@ -29,16 +31,24 @@ export class Prng {
       return items[0];
     }
 
-    const sorted = Array.from(items).sort(this.#compareByCodePoint);
+    const unique = this.#uniqueByCodePoint(items);
+
+    if (unique.length === 1) {
+      return unique[0];
+    }
+
+    const sorted = unique.sort(this.#compareByCodePoint);
     const index = Math.floor(this.getValue(key) * sorted.length);
 
     return sorted[index];
   }
 
   /**
-   * Picks an item from `entries` proportional to its weight. When all weights
-   * are zero, falls back to an unweighted {@link pick}. Returns `undefined`
-   * for an empty list.
+   * Picks an item from `entries` proportional to its weight. Duplicate items
+   * (by string representation) are collapsed before picking — only the
+   * first occurrence's weight is kept. When all weights are zero, falls
+   * back to an unweighted {@link pick}. Returns `undefined` for an empty
+   * list.
    */
   weightedPick<T>(
     key: string,
@@ -48,7 +58,12 @@ export class Prng {
       return undefined;
     }
 
-    const sorted = Array.from(entries).sort((a, b) =>
+    if (entries.length === 1) {
+      return entries[0][0];
+    }
+
+    const unique = this.#uniqueByCodePoint(entries, (e) => String(e[0]));
+    const sorted = unique.sort((a, b) =>
       this.#compareByCodePoint(a[0], b[0]),
     );
     const totalWeight = sorted.reduce((sum, e) => sum + e[1], 0);
@@ -83,40 +98,48 @@ export class Prng {
   }
 
   /**
-   * Returns a deterministic float in the closed range `[min(values), max(values)]`,
-   * rounded to four decimal places. Returns `undefined` for an empty list.
+   * Returns a deterministic float in `range`, rounded to four decimal places.
+   * With `range.step > 0`, the result is quantized to `min + i*step` for the
+   * largest integer `i` that keeps the value within the range. Non-positive
+   * or absent step means continuous. `min`/`max` are sorted internally, so
+   * a reversed pair is tolerated.
    */
-  float(key: string, values: readonly number[]): number | undefined {
-    if (values.length === 0) {
-      return undefined;
-    }
+  float(key: string, range: Range): number {
+    const min = Math.min(range.min, range.max);
+    const max = Math.max(range.min, range.max);
+    const step = range.step ?? 0;
+    const raw = min + this.getValue(key) * (max - min);
+    const quantized = step > 0
+      ? min + Math.floor((raw - min) / step) * step
+      : raw;
 
-    const min = Math.min(...values);
-    const max = Math.max(...values);
-
-    return Math.round((min + this.getValue(key) * (max - min)) * 10000) / 10000;
+    return Math.round(quantized * 10000) / 10000;
   }
 
   /**
-   * Returns a deterministic integer in the closed range
-   * `[min(values), max(values)]`. Returns `undefined` for an empty list.
+   * Returns a deterministic integer in `range`. `min`/`max` are sorted
+   * internally, so a reversed pair is tolerated. `range.step` is accepted
+   * for symmetry with {@link float} but ignored — integers already step by 1.
    */
-  integer(key: string, values: readonly number[]): number | undefined {
-    if (values.length === 0) {
-      return undefined;
-    }
-
-    const min = Math.min(...values);
-    const max = Math.max(...values);
+  integer(key: string, range: Range): number {
+    const min = Math.min(range.min, range.max);
+    const max = Math.max(range.min, range.max);
 
     return Math.floor(this.getValue(key) * (max - min + 1)) + min;
   }
 
   /**
-   * Fisher-Yates shuffle with chained Mulberry32 state.
+   * Fisher-Yates shuffle with chained Mulberry32 state. Duplicate values
+   * (by string representation) are collapsed before shuffling, so a
+   * caller's slice off the front cannot accidentally produce a repeated
+   * value.
    */
   shuffle<T>(key: string, items: readonly T[]): T[] {
-    const result = Array.from(items).sort(this.#compareByCodePoint);
+    if (items.length <= 1) {
+      return [...items];
+    }
+
+    const result = this.#uniqueByCodePoint(items).sort(this.#compareByCodePoint);
     const prng = new Mulberry32(Fnv1a.hash(this.#seed + ':' + key));
 
     for (let i = result.length - 1; i > 0; i--) {
@@ -136,6 +159,32 @@ export class Prng {
    */
   getValue(key: string): number {
     return new Mulberry32(Fnv1a.hash(this.#seed + ':' + key)).nextFloat();
+  }
+
+  /**
+   * Deduplicates by string representation, keeping the first occurrence.
+   * Mirrors the cross-language sort key used by {@link #compareByCodePoint}
+   * so that JS and PHP collapse the same set of inputs. `keyFn` lets
+   * callers (e.g. {@link weightedPick}) extract the sort key from a
+   * compound element.
+   */
+  #uniqueByCodePoint<T>(
+    items: readonly T[],
+    keyFn: (item: T) => string = String,
+  ): T[] {
+    const seen = new Set<string>();
+    const result: T[] = [];
+
+    for (const item of items) {
+      const repr = keyFn(item);
+
+      if (!seen.has(repr)) {
+        seen.add(repr);
+        result.push(item);
+      }
+    }
+
+    return result;
   }
 
   /**

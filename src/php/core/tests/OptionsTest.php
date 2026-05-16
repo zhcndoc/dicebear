@@ -77,33 +77,48 @@ class OptionsTest extends TestCase
         $this->assertSame('My Avatar', $options->title());
     }
 
-    // top-level array normalization
+    // top-level normalization
 
-    public function testNormalizesScalarToOneElementList(): void
+    public function testNormalizesScalarListToOneElementList(): void
     {
-        $options = new Options(['flip' => 'horizontal', 'scale' => 1.5]);
+        $options = new Options(['flip' => 'horizontal']);
         $this->assertSame(['horizontal'], $options->flip());
-        $this->assertSame([1.5], $options->scale());
     }
 
-    public function testPassesArrayThrough(): void
+    public function testPassesListArrayThrough(): void
     {
-        $options = new Options(['flip' => ['horizontal', 'vertical'], 'scale' => [0.8, 1.2]]);
+        $options = new Options(['flip' => ['horizontal', 'vertical']]);
         $this->assertSame(['horizontal', 'vertical'], $options->flip());
-        $this->assertSame([0.8, 1.2], $options->scale());
     }
 
-    public function testReturnsEmptyArrayWhenUnset(): void
+    public function testNormalizesScalarRangeToFixedValue(): void
+    {
+        $options = new Options(['scale' => 1.5]);
+        $this->assertSame(['min' => 1.5, 'max' => 1.5], $options->scale());
+    }
+
+    public function testNormalizesRangeTupleToObject(): void
+    {
+        $options = new Options(['scale' => [0.8, 1.2]]);
+        $this->assertSame(['min' => 0.8, 'max' => 1.2], $options->scale());
+    }
+
+    public function testReturnsNullForUnsetRangeOptions(): void
+    {
+        $options = new Options([]);
+        $this->assertNull($options->scale());
+        $this->assertNull($options->borderRadius());
+        $this->assertNull($options->rotate());
+        $this->assertNull($options->translateX());
+        $this->assertNull($options->translateY());
+    }
+
+    public function testReturnsEmptyArrayForUnsetListOptions(): void
     {
         $options = new Options([]);
         $this->assertSame([], $options->flip());
         $this->assertSame([], $options->fontFamily());
         $this->assertSame([], $options->fontWeight());
-        $this->assertSame([], $options->scale());
-        $this->assertSame([], $options->borderRadius());
-        $this->assertSame([], $options->rotate());
-        $this->assertSame([], $options->translateX());
-        $this->assertSame([], $options->translateY());
     }
 
     // componentVariant()
@@ -173,15 +188,15 @@ class OptionsTest extends TestCase
             'skinColorFillStops' => [2, 4],
         ]);
         $this->assertSame(['linear'], $options->colorFill('skin'));
-        $this->assertSame([45], $options->colorAngle('skin'));
-        $this->assertSame([2, 4], $options->colorFillStops('skin'));
+        $this->assertSame(['min' => 45, 'max' => 45], $options->colorAngle('skin'));
+        $this->assertSame(['min' => 2, 'max' => 4], $options->colorFillStops('skin'));
     }
 
-    public function testColorMetaEmptyWhenUnset(): void
+    public function testColorMetaDefaultsWhenUnset(): void
     {
         $options = new Options([]);
         $this->assertSame([], $options->colorFill('skin'));
-        $this->assertSame([], $options->colorAngle('skin'));
-        $this->assertSame([], $options->colorFillStops('skin'));
+        $this->assertNull($options->colorAngle('skin'));
+        $this->assertNull($options->colorFillStops('skin'));
     }
 }

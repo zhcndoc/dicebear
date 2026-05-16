@@ -25,8 +25,9 @@ class Prng
 
     /**
      * Picks a single item from `$items` deterministically. Returns `null`
-     * for an empty list. Items are sorted by their string representation
-     * before picking so that input order does not affect the result.
+     * for an empty list. Duplicate values (by string representation) are
+     * collapsed before picking so that input order and duplication do not
+     * affect the result.
      *
      * @template T
      *
@@ -44,7 +45,13 @@ class Prng
             return $items[0];
         }
 
-        $sorted = $items;
+        $unique = self::uniqueByCodePoint($items);
+
+        if (count($unique) === 1) {
+            return $unique[0];
+        }
+
+        $sorted = $unique;
         usort($sorted, self::compareByCodePoint(...));
         $index = (int) floor($this->getValue($key) * count($sorted));
 
@@ -52,9 +59,11 @@ class Prng
     }
 
     /**
-     * Picks an item from `$entries` proportional to its weight. When all
-     * weights are zero, falls back to an unweighted {@see pick()}. Returns
-     * `null` for an empty list.
+     * Picks an item from `$entries` proportional to its weight. Duplicate
+     * items (by string representation) are collapsed before picking — only
+     * the first occurrence's weight is kept. When all weights are zero,
+     * falls back to an unweighted {@see pick()}. Returns `null` for an
+     * empty list.
      *
      * @param list<array{0: mixed, 1: int|float}> $entries
      */
@@ -64,7 +73,12 @@ class Prng
             return null;
         }
 
-        $sorted = $entries;
+        if (count($entries) === 1) {
+            return $entries[0][0];
+        }
+
+        $unique = self::uniqueByCodePoint($entries, fn($e) => (string) $e[0]);
+        $sorted = $unique;
         usort($sorted, fn($a, $b) => self::compareByCodePoint($a[0], $b[0]));
         $totalWeight = (float) array_sum(array_column($sorted, 1));
 
@@ -95,44 +109,47 @@ class Prng
     }
 
     /**
-     * Returns a deterministic float in the closed range
-     * `[min($values), max($values)]`, rounded to four decimal places.
-     * Returns `null` for an empty list.
+     * Returns a deterministic float in `$range`, rounded to four decimal
+     * places. With `$range['step'] > 0`, the result is quantized to
+     * `min + i*step` for the largest integer `i` that keeps the value within
+     * the range. Non-positive or absent step means continuous. `min`/`max`
+     * are sorted internally, so a reversed pair is tolerated.
      *
-     * @param list<int|float> $values
+     * @param array{min: int|float, max: int|float, step?: int|float} $range
      */
-    public function float(string $key, array $values): ?float
+    public function float(string $key, array $range): float
     {
-        if (count($values) === 0) {
-            return null;
-        }
+        $min = min($range['min'], $range['max']);
+        $max = max($range['min'], $range['max']);
+        $step = $range['step'] ?? 0;
+        $raw = $min + $this->getValue($key) * ($max - $min);
+        $quantized = $step > 0
+            ? $min + floor(($raw - $min) / $step) * $step
+            : $raw;
 
-        $min = min($values);
-        $max = max($values);
-
-        return round(($min + $this->getValue($key) * ($max - $min)) * 10000) / 10000;
+        return round($quantized * 10000) / 10000;
     }
 
     /**
-     * Returns a deterministic integer in the closed range
-     * `[min($values), max($values)]`. Returns `null` for an empty list.
+     * Returns a deterministic integer in `$range`. `min`/`max` are sorted
+     * internally, so a reversed pair is tolerated. `$range['step']` is
+     * accepted for symmetry with {@see float()} but ignored.
      *
-     * @param list<int|float> $values
+     * @param array{min: int|float, max: int|float, step?: int|float} $range
      */
-    public function integer(string $key, array $values): ?int
+    public function integer(string $key, array $range): int
     {
-        if (count($values) === 0) {
-            return null;
-        }
-
-        $min = (int) min($values);
-        $max = (int) max($values);
+        $min = (int) min($range['min'], $range['max']);
+        $max = (int) max($range['min'], $range['max']);
 
         return (int) floor($this->getValue($key) * ($max - $min + 1)) + $min;
     }
 
     /**
-     * Fisher-Yates shuffle with chained Mulberry32 state.
+     * Fisher-Yates shuffle with chained Mulberry32 state. Duplicate values
+     * (by string representation) are collapsed before shuffling, so a
+     * caller's slice off the front cannot accidentally produce a repeated
+     * value.
      *
      * @template T
      *
@@ -142,7 +159,11 @@ class Prng
      */
     public function shuffle(string $key, array $items): array
     {
-        $result = $items;
+        if (count($items) <= 1) {
+            return array_values($items);
+        }
+
+        $result = self::uniqueByCodePoint($items);
         usort($result, self::compareByCodePoint(...));
         $prng = new Mulberry32(Fnv1a::hash($this->seed . ':' . $key));
 
@@ -173,5 +194,36 @@ class Prng
     private static function compareByCodePoint(mixed $a, mixed $b): int
     {
         return strcmp((string) $a, (string) $b);
+    }
+
+    /**
+     * Deduplicates by string representation, keeping the first occurrence.
+     * Mirrors the cross-language sort key used by
+     * {@see compareByCodePoint()} so that JS and PHP collapse the same
+     * set of inputs. `$keyFn` lets callers (e.g. {@see weightedPick()})
+     * extract the sort key from a compound element.
+     *
+     * @template T
+     *
+     * @param list<T> $items
+     * @param (callable(T): string)|null $keyFn
+     *
+     * @return list<T>
+     */
+    private static function uniqueByCodePoint(array $items, ?callable $keyFn = null): array
+    {
+        $seen = [];
+        $result = [];
+
+        foreach ($items as $item) {
+            $repr = $keyFn !== null ? $keyFn($item) : (string) $item;
+
+            if (!isset($seen[$repr])) {
+                $seen[$repr] = true;
+                $result[] = $item;
+            }
+        }
+
+        return $result;
     }
 }

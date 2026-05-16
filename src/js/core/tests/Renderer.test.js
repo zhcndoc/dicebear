@@ -1,19 +1,39 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { Style, Avatar } from '../lib/index.js';
 
 const minimalStyle = new Style({
   canvas: { width: 100, height: 100, elements: [] },
 });
 
-const aliasFixture = JSON.parse(
-  readFileSync(
-    join(import.meta.dirname, '..', '..', '..', '..', 'tests', 'fixtures', 'parity', 'styles', 'aliasTest.json'),
-    'utf8',
-  ),
-);
+const aliasFixture = {
+  canvas: {
+    width: 100,
+    height: 100,
+    elements: [
+      { type: 'component', name: 'eyes' },
+      {
+        type: 'component',
+        name: 'eyesRight',
+        attributes: { transform: 'matrix(.85 0 0 .85 10 20)' },
+      },
+    ],
+  },
+  components: {
+    eyes: {
+      width: 20,
+      height: 20,
+      variants: {
+        a: { elements: [{ type: 'element', name: 'circle', attributes: { id: 'a' } }] },
+        b: { elements: [{ type: 'element', name: 'circle', attributes: { id: 'b' } }] },
+        c: { elements: [{ type: 'element', name: 'circle', attributes: { id: 'c' } }] },
+        d: { elements: [{ type: 'element', name: 'circle', attributes: { id: 'd' } }] },
+        e: { elements: [{ type: 'element', name: 'circle', attributes: { id: 'e' } }] },
+      },
+    },
+    eyesRight: { extends: 'eyes' },
+  },
+};
 
 describe('Renderer', () => {
   describe('SVG wrapper', () => {
@@ -322,7 +342,7 @@ describe('Renderer', () => {
           eyes: {
             width: 50,
             height: 50,
-            translate: { x: [5], y: [10] },
+            translate: { x: { min: 5, max: 5 }, y: { min: 10, max: 10 } },
             variants: { open: { elements: [{ type: 'element', name: 'circle', attributes: { r: '5' } }] } },
           },
         },
@@ -344,7 +364,7 @@ describe('Renderer', () => {
           eyes: {
             width: 50,
             height: 50,
-            rotate: [45],
+            rotate: { min: 45, max: 45 },
             variants: { open: { elements: [{ type: 'element', name: 'circle', attributes: { r: '5' } }] } },
           },
         },
@@ -363,6 +383,74 @@ describe('Renderer', () => {
 
       assert.ok(svg.includes('<use href="#eyes-open-'));
       assert.ok(!/<use[^>]*\btransform=/.test(svg));
+    });
+
+    it('should apply attributes from a component reference to the <use> tag', () => {
+      const styleWithCompAttrs = new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            {
+              type: 'component',
+              name: 'eyes',
+              attributes: { transform: 'matrix(.5 0 0 .5 10 20)', opacity: '.75' },
+            },
+          ],
+        },
+        components: {
+          eyes: {
+            width: 50,
+            height: 50,
+            variants: {
+              open: { elements: [{ type: 'element', name: 'circle', attributes: { r: '5' } }] },
+            },
+          },
+        },
+      });
+
+      const svg = new Avatar(styleWithCompAttrs, {
+        seed: 'test',
+        eyesVariant: 'open',
+      }).toString();
+
+      assert.ok(
+        svg.includes('<use transform="matrix(.5 0 0 .5 10 20)" opacity=".75" href="#eyes-open-'),
+        `expected merged attributes on <use>, got: ${svg}`,
+      );
+    });
+
+    it('should prepend a user transform to the built-in component transforms', () => {
+      const styleWithBoth = new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            {
+              type: 'component',
+              name: 'eyes',
+              attributes: { transform: 'matrix(.5 0 0 .5 10 20)' },
+            },
+          ],
+        },
+        components: {
+          eyes: {
+            width: 50,
+            height: 50,
+            rotate: { min: 45, max: 45 },
+            variants: {
+              open: { elements: [{ type: 'element', name: 'circle', attributes: { r: '5' } }] },
+            },
+          },
+        },
+      });
+
+      const svg = new Avatar(styleWithBoth, { seed: 'test' }).toString();
+
+      assert.ok(
+        svg.includes('<use transform="matrix(.5 0 0 .5 10 20) rotate(45, 25, 25)" href="#eyes-open-'),
+        `expected user transform outermost, then built-in rotate, got: ${svg}`,
+      );
     });
 
     it('should deduplicate identical component references via shared <defs>', () => {
@@ -424,7 +512,7 @@ describe('Renderer', () => {
         eyesVariant: 'b',
       }).toString();
       const circles = [...svg.matchAll(/<circle id="([a-z])"\/>/g)].map((m) => m[1]);
-      const uses = [...svg.matchAll(/<use href="#(eyes-[a-z]-[a-f0-9]+)"\/>/g)].map((m) => m[1]);
+      const uses = [...svg.matchAll(/<use[^>]*\bhref="#(eyes-[a-z]-[a-f0-9]+)"\/>/g)].map((m) => m[1]);
 
       assert.deepEqual(circles, ['b'], 'variant body is registered once');
       assert.equal(uses.length, 2, 'both component slots reference the body');
@@ -606,7 +694,7 @@ describe('Renderer', () => {
       });
 
     it('should apply component scale from definition around component center', () => {
-      const svg = new Avatar(buildStyle({ scale: [2] }), { seed: 'test' }).toString();
+      const svg = new Avatar(buildStyle({ scale: { min: 2, max: 2 } }), { seed: 'test' }).toString();
 
       assert.ok(svg.includes('translate(25, 25) scale(2) translate(-25, -25)'));
     });
@@ -619,7 +707,7 @@ describe('Renderer', () => {
 
     it('should place component scale after rotate in the transform attribute', () => {
       const svg = new Avatar(
-        buildStyle({ rotate: [45], scale: [2] }),
+        buildStyle({ rotate: { min: 45, max: 45 }, scale: { min: 2, max: 2 } }),
         { seed: 'test' },
       ).toString();
 

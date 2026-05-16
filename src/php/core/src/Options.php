@@ -69,34 +69,34 @@ class Options
         return $this->asArray($this->data['fontWeight'] ?? null);
     }
 
-    /** @return list<int|float> */
-    public function scale(): array
+    /** @return array{min: int|float, max: int|float}|null */
+    public function scale(): ?array
     {
-        return $this->asArray($this->data['scale'] ?? null);
+        return $this->toRange($this->data['scale'] ?? null);
     }
 
-    /** @return list<int|float> */
-    public function borderRadius(): array
+    /** @return array{min: int|float, max: int|float}|null */
+    public function borderRadius(): ?array
     {
-        return $this->asArray($this->data['borderRadius'] ?? null);
+        return $this->toRange($this->data['borderRadius'] ?? null);
     }
 
-    /** @return list<int|float> */
-    public function rotate(): array
+    /** @return array{min: int|float, max: int|float}|null */
+    public function rotate(): ?array
     {
-        return $this->asArray($this->data['rotate'] ?? null);
+        return $this->toRange($this->data['rotate'] ?? null);
     }
 
-    /** @return list<int|float> */
-    public function translateX(): array
+    /** @return array{min: int|float, max: int|float}|null */
+    public function translateX(): ?array
     {
-        return $this->asArray($this->data['translateX'] ?? null);
+        return $this->toRange($this->data['translateX'] ?? null);
     }
 
-    /** @return list<int|float> */
-    public function translateY(): array
+    /** @return array{min: int|float, max: int|float}|null */
+    public function translateY(): ?array
     {
-        return $this->asArray($this->data['translateY'] ?? null);
+        return $this->toRange($this->data['translateY'] ?? null);
     }
 
     /**
@@ -149,16 +149,16 @@ class Options
         return $this->asArray($this->dynamic($name . 'ColorFill'));
     }
 
-    /** @return list<int|float> */
-    public function colorAngle(string $name): array
+    /** @return array{min: int|float, max: int|float}|null */
+    public function colorAngle(string $name): ?array
     {
-        return $this->asArray($this->dynamic($name . 'ColorAngle'));
+        return $this->toRange($this->dynamic($name . 'ColorAngle'));
     }
 
-    /** @return list<int|float> */
-    public function colorFillStops(string $name): array
+    /** @return array{min: int|float, max: int|float}|null */
+    public function colorFillStops(string $name): ?array
     {
-        return $this->asArray($this->dynamic($name . 'ColorFillStops'));
+        return $this->toRange($this->dynamic($name . 'ColorFillStops'));
     }
 
     /**
@@ -178,5 +178,29 @@ class Options
         }
 
         return is_array($value) ? $value : [$value];
+    }
+
+    /**
+     * Normalizes a user-facing range option (bare number, `[min, max]`
+     * 2-tuple, or `null`) into the internal range struct. A bare number
+     * `n` becomes `['min' => n, 'max' => n]` — i.e. a fixed value.
+     *
+     * @return array{min: int|float, max: int|float}|null
+     */
+    private function toRange(mixed $value): ?array
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        if (is_int($value) || is_float($value)) {
+            return ['min' => $value, 'max' => $value];
+        }
+
+        if (is_array($value) && array_is_list($value) && count($value) === 2) {
+            return ['min' => $value[0], 'max' => $value[1]];
+        }
+
+        return null;
     }
 }

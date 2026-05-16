@@ -1,4 +1,4 @@
-import type { StyleDefinitionComponentTranslate } from '../StyleDefinition.js';
+import type { Range, StyleDefinitionComponentTranslate } from '../StyleDefinition.js';
 
 /**
  * Read-only view over a component's `translate` block, providing the X and Y
@@ -11,17 +11,11 @@ export class ComponentTranslate {
     this.#data = data;
   }
 
-  /**
-   * Returns the horizontal offset range, or an empty list when unset.
-   */
-  x(): readonly number[] {
-    return this.#data.x ?? [];
+  x(): Range | undefined {
+    return this.#data.x;
   }
 
-  /**
-   * Returns the vertical offset range, or an empty list when unset.
-   */
-  y(): readonly number[] {
-    return this.#data.y ?? [];
+  y(): Range | undefined {
+    return this.#data.y;
   }
 }

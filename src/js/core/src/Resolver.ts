@@ -1,5 +1,6 @@
 import { Options } from './Options.js';
 import { Prng } from './Prng.js';
+import type { Range } from './StyleDefinition.js';
 import { Color } from './Utils/Color.js';
 import { CircularColorReferenceError } from './Error/CircularColorReferenceError.js';
 import type { Style } from './Style.js';
@@ -14,8 +15,10 @@ import type {
  * Bundles the three inputs needed to derive any deterministic value for an
  * avatar — the {@link Style}, the validated user {@link Options}, and a
  * seeded {@link Prng} — and exposes them as named accessors. Each accessor
- * memoizes its result so that repeated calls cannot drift, and the memo
- * doubles as the snapshot returned by {@link resolved}.
+ * memoizes its result so that repeated calls cannot drift. The memo also
+ * serves as the informational snapshot returned by {@link resolved} — every
+ * value the resolver picks during one resolution lands there, except for
+ * the raw seed.
  */
 export class Resolver<D = unknown> {
   #style: Style<D>;
@@ -31,7 +34,8 @@ export class Resolver<D = unknown> {
   }
 
   seed(): string {
-    // Not memoized so the raw seed stays out of {@link resolved}.
+    // Deliberately not memoized — the seed is the only input we keep out of
+    // the {@link resolved} snapshot, so a serialized avatar never leaks it.
     return this.#options.seed() ?? '';
   }
 
@@ -69,38 +73,23 @@ export class Resolver<D = unknown> {
   }
 
   scale(): number {
-    return this.#memo(
-      'scale',
-      () => this.#prng.float('scale', this.#options.scale()) ?? 1,
-    );
+    return this.#memoFloat('scale', this.#options.scale(), 1);
   }
 
   borderRadius(): number {
-    return this.#memo(
-      'borderRadius',
-      () => this.#prng.float('borderRadius', this.#options.borderRadius()) ?? 0,
-    );
+    return this.#memoFloat('borderRadius', this.#options.borderRadius(), 0);
   }
 
   rotate(): number {
-    return this.#memo(
-      'rotate',
-      () => this.#prng.float('rotate', this.#options.rotate()) ?? 0,
-    );
+    return this.#memoFloat('rotate', this.#options.rotate(), 0);
   }
 
   translateX(): number {
-    return this.#memo(
-      'translateX',
-      () => this.#prng.float('translateX', this.#options.translateX()) ?? 0,
-    );
+    return this.#memoFloat('translateX', this.#options.translateX(), 0);
   }
 
   translateY(): number {
-    return this.#memo(
-      'translateY',
-      () => this.#prng.float('translateY', this.#options.translateY()) ?? 0,
-    );
+    return this.#memoFloat('translateY', this.#options.translateY(), 0);
   }
 
   /**
@@ -156,16 +145,14 @@ export class Resolver<D = unknown> {
   }
 
   colorAngle(name: string): number {
-    return this.#memo(
-      `${name}ColorAngle`,
-      () => this.#prng.float(`${name}ColorAngle`, this.#options.colorAngle(name)) ?? 0,
-    );
+    return this.#memoFloat(`${name}ColorAngle`, this.#options.colorAngle(name), 0);
   }
 
   /**
-   * Per-component transform values are render-time decorations derived per
-   * `<use>` reference, not user-input options that should round-trip. They
-   * are intentionally not memoized and so never appear in {@link resolved}.
+   * Picks the rotate/translateX/translateY/scale values for a single
+   * component. Memoized per `name`, so the four values land in
+   * {@link resolved} as `${name}Rotate` / `${name}TranslateX` /
+   * `${name}TranslateY` / `${name}Scale` for downstream introspection.
    */
   componentTransform(name: string): {
     rotate: number;
@@ -176,19 +163,24 @@ export class Resolver<D = unknown> {
     const component = this.#style.components().get(name);
 
     return {
-      rotate: this.#pickFloat(name, 'Rotate', component?.rotate() ?? [], 0),
-      translateX: this.#pickFloat(name, 'TranslateX', component?.translate().x() ?? [], 0),
-      translateY: this.#pickFloat(name, 'TranslateY', component?.translate().y() ?? [], 0),
-      scale: this.#pickFloat(name, 'Scale', component?.scale() ?? [], 1),
+      rotate: this.#memoFloat(`${name}Rotate`, component?.rotate(), 0),
+      translateX: this.#memoFloat(`${name}TranslateX`, component?.translate().x(), 0),
+      translateY: this.#memoFloat(`${name}TranslateY`, component?.translate().y(), 0),
+      scale: this.#memoFloat(`${name}Scale`, component?.scale(), 1),
     };
   }
 
   /**
-   * Returns every value that has been touched during this resolution. Only
-   * memoized entries are included; unset options remain `undefined` and
-   * disappear on `JSON.stringify()`. Per-component transform values from
-   * {@link componentTransform} and the user-supplied {@link seed} are
-   * intentionally not memoized and therefore do not appear in the snapshot.
+   * Returns an informational snapshot of every value the resolver picked.
+   * Includes top-level options (scale/rotate/translate/…), per-component
+   * variants/probabilities/colors, and per-component transform picks. The
+   * raw seed is deliberately excluded.
+   *
+   * The snapshot is NOT a round-trip-able options object — extra keys like
+   * `${name}Rotate` are not part of {@link StyleOptions} and feeding the
+   * snapshot back into a new {@link Avatar} is not supported. Callers that
+   * need to reproduce an avatar should pass the original `seed` and
+   * user-supplied options.
    *
    * The returned object aliases the internal cache; callers that need
    * isolation (e.g. {@link Avatar.toJSON}) clone it themselves.
@@ -272,18 +264,13 @@ export class Resolver<D = unknown> {
   }
 
   #colorFillStops(name: string): number {
-    return (
-      this.#prng.integer(`${name}ColorFillStops`, this.#options.colorFillStops(name)) ?? 2
-    );
+    const range = this.#options.colorFillStops(name);
+
+    return range ? this.#prng.integer(`${name}ColorFillStops`, range) : 2;
   }
 
-  #pickFloat(
-    name: string,
-    suffix: string,
-    range: readonly number[],
-    fallback: number,
-  ): number {
-    return this.#prng.float(`${name}${suffix}`, range) ?? fallback;
+  #memoFloat(key: string, range: Range | undefined, fallback: number): number {
+    return this.#memo(key, () => (range ? this.#prng.float(key, range) : fallback));
   }
 
   #memo<T>(key: string, compute: () => T): T {

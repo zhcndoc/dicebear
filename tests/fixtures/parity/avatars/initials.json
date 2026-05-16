@@ -4,19 +4,28 @@
     "options": {
       "seed": "parity-1"
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"initials-double-10868c7e\"><text x=\"50%\" y=\"50%\" font-family=\"system-ui\" font-weight=\"400\" font-size=\"50\" fill=\"#ffffff\" text-anchor=\"middle\" dy=\"17.8\">PA</text></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><rect width=\"100\" height=\"100\" fill=\"#347a9d\"/><use href=\"#initials-double-10868c7e\"/></g></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"letters-double-10868c7e\"><text x=\"50%\" y=\"50%\" font-family=\"system-ui\" font-weight=\"400\" font-size=\"50\" fill=\"#ffffff\" text-anchor=\"middle\" dy=\"17.8\">PA</text></g><g id=\"initials-default-10868c7e\"><g style=\"mix-blend-mode:overlay\"><use href=\"#letters-double-10868c7e\"/></g><g opacity=\"0.5\"><use href=\"#letters-double-10868c7e\"/></g></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><rect width=\"100\" height=\"100\" fill=\"#347a9d\"/><use href=\"#initials-default-10868c7e\"/></g></svg>",
     "resolvedOptions": {
       "backgroundColorFill": "solid",
       "backgroundColor": [
         "#347a9d"
       ],
-      "initialsVariant": "double",
+      "initialsVariant": "default",
+      "lettersVariant": "double",
       "fontFamily": "system-ui",
       "fontWeight": 400,
       "textColorFill": "solid",
       "textColor": [
         "#ffffff"
       ],
+      "lettersRotate": 0,
+      "lettersTranslateX": 0,
+      "lettersTranslateY": 0,
+      "lettersScale": 1,
+      "initialsRotate": 0,
+      "initialsTranslateX": 0,
+      "initialsTranslateY": 0,
+      "initialsScale": 1,
       "scale": 1,
       "flip": "none",
       "rotate": 0,
@@ -31,19 +40,28 @@
     "options": {
       "seed": "parity-2"
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"initials-double-0f868aeb\"><text x=\"50%\" y=\"50%\" font-family=\"system-ui\" font-weight=\"400\" font-size=\"50\" fill=\"#ffffff\" text-anchor=\"middle\" dy=\"17.8\">PA</text></g><clipPath id=\"clip-0f868aeb\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-0f868aeb)\"><rect width=\"100\" height=\"100\" fill=\"#347a9d\"/><use href=\"#initials-double-0f868aeb\"/></g></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"letters-double-0f868aeb\"><text x=\"50%\" y=\"50%\" font-family=\"system-ui\" font-weight=\"400\" font-size=\"50\" fill=\"#ffffff\" text-anchor=\"middle\" dy=\"17.8\">PA</text></g><g id=\"initials-default-0f868aeb\"><g style=\"mix-blend-mode:overlay\"><use href=\"#letters-double-0f868aeb\"/></g><g opacity=\"0.5\"><use href=\"#letters-double-0f868aeb\"/></g></g><clipPath id=\"clip-0f868aeb\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-0f868aeb)\"><rect width=\"100\" height=\"100\" fill=\"#347a9d\"/><use href=\"#initials-default-0f868aeb\"/></g></svg>",
     "resolvedOptions": {
       "backgroundColorFill": "solid",
       "backgroundColor": [
         "#347a9d"
       ],
-      "initialsVariant": "double",
+      "initialsVariant": "default",
+      "lettersVariant": "double",
       "fontFamily": "system-ui",
       "fontWeight": 400,
       "textColorFill": "solid",
       "textColor": [
         "#ffffff"
       ],
+      "lettersRotate": 0,
+      "lettersTranslateX": 0,
+      "lettersTranslateY": 0,
+      "lettersScale": 1,
+      "initialsRotate": 0,
+      "initialsTranslateX": 0,
+      "initialsTranslateY": 0,
+      "initialsScale": 1,
       "scale": 1,
       "flip": "none",
       "rotate": 0,
@@ -61,19 +79,28 @@
       "scale": 2,
       "rotate": 45
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\" width=\"256\" height=\"256\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"initials-double-10868c7e\"><text x=\"50%\" y=\"50%\" font-family=\"system-ui\" font-weight=\"400\" font-size=\"50\" fill=\"#ffffff\" text-anchor=\"middle\" dy=\"17.8\">PA</text></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><rect width=\"100\" height=\"100\" fill=\"#347a9d\"/><g transform=\"rotate(45, 50, 50)\"><g transform=\"translate(50, 50) scale(2) translate(-50, -50)\"><use href=\"#initials-double-10868c7e\"/></g></g></g></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\" width=\"256\" height=\"256\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"letters-double-10868c7e\"><text x=\"50%\" y=\"50%\" font-family=\"system-ui\" font-weight=\"400\" font-size=\"50\" fill=\"#ffffff\" text-anchor=\"middle\" dy=\"17.8\">PA</text></g><g id=\"initials-default-10868c7e\"><g style=\"mix-blend-mode:overlay\"><use href=\"#letters-double-10868c7e\"/></g><g opacity=\"0.5\"><use href=\"#letters-double-10868c7e\"/></g></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><rect width=\"100\" height=\"100\" fill=\"#347a9d\"/><g transform=\"rotate(45, 50, 50)\"><g transform=\"translate(50, 50) scale(2) translate(-50, -50)\"><use href=\"#initials-default-10868c7e\"/></g></g></g></svg>",
     "resolvedOptions": {
       "backgroundColorFill": "solid",
       "backgroundColor": [
         "#347a9d"
       ],
-      "initialsVariant": "double",
+      "initialsVariant": "default",
+      "lettersVariant": "double",
       "fontFamily": "system-ui",
       "fontWeight": 400,
       "textColorFill": "solid",
       "textColor": [
         "#ffffff"
       ],
+      "lettersRotate": 0,
+      "lettersTranslateX": 0,
+      "lettersTranslateY": 0,
+      "lettersScale": 1,
+      "initialsRotate": 0,
+      "initialsTranslateX": 0,
+      "initialsTranslateY": 0,
+      "initialsScale": 1,
       "scale": 2,
       "flip": "none",
       "rotate": 45,
@@ -93,19 +120,28 @@
       "borderRadius": 50,
       "flip": "horizontal"
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"initials-double-10868c7e\"><text x=\"50%\" y=\"50%\" font-family=\"system-ui\" font-weight=\"400\" font-size=\"50\" fill=\"#ffffff\" text-anchor=\"middle\" dy=\"17.8\">PA</text></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"50\" ry=\"50\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><rect width=\"100\" height=\"100\" fill=\"#347a9d\"/><g transform=\"translate(10, -5)\"><g transform=\"translate(100, 0) scale(-1, 1)\"><use href=\"#initials-double-10868c7e\"/></g></g></g></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"letters-double-10868c7e\"><text x=\"50%\" y=\"50%\" font-family=\"system-ui\" font-weight=\"400\" font-size=\"50\" fill=\"#ffffff\" text-anchor=\"middle\" dy=\"17.8\">PA</text></g><g id=\"initials-default-10868c7e\"><g style=\"mix-blend-mode:overlay\"><use href=\"#letters-double-10868c7e\"/></g><g opacity=\"0.5\"><use href=\"#letters-double-10868c7e\"/></g></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"50\" ry=\"50\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><rect width=\"100\" height=\"100\" fill=\"#347a9d\"/><g transform=\"translate(10, -5)\"><g transform=\"translate(100, 0) scale(-1, 1)\"><use href=\"#initials-default-10868c7e\"/></g></g></g></svg>",
     "resolvedOptions": {
       "backgroundColorFill": "solid",
       "backgroundColor": [
         "#347a9d"
       ],
-      "initialsVariant": "double",
+      "initialsVariant": "default",
+      "lettersVariant": "double",
       "fontFamily": "system-ui",
       "fontWeight": 400,
       "textColorFill": "solid",
       "textColor": [
         "#ffffff"
       ],
+      "lettersRotate": 0,
+      "lettersTranslateX": 0,
+      "lettersTranslateY": 0,
+      "lettersScale": 1,
+      "initialsRotate": 0,
+      "initialsTranslateX": 0,
+      "initialsTranslateY": 0,
+      "initialsScale": 1,
       "scale": 1,
       "flip": "horizontal",
       "rotate": 0,
@@ -126,19 +162,28 @@
         "solid"
       ]
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"initials-double-10868c7e\"><text x=\"50%\" y=\"50%\" font-family=\"system-ui\" font-weight=\"400\" font-size=\"50\" fill=\"#000000\" text-anchor=\"middle\" dy=\"17.8\">PA</text></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><rect width=\"100\" height=\"100\" fill=\"#ff0000\"/><use href=\"#initials-double-10868c7e\"/></g></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"letters-double-10868c7e\"><text x=\"50%\" y=\"50%\" font-family=\"system-ui\" font-weight=\"400\" font-size=\"50\" fill=\"#000000\" text-anchor=\"middle\" dy=\"17.8\">PA</text></g><g id=\"initials-default-10868c7e\"><g style=\"mix-blend-mode:overlay\"><use href=\"#letters-double-10868c7e\"/></g><g opacity=\"0.5\"><use href=\"#letters-double-10868c7e\"/></g></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><rect width=\"100\" height=\"100\" fill=\"#ff0000\"/><use href=\"#initials-default-10868c7e\"/></g></svg>",
     "resolvedOptions": {
       "backgroundColorFill": "solid",
       "backgroundColor": [
         "#ff0000"
       ],
-      "initialsVariant": "double",
+      "initialsVariant": "default",
+      "lettersVariant": "double",
       "fontFamily": "system-ui",
       "fontWeight": 400,
       "textColorFill": "solid",
       "textColor": [
         "#000000"
       ],
+      "lettersRotate": 0,
+      "lettersTranslateX": 0,
+      "lettersTranslateY": 0,
+      "lettersScale": 1,
+      "initialsRotate": 0,
+      "initialsTranslateX": 0,
+      "initialsTranslateY": 0,
+      "initialsScale": 1,
       "scale": 1,
       "flip": "none",
       "rotate": 0,
@@ -164,7 +209,7 @@
         45
       ]
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><linearGradient id=\"background-color-10868c7e\" gradientTransform=\"rotate(45, 0.5, 0.5)\"><stop offset=\"0%\" stop-color=\"#ff0000\"/><stop offset=\"100%\" stop-color=\"#00ff00\"/></linearGradient><g id=\"initials-double-10868c7e\"><text x=\"50%\" y=\"50%\" font-family=\"system-ui\" font-weight=\"400\" font-size=\"50\" fill=\"#000000\" text-anchor=\"middle\" dy=\"17.8\">PA</text></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><rect width=\"100\" height=\"100\" fill=\"url(#background-color-10868c7e)\"/><use href=\"#initials-double-10868c7e\"/></g></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><linearGradient id=\"background-color-10868c7e\" gradientTransform=\"rotate(45, 0.5, 0.5)\"><stop offset=\"0%\" stop-color=\"#ff0000\"/><stop offset=\"100%\" stop-color=\"#00ff00\"/></linearGradient><g id=\"letters-double-10868c7e\"><text x=\"50%\" y=\"50%\" font-family=\"system-ui\" font-weight=\"400\" font-size=\"50\" fill=\"#000000\" text-anchor=\"middle\" dy=\"17.8\">PA</text></g><g id=\"initials-default-10868c7e\"><g style=\"mix-blend-mode:overlay\"><use href=\"#letters-double-10868c7e\"/></g><g opacity=\"0.5\"><use href=\"#letters-double-10868c7e\"/></g></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><rect width=\"100\" height=\"100\" fill=\"url(#background-color-10868c7e)\"/><use href=\"#initials-default-10868c7e\"/></g></svg>",
     "resolvedOptions": {
       "backgroundColorFill": "linear",
       "backgroundColor": [
@@ -172,13 +217,22 @@
         "#00ff00"
       ],
       "backgroundColorAngle": 45,
-      "initialsVariant": "double",
+      "initialsVariant": "default",
+      "lettersVariant": "double",
       "fontFamily": "system-ui",
       "fontWeight": 400,
       "textColorFill": "solid",
       "textColor": [
         "#000000"
       ],
+      "lettersRotate": 0,
+      "lettersTranslateX": 0,
+      "lettersTranslateY": 0,
+      "lettersScale": 1,
+      "initialsRotate": 0,
+      "initialsTranslateX": 0,
+      "initialsTranslateY": 0,
+      "initialsScale": 1,
       "scale": 1,
       "flip": "none",
       "rotate": 0,
@@ -200,7 +254,7 @@
         "radial"
       ]
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><radialGradient id=\"background-color-10868c7e\"><stop offset=\"0%\" stop-color=\"#ff0000\"/><stop offset=\"100%\" stop-color=\"#00ff00\"/></radialGradient><g id=\"initials-double-10868c7e\"><text x=\"50%\" y=\"50%\" font-family=\"system-ui\" font-weight=\"400\" font-size=\"50\" fill=\"#000000\" text-anchor=\"middle\" dy=\"17.8\">PA</text></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><rect width=\"100\" height=\"100\" fill=\"url(#background-color-10868c7e)\"/><use href=\"#initials-double-10868c7e\"/></g></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><radialGradient id=\"background-color-10868c7e\"><stop offset=\"0%\" stop-color=\"#ff0000\"/><stop offset=\"100%\" stop-color=\"#00ff00\"/></radialGradient><g id=\"letters-double-10868c7e\"><text x=\"50%\" y=\"50%\" font-family=\"system-ui\" font-weight=\"400\" font-size=\"50\" fill=\"#000000\" text-anchor=\"middle\" dy=\"17.8\">PA</text></g><g id=\"initials-default-10868c7e\"><g style=\"mix-blend-mode:overlay\"><use href=\"#letters-double-10868c7e\"/></g><g opacity=\"0.5\"><use href=\"#letters-double-10868c7e\"/></g></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><rect width=\"100\" height=\"100\" fill=\"url(#background-color-10868c7e)\"/><use href=\"#initials-default-10868c7e\"/></g></svg>",
     "resolvedOptions": {
       "backgroundColorFill": "radial",
       "backgroundColor": [
@@ -208,13 +262,22 @@
         "#00ff00"
       ],
       "backgroundColorAngle": 0,
-      "initialsVariant": "double",
+      "initialsVariant": "default",
+      "lettersVariant": "double",
       "fontFamily": "system-ui",
       "fontWeight": 400,
       "textColorFill": "solid",
       "textColor": [
         "#000000"
       ],
+      "lettersRotate": 0,
+      "lettersTranslateX": 0,
+      "lettersTranslateY": 0,
+      "lettersScale": 1,
+      "initialsRotate": 0,
+      "initialsTranslateX": 0,
+      "initialsTranslateY": 0,
+      "initialsScale": 1,
       "scale": 1,
       "flip": "none",
       "rotate": 0,
@@ -234,19 +297,28 @@
       ],
       "fontWeight": 700
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"initials-double-07df7048\"><text x=\"50%\" y=\"50%\" font-family=\"Helvetica\" font-weight=\"700\" font-size=\"50\" fill=\"#ffffff\" text-anchor=\"middle\" dy=\"17.8\">FK</text></g><clipPath id=\"clip-07df7048\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-07df7048)\"><rect width=\"100\" height=\"100\" fill=\"#6a6acd\"/><use href=\"#initials-double-07df7048\"/></g></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"letters-double-07df7048\"><text x=\"50%\" y=\"50%\" font-family=\"Helvetica\" font-weight=\"700\" font-size=\"50\" fill=\"#ffffff\" text-anchor=\"middle\" dy=\"17.8\">FK</text></g><g id=\"initials-default-07df7048\"><g style=\"mix-blend-mode:overlay\"><use href=\"#letters-double-07df7048\"/></g><g opacity=\"0.5\"><use href=\"#letters-double-07df7048\"/></g></g><clipPath id=\"clip-07df7048\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-07df7048)\"><rect width=\"100\" height=\"100\" fill=\"#6a6acd\"/><use href=\"#initials-default-07df7048\"/></g></svg>",
     "resolvedOptions": {
       "backgroundColorFill": "solid",
       "backgroundColor": [
         "#6a6acd"
       ],
-      "initialsVariant": "double",
+      "initialsVariant": "default",
+      "lettersVariant": "double",
       "fontFamily": "Helvetica",
       "fontWeight": 700,
       "textColorFill": "solid",
       "textColor": [
         "#ffffff"
       ],
+      "lettersRotate": 0,
+      "lettersTranslateX": 0,
+      "lettersTranslateY": 0,
+      "lettersScale": 1,
+      "initialsRotate": 0,
+      "initialsTranslateX": 0,
+      "initialsTranslateY": 0,
+      "initialsScale": 1,
       "scale": 1,
       "flip": "none",
       "rotate": 0,
@@ -264,18 +336,11 @@
         "double"
       ]
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"initials-double-aa526f99\"><text x=\"50%\" y=\"50%\" font-family=\"system-ui\" font-weight=\"400\" font-size=\"50\" fill=\"#ffffff\" text-anchor=\"middle\" dy=\"17.8\">AC</text></g><clipPath id=\"clip-aa526f99\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-aa526f99)\"><rect width=\"100\" height=\"100\" fill=\"#ac6039\"/><use href=\"#initials-double-aa526f99\"/></g></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><clipPath id=\"clip-aa526f99\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-aa526f99)\"><rect width=\"100\" height=\"100\" fill=\"#ac6039\"/></g></svg>",
     "resolvedOptions": {
       "backgroundColorFill": "solid",
       "backgroundColor": [
         "#ac6039"
-      ],
-      "initialsVariant": "double",
-      "fontFamily": "system-ui",
-      "fontWeight": 400,
-      "textColorFill": "solid",
-      "textColor": [
-        "#ffffff"
       ],
       "scale": 1,
       "flip": "none",
@@ -294,18 +359,11 @@
         "single"
       ]
     },
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"initials-single-aa526f99\"><text x=\"50%\" y=\"50%\" font-family=\"system-ui\" font-weight=\"400\" font-size=\"50\" fill=\"#ffffff\" text-anchor=\"middle\" dy=\"17.8\">A</text></g><clipPath id=\"clip-aa526f99\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-aa526f99)\"><rect width=\"100\" height=\"100\" fill=\"#ac6039\"/><use href=\"#initials-single-aa526f99\"/></g></svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Initials</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Initials” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><clipPath id=\"clip-aa526f99\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-aa526f99)\"><rect width=\"100\" height=\"100\" fill=\"#ac6039\"/></g></svg>",
     "resolvedOptions": {
       "backgroundColorFill": "solid",
       "backgroundColor": [
         "#ac6039"
-      ],
-      "initialsVariant": "single",
-      "fontFamily": "system-ui",
-      "fontWeight": 400,
-      "textColorFill": "solid",
-      "textColor": [
-        "#ffffff"
       ],
       "scale": 1,
       "flip": "none",

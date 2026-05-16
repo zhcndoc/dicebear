@@ -342,7 +342,7 @@ class ResolverTest extends TestCase
             'components' => [
                 'eyes' => [
                     'width' => 50, 'height' => 50,
-                    'rotate' => [-10, 10],
+                    'rotate' => ['min' => -10, 'max' => 10],
                     'variants' => ['open' => ['elements' => []]],
                 ],
             ],

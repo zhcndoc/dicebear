@@ -1,0 +1,571 @@
+[
+  {
+    "id": "plain-seed",
+    "options": {
+      "seed": "parity-1"
+    },
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" fill=\"none\" shape-rendering=\"auto\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Shape Grid</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Shape Grid” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"shape-plus-10868c7e\"><path d=\"M4.06.78a1 1 0 0 1 1.88 0l.72 1.97a1 1 0 0 0 .6.59l1.96.72a1 1 0 0 1 0 1.88l-1.97.72a1 1 0 0 0-.59.6l-.72 1.96a1 1 0 0 1-1.88 0l-.72-1.97a1 1 0 0 0-.6-.59L.79 5.94a1 1 0 0 1 0-1.88l1.97-.72a1 1 0 0 0 .59-.6z\" fill=\"#ffffff\"/></g><g id=\"shape-polygon-10868c7e\"><path d=\"M4.13 1a1 1 0 0 1 1.74 0l3.9 6.75a1 1 0 0 1-.87 1.5H1.1a1 1 0 0 1-.86-1.5z\" fill=\"#ffffff\"/></g><g id=\"rows-rows02-10868c7e\"><g transform=\"matrix(5.1 0 0 5.1 49 49)\"><use transform=\"translate(5, 5) scale(0.7384) translate(-5, -5)\" href=\"#shape-plus-10868c7e\"/></g><g transform=\"matrix(4.9 0 0 5.1 0 49)\"><use transform=\"translate(5, 5) scale(0.646) translate(-5, -5)\" href=\"#shape-polygon-10868c7e\"/></g><g transform=\"matrix(5.1 0 0 4.9 49 0)\"><use transform=\"translate(5, 5) scale(0.939) translate(-5, -5)\" href=\"#shape-polygon-10868c7e\"/></g><g transform=\"scale(4.9)\"><use transform=\"translate(5, 5) scale(0.7877) translate(-5, -5)\" href=\"#shape-plus-10868c7e\"/></g></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><rect width=\"100\" height=\"100\" fill=\"#a8f0b0\"/><g transform=\"matrix(.65 0 0 .65 17.5 17.5)\"><use href=\"#rows-rows02-10868c7e\"/></g></g></svg>",
+    "resolvedOptions": {
+      "backgroundColorFill": "solid",
+      "backgroundColor": [
+        "#a8f0b0"
+      ],
+      "rowsVariant": "rows02",
+      "shape04Variant": "plus",
+      "shapeColorFill": "solid",
+      "shapeColor": [
+        "#ffffff"
+      ],
+      "shape04Rotate": 0,
+      "shape04TranslateX": 0,
+      "shape04TranslateY": 0,
+      "shape04Scale": 0.7384,
+      "shape03Variant": "polygon",
+      "shape03Rotate": 0,
+      "shape03TranslateX": 0,
+      "shape03TranslateY": 0,
+      "shape03Scale": 0.646,
+      "shape02Variant": "polygon",
+      "shape02Rotate": 0,
+      "shape02TranslateX": 0,
+      "shape02TranslateY": 0,
+      "shape02Scale": 0.939,
+      "shape01Variant": "plus",
+      "shape01Rotate": 0,
+      "shape01TranslateX": 0,
+      "shape01TranslateY": 0,
+      "shape01Scale": 0.7877,
+      "rowsRotate": 0,
+      "rowsTranslateX": 0,
+      "rowsTranslateY": 0,
+      "rowsScale": 1,
+      "scale": 1,
+      "flip": "none",
+      "rotate": 0,
+      "translateX": 0,
+      "translateY": 0,
+      "borderRadius": 0,
+      "idRandomization": false
+    }
+  },
+  {
+    "id": "different-seed",
+    "options": {
+      "seed": "parity-2"
+    },
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" fill=\"none\" shape-rendering=\"auto\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Shape Grid</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Shape Grid” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"shape-plus-0f868aeb\"><path d=\"M4.06.78a1 1 0 0 1 1.88 0l.72 1.97a1 1 0 0 0 .6.59l1.96.72a1 1 0 0 1 0 1.88l-1.97.72a1 1 0 0 0-.59.6l-.72 1.96a1 1 0 0 1-1.88 0l-.72-1.97a1 1 0 0 0-.6-.59L.79 5.94a1 1 0 0 1 0-1.88l1.97-.72a1 1 0 0 0 .59-.6z\" fill=\"#ffffff\"/></g><g id=\"shape-circle-0f868aeb\"><circle cx=\"5\" cy=\"5\" r=\"5\" fill=\"#ffffff\"/></g><g id=\"rows-rows02-0f868aeb\"><g transform=\"matrix(5.1 0 0 5.1 49 49)\"><use transform=\"translate(5, 5) scale(0.9118) translate(-5, -5)\" href=\"#shape-plus-0f868aeb\"/></g><g transform=\"matrix(4.9 0 0 5.1 0 49)\"><use transform=\"translate(5, 5) scale(0.9432) translate(-5, -5)\" href=\"#shape-circle-0f868aeb\"/></g><g transform=\"matrix(5.1 0 0 4.9 49 0)\"><use transform=\"translate(5, 5) scale(0.8349) translate(-5, -5)\" href=\"#shape-plus-0f868aeb\"/></g><g transform=\"scale(4.9)\"><use transform=\"translate(5, 5) scale(0.9123) translate(-5, -5)\" href=\"#shape-circle-0f868aeb\"/></g></g><clipPath id=\"clip-0f868aeb\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-0f868aeb)\"><rect width=\"100\" height=\"100\" fill=\"#7fd4f5\"/><g transform=\"matrix(.65 0 0 .65 17.5 17.5)\"><use href=\"#rows-rows02-0f868aeb\"/></g></g></svg>",
+    "resolvedOptions": {
+      "backgroundColorFill": "solid",
+      "backgroundColor": [
+        "#7fd4f5"
+      ],
+      "rowsVariant": "rows02",
+      "shape04Variant": "plus",
+      "shapeColorFill": "solid",
+      "shapeColor": [
+        "#ffffff"
+      ],
+      "shape04Rotate": 0,
+      "shape04TranslateX": 0,
+      "shape04TranslateY": 0,
+      "shape04Scale": 0.9118,
+      "shape03Variant": "circle",
+      "shape03Rotate": 0,
+      "shape03TranslateX": 0,
+      "shape03TranslateY": 0,
+      "shape03Scale": 0.9432,
+      "shape02Variant": "plus",
+      "shape02Rotate": 0,
+      "shape02TranslateX": 0,
+      "shape02TranslateY": 0,
+      "shape02Scale": 0.8349,
+      "shape01Variant": "circle",
+      "shape01Rotate": 0,
+      "shape01TranslateX": 0,
+      "shape01TranslateY": 0,
+      "shape01Scale": 0.9123,
+      "rowsRotate": 0,
+      "rowsTranslateX": 0,
+      "rowsTranslateY": 0,
+      "rowsScale": 1,
+      "scale": 1,
+      "flip": "none",
+      "rotate": 0,
+      "translateX": 0,
+      "translateY": 0,
+      "borderRadius": 0,
+      "idRandomization": false
+    }
+  },
+  {
+    "id": "size-scale-rotate",
+    "options": {
+      "seed": "parity-1",
+      "size": 256,
+      "scale": 2,
+      "rotate": 45
+    },
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" fill=\"none\" shape-rendering=\"auto\" aria-hidden=\"true\" width=\"256\" height=\"256\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Shape Grid</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Shape Grid” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"shape-plus-10868c7e\"><path d=\"M4.06.78a1 1 0 0 1 1.88 0l.72 1.97a1 1 0 0 0 .6.59l1.96.72a1 1 0 0 1 0 1.88l-1.97.72a1 1 0 0 0-.59.6l-.72 1.96a1 1 0 0 1-1.88 0l-.72-1.97a1 1 0 0 0-.6-.59L.79 5.94a1 1 0 0 1 0-1.88l1.97-.72a1 1 0 0 0 .59-.6z\" fill=\"#ffffff\"/></g><g id=\"shape-polygon-10868c7e\"><path d=\"M4.13 1a1 1 0 0 1 1.74 0l3.9 6.75a1 1 0 0 1-.87 1.5H1.1a1 1 0 0 1-.86-1.5z\" fill=\"#ffffff\"/></g><g id=\"rows-rows02-10868c7e\"><g transform=\"matrix(5.1 0 0 5.1 49 49)\"><use transform=\"translate(5, 5) scale(0.7384) translate(-5, -5)\" href=\"#shape-plus-10868c7e\"/></g><g transform=\"matrix(4.9 0 0 5.1 0 49)\"><use transform=\"translate(5, 5) scale(0.646) translate(-5, -5)\" href=\"#shape-polygon-10868c7e\"/></g><g transform=\"matrix(5.1 0 0 4.9 49 0)\"><use transform=\"translate(5, 5) scale(0.939) translate(-5, -5)\" href=\"#shape-polygon-10868c7e\"/></g><g transform=\"scale(4.9)\"><use transform=\"translate(5, 5) scale(0.7877) translate(-5, -5)\" href=\"#shape-plus-10868c7e\"/></g></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><rect width=\"100\" height=\"100\" fill=\"#a8f0b0\"/><g transform=\"rotate(45, 50, 50)\"><g transform=\"translate(50, 50) scale(2) translate(-50, -50)\"><g transform=\"matrix(.65 0 0 .65 17.5 17.5)\"><use href=\"#rows-rows02-10868c7e\"/></g></g></g></g></svg>",
+    "resolvedOptions": {
+      "backgroundColorFill": "solid",
+      "backgroundColor": [
+        "#a8f0b0"
+      ],
+      "rowsVariant": "rows02",
+      "shape04Variant": "plus",
+      "shapeColorFill": "solid",
+      "shapeColor": [
+        "#ffffff"
+      ],
+      "shape04Rotate": 0,
+      "shape04TranslateX": 0,
+      "shape04TranslateY": 0,
+      "shape04Scale": 0.7384,
+      "shape03Variant": "polygon",
+      "shape03Rotate": 0,
+      "shape03TranslateX": 0,
+      "shape03TranslateY": 0,
+      "shape03Scale": 0.646,
+      "shape02Variant": "polygon",
+      "shape02Rotate": 0,
+      "shape02TranslateX": 0,
+      "shape02TranslateY": 0,
+      "shape02Scale": 0.939,
+      "shape01Variant": "plus",
+      "shape01Rotate": 0,
+      "shape01TranslateX": 0,
+      "shape01TranslateY": 0,
+      "shape01Scale": 0.7877,
+      "rowsRotate": 0,
+      "rowsTranslateX": 0,
+      "rowsTranslateY": 0,
+      "rowsScale": 1,
+      "scale": 2,
+      "flip": "none",
+      "rotate": 45,
+      "translateX": 0,
+      "translateY": 0,
+      "borderRadius": 0,
+      "size": 256,
+      "idRandomization": false
+    }
+  },
+  {
+    "id": "translate-border-flip",
+    "options": {
+      "seed": "parity-1",
+      "translateX": 10,
+      "translateY": -5,
+      "borderRadius": 50,
+      "flip": "horizontal"
+    },
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" fill=\"none\" shape-rendering=\"auto\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Shape Grid</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Shape Grid” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"shape-plus-10868c7e\"><path d=\"M4.06.78a1 1 0 0 1 1.88 0l.72 1.97a1 1 0 0 0 .6.59l1.96.72a1 1 0 0 1 0 1.88l-1.97.72a1 1 0 0 0-.59.6l-.72 1.96a1 1 0 0 1-1.88 0l-.72-1.97a1 1 0 0 0-.6-.59L.79 5.94a1 1 0 0 1 0-1.88l1.97-.72a1 1 0 0 0 .59-.6z\" fill=\"#ffffff\"/></g><g id=\"shape-polygon-10868c7e\"><path d=\"M4.13 1a1 1 0 0 1 1.74 0l3.9 6.75a1 1 0 0 1-.87 1.5H1.1a1 1 0 0 1-.86-1.5z\" fill=\"#ffffff\"/></g><g id=\"rows-rows02-10868c7e\"><g transform=\"matrix(5.1 0 0 5.1 49 49)\"><use transform=\"translate(5, 5) scale(0.7384) translate(-5, -5)\" href=\"#shape-plus-10868c7e\"/></g><g transform=\"matrix(4.9 0 0 5.1 0 49)\"><use transform=\"translate(5, 5) scale(0.646) translate(-5, -5)\" href=\"#shape-polygon-10868c7e\"/></g><g transform=\"matrix(5.1 0 0 4.9 49 0)\"><use transform=\"translate(5, 5) scale(0.939) translate(-5, -5)\" href=\"#shape-polygon-10868c7e\"/></g><g transform=\"scale(4.9)\"><use transform=\"translate(5, 5) scale(0.7877) translate(-5, -5)\" href=\"#shape-plus-10868c7e\"/></g></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"50\" ry=\"50\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><rect width=\"100\" height=\"100\" fill=\"#a8f0b0\"/><g transform=\"translate(10, -5)\"><g transform=\"translate(100, 0) scale(-1, 1)\"><g transform=\"matrix(.65 0 0 .65 17.5 17.5)\"><use href=\"#rows-rows02-10868c7e\"/></g></g></g></g></svg>",
+    "resolvedOptions": {
+      "backgroundColorFill": "solid",
+      "backgroundColor": [
+        "#a8f0b0"
+      ],
+      "rowsVariant": "rows02",
+      "shape04Variant": "plus",
+      "shapeColorFill": "solid",
+      "shapeColor": [
+        "#ffffff"
+      ],
+      "shape04Rotate": 0,
+      "shape04TranslateX": 0,
+      "shape04TranslateY": 0,
+      "shape04Scale": 0.7384,
+      "shape03Variant": "polygon",
+      "shape03Rotate": 0,
+      "shape03TranslateX": 0,
+      "shape03TranslateY": 0,
+      "shape03Scale": 0.646,
+      "shape02Variant": "polygon",
+      "shape02Rotate": 0,
+      "shape02TranslateX": 0,
+      "shape02TranslateY": 0,
+      "shape02Scale": 0.939,
+      "shape01Variant": "plus",
+      "shape01Rotate": 0,
+      "shape01TranslateX": 0,
+      "shape01TranslateY": 0,
+      "shape01Scale": 0.7877,
+      "rowsRotate": 0,
+      "rowsTranslateX": 0,
+      "rowsTranslateY": 0,
+      "rowsScale": 1,
+      "scale": 1,
+      "flip": "horizontal",
+      "rotate": 0,
+      "translateX": 10,
+      "translateY": -5,
+      "borderRadius": 50,
+      "idRandomization": false
+    }
+  },
+  {
+    "id": "background-solid",
+    "options": {
+      "seed": "parity-1",
+      "backgroundColor": [
+        "ff0000"
+      ],
+      "backgroundColorFill": [
+        "solid"
+      ]
+    },
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" fill=\"none\" shape-rendering=\"auto\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Shape Grid</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Shape Grid” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"shape-plus-10868c7e\"><path d=\"M4.06.78a1 1 0 0 1 1.88 0l.72 1.97a1 1 0 0 0 .6.59l1.96.72a1 1 0 0 1 0 1.88l-1.97.72a1 1 0 0 0-.59.6l-.72 1.96a1 1 0 0 1-1.88 0l-.72-1.97a1 1 0 0 0-.6-.59L.79 5.94a1 1 0 0 1 0-1.88l1.97-.72a1 1 0 0 0 .59-.6z\" fill=\"#ffffff\"/></g><g id=\"shape-polygon-10868c7e\"><path d=\"M4.13 1a1 1 0 0 1 1.74 0l3.9 6.75a1 1 0 0 1-.87 1.5H1.1a1 1 0 0 1-.86-1.5z\" fill=\"#ffffff\"/></g><g id=\"rows-rows02-10868c7e\"><g transform=\"matrix(5.1 0 0 5.1 49 49)\"><use transform=\"translate(5, 5) scale(0.7384) translate(-5, -5)\" href=\"#shape-plus-10868c7e\"/></g><g transform=\"matrix(4.9 0 0 5.1 0 49)\"><use transform=\"translate(5, 5) scale(0.646) translate(-5, -5)\" href=\"#shape-polygon-10868c7e\"/></g><g transform=\"matrix(5.1 0 0 4.9 49 0)\"><use transform=\"translate(5, 5) scale(0.939) translate(-5, -5)\" href=\"#shape-polygon-10868c7e\"/></g><g transform=\"scale(4.9)\"><use transform=\"translate(5, 5) scale(0.7877) translate(-5, -5)\" href=\"#shape-plus-10868c7e\"/></g></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><rect width=\"100\" height=\"100\" fill=\"#ff0000\"/><g transform=\"matrix(.65 0 0 .65 17.5 17.5)\"><use href=\"#rows-rows02-10868c7e\"/></g></g></svg>",
+    "resolvedOptions": {
+      "backgroundColorFill": "solid",
+      "backgroundColor": [
+        "#ff0000"
+      ],
+      "rowsVariant": "rows02",
+      "shape04Variant": "plus",
+      "shapeColorFill": "solid",
+      "shapeColor": [
+        "#ffffff"
+      ],
+      "shape04Rotate": 0,
+      "shape04TranslateX": 0,
+      "shape04TranslateY": 0,
+      "shape04Scale": 0.7384,
+      "shape03Variant": "polygon",
+      "shape03Rotate": 0,
+      "shape03TranslateX": 0,
+      "shape03TranslateY": 0,
+      "shape03Scale": 0.646,
+      "shape02Variant": "polygon",
+      "shape02Rotate": 0,
+      "shape02TranslateX": 0,
+      "shape02TranslateY": 0,
+      "shape02Scale": 0.939,
+      "shape01Variant": "plus",
+      "shape01Rotate": 0,
+      "shape01TranslateX": 0,
+      "shape01TranslateY": 0,
+      "shape01Scale": 0.7877,
+      "rowsRotate": 0,
+      "rowsTranslateX": 0,
+      "rowsTranslateY": 0,
+      "rowsScale": 1,
+      "scale": 1,
+      "flip": "none",
+      "rotate": 0,
+      "translateX": 0,
+      "translateY": 0,
+      "borderRadius": 0,
+      "idRandomization": false
+    }
+  },
+  {
+    "id": "background-linear",
+    "options": {
+      "seed": "parity-1",
+      "backgroundColor": [
+        "ff0000",
+        "00ff00"
+      ],
+      "backgroundColorFill": [
+        "linear"
+      ],
+      "backgroundColorAngle": [
+        45,
+        45
+      ]
+    },
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" fill=\"none\" shape-rendering=\"auto\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Shape Grid</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Shape Grid” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><linearGradient id=\"background-color-10868c7e\" gradientTransform=\"rotate(45, 0.5, 0.5)\"><stop offset=\"0%\" stop-color=\"#ff0000\"/><stop offset=\"100%\" stop-color=\"#00ff00\"/></linearGradient><g id=\"shape-plus-10868c7e\"><path d=\"M4.06.78a1 1 0 0 1 1.88 0l.72 1.97a1 1 0 0 0 .6.59l1.96.72a1 1 0 0 1 0 1.88l-1.97.72a1 1 0 0 0-.59.6l-.72 1.96a1 1 0 0 1-1.88 0l-.72-1.97a1 1 0 0 0-.6-.59L.79 5.94a1 1 0 0 1 0-1.88l1.97-.72a1 1 0 0 0 .59-.6z\" fill=\"#ffffff\"/></g><g id=\"shape-polygon-10868c7e\"><path d=\"M4.13 1a1 1 0 0 1 1.74 0l3.9 6.75a1 1 0 0 1-.87 1.5H1.1a1 1 0 0 1-.86-1.5z\" fill=\"#ffffff\"/></g><g id=\"rows-rows02-10868c7e\"><g transform=\"matrix(5.1 0 0 5.1 49 49)\"><use transform=\"translate(5, 5) scale(0.7384) translate(-5, -5)\" href=\"#shape-plus-10868c7e\"/></g><g transform=\"matrix(4.9 0 0 5.1 0 49)\"><use transform=\"translate(5, 5) scale(0.646) translate(-5, -5)\" href=\"#shape-polygon-10868c7e\"/></g><g transform=\"matrix(5.1 0 0 4.9 49 0)\"><use transform=\"translate(5, 5) scale(0.939) translate(-5, -5)\" href=\"#shape-polygon-10868c7e\"/></g><g transform=\"scale(4.9)\"><use transform=\"translate(5, 5) scale(0.7877) translate(-5, -5)\" href=\"#shape-plus-10868c7e\"/></g></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><rect width=\"100\" height=\"100\" fill=\"url(#background-color-10868c7e)\"/><g transform=\"matrix(.65 0 0 .65 17.5 17.5)\"><use href=\"#rows-rows02-10868c7e\"/></g></g></svg>",
+    "resolvedOptions": {
+      "backgroundColorFill": "linear",
+      "backgroundColor": [
+        "#ff0000",
+        "#00ff00"
+      ],
+      "backgroundColorAngle": 45,
+      "rowsVariant": "rows02",
+      "shape04Variant": "plus",
+      "shapeColorFill": "solid",
+      "shapeColor": [
+        "#ffffff"
+      ],
+      "shape04Rotate": 0,
+      "shape04TranslateX": 0,
+      "shape04TranslateY": 0,
+      "shape04Scale": 0.7384,
+      "shape03Variant": "polygon",
+      "shape03Rotate": 0,
+      "shape03TranslateX": 0,
+      "shape03TranslateY": 0,
+      "shape03Scale": 0.646,
+      "shape02Variant": "polygon",
+      "shape02Rotate": 0,
+      "shape02TranslateX": 0,
+      "shape02TranslateY": 0,
+      "shape02Scale": 0.939,
+      "shape01Variant": "plus",
+      "shape01Rotate": 0,
+      "shape01TranslateX": 0,
+      "shape01TranslateY": 0,
+      "shape01Scale": 0.7877,
+      "rowsRotate": 0,
+      "rowsTranslateX": 0,
+      "rowsTranslateY": 0,
+      "rowsScale": 1,
+      "scale": 1,
+      "flip": "none",
+      "rotate": 0,
+      "translateX": 0,
+      "translateY": 0,
+      "borderRadius": 0,
+      "idRandomization": false
+    }
+  },
+  {
+    "id": "background-radial",
+    "options": {
+      "seed": "parity-1",
+      "backgroundColor": [
+        "ff0000",
+        "00ff00"
+      ],
+      "backgroundColorFill": [
+        "radial"
+      ]
+    },
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" fill=\"none\" shape-rendering=\"auto\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Shape Grid</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Shape Grid” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><radialGradient id=\"background-color-10868c7e\"><stop offset=\"0%\" stop-color=\"#ff0000\"/><stop offset=\"100%\" stop-color=\"#00ff00\"/></radialGradient><g id=\"shape-plus-10868c7e\"><path d=\"M4.06.78a1 1 0 0 1 1.88 0l.72 1.97a1 1 0 0 0 .6.59l1.96.72a1 1 0 0 1 0 1.88l-1.97.72a1 1 0 0 0-.59.6l-.72 1.96a1 1 0 0 1-1.88 0l-.72-1.97a1 1 0 0 0-.6-.59L.79 5.94a1 1 0 0 1 0-1.88l1.97-.72a1 1 0 0 0 .59-.6z\" fill=\"#ffffff\"/></g><g id=\"shape-polygon-10868c7e\"><path d=\"M4.13 1a1 1 0 0 1 1.74 0l3.9 6.75a1 1 0 0 1-.87 1.5H1.1a1 1 0 0 1-.86-1.5z\" fill=\"#ffffff\"/></g><g id=\"rows-rows02-10868c7e\"><g transform=\"matrix(5.1 0 0 5.1 49 49)\"><use transform=\"translate(5, 5) scale(0.7384) translate(-5, -5)\" href=\"#shape-plus-10868c7e\"/></g><g transform=\"matrix(4.9 0 0 5.1 0 49)\"><use transform=\"translate(5, 5) scale(0.646) translate(-5, -5)\" href=\"#shape-polygon-10868c7e\"/></g><g transform=\"matrix(5.1 0 0 4.9 49 0)\"><use transform=\"translate(5, 5) scale(0.939) translate(-5, -5)\" href=\"#shape-polygon-10868c7e\"/></g><g transform=\"scale(4.9)\"><use transform=\"translate(5, 5) scale(0.7877) translate(-5, -5)\" href=\"#shape-plus-10868c7e\"/></g></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><rect width=\"100\" height=\"100\" fill=\"url(#background-color-10868c7e)\"/><g transform=\"matrix(.65 0 0 .65 17.5 17.5)\"><use href=\"#rows-rows02-10868c7e\"/></g></g></svg>",
+    "resolvedOptions": {
+      "backgroundColorFill": "radial",
+      "backgroundColor": [
+        "#ff0000",
+        "#00ff00"
+      ],
+      "backgroundColorAngle": 0,
+      "rowsVariant": "rows02",
+      "shape04Variant": "plus",
+      "shapeColorFill": "solid",
+      "shapeColor": [
+        "#ffffff"
+      ],
+      "shape04Rotate": 0,
+      "shape04TranslateX": 0,
+      "shape04TranslateY": 0,
+      "shape04Scale": 0.7384,
+      "shape03Variant": "polygon",
+      "shape03Rotate": 0,
+      "shape03TranslateX": 0,
+      "shape03TranslateY": 0,
+      "shape03Scale": 0.646,
+      "shape02Variant": "polygon",
+      "shape02Rotate": 0,
+      "shape02TranslateX": 0,
+      "shape02TranslateY": 0,
+      "shape02Scale": 0.939,
+      "shape01Variant": "plus",
+      "shape01Rotate": 0,
+      "shape01TranslateX": 0,
+      "shape01TranslateY": 0,
+      "shape01Scale": 0.7877,
+      "rowsRotate": 0,
+      "rowsTranslateX": 0,
+      "rowsTranslateY": 0,
+      "rowsScale": 1,
+      "scale": 1,
+      "flip": "none",
+      "rotate": 0,
+      "translateX": 0,
+      "translateY": 0,
+      "borderRadius": 0,
+      "idRandomization": false
+    }
+  },
+  {
+    "id": "rows-variant-pinned",
+    "options": {
+      "seed": "parity-1",
+      "rowsVariant": [
+        "rows04"
+      ]
+    },
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" fill=\"none\" shape-rendering=\"auto\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Shape Grid</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Shape Grid” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"shape-hexagon-10868c7e\"><path d=\"M4.5.16a1 1 0 0 1 1 0l3.44 1.99c.3.18.5.5.5.86V7a1 1 0 0 1-.5.86L5.5 9.84a1 1 0 0 1-1 0L1.06 7.85A1 1 0 0 1 .56 7V3a1 1 0 0 1 .5-.86z\" fill=\"#ffffff\"/></g><g id=\"shape-plus-10868c7e\"><path d=\"M4.06.78a1 1 0 0 1 1.88 0l.72 1.97a1 1 0 0 0 .6.59l1.96.72a1 1 0 0 1 0 1.88l-1.97.72a1 1 0 0 0-.59.6l-.72 1.96a1 1 0 0 1-1.88 0l-.72-1.97a1 1 0 0 0-.6-.59L.79 5.94a1 1 0 0 1 0-1.88l1.97-.72a1 1 0 0 0 .59-.6z\" fill=\"#ffffff\"/></g><g id=\"shape-square-10868c7e\"><rect width=\"10\" height=\"10\" rx=\"1\" fill=\"#ffffff\"/></g><g id=\"shape-polygon-10868c7e\"><path d=\"M4.13 1a1 1 0 0 1 1.74 0l3.9 6.75a1 1 0 0 1-.87 1.5H1.1a1 1 0 0 1-.86-1.5z\" fill=\"#ffffff\"/></g><g id=\"rows-rows04-10868c7e\"><g transform=\"matrix(2.5 0 0 2.5 75 75)\"><use transform=\"translate(5, 5) scale(0.5813) translate(-5, -5)\" href=\"#shape-hexagon-10868c7e\"/></g><g transform=\"matrix(2.5 0 0 2.5 50 75)\"><use transform=\"translate(5, 5) scale(0.8089) translate(-5, -5)\" href=\"#shape-plus-10868c7e\"/></g><g transform=\"matrix(2.5 0 0 2.5 25 75)\"><use transform=\"translate(5, 5) scale(0.6218) translate(-5, -5)\" href=\"#shape-square-10868c7e\"/></g><g transform=\"matrix(2.5 0 0 2.5 0 75)\"><use transform=\"translate(5, 5) scale(0.6313) translate(-5, -5)\" href=\"#shape-plus-10868c7e\"/></g><g transform=\"matrix(2.5 0 0 2.5 75 50)\"><use transform=\"translate(5, 5) scale(0.7623) translate(-5, -5)\" href=\"#shape-hexagon-10868c7e\"/></g><g transform=\"matrix(2.5 0 0 2.5 50 50)\"><use transform=\"translate(5, 5) scale(0.551) translate(-5, -5)\" href=\"#shape-square-10868c7e\"/></g><g transform=\"matrix(2.5 0 0 2.5 25 50)\"><use transform=\"translate(5, 5) scale(0.7838) translate(-5, -5)\" href=\"#shape-polygon-10868c7e\"/></g><g transform=\"matrix(2.5 0 0 2.5 0 50)\"><use transform=\"translate(5, 5) scale(0.7273) translate(-5, -5)\" href=\"#shape-polygon-10868c7e\"/></g><g transform=\"matrix(2.5 0 0 2.5 75 25)\"><use transform=\"translate(5, 5) scale(0.6864) translate(-5, -5)\" href=\"#shape-plus-10868c7e\"/></g><g transform=\"matrix(2.5 0 0 2.5 50 25)\"><use transform=\"translate(5, 5) scale(0.8084) translate(-5, -5)\" href=\"#shape-plus-10868c7e\"/></g><g transform=\"matrix(2.5 0 0 2.5 25 25)\"><use transform=\"translate(5, 5) scale(0.7493) translate(-5, -5)\" href=\"#shape-hexagon-10868c7e\"/></g><g transform=\"matrix(2.5 0 0 2.5 0 25)\"><use transform=\"translate(5, 5) scale(0.8867) translate(-5, -5)\" href=\"#shape-square-10868c7e\"/></g><g transform=\"translate(75)scale(2.5)\"><use transform=\"translate(5, 5) scale(0.7384) translate(-5, -5)\" href=\"#shape-plus-10868c7e\"/></g><g transform=\"translate(50)scale(2.5)\"><use transform=\"translate(5, 5) scale(0.646) translate(-5, -5)\" href=\"#shape-polygon-10868c7e\"/></g><g transform=\"translate(25)scale(2.5)\"><use transform=\"translate(5, 5) scale(0.939) translate(-5, -5)\" href=\"#shape-polygon-10868c7e\"/></g><g transform=\"scale(2.5)\"><use transform=\"translate(5, 5) scale(0.7877) translate(-5, -5)\" href=\"#shape-plus-10868c7e\"/></g></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><rect width=\"100\" height=\"100\" fill=\"#a8f0b0\"/><g transform=\"matrix(.65 0 0 .65 17.5 17.5)\"><use href=\"#rows-rows04-10868c7e\"/></g></g></svg>",
+    "resolvedOptions": {
+      "backgroundColorFill": "solid",
+      "backgroundColor": [
+        "#a8f0b0"
+      ],
+      "rowsVariant": "rows04",
+      "shape16Variant": "hexagon",
+      "shapeColorFill": "solid",
+      "shapeColor": [
+        "#ffffff"
+      ],
+      "shape16Rotate": 0,
+      "shape16TranslateX": 0,
+      "shape16TranslateY": 0,
+      "shape16Scale": 0.5813,
+      "shape15Variant": "plus",
+      "shape15Rotate": 0,
+      "shape15TranslateX": 0,
+      "shape15TranslateY": 0,
+      "shape15Scale": 0.8089,
+      "shape14Variant": "square",
+      "shape14Rotate": 0,
+      "shape14TranslateX": 0,
+      "shape14TranslateY": 0,
+      "shape14Scale": 0.6218,
+      "shape13Variant": "plus",
+      "shape13Rotate": 0,
+      "shape13TranslateX": 0,
+      "shape13TranslateY": 0,
+      "shape13Scale": 0.6313,
+      "shape12Variant": "hexagon",
+      "shape12Rotate": 0,
+      "shape12TranslateX": 0,
+      "shape12TranslateY": 0,
+      "shape12Scale": 0.7623,
+      "shape11Variant": "square",
+      "shape11Rotate": 0,
+      "shape11TranslateX": 0,
+      "shape11TranslateY": 0,
+      "shape11Scale": 0.551,
+      "shape10Variant": "polygon",
+      "shape10Rotate": 0,
+      "shape10TranslateX": 0,
+      "shape10TranslateY": 0,
+      "shape10Scale": 0.7838,
+      "shape09Variant": "polygon",
+      "shape09Rotate": 0,
+      "shape09TranslateX": 0,
+      "shape09TranslateY": 0,
+      "shape09Scale": 0.7273,
+      "shape08Variant": "plus",
+      "shape08Rotate": 0,
+      "shape08TranslateX": 0,
+      "shape08TranslateY": 0,
+      "shape08Scale": 0.6864,
+      "shape07Variant": "plus",
+      "shape07Rotate": 0,
+      "shape07TranslateX": 0,
+      "shape07TranslateY": 0,
+      "shape07Scale": 0.8084,
+      "shape06Variant": "hexagon",
+      "shape06Rotate": 0,
+      "shape06TranslateX": 0,
+      "shape06TranslateY": 0,
+      "shape06Scale": 0.7493,
+      "shape05Variant": "square",
+      "shape05Rotate": 0,
+      "shape05TranslateX": 0,
+      "shape05TranslateY": 0,
+      "shape05Scale": 0.8867,
+      "shape04Variant": "plus",
+      "shape04Rotate": 0,
+      "shape04TranslateX": 0,
+      "shape04TranslateY": 0,
+      "shape04Scale": 0.7384,
+      "shape03Variant": "polygon",
+      "shape03Rotate": 0,
+      "shape03TranslateX": 0,
+      "shape03TranslateY": 0,
+      "shape03Scale": 0.646,
+      "shape02Variant": "polygon",
+      "shape02Rotate": 0,
+      "shape02TranslateX": 0,
+      "shape02TranslateY": 0,
+      "shape02Scale": 0.939,
+      "shape01Variant": "plus",
+      "shape01Rotate": 0,
+      "shape01TranslateX": 0,
+      "shape01TranslateY": 0,
+      "shape01Scale": 0.7877,
+      "rowsRotate": 0,
+      "rowsTranslateX": 0,
+      "rowsTranslateY": 0,
+      "rowsScale": 1,
+      "scale": 1,
+      "flip": "none",
+      "rotate": 0,
+      "translateX": 0,
+      "translateY": 0,
+      "borderRadius": 0,
+      "idRandomization": false
+    }
+  },
+  {
+    "id": "shape-variant-pinned",
+    "options": {
+      "seed": "parity-1",
+      "shapeVariant": [
+        "square"
+      ]
+    },
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" fill=\"none\" shape-rendering=\"auto\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Shape Grid</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Shape Grid” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"shape-square-10868c7e\"><rect width=\"10\" height=\"10\" rx=\"1\" fill=\"#ffffff\"/></g><g id=\"rows-rows02-10868c7e\"><g transform=\"matrix(5.1 0 0 5.1 49 49)\"><use transform=\"translate(5, 5) scale(0.7384) translate(-5, -5)\" href=\"#shape-square-10868c7e\"/></g><g transform=\"matrix(4.9 0 0 5.1 0 49)\"><use transform=\"translate(5, 5) scale(0.646) translate(-5, -5)\" href=\"#shape-square-10868c7e\"/></g><g transform=\"matrix(5.1 0 0 4.9 49 0)\"><use transform=\"translate(5, 5) scale(0.939) translate(-5, -5)\" href=\"#shape-square-10868c7e\"/></g><g transform=\"scale(4.9)\"><use transform=\"translate(5, 5) scale(0.7877) translate(-5, -5)\" href=\"#shape-square-10868c7e\"/></g></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><rect width=\"100\" height=\"100\" fill=\"#a8f0b0\"/><g transform=\"matrix(.65 0 0 .65 17.5 17.5)\"><use href=\"#rows-rows02-10868c7e\"/></g></g></svg>",
+    "resolvedOptions": {
+      "backgroundColorFill": "solid",
+      "backgroundColor": [
+        "#a8f0b0"
+      ],
+      "rowsVariant": "rows02",
+      "shape04Variant": "square",
+      "shapeColorFill": "solid",
+      "shapeColor": [
+        "#ffffff"
+      ],
+      "shape04Rotate": 0,
+      "shape04TranslateX": 0,
+      "shape04TranslateY": 0,
+      "shape04Scale": 0.7384,
+      "shape03Variant": "square",
+      "shape03Rotate": 0,
+      "shape03TranslateX": 0,
+      "shape03TranslateY": 0,
+      "shape03Scale": 0.646,
+      "shape02Variant": "square",
+      "shape02Rotate": 0,
+      "shape02TranslateX": 0,
+      "shape02TranslateY": 0,
+      "shape02Scale": 0.939,
+      "shape01Variant": "square",
+      "shape01Rotate": 0,
+      "shape01TranslateX": 0,
+      "shape01TranslateY": 0,
+      "shape01Scale": 0.7877,
+      "rowsRotate": 0,
+      "rowsTranslateX": 0,
+      "rowsTranslateY": 0,
+      "rowsScale": 1,
+      "scale": 1,
+      "flip": "none",
+      "rotate": 0,
+      "translateX": 0,
+      "translateY": 0,
+      "borderRadius": 0,
+      "idRandomization": false
+    }
+  },
+  {
+    "id": "shape-probability-zero",
+    "options": {
+      "seed": "parity-1",
+      "shapeProbability": 0
+    },
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" fill=\"none\" shape-rendering=\"auto\" aria-hidden=\"true\"><metadata xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"><rdf:RDF><rdf:Description><dc:title>Shape Grid</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type=\"dcterms:URI\">https://www.dicebear.com</dc:source><dcterms:license xsi:type=\"dcterms:URI\">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>“Shape Grid” (https://www.dicebear.com) by “DiceBear”, licensed under “CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><defs><g id=\"rows-rows02-10868c7e\"><g transform=\"matrix(5.1 0 0 5.1 49 49)\"/><g transform=\"matrix(4.9 0 0 5.1 0 49)\"/><g transform=\"matrix(5.1 0 0 4.9 49 0)\"/><g transform=\"scale(4.9)\"/></g><clipPath id=\"clip-10868c7e\"><rect width=\"100\" height=\"100\" rx=\"0\" ry=\"0\"/></clipPath></defs><g clip-path=\"url(#clip-10868c7e)\"><rect width=\"100\" height=\"100\" fill=\"#a8f0b0\"/><g transform=\"matrix(.65 0 0 .65 17.5 17.5)\"><use href=\"#rows-rows02-10868c7e\"/></g></g></svg>",
+    "resolvedOptions": {
+      "backgroundColorFill": "solid",
+      "backgroundColor": [
+        "#a8f0b0"
+      ],
+      "rowsVariant": "rows02",
+      "rowsRotate": 0,
+      "rowsTranslateX": 0,
+      "rowsTranslateY": 0,
+      "rowsScale": 1,
+      "scale": 1,
+      "flip": "none",
+      "rotate": 0,
+      "translateX": 0,
+      "translateY": 0,
+      "borderRadius": 0,
+      "idRandomization": false
+    }
+  }
+]

@@ -11,8 +11,9 @@ use DiceBear\Utils\Color as ColorUtil;
  * Bundles the three inputs needed to derive any deterministic value for an
  * avatar — the {@see Style}, the validated user {@see Options}, and a seeded
  * {@see Prng} — and exposes them as named accessors. Each accessor memoizes
- * its result so that repeated calls cannot drift, and the memo doubles as
- * the snapshot returned by {@see resolved}.
+ * its result so that repeated calls cannot drift. The memo also serves as
+ * the informational snapshot returned by {@see resolved} — every value the
+ * resolver picks during one resolution lands there, except for the raw seed.
  */
 class Resolver
 {
@@ -33,7 +34,8 @@ class Resolver
 
     public function seed(): string
     {
-        // Not memoized so the raw seed stays out of {@see resolved}.
+        // Deliberately not memoized — the seed is the only input we keep out
+        // of the {@see resolved} snapshot, so a serialized avatar never leaks it.
         return $this->options->seed() ?? '';
     }
 
@@ -78,42 +80,27 @@ class Resolver
 
     public function scale(): float
     {
-        return $this->memo(
-            'scale',
-            fn() => $this->prng->float('scale', $this->options->scale()) ?? 1.0,
-        );
+        return $this->memoFloat('scale', $this->options->scale(), 1.0);
     }
 
     public function borderRadius(): float
     {
-        return $this->memo(
-            'borderRadius',
-            fn() => $this->prng->float('borderRadius', $this->options->borderRadius()) ?? 0.0,
-        );
+        return $this->memoFloat('borderRadius', $this->options->borderRadius(), 0.0);
     }
 
     public function rotate(): float
     {
-        return $this->memo(
-            'rotate',
-            fn() => $this->prng->float('rotate', $this->options->rotate()) ?? 0.0,
-        );
+        return $this->memoFloat('rotate', $this->options->rotate(), 0.0);
     }
 
     public function translateX(): float
     {
-        return $this->memo(
-            'translateX',
-            fn() => $this->prng->float('translateX', $this->options->translateX()) ?? 0.0,
-        );
+        return $this->memoFloat('translateX', $this->options->translateX(), 0.0);
     }
 
     public function translateY(): float
     {
-        return $this->memo(
-            'translateY',
-            fn() => $this->prng->float('translateY', $this->options->translateY()) ?? 0.0,
-        );
+        return $this->memoFloat('translateY', $this->options->translateY(), 0.0);
     }
 
     /**
@@ -182,16 +169,14 @@ class Resolver
 
     public function colorAngle(string $name): float
     {
-        return $this->memo(
-            "{$name}ColorAngle",
-            fn() => $this->prng->float("{$name}ColorAngle", $this->options->colorAngle($name)) ?? 0.0,
-        );
+        return $this->memoFloat("{$name}ColorAngle", $this->options->colorAngle($name), 0.0);
     }
 
     /**
-     * Per-component transform values are render-time decorations derived per
-     * `<use>` reference, not user-input options that should round-trip. They
-     * are intentionally not memoized and so never appear in {@see resolved}.
+     * Picks the rotate/translateX/translateY/scale values for a single
+     * component. Memoized per `name`, so the four values land in
+     * {@see resolved} as `${name}Rotate` / `${name}TranslateX` /
+     * `${name}TranslateY` / `${name}Scale` for downstream introspection.
      *
      * @return array{rotate: float, translateX: float, translateY: float, scale: float}
      */
@@ -201,20 +186,27 @@ class Resolver
         $component = $components[$name] ?? null;
 
         return [
-            'rotate' => $this->pickFloat($name, 'Rotate', $component?->rotate() ?? [], 0.0),
-            'translateX' => $this->pickFloat($name, 'TranslateX', $component?->translate()->x() ?? [], 0.0),
-            'translateY' => $this->pickFloat($name, 'TranslateY', $component?->translate()->y() ?? [], 0.0),
-            'scale' => $this->pickFloat($name, 'Scale', $component?->scale() ?? [], 1.0),
+            'rotate' => $this->memoFloat("{$name}Rotate", $component?->rotate(), 0.0),
+            'translateX' => $this->memoFloat("{$name}TranslateX", $component?->translate()->x(), 0.0),
+            'translateY' => $this->memoFloat("{$name}TranslateY", $component?->translate()->y(), 0.0),
+            'scale' => $this->memoFloat("{$name}Scale", $component?->scale(), 1.0),
         ];
     }
 
     /**
-     * Returns every value that has been touched during this resolution. Only
-     * memoized non-null entries are included; unset entries are filtered out
-     * to mirror the JS shape, where they would disappear on `JSON.stringify()`.
-     * Per-component transform values from {@see componentTransform} and the
-     * user-supplied {@see seed} are intentionally not memoized and therefore
-     * do not appear in the snapshot.
+     * Returns an informational snapshot of every value the resolver picked.
+     * Includes top-level options (scale/rotate/translate/…), per-component
+     * variants/probabilities/colors, and per-component transform picks. The
+     * raw seed is deliberately excluded.
+     *
+     * The snapshot is NOT a round-trip-able options object — extra keys like
+     * `${name}Rotate` are not part of the user-options schema and feeding the
+     * snapshot back into a new {@see Avatar} is not supported. Callers that
+     * need to reproduce an avatar should pass the original `seed` and
+     * user-supplied options.
+     *
+     * Unset entries (null) are filtered out so they disappear on JSON encode,
+     * mirroring the JS behavior.
      *
      * @return array<string, mixed>
      */
@@ -306,13 +298,15 @@ class Resolver
 
     private function colorFillStops(string $name): int
     {
-        return $this->prng->integer("{$name}ColorFillStops", $this->options->colorFillStops($name)) ?? 2;
+        $range = $this->options->colorFillStops($name);
+
+        return $range === null ? 2 : $this->prng->integer("{$name}ColorFillStops", $range);
     }
 
-    /** @param list<int|float> $range */
-    private function pickFloat(string $name, string $suffix, array $range, float $fallback): float
+    /** @param array{min: int|float, max: int|float, step?: int|float}|null $range */
+    private function memoFloat(string $key, ?array $range, float $fallback): float
     {
-        return $this->prng->float("{$name}{$suffix}", $range) ?? $fallback;
+        return $this->memo($key, fn() => $range === null ? $fallback : $this->prng->float($key, $range));
     }
 
     private function memo(string $key, callable $compute): mixed

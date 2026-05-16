@@ -19,6 +19,7 @@ type Component = Components[string];
 type ComponentBase = Extract<Component, { variants: unknown }>;
 type ComponentAlias = Extract<Component, { extends: string }>;
 type Variant = ComponentBase['variants'][string];
+type Range = NonNullable<ComponentBase['rotate']>;
 type ColorGroup = NonNullable<StyleDefinition['colors']>[string];
 
 function isAlias(component: Component | undefined): component is ComponentAlias {
@@ -141,10 +142,11 @@ function effectiveVariants(base: ComponentBase): Variant[] {
 
 // Counts the distinct outputs produced by Prng.float on the definition's
 // rotate/scale/translate ranges. Prng.float rounds to 4 decimals
-// (src/js/core/src/Prng.ts:89-98), so a [min, max] range yields
-// round((max-min)*10000)+1 reachable values; a single-value range yields 1.
+// (src/js/core/src/Prng.ts:89-98), so a continuous `{ min, max }` range
+// yields round((max-min)*10000)+1 reachable values; a stepped range
+// yields floor((max-min)/step)+1; `min === max` yields 1.
 function transformMultiplier(base: ComponentBase): bigint {
-  const ranges: ReadonlyArray<readonly number[] | undefined> = [
+  const ranges: ReadonlyArray<Range | undefined> = [
     base.rotate,
     base.scale,
     base.translate?.x,
@@ -154,13 +156,20 @@ function transformMultiplier(base: ComponentBase): bigint {
   let mult = 1n;
 
   for (const range of ranges) {
-    if (!range || range.length < 2) {
+    if (!range) {
       continue;
     }
 
-    const min = Math.min(...range);
-    const max = Math.max(...range);
-    const slots = Math.round((max - min) * 10000) + 1;
+    const min = Math.min(range.min, range.max);
+    const max = Math.max(range.min, range.max);
+
+    if (min === max) {
+      continue;
+    }
+
+    const slots = range.step !== undefined && range.step > 0
+      ? Math.floor((max - min) / range.step) + 1
+      : Math.round((max - min) * 10000) + 1;
 
     mult *= BigInt(slots);
   }

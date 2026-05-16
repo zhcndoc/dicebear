@@ -113,57 +113,98 @@ describe('Prng', () => {
         assert.ok(items.includes(prng.pick('key', items)));
       }
     });
+
+    it('should collapse duplicate items by string representation', () => {
+      const unique = ['a', 'b', 'c'];
+      const withDuplicates = ['a', 'a', 'b', 'b', 'b', 'c'];
+
+      for (let i = 0; i < 50; i++) {
+        const prng = new Prng(`seed-${i}`);
+
+        assert.equal(
+          prng.pick('key', withDuplicates),
+          new Prng(`seed-${i}`).pick('key', unique),
+        );
+      }
+    });
+
+    it('should treat all-duplicates as single-item', () => {
+      const prng = new Prng('test');
+
+      assert.equal(prng.pick('key', ['only', 'only', 'only']), 'only');
+    });
   });
 
   describe('float', () => {
-    it('should return undefined for empty array', () => {
+    it('should return the value when min equals max', () => {
       const prng = new Prng('test');
 
-      assert.equal(prng.float('key', []), undefined);
-    });
-
-    it('should return the value for single-element array', () => {
-      const prng = new Prng('test');
-
-      assert.equal(prng.float('key', [42]), 42);
+      assert.equal(prng.float('key', { min: 42, max: 42 }), 42);
     });
 
     it('should interpolate within bounds', () => {
       for (let i = 0; i < 50; i++) {
         const prng = new Prng(`seed-${i}`);
-        const value = prng.float('key', [10, 20]);
+        const value = prng.float('key', { min: 10, max: 20 });
 
         assert.ok(value >= 10);
         assert.ok(value <= 20);
       }
     });
 
-    it('should handle reversed order', () => {
+    it('should handle reversed min/max', () => {
       const prng = new Prng('test');
-      const value = prng.float('key', [20, 10]);
+      const value = prng.float('key', { min: 20, max: 10 });
 
       assert.ok(value >= 10);
       assert.ok(value <= 20);
     });
 
-    it('should use min/max across all values', () => {
-      const prng = new Prng('test');
-      const value = prng.float('key', [5, 20, 10]);
+    it('should quantize to step', () => {
+      for (let i = 0; i < 50; i++) {
+        const prng = new Prng(`seed-${i}`);
+        const value = prng.float('key', { min: 0, max: 100, step: 5 });
 
-      assert.ok(value >= 5);
-      assert.ok(value <= 20);
+        assert.ok(value >= 0);
+        assert.ok(value <= 100);
+        assert.equal(value % 5, 0, `Expected multiple of 5, got ${value}`);
+      }
+    });
+
+    it('should ignore non-positive step', () => {
+      for (let i = 0; i < 20; i++) {
+        const prng = new Prng(`seed-${i}`);
+        const value = prng.float('key', { min: 10, max: 20, step: 0 });
+
+        assert.ok(value >= 10);
+        assert.ok(value <= 20);
+      }
+    });
+
+    it('should anchor stepped values at min, not at zero', () => {
+      for (let i = 0; i < 50; i++) {
+        const prng = new Prng(`seed-${i}`);
+        const value = prng.float('key', { min: 3, max: 23, step: 5 });
+
+        assert.ok(value >= 3);
+        assert.ok(value <= 23);
+        assert.equal(((value - 3) * 10000) % (5 * 10000), 0, `Expected 3 + n*5, got ${value}`);
+      }
     });
 
     it('should be deterministic', () => {
       const a = new Prng('test');
       const b = new Prng('test');
 
-      assert.equal(a.float('key', [0, 100]), b.float('key', [0, 100]));
+      assert.equal(
+        a.float('key', { min: 0, max: 100 }),
+        b.float('key', { min: 0, max: 100 }),
+      );
     });
 
     it('should round to four decimal places', () => {
       const prng = new Prng('test');
-      const value = prng.float('scale', [0, 1]);
+      const value = prng.float('scale', { min: 0, max: 1 });
       const decimals = value.toString().split('.')[1] ?? '';
 
       assert.ok(decimals.length <= 4, `Expected at most 4 decimal places, got ${decimals.length}: ${value}`);
@@ -172,8 +213,14 @@ describe('Prng', () => {
     it('should return known values', () => {
       const prng = new Prng('test');
 
-      assert.equal(prng.float('scale', [0, 1]), prng.float('scale', [0, 1]));
-      assert.equal(prng.float('a', [10, 20]), prng.float('a', [10, 20]));
+      assert.equal(
+        prng.float('scale', { min: 0, max: 1 }),
+        prng.float('scale', { min: 0, max: 1 }),
+      );
+      assert.equal(
+        prng.float('a', { min: 10, max: 20 }),
+        prng.float('a', { min: 10, max: 20 }),
+      );
     });
   });
 
@@ -209,22 +256,16 @@ describe('Prng', () => {
   });
 
   describe('integer', () => {
-    it('should return undefined for empty array', () => {
+    it('should return the value when min equals max', () => {
       const prng = new Prng('test');
 
-      assert.equal(prng.integer('key', []), undefined);
-    });
-
-    it('should return the value for single-element array', () => {
-      const prng = new Prng('test');
-
-      assert.equal(prng.integer('key', [5]), 5);
+      assert.equal(prng.integer('key', { min: 5, max: 5 }), 5);
     });
 
     it('should return an integer within bounds', () => {
       for (let i = 0; i < 50; i++) {
         const prng = new Prng(`seed-${i}`);
-        const value = prng.integer('key', [1, 10]);
+        const value = prng.integer('key', { min: 1, max: 10 });
 
         assert.ok(value >= 1);
         assert.ok(value <= 10);
@@ -232,34 +273,31 @@ describe('Prng', () => {
       }
     });
 
-    it('should handle reversed order', () => {
+    it('should handle reversed min/max', () => {
       const prng = new Prng('test');
-      const value = prng.integer('key', [10, 1]);
+      const value = prng.integer('key', { min: 10, max: 1 });
 
       assert.ok(value >= 1);
       assert.ok(value <= 10);
     });
 
-    it('should use min/max across all values', () => {
+    it('should ignore step', () => {
       const prng = new Prng('test');
-      const value = prng.integer('key', [3, 10, 7]);
+      const value = prng.integer('key', { min: 3, max: 10, step: 5 });
 
       assert.ok(value >= 3);
       assert.ok(value <= 10);
       assert.equal(value, Math.floor(value));
     });
 
-    it('should return the value when min equals max', () => {
-      const prng = new Prng('test');
-
-      assert.equal(prng.integer('key', [5, 5]), 5);
-    });
-
     it('should be deterministic', () => {
       const a = new Prng('test');
       const b = new Prng('test');
 
-      assert.equal(a.integer('key', [1, 100]), b.integer('key', [1, 100]));
+      assert.equal(
+        a.integer('key', { min: 1, max: 100 }),
+        b.integer('key', { min: 1, max: 100 }),
+      );
     });
   });
 
@@ -393,6 +431,27 @@ describe('Prng', () => {
 
         assert.ok(['a', 'b', 'c'].includes(result));
       }
+    });
+
+    it('should collapse duplicate items, keeping the first occurrence’s weight', () => {
+      const baseline = [['a', 1], ['b', 4], ['c', 2]];
+      const withDuplicates = [['a', 1], ['a', 100], ['b', 4], ['c', 2]];
+
+      for (let i = 0; i < 50; i++) {
+        assert.equal(
+          new Prng(`seed-${i}`).weightedPick('key', withDuplicates),
+          new Prng(`seed-${i}`).weightedPick('key', baseline),
+        );
+      }
+    });
+  });
+
+  describe('shuffle dedup', () => {
+    it('should collapse duplicates by string representation', () => {
+      const prng = new Prng('test');
+      const result = prng.shuffle('key', ['a', 'a', 'b', 'b', 'c', 'c']);
+
+      assert.deepEqual([...result].sort(), ['a', 'b', 'c']);
     });
   });
 });

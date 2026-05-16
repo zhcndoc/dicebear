@@ -320,6 +320,11 @@ export class Renderer {
    * same source component sharing a variant — and identical components
    * referenced more than once — therefore produce a single `<defs>` entry
    * referenced by every `<use>`, never duplicated SVG markup.
+   *
+   * Any `attributes` on the component reference are written to the emitted
+   * `<use>` tag. A user-supplied `transform` is prepended to the per-component
+   * transforms so it acts as the outer (placement) transform, with the
+   * style's translate/rotate/scale applied inside it.
    */
   #renderComponentElement(element: Element): string {
     const componentName = element.name();
@@ -355,10 +360,22 @@ export class Renderer {
     }
 
     const transforms = this.#buildTransforms(component);
-    const transformAttr =
-      transforms.length > 0 ? ` transform="${transforms.join(' ')}"` : '';
+    const userAttributes = element.attributes();
+    let mergedAttributes: StyleDefinitionAttributes | undefined = userAttributes;
 
-    return `<use${transformAttr} href="#${id}"/>`;
+    if (transforms.length > 0) {
+      const userTransform = userAttributes?.transform;
+      const allParts =
+        typeof userTransform === 'string' && userTransform.length > 0
+          ? [userTransform, ...transforms]
+          : transforms;
+
+      mergedAttributes = { ...userAttributes, transform: allParts.join(' ') };
+    }
+
+    const attrs = this.#renderAttributes(mergedAttributes);
+
+    return `<use${attrs} href="#${id}"/>`;
   }
 
   /**

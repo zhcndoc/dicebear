@@ -239,7 +239,7 @@ class RendererTest extends TestCase
             'components' => [
                 'eyes' => [
                     'width' => 50, 'height' => 50,
-                    'translate' => ['x' => [5], 'y' => [10]],
+                    'translate' => ['x' => ['min' => 5, 'max' => 5], 'y' => ['min' => 10, 'max' => 10]],
                     'variants' => ['open' => ['elements' => [['type' => 'element', 'name' => 'circle', 'attributes' => ['r' => '5']]]]],
                 ],
             ],
@@ -258,7 +258,7 @@ class RendererTest extends TestCase
             'components' => [
                 'eyes' => [
                     'width' => 50, 'height' => 50,
-                    'rotate' => [45],
+                    'rotate' => ['min' => 45, 'max' => 45],
                     'variants' => ['open' => ['elements' => [['type' => 'element', 'name' => 'circle', 'attributes' => ['r' => '5']]]]],
                 ],
             ],
@@ -277,6 +277,76 @@ class RendererTest extends TestCase
 
         $this->assertStringContainsString('<use href="#eyes-open-', $svg);
         $this->assertSame(0, preg_match('/<use[^>]*\\btransform=/', $svg));
+    }
+
+    public function testAppliesAttributesFromComponentReferenceToUseTag(): void
+    {
+        $style = new Style([
+            'canvas' => [
+                'width' => 100,
+                'height' => 100,
+                'elements' => [
+                    [
+                        'type' => 'component',
+                        'name' => 'eyes',
+                        'attributes' => [
+                            'transform' => 'matrix(.5 0 0 .5 10 20)',
+                            'opacity' => '.75',
+                        ],
+                    ],
+                ],
+            ],
+            'components' => [
+                'eyes' => [
+                    'width' => 50,
+                    'height' => 50,
+                    'variants' => [
+                        'open' => ['elements' => [['type' => 'element', 'name' => 'circle', 'attributes' => ['r' => '5']]]],
+                    ],
+                ],
+            ],
+        ]);
+
+        $svg = (new Avatar($style, ['seed' => 'test', 'eyesVariant' => 'open']))->toString();
+
+        $this->assertStringContainsString(
+            '<use transform="matrix(.5 0 0 .5 10 20)" opacity=".75" href="#eyes-open-',
+            $svg,
+        );
+    }
+
+    public function testPrependsUserTransformToBuiltInComponentTransforms(): void
+    {
+        $style = new Style([
+            'canvas' => [
+                'width' => 100,
+                'height' => 100,
+                'elements' => [
+                    [
+                        'type' => 'component',
+                        'name' => 'eyes',
+                        'attributes' => ['transform' => 'matrix(.5 0 0 .5 10 20)'],
+                    ],
+                ],
+            ],
+            'components' => [
+                'eyes' => [
+                    'width' => 50,
+                    'height' => 50,
+                    'rotate' => ['min' => 45, 'max' => 45],
+                    'variants' => [
+                        'open' => ['elements' => [['type' => 'element', 'name' => 'circle', 'attributes' => ['r' => '5']]]],
+                    ],
+                ],
+            ],
+        ]);
+
+        $svg = (new Avatar($style, ['seed' => 'test']))->toString();
+
+        $this->assertStringContainsString(
+            '<use transform="matrix(.5 0 0 .5 10 20) rotate(45, 25, 25)" href="#eyes-open-',
+            $svg,
+        );
     }
 
     public function testDeduplicatesIdenticalComponentReferences(): void
@@ -427,7 +497,7 @@ class RendererTest extends TestCase
 
     public function testComponentScaleFromDefinition(): void
     {
-        $svg = (new Avatar(self::styleWithComponent(['scale' => [2]]), ['seed' => 'test']))->toString();
+        $svg = (new Avatar(self::styleWithComponent(['scale' => ['min' => 2, 'max' => 2]]), ['seed' => 'test']))->toString();
         $this->assertStringContainsString('translate(25, 25) scale(2) translate(-25, -25)', $svg);
     }
 
@@ -440,7 +510,7 @@ class RendererTest extends TestCase
     public function testComponentScaleAfterRotateInTransformAttribute(): void
     {
         $svg = (new Avatar(
-            self::styleWithComponent(['rotate' => [45], 'scale' => [2]]),
+            self::styleWithComponent(['rotate' => ['min' => 45, 'max' => 45], 'scale' => ['min' => 2, 'max' => 2]]),
             ['seed' => 'test'],
         ))->toString();
 
