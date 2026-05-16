@@ -13,8 +13,7 @@ SVG avatar generation, or the HTTP API as a simple `<img>` source with no
 additional dependencies.
 
 You can use DiceBear with Angular either via the
-[JS-Library](/how-to-use/js-library/) or the
-[HTTP-API](/how-to-use/http-api/).
+[JS-Library](/how-to-use/js-library/) or the [HTTP-API](/how-to-use/http-api/).
 
 ## With the JS library
 
@@ -37,7 +36,7 @@ export class AvatarComponent {
       seed: this.seed(),
       size: 128,
       // ... other options
-    }).toDataUri()
+    }).toDataUri(),
   );
 }
 ```

@@ -7,14 +7,13 @@ description: >
 
 # React Avatar Library – Using DiceBear with React
 
-DiceBear integrates naturally into React via the JS library or the HTTP API.
-Use `useMemo` to efficiently generate deterministic SVG profile pictures from a
+DiceBear integrates naturally into React via the JS library or the HTTP API. Use
+`useMemo` to efficiently generate deterministic SVG profile pictures from a
 seed, or use the HTTP API as a plain `<img src>` with no additional
 dependencies.
 
 You can use DiceBear with React either via the
-[JS-Library](/how-to-use/js-library/) or the
-[HTTP-API](/how-to-use/http-api/).
+[JS-Library](/how-to-use/js-library/) or the [HTTP-API](/how-to-use/http-api/).
 
 ## With the JS library
 

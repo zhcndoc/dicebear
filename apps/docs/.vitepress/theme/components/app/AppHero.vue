@@ -26,7 +26,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <section ref="heroRef" class="app-hero" :class="{ 'app-hero--paused': !isVisible }" @mousemove="handleMouseMove">
+  <section
+    ref="heroRef"
+    class="app-hero"
+    :class="{ 'app-hero--paused': !isVisible }"
+    @mousemove="handleMouseMove"
+  >
     <div class="app-hero-gradient"></div>
 
     <div class="app-hero-shape app-hero-shape-1"></div>
@@ -39,7 +44,11 @@ onMounted(() => {
       <AppHeroSwarm />
     </div>
 
-    <button class="app-hero-scroll" @click="scrollToContent" aria-label="Scroll to content">
+    <button
+      class="app-hero-scroll"
+      @click="scrollToContent"
+      aria-label="Scroll to content"
+    >
       <ChevronDown />
     </button>
   </section>
@@ -48,18 +57,42 @@ onMounted(() => {
 <style lang="scss">
 :root {
   --app-hero-gradient:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59, 130, 246, 0.12), transparent),
-    radial-gradient(ellipse 60% 40% at 80% 50%, rgba(236, 72, 153, 0.08), transparent),
-    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(20, 184, 166, 0.06), transparent);
+    radial-gradient(
+      ellipse 80% 50% at 50% -20%,
+      rgba(59, 130, 246, 0.12),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 60% 40% at 80% 50%,
+      rgba(236, 72, 153, 0.08),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 60% 40% at 20% 80%,
+      rgba(20, 184, 166, 0.06),
+      transparent
+    );
   --app-hero-badge-bg: rgba(255, 255, 255, 0.8);
   --app-hero-badge-border: rgba(0, 0, 0, 0.08);
   --app-hero-star-color: #f59e0b;
 }
 .dark {
   --app-hero-gradient:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59, 130, 246, 0.15), transparent),
-    radial-gradient(ellipse 60% 40% at 80% 50%, rgba(236, 72, 153, 0.10), transparent),
-    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(20, 184, 166, 0.08), transparent);
+    radial-gradient(
+      ellipse 80% 50% at 50% -20%,
+      rgba(59, 130, 246, 0.15),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 60% 40% at 80% 50%,
+      rgba(236, 72, 153, 0.1),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 60% 40% at 20% 80%,
+      rgba(20, 184, 166, 0.08),
+      transparent
+    );
   --app-hero-badge-bg: rgba(35, 35, 40, 0.85);
   --app-hero-badge-border: rgba(255, 255, 255, 0.1);
   --app-hero-star-color: #fbbf24;
@@ -113,7 +146,11 @@ onMounted(() => {
       height: 500px;
       top: -15%;
       right: -5%;
-      background: radial-gradient(circle, color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent) 0%, transparent 70%);
+      background: radial-gradient(
+        circle,
+        color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent) 0%,
+        transparent 70%
+      );
       animation: shape-float 18s ease-in-out infinite;
     }
 
@@ -122,7 +159,11 @@ onMounted(() => {
       height: 350px;
       bottom: -5%;
       left: -3%;
-      background: radial-gradient(circle, color-mix(in srgb, var(--vp-c-pink-2) 8%, transparent) 0%, transparent 70%);
+      background: radial-gradient(
+        circle,
+        color-mix(in srgb, var(--vp-c-pink-2) 8%, transparent) 0%,
+        transparent 70%
+      );
       animation: shape-float 22s ease-in-out infinite reverse;
     }
 
@@ -131,7 +172,11 @@ onMounted(() => {
       height: 200px;
       top: 30%;
       left: 8%;
-      background: radial-gradient(circle, color-mix(in srgb, var(--vp-c-green-1) 10%, transparent) 0%, transparent 70%);
+      background: radial-gradient(
+        circle,
+        color-mix(in srgb, var(--vp-c-green-1) 10%, transparent) 0%,
+        transparent 70%
+      );
       animation: shape-float 15s ease-in-out infinite;
       animation-delay: -5s;
     }
@@ -141,7 +186,11 @@ onMounted(() => {
       height: 160px;
       top: 20%;
       right: 12%;
-      background: radial-gradient(circle, color-mix(in srgb, var(--vp-c-pink-2) 8%, transparent) 0%, transparent 70%);
+      background: radial-gradient(
+        circle,
+        color-mix(in srgb, var(--vp-c-pink-2) 8%, transparent) 0%,
+        transparent 70%
+      );
       animation: shape-float 20s ease-in-out infinite;
       animation-delay: -10s;
     }
@@ -221,7 +270,12 @@ onMounted(() => {
     }
 
     &-text {
-      background: linear-gradient(120deg, var(--vp-c-brand-1) 0%, var(--vp-c-pink-2) 50%, var(--vp-c-brand-1) 100%);
+      background: linear-gradient(
+        120deg,
+        var(--vp-c-brand-1) 0%,
+        var(--vp-c-pink-2) 50%,
+        var(--vp-c-brand-1) 100%
+      );
       background-size: 300% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -293,7 +347,8 @@ onMounted(() => {
 }
 
 @keyframes app-hero-gradient-shift {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1) rotate(0deg);
   }
   50% {
@@ -311,7 +366,8 @@ onMounted(() => {
 }
 
 @keyframes app-hero-bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(-50%) translateY(0);
   }
   50% {
@@ -320,7 +376,8 @@ onMounted(() => {
 }
 
 @keyframes app-hero-star-pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -395,7 +452,8 @@ onMounted(() => {
         width: 180px;
         height: 180px;
       }
-      &-3, &-4 {
+      &-3,
+      &-4 {
         display: none;
       }
     }

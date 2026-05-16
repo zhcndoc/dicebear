@@ -15,7 +15,7 @@ const props = withDefaults(
   {
     mode: 'http-api',
     alt: 'avatar',
-  }
+  },
 );
 
 const svg = computedAsync(() => {
@@ -26,7 +26,7 @@ const svg = computedAsync(() => {
     case 'library':
       return loadAvatarStyle(styleName)
         .then((avatarStyle) =>
-          new Avatar(avatarStyle, clonePlain(styleOptions)).toDataUri()
+          new Avatar(avatarStyle, clonePlain(styleOptions)).toDataUri(),
         )
         .catch((e) => {
           if (import.meta.env.DEV) {

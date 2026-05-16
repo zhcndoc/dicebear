@@ -51,7 +51,9 @@ function scrollPreToBottom() {
 
 function updateCodeHtml(instance?: Hljs) {
   if (props.lang && instance?.getLanguage(props.lang)) {
-    codeHtml.value = instance.highlight(props.code, { language: props.lang }).value;
+    codeHtml.value = instance.highlight(props.code, {
+      language: props.lang,
+    }).value;
   } else {
     codeHtml.value = escapeHtml(props.code);
   }
@@ -86,18 +88,25 @@ onMounted(async () => {
   scrollPreToBottom();
 });
 
-watch(() => props.code, async () => {
-  const instance = props.lang ? await loadHljs() : undefined;
-  updateCodeHtml(instance);
-  await nextTick();
-  scrollPreToBottom();
-});
+watch(
+  () => props.code,
+  async () => {
+    const instance = props.lang ? await loadHljs() : undefined;
+    updateCodeHtml(instance);
+    await nextTick();
+    scrollPreToBottom();
+  },
+);
 </script>
 
 <template>
   <div class="ui-code">
     <pre ref="preRef" class="ui-code-text" v-html="codeHtml"></pre>
-    <button class="ui-code-copy" @click="onCopy" :title="copied ? 'Copied!' : 'Copy'">
+    <button
+      class="ui-code-copy"
+      @click="onCopy"
+      :title="copied ? 'Copied!' : 'Copy'"
+    >
       <Check v-if="copied" :size="14" />
       <Copy v-else :size="14" />
     </button>
@@ -154,16 +163,40 @@ watch(() => props.code, async () => {
 </style>
 
 <style>
-.ui-code-text .hljs-keyword { color: var(--vp-c-purple-1); }
-.ui-code-text .hljs-string { color: var(--vp-c-green-1); }
-.ui-code-text .hljs-title { color: var(--vp-c-yellow-1); }
-.ui-code-text .hljs-attr { color: var(--vp-c-indigo-1); }
-.ui-code-text .hljs-name { color: var(--vp-c-brand-1); }
-.ui-code-text .hljs-tag { color: var(--vp-c-text-2); }
-.ui-code-text .hljs-number { color: var(--vp-c-green-1); }
-.ui-code-text .hljs-literal { color: var(--vp-c-brand-1); }
-.ui-code-text .hljs-built_in { color: var(--vp-c-yellow-1); }
-.ui-code-text .hljs-params { color: var(--vp-c-text-1); }
-.ui-code-text .hljs-comment { color: var(--vp-c-text-3); }
-.ui-code-text .hljs-meta { color: var(--vp-c-text-3); }
+.ui-code-text .hljs-keyword {
+  color: var(--vp-c-purple-1);
+}
+.ui-code-text .hljs-string {
+  color: var(--vp-c-green-1);
+}
+.ui-code-text .hljs-title {
+  color: var(--vp-c-yellow-1);
+}
+.ui-code-text .hljs-attr {
+  color: var(--vp-c-indigo-1);
+}
+.ui-code-text .hljs-name {
+  color: var(--vp-c-brand-1);
+}
+.ui-code-text .hljs-tag {
+  color: var(--vp-c-text-2);
+}
+.ui-code-text .hljs-number {
+  color: var(--vp-c-green-1);
+}
+.ui-code-text .hljs-literal {
+  color: var(--vp-c-brand-1);
+}
+.ui-code-text .hljs-built_in {
+  color: var(--vp-c-yellow-1);
+}
+.ui-code-text .hljs-params {
+  color: var(--vp-c-text-1);
+}
+.ui-code-text .hljs-comment {
+  color: var(--vp-c-text-3);
+}
+.ui-code-text .hljs-meta {
+  color: var(--vp-c-text-3);
+}
 </style>

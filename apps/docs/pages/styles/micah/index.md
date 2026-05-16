@@ -1,8 +1,8 @@
 ---
 title: Micah – Avatar Style | DiceBear
 description: >
-  Create Micah avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Create Micah avatars with the DiceBear avatar library. Generate unique profile
+  pictures using our free avatar API or JavaScript avatar library.
 ---
 
 <script setup lang="ts">

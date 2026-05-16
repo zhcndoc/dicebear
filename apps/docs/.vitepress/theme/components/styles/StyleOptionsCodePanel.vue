@@ -15,7 +15,7 @@ const props = defineProps<{
   excludeHttpApi?: boolean;
 }>();
 
-const defaultTab = computed(() => props.excludeHttpApi ? 'js' : 'http-api');
+const defaultTab = computed(() => (props.excludeHttpApi ? 'js' : 'http-api'));
 
 const examples = computed(() =>
   generateCodeExamples(props.styleName, props.optionName, props.value),

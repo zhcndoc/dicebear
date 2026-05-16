@@ -8,7 +8,8 @@ description: >
 # How to programmatically access all available options of an avatar style?
 
 Each avatar style has different options depending on its components and colors.
-The `OptionsDescriptor` class lets you discover all available options at runtime.
+The `OptionsDescriptor` class lets you discover all available options at
+runtime.
 
 ## JavaScript
 
@@ -43,15 +44,15 @@ print_r($descriptor->toJSON());
 The `toJSON()` method returns a map of option names to field descriptors. Each
 descriptor has a `type` and additional properties depending on the type:
 
-| Type      | Properties                        | Example option           |
-| --------- | --------------------------------- | ------------------------ |
-| `string`  | `list?`                           | `seed`, `fontFamily`     |
-| `number`  | `min?`, `max?`, `list?`           | `fontWeight`             |
-| `boolean` |                                   | `idRandomization`        |
-| `enum`    | `values`, `list?`, `weighted?`    | `flip`, `*Variant`       |
-| `color`   | `list?`                           | `*Color`                 |
-| `range`   | `min?`, `max?`                    | `rotate`, `borderRadius` |
+| Type      | Properties                     | Example option           |
+| --------- | ------------------------------ | ------------------------ |
+| `string`  | `list?`                        | `seed`, `fontFamily`     |
+| `number`  | `min?`, `max?`, `list?`        | `fontWeight`             |
+| `boolean` |                                | `idRandomization`        |
+| `enum`    | `values`, `list?`, `weighted?` | `flip`, `*Variant`       |
+| `color`   | `list?`                        | `*Color`                 |
+| `range`   | `min?`, `max?`                 | `rotate`, `borderRadius` |
 
-The `list` flag indicates the option accepts an array. The `weighted` flag
-(on enum fields) indicates the option accepts a `Record<string, number>` for
+The `list` flag indicates the option accepts an array. The `weighted` flag (on
+enum fields) indicates the option accepts a `Record<string, number>` for
 weighted PRNG selection.

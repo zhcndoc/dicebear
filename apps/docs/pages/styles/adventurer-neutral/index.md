@@ -16,8 +16,8 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Adventurer Neutral
 
-Adventurer Neutral is the gender-neutral variant of the Adventurer vector
-avatar style. It generates abstract, character-based customizable profile icons
+Adventurer Neutral is the gender-neutral variant of the Adventurer vector avatar
+style. It generates abstract, character-based customizable profile icons
 suitable for any audience.
 
 <StylePreview styleName="adventurer-neutral" />

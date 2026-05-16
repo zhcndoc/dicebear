@@ -33,7 +33,7 @@ example to create the avatar.
 ```js
 import { toPng } from '@dicebear/converter';
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 const avatar = new Avatar(lorelei, {
   seed: 'Alice',
@@ -198,7 +198,7 @@ const png = toPng(svg, {
 const buffer = await png.toArrayBuffer(); // [!code focus]
 ```
 
-## Options 
+## Options
 
 | Option        | Type       | Default | Environment       | Description                               |
 | ------------- | ---------- | ------- | ----------------- | ----------------------------------------- |
@@ -217,7 +217,6 @@ const buffer = await png.toArrayBuffer(); // [!code focus]
 Controls the width and height of the rasterized output image in pixels. The
 output is always square. Values above `2048` are clamped to `2048`. Invalid
 values (`NaN`, `<= 0`, `Infinity`) fall back to `512`.
-
 
 ```js
 import { toPng } from '@dicebear/converter';
@@ -293,7 +292,7 @@ await exiftool.end();
 
 ```js
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 
 const avatar = new Avatar(lorelei, {
@@ -312,7 +311,7 @@ document.querySelector('img').src = dataUri;
 
 ```js
 import { Avatar } from '@dicebear/core';
-import bottts from '@dicebear/definitions/bottts.json' with { type: 'json' };
+import bottts from '@dicebear/styles/bottts.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 import { writeFile } from 'node:fs/promises';
 
@@ -330,7 +329,7 @@ await writeFile('avatar.png', Buffer.from(buffer));
 
 ```js
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 import { exiftool } from 'exiftool-vendored';
 import { writeFile } from 'node:fs/promises';
@@ -354,7 +353,7 @@ await exiftool.end();
 
 ```js
 import { Avatar } from '@dicebear/core';
-import initials from '@dicebear/definitions/initials.json' with { type: 'json' };
+import initials from '@dicebear/styles/initials.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 
 const avatar = new Avatar(initials, {
@@ -372,7 +371,7 @@ const dataUri = await png.toDataUri();
 
 ```js
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 
 const avatar = new Avatar(lorelei, { seed: 'Alice' });

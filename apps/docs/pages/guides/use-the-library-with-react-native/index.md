@@ -8,8 +8,8 @@ description: >
 # React Native Avatar Library – Using DiceBear with React Native
 
 DiceBear can be used in React Native via the JavaScript library with an SVG
-renderer, or via the HTTP API's PNG format using the built-in `Image`
-component — no SVG library required for the API approach.
+renderer, or via the HTTP API's PNG format using the built-in `Image` component
+— no SVG library required for the API approach.
 
 You can use DiceBear with [React Native](https://reactnative.dev/) either via
 the [JS-Library](/how-to-use/js-library/) or the
@@ -68,10 +68,7 @@ export default function Avatar({ seed = 'Alice' }) {
 
   return (
     <View>
-      <Image
-        source={{ uri: avatar }}
-        style={{ width: 128, height: 128 }}
-      />
+      <Image source={{ uri: avatar }} style={{ width: 128, height: 128 }} />
     </View>
   );
 }

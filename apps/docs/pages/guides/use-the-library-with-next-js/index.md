@@ -14,16 +14,16 @@ recommendation because it produces zero JavaScript on the client and avoids
 hydration pitfalls.
 
 You can use DiceBear with [Next.js](https://nextjs.org/) via the
-[JS-Library](/how-to-use/js-library/) or the
-[HTTP-API](/how-to-use/http-api/).
+[JS-Library](/how-to-use/js-library/) or the [HTTP-API](/how-to-use/http-api/).
 
 ## App Router
 
 ### Server component (recommended)
 
-In App Router, components are server components by default. Generate the SVG
-on the server and inline it as a [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme)
-— no client-side JavaScript is shipped for the avatar.
+In App Router, components are server components by default. Generate the SVG on
+the server and inline it as a
+[data URI](https://en.wikipedia.org/wiki/Data_URI_scheme) — no client-side
+JavaScript is shipped for the avatar.
 
 ```tsx
 // app/components/UserAvatar.tsx
@@ -43,8 +43,8 @@ export function UserAvatar({ seed = 'Alice' }: { seed?: string }) {
 
 ### Client component
 
-Mark the file with `'use client'` and wrap generation in `useMemo` so the
-avatar is only re-derived when the seed changes.
+Mark the file with `'use client'` and wrap generation in `useMemo` so the avatar
+is only re-derived when the seed changes.
 
 ```tsx
 // app/components/UserAvatarClient.tsx
@@ -71,16 +71,16 @@ export function UserAvatarClient({ seed = 'Alice' }: { seed?: string }) {
 
 ::: warning Hydration & `idRandomization`
 
-`idRandomization` uses the host's non-seeded RNG, so the server and the
-client will produce different IDs and React will throw a hydration mismatch
-warning. Either:
+`idRandomization` uses the host's non-seeded RNG, so the server and the client
+will produce different IDs and React will throw a hydration mismatch warning.
+Either:
 
-- Generate the avatar in a server component (no hydration) and don't pass
-  the SVG to a client component, **or**
+- Generate the avatar in a server component (no hydration) and don't pass the
+  SVG to a client component, **or**
 - Leave `idRandomization: false` and rely on the deterministic IDs.
 
-If you need ID uniqueness across multiple avatars on the same page, render
-each avatar entirely on the server.
+If you need ID uniqueness across multiple avatars on the same page, render each
+avatar entirely on the server.
 
 :::
 
@@ -113,11 +113,11 @@ export async function GET(
 
 ## Pages Router
 
-Pages Router treats every component as client-side by default. Use
-`useMemo` exactly like in a plain React app — see the
-[React guide](/guides/use-the-library-with-react/) for the canonical
-pattern. Server-side generation through `getServerSideProps` or
-`getStaticProps` returns the SVG as a prop, avoiding a client bundle hit.
+Pages Router treats every component as client-side by default. Use `useMemo`
+exactly like in a plain React app — see the
+[React guide](/guides/use-the-library-with-react/) for the canonical pattern.
+Server-side generation through `getServerSideProps` or `getStaticProps` returns
+the SVG as a prop, avoiding a client bundle hit.
 
 ```tsx
 // pages/profile.tsx
@@ -151,17 +151,15 @@ export function UserAvatar({ seed = 'Alice' }: { seed?: string }) {
 }
 ```
 
-If you want to use `next/image` with the HTTP API, request a raster format
-(PNG, WebP, AVIF) — `next/image` does not optimise SVG sources — and add
+If you want to use `next/image` with the HTTP API, request a raster format (PNG,
+WebP, AVIF) — `next/image` does not optimise SVG sources — and add
 `api.dicebear.com` to `images.remotePatterns` in `next.config.js`.
 
 ```js
 // next.config.js
 module.exports = {
   images: {
-    remotePatterns: [
-      { protocol: 'https', hostname: 'api.dicebear.com' },
-    ],
+    remotePatterns: [{ protocol: 'https', hostname: 'api.dicebear.com' }],
   },
 };
 ```

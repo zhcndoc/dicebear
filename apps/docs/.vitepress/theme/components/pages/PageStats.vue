@@ -5,7 +5,10 @@ import AppSmallHero from '../app/AppSmallHero.vue';
 import AppStatsChart from '../app/AppStatsChart.vue';
 import AppStatsMultiLineChart from '../app/AppStatsMultiLineChart.vue';
 import AppStatsGlobe from '../app/AppStatsGlobe.vue';
-import { useApiStatsRaw, lastCompleteMonth } from '../../composables/useApiStats';
+import {
+  useApiStatsRaw,
+  lastCompleteMonth,
+} from '../../composables/useApiStats';
 import { formatNumber, formatBytes } from '../../utils/format';
 
 const SECONDS_PER_DAY = 86400;
@@ -45,7 +48,9 @@ function completeWeeks(dayKeys: string[], weekOrder: string[]): string[] {
   }
 
   const firstDow = new Date(`${dayKeys[0]}T00:00:00Z`).getUTCDay();
-  const lastDow = new Date(`${dayKeys[dayKeys.length - 1]}T00:00:00Z`).getUTCDay();
+  const lastDow = new Date(
+    `${dayKeys[dayKeys.length - 1]}T00:00:00Z`,
+  ).getUTCDay();
   const start = firstDow !== 1 ? 1 : 0;
   const end = lastDow !== 0 ? weekOrder.length - 1 : weekOrder.length;
 
@@ -102,7 +107,10 @@ const downloadsData = computed(() => {
 
 function buildSeries(
   source: Record<string, [string, number][]>,
-): { labels: string[]; series: Array<{ name: string; values: number[] }> } | null {
+): {
+  labels: string[];
+  series: Array<{ name: string; values: number[] }>;
+} | null {
   const dayKeys = Object.keys(source).sort();
 
   if (dayKeys.length === 0) {
@@ -154,7 +162,9 @@ function buildSeries(
   const labels = weeks.map((k) => fmtWeekRange(k));
   const series = ranked.map((name) => ({
     name,
-    values: weeks.map((week) => (sums[week][name] ?? 0) / (dayCount[week] || 1)),
+    values: weeks.map(
+      (week) => (sums[week][name] ?? 0) / (dayCount[week] || 1),
+    ),
   }));
 
   return { labels, series };
@@ -204,7 +214,9 @@ const requestsPerSecond = computed(() => {
     return 0;
   }
 
-  const entries = Object.entries(stats.value.requests).sort(([a], [b]) => a.localeCompare(b));
+  const entries = Object.entries(stats.value.requests).sort(([a], [b]) =>
+    a.localeCompare(b),
+  );
 
   if (entries.length < 2) {
     return 0;
@@ -243,8 +255,14 @@ const monthlyStats = computed(() => {
 
 <template>
   <AppSmallHero badge="Statistics">
-    <template #headline>Billions of Avatars.<br><strong>One API.</strong></template>
-    <template #description>Every avatar generated through our HTTP-API is tracked anonymously. This page gives you a transparent look at real usage data — updated daily, broken down by requests, traffic, styles, and more.</template>
+    <template #headline
+      >Billions of Avatars.<br /><strong>One API.</strong></template
+    >
+    <template #description
+      >Every avatar generated through our HTTP-API is tracked anonymously. This
+      page gives you a transparent look at real usage data — updated daily,
+      broken down by requests, traffic, styles, and more.</template
+    >
     <template #actions><!-- no actions --></template>
     <template #below-actions>
       <div v-if="monthlyStats" class="page-stats-hero-kpis">

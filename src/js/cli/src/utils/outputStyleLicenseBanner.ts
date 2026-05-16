@@ -31,7 +31,9 @@ export function outputStyleLicenseBanner(name: string, style: Style) {
   }
 
   if (licenseName) {
-    banner.push(`License: ${licenseName}${licenseUrl ? ` - ${licenseUrl}` : ''}`);
+    banner.push(
+      `License: ${licenseName}${licenseUrl ? ` - ${licenseUrl}` : ''}`,
+    );
   }
 
   banner.push('-'.repeat(64));

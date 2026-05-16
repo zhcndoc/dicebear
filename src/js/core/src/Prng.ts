@@ -63,9 +63,7 @@ export class Prng {
     }
 
     const unique = this.#uniqueByCodePoint(entries, (e) => String(e[0]));
-    const sorted = unique.sort((a, b) =>
-      this.#compareByCodePoint(a[0], b[0]),
-    );
+    const sorted = unique.sort((a, b) => this.#compareByCodePoint(a[0], b[0]));
     const totalWeight = sorted.reduce((sum, e) => sum + e[1], 0);
 
     if (totalWeight === 0) {
@@ -109,9 +107,8 @@ export class Prng {
     const max = Math.max(range.min, range.max);
     const step = range.step ?? 0;
     const raw = min + this.getValue(key) * (max - min);
-    const quantized = step > 0
-      ? min + Math.floor((raw - min) / step) * step
-      : raw;
+    const quantized =
+      step > 0 ? min + Math.floor((raw - min) / step) * step : raw;
 
     return Math.round(quantized * 10000) / 10000;
   }
@@ -139,7 +136,9 @@ export class Prng {
       return [...items];
     }
 
-    const result = this.#uniqueByCodePoint(items).sort(this.#compareByCodePoint);
+    const result = this.#uniqueByCodePoint(items).sort(
+      this.#compareByCodePoint,
+    );
     const prng = new Mulberry32(Fnv1a.hash(this.#seed + ':' + key));
 
     for (let i = result.length - 1; i > 0; i--) {

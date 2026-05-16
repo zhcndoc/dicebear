@@ -97,7 +97,9 @@ const metaList = computed(() => {
       </li>
       <li>
         CDN Sponsored by
-        <a href="https://bunny.net/" target="_blank" rel="noopener sponsored">bunny.net</a>
+        <a href="https://bunny.net/" target="_blank" rel="noopener sponsored"
+          >bunny.net</a
+        >
         (Advertisement)
       </li>
     </ul>
@@ -114,11 +116,9 @@ const metaList = computed(() => {
           meta.creator
         }}</a>
         /
-        <a
-          :href="meta.licenseUrl"
-          target="_blank"
-          rel="noopener noreferrer"
-          >{{ meta.licenseName?.replace(/\.$/, '') }}</a
+        <a :href="meta.licenseUrl" target="_blank" rel="noopener noreferrer">{{
+          meta.licenseName?.replace(/\.$/, '')
+        }}</a
         >.
         {{ ' ' }}
       </template>

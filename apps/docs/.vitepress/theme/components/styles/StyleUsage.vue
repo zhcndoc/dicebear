@@ -26,12 +26,12 @@ const exampleHttpApiImgTag = computed(() => {
 });
 
 const exampleJsLibraryInstall = computed(() => {
-  return `npm install @dicebear/core @dicebear/definitions --save`;
+  return `npm install @dicebear/core @dicebear/styles --save`;
 });
 
 const exampleJsLibraryUsage = computed(() => {
   return `import { Style, Avatar } from '@dicebear/core';
-import definition from '@dicebear/definitions/${kebabCase(props.styleName)}.json' with { type: 'json' };
+import definition from '@dicebear/styles/${kebabCase(props.styleName)}.json' with { type: 'json' };
 
 const style = new Style(definition);
 const avatar = new Avatar(style, {
@@ -47,7 +47,7 @@ const exampleCliInstall = computed(() => {
 });
 
 const examplePhpInstall = computed(() => {
-  return `composer require dicebear/core dicebear/definitions`;
+  return `composer require dicebear/core dicebear/styles`;
 });
 
 const examplePhpUsage = computed(() => {
@@ -57,7 +57,7 @@ use Composer\\InstalledVersions;
 use DiceBear\\Style;
 use DiceBear\\Avatar;
 
-$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$basePath = InstalledVersions::getInstallPath('dicebear/styles');
 $definition = json_decode(file_get_contents($basePath . '/src/${kebabCase(props.styleName)}.json'), true);
 
 $style = new Style($definition);

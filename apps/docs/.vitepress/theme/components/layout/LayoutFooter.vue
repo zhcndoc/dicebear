@@ -9,7 +9,10 @@ const { hasSidebar } = useLayout();
 </script>
 
 <template>
-  <footer class="layout-footer" :class="{ 'layout-footer-has-sidebar': hasSidebar }">
+  <footer
+    class="layout-footer"
+    :class="{ 'layout-footer-has-sidebar': hasSidebar }"
+  >
     <div class="layout-footer-divider"></div>
 
     <div class="layout-footer-main">
@@ -46,7 +49,12 @@ const { hasSidebar } = useLayout();
     height: 1px;
     max-width: 800px;
     margin: 0 auto;
-    background: linear-gradient(90deg, transparent, var(--vp-c-divider), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--vp-c-divider),
+      transparent
+    );
   }
 
   &-container {

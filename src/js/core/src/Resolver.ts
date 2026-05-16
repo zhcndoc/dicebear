@@ -44,7 +44,10 @@ export class Resolver<D = unknown> {
   }
 
   idRandomization(): boolean {
-    return this.#memo('idRandomization', () => this.#options.idRandomization() ?? false);
+    return this.#memo(
+      'idRandomization',
+      () => this.#options.idRandomization() ?? false,
+    );
   }
 
   title(): string | undefined {
@@ -61,7 +64,9 @@ export class Resolver<D = unknown> {
   fontFamily(): string {
     return this.#memo(
       'fontFamily',
-      () => this.#prng.pick('fontFamily', this.#options.fontFamily()) ?? 'system-ui',
+      () =>
+        this.#prng.pick('fontFamily', this.#options.fontFamily()) ??
+        'system-ui',
     );
   }
 
@@ -145,7 +150,11 @@ export class Resolver<D = unknown> {
   }
 
   colorAngle(name: string): number {
-    return this.#memoFloat(`${name}ColorAngle`, this.#options.colorAngle(name), 0);
+    return this.#memoFloat(
+      `${name}ColorAngle`,
+      this.#options.colorAngle(name),
+      0,
+    );
   }
 
   /**
@@ -164,8 +173,16 @@ export class Resolver<D = unknown> {
 
     return {
       rotate: this.#memoFloat(`${name}Rotate`, component?.rotate(), 0),
-      translateX: this.#memoFloat(`${name}TranslateX`, component?.translate().x(), 0),
-      translateY: this.#memoFloat(`${name}TranslateY`, component?.translate().y(), 0),
+      translateX: this.#memoFloat(
+        `${name}TranslateX`,
+        component?.translate().x(),
+        0,
+      ),
+      translateY: this.#memoFloat(
+        `${name}TranslateY`,
+        component?.translate().y(),
+        0,
+      ),
       scale: this.#memoFloat(`${name}Scale`, component?.scale(), 1),
     };
   }
@@ -270,7 +287,9 @@ export class Resolver<D = unknown> {
   }
 
   #memoFloat(key: string, range: Range | undefined, fallback: number): number {
-    return this.#memo(key, () => (range ? this.#prng.float(key, range) : fallback));
+    return this.#memo(key, () =>
+      range ? this.#prng.float(key, range) : fallback,
+    );
   }
 
   #memo<T>(key: string, compute: () => T): T {

@@ -16,16 +16,21 @@ const props = defineProps<{
   seed: string;
 }>();
 
-const { store, open, confettiKey, options, showDialog } = usePlaygroundDialog(() => props.seed);
+const { store, open, confettiKey, options, showDialog } = usePlaygroundDialog(
+  () => props.seed,
+);
 
 const text = ref('');
 
 async function onClick() {
   const avatarStyle = await loadAvatarStyle(store.avatarStyleName);
-  const avatar = new Avatar(avatarStyle, clonePlain({
-    ...options.value,
-    size: DOWNLOAD_AVATAR_SIZE,
-  }));
+  const avatar = new Avatar(
+    avatarStyle,
+    clonePlain({
+      ...options.value,
+      size: DOWNLOAD_AVATAR_SIZE,
+    }),
+  );
 
   const successful = copy(avatar.toString());
 
@@ -38,7 +43,12 @@ async function onClick() {
 </script>
 
 <template>
-  <Button label="Copy SVG" severity="secondary" variant="outlined" @click="onClick">
+  <Button
+    label="Copy SVG"
+    severity="secondary"
+    variant="outlined"
+    @click="onClick"
+  >
     <template #icon>
       <Copy :size="15" />
     </template>
@@ -55,7 +65,9 @@ async function onClick() {
       />
     </div>
     <h2 class="dialog-title">{{ text }}</h2>
-    <div class="dialog-subtitle">Please note the license below before using.</div>
+    <div class="dialog-subtitle">
+      Please note the license below before using.
+    </div>
     <div class="dialog-text">
       <PlaygroundLicenseAlert />
     </div>

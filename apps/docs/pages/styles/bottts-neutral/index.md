@@ -17,8 +17,8 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 # Bottts Neutral
 
 Bottts Neutral is a minimalist robot-inspired vector avatar style with clean
-geometric shapes. Generate simple, distinct customizable profile icons ideal
-for API services and tech platforms.
+geometric shapes. Generate simple, distinct customizable profile icons ideal for
+API services and tech platforms.
 
 <StylePreview styleName="bottts-neutral" />
 

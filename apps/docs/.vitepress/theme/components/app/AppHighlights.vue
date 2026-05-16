@@ -1,19 +1,30 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { UiContainer, UiSection, UiSectionHeader, UiIconBox, UiCard, UiIcon } from '../ui';
+import {
+  UiContainer,
+  UiSection,
+  UiSectionHeader,
+  UiIconBox,
+  UiCard,
+  UiIcon,
+} from '../ui';
 import { Target, Palette, Zap, SlidersHorizontal, Globe } from '@lucide/vue';
 import { siGithub } from 'simple-icons';
 import { useVisibility } from '../../composables/useVisibility';
 
-withDefaults(defineProps<{
-  badge?: string;
-  headline?: string;
-  description?: string;
-}>(), {
-  badge: 'Why DiceBear?',
-  headline: 'Built for Developers, Loved by Users',
-  description: 'Everything you need to create beautiful, unique avatars for your applications.',
-});
+withDefaults(
+  defineProps<{
+    badge?: string;
+    headline?: string;
+    description?: string;
+  }>(),
+  {
+    badge: 'Why DiceBear?',
+    headline: 'Built for Developers, Loved by Users',
+    description:
+      'Everything you need to create beautiful, unique avatars for your applications.',
+  },
+);
 
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
@@ -22,37 +33,43 @@ const highlights = [
   {
     icon: Target,
     title: 'Deterministic Avatars',
-    description: 'Same seed always generates the same avatar. Perfect for user profiles and consistent identities.',
+    description:
+      'Same seed always generates the same avatar. Perfect for user profiles and consistent identities.',
     color: '#1689cc',
   },
   {
     icon: Palette,
     title: '30+ Avatar Styles',
-    description: 'Carefully crafted styles from talented artists. Characters, abstract, pixel art, and more.',
+    description:
+      'Carefully crafted styles from talented artists. Characters, abstract, pixel art, and more.',
     color: '#a855f7',
   },
   {
     icon: Globe,
     title: 'Free Avatar API',
-    description: 'Our profile picture API handles millions of daily requests. Global CDN delivers random user avatars in milliseconds.',
+    description:
+      'Our profile picture API handles millions of daily requests. Global CDN delivers random user avatars in milliseconds.',
     color: '#22c55e',
   },
   {
     icon: Zap,
     title: 'JS Library & CLI',
-    description: 'No data sent to external servers. Full control over avatar generation in your app.',
+    description:
+      'No data sent to external servers. Full control over avatar generation in your app.',
     color: '#f59e0b',
   },
   {
     icon: SlidersHorizontal,
     title: 'Fully Customizable',
-    description: 'Colors, accessories, backgrounds, and more. Fine-tune every detail to match your brand.',
+    description:
+      'Colors, accessories, backgrounds, and more. Fine-tune every detail to match your brand.',
     color: '#ec4899',
   },
   {
     iconPath: siGithub.path,
     title: '100% Open Source',
-    description: 'MIT licensed core, transparent development. Contribute, fork, or self-host with confidence.',
+    description:
+      'MIT licensed core, transparent development. Contribute, fork, or self-host with confidence.',
     color: 'var(--vp-c-text-1)',
   },
 ];
@@ -81,9 +98,16 @@ const highlights = [
           padding="lg"
           radius="md"
           class="app-highlights-card"
-          :style="{ '--accent-color': highlight.color, animationDelay: `${index * 0.1}s` }"
+          :style="{
+            '--accent-color': highlight.color,
+            animationDelay: `${index * 0.1}s`,
+          }"
         >
-          <UiIconBox size="lg" :color="highlight.color" class="app-highlights-icon-wrapper">
+          <UiIconBox
+            size="lg"
+            :color="highlight.color"
+            class="app-highlights-icon-wrapper"
+          >
             <UiIcon v-if="highlight.iconPath" :path="highlight.iconPath" />
             <component v-else :is="highlight.icon" />
           </UiIconBox>
@@ -99,8 +123,16 @@ const highlights = [
 .app-highlights {
   &-gradient {
     background:
-      radial-gradient(ellipse 50% 50% at 50% 0%, color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent), transparent),
-      radial-gradient(ellipse 50% 50% at 50% 100%, color-mix(in srgb, var(--vp-c-purple-1) 6%, transparent), transparent);
+      radial-gradient(
+        ellipse 50% 50% at 50% 0%,
+        color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent),
+        transparent
+      ),
+      radial-gradient(
+        ellipse 50% 50% at 50% 100%,
+        color-mix(in srgb, var(--vp-c-purple-1) 6%, transparent),
+        transparent
+      );
   }
 
   &-header {

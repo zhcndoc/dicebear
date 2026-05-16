@@ -29,7 +29,7 @@ export class Mulberry32 {
     let t = Math.imul(z ^ (z >>> 15), z | 1);
     t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
 
-    return ((t ^ (t >>> 14)) >>> 0);
+    return (t ^ (t >>> 14)) >>> 0;
   }
 
   /**

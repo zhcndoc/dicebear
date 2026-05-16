@@ -2,7 +2,14 @@
 import { ref } from 'vue';
 import { Star, Heart, Scale, ArrowRight } from '@lucide/vue';
 import { siGithub } from 'simple-icons';
-import { UiButton, UiContainer, UiSection, UiCard, UiIconBox, UiIcon } from '../ui';
+import {
+  UiButton,
+  UiContainer,
+  UiSection,
+  UiCard,
+  UiIconBox,
+  UiIcon,
+} from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
 const sectionRef = ref();
@@ -16,14 +23,18 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
     </template>
     <UiContainer>
       <div class="app-open-source-cards-grid">
-        <UiCard padding="xl" radius="lg" class="app-open-source-cards-opensource-card">
+        <UiCard
+          padding="xl"
+          radius="lg"
+          class="app-open-source-cards-opensource-card"
+        >
           <UiIconBox size="lg" color="#f59e0b">
             <Star />
           </UiIconBox>
           <h3 class="app-open-source-cards-title">Open Source</h3>
           <p class="app-open-source-cards-text">
-            We believe in open source. All our code is available on GitHub. Feel free to contribute,
-            fork, or simply use it with confidence.
+            We believe in open source. All our code is available on GitHub. Feel
+            free to contribute, fork, or simply use it with confidence.
           </p>
           <div class="app-open-source-cards-actions">
             <UiButton
@@ -35,24 +46,37 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
               <UiIcon :path="siGithub.path" :size="20" />
               Star on GitHub
             </UiButton>
-            <UiButton href="/guides/contribute-to-the-library/" variant="secondary" class="app-open-source-cards-action-btn">
+            <UiButton
+              href="/guides/contribute-to-the-library/"
+              variant="secondary"
+              class="app-open-source-cards-action-btn"
+            >
               <Heart />
               Contribute
             </UiButton>
           </div>
         </UiCard>
 
-        <UiCard padding="xl" radius="lg" class="app-open-source-cards-license-card">
+        <UiCard
+          padding="xl"
+          radius="lg"
+          class="app-open-source-cards-license-card"
+        >
           <UiIconBox size="lg" color="#22c55e">
             <Scale />
           </UiIconBox>
           <h3 class="app-open-source-cards-title">License</h3>
           <p class="app-open-source-cards-text">
-            Our code is MIT licensed. The avatar styles are licensed under different licenses
-            chosen by the artists. Check out the overview for details.
+            Our code is MIT licensed. The avatar styles are licensed under
+            different licenses chosen by the artists. Check out the overview for
+            details.
           </p>
           <div class="app-open-source-cards-actions">
-            <UiButton href="/licenses/" variant="secondary" class="app-open-source-cards-action-btn app-open-source-cards-license-btn">
+            <UiButton
+              href="/licenses/"
+              variant="secondary"
+              class="app-open-source-cards-action-btn app-open-source-cards-license-btn"
+            >
               License Overview
               <ArrowRight :size="20" />
             </UiButton>
@@ -67,8 +91,16 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
 .app-open-source-cards {
   &-gradient {
     background:
-      radial-gradient(ellipse 50% 80% at 50% 0%, color-mix(in srgb, var(--vp-c-yellow-1) 5%, transparent), transparent),
-      radial-gradient(ellipse 50% 80% at 50% 100%, color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent), transparent);
+      radial-gradient(
+        ellipse 50% 80% at 50% 0%,
+        color-mix(in srgb, var(--vp-c-yellow-1) 5%, transparent),
+        transparent
+      ),
+      radial-gradient(
+        ellipse 50% 80% at 50% 100%,
+        color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent),
+        transparent
+      );
   }
 
   &-grid {

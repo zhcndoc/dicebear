@@ -8,7 +8,12 @@ import { Search } from '@lucide/vue';
 import InputText from 'primevue/inputtext';
 import StyleOptionsGroup from './StyleOptionsGroup.vue';
 import { useStyleOptions } from '@theme/composables/useStyleOptions';
-import { componentNamesKey, styleColorsKey, componentPreviewKey, styleDefaultsKey } from './styleOptionsKeys';
+import {
+  componentNamesKey,
+  styleColorsKey,
+  componentPreviewKey,
+  styleDefaultsKey,
+} from './styleOptionsKeys';
 
 interface OptionGroup {
   id: string;
@@ -23,9 +28,14 @@ const props = defineProps<{
 
 const searchQuery = ref('');
 
-const { loadedStyle, descriptor, componentNames, colorNames, styleColors, preview } = useStyleOptions(
-  toRef(() => props.styleName),
-);
+const {
+  loadedStyle,
+  descriptor,
+  componentNames,
+  colorNames,
+  styleColors,
+  preview,
+} = useStyleOptions(toRef(() => props.styleName));
 
 provide(componentNamesKey, componentNames);
 provide(componentPreviewKey, preview);
@@ -59,16 +69,16 @@ const styleDefaults = computed<Record<string, unknown>>(() => {
     result[`${name}Probability`] = component.probability();
 
     const rotate = component.rotate();
-    result[`${name}Rotate`] = rotate.length === 2 ? rotate : rotate[0] ?? 0;
+    result[`${name}Rotate`] = rotate.length === 2 ? rotate : (rotate[0] ?? 0);
 
     const tx = component.translate().x();
-    result[`${name}TranslateX`] = tx.length === 2 ? tx : tx[0] ?? 0;
+    result[`${name}TranslateX`] = tx.length === 2 ? tx : (tx[0] ?? 0);
 
     const ty = component.translate().y();
-    result[`${name}TranslateY`] = ty.length === 2 ? ty : ty[0] ?? 0;
+    result[`${name}TranslateY`] = ty.length === 2 ? ty : (ty[0] ?? 0);
 
     const scale = component.scale();
-    result[`${name}Scale`] = scale.length === 2 ? scale : scale[0] ?? 1;
+    result[`${name}Scale`] = scale.length === 2 ? scale : (scale[0] ?? 1);
   }
 
   for (const [name, values] of Object.entries(styleColors.value)) {
@@ -105,7 +115,10 @@ function isColorOption(key: string, names: string[]): boolean {
   );
 }
 
-function pick(source: Record<string, any>, keys: string[]): Record<string, any> {
+function pick(
+  source: Record<string, any>,
+  keys: string[],
+): Record<string, any> {
   const result: Record<string, any> = {};
 
   for (const key of keys) {
@@ -234,9 +247,7 @@ watchOnce(loadedStyle, async (style) => {
   }
 
   const top =
-    window.scrollY +
-    target.getBoundingClientRect().top -
-    getScrollOffset();
+    window.scrollY + target.getBoundingClientRect().top - getScrollOffset();
 
   window.scrollTo({ left: 0, top, behavior: 'instant' });
 });
@@ -266,7 +277,10 @@ watchOnce(loadedStyle, async (style) => {
       />
     </div>
 
-    <p class="style-options-empty" v-if="filteredGroups.length === 0 && searchQuery">
+    <p
+      class="style-options-empty"
+      v-if="filteredGroups.length === 0 && searchQuery"
+    >
       No options match "{{ searchQuery }}".
     </p>
   </div>

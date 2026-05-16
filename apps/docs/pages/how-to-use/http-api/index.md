@@ -74,8 +74,8 @@ themselves. For a quick overview we have created an
 All [core options](/how-to-use/js-library/#core-options) — such as `seed`,
 `flip`, `rotate`, `scale`, `borderRadius`, `backgroundColor`, and more — are
 available as [query parameters](https://en.wikipedia.org/wiki/Query_string).
-Style-specific options are listed on each [avatar style page](/styles/).
-For example:
+Style-specific options are listed on each [avatar style page](/styles/). For
+example:
 
 <BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=John" />
 <BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=Jane" />
@@ -134,14 +134,14 @@ supports the following subsets: `cyrillic`, `cyrillic-ext`, `devanagari`,
 You can set the version in the URL. Just replace the `10.x` from the previous
 examples with the one you want.
 
-| Version | Status | End of Life |
-| ------- | ------ | ----------- |
-| `10.x` | **Active** | — |
-| `9.x` | **Active** | — |
-| `8.x` | Deprecated | April 30, 2028 |
-| `7.x` | Deprecated | April 30, 2028 |
-| `6.x` | Deprecated | April 30, 2028 |
-| `5.x` | Deprecated | April 30, 2028 |
+| Version | Status     | End of Life    |
+| ------- | ---------- | -------------- |
+| `10.x`  | **Active** | —              |
+| `9.x`   | **Active** | —              |
+| `8.x`   | Deprecated | April 30, 2028 |
+| `7.x`   | Deprecated | April 30, 2028 |
+| `6.x`   | Deprecated | April 30, 2028 |
+| `5.x`   | Deprecated | April 30, 2028 |
 
 ::: warning
 
@@ -161,21 +161,22 @@ using discontinued versions after their End of Life.
 
 ## Self-Hosted Avatar API
 
-Need a private or commercial setup? You can [host the Avatar API yourself](/guides/host-the-http-api-yourself/) for full control over availability, rate limits, and data privacy.
+Need a private or commercial setup? You can
+[host the Avatar API yourself](/guides/host-the-http-api-yourself/) for full
+control over availability, rate limits, and data privacy.
 
 ## Fair Use & Rate Limits
 
 Our API is free to use for non-commercial purposes, but please use it
 responsibly. We reserve the right to block abusive users.
 
-We currently limit requests per second to **50 for SVG** and **10 for PNG,
-JPG, WebP, and AVIF**. Exceeding the limit returns HTTP `429 Too Many
-Requests`. We reserve the right to change these limits at any time without
-notice.
+We currently limit requests per second to **50 for SVG** and **10 for PNG, JPG,
+WebP, and AVIF**. Exceeding the limit returns HTTP `429 Too Many Requests`. We
+reserve the right to change these limits at any time without notice.
 
 For commercial use or higher limits, please
-[set up your own instance](/guides/host-the-http-api-yourself/).
-We're happy to answer questions — open a
+[set up your own instance](/guides/host-the-http-api-yourself/). We're happy to
+answer questions — open a
 [discussion](https://github.com/orgs/dicebear/discussions) on GitHub.
 
 ## Changes and Availability

@@ -53,7 +53,10 @@ function addPreset(hex: string) {
 
   <Popover ref="popover">
     <div class="pg-picker">
-      <div class="pg-picker-presets" v-if="presetColors.some(p => !colors.includes(p))">
+      <div
+        class="pg-picker-presets"
+        v-if="presetColors.some((p) => !colors.includes(p))"
+      >
         <button
           v-for="preset in presetColors"
           :key="preset"
@@ -71,11 +74,22 @@ function addPreset(hex: string) {
         />
         <div class="pg-picker-opacity">
           <span class="pg-picker-opacity-label">Opacity</span>
-          <Slider v-model="pickerOpacity" :min="0" :max="100" :step="1" class="pg-picker-opacity-slider" />
+          <Slider
+            v-model="pickerOpacity"
+            :min="0"
+            :max="100"
+            :step="1"
+            class="pg-picker-opacity-slider"
+          />
           <span>{{ pickerOpacity }}%</span>
         </div>
       </div>
-      <Button :label="`Add #${pickerHexWithAlpha()}`" severity="secondary" size="small" @click="addFromPicker" />
+      <Button
+        :label="`Add #${pickerHexWithAlpha()}`"
+        severity="secondary"
+        size="small"
+        @click="addFromPicker"
+      />
     </div>
   </Popover>
 </template>

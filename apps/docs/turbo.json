@@ -3,7 +3,11 @@
   "extends": ["//"],
   "tasks": {
     "build": {
-      "env": ["VITE_PRIVACY_POLICY_URL", "VITE_COOKIE_POLICY_URL", "VITE_SITE_NOTICE_URL"]
+      "env": [
+        "VITE_PRIVACY_POLICY_URL",
+        "VITE_COOKIE_POLICY_URL",
+        "VITE_SITE_NOTICE_URL"
+      ]
     }
   }
 }

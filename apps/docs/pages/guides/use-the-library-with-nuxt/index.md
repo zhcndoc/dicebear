@@ -7,22 +7,21 @@ description: >
 
 # Nuxt Avatar Library – Using DiceBear with Nuxt
 
-DiceBear fits naturally into Nuxt's universal rendering model. The avatar
-can be generated on the server during SSR, in a Nitro endpoint, or in a
-plain client component — pick whichever matches the page's
+DiceBear fits naturally into Nuxt's universal rendering model. The avatar can be
+generated on the server during SSR, in a Nitro endpoint, or in a plain client
+component — pick whichever matches the page's
 [rendering mode](https://nuxt.com/docs/guide/concepts/rendering).
 
 You can use DiceBear with [Nuxt](https://nuxt.com/) via the
-[JS-Library](/how-to-use/js-library/) or the
-[HTTP-API](/how-to-use/http-api/).
+[JS-Library](/how-to-use/js-library/) or the [HTTP-API](/how-to-use/http-api/).
 
 ## With the JS library
 
 ### Universal component
 
-Wrap generation in `computed` and the avatar is produced on whichever side
-the component renders on. Because the result is a data URI, the markup
-hydrates without re-running the renderer on the client.
+Wrap generation in `computed` and the avatar is produced on whichever side the
+component renders on. Because the result is a data URI, the markup hydrates
+without re-running the renderer on the client.
 
 ```vue
 <!-- components/UserAvatar.vue -->
@@ -49,21 +48,20 @@ const avatar = computed(() =>
 
 ::: warning Hydration & `idRandomization`
 
-`idRandomization` is backed by the host's non-seeded RNG, so the IDs
-produced during SSR will not match the client re-render — Vue logs a
-hydration mismatch. Keep `idRandomization: false` for SSR'd avatars, or
-wrap the component in `<ClientOnly>` and accept the visual flash.
+`idRandomization` is backed by the host's non-seeded RNG, so the IDs produced
+during SSR will not match the client re-render — Vue logs a hydration mismatch.
+Keep `idRandomization: false` for SSR'd avatars, or wrap the component in
+`<ClientOnly>` and accept the visual flash.
 
-If you need unique IDs across multiple avatars on the same page, render
-the entire page server-side and skip client hydration of the avatar
-subtree.
+If you need unique IDs across multiple avatars on the same page, render the
+entire page server-side and skip client hydration of the avatar subtree.
 
 :::
 
 ### Nitro endpoint
 
-Expose DiceBear behind your own URL when you want custom caching or
-seed validation:
+Expose DiceBear behind your own URL when you want custom caching or seed
+validation:
 
 ```ts
 // server/api/avatar/[seed].get.ts
@@ -84,8 +82,8 @@ Consume it from any component with `<img :src="`/api/avatar/${seed}`">`.
 
 ### Cache with `useAsyncData`
 
-For per-request SSR caching (so the same seed isn't re-rendered when
-multiple components ask for it), wrap generation in `useAsyncData`:
+For per-request SSR caching (so the same seed isn't re-rendered when multiple
+components ask for it), wrap generation in `useAsyncData`:
 
 ```vue
 <script setup lang="ts">
@@ -108,8 +106,8 @@ const { data: avatar } = await useAsyncData(`avatar:${props.seed}`, () =>
 
 ## With the HTTP API
 
-The HTTP API needs no installation. The URL is the same on the server and
-in the browser, so `<img>` works in any rendering mode:
+The HTTP API needs no installation. The URL is the same on the server and in the
+browser, so `<img>` works in any rendering mode:
 
 ```vue
 <script setup lang="ts">

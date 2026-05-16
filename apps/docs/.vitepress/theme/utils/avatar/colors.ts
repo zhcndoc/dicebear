@@ -14,7 +14,13 @@ export function getStyleColorsMap(style: Style): Record<string, string[]> {
   return result;
 }
 
-export const fallbackColors = ['ff8aab', 'ffbe47', '5bc971', '4da6ff', 'a67df5'] as const;
+export const fallbackColors = [
+  'ff8aab',
+  'ffbe47',
+  '5bc971',
+  '4da6ff',
+  'a67df5',
+] as const;
 
 export function padColors(values: readonly string[], min = 4): string[] {
   if (values.length >= min) return [...values];

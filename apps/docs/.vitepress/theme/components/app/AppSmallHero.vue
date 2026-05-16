@@ -1,18 +1,29 @@
 <script setup lang="ts">
 import { ref, useSlots, computed } from 'vue';
 import { Play, ArrowRight } from '@lucide/vue';
-import { UiButton, UiHeadline, UiDescription, UiBadge, UiContainer, UiSection } from '../ui';
+import {
+  UiButton,
+  UiHeadline,
+  UiDescription,
+  UiBadge,
+  UiContainer,
+  UiSection,
+} from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
-withDefaults(defineProps<{
-  badge?: string;
-  headline?: string;
-  description?: string;
-}>(), {
-  badge: 'Why DiceBear?',
-  headline: 'Avatars That Stand Out',
-  description: 'DiceBear is an open source avatar library that lets you generate unique, deterministic profile pictures in no time. Whether you need geometric shapes, cute characters, or pixel art — our privacy-focused SVG avatar library with 30+ styles brings your projects to life.',
-});
+withDefaults(
+  defineProps<{
+    badge?: string;
+    headline?: string;
+    description?: string;
+  }>(),
+  {
+    badge: 'Why DiceBear?',
+    headline: 'Avatars That Stand Out',
+    description:
+      'DiceBear is an open source avatar library that lets you generate unique, deterministic profile pictures in no time. Whether you need geometric shapes, cute characters, or pixel art — our privacy-focused SVG avatar library with 30+ styles brings your projects to life.',
+  },
+);
 
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef, { threshold: 0.1 });
@@ -27,7 +38,10 @@ const hasActions = computed(() => !!slots.actions);
     <template #background>
       <div class="app-small-hero-gradient"></div>
     </template>
-    <UiContainer class="app-small-hero-container" :class="{ 'app-small-hero-container--has-aside': hasAside }">
+    <UiContainer
+      class="app-small-hero-container"
+      :class="{ 'app-small-hero-container--has-aside': hasAside }"
+    >
       <div :class="{ 'app-small-hero-layout': hasAside }">
         <div>
           <UiBadge>{{ badge }}</UiBadge>
@@ -46,7 +60,11 @@ const hasActions = computed(() => !!slots.actions);
               <Play :size="20" />
               Try Playground
             </UiButton>
-            <UiButton href="/styles/" variant="secondary" class="app-small-hero-action-btn">
+            <UiButton
+              href="/styles/"
+              variant="secondary"
+              class="app-small-hero-action-btn"
+            >
               Browse Styles
               <ArrowRight :size="20" class="app-small-hero-arrow-icon" />
             </UiButton>
@@ -67,9 +85,21 @@ const hasActions = computed(() => !!slots.actions);
 .app-small-hero {
   &-gradient {
     background:
-      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(14, 165, 233, 0.12), transparent),
-      radial-gradient(ellipse 60% 40% at 80% 50%, rgba(124, 58, 237, 0.08), transparent),
-      radial-gradient(ellipse 60% 40% at 20% 80%, rgba(20, 184, 166, 0.06), transparent);
+      radial-gradient(
+        ellipse 80% 50% at 50% -20%,
+        rgba(14, 165, 233, 0.12),
+        transparent
+      ),
+      radial-gradient(
+        ellipse 60% 40% at 80% 50%,
+        rgba(124, 58, 237, 0.08),
+        transparent
+      ),
+      radial-gradient(
+        ellipse 60% 40% at 20% 80%,
+        rgba(20, 184, 166, 0.06),
+        transparent
+      );
 
     &::before,
     &::after {
@@ -84,7 +114,11 @@ const hasActions = computed(() => !!slots.actions);
       height: 400px;
       top: -10%;
       right: -5%;
-      background: radial-gradient(circle, color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent) 0%, transparent 70%);
+      background: radial-gradient(
+        circle,
+        color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent) 0%,
+        transparent 70%
+      );
       animation: shape-float 18s ease-in-out infinite;
     }
 
@@ -93,7 +127,11 @@ const hasActions = computed(() => !!slots.actions);
       height: 300px;
       bottom: -5%;
       left: -3%;
-      background: radial-gradient(circle, color-mix(in srgb, var(--vp-c-purple-1) 8%, transparent) 0%, transparent 70%);
+      background: radial-gradient(
+        circle,
+        color-mix(in srgb, var(--vp-c-purple-1) 8%, transparent) 0%,
+        transparent 70%
+      );
       animation: shape-float 22s ease-in-out infinite reverse;
     }
   }

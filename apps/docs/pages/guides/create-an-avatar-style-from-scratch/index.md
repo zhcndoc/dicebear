@@ -147,8 +147,8 @@ Let's add a face component with two variants:
 ```
 
 The `canvas.elements` array references the `face` component via
-`{ "type": "component", "name": "face" }`. The PRNG selects either the
-`smile` or `neutral` variant.
+`{ "type": "component", "name": "face" }`. The PRNG selects either the `smile`
+or `neutral` variant.
 
 ## Multiple components
 
@@ -190,8 +190,8 @@ PRNG selects a variant for each one separately.
 
 ### Probability
 
-The `probability` property (0-100) controls how often a component appears.
-In the example above, `accessories` only appears in ~30% of generated avatars.
+The `probability` property (0-100) controls how often a component appears. In
+the example above, `accessories` only appears in ~30% of generated avatars.
 Default is `100` (always visible).
 
 ### Variant weights
@@ -302,6 +302,7 @@ Add metadata to your definition for license attribution:
 ```
 
 This metadata appears in:
+
 - The `<metadata>` RDF block inside generated SVGs (Dublin Core terms; see the
   [Core implementation spec](/specification/implement-dicebear-core/#metadata-block))
 - The CLI license banner
@@ -354,8 +355,7 @@ echo (string) $avatar;
 
 - See the [Definition Schema Reference](/specification/definition-schema/) for
   the complete specification
-- Browse the
-  [official definitions](https://github.com/dicebear/styles) for
+- Browse the [official definitions](https://github.com/dicebear/styles) for
   real-world examples
 - Use the [Figma plugin](/guides/create-an-avatar-style-with-figma/) for a
   visual workflow

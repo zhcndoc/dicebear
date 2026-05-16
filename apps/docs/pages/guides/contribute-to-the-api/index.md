@@ -8,15 +8,14 @@ description: >
 # Contribute to the API
 
 The HTTP API at [api.dicebear.com](https://api.dicebear.com) is a
-[Fastify](https://www.fastify.io/) server that lives in its own
-repository: [`dicebear/api`](https://github.com/dicebear/api).
+[Fastify](https://www.fastify.io/) server that lives in its own repository:
+[`dicebear/api`](https://github.com/dicebear/api).
 
-The contribution guide, including local setup, the test suite, the
-Docker-based production image, and the release process, lives alongside
-the code:
+The contribution guide, including local setup, the test suite, the Docker-based
+production image, and the release process, lives alongside the code:
 
 - [`CONTRIBUTING.md`](https://github.com/dicebear/api/blob/4.x/CONTRIBUTING.md)
   in `dicebear/api`
 
-For hosting the API yourself (as opposed to working on its source),
-see [Host the HTTP API yourself](/guides/host-the-http-api-yourself/).
+For hosting the API yourself (as opposed to working on its source), see
+[Host the HTTP API yourself](/guides/host-the-http-api-yourself/).

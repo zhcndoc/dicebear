@@ -23,7 +23,10 @@ export default function getAvatarOptions(
       continue;
     }
 
-    if (styleOption.isColor && (!avatarOption || avatarOption === 'transparent')) {
+    if (
+      styleOption.isColor &&
+      (!avatarOption || avatarOption === 'transparent')
+    ) {
       continue;
     }
 

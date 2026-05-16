@@ -19,8 +19,16 @@ import StyleOptionsCodePanel from './StyleOptionsCodePanel.vue';
 import Message from 'primevue/message';
 import { padColors } from '@theme/utils/avatar/colors';
 import { unsupportedHttpApiOptions } from '@theme/utils/avatar/api';
-import { getOptionDescription, getOptionExamples } from '@theme/utils/styleOptionMeta';
-import { styleColorsKey, styleColorsDefault, styleDefaultsKey, styleDefaultsDefault } from './styleOptionsKeys';
+import {
+  getOptionDescription,
+  getOptionExamples,
+} from '@theme/utils/styleOptionMeta';
+import {
+  styleColorsKey,
+  styleColorsDefault,
+  styleDefaultsKey,
+  styleDefaultsDefault,
+} from './styleOptionsKeys';
 
 export interface OptionValue {
   type: string;
@@ -65,12 +73,12 @@ interface BadgeConfig {
 }
 
 const typeStyles: Record<string, { color: string; icon: Component }> = {
-  string:  { color: 'var(--vp-c-text-2)',    icon: Type },
-  number:  { color: 'var(--vp-c-green-1)',   icon: Hash },
-  boolean: { color: 'var(--vp-c-brand-1)',   icon: ToggleLeft },
-  enum:    { color: 'var(--vp-c-purple-1)',   icon: List },
-  color:   { color: 'var(--vp-c-yellow-1)',   icon: Palette },
-  range:   { color: 'var(--vp-c-indigo-1)',   icon: SlidersHorizontal },
+  string: { color: 'var(--vp-c-text-2)', icon: Type },
+  number: { color: 'var(--vp-c-green-1)', icon: Hash },
+  boolean: { color: 'var(--vp-c-brand-1)', icon: ToggleLeft },
+  enum: { color: 'var(--vp-c-purple-1)', icon: List },
+  color: { color: 'var(--vp-c-yellow-1)', icon: Palette },
+  range: { color: 'var(--vp-c-indigo-1)', icon: SlidersHorizontal },
 };
 
 function style(type: string) {
@@ -96,7 +104,8 @@ const badges = computed<BadgeConfig[]>(() => {
     case 'enum': {
       const result: BadgeConfig[] = [{ label: 'enum', ...s }];
       if (isList.value) result.push({ label: 'enum[]', ...s });
-      if (isWeighted.value) result.push({ label: 'weighted', color: s.color, icon: Weight });
+      if (isWeighted.value)
+        result.push({ label: 'weighted', color: s.color, icon: Weight });
       return result;
     }
 
@@ -111,11 +120,16 @@ const badges = computed<BadgeConfig[]>(() => {
   }
 });
 
-const skipPreview = computed(() =>
-  fieldType.value === 'boolean' || props.name === 'fontFamily' || props.name === 'title',
+const skipPreview = computed(
+  () =>
+    fieldType.value === 'boolean' ||
+    props.name === 'fontFamily' ||
+    props.name === 'title',
 );
 
-const excludeHttpApi = computed(() => unsupportedHttpApiOptions.has(props.name));
+const excludeHttpApi = computed(() =>
+  unsupportedHttpApiOptions.has(props.name),
+);
 
 const possibleValues = computed(() => {
   if (skipPreview.value) {
@@ -155,7 +169,9 @@ const codeExampleValue = computed(() => {
   }
 
   if (possibleValues.value.length > 0) {
-    return isList.value ? possibleValues.value.slice(0, 2) : possibleValues.value[0];
+    return isList.value
+      ? possibleValues.value.slice(0, 2)
+      : possibleValues.value[0];
   }
 
   if (fieldType.value === 'boolean') {
@@ -197,7 +213,10 @@ const headerId = computed(() => {
 
 const description = computed(() => getOptionDescription(props.name));
 
-interface MetaItem { label: string; value: string }
+interface MetaItem {
+  label: string;
+  value: string;
+}
 
 const metaItems = computed<MetaItem[]>(() => {
   const items: MetaItem[] = [];
@@ -219,7 +238,9 @@ const metaItems = computed<MetaItem[]>(() => {
     if (Array.isArray(dv)) {
       formatted = `[${dv.join(', ')}]`;
     } else if (typeof dv === 'object' && dv !== null) {
-      formatted = Object.entries(dv).map(([k, v]) => `${k}: ${v}`).join(', ');
+      formatted = Object.entries(dv)
+        .map(([k, v]) => `${k}: ${v}`)
+        .join(', ');
     } else {
       formatted = String(dv);
     }
@@ -255,9 +276,11 @@ const weightedExampleValue = computed(() => {
 });
 
 const hasDetails = computed(() => {
-  return previewItems.value.length > 0
-    || codeExampleValue.value !== undefined
-    || excludeHttpApi.value;
+  return (
+    previewItems.value.length > 0 ||
+    codeExampleValue.value !== undefined ||
+    excludeHttpApi.value
+  );
 });
 </script>
 
@@ -284,17 +307,30 @@ const hasDetails = computed(() => {
     </p>
 
     <div class="style-options-card-meta" v-if="metaItems.length > 0">
-      <span v-for="item in metaItems" :key="item.label" class="style-options-card-meta-item">
+      <span
+        v-for="item in metaItems"
+        :key="item.label"
+        class="style-options-card-meta-item"
+      >
         {{ item.label }} <code>{{ item.value }}</code>
       </span>
     </div>
 
-    <Accordion v-if="hasDetails" :value="[]" multiple lazy class="style-options-card-details">
+    <Accordion
+      v-if="hasDetails"
+      :value="[]"
+      multiple
+      lazy
+      class="style-options-card-details"
+    >
       <AccordionPanel value="0">
         <AccordionHeader>Examples</AccordionHeader>
         <AccordionContent>
           <div class="style-options-card-details-body">
-            <div class="style-options-card-preview" v-if="previewItems.length > 0">
+            <div
+              class="style-options-card-preview"
+              v-if="previewItems.length > 0"
+            >
               <div class="style-options-card-preview-grid">
                 <StyleOptionsPreview
                   v-for="(val, key) in previewItems"
@@ -306,7 +342,10 @@ const hasDetails = computed(() => {
               </div>
             </div>
 
-            <div class="style-options-card-code" v-if="codeExampleValue !== undefined && !weightedExampleValue">
+            <div
+              class="style-options-card-code"
+              v-if="codeExampleValue !== undefined && !weightedExampleValue"
+            >
               <StyleOptionsCodePanel
                 :style-name="styleName"
                 :option-name="name"
@@ -315,7 +354,10 @@ const hasDetails = computed(() => {
               />
             </div>
 
-            <div class="style-options-card-code-group" v-if="codeExampleValue !== undefined && weightedExampleValue">
+            <div
+              class="style-options-card-code-group"
+              v-if="codeExampleValue !== undefined && weightedExampleValue"
+            >
               <div class="style-options-card-code-section">
                 <span class="style-options-card-code-label">Usage</span>
                 <StyleOptionsCodePanel
@@ -338,8 +380,12 @@ const hasDetails = computed(() => {
 
             <div v-if="excludeHttpApi" class="style-options-card-message">
               <Message severity="warn" :closable="false">
-                This option is not supported by our public <a href="/how-to-use/http-api/">HTTP-API</a>.
-                You can enable it by <a href="/guides/host-the-http-api-yourself/">hosting your own instance</a>.
+                This option is not supported by our public
+                <a href="/how-to-use/http-api/">HTTP-API</a>. You can enable it
+                by
+                <a href="/guides/host-the-http-api-yourself/"
+                  >hosting your own instance</a
+                >.
               </Message>
             </div>
           </div>

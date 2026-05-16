@@ -13,8 +13,7 @@ the JS library for full control, or the HTTP API for a lightweight,
 dependency-free approach.
 
 You can use DiceBear with Vue either via the
-[JS-Library](/how-to-use/js-library/) or the
-[HTTP-API](/how-to-use/http-api/).
+[JS-Library](/how-to-use/js-library/) or the [HTTP-API](/how-to-use/http-api/).
 
 ## With the JS library
 
@@ -22,7 +21,7 @@ You can use DiceBear with Vue either via the
 <script setup>
 import { computed } from 'vue';
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 const props = defineProps({
   seed: { type: String, default: 'Alice' },
@@ -33,7 +32,7 @@ const avatar = computed(() =>
     seed: props.seed,
     size: 128,
     // ... other options
-  }).toDataUri()
+  }).toDataUri(),
 );
 </script>
 

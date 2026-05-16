@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { ArrowRight } from '@lucide/vue';
-import { UiButton, UiContainer, UiSection, UiSectionHeader, UiCard } from '../ui';
+import {
+  UiButton,
+  UiContainer,
+  UiSection,
+  UiSectionHeader,
+  UiCard,
+} from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
 const sectionRef = ref();
@@ -10,15 +16,18 @@ const isVisible = useVisibility(sectionRef);
 const steps = [
   {
     title: 'Design in Figma',
-    description: 'Create your avatar components visually. Group colors and parts using our simple naming conventions.',
+    description:
+      'Create your avatar components visually. Group colors and parts using our simple naming conventions.',
   },
   {
     title: 'Export with Plugin',
-    description: 'Use the DiceBear Figma plugin to configure options and export your style as a ready-to-use package.',
+    description:
+      'Use the DiceBear Figma plugin to configure options and export your style as a ready-to-use package.',
   },
   {
     title: 'Build & Use',
-    description: 'Run npm install and npm run build. Your custom style is ready to generate avatars.',
+    description:
+      'Run npm install and npm run build. Your custom style is ready to generate avatars.',
   },
 ];
 </script>
@@ -36,7 +45,9 @@ const steps = [
         badge-variant="green"
         description="Design your avatar style visually in Figma. Our plugin handles the technical export – no coding required."
       >
-        <template #headline>Create Your Own Style<br /><strong>with Figma</strong></template>
+        <template #headline
+          >Create Your Own Style<br /><strong>with Figma</strong></template
+        >
       </UiSectionHeader>
 
       <div class="app-create-style-grid">
@@ -53,7 +64,9 @@ const steps = [
               <div class="app-create-style-step-number">{{ index + 1 }}</div>
               <div class="app-create-style-step-content">
                 <h3 class="app-create-style-step-title">{{ step.title }}</h3>
-                <p class="app-create-style-step-description">{{ step.description }}</p>
+                <p class="app-create-style-step-description">
+                  {{ step.description }}
+                </p>
               </div>
             </UiCard>
           </div>
@@ -63,7 +76,11 @@ const steps = [
               Read the Figma Guide
               <ArrowRight :size="20" />
             </UiButton>
-            <UiButton href="https://www.figma.com/community/plugin/1005765655729342787" variant="secondary" target="_blank">
+            <UiButton
+              href="https://www.figma.com/community/plugin/1005765655729342787"
+              variant="secondary"
+              target="_blank"
+            >
               Get the Plugin
               <ArrowRight :size="20" />
             </UiButton>
@@ -75,51 +92,87 @@ const steps = [
             <div class="app-create-style-figma-sidebar">
               <div class="app-create-style-figma-layers">
                 <div class="app-create-style-layer-group">
-                  <span class="app-create-style-layer-icon app-create-style-layer-icon-folder"></span>
+                  <span
+                    class="app-create-style-layer-icon app-create-style-layer-icon-folder"
+                  ></span>
                   <span>face</span>
                 </div>
                 <div class="app-create-style-layer-item">
-                  <span class="app-create-style-layer-icon app-create-style-layer-icon-component"></span>
+                  <span
+                    class="app-create-style-layer-icon app-create-style-layer-icon-component"
+                  ></span>
                   <span>face/round</span>
                 </div>
                 <div class="app-create-style-layer-item">
-                  <span class="app-create-style-layer-icon app-create-style-layer-icon-component"></span>
+                  <span
+                    class="app-create-style-layer-icon app-create-style-layer-icon-component"
+                  ></span>
                   <span>face/oval</span>
                 </div>
                 <div class="app-create-style-layer-group">
-                  <span class="app-create-style-layer-icon app-create-style-layer-icon-folder"></span>
+                  <span
+                    class="app-create-style-layer-icon app-create-style-layer-icon-folder"
+                  ></span>
                   <span>eyes</span>
                 </div>
                 <div class="app-create-style-layer-item">
-                  <span class="app-create-style-layer-icon app-create-style-layer-icon-component"></span>
+                  <span
+                    class="app-create-style-layer-icon app-create-style-layer-icon-component"
+                  ></span>
                   <span>eyes/happy</span>
                 </div>
                 <div class="app-create-style-layer-item active">
-                  <span class="app-create-style-layer-icon app-create-style-layer-icon-component"></span>
+                  <span
+                    class="app-create-style-layer-icon app-create-style-layer-icon-component"
+                  ></span>
                   <span>eyes/wink</span>
                 </div>
                 <div class="app-create-style-layer-group">
-                  <span class="app-create-style-layer-icon app-create-style-layer-icon-folder"></span>
+                  <span
+                    class="app-create-style-layer-icon app-create-style-layer-icon-folder"
+                  ></span>
                   <span>mouth</span>
                 </div>
                 <div class="app-create-style-layer-item">
-                  <span class="app-create-style-layer-icon app-create-style-layer-icon-component"></span>
+                  <span
+                    class="app-create-style-layer-icon app-create-style-layer-icon-component"
+                  ></span>
                   <span>mouth/smile</span>
                 </div>
               </div>
             </div>
             <div class="app-create-style-figma-canvas">
               <div class="app-create-style-canvas-avatar">
-                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="32" cy="32" r="28" fill="#FFD93D"/>
-                  <circle cx="22" cy="28" r="4" fill="#1a1a2e"/>
-                  <path d="M38 26 L42 30 L38 34" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M20 42 Q32 52 44 42" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round" fill="none"/>
+                <svg
+                  viewBox="0 0 64 64"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle cx="32" cy="32" r="28" fill="#FFD93D" />
+                  <circle cx="22" cy="28" r="4" fill="#1a1a2e" />
+                  <path
+                    d="M38 26 L42 30 L38 34"
+                    stroke="#1a1a2e"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M20 42 Q32 52 44 42"
+                    stroke="#1a1a2e"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    fill="none"
+                  />
                 </svg>
               </div>
               <div class="app-create-style-canvas-guides">
-                <div class="app-create-style-guide app-create-style-guide-h"></div>
-                <div class="app-create-style-guide app-create-style-guide-v"></div>
+                <div
+                  class="app-create-style-guide app-create-style-guide-h"
+                ></div>
+                <div
+                  class="app-create-style-guide app-create-style-guide-v"
+                ></div>
               </div>
             </div>
           </div>
@@ -139,11 +192,19 @@ const steps = [
     background-repeat: repeat !important;
     opacity: 0.3;
     mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent);
-    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent);
+    -webkit-mask-image: radial-gradient(
+      ellipse 80% 60% at 50% 50%,
+      black,
+      transparent
+    );
   }
 
   &-gradient {
-    background: radial-gradient(ellipse 80% 50% at 50% 0%, color-mix(in srgb, var(--vp-c-green-1) 8%, transparent), transparent);
+    background: radial-gradient(
+      ellipse 80% 50% at 50% 0%,
+      color-mix(in srgb, var(--vp-c-green-1) 8%, transparent),
+      transparent
+    );
   }
 
   &-container {

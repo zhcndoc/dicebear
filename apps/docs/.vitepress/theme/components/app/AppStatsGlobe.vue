@@ -2,7 +2,11 @@
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useData } from 'vitepress';
 import { useVisibility } from '@theme/composables/useVisibility';
-import { buildLandPoints, createPreloadBuffer, type PreloadBuffer } from '@theme/utils/globeLandPoints';
+import {
+  buildLandPoints,
+  createPreloadBuffer,
+  type PreloadBuffer,
+} from '@theme/utils/globeLandPoints';
 
 const props = defineProps<{
   rate: number;
@@ -18,7 +22,16 @@ let resizeObserver: ResizeObserver | null = null;
 let rotationFrame: number | null = null;
 
 const apiBase = 'https://api.dicebear.com/10.x';
-const avatarStyles = ['thumbs', 'shapes', 'lorelei', 'pixel-art', 'adventurer', 'bottts', 'avataaars', 'notionists'];
+const avatarStyles = [
+  'thumbs',
+  'shapes',
+  'lorelei',
+  'pixel-art',
+  'adventurer',
+  'bottts',
+  'avataaars',
+  'notionists',
+];
 
 interface GlobeEvent {
   id: number;
@@ -51,7 +64,10 @@ function pickLandPoint(): [number, number] {
     const pt = landPoints[Math.floor(Math.random() * landPoints.length)];
     let tooClose = false;
     for (const e of events) {
-      if (Math.abs(pt[0] - e.lat) < MIN_DISTANCE_DEG && Math.abs(pt[1] - e.lng) < MIN_DISTANCE_DEG) {
+      if (
+        Math.abs(pt[0] - e.lat) < MIN_DISTANCE_DEG &&
+        Math.abs(pt[1] - e.lng) < MIN_DISTANCE_DEG
+      ) {
         tooClose = true;
         break;
       }
@@ -72,7 +88,9 @@ function syncGlobe() {
 
 function addEvent() {
   const city = pickLandPoint();
-  const url = preloadBuffer ? preloadBuffer.getPreloadedUrl() : generateAvatarUrl();
+  const url = preloadBuffer
+    ? preloadBuffer.getPreloadedUrl()
+    : generateAvatarUrl();
 
   const ev: GlobeEvent = {
     id: eventId++,
@@ -88,7 +106,7 @@ function addEvent() {
     if (el) el.classList.add('app-stats-globe-bubble--leaving');
 
     const t2 = setTimeout(() => {
-      events = events.filter(e => e !== ev);
+      events = events.filter((e) => e !== ev);
       elementMap.delete(ev.id);
       syncGlobe();
     }, 600);
@@ -153,7 +171,9 @@ async function initGlobe() {
     .height(height)
     .backgroundColor('rgba(0,0,0,0)')
     .showAtmosphere(true)
-    .atmosphereColor(dark ? 'rgba(56, 189, 248, 0.2)' : 'rgba(2, 132, 199, 0.1)')
+    .atmosphereColor(
+      dark ? 'rgba(56, 189, 248, 0.2)' : 'rgba(2, 132, 199, 0.1)',
+    )
     .atmosphereAltitude(0.14)
     .globeImageUrl(null as any)
     .htmlElementsData([...events])
@@ -174,8 +194,11 @@ async function initGlobe() {
         const toRad = Math.PI / 180;
         const dLat = (lat - pov.lat) * toRad;
         const dLng = (lng - pov.lng) * toRad;
-        const a = Math.sin(dLat / 2) ** 2 +
-          Math.cos(lat * toRad) * Math.cos(pov.lat * toRad) * Math.sin(dLng / 2) ** 2;
+        const a =
+          Math.sin(dLat / 2) ** 2 +
+          Math.cos(lat * toRad) *
+            Math.cos(pov.lat * toRad) *
+            Math.sin(dLng / 2) ** 2;
         const angDist = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         // 0 = center → scale 1.0, PI/2 = edge → scale 0.55
         const scale = 0.55 + 0.45 * Math.max(0, 1 - angDist / (Math.PI / 2));
@@ -191,7 +214,9 @@ async function initGlobe() {
     try {
       const res = await fetch('/ne_110m_land.geojson');
       countriesGeoJson = await res.json();
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   }
 
   if (landPoints.length === 0) {
@@ -204,7 +229,9 @@ async function initGlobe() {
       .hexPolygonResolution(3)
       .hexPolygonMargin(0.35)
       .hexPolygonUseDots(true)
-      .hexPolygonColor(dark ? 'rgba(56, 189, 248, 0.65)' : 'rgba(2, 132, 199, 0.28)')
+      .hexPolygonColor(
+        dark ? 'rgba(56, 189, 248, 0.65)' : 'rgba(2, 132, 199, 0.28)',
+      )
       .hexPolygonAltitude(0.006);
   }
 
@@ -237,15 +264,18 @@ async function initGlobe() {
 function applyTheme() {
   if (!globe || !threeModule) return;
   const dark = isDark.value;
-  const { MeshPhongMaterial, Color, AmbientLight, DirectionalLight } = threeModule;
+  const { MeshPhongMaterial, Color, AmbientLight, DirectionalLight } =
+    threeModule;
 
   // Update atmosphere
-  globe
-    .atmosphereColor(dark ? 'rgba(56, 189, 248, 0.2)' : 'rgba(2, 132, 199, 0.1)');
+  globe.atmosphereColor(
+    dark ? 'rgba(56, 189, 248, 0.2)' : 'rgba(2, 132, 199, 0.1)',
+  );
 
   // Update hex polygon colors — pass string directly, no per-polygon closure needed
-  globe
-    .hexPolygonColor(dark ? 'rgba(56, 189, 248, 0.65)' : 'rgba(2, 132, 199, 0.28)');
+  globe.hexPolygonColor(
+    dark ? 'rgba(56, 189, 248, 0.65)' : 'rgba(2, 132, 199, 0.28)',
+  );
 
   // Dispose old material before creating a new one to free GPU resources
   const oldMat = globe.globeMaterial();
@@ -266,8 +296,14 @@ function applyTheme() {
   const oldLights = globe.lights();
   if (oldLights) oldLights.forEach((l: any) => l.dispose?.());
 
-  const ambient = new AmbientLight(dark ? 0xffffff : 0xf0f4fa, dark ? 1.6 : 1.4);
-  const dir = new DirectionalLight(dark ? 0x6699cc : 0xf4f8ff, dark ? 1.0 : 0.5);
+  const ambient = new AmbientLight(
+    dark ? 0xffffff : 0xf0f4fa,
+    dark ? 1.6 : 1.4,
+  );
+  const dir = new DirectionalLight(
+    dark ? 0x6699cc : 0xf4f8ff,
+    dark ? 1.0 : 0.5,
+  );
   dir.position.set(5, 3, 5);
   globe.lights([ambient, dir]);
 }
@@ -275,7 +311,9 @@ function applyTheme() {
 function startEvents() {
   if (eventInterval) return;
   if (landPoints.length === 0) {
-    console.warn('[AppStatsGlobe] No land points available — skipping avatar events.');
+    console.warn(
+      '[AppStatsGlobe] No land points available — skipping avatar events.',
+    );
     return;
   }
   for (let i = 0; i < 8; i++) {
@@ -285,7 +323,10 @@ function startEvents() {
 }
 
 function stopEvents() {
-  if (eventInterval) { clearInterval(eventInterval); eventInterval = null; }
+  if (eventInterval) {
+    clearInterval(eventInterval);
+    eventInterval = null;
+  }
   pendingTimeouts.forEach(clearTimeout);
   pendingTimeouts.length = 0;
 }
@@ -301,7 +342,8 @@ function startRotation() {
 
   function animateRotation() {
     rotLng += ROT_SPEED;
-    const lat = BASE_LAT + TILT * Math.sin(rotLng * TILT_FREQ * Math.PI / 180);
+    const lat =
+      BASE_LAT + TILT * Math.sin((rotLng * TILT_FREQ * Math.PI) / 180);
     globe.pointOfView({ lat, lng: rotLng % 360, altitude: 1.8 }, 0);
     rotationFrame = requestAnimationFrame(animateRotation);
   }
@@ -309,7 +351,10 @@ function startRotation() {
 }
 
 function stopRotation() {
-  if (rotationFrame !== null) { cancelAnimationFrame(rotationFrame); rotationFrame = null; }
+  if (rotationFrame !== null) {
+    cancelAnimationFrame(rotationFrame);
+    rotationFrame = null;
+  }
 }
 
 onMounted(async () => {
@@ -332,7 +377,9 @@ watch(isVisible, (visible) => {
   }
 });
 
-watch(isDark, () => { applyTheme(); });
+watch(isDark, () => {
+  applyTheme();
+});
 
 onUnmounted(() => {
   stopEvents();
@@ -341,8 +388,14 @@ onUnmounted(() => {
   eventId = 0;
   elementMap.clear();
   preloadBuffer = null;
-  if (globe) { globe._destructor(); globe = null; }
-  if (resizeObserver) { resizeObserver.disconnect(); resizeObserver = null; }
+  if (globe) {
+    globe._destructor();
+    globe = null;
+  }
+  if (resizeObserver) {
+    resizeObserver.disconnect();
+    resizeObserver = null;
+  }
 });
 
 const formattedRate = (r: number) => {
@@ -426,8 +479,9 @@ const formattedRate = (r: number) => {
   justify-content: center;
   opacity: 0;
   transform: scale(0);
-  transition: opacity var(--duration-slow) var(--ease-spring),
-              transform var(--duration-slow) var(--ease-spring);
+  transition:
+    opacity var(--duration-slow) var(--ease-spring),
+    transform var(--duration-slow) var(--ease-spring);
 
   &--visible {
     opacity: 1;
@@ -442,7 +496,9 @@ const formattedRate = (r: number) => {
   &--leaving {
     opacity: 0 !important;
     transform: scale(0.3) !important;
-    transition: opacity var(--duration-slow) ease, transform var(--duration-slow) ease !important;
+    transition:
+      opacity var(--duration-slow) ease,
+      transform var(--duration-slow) ease !important;
   }
 
   &-ring {

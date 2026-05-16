@@ -1,8 +1,8 @@
 ---
 title: Icons – Avatar Style | DiceBear
 description: >
-  Create Icons avatars with the DiceBear avatar library. Generate unique
-  profile pictures using our free avatar API or JavaScript avatar library.
+  Create Icons avatars with the DiceBear avatar library. Generate unique profile
+  pictures using our free avatar API or JavaScript avatar library.
 ---
 
 <script setup lang="ts">

@@ -20,7 +20,11 @@ export class Component {
   #translate?: ComponentTranslate;
   #variants?: ReadonlyMap<string, ComponentVariant>;
 
-  constructor(name: string, data: StyleDefinitionComponent, source?: Component) {
+  constructor(
+    name: string,
+    data: StyleDefinitionComponent,
+    source?: Component,
+  ) {
     this.#data = data;
     this.#name = name;
     this.#source = source;

@@ -19,7 +19,8 @@ import { UiIcon } from '../ui';
       />
     </a>
     <p class="layout-footer-tagline">
-      Open source SVG avatar library and avatar API for designers and developers.
+      Open source SVG avatar library and avatar API for designers and
+      developers.
     </p>
 
     <div class="layout-footer-social">

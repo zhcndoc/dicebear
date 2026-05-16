@@ -21,7 +21,10 @@ export const resourceLinks: FooterLink[] = [
   { label: 'Statistics', href: '/stats/' },
 ];
 
-function buildLegalLink(label: string, rawHref: string | undefined): FooterLink | null {
+function buildLegalLink(
+  label: string,
+  rawHref: string | undefined,
+): FooterLink | null {
   if (!rawHref) {
     return null;
   }

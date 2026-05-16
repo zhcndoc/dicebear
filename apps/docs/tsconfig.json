@@ -9,21 +9,11 @@
     "jsx": "preserve",
     "types": [],
     "paths": {
-      "@theme/*": [
-        "./.vitepress/theme/*"
-      ],
-      "@playground/*": [
-        "./.vitepress/theme/components/playground/*"
-      ]
+      "@theme/*": ["./.vitepress/theme/*"],
+      "@playground/*": ["./.vitepress/theme/components/playground/*"]
     },
     "skipLibCheck": true
   },
-  "include": [
-    "env.d.ts",
-    ".vitepress/**/*"
-  ],
-  "exclude": [
-    ".vitepress/cache",
-    ".vitepress/dist"
-  ]
+  "include": ["env.d.ts", ".vitepress/**/*"],
+  "exclude": [".vitepress/cache", ".vitepress/dist"]
 }

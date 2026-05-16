@@ -22,7 +22,9 @@ type Variant = ComponentBase['variants'][string];
 type Range = NonNullable<ComponentBase['rotate']>;
 type ColorGroup = NonNullable<StyleDefinition['colors']>[string];
 
-function isAlias(component: Component | undefined): component is ComponentAlias {
+function isAlias(
+  component: Component | undefined,
+): component is ComponentAlias {
   return (
     component !== undefined &&
     'extends' in component &&
@@ -167,9 +169,10 @@ function transformMultiplier(base: ComponentBase): bigint {
       continue;
     }
 
-    const slots = range.step !== undefined && range.step > 0
-      ? Math.floor((max - min) / range.step) + 1
-      : Math.round((max - min) * 10000) + 1;
+    const slots =
+      range.step !== undefined && range.step > 0
+        ? Math.floor((max - min) / range.step) + 1
+        : Math.round((max - min) * 10000) + 1;
 
     mult *= BigInt(slots);
   }
@@ -383,7 +386,9 @@ function jointColorCount(definition: StyleDefinition): bigint {
     }
 
     let candidates: string[];
-    const contrastRef = spec.contrastTo ? picks.get(spec.contrastTo) : undefined;
+    const contrastRef = spec.contrastTo
+      ? picks.get(spec.contrastTo)
+      : undefined;
 
     if (contrastRef) {
       candidates = sortByContrast(raw, contrastRef).slice(0, 1);

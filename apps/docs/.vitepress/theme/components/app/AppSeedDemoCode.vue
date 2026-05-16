@@ -14,38 +14,41 @@ const activeTab = ref<'api' | 'js' | 'php' | 'cli'>('api');
 const tabs = ['api', 'js', 'php', 'cli'] as const;
 const activeTabIndex = computed(() => tabs.indexOf(activeTab.value));
 
-const apiExample = computed(() =>
-  `https://api.dicebear.com/10.x/${props.style}/svg?seed=${encodeURIComponent(props.seed)}`
+const apiExample = computed(
+  () =>
+    `https://api.dicebear.com/10.x/${props.style}/svg?seed=${encodeURIComponent(props.seed)}`,
 );
 
-const jsExample = computed(() =>
-  `import { Style, Avatar } from '@dicebear/core';
-import definition from '@dicebear/definitions/${props.style}.json';
+const jsExample = computed(
+  () =>
+    `import { Style, Avatar } from '@dicebear/core';
+import definition from '@dicebear/styles/${props.style}.json';
 
 const style = new Style(definition);
 const avatar = new Avatar(style, {
   seed: '${escapeJsString(props.seed)}'
-});`
+});`,
 );
 
-const phpExample = computed(() =>
-  `<?php
+const phpExample = computed(
+  () =>
+    `<?php
 
 use Composer\\InstalledVersions;
 use DiceBear\\Style;
 use DiceBear\\Avatar;
 
-$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$basePath = InstalledVersions::getInstallPath('dicebear/styles');
 $definition = json_decode(file_get_contents($basePath . '/src/${props.style}.json'), true);
 
 $style = new Style($definition);
 $avatar = new Avatar($style, [
   'seed' => '${escapeJsString(props.seed)}'
-]);`
+]);`,
 );
 
-const cliExample = computed(() =>
-  `npx dicebear ${props.style} --seed '${escapeShellArg(props.seed)}'`
+const cliExample = computed(
+  () => `npx dicebear ${props.style} --seed '${escapeShellArg(props.seed)}'`,
 );
 
 const playgroundLink = '/playground/';
@@ -55,7 +58,10 @@ const playgroundLink = '/playground/';
   <div class="app-seed-demo-code">
     <div class="app-seed-demo-code-wrapper">
       <div class="app-seed-demo-code-tabs">
-        <div class="app-seed-demo-code-tabs-indicator" :style="{ transform: `translateX(${activeTabIndex * 100}%)` }"></div>
+        <div
+          class="app-seed-demo-code-tabs-indicator"
+          :style="{ transform: `translateX(${activeTabIndex * 100}%)` }"
+        ></div>
         <button
           v-for="tab in tabs"
           :key="tab"
@@ -63,20 +69,54 @@ const playgroundLink = '/playground/';
           :class="{ active: activeTab === tab }"
           @click="activeTab = tab"
         >
-          {{ tab === 'api' ? 'HTTP API' : tab === 'js' ? 'JS Library' : tab === 'php' ? 'PHP Library' : 'CLI' }}
+          {{
+            tab === 'api'
+              ? 'HTTP API'
+              : tab === 'js'
+                ? 'JS Library'
+                : tab === 'php'
+                  ? 'PHP Library'
+                  : 'CLI'
+          }}
         </button>
       </div>
 
       <div class="app-seed-demo-code-body">
-        <UiCode :code="apiExample" scroll-to-bottom class="app-seed-demo-code-block" :class="{ active: activeTab === 'api' }" />
-        <UiCode :code="jsExample" lang="js" scroll-to-bottom class="app-seed-demo-code-block" :class="{ active: activeTab === 'js' }" />
-        <UiCode :code="phpExample" lang="php" scroll-to-bottom class="app-seed-demo-code-block" :class="{ active: activeTab === 'php' }" />
-        <UiCode :code="cliExample" scroll-to-bottom class="app-seed-demo-code-block" :class="{ active: activeTab === 'cli' }" />
+        <UiCode
+          :code="apiExample"
+          scroll-to-bottom
+          class="app-seed-demo-code-block"
+          :class="{ active: activeTab === 'api' }"
+        />
+        <UiCode
+          :code="jsExample"
+          lang="js"
+          scroll-to-bottom
+          class="app-seed-demo-code-block"
+          :class="{ active: activeTab === 'js' }"
+        />
+        <UiCode
+          :code="phpExample"
+          lang="php"
+          scroll-to-bottom
+          class="app-seed-demo-code-block"
+          :class="{ active: activeTab === 'php' }"
+        />
+        <UiCode
+          :code="cliExample"
+          scroll-to-bottom
+          class="app-seed-demo-code-block"
+          :class="{ active: activeTab === 'cli' }"
+        />
       </div>
     </div>
 
     <div class="app-seed-demo-code-cta">
-      <UiButton :href="playgroundLink" variant="primary" class="app-seed-demo-code-cta-btn">
+      <UiButton
+        :href="playgroundLink"
+        variant="primary"
+        class="app-seed-demo-code-cta-btn"
+      >
         <Play :size="20" />
         Open Playground
       </UiButton>

@@ -40,12 +40,22 @@ const hasCustomMeta = computed(() => {
   return meta && (meta.creator || meta.license?.name);
 });
 
-const customSourceUrl = computed(() => safeHttpUrl(customStyleMeta.value?.source));
-const customLicenseUrl = computed(() => safeHttpUrl(customStyleMeta.value?.license?.url));
+const customSourceUrl = computed(() =>
+  safeHttpUrl(customStyleMeta.value?.source),
+);
+const customLicenseUrl = computed(() =>
+  safeHttpUrl(customStyleMeta.value?.license?.url),
+);
 
-const builtInSourceUrl = computed(() => safeHttpUrl(avatarStyleMeta.value?.source));
-const builtInHomepageUrl = computed(() => safeHttpUrl(avatarStyleMeta.value?.homepage));
-const builtInLicenseUrl = computed(() => safeHttpUrl(avatarStyleMeta.value?.license?.url));
+const builtInSourceUrl = computed(() =>
+  safeHttpUrl(avatarStyleMeta.value?.source),
+);
+const builtInHomepageUrl = computed(() =>
+  safeHttpUrl(avatarStyleMeta.value?.homepage),
+);
+const builtInLicenseUrl = computed(() =>
+  safeHttpUrl(avatarStyleMeta.value?.license?.url),
+);
 
 const avatarStyleName = computed(() => {
   if (store.isCustomStyle) {
@@ -55,8 +65,10 @@ const avatarStyleName = computed(() => {
   return capitalCase(store.avatarStyleName);
 });
 
-const avatarStyleLink = computed(
-  () => store.isCustomStyle ? undefined : `/styles/${kebabCase(store.avatarStyleName)}/`,
+const avatarStyleLink = computed(() =>
+  store.isCustomStyle
+    ? undefined
+    : `/styles/${kebabCase(store.avatarStyleName)}/`,
 );
 </script>
 
@@ -71,7 +83,8 @@ const avatarStyleLink = computed(
           :href="customSourceUrl"
           target="_blank"
           rel="noopener noreferrer"
-        >{{ customStyleMeta?.title }}</a>
+          >{{ customStyleMeta?.title }}</a
+        >
         <template v-else>{{ customStyleMeta?.title }}</template>
       </template>
       <template v-if="customStyleMeta?.creator">
@@ -84,13 +97,15 @@ const avatarStyleLink = computed(
           :href="customLicenseUrl"
           target="_blank"
           rel="noopener noreferrer"
-        >{{ customStyleMeta?.license?.name }}</a>
+          >{{ customStyleMeta?.license?.name }}</a
+        >
         <template v-else>{{ customStyleMeta?.license?.name }}</template>
       </template>
       (as stated by the creator — not verified by DiceBear).
     </template>
     <template v-else>
-      This avatar style was provided by a user. License and copyright have not been verified by DiceBear.
+      This avatar style was provided by a user. License and copyright have not
+      been verified by DiceBear.
     </template>
   </p>
 
@@ -126,8 +141,10 @@ const avatarStyleLink = computed(
       :href="builtInHomepageUrl"
       target="_blank"
       rel="noopener noreferrer"
-    >{{ avatarStyleMeta?.creator }}</a>
-    <template v-else>{{ avatarStyleMeta?.creator }}</template>, licensed under
+      >{{ avatarStyleMeta?.creator }}</a
+    >
+    <template v-else>{{ avatarStyleMeta?.creator }}</template
+    >, licensed under
     <a
       v-if="builtInLicenseUrl"
       :href="builtInLicenseUrl"
@@ -136,7 +153,9 @@ const avatarStyleLink = computed(
     >
       {{ formatLicenseName(avatarStyleMeta?.license?.name) }}
     </a>
-    <template v-else>{{ formatLicenseName(avatarStyleMeta?.license?.name) }}</template>
+    <template v-else>{{
+      formatLicenseName(avatarStyleMeta?.license?.name)
+    }}</template>
     .
   </p>
 </template>

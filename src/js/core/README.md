@@ -27,7 +27,8 @@ Playground, your next avatar is always just a stone's throw away!
 
 ## Sponsors
 
-Advertisement: Many thanks to our sponsors who provide us with free or discounted products.
+Advertisement: Many thanks to our sponsors who provide us with free or
+discounted products.
 
 <a href="https://bunny.net/" target="_blank" rel="noopener noreferrer">
     <picture>

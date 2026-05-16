@@ -166,5 +166,4 @@ function openSearch() {
     margin-left: 8px;
   }
 }
-
 </style>

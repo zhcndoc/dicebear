@@ -3,7 +3,13 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { kebabCase } from 'change-case';
 import Prando from 'prando';
 import { ArrowRight, ArrowLeft } from '@lucide/vue';
-import { UiAvatar, UiButton, UiContainer, UiSection, UiSectionHeader } from '../ui';
+import {
+  UiAvatar,
+  UiButton,
+  UiContainer,
+  UiSection,
+  UiSectionHeader,
+} from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 import { useAvatarStyleList } from '../../composables/avatar';
 
@@ -12,8 +18,18 @@ const isVisible = useVisibility(sectionRef, { once: false, threshold: 0.1 });
 const avatarStyleList = useAvatarStyleList();
 
 const SHOWCASE_SEEDS = [
-  'Felix', 'Aneka', 'Milo', 'Luna', 'Max', 'Sophie',
-  'Leo', 'Emma', 'Noah', 'Aria', 'Zoe', 'Oscar',
+  'Felix',
+  'Aneka',
+  'Milo',
+  'Luna',
+  'Max',
+  'Sophie',
+  'Leo',
+  'Emma',
+  'Noah',
+  'Aria',
+  'Zoe',
+  'Oscar',
 ];
 
 const showcaseAvatars = computed(() => {
@@ -25,7 +41,10 @@ const showcaseAvatars = computed(() => {
   }));
 });
 
-const doubledAvatars = computed(() => [...showcaseAvatars.value, ...showcaseAvatars.value]);
+const doubledAvatars = computed(() => [
+  ...showcaseAvatars.value,
+  ...showcaseAvatars.value,
+]);
 
 const ITEM_WIDTH = 140;
 const SCROLL_DURATION_MS = 400;
@@ -64,7 +83,9 @@ function animate(timestamp: number) {
     const progress = Math.min(elapsed / SCROLL_DURATION_MS, 1);
     const easedProgress = easeOutCubic(progress);
 
-    scrollPosition = scrollStartPosition + (scrollTargetPosition - scrollStartPosition) * easedProgress;
+    scrollPosition =
+      scrollStartPosition +
+      (scrollTargetPosition - scrollStartPosition) * easedProgress;
 
     if (progress >= 1) {
       isManualScrolling = false;
@@ -135,7 +156,12 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <UiSection ref="sectionRef" :class="{ visible: isVisible }" no-padding divider>
+  <UiSection
+    ref="sectionRef"
+    :class="{ visible: isVisible }"
+    no-padding
+    divider
+  >
     <template #background>
       <div class="app-style-showcase-gradient"></div>
     </template>
@@ -149,7 +175,11 @@ onUnmounted(() => {
     </UiContainer>
 
     <div class="app-style-showcase-outer">
-      <button class="app-style-showcase-scroll-btn app-style-showcase-scroll-btn-left" @click="scrollLeft" aria-label="Scroll left">
+      <button
+        class="app-style-showcase-scroll-btn app-style-showcase-scroll-btn-left"
+        @click="scrollLeft"
+        aria-label="Scroll left"
+      >
         <ArrowLeft />
       </button>
 
@@ -161,10 +191,7 @@ onUnmounted(() => {
           @touchstart="pauseAnimation"
           @touchend="resumeAnimation"
         >
-          <div
-            ref="trackRef"
-            class="app-style-showcase-track"
-          >
+          <div ref="trackRef" class="app-style-showcase-track">
             <a
               v-for="(avatar, index) in doubledAvatars"
               :key="`${avatar.style}-${index}`"
@@ -172,7 +199,11 @@ onUnmounted(() => {
               class="app-style-showcase-item"
             >
               <div class="app-style-showcase-avatar">
-                <UiAvatar :style-name="avatar.style" :style-options="{ seed: avatar.seed, size: 120 }" :alt="`${avatar.style} style`" />
+                <UiAvatar
+                  :style-name="avatar.style"
+                  :style-options="{ seed: avatar.seed, size: 120 }"
+                  :alt="`${avatar.style} style`"
+                />
                 <div class="app-style-showcase-avatar-glow"></div>
               </div>
               <span class="app-style-showcase-label">{{ avatar.style }}</span>
@@ -181,7 +212,11 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <button class="app-style-showcase-scroll-btn app-style-showcase-scroll-btn-right" @click="scrollRight" aria-label="Scroll right">
+      <button
+        class="app-style-showcase-scroll-btn app-style-showcase-scroll-btn-right"
+        @click="scrollRight"
+        aria-label="Scroll right"
+      >
         <ArrowRight />
       </button>
     </div>
@@ -199,8 +234,16 @@ onUnmounted(() => {
 .app-style-showcase {
   &-gradient {
     background:
-      radial-gradient(ellipse 60% 80% at 0% 50%, color-mix(in srgb, var(--vp-c-purple-1) 6%, transparent), transparent),
-      radial-gradient(ellipse 60% 80% at 100% 50%, color-mix(in srgb, var(--vp-c-indigo-1) 5%, transparent), transparent);
+      radial-gradient(
+        ellipse 60% 80% at 0% 50%,
+        color-mix(in srgb, var(--vp-c-purple-1) 6%, transparent),
+        transparent
+      ),
+      radial-gradient(
+        ellipse 60% 80% at 100% 50%,
+        color-mix(in srgb, var(--vp-c-indigo-1) 5%, transparent),
+        transparent
+      );
   }
 
   &-header {
@@ -223,8 +266,20 @@ onUnmounted(() => {
   &-wrapper {
     overflow-x: clip;
     overflow-y: visible;
-    mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
-    -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      black 8%,
+      black 92%,
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent,
+      black 8%,
+      black 92%,
+      transparent
+    );
   }
 
   &-scroll-btn {
@@ -333,7 +388,11 @@ onUnmounted(() => {
     &-glow {
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, transparent 40%, rgba(22, 137, 204, 0.2));
+      background: linear-gradient(
+        135deg,
+        transparent 40%,
+        rgba(22, 137, 204, 0.2)
+      );
       opacity: 0;
       transition: opacity var(--duration-mid) ease;
     }

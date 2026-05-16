@@ -2,7 +2,8 @@
 title: JavaScript Avatar Library – Browser & Node.js
 description: >
   Use the DiceBear JavaScript avatar library to generate SVG profile pictures in
-  the browser (vanilla JS), React, Vue, Angular, Svelte, and Node.js. TypeScript support included.
+  the browser (vanilla JS), React, Vue, Angular, Svelte, and Node.js. TypeScript
+  support included.
 ---
 
 # JavaScript Avatar Library
@@ -11,8 +12,8 @@ The library is written in [TypeScript](https://www.typescriptlang.org/) /
 [JavaScript](https://developer.mozilla.org/en-US/Web/JavaScript) and can be used
 in the browser and also in [Node.js](https://nodejs.org/en/) (version 22 or
 higher). In other environments you may be interested in the
-[PHP Library](/how-to-use/php-library/), the
-[HTTP API](/how-to-use/http-api/) or the [CLI](/how-to-use/cli/).
+[PHP Library](/how-to-use/php-library/), the [HTTP API](/how-to-use/http-api/)
+or the [CLI](/how-to-use/cli/).
 
 The library is a pure
 [ESM package](https://developer.mozilla.org/en-US/Web/JavaScript/Guide/Modules).
@@ -96,7 +97,8 @@ instance) and optional options.
 import { Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
-const avatar = new Avatar(lorelei, { // [!code focus:3]
+const avatar = new Avatar(lorelei, {
+  // [!code focus:3]
   // ... options
 });
 ```
@@ -195,42 +197,42 @@ const dataUri = avatar.toDataUri(); // [!code focus]
 
 These options are available for all avatar styles:
 
-| Option              | Type                                              | Default     | Description                                      |
-| ------------------- | ------------------------------------------------- | ----------- | ------------------------------------------------ |
-| `seed`              | `string`                                          | `''`        | Seed for deterministic generation                |
-| `flip`              | `'none' \| 'horizontal' \| 'vertical' \| 'both'` | `'none'`    | Flip the avatar                                  |
-| `rotate`            | `number \| [min, max]`                            | `0`         | Rotate the avatar (-360 to 360 degrees)          |
-| `scale`             | `number \| [min, max]`                            | `1`         | Uniform scale factor around the canvas center (0 to 10; `1` is original size) |
-| `borderRadius`      | `number \| [min, max]`                            | `0`         | Border radius (0-50 percent, 50 = circle)        |
-| `size`              | `number`                                          | _undefined_ | Fixed size in pixels                             |
-| `translateX`        | `number \| [min, max]`                            | `0`         | Horizontal translation as a percentage of the canvas width (-1000 to 1000) |
-| `translateY`        | `number \| [min, max]`                            | `0`         | Vertical translation as a percentage of the canvas height (-1000 to 1000)  |
-| `idRandomization`   | `boolean`                                         | `false`     | Randomize SVG element IDs                        |
-| `title`             | `string`                                          | _undefined_ | Accessible title for the SVG                     |
-| `fontFamily`        | `string \| string[]`                              | `'system-ui'` | Font family for text-based styles              |
-| `fontWeight`        | `number \| number[]`                              | `400`       | Font weight for text-based styles (1-1000)       |
+| Option            | Type                                             | Default       | Description                                                                   |
+| ----------------- | ------------------------------------------------ | ------------- | ----------------------------------------------------------------------------- |
+| `seed`            | `string`                                         | `''`          | Seed for deterministic generation                                             |
+| `flip`            | `'none' \| 'horizontal' \| 'vertical' \| 'both'` | `'none'`      | Flip the avatar                                                               |
+| `rotate`          | `number \| [min, max]`                           | `0`           | Rotate the avatar (-360 to 360 degrees)                                       |
+| `scale`           | `number \| [min, max]`                           | `1`           | Uniform scale factor around the canvas center (0 to 10; `1` is original size) |
+| `borderRadius`    | `number \| [min, max]`                           | `0`           | Border radius (0-50 percent, 50 = circle)                                     |
+| `size`            | `number`                                         | _undefined_   | Fixed size in pixels                                                          |
+| `translateX`      | `number \| [min, max]`                           | `0`           | Horizontal translation as a percentage of the canvas width (-1000 to 1000)    |
+| `translateY`      | `number \| [min, max]`                           | `0`           | Vertical translation as a percentage of the canvas height (-1000 to 1000)     |
+| `idRandomization` | `boolean`                                        | `false`       | Randomize SVG element IDs                                                     |
+| `title`           | `string`                                         | _undefined_   | Accessible title for the SVG                                                  |
+| `fontFamily`      | `string \| string[]`                             | `'system-ui'` | Font family for text-based styles                                             |
+| `fontWeight`      | `number \| number[]`                             | `400`         | Font weight for text-based styles (1-1000)                                    |
 
 ### Background options
 
 These options are available for every style — even ones that don't declare a
 `background` color group in their definition.
 
-| Option                    | Type                                    | Default     | Description                                |
-| ------------------------- | --------------------------------------- | ----------- | ------------------------------------------ |
-| `backgroundColor`         | `string \| string[]`                    | _undefined_ | Background colors (hex with #)             |
-| `backgroundColorFill`     | `'solid' \| 'linear' \| 'radial'`      | `'solid'`   | Background fill type                       |
-| `backgroundColorFillStops`| `number \| [min, max]`                  | `2`         | Number of gradient stops; ignored when fill is `solid` |
-| `backgroundColorAngle`    | `number \| [min, max]`                  | `0`         | Gradient angle (-360 to 360 degrees)       |
+| Option                     | Type                              | Default     | Description                                            |
+| -------------------------- | --------------------------------- | ----------- | ------------------------------------------------------ |
+| `backgroundColor`          | `string \| string[]`              | _undefined_ | Background colors (hex with #)                         |
+| `backgroundColorFill`      | `'solid' \| 'linear' \| 'radial'` | `'solid'`   | Background fill type                                   |
+| `backgroundColorFillStops` | `number \| [min, max]`            | `2`         | Number of gradient stops; ignored when fill is `solid` |
+| `backgroundColorAngle`     | `number \| [min, max]`            | `0`         | Gradient angle (-360 to 360 degrees)                   |
 
 ### Dynamic component options
 
 For each component in a style (e.g. `eyes`, `mouth`, `hair`), the following
 options are available:
 
-| Pattern                   | Type                                            | Description                              |
-| ------------------------- | ----------------------------------------------- | ---------------------------------------- |
-| `{component}Variant`      | `string \| string[] \| Record<string, number>` | Select specific variants or set weights  |
-| `{component}Probability`  | `number`                                        | Visibility probability (0-100)           |
+| Pattern                  | Type                                           | Description                             |
+| ------------------------ | ---------------------------------------------- | --------------------------------------- |
+| `{component}Variant`     | `string \| string[] \| Record<string, number>` | Select specific variants or set weights |
+| `{component}Probability` | `number`                                       | Visibility probability (0-100)          |
 
 A component's rotation, translation, and scale are sampled at render time from
 the component definition and are **not** user options — there are no
@@ -242,12 +244,12 @@ the component definition and are **not** user options — there are no
 For each color group in a style (e.g. `skin`, `hair`) and `background`, the
 following options are available:
 
-| Pattern                   | Type                                    | Description                              |
-| ------------------------- | --------------------------------------- | ---------------------------------------- |
-| `{color}Color`            | `string \| string[]`                    | Override color palette (hex with #)      |
-| `{color}ColorFill`        | `'solid' \| 'linear' \| 'radial'`      | Color fill type                          |
-| `{color}ColorFillStops`   | `number \| [min, max]`                  | Number of gradient stops                 |
-| `{color}ColorAngle`       | `number \| [min, max]`                  | Gradient angle (-360 to 360 degrees)     |
+| Pattern                 | Type                              | Description                          |
+| ----------------------- | --------------------------------- | ------------------------------------ |
+| `{color}Color`          | `string \| string[]`              | Override color palette (hex with #)  |
+| `{color}ColorFill`      | `'solid' \| 'linear' \| 'radial'` | Color fill type                      |
+| `{color}ColorFillStops` | `number \| [min, max]`            | Number of gradient stops             |
+| `{color}ColorAngle`     | `number \| [min, max]`            | Gradient angle (-360 to 360 degrees) |
 
 ## Examples
 
@@ -332,13 +334,13 @@ const avatar = new Avatar(avataaars, {
 ## Accessibility
 
 By default the generated `<svg>` element is `aria-hidden="true"` — assistive
-technology skips it. This is the right default for purely decorative
-avatars next to a username.
+technology skips it. This is the right default for purely decorative avatars
+next to a username.
 
 When the avatar conveys identity on its own (e.g. it is the only thing in a
 link, or has no visible label), set the `title` option. The renderer emits
-`role="img" aria-label="…"` on the root element **and** a `<title>` child,
-so screen readers announce the value:
+`role="img" aria-label="…"` on the root element **and** a `<title>` child, so
+screen readers announce the value:
 
 ```js
 const avatar = new Avatar(lorelei, {
@@ -348,8 +350,8 @@ const avatar = new Avatar(lorelei, {
 ```
 
 If you embed the SVG inside an `<img>` (via `toDataUri()`), use the `<img>`
-element's `alt` attribute instead — the SVG's internal `title` is not read
-by assistive technology when the SVG is loaded as an image.
+element's `alt` attribute instead — the SVG's internal `title` is not read by
+assistive technology when the SVG is loaded as an image.
 
 ## TypeScript
 

@@ -22,7 +22,8 @@ export class Avatar<D = unknown> {
   #resolvedOptions: StyleOptions<UnwrapStyle<D>>;
 
   constructor(styleInput: D, optionsInput?: StyleOptions<UnwrapStyle<D>>) {
-    const style = styleInput instanceof Style ? styleInput : new Style(styleInput);
+    const style =
+      styleInput instanceof Style ? styleInput : new Style(styleInput);
     const options = new Options<UnwrapStyle<D>>(optionsInput);
     const resolver = new Resolver(style, options);
 

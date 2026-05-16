@@ -2,9 +2,19 @@
 import { ref, computed } from 'vue';
 import { kebabCase, camelCase, capitalCase } from 'change-case';
 import { Sparkles } from '@lucide/vue';
-import { UiHeadline, UiDescription, UiBadge, UiContainer, UiSection, UiWindow } from '../ui';
+import {
+  UiHeadline,
+  UiDescription,
+  UiBadge,
+  UiContainer,
+  UiSection,
+  UiWindow,
+} from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
-import { useAvatarStyleList, useAvatarStyleMeta } from '../../composables/avatar';
+import {
+  useAvatarStyleList,
+  useAvatarStyleMeta,
+} from '../../composables/avatar';
 import { formatLicenseName } from '../../utils/format';
 import { safeHttpUrl } from '../../utils/url';
 import AppSeedDemoCode from './AppSeedDemoCode.vue';
@@ -13,7 +23,13 @@ import AppSeedDemoStylePicker from './AppSeedDemoStylePicker.vue';
 
 const DEFAULT_STYLE = 'lorelei';
 
-const RANDOM_SEEDS: readonly string[] = ['Felix', 'Aneka', 'Milo', 'Luna', 'Sophie'];
+const RANDOM_SEEDS: readonly string[] = [
+  'Felix',
+  'Aneka',
+  'Milo',
+  'Luna',
+  'Sophie',
+];
 
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef);
@@ -21,7 +37,9 @@ const activeStyleIndex = ref(0);
 const styleDialogOpen = ref(false);
 
 const avatarStyleList = useAvatarStyleList();
-const activeStyleName = computed(() => avatarStyleList.value[activeStyleIndex.value] || DEFAULT_STYLE);
+const activeStyleName = computed(
+  () => avatarStyleList.value[activeStyleIndex.value] || DEFAULT_STYLE,
+);
 const currentStyle = computed(() => kebabCase(activeStyleName.value));
 const currentStyleCamel = computed(() => camelCase(activeStyleName.value));
 const currentStyleDisplay = computed(() => capitalCase(activeStyleName.value));
@@ -45,8 +63,12 @@ function selectStyle(index: number) {
 }
 
 const sourceUrl = computed(() => safeHttpUrl(avatarStyleMeta.value?.source));
-const homepageUrl = computed(() => safeHttpUrl(avatarStyleMeta.value?.homepage));
-const licenseUrl = computed(() => safeHttpUrl(avatarStyleMeta.value?.license?.url));
+const homepageUrl = computed(() =>
+  safeHttpUrl(avatarStyleMeta.value?.homepage),
+);
+const licenseUrl = computed(() =>
+  safeHttpUrl(avatarStyleMeta.value?.license?.url),
+);
 
 const allStyleAvatars = computed(() =>
   avatarStyleList.value.map((style, index) => ({
@@ -70,11 +92,12 @@ const allStyleAvatars = computed(() =>
           Deterministic Avatars
         </UiBadge>
         <UiHeadline class="app-seed-demo-title">
-          Same Seed, Same Avatar.<br>
+          Same Seed, Same Avatar.<br />
           <strong>Every Time.</strong>
         </UiHeadline>
         <UiDescription class="app-seed-demo-subtitle">
-          Use any string as a seed — usernames, emails, IDs — and DiceBear generates the identical avatar consistently across all platforms.
+          Use any string as a seed — usernames, emails, IDs — and DiceBear
+          generates the identical avatar consistently across all platforms.
         </UiDescription>
       </div>
 
@@ -89,25 +112,56 @@ const allStyleAvatars = computed(() =>
               @randomize-seed="randomizeSeed"
             />
 
-            <AppSeedDemoCode :seed="seed" :style="currentStyle" :style-camel="currentStyleCamel" />
+            <AppSeedDemoCode
+              :seed="seed"
+              :style="currentStyle"
+              :style-camel="currentStyleCamel"
+            />
           </div>
         </UiWindow>
 
         <p class="app-seed-demo-license">
           <a :href="currentStyleLink">{{ currentStyleDisplay }}</a>
           <template v-if="avatarStyleMeta?.creator !== 'DiceBear'">
-            <template v-if="avatarStyleMeta?.license?.name !== 'MIT' && avatarStyleMeta?.title">
+            <template
+              v-if="
+                avatarStyleMeta?.license?.name !== 'MIT' &&
+                avatarStyleMeta?.title
+              "
+            >
               is a remix of
             </template>
             <template v-else> is based on </template>
-            <a v-if="sourceUrl" :href="sourceUrl" target="_blank" rel="noopener noreferrer">{{ avatarStyleMeta?.title ?? 'Design' }}</a>
+            <a
+              v-if="sourceUrl"
+              :href="sourceUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              >{{ avatarStyleMeta?.title ?? 'Design' }}</a
+            >
             <template v-else>{{ avatarStyleMeta?.title ?? 'Design' }}</template>
           </template>
           by
-          <a v-if="homepageUrl" :href="homepageUrl" target="_blank" rel="noopener noreferrer">{{ avatarStyleMeta?.creator }}</a>
-          <template v-else>{{ avatarStyleMeta?.creator }}</template>, licensed under
-          <a v-if="licenseUrl" :href="licenseUrl" target="_blank" rel="noopener noreferrer">{{ formatLicenseName(avatarStyleMeta?.license?.name) }}</a>
-          <template v-else>{{ formatLicenseName(avatarStyleMeta?.license?.name) }}</template>.
+          <a
+            v-if="homepageUrl"
+            :href="homepageUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            >{{ avatarStyleMeta?.creator }}</a
+          >
+          <template v-else>{{ avatarStyleMeta?.creator }}</template
+          >, licensed under
+          <a
+            v-if="licenseUrl"
+            :href="licenseUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            >{{ formatLicenseName(avatarStyleMeta?.license?.name) }}</a
+          >
+          <template v-else>{{
+            formatLicenseName(avatarStyleMeta?.license?.name)
+          }}</template
+          >.
         </p>
       </div>
     </UiContainer>
@@ -132,9 +186,21 @@ const allStyleAvatars = computed(() =>
 .app-seed-demo {
   &-glow {
     background:
-      radial-gradient(ellipse 60% 60% at 50% 0%, color-mix(in srgb, var(--vp-c-brand-1) 10%, transparent), transparent),
-      radial-gradient(ellipse 50% 40% at 20% 80%, color-mix(in srgb, var(--vp-c-green-1) 6%, transparent), transparent),
-      radial-gradient(ellipse 50% 40% at 80% 60%, color-mix(in srgb, var(--vp-c-purple-1) 5%, transparent), transparent);
+      radial-gradient(
+        ellipse 60% 60% at 50% 0%,
+        color-mix(in srgb, var(--vp-c-brand-1) 10%, transparent),
+        transparent
+      ),
+      radial-gradient(
+        ellipse 50% 40% at 20% 80%,
+        color-mix(in srgb, var(--vp-c-green-1) 6%, transparent),
+        transparent
+      ),
+      radial-gradient(
+        ellipse 50% 40% at 80% 60%,
+        color-mix(in srgb, var(--vp-c-purple-1) 5%, transparent),
+        transparent
+      );
   }
 
   &-container {
@@ -235,8 +301,11 @@ const allStyleAvatars = computed(() =>
     justify-content: center;
     padding: 40px 24px 40px;
     gap: 10px;
-    background:
-      radial-gradient(ellipse 70% 60% at 50% 40%, color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent), transparent);
+    background: radial-gradient(
+      ellipse 70% 60% at 50% 40%,
+      color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent),
+      transparent
+    );
   }
 
   &-avatar-stage {
@@ -251,7 +320,11 @@ const allStyleAvatars = computed(() =>
     width: 180px;
     height: 180px;
     border-radius: 50%;
-    background: radial-gradient(circle, color-mix(in srgb, var(--vp-c-brand-1) 15%, transparent), transparent 70%);
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--vp-c-brand-1) 15%, transparent),
+      transparent 70%
+    );
     animation: app-seed-demo-glow-pulse 3s ease-in-out infinite;
   }
 
@@ -336,12 +409,18 @@ const allStyleAvatars = computed(() =>
       transform: rotate(180deg) scale(0.9);
     }
   }
-
 }
 
 @keyframes app-seed-demo-glow-pulse {
-  0%, 100% { transform: scale(1); opacity: 0.6; }
-  50% { transform: scale(1.15); opacity: 1; }
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
 }
 
 @media (max-width: 768px) {

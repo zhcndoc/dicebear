@@ -58,7 +58,10 @@ function extractName(definition: Record<string, unknown>): string {
 async function submit() {
   error.value = '';
 
-  if (new TextEncoder().encode(jsonInput.value).length > MAX_CUSTOM_STYLE_UPLOAD_BYTES) {
+  if (
+    new TextEncoder().encode(jsonInput.value).length >
+    MAX_CUSTOM_STYLE_UPLOAD_BYTES
+  ) {
     error.value = 'Style definition is too large (max 1 MB).';
 
     return;
@@ -80,7 +83,8 @@ async function submit() {
     if (err instanceof SyntaxError) {
       error.value = 'Invalid JSON: ' + err.message;
     } else if (err instanceof Error) {
-      error.value = 'Invalid style definition. Check format and required fields.';
+      error.value =
+        'Invalid style definition. Check format and required fields.';
     } else {
       error.value = 'An unknown error occurred.';
     }
@@ -115,7 +119,9 @@ async function onFileSelect(event: Event) {
   input.value = '';
 }
 
-const canSubmit = computed(() => jsonInput.value.trim().length > 0 && !loading.value);
+const canSubmit = computed(
+  () => jsonInput.value.trim().length > 0 && !loading.value,
+);
 </script>
 
 <template>
@@ -143,7 +149,7 @@ const canSubmit = computed(() => jsonInput.value.trim().length > 0 && !loading.v
         <textarea
           v-model="jsonInput"
           class="pg-custom-upload-textarea"
-          placeholder='Paste your style definition JSON here...'
+          placeholder="Paste your style definition JSON here..."
           rows="12"
         />
       </div>
@@ -163,7 +169,12 @@ const canSubmit = computed(() => jsonInput.value.trim().length > 0 && !loading.v
         />
       </label>
 
-      <Message v-if="error" severity="error" :closable="false" class="pg-custom-upload-error">
+      <Message
+        v-if="error"
+        severity="error"
+        :closable="false"
+        class="pg-custom-upload-error"
+      >
         {{ error }}
       </Message>
 
@@ -177,8 +188,8 @@ const canSubmit = computed(() => jsonInput.value.trim().length > 0 && !loading.v
 
       <p class="pg-custom-upload-notice">
         Note: Please only upload styles for which you hold the necessary
-        copyrights. Your data is processed and stored exclusively in your
-        local browser and never reaches our server.
+        copyrights. Your data is processed and stored exclusively in your local
+        browser and never reaches our server.
       </p>
     </div>
   </Dialog>

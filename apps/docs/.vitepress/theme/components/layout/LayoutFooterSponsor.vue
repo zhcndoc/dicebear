@@ -23,7 +23,9 @@ import { withBase } from 'vitepress';
             alt="bunny.net"
           />
         </a>
-        <span class="layout-footer-sponsor-meta">CDN sponsored by bunny.net · Advertisement</span>
+        <span class="layout-footer-sponsor-meta"
+          >CDN sponsored by bunny.net · Advertisement</span
+        >
       </div>
     </div>
   </div>

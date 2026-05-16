@@ -12,7 +12,14 @@ import {
 } from 'chart.js';
 import { useChartTheme } from '../../composables/useChartTheme';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Tooltip,
+  Legend,
+);
 
 const props = defineProps<{
   labels: string[];
@@ -84,7 +91,8 @@ const chartOptions = computed(() => ({
     tooltip: {
       ...tooltipConfig(),
       callbacks: {
-        label: (ctx: any) => `${ctx.dataset.label}: ${props.formatValue(ctx.parsed.y)}`,
+        label: (ctx: any) =>
+          `${ctx.dataset.label}: ${props.formatValue(ctx.parsed.y)}`,
       },
     },
   },

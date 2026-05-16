@@ -361,7 +361,8 @@ export class Renderer {
 
     const transforms = this.#buildTransforms(component);
     const userAttributes = element.attributes();
-    let mergedAttributes: StyleDefinitionAttributes | undefined = userAttributes;
+    let mergedAttributes: StyleDefinitionAttributes | undefined =
+      userAttributes;
 
     if (transforms.length > 0) {
       const userTransform = userAttributes?.transform;
@@ -401,8 +402,10 @@ export class Renderer {
     const cy = component.height() / 2;
 
     if (translateX !== 0 || translateY !== 0) {
-      const x = Math.round((translateX / 100) * component.width() * 10000) / 10000;
-      const y = Math.round((translateY / 100) * component.height() * 10000) / 10000;
+      const x =
+        Math.round((translateX / 100) * component.width() * 10000) / 10000;
+      const y =
+        Math.round((translateY / 100) * component.height() * 10000) / 10000;
 
       transforms.push(`translate(${x}, ${y})`);
     }
@@ -412,7 +415,9 @@ export class Renderer {
     }
 
     if (scale !== 1) {
-      transforms.push(`translate(${cx}, ${cy}) scale(${scale}) translate(${-cx}, ${-cy})`);
+      transforms.push(
+        `translate(${cx}, ${cy}) scale(${scale}) translate(${-cx}, ${-cy})`,
+      );
     }
 
     return transforms;

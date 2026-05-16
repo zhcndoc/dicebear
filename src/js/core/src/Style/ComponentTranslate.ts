@@ -1,4 +1,7 @@
-import type { Range, StyleDefinitionComponentTranslate } from '../StyleDefinition.js';
+import type {
+  Range,
+  StyleDefinitionComponentTranslate,
+} from '../StyleDefinition.js';
 
 /**
  * Read-only view over a component's `translate` block, providing the X and Y

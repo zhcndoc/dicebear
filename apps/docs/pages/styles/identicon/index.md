@@ -15,10 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Identicon
 
-Identicon generates deterministic geometric pattern avatars — a popular
-approach for user identification in developer tools and version control
-systems. Each SVG identicon is uniquely derived from its seed, making it a
-reliable choice for technical profile icons and the identicon API use case.
+Identicon generates deterministic geometric pattern avatars — a popular approach
+for user identification in developer tools and version control systems. Each SVG
+identicon is uniquely derived from its seed, making it a reliable choice for
+technical profile icons and the identicon API use case.
 
 <StylePreview styleName="identicon" />
 

@@ -115,8 +115,8 @@ dicebear lorelei ./avatars --format png
 #### Controlling the output image size
 
 `--size` controls the output dimensions (width and height in pixels) for all
-formats. The default is `512`. For rasterized formats (PNG, JPEG, WebP, AVIF) the
-value is capped at `2048`.
+formats. The default is `512`. For rasterized formats (PNG, JPEG, WebP, AVIF)
+the value is capped at `2048`.
 
 ```
 dicebear lorelei ./avatars --format png --size 256
@@ -330,9 +330,8 @@ The CLI does not overwrite existing files. Either:
 
 ### Avatar style not found
 
-Style names are lowercase, with hyphens for multi-word styles
-(e.g. `pixel-art`, `adventurer-neutral`). Run `dicebear --help` to see all
-available styles.
+Style names are lowercase, with hyphens for multi-word styles (e.g. `pixel-art`,
+`adventurer-neutral`). Run `dicebear --help` to see all available styles.
 
 ### Permission denied
 

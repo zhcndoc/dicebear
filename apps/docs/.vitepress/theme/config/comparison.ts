@@ -63,7 +63,10 @@ export const comparisonServices: readonly ComparisonService[] = [
   },
 ];
 
-export function buildComparisonRows({ stars, styleCount }: ComparisonContext): ComparisonRow[] {
+export function buildComparisonRows({
+  stars,
+  styleCount,
+}: ComparisonContext): ComparisonRow[] {
   const githubStars: Record<ComparisonServiceKey, ComparisonCellValue> = {
     dicebear: stars['dicebear/dicebear'] || '8k+',
     boringAvatars: stars['boringdesigners/boring-avatars'] || '6k+',

@@ -23,10 +23,7 @@ export async function handleStyleCommand(
   name: string,
   style: Style,
 ) {
-  const bar = new cliProgress.SingleBar(
-    {},
-    cliProgress.Presets.shades_classic,
-  );
+  const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
 
   const format = (argv.format as string) ?? 'svg';
   const count = (argv.count as number) ?? 1;
@@ -57,9 +54,10 @@ export async function handleStyleCommand(
           `${name}-${i}.${format}`,
         );
 
-        const seed = count <= 1
-          ? (argv.seed as string) ?? createRandomSeed()
-          : createRandomSeed();
+        const seed =
+          count <= 1
+            ? ((argv.seed as string) ?? createRandomSeed())
+            : createRandomSeed();
 
         const avatar = new Avatar(style, {
           ...extractStyleOptions(argv, style),
@@ -74,7 +72,10 @@ export async function handleStyleCommand(
           case 'png':
             await writeFile(
               fileName,
-              await toPng(avatar.toString(), { includeExif, size: argv.size as number }).toArrayBuffer(),
+              await toPng(avatar.toString(), {
+                includeExif,
+                size: argv.size as number,
+              }).toArrayBuffer(),
             );
             break;
 
@@ -110,10 +111,7 @@ export async function handleStyleCommand(
             break;
 
           case 'json':
-            await writeFile(
-              fileName,
-              JSON.stringify(avatar.toJSON(), null, 2),
-            );
+            await writeFile(fileName, JSON.stringify(avatar.toJSON(), null, 2));
             break;
         }
 

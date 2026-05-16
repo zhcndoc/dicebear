@@ -64,16 +64,38 @@ const users = [
       :style="{ animationDelay: `${index * 0.12}s` }"
     >
       <div class="app-hero-aside-user-list-avatar">
-        <UiAvatar class="app-hero-aside-user-list-layer" :class="{ 'app-hero-aside-user-list-layer-active': activeLayer === 'a' }" :style-name="styleA" :style-options="{ seed: user.name, size: 80 }" :alt="user.name" />
-        <UiAvatar class="app-hero-aside-user-list-layer" :class="{ 'app-hero-aside-user-list-layer-active': activeLayer === 'b' }" :style-name="styleB" :style-options="{ seed: user.name, size: 80 }" :alt="user.name" />
+        <UiAvatar
+          class="app-hero-aside-user-list-layer"
+          :class="{
+            'app-hero-aside-user-list-layer-active': activeLayer === 'a',
+          }"
+          :style-name="styleA"
+          :style-options="{ seed: user.name, size: 80 }"
+          :alt="user.name"
+        />
+        <UiAvatar
+          class="app-hero-aside-user-list-layer"
+          :class="{
+            'app-hero-aside-user-list-layer-active': activeLayer === 'b',
+          }"
+          :style-name="styleB"
+          :style-options="{ seed: user.name, size: 80 }"
+          :alt="user.name"
+        />
       </div>
       <div class="app-hero-aside-user-list-info">
         <span class="app-hero-aside-user-list-name">{{ user.name }}</span>
-        <span class="app-hero-aside-user-list-position">{{ user.position }}</span>
+        <span class="app-hero-aside-user-list-position">{{
+          user.position
+        }}</span>
       </div>
       <span
         class="app-hero-aside-user-list-status"
-        :class="user.online ? 'app-hero-aside-user-list-status-online' : 'app-hero-aside-user-list-status-offline'"
+        :class="
+          user.online
+            ? 'app-hero-aside-user-list-status-online'
+            : 'app-hero-aside-user-list-status-offline'
+        "
       />
     </div>
   </div>
@@ -96,8 +118,11 @@ const users = [
     gap: 16px;
     padding: 12px 16px;
     border-radius: var(--vp-radius-md);
-    background:
-      linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.7) 100%);
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.85) 0%,
+      rgba(255, 255, 255, 0.7) 100%
+    );
     border: 1px solid rgba(255, 255, 255, 0.6);
     box-shadow:
       0 4px 16px rgba(0, 0, 0, 0.06),
@@ -117,7 +142,6 @@ const users = [
     border-radius: var(--vp-radius-sm);
     overflow: hidden;
     flex-shrink: 0;
-
   }
 
   &-layer {
@@ -140,7 +164,6 @@ const users = [
     gap: 1px;
     flex: 1;
     min-width: 0;
-
   }
 
   &-name {
@@ -180,8 +203,11 @@ const users = [
 }
 
 .dark .app-hero-aside-user-list-card {
-  background:
-    linear-gradient(135deg, rgba(40, 40, 45, 0.92) 0%, rgba(35, 35, 40, 0.88) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(40, 40, 45, 0.92) 0%,
+    rgba(35, 35, 40, 0.88) 100%
+  );
   border-color: rgba(255, 255, 255, 0.1);
   box-shadow:
     0 4px 16px rgba(0, 0, 0, 0.25),

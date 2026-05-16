@@ -19,4 +19,3 @@ interface ImportMetaEnv {
   readonly VITE_COOKIE_POLICY_URL?: string;
   readonly VITE_SITE_NOTICE_URL?: string;
 }
-

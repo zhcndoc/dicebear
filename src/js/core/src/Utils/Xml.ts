@@ -10,10 +10,7 @@ export class Xml {
     '>': '&gt;',
   };
 
-  static #pattern = new RegExp(
-    `[${Object.keys(Xml.#entities).join('')}]`,
-    'g',
-  );
+  static #pattern = new RegExp(`[${Object.keys(Xml.#entities).join('')}]`, 'g');
 
   /**
    * Returns `value` with the five XML predefined entities escaped.

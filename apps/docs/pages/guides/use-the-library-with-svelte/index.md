@@ -13,8 +13,7 @@ changes — via the JS library for client-side generation or the HTTP API for a
 zero-dependency approach.
 
 You can use DiceBear with Svelte either via the
-[JS-Library](/how-to-use/js-library/) or the
-[HTTP-API](/how-to-use/http-api/).
+[JS-Library](/how-to-use/js-library/) or the [HTTP-API](/how-to-use/http-api/).
 
 ## With the JS library
 

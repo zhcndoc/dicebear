@@ -1,7 +1,17 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { MousePointerClick, Palette, Download, ArrowRight } from '@lucide/vue';
-import { UiAvatar, UiButton, UiHeadline, UiDescription, UiBadge, UiContainer, UiSection, UiWindow, UiIconBox } from '../ui';
+import {
+  UiAvatar,
+  UiButton,
+  UiHeadline,
+  UiDescription,
+  UiBadge,
+  UiContainer,
+  UiSection,
+  UiWindow,
+  UiIconBox,
+} from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
 const sectionRef = ref();
@@ -22,17 +32,64 @@ const currentOptions = ref({
 
 // Background colors
 const bgColors = [
-  'ffd5dc', 'f8bbd9', 'e1bee7', 'd1c4e9',
-  'c5cae9', 'bbdefb', 'b2ebf2', 'b2dfdb',
-  'c8e6c9', 'dcedc8',
+  'ffd5dc',
+  'f8bbd9',
+  'e1bee7',
+  'd1c4e9',
+  'c5cae9',
+  'bbdefb',
+  'b2ebf2',
+  'b2dfdb',
+  'c8e6c9',
+  'dcedc8',
 ];
 
 // Variants for each category
 const variants = {
-  hair: ['variant01', 'variant02', 'variant03', 'variant04', 'variant05', 'variant06', 'variant07', 'variant08', 'variant09', 'variant10'],
-  eyes: ['variant01', 'variant02', 'variant03', 'variant04', 'variant05', 'variant06', 'variant07', 'variant08', 'variant09', 'variant10'],
-  nose: ['variant01', 'variant02', 'variant03', 'variant04', 'variant05', 'variant06'],
-  mouth: ['happy01', 'happy02', 'happy03', 'happy04', 'happy05', 'happy06', 'happy07', 'happy08', 'happy09', 'happy10'],
+  hair: [
+    'variant01',
+    'variant02',
+    'variant03',
+    'variant04',
+    'variant05',
+    'variant06',
+    'variant07',
+    'variant08',
+    'variant09',
+    'variant10',
+  ],
+  eyes: [
+    'variant01',
+    'variant02',
+    'variant03',
+    'variant04',
+    'variant05',
+    'variant06',
+    'variant07',
+    'variant08',
+    'variant09',
+    'variant10',
+  ],
+  nose: [
+    'variant01',
+    'variant02',
+    'variant03',
+    'variant04',
+    'variant05',
+    'variant06',
+  ],
+  mouth: [
+    'happy01',
+    'happy02',
+    'happy03',
+    'happy04',
+    'happy05',
+    'happy06',
+    'happy07',
+    'happy08',
+    'happy09',
+    'happy10',
+  ],
 };
 
 // Darken a hex color by a percentage
@@ -45,11 +102,16 @@ function darkenColor(hex: string, percent: number): string {
 }
 
 // Canvas background (slightly darker than avatar background)
-const canvasBackground = computed(() => `#${darkenColor(currentOptions.value.backgroundColor, 0.15)}`);
+const canvasBackground = computed(
+  () => `#${darkenColor(currentOptions.value.backgroundColor, 0.15)}`,
+);
 
 // Build style options from current options
 function buildStyleOptions(options: typeof currentOptions.value) {
-  const result: Record<string, unknown> = { seed: 'editorUser', glassesProbability: 0 };
+  const result: Record<string, unknown> = {
+    seed: 'editorUser',
+    glassesProbability: 0,
+  };
   if (options.backgroundColor) result.backgroundColor = options.backgroundColor;
   if (options.hair) result.hairVariant = options.hair;
   if (options.eyes) result.eyesVariant = options.eyes;
@@ -60,16 +122,21 @@ function buildStyleOptions(options: typeof currentOptions.value) {
 }
 
 // Main avatar style options
-const mainStyleOptions = computed(() => buildStyleOptions(currentOptions.value));
+const mainStyleOptions = computed(() =>
+  buildStyleOptions(currentOptions.value),
+);
 
 // Panel items based on active tab
 const panelItems = computed(() => {
   const tab = tabs[activeTab.value].toLowerCase();
 
   if (tab === 'background') {
-    return bgColors.map(color => ({
+    return bgColors.map((color) => ({
       id: color,
-      options: buildStyleOptions({ ...currentOptions.value, backgroundColor: color }),
+      options: buildStyleOptions({
+        ...currentOptions.value,
+        backgroundColor: color,
+      }),
       selected: currentOptions.value.backgroundColor === color,
     }));
   }
@@ -77,7 +144,7 @@ const panelItems = computed(() => {
   const key = tab as keyof typeof variants;
   const variantList = variants[key] || [];
 
-  return variantList.map(variant => ({
+  return variantList.map((variant) => ({
     id: variant,
     options: buildStyleOptions({ ...currentOptions.value, [key]: variant }),
     selected: currentOptions.value[key] === variant,
@@ -125,8 +192,14 @@ const features = [
       <div class="app-editor-preview">
         <UiWindow title="DiceBear Editor">
           <!-- Main avatar preview -->
-          <div class="app-editor-canvas" :style="{ backgroundColor: canvasBackground }">
-            <div class="app-editor-avatar-preview" :style="{ backgroundColor: `#${currentOptions.backgroundColor}` }">
+          <div
+            class="app-editor-canvas"
+            :style="{ backgroundColor: canvasBackground }"
+          >
+            <div
+              class="app-editor-avatar-preview"
+              :style="{ backgroundColor: `#${currentOptions.backgroundColor}` }"
+            >
               <UiAvatar
                 style-name="lorelei"
                 :style-options="mainStyleOptions"
@@ -141,7 +214,10 @@ const features = [
               <button
                 v-for="(tab, index) in tabs"
                 :key="tab"
-                :class="['app-editor-panel-tab', { active: index === activeTab }]"
+                :class="[
+                  'app-editor-panel-tab',
+                  { active: index === activeTab },
+                ]"
                 @click="activeTab = index"
               >
                 {{ tab }}
@@ -151,11 +227,18 @@ const features = [
               <button
                 v-for="(item, index) in panelItems"
                 :key="`${activeTab}-${item.id}`"
-                :class="['app-editor-panel-avatar', { selected: item.selected }]"
+                :class="[
+                  'app-editor-panel-avatar',
+                  { selected: item.selected },
+                ]"
                 :style="{ animationDelay: `${index * 0.05}s` }"
                 @click="selectItem(item.id)"
               >
-                <UiAvatar style-name="lorelei" :style-options="item.options" :alt="`Variant ${index + 1}`" />
+                <UiAvatar
+                  style-name="lorelei"
+                  :style-options="item.options"
+                  :alt="`Variant ${index + 1}`"
+                />
               </button>
             </div>
           </div>
@@ -164,10 +247,13 @@ const features = [
 
       <div class="app-editor-content">
         <UiBadge variant="brand">Visual Editor</UiBadge>
-        <UiHeadline class="app-editor-title-text">Avatar Maker <strong>Without Code</strong></UiHeadline>
+        <UiHeadline class="app-editor-title-text"
+          >Avatar Maker <strong>Without Code</strong></UiHeadline
+        >
         <UiDescription class="app-editor-description">
-          No developer? No problem! Our avatar maker lets anyone create custom profile pictures
-          without writing a single line of code. Just pick, click, and download.
+          No developer? No problem! Our avatar maker lets anyone create custom
+          profile pictures without writing a single line of code. Just pick,
+          click, and download.
         </UiDescription>
 
         <div class="app-editor-features">
@@ -182,7 +268,9 @@ const features = [
             </UiIconBox>
             <div class="app-editor-feature-text">
               <h4 class="app-editor-feature-title">{{ feature.title }}</h4>
-              <p class="app-editor-feature-description">{{ feature.description }}</p>
+              <p class="app-editor-feature-description">
+                {{ feature.description }}
+              </p>
             </div>
           </div>
         </div>
@@ -201,16 +289,28 @@ const features = [
 <style lang="scss" scoped>
 .app-editor {
   &-gradient {
-    background: radial-gradient(ellipse 60% 60% at 100% 50%, color-mix(in srgb, var(--vp-c-green-1) 6%, transparent), transparent);
+    background: radial-gradient(
+      ellipse 60% 60% at 100% 50%,
+      color-mix(in srgb, var(--vp-c-green-1) 6%, transparent),
+      transparent
+    );
   }
 
   &-dots {
-    background-image: radial-gradient(circle, var(--vp-c-text-3) 1px, transparent 1px);
+    background-image: radial-gradient(
+      circle,
+      var(--vp-c-text-3) 1px,
+      transparent 1px
+    );
     background-size: 24px 24px;
     background-repeat: repeat !important;
     opacity: 0.12;
     mask-image: radial-gradient(ellipse 50% 50% at 0% 50%, black, transparent);
-    -webkit-mask-image: radial-gradient(ellipse 50% 50% at 0% 50%, black, transparent);
+    -webkit-mask-image: radial-gradient(
+      ellipse 50% 50% at 0% 50%,
+      black,
+      transparent
+    );
   }
 
   &-container {
@@ -312,7 +412,9 @@ const features = [
       padding: 0;
       cursor: pointer;
       background: transparent;
-      transition: transform var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
+      transition:
+        transform var(--duration-fast) ease,
+        box-shadow var(--duration-fast) ease;
 
       &:hover {
         transform: scale(1.05);

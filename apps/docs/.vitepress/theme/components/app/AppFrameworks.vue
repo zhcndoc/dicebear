@@ -1,17 +1,43 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { siReact, siVuedotjs, siAngular, siSvelte } from 'simple-icons';
-import { UiContainer, UiSection, UiSectionHeader, UiIconBox, UiIcon } from '../ui';
+import {
+  UiContainer,
+  UiSection,
+  UiSectionHeader,
+  UiIconBox,
+  UiIcon,
+} from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
 
 const frameworks = [
-  { name: 'React', icon: siReact.path, href: '/guides/use-the-library-with-react/', color: `#${siReact.hex}` },
-  { name: 'Vue', icon: siVuedotjs.path, href: '/guides/use-the-library-with-vue/', color: `#${siVuedotjs.hex}` },
-  { name: 'Angular', icon: siAngular.path, href: '/guides/use-the-library-with-angular/', color: '#dd0031' },
-  { name: 'Svelte', icon: siSvelte.path, href: '/guides/use-the-library-with-svelte/', color: `#${siSvelte.hex}` },
+  {
+    name: 'React',
+    icon: siReact.path,
+    href: '/guides/use-the-library-with-react/',
+    color: `#${siReact.hex}`,
+  },
+  {
+    name: 'Vue',
+    icon: siVuedotjs.path,
+    href: '/guides/use-the-library-with-vue/',
+    color: `#${siVuedotjs.hex}`,
+  },
+  {
+    name: 'Angular',
+    icon: siAngular.path,
+    href: '/guides/use-the-library-with-angular/',
+    color: '#dd0031',
+  },
+  {
+    name: 'Svelte',
+    icon: siSvelte.path,
+    href: '/guides/use-the-library-with-svelte/',
+    color: `#${siSvelte.hex}`,
+  },
 ];
 </script>
 
@@ -26,7 +52,9 @@ const frameworks = [
         badge="Framework Support"
         description="Use DiceBear with React, Vue, Svelte, Angular and more. Simply use our HTTP-API as image source or install the JS-library."
       >
-        <template #headline>Works with Your <strong>Favorite</strong> Framework</template>
+        <template #headline
+          >Works with Your <strong>Favorite</strong> Framework</template
+        >
       </UiSectionHeader>
 
       <div class="app-frameworks-grid">
@@ -35,7 +63,10 @@ const frameworks = [
           :key="framework.name"
           :href="framework.href"
           class="app-frameworks-item"
-          :style="{ '--framework-color': framework.color, animationDelay: `${index * 0.1}s` }"
+          :style="{
+            '--framework-color': framework.color,
+            animationDelay: `${index * 0.1}s`,
+          }"
         >
           <UiIconBox size="lg" :color="framework.color">
             <UiIcon :path="framework.icon" />
@@ -59,16 +90,28 @@ const frameworks = [
 <style lang="scss" scoped>
 .app-frameworks {
   &-dots {
-    background-image: radial-gradient(circle, var(--vp-c-text-3) 1px, transparent 1px);
+    background-image: radial-gradient(
+      circle,
+      var(--vp-c-text-3) 1px,
+      transparent 1px
+    );
     background-size: 32px 32px;
     background-repeat: repeat !important;
     opacity: 0.2;
     mask-image: radial-gradient(ellipse 70% 50% at 50% 50%, black, transparent);
-    -webkit-mask-image: radial-gradient(ellipse 70% 50% at 50% 50%, black, transparent);
+    -webkit-mask-image: radial-gradient(
+      ellipse 70% 50% at 50% 50%,
+      black,
+      transparent
+    );
   }
 
   &-gradient {
-    background: radial-gradient(ellipse 80% 60% at 50% 0%, color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent), transparent);
+    background: radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent),
+      transparent
+    );
   }
 
   &-container {
@@ -128,5 +171,4 @@ const frameworks = [
     color: var(--vp-c-text-1);
   }
 }
-
 </style>

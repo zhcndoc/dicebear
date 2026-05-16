@@ -20,9 +20,7 @@ export function addStyleCommand(
     command: `${name} [outputPath]`,
     describe: `Generate "${name}" avatar(s)`,
     builder: (yargs) => {
-      return yargs
-        .default('outputPath', '.')
-        .options(options);
+      return yargs.default('outputPath', '.').options(options);
     },
     handler: async (argv) => {
       try {

@@ -88,16 +88,15 @@ const defaultBackgroundColors = [
   'f7b0f0',
 ];
 
-export default function getSchemaOptions(
-  style: Style,
-): ConfigStyleOptions {
+export default function getSchemaOptions(style: Style): ConfigStyleOptions {
   const descriptor = new OptionsDescriptor(style).toJSON();
   const result: ConfigStyleOptions = {};
 
   for (const [key, field] of Object.entries(descriptor)) {
     // Only show variant (enum with weighted) and color options in the editor
     const isColor = field.type === 'color';
-    const isVariant = field.type === 'enum' && 'weighted' in field && field.weighted === true;
+    const isVariant =
+      field.type === 'enum' && 'weighted' in field && field.weighted === true;
     const isBackgroundColor = key === 'backgroundColor';
 
     if (!isColor && !isVariant && !isBackgroundColor) {

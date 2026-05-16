@@ -80,9 +80,9 @@ const styles = [
 # Using DiceBear as an Avatar Placeholder API
 
 An avatar placeholder replaces the generic default shown when a user hasn't
-uploaded a profile picture yet. Instead of a grey silhouette, DiceBear
-generates a unique, deterministic SVG avatar from any seed — making every user
-feel represented from the moment they sign up.
+uploaded a profile picture yet. Instead of a grey silhouette, DiceBear generates
+a unique, deterministic SVG avatar from any seed — making every user feel
+represented from the moment they sign up.
 
 ## Why DiceBear as a Placeholder?
 
@@ -92,7 +92,8 @@ feel represented from the moment they sign up.
 
 The simplest approach: use a DiceBear API URL as the `src` of an `<img>` tag.
 Use a stable identifier as the seed — a numeric user ID works well. For full
-options and rate limit details, see the [HTTP API documentation](/how-to-use/http-api/).
+options and rate limit details, see the
+[HTTP API documentation](/how-to-use/http-api/).
 
 <BrowserPreview url="https://api.dicebear.com/10.x/initials/svg?seed=JD" />
 <BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=user-42" />
@@ -108,8 +109,8 @@ options and rate limit details, see the [HTTP API documentation](/how-to-use/htt
 
 ### Fallback on Image Error
 
-Combine DiceBear with an `onerror` handler to fall back gracefully when a
-user's uploaded photo fails to load:
+Combine DiceBear with an `onerror` handler to fall back gracefully when a user's
+uploaded photo fails to load:
 
 ```html
 <img
@@ -121,8 +122,8 @@ user's uploaded photo fails to load:
 
 ### Using a User ID as Seed
 
-Pass a stable, unique identifier as the seed to ensure each user always gets
-the same placeholder:
+Pass a stable, unique identifier as the seed to ensure each user always gets the
+same placeholder:
 
 ```js
 const userId = 'user-8f3a2c';
@@ -186,8 +187,7 @@ options.
 
 ## Tip: Always Define a Size
 
-Specify a `size` or CSS dimensions to avoid layout shift while the avatar
-loads:
+Specify a `size` or CSS dimensions to avoid layout shift while the avatar loads:
 
 ```js
 // JS library

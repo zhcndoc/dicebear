@@ -20,7 +20,7 @@ withDefaults(
     avatarSize: 48,
     allStylesLink: '/styles/',
     allStylesLabel: 'Browse all 30+ avatar styles',
-  }
+  },
 );
 </script>
 

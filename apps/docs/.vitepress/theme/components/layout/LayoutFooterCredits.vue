@@ -11,7 +11,10 @@ const styles = computed(() => {
   const knownWork: string[] = [];
 
   for (const val of Object.values(theme.value.avatarStyles)) {
-    if (val.meta.creator === 'Florian Körner' || val.meta.creator === 'DiceBear') {
+    if (
+      val.meta.creator === 'Florian Körner' ||
+      val.meta.creator === 'DiceBear'
+    ) {
       continue;
     }
 
@@ -36,15 +39,26 @@ const styles = computed(() => {
       <div class="layout-footer-bottom-inner">
         <p class="layout-footer-attributions">
           <template v-for="(style, index) in styles" :key="style.source">
-            <a v-if="safeHttpUrl(style.source)" class="layout-footer-attribution-link" :href="safeHttpUrl(style.source)" target="_blank" rel="noopener">{{
-              style.title
-            }}</a>
+            <a
+              v-if="safeHttpUrl(style.source)"
+              class="layout-footer-attribution-link"
+              :href="safeHttpUrl(style.source)"
+              target="_blank"
+              rel="noopener"
+              >{{ style.title }}</a
+            >
             <template v-else>{{ style.title }}</template>
             by {{ style.creator }} /
-            <a v-if="safeHttpUrl(style.license?.url)" class="layout-footer-attribution-link" :href="safeHttpUrl(style.license?.url)" target="_blank" rel="noopener">{{
-              style.license?.name
-            }}</a>
-            <template v-else>{{ style.license?.name }}</template><template v-if="index < styles.length - 1">. </template>
+            <a
+              v-if="safeHttpUrl(style.license?.url)"
+              class="layout-footer-attribution-link"
+              :href="safeHttpUrl(style.license?.url)"
+              target="_blank"
+              rel="noopener"
+              >{{ style.license?.name }}</a
+            >
+            <template v-else>{{ style.license?.name }}</template
+            ><template v-if="index < styles.length - 1">. </template>
           </template>
           — All avatars are remixes of the original works.
         </p>

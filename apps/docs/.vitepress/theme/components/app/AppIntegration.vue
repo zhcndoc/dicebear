@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Globe, MonitorSmartphone, Server, Terminal } from '@lucide/vue';
-import { UiContainer, UiSection, UiSectionHeader, UiCard, UiIconBox, UiCode } from '../ui';
+import {
+  UiContainer,
+  UiSection,
+  UiSectionHeader,
+  UiCard,
+  UiIconBox,
+  UiCode,
+} from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
 const sectionRef = ref();
@@ -9,7 +16,7 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
 
 const plainCode = {
   js: `import { Style, Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json';
+import lorelei from '@dicebear/styles/lorelei.json';
 
 const style = new Style(lorelei);
 const svg = new Avatar(style, {
@@ -20,7 +27,7 @@ use Composer\\InstalledVersions;
 use DiceBear\\Style;
 use DiceBear\\Avatar;
 
-$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$basePath = InstalledVersions::getInstallPath('dicebear/styles');
 $definition = json_decode(
   file_get_contents($basePath . '/src/lorelei.json'), true
 );
@@ -58,10 +65,18 @@ $svg = (string) new Avatar($style, [
                 <MonitorSmartphone />
               </UiIconBox>
               <h3 class="app-integration-title">JS Library</h3>
-              <p class="app-integration-description">No data sent externally. Full control over your avatar creation with a simple API.</p>
+              <p class="app-integration-description">
+                No data sent externally. Full control over your avatar creation
+                with a simple API.
+              </p>
             </div>
 
-            <UiCode :code="plainCode.js" lang="js" scroll-to-bottom class="app-integration-code-block" />
+            <UiCode
+              :code="plainCode.js"
+              lang="js"
+              scroll-to-bottom
+              class="app-integration-code-block"
+            />
 
             <a href="/how-to-use/js-library/" class="app-integration-link">
               JS Documentation &rarr;
@@ -76,10 +91,18 @@ $svg = (string) new Avatar($style, [
                 <Server />
               </UiIconBox>
               <h3 class="app-integration-title">PHP Library</h3>
-              <p class="app-integration-description">Server-side avatar generation for PHP 8.2+. The same API as the JS library.</p>
+              <p class="app-integration-description">
+                Server-side avatar generation for PHP 8.2+. The same API as the
+                JS library.
+              </p>
             </div>
 
-            <UiCode :code="plainCode.php" lang="php" scroll-to-bottom class="app-integration-code-block" />
+            <UiCode
+              :code="plainCode.php"
+              lang="php"
+              scroll-to-bottom
+              class="app-integration-code-block"
+            />
 
             <a href="/how-to-use/php-library/" class="app-integration-link">
               PHP Documentation &rarr;
@@ -97,7 +120,10 @@ $svg = (string) new Avatar($style, [
                 <Globe />
               </UiIconBox>
               <h3 class="app-integration-title">Avatar API</h3>
-              <p class="app-integration-description">Free avatar API for profile pictures. Handles millions of requests daily via global CDN.</p>
+              <p class="app-integration-description">
+                Free avatar API for profile pictures. Handles millions of
+                requests daily via global CDN.
+              </p>
             </div>
 
             <UiCode :code="plainCode.api" class="app-integration-code-block" />
@@ -115,7 +141,10 @@ $svg = (string) new Avatar($style, [
                 <Terminal />
               </UiIconBox>
               <h3 class="app-integration-title">CLI</h3>
-              <p class="app-integration-description">Generate avatars from the command line. Perfect for scripts and automation.</p>
+              <p class="app-integration-description">
+                Generate avatars from the command line. Perfect for scripts and
+                automation.
+              </p>
             </div>
 
             <UiCode :code="plainCode.cli" class="app-integration-code-block" />
@@ -133,16 +162,28 @@ $svg = (string) new Avatar($style, [
 <style lang="scss" scoped>
 .app-integration {
   &-dots {
-    background-image: radial-gradient(circle, var(--vp-c-text-3) 1px, transparent 1px);
+    background-image: radial-gradient(
+      circle,
+      var(--vp-c-text-3) 1px,
+      transparent 1px
+    );
     background-size: 32px 32px;
     background-repeat: repeat !important;
     opacity: 0.2;
     mask-image: radial-gradient(ellipse 70% 50% at 50% 50%, black, transparent);
-    -webkit-mask-image: radial-gradient(ellipse 70% 50% at 50% 50%, black, transparent);
+    -webkit-mask-image: radial-gradient(
+      ellipse 70% 50% at 50% 50%,
+      black,
+      transparent
+    );
   }
 
   &-gradient {
-    background: radial-gradient(ellipse 80% 60% at 50% 0%, color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent), transparent);
+    background: radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent),
+      transparent
+    );
   }
 
   &-header {

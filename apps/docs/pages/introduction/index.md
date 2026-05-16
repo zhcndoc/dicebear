@@ -2,8 +2,8 @@
 title: DiceBear – Open Source Avatar Library & API
 description: >
   DiceBear is a free, open source avatar library and avatar API. Generate
-  deterministic SVG profile pictures and user placeholder images via
-  JavaScript library, PHP library, HTTP API, or CLI.
+  deterministic SVG profile pictures and user placeholder images via JavaScript
+  library, PHP library, HTTP API, or CLI.
 ---
 
 <script setup>
@@ -71,11 +71,12 @@ the same avatar over and over again based on a seed. But also individual avatars
 are possible! Just use the countless options that each avatar style provides.
 
 And thanks to the [JavaScript library](/how-to-use/js-library/),
-[PHP library](/how-to-use/php-library/),
-[HTTP API](/how-to-use/http-api/), [CLI](/how-to-use/cli/),
+[PHP library](/how-to-use/php-library/), [HTTP API](/how-to-use/http-api/),
+[CLI](/how-to-use/cli/),
 [Figma plugin](https://www.figma.com/community/plugin/1005765655729342787/DiceBear-Exporter),
 [Editor](https://editor.dicebear.com) and [Playground](/playground/), your next
-avatar is always just a stone's throw away! Explore our [Avatar API](/how-to-use/http-api/) for simple URL-based integration.
+avatar is always just a stone's throw away! Explore our
+[Avatar API](/how-to-use/http-api/) for simple URL-based integration.
 
 ## How to use?
 
@@ -90,7 +91,8 @@ cases, various SVG elements such as hair, eyes, ears etc. are selected from a
 set and combined to create a character / avatar.
 
 [FNV-1a](https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function)
-combined with [Mulberry32](https://gist.github.com/tommyettinger/46a874533244883189143505d203312c)
+combined with
+[Mulberry32](https://gist.github.com/tommyettinger/46a874533244883189143505d203312c)
 is used as the algorithm for the
 [PRNG](https://en.wikipedia.org/wiki/Pseudorandom_number_generator). It is
 important to note that the PRNG **does not** attempt to be
@@ -100,8 +102,8 @@ important to note that the PRNG **does not** attempt to be
 
 DiceBear is built with privacy in mind. When using the
 [JavaScript library](/how-to-use/js-library/) or
-[PHP library](/how-to-use/php-library/), avatars are generated entirely
-on your infrastructure — no personal data ever leaves your systems. For teams that
+[PHP library](/how-to-use/php-library/), avatars are generated entirely on your
+infrastructure — no personal data ever leaves your systems. For teams that
 require full control over data retention and infrastructure, DiceBear can be
-[self-hosted](/guides/host-the-http-api-yourself/) — making it a
-privacy-focused avatar solution with no dependency on external services.
+[self-hosted](/guides/host-the-http-api-yourself/) — making it a privacy-focused
+avatar solution with no dependency on external services.

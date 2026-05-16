@@ -68,10 +68,25 @@ export default defineConfig<ThemeOptions>({
   description:
     'DiceBear is a free, open source avatar library and avatar API with 30+ avatar styles. Generate profile pictures and user placeholder images for any project.',
   head: [
-    ['link', { rel: 'icon', type: 'image/png', href: '/favicon-96x96.png', sizes: '96x96' }],
+    [
+      'link',
+      {
+        rel: 'icon',
+        type: 'image/png',
+        href: '/favicon-96x96.png',
+        sizes: '96x96',
+      },
+    ],
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
     ['link', { rel: 'shortcut icon', href: '/favicon.ico' }],
-    ['link', { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' }],
+    [
+      'link',
+      {
+        rel: 'apple-touch-icon',
+        sizes: '180x180',
+        href: '/apple-touch-icon.png',
+      },
+    ],
     ['meta', { name: 'apple-mobile-web-app-title', content: 'DiceBear' }],
     ['link', { rel: 'manifest', href: '/site.webmanifest' }],
     ['meta', { property: 'og:site_name', content: 'DiceBear' }],
@@ -147,12 +162,7 @@ export default defineConfig<ThemeOptions>({
   },
   vite: {
     ssr: {
-      noExternal: [
-        'vue-countup-v3',
-        'vue-chartjs',
-        'globe.gl',
-        'three',
-      ],
+      noExternal: ['vue-countup-v3', 'vue-chartjs', 'globe.gl', 'three'],
     },
     resolve: {
       alias: {
