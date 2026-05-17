@@ -15,9 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Dylan
 
-Dylan is an illustrated vector avatar style featuring expressive characters with
-a modern, artistic aesthetic. Generate unique, customizable SVG profile icons
-for creative projects and platforms.
+Dylan is a bold, flat-illustrated vector avatar style with chunky outlined
+faces, hand-drawn stubble, and minimal facial features on saturated
+backgrounds. Generate distinctive, character-rich SVG profile icons for
+creative projects and modern apps.
 
 <StylePreview styleName="dylan" />
 

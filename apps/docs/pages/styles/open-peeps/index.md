@@ -16,8 +16,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 # Open Peeps
 
 Open Peeps is a hand-drawn illustration vector avatar style featuring diverse
-human figures with mix-and-match components. Generate inclusive, expressive
-customizable SVG profile icons for community platforms and social apps.
+half-body characters with sketchy outlines, mix-and-match hair, expressions,
+and accessories. Generate inclusive, friendly SVG profile icons for community
+platforms, marketing pages, and social apps.
 
 <StylePreview styleName="open-peeps" />
 

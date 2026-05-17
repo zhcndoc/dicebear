@@ -16,9 +16,8 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Big Ears Neutral
 
-Big Ears Neutral is the gender-neutral variant of the Big Ears vector avatar
-style, delivering abstract character designs perfect for inclusive user profile
-icons.
+Big Ears Neutral is a reduced variant of the Big Ears style, showing only the
+eyes and mouth on a solid colored square — no head outline, hair, or ears.
 
 <StylePreview styleName="big-ears-neutral" />
 

@@ -15,10 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Adventurer
 
-Adventurer is a charming illustrated vector avatar style featuring colorful
-cartoon characters with customizable hair, eyes, and accessories. Use it to
-generate friendly, customizable profile icons for games, social networks, and
-user profiles.
+Adventurer is an illustrated vector avatar style featuring expressive cartoon
+faces with bold outlines, varied hairstyles, and customizable details like
+glasses, earrings, and eyebrows. Generate friendly, character-driven profile
+icons for games, communities, and social apps.
 
 <StylePreview styleName="adventurer" />
 

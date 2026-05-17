@@ -15,9 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Micah
 
-Micah is a vibrant illustrated vector avatar style with flat-design characters
-and bold color combinations. Generate striking, customizable SVG profile icons
-for modern web and mobile applications.
+Micah is a flat-design vector avatar style featuring half-body portraits with
+clean outlines, simple facial features, and bold color combinations across
+hair, clothing, and background. Generate striking SVG profile icons for modern
+web and mobile applications.
 
 <StylePreview styleName="micah" />
 

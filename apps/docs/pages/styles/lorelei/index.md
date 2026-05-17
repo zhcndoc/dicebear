@@ -15,9 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Lorelei
 
-Lorelei is an elegant illustrated vector avatar style featuring expressive
-characters with detailed hair and facial features. Generate refined,
-customizable SVG profile icons for social applications and user accounts.
+Lorelei is an elegant hand-drawn vector avatar style rendered in fine black ink
+lines, featuring detailed hairstyles, expressive eyes, and gently sketched
+collars. Generate refined, illustration-led SVG profile icons for social apps,
+editorial sites, and user accounts.
 
 <StylePreview styleName="lorelei" />
 

@@ -15,9 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Miniavs
 
-Miniavs is a compact illustrated vector avatar style featuring small, detailed
-characters with a charming aesthetic. Generate distinctive, customizable profile
-icons for apps where compact display sizes are common.
+Miniavs is a flat-design vector avatar style with chunky half-body characters
+sporting bold hairstyles, simple expressions, and colorful tops. Generate
+charming, friendly SVG profile icons that read clearly even at small sizes —
+well suited to compact user lists and mobile UIs.
 
 <StylePreview styleName="miniavs" />
 

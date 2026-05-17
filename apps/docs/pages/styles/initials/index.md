@@ -15,10 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Initials
 
-Initials is a text-based vector avatar style that generates profile icons from
-one or two characters. A classic avatar placeholder approach — deterministic,
-readable, and ideal for systems where users haven't yet uploaded a profile
-picture.
+Initials is a text-based vector avatar style that renders one or two large
+letters centered on a solid colored square — the classic monogram placeholder.
+Deterministic and readable, it's an ideal fallback for systems where users
+haven't uploaded a profile picture yet.
 
 <StylePreview styleName="initials" />
 

@@ -15,9 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Avataaars
 
-Avataaars is a popular cartoon vector avatar style with a wide range of
-customizable facial features, hairstyles, and clothing options. Generate
-distinctive SVG profile icons for user accounts and social applications.
+Avataaars is a popular cartoon vector avatar style featuring half-body
+characters with an enormous range of hairstyles, clothing, accessories, and
+facial expressions. Generate richly customizable SVG profile icons for user
+accounts, dashboards, and social applications.
 
 <StylePreview styleName="avataaars" />
 

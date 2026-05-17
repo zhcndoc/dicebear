@@ -16,9 +16,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Avataaars Neutral
 
-Avataaars Neutral is the gender-neutral variant of the Avataaars vector avatar
-style, offering abstract character designs with extensive customization options
-for user profile icons.
+Avataaars Neutral is a reduced variant of the Avataaars style, showing only
+the eyes, eyebrows, and mouth on a solid colored square — no head, hair, or
+clothing.
 
 <StylePreview styleName="avataaars-neutral" />
 

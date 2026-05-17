@@ -15,9 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Icons
 
-Icons is a geometric vector avatar style built from simple, recognizable icon
-shapes. Generate clean, scalable customizable profile icons ideal for
-dashboards, admin panels, and enterprise tools.
+Icons is a clean vector avatar style that drops a single Bootstrap Icons
+pictogram onto a colored tinted background. Generate crisp, scalable profile
+icons ideal for dashboards, admin panels, and enterprise tools where character
+faces would feel out of place.
 
 <StylePreview styleName="icons" />
 

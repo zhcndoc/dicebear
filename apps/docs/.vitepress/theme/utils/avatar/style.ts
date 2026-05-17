@@ -18,9 +18,11 @@ const definitionImports: Record<string, () => Promise<{ default: unknown }>> = {
   'bottts-neutral': () => import('@dicebear/styles/bottts-neutral.json'),
   croodles: () => import('@dicebear/styles/croodles.json'),
   'croodles-neutral': () => import('@dicebear/styles/croodles-neutral.json'),
+  disco: () => import('@dicebear/styles/disco.json'),
   dylan: () => import('@dicebear/styles/dylan.json'),
   'fun-emoji': () => import('@dicebear/styles/fun-emoji.json'),
   glass: () => import('@dicebear/styles/glass.json'),
+  glyphs: () => import('@dicebear/styles/glyphs.json'),
   icons: () => import('@dicebear/styles/icons.json'),
   identicon: () => import('@dicebear/styles/identicon.json'),
   'initial-face': () => import('@dicebear/styles/initial-face.json'),
@@ -39,8 +41,10 @@ const definitionImports: Record<string, () => Promise<{ default: unknown }>> = {
   rings: () => import('@dicebear/styles/rings.json'),
   'shape-grid': () => import('@dicebear/styles/shape-grid.json'),
   shapes: () => import('@dicebear/styles/shapes.json'),
+  stripes: () => import('@dicebear/styles/stripes.json'),
   thumbs: () => import('@dicebear/styles/thumbs.json'),
   'toon-head': () => import('@dicebear/styles/toon-head.json'),
+  triangles: () => import('@dicebear/styles/triangles.json'),
 };
 
 const styleCache = new Map<string, Style>();

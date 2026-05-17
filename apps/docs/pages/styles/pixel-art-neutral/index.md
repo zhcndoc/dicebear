@@ -16,9 +16,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Pixel Art Neutral
 
-Pixel Art Neutral is the gender-neutral variant of the Pixel Art vector avatar
-style, offering abstract pixel-based customizable profile icons in a retro
-aesthetic.
+Pixel Art Neutral is a reduced variant of the Pixel Art style, showing only
+pixel eyes and a mouth on a solid background — no head outline, hair, or
+body.
 
 <StylePreview styleName="pixel-art-neutral" />
 

@@ -15,9 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Toon Head
 
-Toon Head is an illustrated vector avatar style featuring detailed character
-portraits with diverse skin tones, hairstyles, and expressive faces. Generate
-lifelike, customizable SVG profile icons in a modern animated-series aesthetic.
+Toon Head is an illustrated vector avatar style featuring half-body character
+portraits with naturalistic proportions, diverse skin tones, hairstyles, and
+facial hair. Generate expressive SVG profile icons in a modern animated-series
+aesthetic — well suited to community apps and social products.
 
 <StylePreview styleName="toon-head" />
 

@@ -151,11 +151,14 @@ h6,
     'bottts-neutral',
     'croodles',
     'croodles-neutral',
+    'disco',
     'dylan',
     'fun-emoji',
     'glass',
+    'glyphs',
     'icons',
     'identicon',
+    'initial-face',
     'initials',
     'lorelei',
     'lorelei-neutral',
@@ -168,9 +171,12 @@ h6,
     'pixel-art',
     'pixel-art-neutral',
     'rings',
+    'shape-grid',
     'shapes',
+    'stripes',
     'thumbs',
-    'toon-head'
+    'toon-head',
+    'triangles'
   );
 
   @each $style in $styles {

@@ -15,9 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Fun Emoji
 
-Fun Emoji is a vector avatar style based on colorful, expressive emoji
-characters. Generate playful, instantly recognizable customizable profile icons
-for chat apps, social networks, and messaging platforms.
+Fun Emoji is an emoji-inspired vector avatar style placing a single expressive
+face — eyes, mouth, and the occasional accessory like sunglasses or tears — on
+a solid colored square. Generate playful, instantly readable profile icons for
+chat apps, social networks, and messaging platforms.
 
 <StylePreview styleName="fun-emoji" />
 

@@ -16,9 +16,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Notionists Neutral
 
-Notionists Neutral is the gender-neutral variant of the Notionists vector avatar
-style, delivering abstract, professional customizable profile icons for
-inclusive platforms.
+Notionists Neutral is a reduced variant of the Notionists style, drawing only
+the eyes, nose, and mouth in loose black ink lines on a plain background —
+no head, hair, or body.
 
 <StylePreview styleName="notionists-neutral" />
 

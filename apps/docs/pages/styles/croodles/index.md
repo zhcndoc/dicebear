@@ -15,9 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Croodles
 
-Croodles is a hand-drawn doodle vector avatar style with a sketchy, organic
-feel. Generate quirky, customizable profile icons that stand out with an
-artistic, informal aesthetic.
+Croodles is a hand-drawn doodle vector avatar style rendered in loose black
+ink lines, featuring sketchy faces with hair, glasses, and quirky expressions.
+Generate informal, artistic profile icons for blogs, creative tools, and
+sketchbook-style products.
 
 <StylePreview styleName="croodles" />
 

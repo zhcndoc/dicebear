@@ -15,9 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Glass
 
-Glass is an abstract vector avatar style featuring translucent, geometric
-glass-effect shapes. Generate modern, design-forward customizable profile icons
-for apps with a premium aesthetic.
+Glass is a minimal abstract vector avatar style rendered as soft, smooth color
+gradients with a subtle glassy sheen and no visible shapes. Generate modern,
+calm SVG profile icons that work as understated placeholders or backgrounds for
+premium interfaces.
 
 <StylePreview styleName="glass" />
 

@@ -15,10 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Initial Face
 
-Initial Face is a friendly vector avatar style that combines a bold initial with
-a simple character face. Generate approachable, customizable SVG profile icons
-that feel personal at small sizes — great for compact user lists and profile
-placeholders.
+Initial Face is a friendly vector avatar style that pairs a pair of expressive
+eyes with a single bold initial on a colored square — half emoji, half
+monogram. Generate approachable SVG profile icons that feel personal even at
+small sizes, great for user lists and profile placeholders.
 
 <StylePreview styleName="initial-face" />
 

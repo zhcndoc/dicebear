@@ -16,9 +16,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Lorelei Neutral
 
-Lorelei Neutral is the gender-neutral variant of the Lorelei vector avatar
-style, providing abstract character-based customizable profile icons for
-inclusive platforms.
+Lorelei Neutral is a reduced variant of the Lorelei style, drawing only the
+eyes, nose, and mouth in delicate ink lines on a plain background — no head
+outline or hair.
 
 <StylePreview styleName="lorelei-neutral" />
 
