@@ -375,6 +375,30 @@ class PrngTest extends TestCase
         );
     }
 
+    public function testIntegerDistributesValuesRoughlyUniformly(): void
+    {
+        $buckets = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
+        $samples = 2000;
+
+        for ($i = 0; $i < $samples; $i++) {
+            $value = (new Prng("seed-{$i}"))->integer('key', ['min' => 1, 'max' => 5]);
+
+            $this->assertArrayHasKey($value, $buckets, "Unexpected bucket value: {$value}");
+            $buckets[$value]++;
+        }
+
+        $expected = $samples / 5; // 400 per bucket
+        $tolerance = $expected * 0.35; // ±35% — generous for 2000 samples
+
+        foreach ($buckets as $value => $count) {
+            $this->assertLessThan(
+                $tolerance,
+                abs($count - $expected),
+                "Bucket {$value}: expected ~{$expected} ±{$tolerance}, got {$count}",
+            );
+        }
+    }
+
     // shuffle
 
     public function testShuffleReturnsNewArray(): void

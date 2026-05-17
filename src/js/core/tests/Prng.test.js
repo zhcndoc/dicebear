@@ -334,6 +334,28 @@ describe('Prng', () => {
         b.integer('key', { min: 1, max: 100 }),
       );
     });
+
+    it('should distribute values roughly uniformly across the inclusive range', () => {
+      const buckets = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+      const samples = 2000;
+
+      for (let i = 0; i < samples; i++) {
+        const value = new Prng(`seed-${i}`).integer('key', { min: 1, max: 5 });
+
+        assert.ok(value in buckets, `Unexpected bucket value: ${value}`);
+        buckets[value]++;
+      }
+
+      const expected = samples / 5; // 400 per bucket
+      const tolerance = expected * 0.35; // ±35% — generous for 2000 samples
+
+      for (const [value, count] of Object.entries(buckets)) {
+        assert.ok(
+          Math.abs(count - expected) < tolerance,
+          `Bucket ${value}: expected ~${expected} ±${tolerance}, got ${count}`,
+        );
+      }
+    });
   });
 
   describe('shuffle', () => {
