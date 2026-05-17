@@ -27,7 +27,7 @@
   "dependencies": {
     "@dicebear/converter": "10.0.0-rc.4",
     "@dicebear/core": "10.0.0-rc.4",
-    "@dicebear/styles": "^10.0.0-rc.10",
+    "@dicebear/styles": "^10.0.0-rc.11",
     "ajv": "^8.17.1",
     "chalk": "^5.4.1",
     "chalk-template": "^1.1.2",
