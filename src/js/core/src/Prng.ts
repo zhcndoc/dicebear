@@ -97,20 +97,27 @@ export class Prng {
 
   /**
    * Returns a deterministic float in `range`, rounded to four decimal places.
-   * With `range.step > 0`, the result is quantized to `min + i*step` for the
-   * largest integer `i` that keeps the value within the range. Non-positive
-   * or absent step means continuous. `min`/`max` are sorted internally, so
-   * a reversed pair is tolerated.
+   * With `range.step > 0`, the result is drawn uniformly from
+   * `{ min + i*step | 0 ≤ i ≤ floor((max - min) / step) }`, so both endpoints
+   * of an evenly-divisible range are equally likely. Non-positive or absent
+   * step means continuous. `min`/`max` are sorted internally, so a reversed
+   * pair is tolerated.
    */
   float(key: string, range: Range): number {
     const min = Math.min(range.min, range.max);
     const max = Math.max(range.min, range.max);
     const step = range.step ?? 0;
-    const raw = min + this.getValue(key) * (max - min);
-    const quantized =
-      step > 0 ? min + Math.floor((raw - min) / step) * step : raw;
+    let value: number;
 
-    return Math.round(quantized * 10000) / 10000;
+    if (step > 0) {
+      const buckets = Math.floor((max - min) / step) + 1;
+      const i = Math.floor(this.getValue(key) * buckets);
+      value = min + i * step;
+    } else {
+      value = min + this.getValue(key) * (max - min);
+    }
+
+    return Math.round(value * 10000) / 10000;
   }
 
   /**

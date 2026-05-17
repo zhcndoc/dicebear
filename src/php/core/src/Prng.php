@@ -110,10 +110,11 @@ class Prng
 
     /**
      * Returns a deterministic float in `$range`, rounded to four decimal
-     * places. With `$range['step'] > 0`, the result is quantized to
-     * `min + i*step` for the largest integer `i` that keeps the value within
-     * the range. Non-positive or absent step means continuous. `min`/`max`
-     * are sorted internally, so a reversed pair is tolerated.
+     * places. With `$range['step'] > 0`, the result is drawn uniformly from
+     * `{ min + i*step | 0 ≤ i ≤ floor((max - min) / step) }`, so both
+     * endpoints of an evenly-divisible range are equally likely. Non-positive
+     * or absent step means continuous. `min`/`max` are sorted internally, so
+     * a reversed pair is tolerated.
      *
      * @param array{min: int|float, max: int|float, step?: int|float} $range
      */
@@ -122,12 +123,16 @@ class Prng
         $min = min($range['min'], $range['max']);
         $max = max($range['min'], $range['max']);
         $step = $range['step'] ?? 0;
-        $raw = $min + $this->getValue($key) * ($max - $min);
-        $quantized = $step > 0
-            ? $min + floor(($raw - $min) / $step) * $step
-            : $raw;
 
-        return round($quantized * 10000) / 10000;
+        if ($step > 0) {
+            $buckets = (int) floor(($max - $min) / $step) + 1;
+            $i = (int) floor($this->getValue($key) * $buckets);
+            $value = $min + $i * $step;
+        } else {
+            $value = $min + $this->getValue($key) * ($max - $min);
+        }
+
+        return round($value * 10000) / 10000;
     }
 
     /**

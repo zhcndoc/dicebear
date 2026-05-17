@@ -20,7 +20,7 @@ const definitionsDir = join(
   '..',
   '..',
   '..',
-  'definitions',
+  'styles',
   'dist',
 );
 

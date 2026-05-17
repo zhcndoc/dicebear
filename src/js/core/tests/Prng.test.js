@@ -192,6 +192,41 @@ describe('Prng', () => {
       }
     });
 
+    it('should reach the max endpoint when step divides the range evenly', () => {
+      let maxSeen = false;
+
+      for (let i = 0; i < 500; i++) {
+        const value = new Prng(`seed-${i}`).float('key', { min: 0, max: 90, step: 90 });
+
+        assert.ok(value === 0 || value === 90, `Expected 0 or 90, got ${value}`);
+        if (value === 90) maxSeen = true;
+      }
+
+      assert.ok(maxSeen, 'Expected 90 to appear at least once across 500 seeds');
+    });
+
+    it('should distribute stepped values roughly uniformly across buckets', () => {
+      const buckets = { 0: 0, 45: 0, 90: 0, 135: 0, 180: 0 };
+      const samples = 2000;
+
+      for (let i = 0; i < samples; i++) {
+        const value = new Prng(`seed-${i}`).float('key', { min: 0, max: 180, step: 45 });
+
+        assert.ok(value in buckets, `Unexpected bucket value: ${value}`);
+        buckets[value]++;
+      }
+
+      const expected = samples / 5; // 400 per bucket
+      const tolerance = expected * 0.35; // ±35% — generous for 2000 samples
+
+      for (const [value, count] of Object.entries(buckets)) {
+        assert.ok(
+          Math.abs(count - expected) < tolerance,
+          `Bucket ${value}: expected ~${expected} ±${tolerance}, got ${count}`,
+        );
+      }
+    });
+
     it('should be deterministic', () => {
       const a = new Prng('test');
       const b = new Prng('test');
