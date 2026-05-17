@@ -15,6 +15,19 @@ import {
   styleDefaultsKey,
 } from './styleOptionsKeys';
 
+type RangeLike = { min: number; max: number } | undefined;
+
+function rangeDefault(
+  range: RangeLike,
+  fallback: number,
+): number | [number, number] {
+  if (!range) {
+    return fallback;
+  }
+
+  return range.min === range.max ? range.min : [range.min, range.max];
+}
+
 interface OptionGroup {
   id: string;
   label: string;
@@ -67,18 +80,10 @@ const styleDefaults = computed<Record<string, unknown>>(() => {
 
     result[`${name}Variant`] = variantDefaults;
     result[`${name}Probability`] = component.probability();
-
-    const rotate = component.rotate();
-    result[`${name}Rotate`] = rotate.length === 2 ? rotate : (rotate[0] ?? 0);
-
-    const tx = component.translate().x();
-    result[`${name}TranslateX`] = tx.length === 2 ? tx : (tx[0] ?? 0);
-
-    const ty = component.translate().y();
-    result[`${name}TranslateY`] = ty.length === 2 ? ty : (ty[0] ?? 0);
-
-    const scale = component.scale();
-    result[`${name}Scale`] = scale.length === 2 ? scale : (scale[0] ?? 1);
+    result[`${name}Rotate`] = rangeDefault(component.rotate(), 0);
+    result[`${name}TranslateX`] = rangeDefault(component.translate().x(), 0);
+    result[`${name}TranslateY`] = rangeDefault(component.translate().y(), 0);
+    result[`${name}Scale`] = rangeDefault(component.scale(), 1);
   }
 
   for (const [name, values] of Object.entries(styleColors.value)) {
