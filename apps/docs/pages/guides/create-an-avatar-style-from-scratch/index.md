@@ -314,7 +314,7 @@ Add the `$schema` property to enable validation in your editor:
 
 ```json
 {
-  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@0.16.0/dist/definition.min.json",
+  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@1.0.0/dist/definition.min.json",
   "canvas": { ... }
 }
 ```
