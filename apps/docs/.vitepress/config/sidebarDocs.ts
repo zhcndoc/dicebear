@@ -105,6 +105,10 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         link: '/guides/access-all-available-options/',
       },
       {
+        text: 'Load All Avatar Styles',
+        link: '/guides/load-all-avatar-styles/',
+      },
+      {
         text: 'Unique Avatar Count',
         link: '/guides/how-many-unique-avatars/',
       },
