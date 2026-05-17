@@ -66,7 +66,7 @@ const thirdPartyScripts: HeadConfig[] = isProduction
 export default defineConfig<ThemeOptions>({
   title: 'DiceBear',
   description:
-    'DiceBear is a free, open source avatar library and avatar API with 30+ avatar styles. Generate profile pictures and user placeholder images for any project.',
+    'DiceBear is a free, open source avatar library and avatar API with 35+ avatar styles. Generate profile pictures and user placeholder images for any project.',
   head: [
     [
       'link',
@@ -101,7 +101,7 @@ export default defineConfig<ThemeOptions>({
         name: 'DiceBear',
         url: 'https://www.dicebear.com',
         description:
-          'DiceBear is a free, open source avatar library and Avatar API. Generate unique, deterministic SVG avatars and profile pictures with 30+ styles — privacy-focused and self-hostable.',
+          'DiceBear is a free, open source avatar library and Avatar API. Generate unique, deterministic SVG avatars and profile pictures with 35+ styles — privacy-focused and self-hostable.',
       }),
     ],
     [
@@ -115,7 +115,7 @@ export default defineConfig<ThemeOptions>({
         operatingSystem: 'Any',
         url: 'https://www.dicebear.com',
         description:
-          'Privacy-focused, open source SVG avatar library with 30+ styles. Free Avatar API, JavaScript library, and CLI for generating deterministic profile pictures and user placeholder images.',
+          'Privacy-focused, open source SVG avatar library with 35+ styles. Free Avatar API, JavaScript library, and CLI for generating deterministic profile pictures and user placeholder images.',
         offers: {
           '@type': 'Offer',
           price: '0',
@@ -147,7 +147,7 @@ export default defineConfig<ThemeOptions>({
       const pageDescription =
         ctx.pageData.frontmatter.description ||
         ctx.pageData.description ||
-        'DiceBear is a free, open source avatar library and Avatar API with 30+ avatar styles.';
+        'DiceBear is a free, open source avatar library and Avatar API with 35+ avatar styles.';
 
       result.push(
         ['meta', { property: 'og:title', content: pageTitle }],

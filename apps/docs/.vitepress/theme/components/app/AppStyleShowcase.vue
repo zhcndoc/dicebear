@@ -170,7 +170,7 @@ onUnmounted(() => {
         badge="Explore the Collection"
         description="From cute characters to abstract patterns, pixel art to professional illustrations. Our avatar library features styles crafted by talented artists and designers."
       >
-        <template #headline><strong>30+</strong> Unique Avatar Styles</template>
+        <template #headline><strong>35+</strong> Unique Avatar Styles</template>
       </UiSectionHeader>
     </UiContainer>
 

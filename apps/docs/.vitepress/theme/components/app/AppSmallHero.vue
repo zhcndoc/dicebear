@@ -21,7 +21,7 @@ withDefaults(
     badge: 'Why DiceBear?',
     headline: 'Avatars That Stand Out',
     description:
-      'DiceBear is an open source avatar library that lets you generate unique, deterministic profile pictures in no time. Whether you need geometric shapes, cute characters, or pixel art — our privacy-focused SVG avatar library with 30+ styles brings your projects to life.',
+      'DiceBear is an open source avatar library that lets you generate unique, deterministic profile pictures in no time. Whether you need geometric shapes, cute characters, or pixel art — our privacy-focused SVG avatar library with 35+ styles brings your projects to life.',
   },
 );
 

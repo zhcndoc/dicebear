@@ -35,7 +35,7 @@ const { theme } = useData<ThemeOptions>();
     <p class="app-hero-description">
       DiceBear is a privacy-focused, open source avatar library with
       <span class="app-hero-highlight" style="white-space: nowrap"
-        >30+ avatar styles</span
+        >35+ avatar styles</span
       >&nbsp;crafted by talented artists. Generate deterministic profile
       pictures via API, JS&nbsp;library &amp; CLI.
     </p>
