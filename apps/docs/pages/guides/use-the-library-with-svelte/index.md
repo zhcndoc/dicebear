@@ -12,7 +12,7 @@ DiceBear 可同时用于 Svelte 4 和 Svelte 5。使用 `$derived`（Svelte 5）
 零依赖方案。
 
 你可以通过
-[JS 库](/how-to-use/js-library/) 或 [HTTP API](/how-to-use/http_api/) 在 Svelte 中使用 DiceBear。
+[JS 库](/how-to-use/js-library/) 或 [HTTP API](/how-to-use/http-api/) 在 Svelte 中使用 DiceBear。
 
 ## 使用 JS 库
 
