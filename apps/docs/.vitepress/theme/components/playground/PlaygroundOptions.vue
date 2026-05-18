@@ -43,16 +43,21 @@ const seed = defineModel<string>('seed', { required: true });
 const store = useStore();
 const { avatarStyleName } = storeToRefs(store);
 
-const { loadedStyle, descriptor, styleColors, preview } = useStyleOptions(avatarStyleName);
+const { loadedStyle, descriptor, styleColors, preview } =
+  useStyleOptions(avatarStyleName);
 
 provide(componentPreviewKey, preview);
 
 const hasFontFamily = computed(() =>
-  loadedStyle.value ? styleUsesVariable(avatarStyleName.value, 'fontFamily') : false,
+  loadedStyle.value
+    ? styleUsesVariable(avatarStyleName.value, 'fontFamily')
+    : false,
 );
 
 const hasFontWeight = computed(() =>
-  loadedStyle.value ? styleUsesVariable(avatarStyleName.value, 'fontWeight') : false,
+  loadedStyle.value
+    ? styleUsesVariable(avatarStyleName.value, 'fontWeight')
+    : false,
 );
 
 const components = computed(() => {
@@ -70,9 +75,13 @@ const components = computed(() => {
     const comp = style?.components().get(name);
     const variantNames = (field.values as string[]) ?? [];
     const defaultWeights = comp
-      ? Object.fromEntries([...comp.variants()].map(([n, v]) => [n, v.weight()]))
+      ? Object.fromEntries(
+          [...comp.variants()].map(([n, v]) => [n, v.weight()]),
+        )
       : {};
-    const hasNonDefaultWeights = Object.values(defaultWeights).some((w) => w !== 1);
+    const hasNonDefaultWeights = Object.values(defaultWeights).some(
+      (w) => w !== 1,
+    );
 
     result.push({
       name,
@@ -97,7 +106,11 @@ const allColors = computed(() => {
       continue;
     }
 
-    if (key.endsWith('ColorFill') || key.endsWith('ColorAngle') || key.endsWith('ColorFillStops')) {
+    if (
+      key.endsWith('ColorFill') ||
+      key.endsWith('ColorAngle') ||
+      key.endsWith('ColorFillStops')
+    ) {
       continue;
     }
 
@@ -130,7 +143,9 @@ function activeCount(comp: ComponentInfo): number {
 
   if (val === undefined) return comp.variants.length;
   if (Array.isArray(val)) return val.length;
-  if (typeof val === 'object') return Object.values(val as Record<string, number>).filter((w) => w > 0).length;
+  if (typeof val === 'object')
+    return Object.values(val as Record<string, number>).filter((w) => w > 0)
+      .length;
   if (typeof val === 'string') return 1;
 
   return comp.variants.length;
@@ -166,7 +181,11 @@ const onSeedFocus = (e: FocusEvent) => {
 
     <div class="pg-options-group">
       <h3 class="pg-options-group-title">General</h3>
-      <Accordion :multiple="true" :value="['__seed']" class="pg-options-accordion">
+      <Accordion
+        :multiple="true"
+        :value="['__seed']"
+        class="pg-options-accordion"
+      >
         <AccordionPanel value="__seed">
           <AccordionHeader>
             <span class="pg-options-label">Seed</span>
@@ -190,9 +209,11 @@ const onSeedFocus = (e: FocusEvent) => {
             </div>
             <p class="pg-options-seed-help">
               The seed is the starting value used to generate the avatar.
-              <strong>The same seed always produces the same avatar</strong>, so you can reuse it whenever you need the
-              exact same result. For privacy, prefer an opaque identifier such as a random string or hashed user ID
-              instead of personal data like names or email addresses.
+              <strong>The same seed always produces the same avatar</strong>, so
+              you can reuse it whenever you need the exact same result. For
+              privacy, prefer an opaque identifier such as a random string or
+              hashed user ID instead of personal data like names or email
+              addresses.
             </p>
           </AccordionContent>
         </AccordionPanel>
@@ -201,7 +222,11 @@ const onSeedFocus = (e: FocusEvent) => {
             <span class="pg-options-label">Font</span>
           </AccordionHeader>
           <AccordionContent>
-            <PlaygroundFontSection :key="avatarStyleName" :has-font-family="hasFontFamily" :has-font-weight="hasFontWeight" />
+            <PlaygroundFontSection
+              :key="avatarStyleName"
+              :has-font-family="hasFontFamily"
+              :has-font-weight="hasFontWeight"
+            />
           </AccordionContent>
         </AccordionPanel>
         <AccordionPanel value="__transform">
@@ -218,10 +243,18 @@ const onSeedFocus = (e: FocusEvent) => {
     <div class="pg-options-group" v-if="components.length > 0">
       <h3 class="pg-options-group-title">Components</h3>
       <Accordion :multiple="true" class="pg-options-accordion">
-        <AccordionPanel v-for="comp in components" :key="`${avatarStyleName}-${comp.name}`" :value="comp.name">
+        <AccordionPanel
+          v-for="comp in components"
+          :key="`${avatarStyleName}-${comp.name}`"
+          :value="comp.name"
+        >
           <AccordionHeader>
             <span class="pg-options-label">{{ capitalCase(comp.name) }}</span>
-            <Tag :value="`${activeCount(comp)}/${comp.variants.length}`" severity="secondary" class="pg-options-tag" />
+            <Tag
+              :value="`${activeCount(comp)}/${comp.variants.length}`"
+              severity="secondary"
+              class="pg-options-tag"
+            />
           </AccordionHeader>
           <AccordionContent>
             <PlaygroundComponentSection
@@ -241,10 +274,18 @@ const onSeedFocus = (e: FocusEvent) => {
     <div class="pg-options-group" v-if="allColors.length > 0">
       <h3 class="pg-options-group-title">Colors</h3>
       <Accordion :multiple="true" class="pg-options-accordion">
-        <AccordionPanel v-for="color in sortedColors" :key="`${avatarStyleName}-${color.key}`" :value="color.key">
+        <AccordionPanel
+          v-for="color in sortedColors"
+          :key="`${avatarStyleName}-${color.key}`"
+          :value="color.key"
+        >
           <AccordionHeader>
             <span class="pg-options-label">{{ capitalCase(color.name) }}</span>
-            <Tag :value="String(colorCount(color))" severity="secondary" class="pg-options-tag" />
+            <Tag
+              :value="String(colorCount(color))"
+              severity="secondary"
+              class="pg-options-tag"
+            />
           </AccordionHeader>
           <AccordionContent>
             <PlaygroundColorSection

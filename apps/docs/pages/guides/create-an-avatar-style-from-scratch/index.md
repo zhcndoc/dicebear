@@ -144,9 +144,7 @@ PRNG 会为每个种子选择不同的背景颜色。
 }
 ```
 
-`canvas.elements` 数组通过
-`{ "type": "component", "name": "face" }` 引用了 `face` 组件。PRNG 会选择
-`smile` 或 `neutral` 变体之一。
+`canvas.elements` 数组通过 `{ "type": "component", "name": "face" }` 引用了 `face` 组件。PRNG 会选择 `smile` 或 `neutral` 变体之一。
 
 ## 多个组件
 
@@ -187,9 +185,7 @@ PRNG 会为每个种子选择不同的背景颜色。
 
 ### 概率
 
-`probability` 属性（0-100）控制组件出现的频率。
-在上面的示例中，`accessories` 只会出现在大约 30% 的生成头像中。
-默认值为 `100`（始终可见）。
+`probability` 属性（0-100）控制组件出现的频率。在上面的示例中，`accessories` 只会出现在大约 30% 的生成头像中。默认值为 `100`（始终可见）。
 
 ### 变体权重
 
@@ -294,7 +290,8 @@ PRNG 会为每个种子选择不同的背景颜色。
 ```
 
 此元数据会出现在：
-- 生成的 SVG 内部的 `<metadata>` RDF 块中（Dublin Core terms；参见
+
+- 生成的 SVG 内部的 `<metadata>` RDF 块中（Dublin Core 术语；参见
   [核心实现规范](/specification/implement-dicebear-core/#metadata-block)）
 - CLI 许可证横幅中
 - 文档中（如果你的风格被添加到官方集合中）
@@ -305,7 +302,7 @@ PRNG 会为每个种子选择不同的背景颜色。
 
 ```json
 {
-  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@0.14.1/dist/definition.min.json",
+  "$schema": "https://cdn.hopjs.net/npm/@dicebear/schema@1.0.0/dist/definition.min.json",
   "canvas": { ... }
 }
 ```
@@ -344,5 +341,5 @@ echo (string) $avatar;
 ## 下一步
 
 - 查看 [定义模式参考](/specification/definition-schema/) 以获取完整规范
-- 浏览 [官方定义](https://github.com/dicebear/definitions) 以查看真实世界示例
+- 浏览 [官方定义](https://github.com/dicebear/styles) 以查看真实示例
 - 使用 [Figma 插件](/guides/create-an-avatar-style-with-figma/) 进行可视化工作流

@@ -1,5 +1,5 @@
 ---
-title: Adventurer – Avatar Style | DiceBear
+title: Adventurer – 头像风格 | DiceBear
 description: >
   使用 DiceBear 头像库创建 Adventurer 头像。通过我们的免费头像 API 或 JavaScript 头像库生成独特的
   个人资料图片。
@@ -15,9 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Adventurer
 
-Adventurer 是一种迷人的插画风矢量头像样式，具有色彩丰富的
-卡通角色，可自定义发型、眼睛和配饰。可用于为游戏、社交网络和
-用户资料生成友好、可定制的个人头像图标。
+Adventurer 是一种插画风格的矢量头像，具有富有表现力的卡通
+面孔、粗黑轮廓、多样的发型，以及可自定义的细节，如
+眼镜、耳环和眉毛。为游戏、社区和社交应用生成友好、富有角色感的个人资料
+图标。
 
 <StylePreview styleName="adventurer" />
 

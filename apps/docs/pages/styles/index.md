@@ -1,9 +1,10 @@
 ---
 layout: page
-title: 头像风格 – 浏览 30+ 款头像设计 | DiceBear
+title: 头像风格 – 浏览 35+ 种头像设计 | DiceBear
 description: >
-  浏览 30+ 款风格，并使用 DiceBear 头像库生成头像。从
-  抽象图案到角色设计——适合个人资料图片和用户头像的完美头像生成器。
+  浏览 35+ 种风格，并使用 DiceBear 头像库生成头像。从
+  抽象图案到角色设计——为个人资料图片和用户头像提供
+  完美的头像生成器。
 aside: false
 sidebar: false
 ---

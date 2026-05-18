@@ -167,7 +167,6 @@ export default {
 
           if (link && link.hostname) {
             if (link.hostname !== window.location.hostname) {
-
               if (typeof umami !== 'undefined') {
                 umami.track('Outbound Link', { url: link.hostname });
               }

@@ -30,7 +30,7 @@ npm install @dicebear/converter
 ```js
 import { toPng } from '@dicebear/converter';
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 const avatar = new Avatar(lorelei, {
   seed: 'Alice',
@@ -190,7 +190,7 @@ const png = toPng(svg, {
 const buffer = await png.toArrayBuffer(); // [!code focus]
 ```
 
-## 选项 
+## 选项
 
 | 选项          | 类型       | 默认值   | 环境              | 描述                                  |
 | ------------- | ---------- | ------- | ----------------- | ------------------------------------- |
@@ -208,7 +208,6 @@ const buffer = await png.toArrayBuffer(); // [!code focus]
 
 控制光栅化输出图像的宽度和高度，单位为像素。输出始终是正方形。高于 `2048` 的值会被限制为 `2048`。无效值
 （`NaN`、`<= 0`、`Infinity`）会回退到 `512`。
-
 
 ```js
 import { toPng } from '@dicebear/converter';
@@ -280,7 +279,7 @@ await exiftool.end();
 
 ```js
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 
 const avatar = new Avatar(lorelei, {
@@ -299,7 +298,7 @@ document.querySelector('img').src = dataUri;
 
 ```js
 import { Avatar } from '@dicebear/core';
-import bottts from '@dicebear/definitions/bottts.json' with { type: 'json' };
+import bottts from '@dicebear/styles/bottts.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 import { writeFile } from 'node:fs/promises';
 
@@ -317,7 +316,7 @@ await writeFile('avatar.png', Buffer.from(buffer));
 
 ```js
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 import { exiftool } from 'exiftool-vendored';
 import { writeFile } from 'node:fs/promises';
@@ -341,7 +340,7 @@ await exiftool.end();
 
 ```js
 import { Avatar } from '@dicebear/core';
-import initials from '@dicebear/definitions/initials.json' with { type: 'json' };
+import initials from '@dicebear/styles/initials.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 
 const avatar = new Avatar(initials, {
@@ -359,7 +358,7 @@ const dataUri = await png.toDataUri();
 
 ```js
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 
 const avatar = new Avatar(lorelei, { seed: 'Alice' });

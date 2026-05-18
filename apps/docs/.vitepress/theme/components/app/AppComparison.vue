@@ -5,7 +5,10 @@ import { useData } from 'vitepress';
 import type { ThemeOptions } from '@theme/types';
 import { UiContainer, UiSection, UiSectionHeader, UiCard } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
-import { buildComparisonRows, comparisonServices } from '@theme/config/comparison';
+import {
+  buildComparisonRows,
+  comparisonServices,
+} from '@theme/config/comparison';
 
 const { theme } = useData<ThemeOptions>();
 const sectionRef = ref();
@@ -42,7 +45,13 @@ const rows = buildComparisonRows({
                   :key="service.key"
                   :class="{ 'app-comparison-highlight-col': index === 0 }"
                 >
-                  <a :href="service.url" target="_blank" rel="noopener" class="app-comparison-service-link">{{ service.name }}</a>
+                  <a
+                    :href="service.url"
+                    target="_blank"
+                    rel="noopener"
+                    class="app-comparison-service-link"
+                    >{{ service.name }}</a
+                  >
                 </th>
               </tr>
             </thead>
@@ -54,19 +63,33 @@ const rows = buildComparisonRows({
                   :key="service.key"
                   :class="{ 'app-comparison-highlight-col': colIndex === 0 }"
                 >
-                  <span v-if="row.values[service.key] === 'yes'" class="app-comparison-cell-yes">
+                  <span
+                    v-if="row.values[service.key] === 'yes'"
+                    class="app-comparison-cell-yes"
+                  >
                     <Check :size="18" />
                   </span>
-                  <span v-else-if="row.values[service.key] === 'free'" class="app-comparison-cell-free">
+                  <span
+                    v-else-if="row.values[service.key] === 'free'"
+                    class="app-comparison-cell-free"
+                  >
                     免费
                   </span>
-                  <span v-else-if="row.values[service.key] === 'paid'" class="app-comparison-cell-paid">
+                  <span
+                    v-else-if="row.values[service.key] === 'paid'"
+                    class="app-comparison-cell-paid"
+                  >
                     付费
                   </span>
-                  <span v-else-if="row.values[service.key] === 'no'" class="app-comparison-cell-no">
+                  <span
+                    v-else-if="row.values[service.key] === 'no'"
+                    class="app-comparison-cell-no"
+                  >
                     <X :size="18" />
                   </span>
-                  <span v-else class="app-comparison-cell-text">{{ row.values[service.key] }}</span>
+                  <span v-else class="app-comparison-cell-text">{{
+                    row.values[service.key]
+                  }}</span>
                 </td>
               </tr>
             </tbody>
@@ -75,8 +98,7 @@ const rows = buildComparisonRows({
       </UiCard>
 
       <p class="app-comparison-note">
-        这个对比基于公开信息，可能无法完全反映最新变化。
-        每个工具都有自己的优势，请选择最适合你项目的方案。
+        此比较基于公开可用的信息，可能不反映最新更新。每种工具都有其自身的优势——请选择最适合您项目的工具。
       </p>
     </UiContainer>
   </UiSection>
@@ -86,8 +108,16 @@ const rows = buildComparisonRows({
 .app-comparison {
   &-gradient {
     background:
-      radial-gradient(ellipse 50% 50% at 50% 0%, color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent), transparent),
-      radial-gradient(ellipse 50% 50% at 50% 100%, color-mix(in srgb, var(--vp-c-purple-1) 6%, transparent), transparent);
+      radial-gradient(
+        ellipse 50% 50% at 50% 0%,
+        color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent),
+        transparent
+      ),
+      radial-gradient(
+        ellipse 50% 50% at 50% 100%,
+        color-mix(in srgb, var(--vp-c-purple-1) 6%, transparent),
+        transparent
+      );
   }
 
   &-header {

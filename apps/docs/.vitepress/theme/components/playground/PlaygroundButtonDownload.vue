@@ -17,7 +17,9 @@ const props = defineProps<{
   seed: string;
 }>();
 
-const { store, open, confettiKey, options, showDialog } = usePlaygroundDialog(() => props.seed);
+const { store, open, confettiKey, options, showDialog } = usePlaygroundDialog(
+  () => props.seed,
+);
 const menu = ref();
 
 function triggerDownload(blob: Blob, filename: string) {
@@ -35,10 +37,13 @@ async function downloadSvg() {
   showDialog();
 
   const avatarStyle = await loadAvatarStyle(store.avatarStyleName);
-  const avatar = new Avatar(avatarStyle, clonePlain({
-    ...options.value,
-    size: DOWNLOAD_AVATAR_SIZE,
-  }));
+  const avatar = new Avatar(
+    avatarStyle,
+    clonePlain({
+      ...options.value,
+      size: DOWNLOAD_AVATAR_SIZE,
+    }),
+  );
 
   const blob = new Blob([avatar.toString()], { type: 'image/svg+xml' });
   triggerDownload(blob, `${store.avatarStyleName}-${Date.now()}.svg`);
@@ -48,7 +53,7 @@ async function downloadBinary(format: string) {
   showDialog();
 
   const response = await fetch(
-    getAvatarApiUrl(store.avatarStyleName, options.value, format)
+    getAvatarApiUrl(store.avatarStyleName, options.value, format),
   );
 
   const blob = await response.blob();
@@ -73,7 +78,12 @@ function onDownloadClick(e: Event) {
 </script>
 
 <template>
-  <Button :label="store.isCustomStyle ? 'Download SVG' : 'Download'" severity="secondary" variant="outlined" @click="onDownloadClick">
+  <Button
+    :label="store.isCustomStyle ? 'Download SVG' : 'Download'"
+    severity="secondary"
+    variant="outlined"
+    @click="onDownloadClick"
+  >
     <template #icon>
       <Download :size="15" />
     </template>
@@ -90,10 +100,10 @@ function onDownloadClick(e: Event) {
         mode="library"
       />
     </div>
-    <div class="dialog-title">
-      Your avatar will be downloaded! 🎉
+    <div class="dialog-title">Your avatar will be downloaded! 🎉</div>
+    <div class="dialog-subtitle">
+      Please note the license below before using.
     </div>
-    <div class="dialog-subtitle">Please note the license below before using.</div>
     <div class="dialog-text">
       <PlaygroundLicenseAlert />
     </div>

@@ -8,7 +8,7 @@
 
 All individual avatar style packages (e.g. `@dicebear/initials`, `@dicebear/adventurer`, etc.) and the `@dicebear/collection` package have been removed from this repository.
 
-Avatar styles are now distributed as JSON definition files via the separate [`dicebear/definitions`](https://github.com/dicebear/definitions) repository and installed through the `@dicebear/definitions` package. The format follows the new [DiceBear Avatar Style JSON Schema](https://github.com/dicebear/schema).
+Avatar styles are now distributed as JSON definition files via the separate [`dicebear/styles`](https://github.com/dicebear/styles) repository and installed through the `@dicebear/styles` package. The format follows the new [DiceBear Avatar Style JSON Schema](https://github.com/dicebear/schema).
 
 **Before:**
 ```bash
@@ -24,12 +24,12 @@ const avatar = createAvatar(initials, { seed: 'Jane' });
 
 **After:**
 ```bash
-npm install @dicebear/core @dicebear/definitions
+npm install @dicebear/core @dicebear/styles
 ```
 
 ```js
 import { createAvatar } from '@dicebear/core';
-import initials from '@dicebear/definitions/initials.json' with { type: 'json' };
+import initials from '@dicebear/styles/initials.json' with { type: 'json' };
 
 const avatar = createAvatar(initials, { seed: 'Jane' });
 ```

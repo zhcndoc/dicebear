@@ -8,7 +8,12 @@ import type {
   PlaygroundStoreOptions,
 } from '@theme/types';
 import { useData } from 'vitepress';
-import { clonePlain, registerCustomStyle, unregisterCustomStyle, flushPendingCustomStyles } from '@theme/utils/avatar/style';
+import {
+  clonePlain,
+  registerCustomStyle,
+  unregisterCustomStyle,
+  flushPendingCustomStyles,
+} from '@theme/utils/avatar/style';
 
 export default defineStore('playground', () => {
   const data = useData();
@@ -25,33 +30,38 @@ export default defineStore('playground', () => {
   );
   const seed = useLocalStorage<string>('dicebear-playground-seed', 'Felix');
 
-  const { data: customStyles, isFinished: customStylesReady } = useIDBKeyval<Record<string, CustomStyleEntry>>(
-    'dicebear-playground-custom-styles',
-    {},
-  );
+  const { data: customStyles, isFinished: customStylesReady } = useIDBKeyval<
+    Record<string, CustomStyleEntry>
+  >('dicebear-playground-custom-styles', {});
 
   // useIDBKeyval returns reactive proxies; structuredClone inside Style throws on those.
-  watch(customStylesReady, (isReady) => {
-    if (!isReady) return;
+  watch(
+    customStylesReady,
+    (isReady) => {
+      if (!isReady) return;
 
-    const invalid: string[] = [];
+      const invalid: string[] = [];
 
-    for (const [key, entry] of Object.entries(customStyles.value)) {
-      try {
-        registerCustomStyle(key, clonePlain(entry.definition));
-      } catch {
-        invalid.push(key);
+      for (const [key, entry] of Object.entries(customStyles.value)) {
+        try {
+          registerCustomStyle(key, clonePlain(entry.definition));
+        } catch {
+          invalid.push(key);
+        }
       }
-    }
 
-    if (invalid.length > 0) {
-      customStyles.value = Object.fromEntries(
-        Object.entries(customStyles.value).filter(([key]) => !invalid.includes(key)),
-      );
-    }
+      if (invalid.length > 0) {
+        customStyles.value = Object.fromEntries(
+          Object.entries(customStyles.value).filter(
+            ([key]) => !invalid.includes(key),
+          ),
+        );
+      }
 
-    flushPendingCustomStyles();
-  }, { immediate: true });
+      flushPendingCustomStyles();
+    },
+    { immediate: true },
+  );
 
   const isCustomStyle = computed(() =>
     avatarStyleName.value.startsWith('custom:'),

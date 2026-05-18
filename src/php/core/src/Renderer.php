@@ -315,6 +315,11 @@ class Renderer
      * same source component sharing a variant — and identical components
      * referenced more than once — therefore produce a single `<defs>` entry
      * referenced by every `<use>`, never duplicated SVG markup.
+     *
+     * Any `attributes` on the component reference are written to the emitted
+     * `<use>` tag. A user-supplied `transform` is prepended to the
+     * per-component transforms so it acts as the outer (placement) transform,
+     * with the style's translate/rotate/scale applied inside it.
      */
     private function renderComponentElement(Element $element): string
     {
@@ -353,11 +358,22 @@ class Renderer
         }
 
         $transforms = $this->buildTransforms($component);
-        $transformAttr = count($transforms) > 0
-            ? ' transform="' . implode(' ', $transforms) . '"'
-            : '';
+        $userAttributes = $element->attributes();
+        $mergedAttributes = $userAttributes;
 
-        return "<use{$transformAttr} href=\"#{$id}\"/>";
+        if (count($transforms) > 0) {
+            $userTransform = $userAttributes['transform'] ?? null;
+            $allParts = is_string($userTransform) && $userTransform !== ''
+                ? [$userTransform, ...$transforms]
+                : $transforms;
+
+            $mergedAttributes = $userAttributes ?? [];
+            $mergedAttributes['transform'] = implode(' ', $allParts);
+        }
+
+        $attrs = $this->renderAttributes($mergedAttributes);
+
+        return "<use{$attrs} href=\"#{$id}\"/>";
     }
 
     /**

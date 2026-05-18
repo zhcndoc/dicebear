@@ -4,7 +4,9 @@
  * style-metadata URLs so that javascript:, data:, file: and other dangerous
  * schemes are dropped before they reach the DOM.
  */
-export function safeHttpUrl(url: string | undefined | null): string | undefined {
+export function safeHttpUrl(
+  url: string | undefined | null,
+): string | undefined {
   if (!url) {
     return undefined;
   }

@@ -15,7 +15,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Avataaars Neutral
 
-Avataaars Neutral 是 Avataaars 矢量头像风格的中性版本，为用户资料图标提供具有丰富自定义选项的抽象角色设计。
+Avataaars Neutral 是 Avataaars 风格的简化变体，仅在纯色方形背景上显示
+眼睛、眉毛和嘴巴——没有头部、头发或
+服装。
 
 <StylePreview styleName="avataaars-neutral" />
 

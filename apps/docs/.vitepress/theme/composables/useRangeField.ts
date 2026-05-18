@@ -17,7 +17,11 @@ export function useRangeField(avatarStyleOptions: PlaygroundStoreOptions) {
 
     if (wasRange) {
       const val = avatarStyleOptions[key];
-      const single = Array.isArray(val) ? val[0] : (typeof val === 'number' ? val : fallback);
+      const single = Array.isArray(val)
+        ? val[0]
+        : typeof val === 'number'
+          ? val
+          : fallback;
 
       avatarStyleOptions[key] = single;
     } else {
@@ -58,12 +62,14 @@ export function useRangeField(avatarStyleOptions: PlaygroundStoreOptions) {
       get: () => {
         const val = avatarStyleOptions[key];
 
-        if (Array.isArray(val) && val.length === 2) return [val[0], val[1]] as [number, number];
+        if (Array.isArray(val) && val.length === 2)
+          return [val[0], val[1]] as [number, number];
         if (typeof val === 'number') return [val, val] as [number, number];
 
         const fb = resolve();
 
-        if (Array.isArray(fb) && fb.length === 2) return [fb[0], fb[1]] as [number, number];
+        if (Array.isArray(fb) && fb.length === 2)
+          return [fb[0], fb[1]] as [number, number];
 
         const single = typeof fb === 'number' ? fb : 0;
 

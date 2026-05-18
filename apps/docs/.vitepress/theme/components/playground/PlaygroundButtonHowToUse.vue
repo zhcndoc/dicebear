@@ -2,7 +2,11 @@
 import { Code as CodeIcon } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
 import { UiCode } from '../ui';
-import { getAvatarApiUrl, getAvatarApiCommand, unsupportedHttpApiOptions } from '@theme/utils/avatar/api';
+import {
+  getAvatarApiUrl,
+  getAvatarApiCommand,
+  unsupportedHttpApiOptions,
+} from '@theme/utils/avatar/api';
 import { formatPhpValue } from '@theme/utils/code-examples';
 import PlaygroundDialog from './PlaygroundDialog.vue';
 import Button from 'primevue/button';
@@ -23,14 +27,17 @@ const { store, open, options } = usePlaygroundDialog(() => props.seed);
 
 const tab = ref<string>(store.isCustomStyle ? 'js-library' : 'http-api');
 
-watch(() => store.isCustomStyle, (isCustom) => {
-  if (isCustom && tab.value === 'http-api') {
-    tab.value = 'js-library';
-  }
-});
+watch(
+  () => store.isCustomStyle,
+  (isCustom) => {
+    if (isCustom && tab.value === 'http-api') {
+      tab.value = 'js-library';
+    }
+  },
+);
 
 const exampleHttpApi = computed(() =>
-  getAvatarApiUrl(store.avatarStyleName, options.value)
+  getAvatarApiUrl(store.avatarStyleName, options.value),
 );
 const hasExcludedOptions = computed(() => {
   const opts = options.value as Record<string, unknown>;
@@ -41,7 +48,7 @@ const hasExcludedOptions = computed(() => {
 const exampleHttpApiHtml = computed(
   () => `<img
   src="${getAvatarApiUrl(store.avatarStyleName, options.value)}"
-  alt="avatar" />`
+  alt="avatar" />`,
 );
 const exampleJsLibrary = computed(() => {
   if (store.isCustomStyle) {
@@ -51,24 +58,16 @@ const exampleJsLibrary = computed(() => {
 const definition = { /* ... */ };
 
 const style = new Style(definition);
-const avatar = new Avatar(style, ${JSON.stringify(
-      options.value,
-      null,
-      2
-    )});
+const avatar = new Avatar(style, ${JSON.stringify(options.value, null, 2)});
 
 const svg = avatar.toString();`;
   }
 
   return `import { Style, Avatar } from '@dicebear/core';
-import definition from '@dicebear/definitions/${store.avatarStyleName}.json';
+import definition from '@dicebear/styles/${store.avatarStyleName}.json';
 
 const style = new Style(definition);
-const avatar = new Avatar(style, ${JSON.stringify(
-    options.value,
-    null,
-    2
-  )});
+const avatar = new Avatar(style, ${JSON.stringify(options.value, null, 2)});
 
 const svg = avatar.toString();`;
 });
@@ -96,7 +95,7 @@ use Composer\\InstalledVersions;
 use DiceBear\\Style;
 use DiceBear\\Avatar;
 
-$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$basePath = InstalledVersions::getInstallPath('dicebear/styles');
 $definition = json_decode(file_get_contents($basePath . '/src/${store.avatarStyleName}.json'), true);
 
 $style = new Style($definition);
@@ -109,19 +108,23 @@ const exampleCli = computed(() =>
   getAvatarApiCommand(
     store.isCustomStyle ? './my-style.json' : store.avatarStyleName,
     options.value,
-  )
+  ),
 );
 </script>
 
 <template>
-  <Button label="How to use" severity="secondary" variant="outlined" @click="open = true">
+  <Button
+    label="How to use"
+    severity="secondary"
+    variant="outlined"
+    @click="open = true"
+  >
     <template #icon>
       <CodeIcon :size="15" />
     </template>
   </Button>
 
   <PlaygroundDialog v-model:open="open" max-width="800px" header="How to use">
-
     <div class="playground-button-how-to-use-text">
       <div class="playground-button-how-to-use-tabs-card">
         <Tabs v-model:value="tab">
@@ -134,14 +137,24 @@ const exampleCli = computed(() =>
           <TabPanels>
             <TabPanel v-if="!store.isCustomStyle" value="http-api">
               <div class="playground-button-how-to-use-tab-content">
-                <p>Use this URL to request this avatar style via our HTTP API.</p>
+                <p>
+                  Use this URL to request this avatar style via our HTTP API.
+                </p>
                 <UiCode :code="exampleHttpApi" />
                 <p>You can use the URL directly as image source.</p>
                 <UiCode :code="exampleHttpApiHtml" lang="html" />
-                <Message v-if="hasExcludedOptions" severity="warn" :closable="false" :style="{ '--p-message-text-font-size': '13px' }">
+                <Message
+                  v-if="hasExcludedOptions"
+                  severity="warn"
+                  :closable="false"
+                  :style="{ '--p-message-text-font-size': '13px' }"
+                >
                   Some options you selected are not supported by our public
                   HTTP-API and have been omitted from the URL. You can enable
-                  them by <a href="/guides/host-the-http-api-yourself/">hosting your own instance</a>.
+                  them by
+                  <a href="/guides/host-the-http-api-yourself/"
+                    >hosting your own instance</a
+                  >.
                 </Message>
                 <p>
                   See <a href="/how-to-use/http-api">HTTP-API</a> docs for more
@@ -153,9 +166,11 @@ const exampleCli = computed(() =>
               <div class="playground-button-how-to-use-tab-content">
                 <p>First install the required packages via npm:</p>
                 <UiCode
-                  :code="store.isCustomStyle
-                    ? 'npm install @dicebear/core --save'
-                    : 'npm install @dicebear/core @dicebear/definitions --save'"
+                  :code="
+                    store.isCustomStyle
+                      ? 'npm install @dicebear/core --save'
+                      : 'npm install @dicebear/core @dicebear/styles --save'
+                  "
                 />
                 <p>Then you can create this avatar as follows:</p>
                 <UiCode :code="exampleJsLibrary" lang="js" />
@@ -169,14 +184,17 @@ const exampleCli = computed(() =>
               <div class="playground-button-how-to-use-tab-content">
                 <p>First install the required packages via Composer:</p>
                 <UiCode
-                  :code="store.isCustomStyle
-                    ? 'composer require dicebear/core'
-                    : 'composer require dicebear/core dicebear/definitions'"
+                  :code="
+                    store.isCustomStyle
+                      ? 'composer require dicebear/core'
+                      : 'composer require dicebear/core dicebear/styles'
+                  "
                 />
                 <p>Then you can create this avatar as follows:</p>
                 <UiCode :code="examplePhp" lang="php" />
                 <p v-if="store.isCustomStyle">
-                  Replace <code>./my-style.json</code> with the path to your style definition.
+                  Replace <code>./my-style.json</code> with the path to your
+                  style definition.
                 </p>
               </div>
             </TabPanel>
@@ -187,10 +205,12 @@ const exampleCli = computed(() =>
                 <p>Then you can create this avatar as follows:</p>
                 <UiCode :code="exampleCli" />
                 <p v-if="store.isCustomStyle">
-                  Replace <code>./my-style.json</code> with the path to your style definition.
+                  Replace <code>./my-style.json</code> with the path to your
+                  style definition.
                 </p>
                 <p>
-                  See <a href="/how-to-use/cli">CLI</a> docs for more information.
+                  See <a href="/how-to-use/cli">CLI</a> docs for more
+                  information.
                 </p>
               </div>
             </TabPanel>
@@ -233,6 +253,5 @@ const exampleCli = computed(() =>
       margin: 0;
     }
   }
-
 }
 </style>

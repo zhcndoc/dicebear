@@ -15,9 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Notionists
 
-Notionists 是一种简洁、插画风格的矢量头像样式，具有极简、
-专业的美学风格。生成精致、可定制的 SVG 个人资料图标，非常
-适合生产力工具和企业应用。
+Notionists 是一种手绘黑线矢量头像风格，特点是半身人物，摆出拿着手机或咖啡杯等小道具的姿势。为生产力工具、文档应用和团队工作区生成精致、轻松且专业的 SVG 个人资料图标。
 
 <StylePreview styleName="notionists" />
 

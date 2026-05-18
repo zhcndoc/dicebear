@@ -1,7 +1,8 @@
 ---
 title: DiceBear – 开源头像库与 API
 description: >
-  DiceBear 是一个免费的开源头像库和头像 API。通过 JavaScript 库、PHP 库、HTTP API 或 CLI 生成确定性的 SVG 个人资料图片和用户占位图片。
+  DiceBear 是一款免费、开源的头像库和头像 API。可通过 JavaScript
+  库、PHP 库、HTTP API 或 CLI 生成确定性的 SVG 个人头像和用户占位图像。
 ---
 
 <script setup>
@@ -66,13 +67,13 @@ const highlights = [
 借助内置的 [PRNG](https://en.wikipedia.org/wiki/Pseudorandom_number_generator)，你可以根据 seed 一次又一次地生成相同的头像。
 当然也可以创建个性化头像！只需使用每种头像风格提供的无数选项即可。
 
-而且借助 [JavaScript 库](/how-to-use/js-library/)、
-[PHP 库](/how-to-use/php-library/)、
-[HTTP API](/how-to-use/http-api/)、
+而且多亏了 [JavaScript library](/how-to-use/js-library/)，
+[PHP library](/how-to-use/php-library/)、[HTTP API](/how-to-use/http-api/)、
 [CLI](/how-to-use/cli/)、
-[Figma 插件](https://www.figma.com/community/plugin/1005765655729342787/DiceBear-Exporter)、
-[编辑器](https://editor.dicebear.com) 和 [Playground](/playground/)，你的下一个
-头像总是近在咫尺！探索我们的 [头像 API](/how-to-use/http-api/)，以便通过基于 URL 的方式轻松集成。
+[Figma plugin](https://www.figma.com/community/plugin/1005765655729342787/DiceBear-Exporter)、
+[Editor](https://editor.dicebear.com) 和 [Playground](/playground/)，你的下一个
+头像总是近在咫尺！探索我们的
+[Avatar API](/how-to-use/http-api/)，即可通过简单的基于 URL 的集成方式使用。
 
 ## 如何使用？
 
@@ -85,15 +86,18 @@ const highlights = [
 会从一组 SVG 元素中选择各种元素，例如头发、眼睛、耳朵等，并将它们组合起来创建一个角色 / 头像。
 
 [FNV-1a](https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function)
-结合 [Mulberry32](https://gist.github.com/tommyettinger/46a874533244883189143505d203312c)
-被用作 [PRNG](https://en.wikipedia.org/wiki/Pseudorandom_number_generator) 的算法。
+结合
+[Mulberry32](https://gist.github.com/tommyettinger/46a874533244883189143505d203312c)
+被用作
+[PRNG](https://en.wikipedia.org/wiki/Pseudorandom_number_generator) 的算法。
 需要注意的是，PRNG **并不**试图做到
-[密码学安全](https://en.wikipedia.org/wiki/Cryptographically-secure_pseudorandom_number_generator)。
+[加密安全](https://en.wikipedia.org/wiki/Cryptographically-secure_pseudorandom_number_generator)。
 
 ## 隐私优先设计
 
-DiceBear 的构建充分考虑了隐私。在使用
-[JavaScript 库](/how-to-use/js-library/) 或
-[PHP 库](/how-to-use/php-library/) 时，头像会完全在你的基础设施上生成——不会有任何个人数据离开你的系统。对于需要
-完全控制数据保留和基础设施的团队，DiceBear 可以
-[self-hosted](/guides/host-the-http-api-yourself/)——因此它是一个不依赖外部服务、注重隐私的头像解决方案。
+DiceBear 在设计时就将隐私放在首位。在使用
+[JavaScript library](/how-to-use/js-library/) 或
+[PHP library](/how-to-use/php-library/) 时，头像完全在你的
+基础设施上生成——个人数据不会离开你的系统。对于需要完全控制数据保留和基础设施的团队，DiceBear 可以
+[self-hosted](/guides/host-the-http-api-yourself/)——这使它成为一个以隐私为重点的
+头像解决方案，不依赖外部服务。

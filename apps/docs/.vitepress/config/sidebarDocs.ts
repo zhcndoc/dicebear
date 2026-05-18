@@ -105,6 +105,10 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         link: '/guides/access-all-available-options/',
       },
       {
+        text: '加载所有头像样式',
+        link: '/guides/load-all-avatar-styles/',
+      },
+      {
         text: '唯一头像数量',
         link: '/guides/how-many-unique-avatars/',
       },

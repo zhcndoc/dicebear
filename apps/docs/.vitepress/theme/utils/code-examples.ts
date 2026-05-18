@@ -14,7 +14,8 @@ export function formatPhpValue(value: unknown, depth = 0): string {
   if (value === null || value === undefined) return 'null';
   if (typeof value === 'boolean') return value ? 'true' : 'false';
   if (typeof value === 'number') return String(value);
-  if (typeof value === 'string') return `'${value.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
+  if (typeof value === 'string')
+    return `'${value.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
 
   if (Array.isArray(value)) {
     if (value.length === 0) return '[]';
@@ -37,7 +38,8 @@ export function formatPhpValue(value: unknown, depth = 0): string {
     }
 
     const items = entries.map(
-      ([k, v]) => `${indent}'${k.replace(/'/g, "\\'")}' => ${formatPhpValue(v, depth + 1)}`,
+      ([k, v]) =>
+        `${indent}'${k.replace(/'/g, "\\'")}' => ${formatPhpValue(v, depth + 1)}`,
     );
 
     return `[\n${items.join(',\n')}\n${outerIndent}]`;

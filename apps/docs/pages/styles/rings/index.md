@@ -1,8 +1,8 @@
 ---
 title: Rings – 头像风格 | DiceBear
 description: >
-  使用 DiceBear 头像库创建 Rings 头像。使用我们的免费头像 API 或 JavaScript 头像库生成独特的
-  个人资料图片。
+  使用 DiceBear 头像库创建 Rings 头像。通过我们的免费头像 API 或 JavaScript 头像库生成独特的个人资料
+  图片。
 ---
 
 <script setup lang="ts">
@@ -15,9 +15,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Rings
 
-Rings 是一种几何抽象矢量头像风格，具有相互交织的环形
-图案。生成独特的、算法驱动且可自定义的个人资料图标，采用简洁、
-现代的设计，适用于任何应用程序。
+Rings 是一种几何抽象矢量头像风格，它将分段的同心环和弧线排列成
+一个在透明背景上的单色构图。生成简洁、算法化的 SVG 个人资料图标，
+可作为现代占位符或装饰性用户标识。
 
 <StylePreview styleName="rings" />
 

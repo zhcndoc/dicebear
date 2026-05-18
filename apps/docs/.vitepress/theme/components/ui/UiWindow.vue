@@ -24,15 +24,13 @@ defineProps<{
   --ui-window-border-color: rgba(0, 0, 0, 0.1);
   --ui-window-divider-color: rgba(0, 0, 0, 0.05);
   --ui-window-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.04),
-    0 18px 40px -16px rgba(0, 0, 0, 0.14);
+    0 1px 2px rgba(0, 0, 0, 0.04), 0 18px 40px -16px rgba(0, 0, 0, 0.14);
 }
 .dark {
   --ui-window-border-color: rgba(255, 255, 255, 0.07);
   --ui-window-divider-color: rgba(255, 255, 255, 0.04);
   --ui-window-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.2),
-    0 8px 24px -16px rgba(0, 0, 0, 0.35);
+    0 1px 2px rgba(0, 0, 0, 0.2), 0 8px 24px -16px rgba(0, 0, 0, 0.35);
 }
 </style>
 

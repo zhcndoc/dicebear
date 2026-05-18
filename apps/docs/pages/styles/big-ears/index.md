@@ -15,8 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # 大耳朵
 
-大耳朵是一种俏皮的插画矢量头像风格，采用卡通角色设计，并以特征鲜明的大耳朵为特色。为应用和社区生成欢快、可自定义的
-个人资料图标。
+大耳朵是一种充满趣味的矢量头像风格，特点是卡通头部、夸张的圆形耳朵、多样的发型以及简洁而富有表现力的面孔。为社区应用、儿童平台和轻松的社交产品生成欢快、独特的个人资料图标。
 
 <StylePreview styleName="big-ears" />
 

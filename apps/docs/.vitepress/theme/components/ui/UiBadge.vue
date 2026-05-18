@@ -25,17 +25,33 @@ defineProps<{
   margin-bottom: 24px;
 
   &-brand {
-    background: linear-gradient(120deg, color-mix(in srgb, var(--vp-c-brand-1) 15%, transparent), color-mix(in srgb, var(--vp-c-pink-2) 12%, transparent));
+    background: linear-gradient(
+      120deg,
+      color-mix(in srgb, var(--vp-c-brand-1) 15%, transparent),
+      color-mix(in srgb, var(--vp-c-pink-2) 12%, transparent)
+    );
     color: var(--vp-c-brand-1);
   }
 
   &-green {
-    background: linear-gradient(135deg, color-mix(in srgb, var(--vp-c-green-1) 15%, transparent), color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent));
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--vp-c-green-1) 15%, transparent),
+      color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent)
+    );
     color: var(--vp-c-green-1);
   }
 
   &-orange {
-    background: linear-gradient(135deg, color-mix(in srgb, var(--vp-c-yellow-1) 15%, transparent), color-mix(in srgb, var(--vp-c-coral-1, var(--vp-c-red-1)) 10%, transparent));
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--vp-c-yellow-1) 15%, transparent),
+      color-mix(
+        in srgb,
+        var(--vp-c-coral-1, var(--vp-c-red-1)) 10%,
+        transparent
+      )
+    );
     color: var(--vp-c-yellow-1);
   }
 }

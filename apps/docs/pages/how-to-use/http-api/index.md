@@ -63,9 +63,9 @@ https://api.dicebear.com/10.x/<styleName>/svg
 
 ## 选项
 
-所有 [核心选项](/how-to-use/js-library/#core-options)——例如 `seed`、
+所有[核心选项](/how-to-use/js-library/#core-options)——例如 `seed`、
 `flip`、`rotate`、`scale`、`borderRadius`、`backgroundColor` 等——都可作为[查询参数](https://en.wikipedia.org/wiki/Query_string)使用。
-各个样式特有的选项会列在对应的[头像样式页面](/styles/)上。例如：
+特定样式的选项列在各个[头像样式页面](/styles/)中。例如：
 
 <BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=John" />
 <BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=Jane" />
@@ -117,14 +117,14 @@ PNG、JPG、WebP 和 AVIF 使用
 
 你可以在 URL 中设置版本。只需将前面示例中的 `10.x` 替换为你想要的版本即可。
 
-| 版本 | 状态 | 生命周期结束 |
-| ------- | ------ | ----------- |
-| `10.x` | **活跃** | — |
-| `9.x` | **活跃** | — |
-| `8.x` | 已弃用 | 2028 年 4 月 30 日 |
-| `7.x` | 已弃用 | 2028 年 4 月 30 日 |
-| `6.x` | 已弃用 | 2028 年 4 月 30 日 |
-| `5.x` | 已弃用 | 2028 年 4 月 30 日 |
+| 版本 | 状态 | 终止支持时间 |
+| ------- | ---------- | -------------- |
+| `10.x`  | **活跃** | —              |
+| `9.x`   | **活跃** | —              |
+| `8.x`   | 已弃用 | 2028 年 4 月 30 日 |
+| `7.x`   | 已弃用 | 2028 年 4 月 30 日 |
+| `6.x`   | 已弃用 | 2028 年 4 月 30 日 |
+| `5.x`   | 已弃用 | 2028 年 4 月 30 日 |
 
 ::: warning
 
@@ -141,16 +141,21 @@ PNG、JPG、WebP 和 AVIF 使用
 
 ## 自托管头像 API
 
-需要私有或商业部署？你可以[自行托管头像 API](/guides/host-the-http-api-yourself/)，以完全控制可用性、速率限制和数据隐私。
+需要私有或商业部署？你可以
+[自行托管头像 API](/guides/host-the-http-api-yourself/)，以完全掌控
+可用性、速率限制和数据隐私。
 
 ## 合理使用与速率限制
 
 我们的 API 可免费用于非商业用途，但请负责任地使用。我们保留封禁滥用用户的权利。
 
-目前我们将每秒请求数限制为 **SVG 50 次**，以及 **PNG、JPG、WebP 和 AVIF 10 次**。超过限制会返回 HTTP `429 Too Many Requests`。我们保留随时更改这些限制而不另行通知的权利。
+我们目前将请求速率限制为每秒 **50 次用于 SVG**，以及 **10 次用于 PNG、JPG、
+WebP 和 AVIF**。超过限制将返回 HTTP `429 Too Many Requests`。我们保留
+随时更改这些限制的权利，恕不另行通知。
 
-如需商业用途或更高限制，请[搭建你自己的实例](/guides/host-the-http-api-yourself/)。
-我们很乐意回答问题——欢迎在 GitHub 上发起
+如需商业用途或更高限制，请
+[搭建你自己的实例](/guides/host-the-http-api-yourself/)。我们很乐意
+回答问题——欢迎在 GitHub 上发起
 [讨论](https://github.com/orgs/dicebear/discussions)。
 
 ## 变更与可用性

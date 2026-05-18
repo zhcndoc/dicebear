@@ -1,4 +1,5 @@
 import type {
+  Range,
   StyleDefinitionComponent,
   StyleDefinitionComponentBase,
 } from '../StyleDefinition.js';
@@ -19,7 +20,11 @@ export class Component {
   #translate?: ComponentTranslate;
   #variants?: ReadonlyMap<string, ComponentVariant>;
 
-  constructor(name: string, data: StyleDefinitionComponent, source?: Component) {
+  constructor(
+    name: string,
+    data: StyleDefinitionComponent,
+    source?: Component,
+  ) {
     this.#data = data;
     this.#name = name;
     this.#source = source;
@@ -79,25 +84,19 @@ export class Component {
   }
 
   /**
-   * Returns the rotation range definition. Aliases delegate to the source.
+   * Returns the rotation range, or `undefined` when unset.
+   * Aliases delegate to the source.
    */
-  rotate(): readonly number[] {
-    if (this.#source) {
-      return this.#source.rotate();
-    }
-
-    return this.#asBase().rotate ?? [];
+  rotate(): Range | undefined {
+    return this.#source ? this.#source.rotate() : this.#asBase().rotate;
   }
 
   /**
-   * Returns the scale range definition. Aliases delegate to the source.
+   * Returns the scale range, or `undefined` when unset.
+   * Aliases delegate to the source.
    */
-  scale(): readonly number[] {
-    if (this.#source) {
-      return this.#source.scale();
-    }
-
-    return this.#asBase().scale ?? [];
+  scale(): Range | undefined {
+    return this.#source ? this.#source.scale() : this.#asBase().scale;
   }
 
   /**

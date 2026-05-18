@@ -21,7 +21,7 @@ const exampleHttpApiUrl = computed(() => {
 });
 
 const exampleDefinitionImport = computed(() => {
-  return `import definition from '@dicebear/definitions/${kebabCase(props.styleName)}.json';`;
+  return `import definition from '@dicebear/styles/${kebabCase(props.styleName)}.json';`;
 });
 
 const exampleCliCommand = computed(() => {

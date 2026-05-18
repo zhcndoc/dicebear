@@ -12,7 +12,14 @@ import {
 } from 'chart.js';
 import { useChartTheme } from '../../composables/useChartTheme';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Tooltip);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+);
 
 const props = defineProps<{
   labels: string[];

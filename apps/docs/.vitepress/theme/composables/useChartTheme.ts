@@ -24,7 +24,9 @@ export function useChartTheme() {
   }
 
   function tickColor(opacity = 0.4) {
-    return isDark.value ? `rgba(255,255,255,${opacity})` : `rgba(0,0,0,${opacity})`;
+    return isDark.value
+      ? `rgba(255,255,255,${opacity})`
+      : `rgba(0,0,0,${opacity})`;
   }
 
   return { chartKey, tooltipConfig, gridColor, tickColor };

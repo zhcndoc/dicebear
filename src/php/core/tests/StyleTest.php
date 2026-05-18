@@ -53,8 +53,8 @@ class StyleTest extends TestCase
                     'width' => 50,
                     'height' => 50,
                     'probability' => 100,
-                    'rotate' => [-10, 10],
-                    'translate' => ['x' => [0, 5], 'y' => [-2, 2]],
+                    'rotate' => ['min' => -10, 'max' => 10],
+                    'translate' => ['x' => ['min' => 0, 'max' => 5], 'y' => ['min' => -2, 'max' => 2]],
                     'variants' => [
                         'open' => [
                             'elements' => [
@@ -255,15 +255,15 @@ class StyleTest extends TestCase
         $this->assertSame(50, $eyes->width());
         $this->assertSame(50, $eyes->height());
         $this->assertSame(100, $eyes->probability());
-        $this->assertSame([-10, 10], $eyes->rotate());
+        $this->assertSame(['min' => -10, 'max' => 10], $eyes->rotate());
     }
 
     public function testComponentTranslate(): void
     {
         $style = new Style(self::full());
         $translate = $style->components()['eyes']->translate();
-        $this->assertSame([0, 5], $translate->x());
-        $this->assertSame([-2, 2], $translate->y());
+        $this->assertSame(['min' => 0, 'max' => 5], $translate->x());
+        $this->assertSame(['min' => -2, 'max' => 2], $translate->y());
     }
 
     public function testComponentVariants(): void
@@ -347,9 +347,9 @@ class StyleTest extends TestCase
                     'width' => 50,
                     'height' => 60,
                     'probability' => 80,
-                    'rotate' => [-10, 10],
-                    'scale' => [0.9, 1.1],
-                    'translate' => ['x' => [-5, 5], 'y' => [-2, 2]],
+                    'rotate' => ['min' => -10, 'max' => 10],
+                    'scale' => ['min' => 0.9, 'max' => 1.1],
+                    'translate' => ['x' => ['min' => -5, 'max' => 5], 'y' => ['min' => -2, 'max' => 2]],
                     'variants' => [
                         'open' => ['elements' => [['type' => 'element', 'name' => 'circle', 'attributes' => ['r' => '5']]]],
                         'closed' => ['elements' => [['type' => 'element', 'name' => 'line', 'attributes' => ['x1' => '0', 'x2' => '10']]]],
@@ -385,10 +385,10 @@ class StyleTest extends TestCase
     {
         $alias = (new Style(self::aliasDefinition()))->components()['eyesRight'];
         $this->assertSame(80, $alias->probability());
-        $this->assertSame([-10, 10], $alias->rotate());
-        $this->assertSame([0.9, 1.1], $alias->scale());
-        $this->assertSame([-5, 5], $alias->translate()->x());
-        $this->assertSame([-2, 2], $alias->translate()->y());
+        $this->assertSame(['min' => -10, 'max' => 10], $alias->rotate());
+        $this->assertSame(['min' => 0.9, 'max' => 1.1], $alias->scale());
+        $this->assertSame(['min' => -5, 'max' => 5], $alias->translate()->x());
+        $this->assertSame(['min' => -2, 'max' => 2], $alias->translate()->y());
     }
 
     public function testAliasRejectsUnknownExtendsTarget(): void

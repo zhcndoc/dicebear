@@ -50,8 +50,13 @@ const {
               v-for="category in availableCategories"
               :key="category"
               class="style-list-filter-chip"
-              :class="{ 'style-list-filter-chip-active': selectedCategory === category }"
-              @click="selectedCategory = selectedCategory === category ? null : category"
+              :class="{
+                'style-list-filter-chip-active': selectedCategory === category,
+              }"
+              @click="
+                selectedCategory =
+                  selectedCategory === category ? null : category
+              "
             >
               {{ category }}
             </button>
@@ -68,8 +73,12 @@ const {
               v-for="license in availableLicenses"
               :key="license"
               class="style-list-filter-chip"
-              :class="{ 'style-list-filter-chip-active': selectedLicense === license }"
-              @click="selectedLicense = selectedLicense === license ? null : license"
+              :class="{
+                'style-list-filter-chip-active': selectedLicense === license,
+              }"
+              @click="
+                selectedLicense = selectedLicense === license ? null : license
+              "
             >
               {{ license }}
             </button>
@@ -78,14 +87,22 @@ const {
       </div>
 
       <div class="style-list-filter-footer">
-        <button v-if="hasActiveFilters" class="style-list-clear-filters" @click="clearFilters">
+        <button
+          v-if="hasActiveFilters"
+          class="style-list-clear-filters"
+          @click="clearFilters"
+        >
           <X />
           Clear filters
         </button>
       </div>
     </div>
 
-    <div v-for="(styles, category) in groupedStyles" :key="category" class="style-list-category">
+    <div
+      v-for="(styles, category) in groupedStyles"
+      :key="category"
+      class="style-list-category"
+    >
       <h2 class="style-list-category-title">{{ category }}</h2>
       <div class="style-list-grid">
         <a
@@ -100,7 +117,11 @@ const {
               :key="avatar.seed"
               class="style-list-card-avatar"
             >
-              <UiAvatar :style-name="style.slug" :style-options="{ seed: avatar.seed, size: 80 }" :alt="`${style.displayName} - ${avatar.seed}`" />
+              <UiAvatar
+                :style-name="style.slug"
+                :style-options="{ seed: avatar.seed, size: 80 }"
+                :alt="`${style.displayName} - ${avatar.seed}`"
+              />
             </div>
           </div>
 

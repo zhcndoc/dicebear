@@ -15,7 +15,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # 像素艺术中性
 
-像素艺术中性是像素艺术矢量头像风格的中性变体，提供具有复古美学、可自定义的抽象像素风个人资料图标。
+像素艺术中性是 Pixel Art 风格的一个精简变体，只显示
+像素眼睛和一张嘴，背景为纯色——没有头部轮廓、头发或
+身体。
 
 <StylePreview styleName="pixel-art-neutral" />
 

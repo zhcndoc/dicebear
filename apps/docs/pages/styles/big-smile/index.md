@@ -15,7 +15,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Big Smile
 
-Big Smile 是一种友好的矢量头像风格，特色是带有富有表现力、醒目笑容的角色。生成温暖、可自定义的 SVG 个人资料图标，在用户信息流和评论区中格外醒目。
+Big Smile 是一种温暖的插画风矢量头像风格，采用圆润的卡通脸庞、
+丰富的发型和夸张的大牙笑容。生成令人愉悦、友好的 SVG
+个人资料图标，在用户信息流和评论区中格外醒目。
 
 <StylePreview styleName="big-smile" />
 

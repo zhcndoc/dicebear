@@ -59,11 +59,11 @@ const styleOptions = computed(() => ({
   padding: 40px 24px;
   border-radius: var(--vp-radius-sm);
   border: 1px solid var(--pg-border);
-  background:
-    repeating-conic-gradient(
+  background: repeating-conic-gradient(
       var(--vp-c-bg-soft) 0% 25%,
       var(--vp-c-bg) 0% 50%
-    ) 50% / 20px 20px;
+    )
+    50% / 20px 20px;
 
   @media (max-width: 540px) {
     padding: 24px 16px;

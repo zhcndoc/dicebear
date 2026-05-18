@@ -1,8 +1,8 @@
 ---
 title: Glass – 头像风格 | DiceBear
 description: >
-  使用 DiceBear 头像库创建 Glass 头像。通过我们的免费头像 API 或 JavaScript 头像库生成独特的
-  个人资料图片。
+  使用 DiceBear 头像库创建 Glass 头像。通过我们的免费头像 API 或 JavaScript 头像库生成独特的个人资料
+  图片。
 ---
 
 <script setup lang="ts">
@@ -15,9 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Glass
 
-Glass 是一种抽象的矢量头像风格，具有半透明、几何化的
-玻璃效果形状。为应用程序生成现代、注重设计且可自定义的个人资料图标，
-呈现高级美感。
+Glass 是一种极简的抽象矢量头像风格，以柔和、顺滑的色彩渐变呈现，带有微妙的玻璃光泽且没有可见形状。生成现代、平静的 SVG 个人资料图标，可作为低调的占位符或高端界面的背景。
 
 <StylePreview styleName="glass" />
 

@@ -45,14 +45,14 @@ defineProps<{
   &-primary {
     background-color: var(--vp-c-brand-1);
     color: white;
-    box-shadow:
-      0 4px 20px color-mix(in srgb, var(--vp-c-brand-1) 25%, transparent);
+    box-shadow: 0 4px 20px
+      color-mix(in srgb, var(--vp-c-brand-1) 25%, transparent);
 
     &:hover {
       transform: translateY(-4px) scale(1.02);
       background-color: var(--vp-c-brand-2);
-      box-shadow:
-        0 12px 32px color-mix(in srgb, var(--vp-c-brand-1) 35%, transparent);
+      box-shadow: 0 12px 32px
+        color-mix(in srgb, var(--vp-c-brand-1) 35%, transparent);
     }
 
     &:active {

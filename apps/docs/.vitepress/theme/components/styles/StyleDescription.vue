@@ -32,13 +32,25 @@ const licenseUrl = computed(() => safeHttpUrl(style.value.meta?.license?.url));
       </template>
       <template v-else> This avatar style is based on: </template>
     </template>
-    <a v-if="sourceUrl" :href="sourceUrl" target="_blank" rel="noopener noreferrer">
+    <a
+      v-if="sourceUrl"
+      :href="sourceUrl"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       {{ style.meta?.title ?? 'Design' }}
     </a>
     <template v-else>{{ style.meta?.title ?? 'Design' }}</template>
     by
-    <a v-if="homepageUrl" :href="homepageUrl" target="_blank" rel="noopener noreferrer">{{ style.meta?.creator }}</a>
-    <template v-else>{{ style.meta?.creator }}</template>, licensed under
+    <a
+      v-if="homepageUrl"
+      :href="homepageUrl"
+      target="_blank"
+      rel="noopener noreferrer"
+      >{{ style.meta?.creator }}</a
+    >
+    <template v-else>{{ style.meta?.creator }}</template
+    >, licensed under
     <a
       v-if="licenseUrl"
       :href="licenseUrl"
@@ -47,7 +59,9 @@ const licenseUrl = computed(() => safeHttpUrl(style.value.meta?.license?.url));
     >
       {{ formatLicenseName(style.meta?.license?.name) }}
     </a>
-    <template v-else>{{ formatLicenseName(style.meta?.license?.name) }}</template>
+    <template v-else>{{
+      formatLicenseName(style.meta?.license?.name)
+    }}</template>
     .
   </p>
 
@@ -63,14 +77,14 @@ const licenseUrl = computed(() => safeHttpUrl(style.value.meta?.license?.url));
         rel="noopener noreferrer"
         >{{ formatLicenseName(style.meta.license?.name) }}</a
       >
-      <template v-else>{{ formatLicenseName(style.meta.license?.name) }}</template>. See <a href="#details">details</a> for more information.
+      <template v-else>{{
+        formatLicenseName(style.meta.license?.name)
+      }}</template
+      >. See <a href="#details">details</a> for more information.
     </p>
   </div>
 
-  <a
-    :href="playgroundUrl"
-    class="style-description-btn"
-  >
+  <a :href="playgroundUrl" class="style-description-btn">
     Open in Playground
   </a>
 </template>

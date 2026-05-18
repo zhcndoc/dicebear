@@ -1,9 +1,15 @@
-export function pointInPolygon(x: number, y: number, ring: number[][]): boolean {
+export function pointInPolygon(
+  x: number,
+  y: number,
+  ring: number[][],
+): boolean {
   let inside = false;
   for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
-    const xi = ring[i][0], yi = ring[i][1];
-    const xj = ring[j][0], yj = ring[j][1];
-    if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) {
+    const xi = ring[i][0],
+      yi = ring[i][1];
+    const xj = ring[j][0],
+      yj = ring[j][1];
+    if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) {
       inside = !inside;
     }
   }
@@ -15,14 +21,18 @@ export function buildLandPoints(geoJson: any): [number, number][] {
   if (!geoJson) return points;
 
   for (const feature of geoJson.features) {
-    const polygons = feature.geometry.type === 'MultiPolygon'
-      ? feature.geometry.coordinates
-      : [feature.geometry.coordinates];
+    const polygons =
+      feature.geometry.type === 'MultiPolygon'
+        ? feature.geometry.coordinates
+        : [feature.geometry.coordinates];
     for (const poly of polygons) {
       const ring = poly[0]; // outer ring
       if (!ring || ring.length < 3) continue;
       // Compute bounding box
-      let minLng = Infinity, maxLng = -Infinity, minLat = Infinity, maxLat = -Infinity;
+      let minLng = Infinity,
+        maxLng = -Infinity,
+        minLat = Infinity,
+        maxLat = -Infinity;
       for (const [lng, lat] of ring) {
         if (lng < minLng) minLng = lng;
         if (lng > maxLng) maxLng = lng;
@@ -49,7 +59,10 @@ export interface PreloadBuffer {
   getPreloadedUrl(): string;
 }
 
-export function createPreloadBuffer(generateUrl: () => string, size = 6): PreloadBuffer {
+export function createPreloadBuffer(
+  generateUrl: () => string,
+  size = 6,
+): PreloadBuffer {
   const preloadedUrls: string[] = [];
 
   function preload(url: string) {

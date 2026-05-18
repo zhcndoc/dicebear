@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { productLinks, resourceLinks, legalLinks } from '../../config/footer-links';
+import {
+  productLinks,
+  resourceLinks,
+  legalLinks,
+} from '../../config/footer-links';
 
 const columns = [
   { title: '精选', links: productLinks },
@@ -10,7 +14,11 @@ const columns = [
 
 <template>
   <div class="layout-footer-links">
-    <div v-for="column in columns" :key="column.title" class="layout-footer-column">
+    <div
+      v-for="column in columns"
+      :key="column.title"
+      class="layout-footer-column"
+    >
       <h3 class="layout-footer-column-title">{{ column.title }}</h3>
       <ul class="layout-footer-column-list">
         <li v-for="link in column.links" :key="link.label">

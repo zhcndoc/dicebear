@@ -6,7 +6,15 @@ import { ThemeOptions } from '@theme/types';
 import { useData } from 'vitepress';
 import { kebabCase } from 'change-case';
 import Prando from 'prando';
-import { UiAvatar, UiButton, UiHeadline, UiDescription, UiContainer, UiSection, UiIcon } from '../ui';
+import {
+  UiAvatar,
+  UiButton,
+  UiHeadline,
+  UiDescription,
+  UiContainer,
+  UiSection,
+  UiIcon,
+} from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 import { useAvatarStyleList } from '../../composables/avatar';
 
@@ -20,10 +28,21 @@ const avatarStyleList = useAvatarStyleList();
 const scatteredAvatars = computed(() => {
   const prng = new Prando(555);
   const avatars = [];
-  const seeds = ['OpenSource', 'Community', 'Stars', 'Love', 'Code', 'Free', 'MIT', 'GitHub'];
+  const seeds = [
+    'OpenSource',
+    'Community',
+    'Stars',
+    'Love',
+    'Code',
+    'Free',
+    'MIT',
+    'GitHub',
+  ];
 
   for (let i = 0; i < 8; i++) {
-    const style = kebabCase(avatarStyleList.value[i % avatarStyleList.value.length]);
+    const style = kebabCase(
+      avatarStyleList.value[i % avatarStyleList.value.length],
+    );
     const angle = (i / 8) * Math.PI * 2;
     const radius = 38 + prng.next() * 10;
     avatars.push({
@@ -58,31 +77,45 @@ const scatteredAvatars = computed(() => {
           animationDelay: `${avatar.delay}s`,
         }"
       >
-        <UiAvatar :style-name="avatar.style" :style-options="{ seed: avatar.seed, size: 80 }" :alt="avatar.style" />
+        <UiAvatar
+          :style-name="avatar.style"
+          :style-options="{ seed: avatar.seed, size: 80 }"
+          :alt="avatar.style"
+        />
       </div>
     </template>
     <UiContainer class="app-open-source-container">
       <!-- Animated star icon -->
       <div class="app-open-source-star-wrapper">
         <div class="app-open-source-star-ring"></div>
-        <div class="app-open-source-star-ring app-open-source-star-ring-2"></div>
+        <div
+          class="app-open-source-star-ring app-open-source-star-ring-2"
+        ></div>
         <div class="app-open-source-star-icon">
           <Star :size="36" />
         </div>
       </div>
 
-      <UiHeadline>免费且<strong>开源</strong>。<br />永远如此。</UiHeadline>
+      <UiHeadline
+        >免费且<strong>开源</strong>。<br />永远如此。</UiHeadline
+      >
 
       <UiDescription class="app-open-source-description">
-        DiceBear 在开放环境中构建。核心库采用 MIT 许可，我们相信透明开发。
-        加入已经喜爱 DiceBear 的成千上万开发者。
+        DiceBear 是在开放环境中构建的。我们的核心库采用 MIT 许可证，我们倡导透明开发。加入成千上万已经喜爱 DiceBear 的开发者行列。
       </UiDescription>
 
       <!-- Star counter with social proof -->
       <div class="app-open-source-social-proof">
-        <a href="https://github.com/dicebear/dicebear" target="_blank" rel="noopener" class="app-open-source-star-count">
+        <a
+          href="https://github.com/dicebear/dicebear"
+          target="_blank"
+          rel="noopener"
+          class="app-open-source-star-count"
+        >
           <Star :size="24" class="app-open-source-star-filled" />
-          <span class="app-open-source-star-number">{{ theme.githubStars?.['dicebear/dicebear'] || '8k+' }}</span>
+          <span class="app-open-source-star-number">{{
+            theme.githubStars?.['dicebear/dicebear'] || '8k+'
+          }}</span>
           <span class="app-open-source-star-text">GitHub 星标</span>
         </a>
       </div>
@@ -125,8 +158,16 @@ const scatteredAvatars = computed(() => {
 .app-open-source {
   &-gradient {
     background:
-      radial-gradient(ellipse 60% 60% at 50% 50%, color-mix(in srgb, var(--app-open-source-star-color) 6%, transparent), transparent),
-      radial-gradient(ellipse 50% 80% at 50% 0%, color-mix(in srgb, var(--vp-c-brand-1) 4%, transparent), transparent);
+      radial-gradient(
+        ellipse 60% 60% at 50% 50%,
+        color-mix(in srgb, var(--app-open-source-star-color) 6%, transparent),
+        transparent
+      ),
+      radial-gradient(
+        ellipse 50% 80% at 50% 0%,
+        color-mix(in srgb, var(--vp-c-brand-1) 4%, transparent),
+        transparent
+      );
   }
 
   &-bg-avatar {
@@ -190,9 +231,14 @@ const scatteredAvatars = computed(() => {
     width: 64px;
     height: 64px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--app-open-source-star-color), #f97316);
+    background: linear-gradient(
+      135deg,
+      var(--app-open-source-star-color),
+      #f97316
+    );
     color: white;
-    box-shadow: 0 8px 24px color-mix(in srgb, var(--app-open-source-star-color) 40%, transparent);
+    box-shadow: 0 8px 24px
+      color-mix(in srgb, var(--app-open-source-star-color) 40%, transparent);
     z-index: 1;
     animation: app-open-source-star-bounce 2s ease-in-out infinite;
 
@@ -221,11 +267,14 @@ const scatteredAvatars = computed(() => {
     border-radius: 100px;
     box-shadow: var(--vp-shadow-2);
     text-decoration: none;
-    transition: border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
+    transition:
+      border-color var(--duration-fast) ease,
+      box-shadow var(--duration-fast) ease;
 
     &:hover {
       border-color: var(--app-open-source-star-color);
-      box-shadow: 0 0 16px color-mix(in srgb, var(--app-open-source-star-color) 20%, transparent);
+      box-shadow: 0 0 16px
+        color-mix(in srgb, var(--app-open-source-star-color) 20%, transparent);
     }
   }
 
@@ -259,7 +308,8 @@ const scatteredAvatars = computed(() => {
 }
 
 @keyframes app-open-source-ring-pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 1;
   }
@@ -270,7 +320,8 @@ const scatteredAvatars = computed(() => {
 }
 
 @keyframes app-open-source-star-bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) rotate(0deg);
   }
   25% {

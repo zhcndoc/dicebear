@@ -1,4 +1,5 @@
 import { OptionsValidator } from './Validator/OptionsValidator.js';
+import type { Range } from './StyleDefinition.js';
 import type {
   StyleOptions,
   StyleOptionsFlipValue,
@@ -52,24 +53,24 @@ export class Options<D = unknown> {
     return this.#asArray(this.#data.fontWeight);
   }
 
-  scale(): readonly number[] {
-    return this.#asArray(this.#data.scale);
+  scale(): Range | undefined {
+    return this.#toRange(this.#data.scale);
   }
 
-  borderRadius(): readonly number[] {
-    return this.#asArray(this.#data.borderRadius);
+  borderRadius(): Range | undefined {
+    return this.#toRange(this.#data.borderRadius);
   }
 
-  rotate(): readonly number[] {
-    return this.#asArray(this.#data.rotate);
+  rotate(): Range | undefined {
+    return this.#toRange(this.#data.rotate);
   }
 
-  translateX(): readonly number[] {
-    return this.#asArray(this.#data.translateX);
+  translateX(): Range | undefined {
+    return this.#toRange(this.#data.translateX);
   }
 
-  translateY(): readonly number[] {
-    return this.#asArray(this.#data.translateY);
+  translateY(): Range | undefined {
+    return this.#toRange(this.#data.translateY);
   }
 
   /**
@@ -120,20 +121,20 @@ export class Options<D = unknown> {
     );
   }
 
-  colorAngle(name: string): readonly number[] {
-    return this.#asArray(
+  colorAngle(name: string): Range | undefined {
+    return this.#toRange(
       this.#dynamic(`${name}ColorAngle`) as
         | number
-        | readonly number[]
+        | readonly [number, number]
         | undefined,
     );
   }
 
-  colorFillStops(name: string): readonly number[] {
-    return this.#asArray(
+  colorFillStops(name: string): Range | undefined {
+    return this.#toRange(
       this.#dynamic(`${name}ColorFillStops`) as
         | number
-        | readonly number[]
+        | readonly [number, number]
         | undefined,
     );
   }
@@ -158,5 +159,24 @@ export class Options<D = unknown> {
     }
 
     return [value as T];
+  }
+
+  /**
+   * Normalizes a user-facing range option (bare number, `[min, max]` tuple,
+   * or `undefined`) into the internal {@link Range} struct. A bare number
+   * `n` becomes `{ min: n, max: n }` — i.e. a fixed value.
+   */
+  #toRange(
+    value: number | readonly [number, number] | undefined,
+  ): Range | undefined {
+    if (value === undefined) {
+      return undefined;
+    }
+
+    if (typeof value === 'number') {
+      return { min: value, max: value };
+    }
+
+    return { min: value[0], max: value[1] };
   }
 }

@@ -15,23 +15,15 @@ class ComponentTranslate
      */
     public function __construct(private readonly array $data) {}
 
-    /**
-     * Returns the horizontal offset range, or an empty list when unset.
-     *
-     * @return list<int|float>
-     */
-    public function x(): array
+    /** @return array{min: int|float, max: int|float, step?: int|float}|null */
+    public function x(): ?array
     {
-        return $this->data['x'] ?? [];
+        return $this->data['x'] ?? null;
     }
 
-    /**
-     * Returns the vertical offset range, or an empty list when unset.
-     *
-     * @return list<int|float>
-     */
-    public function y(): array
+    /** @return array{min: int|float, max: int|float, step?: int|float}|null */
+    public function y(): ?array
     {
-        return $this->data['y'] ?? [];
+        return $this->data['y'] ?? null;
     }
 }

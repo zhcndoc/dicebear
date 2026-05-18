@@ -35,7 +35,9 @@ function avatar(
         badge="Use Cases"
         description="From two-person side projects to global platforms, DiceBear powers the avatar layer wherever identity needs a face."
       >
-        <template #headline>Built for <strong>every</strong> application.</template>
+        <template #headline
+          >Built for <strong>every</strong> application.</template
+        >
       </UiSectionHeader>
 
       <div class="app-use-cases-grid">
@@ -44,10 +46,38 @@ function avatar(
           description="Give every user a unique avatar from day one. No upload, no Gravatar fallback, no awkward grey silhouette."
         >
           <div class="uc-stack">
-            <img :src="avatar('lorelei',    'Mia',  96, PALETTE.rose)"   alt="" width="80" height="80" loading="lazy" decoding="async" />
-            <img :src="avatar('notionists', 'Bee',  96, PALETTE.amber)"  alt="" width="80" height="80" loading="lazy" decoding="async" />
-            <img :src="avatar('adventurer', 'Theo', 96, PALETTE.cyan)"   alt="" width="80" height="80" loading="lazy" decoding="async" />
-            <img :src="avatar('personas',   'Sage', 96, PALETTE.violet)" alt="" width="80" height="80" loading="lazy" decoding="async" />
+            <img
+              :src="avatar('lorelei', 'Mia', 96, PALETTE.rose)"
+              alt=""
+              width="80"
+              height="80"
+              loading="lazy"
+              decoding="async"
+            />
+            <img
+              :src="avatar('notionists', 'Bee', 96, PALETTE.amber)"
+              alt=""
+              width="80"
+              height="80"
+              loading="lazy"
+              decoding="async"
+            />
+            <img
+              :src="avatar('adventurer', 'Theo', 96, PALETTE.cyan)"
+              alt=""
+              width="80"
+              height="80"
+              loading="lazy"
+              decoding="async"
+            />
+            <img
+              :src="avatar('personas', 'Sage', 96, PALETTE.violet)"
+              alt=""
+              width="80"
+              height="80"
+              loading="lazy"
+              decoding="async"
+            />
           </div>
         </AppUseCasesCard>
 
@@ -57,15 +87,36 @@ function avatar(
         >
           <div class="uc-bubbles">
             <div class="uc-bubble uc-bubble-light uc-bubble-pink">
-              <img :src="avatar('fun-emoji', 'Hi', 48, PALETTE.pink)" alt="" width="24" height="24" loading="lazy" decoding="async" />
+              <img
+                :src="avatar('fun-emoji', 'Hi', 48, PALETTE.pink)"
+                alt=""
+                width="24"
+                height="24"
+                loading="lazy"
+                decoding="async"
+              />
               <span>Hey 👋</span>
             </div>
             <div class="uc-bubble uc-bubble-dark">
               <span>How's the launch?</span>
-              <img :src="avatar('lorelei', 'Otis', 48, PALETTE.amber)" alt="" width="24" height="24" loading="lazy" decoding="async" />
+              <img
+                :src="avatar('lorelei', 'Otis', 48, PALETTE.amber)"
+                alt=""
+                width="24"
+                height="24"
+                loading="lazy"
+                decoding="async"
+              />
             </div>
             <div class="uc-bubble uc-bubble-light uc-bubble-green">
-              <img :src="avatar('big-smile', 'Ari', 48, PALETTE.green)" alt="" width="24" height="24" loading="lazy" decoding="async" />
+              <img
+                :src="avatar('big-smile', 'Ari', 48, PALETTE.green)"
+                alt=""
+                width="24"
+                height="24"
+                loading="lazy"
+                decoding="async"
+              />
               <span>Going great!</span>
             </div>
           </div>
@@ -77,15 +128,36 @@ function avatar(
         >
           <div class="uc-roster">
             <div class="uc-player">
-              <img :src="avatar('bottts', 'Zap', 160)" alt="" width="160" height="160" loading="lazy" decoding="async" />
+              <img
+                :src="avatar('bottts', 'Zap', 160)"
+                alt=""
+                width="160"
+                height="160"
+                loading="lazy"
+                decoding="async"
+              />
               <span class="uc-rank">LV 47</span>
             </div>
             <div class="uc-player">
-              <img :src="avatar('pixel-art', 'Nyx', 160)" alt="" width="160" height="160" loading="lazy" decoding="async" />
+              <img
+                :src="avatar('pixel-art', 'Nyx', 160)"
+                alt=""
+                width="160"
+                height="160"
+                loading="lazy"
+                decoding="async"
+              />
               <span class="uc-rank">LV 32</span>
             </div>
             <div class="uc-player">
-              <img :src="avatar('bottts-neutral', 'Rex', 160)" alt="" width="160" height="160" loading="lazy" decoding="async" />
+              <img
+                :src="avatar('bottts-neutral', 'Rex', 160)"
+                alt=""
+                width="160"
+                height="160"
+                loading="lazy"
+                decoding="async"
+              />
               <span class="uc-rank">LV 88</span>
             </div>
           </div>
@@ -97,21 +169,42 @@ function avatar(
         >
           <div class="uc-thread">
             <div class="uc-post">
-              <img :src="avatar('notionists', 'Posy', 56, PALETTE.fuchsia)" alt="" width="28" height="28" loading="lazy" decoding="async" />
+              <img
+                :src="avatar('notionists', 'Posy', 56, PALETTE.fuchsia)"
+                alt=""
+                width="28"
+                height="28"
+                loading="lazy"
+                decoding="async"
+              />
               <div>
                 <strong>posy</strong>
                 <em>Anyone tried the new beta?</em>
               </div>
             </div>
             <div class="uc-post">
-              <img :src="avatar('lorelei', 'Ren', 56, PALETTE.cyan)" alt="" width="28" height="28" loading="lazy" decoding="async" />
+              <img
+                :src="avatar('lorelei', 'Ren', 56, PALETTE.cyan)"
+                alt=""
+                width="28"
+                height="28"
+                loading="lazy"
+                decoding="async"
+              />
               <div>
                 <strong>ren</strong>
                 <em>Yep — runs 2× faster.</em>
               </div>
             </div>
             <div class="uc-post">
-              <img :src="avatar('open-peeps', 'Ivo', 56, PALETTE.amber)" alt="" width="28" height="28" loading="lazy" decoding="async" />
+              <img
+                :src="avatar('open-peeps', 'Ivo', 56, PALETTE.amber)"
+                alt=""
+                width="28"
+                height="28"
+                loading="lazy"
+                decoding="async"
+              />
               <div>
                 <strong>ivo</strong>
                 <em>Submitted a PR for the bug.</em>
@@ -126,22 +219,50 @@ function avatar(
         >
           <div class="uc-team">
             <div class="uc-pill">
-              <img :src="avatar('personas', 'Lex', 52)" alt="" width="26" height="26" loading="lazy" decoding="async" />
+              <img
+                :src="avatar('personas', 'Lex', 52)"
+                alt=""
+                width="26"
+                height="26"
+                loading="lazy"
+                decoding="async"
+              />
               <span>Lex Hart</span>
               <em>Design</em>
             </div>
             <div class="uc-pill">
-              <img :src="avatar('personas', 'Mae', 52)" alt="" width="26" height="26" loading="lazy" decoding="async" />
+              <img
+                :src="avatar('personas', 'Mae', 52)"
+                alt=""
+                width="26"
+                height="26"
+                loading="lazy"
+                decoding="async"
+              />
               <span>Mae Park</span>
               <em>Engineering</em>
             </div>
             <div class="uc-pill">
-              <img :src="avatar('personas', 'Sam', 52)" alt="" width="26" height="26" loading="lazy" decoding="async" />
+              <img
+                :src="avatar('personas', 'Sam', 52)"
+                alt=""
+                width="26"
+                height="26"
+                loading="lazy"
+                decoding="async"
+              />
               <span>Sam Ito</span>
               <em>Product</em>
             </div>
             <div class="uc-pill">
-              <img :src="avatar('personas', 'Avery', 52)" alt="" width="26" height="26" loading="lazy" decoding="async" />
+              <img
+                :src="avatar('personas', 'Avery', 52)"
+                alt=""
+                width="26"
+                height="26"
+                loading="lazy"
+                decoding="async"
+              />
               <span>Avery Lin</span>
               <em>Marketing</em>
             </div>
@@ -153,12 +274,54 @@ function avatar(
           description="Beautiful default profile pictures while users set up their account — and a graceful fallback when uploads fail."
         >
           <div class="uc-grid-mini">
-            <img :src="avatar('shapes', 'A', 160, PALETTE.rose)"   alt="" width="160" height="160" loading="lazy" decoding="async" />
-            <img :src="avatar('shapes', 'B', 160, PALETTE.amber)"  alt="" width="160" height="160" loading="lazy" decoding="async" />
-            <img :src="avatar('shapes', 'C', 160, PALETTE.green)"  alt="" width="160" height="160" loading="lazy" decoding="async" />
-            <img :src="avatar('shapes', 'D', 160, PALETTE.cyan)"   alt="" width="160" height="160" loading="lazy" decoding="async" />
-            <img :src="avatar('shapes', 'E', 160, PALETTE.blue)"   alt="" width="160" height="160" loading="lazy" decoding="async" />
-            <img :src="avatar('shapes', 'F', 160, PALETTE.violet)" alt="" width="160" height="160" loading="lazy" decoding="async" />
+            <img
+              :src="avatar('shapes', 'A', 160, PALETTE.rose)"
+              alt=""
+              width="160"
+              height="160"
+              loading="lazy"
+              decoding="async"
+            />
+            <img
+              :src="avatar('shapes', 'B', 160, PALETTE.amber)"
+              alt=""
+              width="160"
+              height="160"
+              loading="lazy"
+              decoding="async"
+            />
+            <img
+              :src="avatar('shapes', 'C', 160, PALETTE.green)"
+              alt=""
+              width="160"
+              height="160"
+              loading="lazy"
+              decoding="async"
+            />
+            <img
+              :src="avatar('shapes', 'D', 160, PALETTE.cyan)"
+              alt=""
+              width="160"
+              height="160"
+              loading="lazy"
+              decoding="async"
+            />
+            <img
+              :src="avatar('shapes', 'E', 160, PALETTE.blue)"
+              alt=""
+              width="160"
+              height="160"
+              loading="lazy"
+              decoding="async"
+            />
+            <img
+              :src="avatar('shapes', 'F', 160, PALETTE.violet)"
+              alt=""
+              width="160"
+              height="160"
+              loading="lazy"
+              decoding="async"
+            />
           </div>
         </AppUseCasesCard>
       </div>
@@ -172,14 +335,22 @@ function avatar(
     top: 0;
     bottom: auto;
     height: 50%;
-    background: radial-gradient(ellipse 100% 100% at 20% 0%, color-mix(in srgb, var(--vp-c-brand-1) 7%, transparent), transparent);
+    background: radial-gradient(
+      ellipse 100% 100% at 20% 0%,
+      color-mix(in srgb, var(--vp-c-brand-1) 7%, transparent),
+      transparent
+    );
   }
 
   &-gradient-bottom {
     top: auto;
     bottom: 0;
     height: 50%;
-    background: radial-gradient(ellipse 100% 100% at 80% 100%, color-mix(in srgb, var(--vp-c-pink-2) 6%, transparent), transparent);
+    background: radial-gradient(
+      ellipse 100% 100% at 80% 100%,
+      color-mix(in srgb, var(--vp-c-pink-2) 6%, transparent),
+      transparent
+    );
   }
 
   &-header {
@@ -210,13 +381,29 @@ function avatar(
     width: 80px;
     height: 80px;
     border-radius: 22px;
-    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.10);
+    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.1);
     transition: transform var(--duration-mid) ease;
 
-    &:nth-child(1) { left: 0;     top: 6px; transform: rotate(-7deg); }
-    &:nth-child(2) { left: 60px;  top: 0;   transform: rotate(3deg);  }
-    &:nth-child(3) { left: 120px; top: 8px; transform: rotate(-3deg); }
-    &:nth-child(4) { left: 180px; top: 2px; transform: rotate(6deg);  }
+    &:nth-child(1) {
+      left: 0;
+      top: 6px;
+      transform: rotate(-7deg);
+    }
+    &:nth-child(2) {
+      left: 60px;
+      top: 0;
+      transform: rotate(3deg);
+    }
+    &:nth-child(3) {
+      left: 120px;
+      top: 8px;
+      transform: rotate(-3deg);
+    }
+    &:nth-child(4) {
+      left: 180px;
+      top: 2px;
+      transform: rotate(6deg);
+    }
   }
 
   .uc-card:hover & img:nth-child(1) {
@@ -249,8 +436,12 @@ function avatar(
     color: #18181b;
   }
 
-  &-pink  { background: #ffe4f1; }
-  &-green { background: #dcfce7; }
+  &-pink {
+    background: #ffe4f1;
+  }
+  &-green {
+    background: #dcfce7;
+  }
 
   &-dark {
     align-self: flex-end;

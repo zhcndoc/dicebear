@@ -6,39 +6,45 @@ export function clonePlain<T>(obj: T): T {
 }
 
 const definitionImports: Record<string, () => Promise<{ default: unknown }>> = {
-  'adventurer': () => import('@dicebear/definitions/adventurer.json'),
-  'adventurer-neutral': () => import('@dicebear/definitions/adventurer-neutral.json'),
-  'avataaars': () => import('@dicebear/definitions/avataaars.json'),
-  'avataaars-neutral': () => import('@dicebear/definitions/avataaars-neutral.json'),
-  'big-ears': () => import('@dicebear/definitions/big-ears.json'),
-  'big-ears-neutral': () => import('@dicebear/definitions/big-ears-neutral.json'),
-  'big-smile': () => import('@dicebear/definitions/big-smile.json'),
-  'bottts': () => import('@dicebear/definitions/bottts.json'),
-  'bottts-neutral': () => import('@dicebear/definitions/bottts-neutral.json'),
-  'croodles': () => import('@dicebear/definitions/croodles.json'),
-  'croodles-neutral': () => import('@dicebear/definitions/croodles-neutral.json'),
-  'dylan': () => import('@dicebear/definitions/dylan.json'),
-  'fun-emoji': () => import('@dicebear/definitions/fun-emoji.json'),
-  'glass': () => import('@dicebear/definitions/glass.json'),
-  'icons': () => import('@dicebear/definitions/icons.json'),
-  'identicon': () => import('@dicebear/definitions/identicon.json'),
-  'initial-face': () => import('@dicebear/definitions/initial-face.json'),
-  'initials': () => import('@dicebear/definitions/initials.json'),
-  'lorelei': () => import('@dicebear/definitions/lorelei.json'),
-  'lorelei-neutral': () => import('@dicebear/definitions/lorelei-neutral.json'),
-  'micah': () => import('@dicebear/definitions/micah.json'),
-  'miniavs': () => import('@dicebear/definitions/miniavs.json'),
-  'notionists': () => import('@dicebear/definitions/notionists.json'),
-  'notionists-neutral': () => import('@dicebear/definitions/notionists-neutral.json'),
-  'open-peeps': () => import('@dicebear/definitions/open-peeps.json'),
-  'personas': () => import('@dicebear/definitions/personas.json'),
-  'pixel-art': () => import('@dicebear/definitions/pixel-art.json'),
-  'pixel-art-neutral': () => import('@dicebear/definitions/pixel-art-neutral.json'),
-  'rings': () => import('@dicebear/definitions/rings.json'),
-  'shape-grid': () => import('@dicebear/definitions/shape-grid.json'),
-  'shapes': () => import('@dicebear/definitions/shapes.json'),
-  'thumbs': () => import('@dicebear/definitions/thumbs.json'),
-  'toon-head': () => import('@dicebear/definitions/toon-head.json'),
+  adventurer: () => import('@dicebear/styles/adventurer.json'),
+  'adventurer-neutral': () =>
+    import('@dicebear/styles/adventurer-neutral.json'),
+  avataaars: () => import('@dicebear/styles/avataaars.json'),
+  'avataaars-neutral': () => import('@dicebear/styles/avataaars-neutral.json'),
+  'big-ears': () => import('@dicebear/styles/big-ears.json'),
+  'big-ears-neutral': () => import('@dicebear/styles/big-ears-neutral.json'),
+  'big-smile': () => import('@dicebear/styles/big-smile.json'),
+  bottts: () => import('@dicebear/styles/bottts.json'),
+  'bottts-neutral': () => import('@dicebear/styles/bottts-neutral.json'),
+  croodles: () => import('@dicebear/styles/croodles.json'),
+  'croodles-neutral': () => import('@dicebear/styles/croodles-neutral.json'),
+  disco: () => import('@dicebear/styles/disco.json'),
+  dylan: () => import('@dicebear/styles/dylan.json'),
+  'fun-emoji': () => import('@dicebear/styles/fun-emoji.json'),
+  glass: () => import('@dicebear/styles/glass.json'),
+  glyphs: () => import('@dicebear/styles/glyphs.json'),
+  icons: () => import('@dicebear/styles/icons.json'),
+  identicon: () => import('@dicebear/styles/identicon.json'),
+  'initial-face': () => import('@dicebear/styles/initial-face.json'),
+  initials: () => import('@dicebear/styles/initials.json'),
+  lorelei: () => import('@dicebear/styles/lorelei.json'),
+  'lorelei-neutral': () => import('@dicebear/styles/lorelei-neutral.json'),
+  micah: () => import('@dicebear/styles/micah.json'),
+  miniavs: () => import('@dicebear/styles/miniavs.json'),
+  notionists: () => import('@dicebear/styles/notionists.json'),
+  'notionists-neutral': () =>
+    import('@dicebear/styles/notionists-neutral.json'),
+  'open-peeps': () => import('@dicebear/styles/open-peeps.json'),
+  personas: () => import('@dicebear/styles/personas.json'),
+  'pixel-art': () => import('@dicebear/styles/pixel-art.json'),
+  'pixel-art-neutral': () => import('@dicebear/styles/pixel-art-neutral.json'),
+  rings: () => import('@dicebear/styles/rings.json'),
+  'shape-grid': () => import('@dicebear/styles/shape-grid.json'),
+  shapes: () => import('@dicebear/styles/shapes.json'),
+  stripes: () => import('@dicebear/styles/stripes.json'),
+  thumbs: () => import('@dicebear/styles/thumbs.json'),
+  'toon-head': () => import('@dicebear/styles/toon-head.json'),
+  triangles: () => import('@dicebear/styles/triangles.json'),
 };
 
 const styleCache = new Map<string, Style>();
@@ -149,7 +155,10 @@ function scanForVariable(obj: unknown, variableName: string): boolean {
   return false;
 }
 
-export function styleUsesVariable(avatarStyle: string, variableName: string): boolean {
+export function styleUsesVariable(
+  avatarStyle: string,
+  variableName: string,
+): boolean {
   const name = kebabCase(avatarStyle);
   const key = definitionRawCache.has(name) ? name : avatarStyle;
   const raw = definitionRawCache.get(key);

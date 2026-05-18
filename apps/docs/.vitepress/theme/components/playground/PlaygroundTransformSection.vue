@@ -39,9 +39,16 @@ const borderRadius = singleComputed(borderRadiusKey, 0);
       <div class="pg-field">
         <div class="pg-field-label">
           <span>Flip</span>
-          <PlaygroundFieldReset v-if="store.isOptionSet(flipKey)" @click="store.resetOption(flipKey)" />
+          <PlaygroundFieldReset
+            v-if="store.isOptionSet(flipKey)"
+            @click="store.resetOption(flipKey)"
+          />
         </div>
-        <SelectButton v-model="flip" :options="flipOptions" :allow-empty="false" />
+        <SelectButton
+          v-model="flip"
+          :options="flipOptions"
+          :allow-empty="false"
+        />
       </div>
 
       <PlaygroundRangeField
@@ -66,7 +73,10 @@ const borderRadius = singleComputed(borderRadiusKey, 0);
       <div class="pg-field">
         <div class="pg-field-label">
           <span>Border Radius</span>
-          <PlaygroundFieldReset v-if="store.isOptionSet(borderRadiusKey)" @click="store.resetOption(borderRadiusKey)" />
+          <PlaygroundFieldReset
+            v-if="store.isOptionSet(borderRadiusKey)"
+            @click="store.resetOption(borderRadiusKey)"
+          />
           <span class="pg-field-value">{{ borderRadius }}</span>
         </div>
         <Slider v-model="borderRadius" :min="0" :max="50" :step="1" />
@@ -107,5 +117,4 @@ const borderRadius = singleComputed(borderRadiusKey, 0);
   flex-direction: column;
   gap: 16px;
 }
-
 </style>

@@ -86,7 +86,13 @@ const fill = computed({
   },
 });
 
-const { isRangeMode, toggleRangeMode, resetRangeField, singleComputed, rangeComputed } = useRangeField(store.avatarStyleOptions);
+const {
+  isRangeMode,
+  toggleRangeMode,
+  resetRangeField,
+  singleComputed,
+  rangeComputed,
+} = useRangeField(store.avatarStyleOptions);
 
 const angleSingle = singleComputed(angleKey, 0);
 const angleRange = rangeComputed(angleKey, 0);
@@ -99,7 +105,10 @@ const fillStopsRange = rangeComputed(fillStopsKey, 2);
   <div class="pg-color">
     <div class="pg-color-label">
       <span>Color</span>
-      <PlaygroundFieldReset v-if="store.isOptionSet(colorKey)" @click="store.resetOption(colorKey)" />
+      <PlaygroundFieldReset
+        v-if="store.isOptionSet(colorKey)"
+        @click="store.resetOption(colorKey)"
+      />
     </div>
     <div class="pg-color-grid">
       <div
@@ -124,9 +133,18 @@ const fillStopsRange = rangeComputed(fillStopsKey, 2);
       <div class="pg-field">
         <div class="pg-field-label">
           <span>Fill</span>
-          <PlaygroundFieldReset v-if="store.isOptionSet(fillKey)" @click="store.resetOption(fillKey)" />
+          <PlaygroundFieldReset
+            v-if="store.isOptionSet(fillKey)"
+            @click="store.resetOption(fillKey)"
+          />
         </div>
-        <Select v-model="fill" :options="fillOptions" option-label="label" option-value="value" class="pg-color-fill-select" />
+        <Select
+          v-model="fill"
+          :options="fillOptions"
+          option-label="label"
+          option-value="value"
+          class="pg-color-fill-select"
+        />
       </div>
 
       <div class="pg-field" v-if="hasAngle && fill !== 'solid'">
@@ -135,17 +153,33 @@ const fillStopsRange = rangeComputed(fillStopsKey, 2);
           <Button
             size="small"
             :severity="isRangeMode(angleKey) ? 'primary' : 'secondary'"
-            v-tooltip="isRangeMode(angleKey) ? 'Switch to fixed value' : 'Switch to range'"
+            v-tooltip="
+              isRangeMode(angleKey)
+                ? 'Switch to fixed value'
+                : 'Switch to range'
+            "
             @click="toggleRangeMode(angleKey, 0)"
             class="pg-field-toggle"
           >
             <ArrowLeftRight :size="14" />
           </Button>
-          <PlaygroundFieldReset v-if="store.isOptionSet(angleKey)" @click="resetRangeField(angleKey)" />
-          <span class="pg-field-value" v-if="isRangeMode(angleKey)">{{ angleRange[0] }}° — {{ angleRange[1] }}°</span>
+          <PlaygroundFieldReset
+            v-if="store.isOptionSet(angleKey)"
+            @click="resetRangeField(angleKey)"
+          />
+          <span class="pg-field-value" v-if="isRangeMode(angleKey)"
+            >{{ angleRange[0] }}° — {{ angleRange[1] }}°</span
+          >
           <span class="pg-field-value" v-else>{{ angleSingle }}°</span>
         </div>
-        <Slider v-if="isRangeMode(angleKey)" v-model="angleRange" :range="true" :min="-360" :max="360" :step="1" />
+        <Slider
+          v-if="isRangeMode(angleKey)"
+          v-model="angleRange"
+          :range="true"
+          :min="-360"
+          :max="360"
+          :step="1"
+        />
         <Slider v-else v-model="angleSingle" :min="-360" :max="360" :step="1" />
       </div>
 
@@ -155,17 +189,33 @@ const fillStopsRange = rangeComputed(fillStopsKey, 2);
           <Button
             size="small"
             :severity="isRangeMode(fillStopsKey) ? 'primary' : 'secondary'"
-            v-tooltip="isRangeMode(fillStopsKey) ? 'Switch to fixed value' : 'Switch to range'"
+            v-tooltip="
+              isRangeMode(fillStopsKey)
+                ? 'Switch to fixed value'
+                : 'Switch to range'
+            "
             @click="toggleRangeMode(fillStopsKey, 2)"
             class="pg-field-toggle"
           >
             <ArrowLeftRight :size="14" />
           </Button>
-          <PlaygroundFieldReset v-if="store.isOptionSet(fillStopsKey)" @click="resetRangeField(fillStopsKey)" />
-          <span class="pg-field-value" v-if="isRangeMode(fillStopsKey)">{{ fillStopsRange[0] }} — {{ fillStopsRange[1] }}</span>
+          <PlaygroundFieldReset
+            v-if="store.isOptionSet(fillStopsKey)"
+            @click="resetRangeField(fillStopsKey)"
+          />
+          <span class="pg-field-value" v-if="isRangeMode(fillStopsKey)"
+            >{{ fillStopsRange[0] }} — {{ fillStopsRange[1] }}</span
+          >
           <span class="pg-field-value" v-else>{{ fillStopsSingle }}</span>
         </div>
-        <Slider v-if="isRangeMode(fillStopsKey)" v-model="fillStopsRange" :range="true" :min="2" :max="5" :step="1" />
+        <Slider
+          v-if="isRangeMode(fillStopsKey)"
+          v-model="fillStopsRange"
+          :range="true"
+          :min="2"
+          :max="5"
+          :step="1"
+        />
         <Slider v-else v-model="fillStopsSingle" :min="2" :max="5" :step="1" />
       </div>
     </template>
@@ -198,11 +248,11 @@ const fillStopsRange = rangeComputed(fillStopsKey, 2);
   aspect-ratio: 1;
   border: 1px solid var(--pg-border);
   border-radius: var(--vp-radius-xs);
-  background:
-    repeating-conic-gradient(
+  background: repeating-conic-gradient(
       var(--vp-c-bg-soft) 0% 25%,
       var(--vp-c-bg) 0% 50%
-    ) 50% / 10px 10px;
+    )
+    50% / 10px 10px;
   cursor: pointer;
   transition: all var(--duration-fast) ease;
   position: relative;
@@ -233,7 +283,6 @@ const fillStopsRange = rangeComputed(fillStopsKey, 2);
   &:hover .pg-color-tile-delete {
     opacity: 1;
   }
-
 }
 
 .pg-color-fill-select {

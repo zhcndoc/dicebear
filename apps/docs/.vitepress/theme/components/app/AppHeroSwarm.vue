@@ -11,12 +11,48 @@ interface Tile {
 }
 
 const tiles: Tile[] = [
-  { styleName: 'lorelei',    seed: 'Felix', background: PALETTE.rose,    size: 256, delay: 0    },
-  { styleName: 'lorelei',    seed: 'Aneka', background: PALETTE.amber,   size: 160, delay: -1.2 },
-  { styleName: 'bottts',     seed: 'Pixel', background: PALETTE.cyan,    size: 128, delay: -2.1 },
-  { styleName: 'adventurer', seed: 'Milo',  background: PALETTE.blue,    size: 160, delay: -0.6 },
-  { styleName: 'notionists', seed: 'Luna',  background: PALETTE.green,   size: 128, delay: -3.0 },
-  { styleName: 'fun-emoji',  seed: 'Sage',  background: PALETTE.fuchsia, size: 128, delay: -1.6 },
+  {
+    styleName: 'lorelei',
+    seed: 'Felix',
+    background: PALETTE.rose,
+    size: 256,
+    delay: 0,
+  },
+  {
+    styleName: 'lorelei',
+    seed: 'Aneka',
+    background: PALETTE.amber,
+    size: 160,
+    delay: -1.2,
+  },
+  {
+    styleName: 'bottts',
+    seed: 'Pixel',
+    background: PALETTE.cyan,
+    size: 128,
+    delay: -2.1,
+  },
+  {
+    styleName: 'adventurer',
+    seed: 'Milo',
+    background: PALETTE.blue,
+    size: 160,
+    delay: -0.6,
+  },
+  {
+    styleName: 'notionists',
+    seed: 'Luna',
+    background: PALETTE.green,
+    size: 128,
+    delay: -3.0,
+  },
+  {
+    styleName: 'fun-emoji',
+    seed: 'Sage',
+    background: PALETTE.fuchsia,
+    size: 128,
+    delay: -1.6,
+  },
 ];
 
 function url(tile: Tile): string {
@@ -77,7 +113,8 @@ function url(tile: Tile): string {
     var(--vp-shadow-3),
     0 0 0 1px var(--vp-c-divider);
   animation:
-    app-hero-swarm-fade var(--duration-reveal) var(--ease-smooth) var(--tile-fade-delay, 0s) both,
+    app-hero-swarm-fade var(--duration-reveal) var(--ease-smooth)
+      var(--tile-fade-delay, 0s) both,
     app-hero-swarm-bob 6s ease-in-out var(--tile-delay, 0s) infinite;
   will-change: translate;
   contain: layout paint;
@@ -141,13 +178,22 @@ function url(tile: Tile): string {
 }
 
 @keyframes app-hero-swarm-bob {
-  0%, 100% { translate: 0 0; }
-  50%      { translate: 0 -8px; }
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -8px;
+  }
 }
 
 @keyframes app-hero-swarm-fade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @media (max-width: 960px) {
@@ -158,12 +204,24 @@ function url(tile: Tile): string {
   }
 
   .app-hero-swarm-tile {
-    &--0 { --tile-w: 180px; }
-    &--1 { --tile-w: 104px; }
-    &--2 { --tile-w: 88px;  }
-    &--3 { --tile-w: 112px; }
-    &--4 { --tile-w: 80px;  }
-    &--5 { --tile-w: 76px;  }
+    &--0 {
+      --tile-w: 180px;
+    }
+    &--1 {
+      --tile-w: 104px;
+    }
+    &--2 {
+      --tile-w: 88px;
+    }
+    &--3 {
+      --tile-w: 112px;
+    }
+    &--4 {
+      --tile-w: 80px;
+    }
+    &--5 {
+      --tile-w: 76px;
+    }
   }
 }
 
@@ -173,12 +231,24 @@ function url(tile: Tile): string {
   }
 
   .app-hero-swarm-tile {
-    &--0 { --tile-w: 150px; }
-    &--1 { --tile-w: 86px;  }
-    &--2 { --tile-w: 74px;  }
-    &--3 { --tile-w: 94px;  }
-    &--4 { --tile-w: 68px;  }
-    &--5 { --tile-w: 64px;  }
+    &--0 {
+      --tile-w: 150px;
+    }
+    &--1 {
+      --tile-w: 86px;
+    }
+    &--2 {
+      --tile-w: 74px;
+    }
+    &--3 {
+      --tile-w: 94px;
+    }
+    &--4 {
+      --tile-w: 68px;
+    }
+    &--5 {
+      --tile-w: 64px;
+    }
   }
 }
 </style>

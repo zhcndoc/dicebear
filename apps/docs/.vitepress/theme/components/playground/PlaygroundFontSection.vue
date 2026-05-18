@@ -58,17 +58,33 @@ const fontWeight = computed({
     <div class="pg-field" v-if="hasFontFamily">
       <div class="pg-field-label">
         <span>Font Family</span>
-        <PlaygroundFieldReset v-if="store.isOptionSet(fontFamilyKey)" @click="store.resetOption(fontFamilyKey)" />
+        <PlaygroundFieldReset
+          v-if="store.isOptionSet(fontFamilyKey)"
+          @click="store.resetOption(fontFamilyKey)"
+        />
       </div>
-      <Select v-model="fontFamily" :options="fontFamilyOptions" class="pg-field-select" />
+      <Select
+        v-model="fontFamily"
+        :options="fontFamilyOptions"
+        class="pg-field-select"
+      />
     </div>
 
     <div class="pg-field" v-if="hasFontWeight">
       <div class="pg-field-label">
         <span>Font Weight</span>
-        <PlaygroundFieldReset v-if="store.isOptionSet(fontWeightKey)" @click="store.resetOption(fontWeightKey)" />
+        <PlaygroundFieldReset
+          v-if="store.isOptionSet(fontWeightKey)"
+          @click="store.resetOption(fontWeightKey)"
+        />
       </div>
-      <Select v-model="fontWeight" :options="fontWeightOptions" option-label="label" option-value="value" class="pg-field-select" />
+      <Select
+        v-model="fontWeight"
+        :options="fontWeightOptions"
+        option-label="label"
+        option-value="value"
+        class="pg-field-select"
+      />
     </div>
   </div>
 </template>

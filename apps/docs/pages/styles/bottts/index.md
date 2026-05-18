@@ -15,8 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Bottts
 
-Bottts 是一种以机器人为主题的矢量头像风格，具有色彩丰富、模块化的机器人
-角色，并且部件可自定义。对于在开发者工具和应用中生成有趣、技术感十足的个人资料图标来说，这是一个经典选择。
+Bottts 是一种以机器人为主题的矢量头像风格，由可互换的脸部、嘴巴、天线、侧边组件和纹理构成模块化机器人头部。它是一种经典而鲜明的选择，适合在开发者工具、AI 应用和 API 服务中生成有趣、技术感十足的个人资料图标。
 
 <StylePreview styleName="bottts" />
 

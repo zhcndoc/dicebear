@@ -5,16 +5,17 @@ description: >
   支持 PHP 8.2+，API 与 JavaScript 库完全一致。
 ---
 
-# PHP Avatar Library
+# PHP 头像库
 
 PHP 库提供了与 [JavaScript library](/how-to-use/js-library/) 完全一致的 API。它需要 PHP 8.2 或更高版本。相同的 seed 和样式定义在两种实现中都会生成字节级一致的 SVG。
 
 ## 安装
 
-你需要两个包：核心库 `dicebear/core` 和头像样式定义 `dicebear/definitions`。
+你需要两个包：核心库 `dicebear/core` 和头像样式
+定义 `dicebear/styles`。
 
 ```
-composer require dicebear/core dicebear/definitions
+composer require dicebear/core dicebear/styles
 ```
 
 ## 使用
@@ -26,7 +27,7 @@ use Composer\InstalledVersions;
 use DiceBear\Style;
 use DiceBear\Avatar;
 
-$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$basePath = InstalledVersions::getInstallPath('dicebear/styles');
 $definition = json_decode(file_get_contents($basePath . '/src/lorelei.json'), true);
 
 $style = new Style($definition);
@@ -181,7 +182,7 @@ $avatar = new Avatar($style, [
 ### 固定尺寸头像
 
 ```php
-$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$basePath = InstalledVersions::getInstallPath('dicebear/styles');
 $definition = json_decode(file_get_contents($basePath . '/src/bottts.json'), true);
 
 $style = new Style($definition);
@@ -195,7 +196,7 @@ $avatar = new Avatar($style, [
 ### 带变换效果的头像
 
 ```php
-$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$basePath = InstalledVersions::getInstallPath('dicebear/styles');
 $definition = json_decode(file_get_contents($basePath . '/src/avataaars.json'), true);
 
 $style = new Style($definition);

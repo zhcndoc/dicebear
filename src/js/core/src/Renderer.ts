@@ -320,6 +320,11 @@ export class Renderer {
    * same source component sharing a variant — and identical components
    * referenced more than once — therefore produce a single `<defs>` entry
    * referenced by every `<use>`, never duplicated SVG markup.
+   *
+   * Any `attributes` on the component reference are written to the emitted
+   * `<use>` tag. A user-supplied `transform` is prepended to the per-component
+   * transforms so it acts as the outer (placement) transform, with the
+   * style's translate/rotate/scale applied inside it.
    */
   #renderComponentElement(element: Element): string {
     const componentName = element.name();
@@ -355,10 +360,23 @@ export class Renderer {
     }
 
     const transforms = this.#buildTransforms(component);
-    const transformAttr =
-      transforms.length > 0 ? ` transform="${transforms.join(' ')}"` : '';
+    const userAttributes = element.attributes();
+    let mergedAttributes: StyleDefinitionAttributes | undefined =
+      userAttributes;
 
-    return `<use${transformAttr} href="#${id}"/>`;
+    if (transforms.length > 0) {
+      const userTransform = userAttributes?.transform;
+      const allParts =
+        typeof userTransform === 'string' && userTransform.length > 0
+          ? [userTransform, ...transforms]
+          : transforms;
+
+      mergedAttributes = { ...userAttributes, transform: allParts.join(' ') };
+    }
+
+    const attrs = this.#renderAttributes(mergedAttributes);
+
+    return `<use${attrs} href="#${id}"/>`;
   }
 
   /**
@@ -384,8 +402,10 @@ export class Renderer {
     const cy = component.height() / 2;
 
     if (translateX !== 0 || translateY !== 0) {
-      const x = Math.round((translateX / 100) * component.width() * 10000) / 10000;
-      const y = Math.round((translateY / 100) * component.height() * 10000) / 10000;
+      const x =
+        Math.round((translateX / 100) * component.width() * 10000) / 10000;
+      const y =
+        Math.round((translateY / 100) * component.height() * 10000) / 10000;
 
       transforms.push(`translate(${x}, ${y})`);
     }
@@ -395,7 +415,9 @@ export class Renderer {
     }
 
     if (scale !== 1) {
-      transforms.push(`translate(${cx}, ${cy}) scale(${scale}) translate(${-cx}, ${-cy})`);
+      transforms.push(
+        `translate(${cx}, ${cy}) scale(${scale}) translate(${-cx}, ${-cy})`,
+      );
     }
 
     return transforms;

@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { ArrowRight } from '@lucide/vue';
-import { UiButton, UiContainer, UiSection, UiSectionHeader, UiCard } from '../ui';
+import {
+  UiButton,
+  UiContainer,
+  UiSection,
+  UiSectionHeader,
+  UiCard,
+} from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
 const sectionRef = ref();
@@ -10,15 +16,18 @@ const isVisible = useVisibility(sectionRef);
 const steps = [
   {
     title: '在 Figma 中设计',
-    description: '通过可视化方式创建头像组件，并用简单命名约定组织颜色与部件。',
+    description:
+      '通过可视化方式创建头像组件，并用简单命名约定组织颜色与部件。',
   },
   {
     title: '使用插件导出',
-    description: '使用 DiceBear Figma 插件配置选项，并将风格导出为可直接使用的包。',
+    description:
+      '使用 DiceBear Figma 插件配置选项，并将风格导出为可直接使用的包。',
   },
   {
     title: '构建并使用',
-    description: '运行 npm install 和 npm run build，你的自定义风格就可以开始生成头像。',
+    description:
+      '运行 npm install 和 npm run build，你的自定义风格就可以开始生成头像。',
   },
 ];
 </script>
@@ -36,7 +45,9 @@ const steps = [
         badge-variant="green"
         description="在 Figma 中可视化设计头像风格，导出细节由插件处理，无需编写代码。"
       >
-        <template #headline>用 Figma 创建<br /><strong>属于你的风格</strong></template>
+        <template #headline
+          >用 Figma 创建<br /><strong>属于你的风格</strong></template
+        >
       </UiSectionHeader>
 
       <div class="app-create-style-grid">
@@ -53,7 +64,9 @@ const steps = [
               <div class="app-create-style-step-number">{{ index + 1 }}</div>
               <div class="app-create-style-step-content">
                 <h3 class="app-create-style-step-title">{{ step.title }}</h3>
-                <p class="app-create-style-step-description">{{ step.description }}</p>
+                <p class="app-create-style-step-description">
+                  {{ step.description }}
+                </p>
               </div>
             </UiCard>
           </div>
@@ -63,7 +76,11 @@ const steps = [
               阅读 Figma 指南
               <ArrowRight :size="20" />
             </UiButton>
-            <UiButton href="https://www.figma.com/community/plugin/1005765655729342787" variant="secondary" target="_blank">
+            <UiButton
+              href="https://www.figma.com/community/plugin/1005765655729342787"
+              variant="secondary"
+              target="_blank"
+            >
               获取插件
               <ArrowRight :size="20" />
             </UiButton>
@@ -75,51 +92,87 @@ const steps = [
             <div class="app-create-style-figma-sidebar">
               <div class="app-create-style-figma-layers">
                 <div class="app-create-style-layer-group">
-                  <span class="app-create-style-layer-icon app-create-style-layer-icon-folder"></span>
+                  <span
+                    class="app-create-style-layer-icon app-create-style-layer-icon-folder"
+                  ></span>
                   <span>脸部</span>
                 </div>
                 <div class="app-create-style-layer-item">
-                  <span class="app-create-style-layer-icon app-create-style-layer-icon-component"></span>
+                  <span
+                    class="app-create-style-layer-icon app-create-style-layer-icon-component"
+                  ></span>
                   <span>脸部/圆形</span>
                 </div>
                 <div class="app-create-style-layer-item">
-                  <span class="app-create-style-layer-icon app-create-style-layer-icon-component"></span>
+                  <span
+                    class="app-create-style-layer-icon app-create-style-layer-icon-component"
+                  ></span>
                   <span>脸部/椭圆</span>
                 </div>
                 <div class="app-create-style-layer-group">
-                  <span class="app-create-style-layer-icon app-create-style-layer-icon-folder"></span>
+                  <span
+                    class="app-create-style-layer-icon app-create-style-layer-icon-folder"
+                  ></span>
                   <span>眼睛</span>
                 </div>
                 <div class="app-create-style-layer-item">
-                  <span class="app-create-style-layer-icon app-create-style-layer-icon-component"></span>
+                  <span
+                    class="app-create-style-layer-icon app-create-style-layer-icon-component"
+                  ></span>
                   <span>眼睛/开心</span>
                 </div>
                 <div class="app-create-style-layer-item active">
-                  <span class="app-create-style-layer-icon app-create-style-layer-icon-component"></span>
+                  <span
+                    class="app-create-style-layer-icon app-create-style-layer-icon-component"
+                  ></span>
                   <span>眼睛/眨眼</span>
                 </div>
                 <div class="app-create-style-layer-group">
-                  <span class="app-create-style-layer-icon app-create-style-layer-icon-folder"></span>
+                  <span
+                    class="app-create-style-layer-icon app-create-style-layer-icon-folder"
+                  ></span>
                   <span>嘴巴</span>
                 </div>
                 <div class="app-create-style-layer-item">
-                  <span class="app-create-style-layer-icon app-create-style-layer-icon-component"></span>
+                  <span
+                    class="app-create-style-layer-icon app-create-style-layer-icon-component"
+                  ></span>
                   <span>嘴巴/微笑</span>
                 </div>
               </div>
             </div>
             <div class="app-create-style-figma-canvas">
               <div class="app-create-style-canvas-avatar">
-                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="32" cy="32" r="28" fill="#FFD93D"/>
-                  <circle cx="22" cy="28" r="4" fill="#1a1a2e"/>
-                  <path d="M38 26 L42 30 L38 34" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M20 42 Q32 52 44 42" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round" fill="none"/>
+                <svg
+                  viewBox="0 0 64 64"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle cx="32" cy="32" r="28" fill="#FFD93D" />
+                  <circle cx="22" cy="28" r="4" fill="#1a1a2e" />
+                  <path
+                    d="M38 26 L42 30 L38 34"
+                    stroke="#1a1a2e"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M20 42 Q32 52 44 42"
+                    stroke="#1a1a2e"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    fill="none"
+                  />
                 </svg>
               </div>
               <div class="app-create-style-canvas-guides">
-                <div class="app-create-style-guide app-create-style-guide-h"></div>
-                <div class="app-create-style-guide app-create-style-guide-v"></div>
+                <div
+                  class="app-create-style-guide app-create-style-guide-h"
+                ></div>
+                <div
+                  class="app-create-style-guide app-create-style-guide-v"
+                ></div>
               </div>
             </div>
           </div>
@@ -139,11 +192,19 @@ const steps = [
     background-repeat: repeat !important;
     opacity: 0.3;
     mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent);
-    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent);
+    -webkit-mask-image: radial-gradient(
+      ellipse 80% 60% at 50% 50%,
+      black,
+      transparent
+    );
   }
 
   &-gradient {
-    background: radial-gradient(ellipse 80% 50% at 50% 0%, color-mix(in srgb, var(--vp-c-green-1) 8%, transparent), transparent);
+    background: radial-gradient(
+      ellipse 80% 50% at 50% 0%,
+      color-mix(in srgb, var(--vp-c-green-1) 8%, transparent),
+      transparent
+    );
   }
 
   &-container {

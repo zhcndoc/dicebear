@@ -129,27 +129,40 @@ class PrngTest extends TestCase
         }
     }
 
-    // float
-
-    public function testFloatReturnsNullForEmptyArray(): void
+    public function testPickCollapsesDuplicateItems(): void
     {
-        $prng = new Prng('test');
+        $unique = ['a', 'b', 'c'];
+        $withDuplicates = ['a', 'a', 'b', 'b', 'b', 'c'];
 
-        $this->assertNull($prng->float('key', []));
+        for ($i = 0; $i < 50; $i++) {
+            $this->assertSame(
+                (new Prng("seed-{$i}"))->pick('key', $unique),
+                (new Prng("seed-{$i}"))->pick('key', $withDuplicates),
+            );
+        }
     }
 
-    public function testFloatReturnsSingleValue(): void
+    public function testPickTreatsAllDuplicatesAsSingleItem(): void
     {
         $prng = new Prng('test');
 
-        $this->assertEqualsWithDelta(42, $prng->float('key', [42]), 1e-10);
+        $this->assertSame('only', $prng->pick('key', ['only', 'only', 'only']));
+    }
+
+    // float
+
+    public function testFloatReturnsValueWhenMinEqualsMax(): void
+    {
+        $prng = new Prng('test');
+
+        $this->assertEqualsWithDelta(42, $prng->float('key', ['min' => 42, 'max' => 42]), 1e-10);
     }
 
     public function testFloatInterpolatesWithinBounds(): void
     {
         for ($i = 0; $i < 50; $i++) {
             $prng = new Prng("seed-{$i}");
-            $value = $prng->float('key', [10, 20]);
+            $value = $prng->float('key', ['min' => 10, 'max' => 20]);
 
             $this->assertGreaterThanOrEqual(10, $value);
             $this->assertLessThanOrEqual(20, $value);
@@ -159,19 +172,86 @@ class PrngTest extends TestCase
     public function testFloatHandlesReversedOrder(): void
     {
         $prng = new Prng('test');
-        $value = $prng->float('key', [20, 10]);
+        $value = $prng->float('key', ['min' => 20, 'max' => 10]);
 
         $this->assertGreaterThanOrEqual(10, $value);
         $this->assertLessThanOrEqual(20, $value);
     }
 
-    public function testFloatUsesMinMaxAcrossAllValues(): void
+    public function testFloatQuantizesToStep(): void
     {
-        $prng = new Prng('test');
-        $value = $prng->float('key', [5, 20, 10]);
+        for ($i = 0; $i < 50; $i++) {
+            $prng = new Prng("seed-{$i}");
+            $value = $prng->float('key', ['min' => 0, 'max' => 100, 'step' => 5]);
 
-        $this->assertGreaterThanOrEqual(5, $value);
-        $this->assertLessThanOrEqual(20, $value);
+            $this->assertGreaterThanOrEqual(0, $value);
+            $this->assertLessThanOrEqual(100, $value);
+            $this->assertEqualsWithDelta(0.0, fmod($value, 5), 1e-9, "Expected multiple of 5, got {$value}");
+        }
+    }
+
+    public function testFloatIgnoresNonPositiveStep(): void
+    {
+        for ($i = 0; $i < 20; $i++) {
+            $prng = new Prng("seed-{$i}");
+            $value = $prng->float('key', ['min' => 10, 'max' => 20, 'step' => 0]);
+
+            $this->assertGreaterThanOrEqual(10, $value);
+            $this->assertLessThanOrEqual(20, $value);
+        }
+    }
+
+    public function testFloatStepIsAnchoredAtMin(): void
+    {
+        for ($i = 0; $i < 50; $i++) {
+            $prng = new Prng("seed-{$i}");
+            $value = $prng->float('key', ['min' => 3, 'max' => 23, 'step' => 5]);
+
+            $this->assertGreaterThanOrEqual(3, $value);
+            $this->assertLessThanOrEqual(23, $value);
+            $this->assertEqualsWithDelta(0.0, fmod($value - 3, 5), 1e-9, "Expected 3 + n*5, got {$value}");
+        }
+    }
+
+    public function testFloatReachesMaxEndpointWhenStepDividesRangeEvenly(): void
+    {
+        $maxSeen = false;
+
+        for ($i = 0; $i < 500; $i++) {
+            $value = (new Prng("seed-{$i}"))->float('key', ['min' => 0, 'max' => 90, 'step' => 90]);
+
+            $this->assertTrue($value === 0.0 || $value === 90.0, "Expected 0 or 90, got {$value}");
+            if ($value === 90.0) {
+                $maxSeen = true;
+            }
+        }
+
+        $this->assertTrue($maxSeen, 'Expected 90 to appear at least once across 500 seeds');
+    }
+
+    public function testFloatDistributesSteppedValuesRoughlyUniformly(): void
+    {
+        $buckets = [0 => 0, 45 => 0, 90 => 0, 135 => 0, 180 => 0];
+        $samples = 2000;
+
+        for ($i = 0; $i < $samples; $i++) {
+            $value = (new Prng("seed-{$i}"))->float('key', ['min' => 0, 'max' => 180, 'step' => 45]);
+            $key = (int) $value;
+
+            $this->assertArrayHasKey($key, $buckets, "Unexpected bucket value: {$value}");
+            $buckets[$key]++;
+        }
+
+        $expected = $samples / 5; // 400 per bucket
+        $tolerance = $expected * 0.35; // ±35% — generous for 2000 samples
+
+        foreach ($buckets as $value => $count) {
+            $this->assertLessThan(
+                $tolerance,
+                abs($count - $expected),
+                "Bucket {$value}: expected ~{$expected} ±{$tolerance}, got {$count}",
+            );
+        }
     }
 
     public function testFloatIsDeterministic(): void
@@ -179,13 +259,16 @@ class PrngTest extends TestCase
         $a = new Prng('test');
         $b = new Prng('test');
 
-        $this->assertSame($a->float('key', [0, 100]), $b->float('key', [0, 100]));
+        $this->assertSame(
+            $a->float('key', ['min' => 0, 'max' => 100]),
+            $b->float('key', ['min' => 0, 'max' => 100]),
+        );
     }
 
     public function testFloatRoundsToFourDecimalPlaces(): void
     {
         $prng = new Prng('test');
-        $value = $prng->float('scale', [0, 1]);
+        $value = $prng->float('scale', ['min' => 0, 'max' => 1]);
         $parts = explode('.', (string) $value);
         $decimals = $parts[1] ?? '';
 
@@ -196,8 +279,14 @@ class PrngTest extends TestCase
     {
         $prng = new Prng('test');
 
-        $this->assertSame($prng->float('scale', [0, 1]), $prng->float('scale', [0, 1]));
-        $this->assertSame($prng->float('a', [10, 20]), $prng->float('a', [10, 20]));
+        $this->assertSame(
+            $prng->float('scale', ['min' => 0, 'max' => 1]),
+            $prng->float('scale', ['min' => 0, 'max' => 1]),
+        );
+        $this->assertSame(
+            $prng->float('a', ['min' => 10, 'max' => 20]),
+            $prng->float('a', ['min' => 10, 'max' => 20]),
+        );
     }
 
     // bool
@@ -237,25 +326,18 @@ class PrngTest extends TestCase
 
     // integer
 
-    public function testIntegerReturnsNullForEmptyArray(): void
+    public function testIntegerReturnsValueWhenMinEqualsMax(): void
     {
         $prng = new Prng('test');
 
-        $this->assertNull($prng->integer('key', []));
-    }
-
-    public function testIntegerReturnsSingleValue(): void
-    {
-        $prng = new Prng('test');
-
-        $this->assertSame(5, $prng->integer('key', [5]));
+        $this->assertSame(5, $prng->integer('key', ['min' => 5, 'max' => 5]));
     }
 
     public function testIntegerWithinBounds(): void
     {
         for ($i = 0; $i < 50; $i++) {
             $prng = new Prng("seed-{$i}");
-            $value = $prng->integer('key', [1, 10]);
+            $value = $prng->integer('key', ['min' => 1, 'max' => 10]);
 
             $this->assertGreaterThanOrEqual(1, $value);
             $this->assertLessThanOrEqual(10, $value);
@@ -266,27 +348,20 @@ class PrngTest extends TestCase
     public function testIntegerHandlesReversedOrder(): void
     {
         $prng = new Prng('test');
-        $value = $prng->integer('key', [10, 1]);
+        $value = $prng->integer('key', ['min' => 10, 'max' => 1]);
 
         $this->assertGreaterThanOrEqual(1, $value);
         $this->assertLessThanOrEqual(10, $value);
     }
 
-    public function testIntegerUsesMinMaxAcrossAllValues(): void
+    public function testIntegerIgnoresStep(): void
     {
         $prng = new Prng('test');
-        $value = $prng->integer('key', [3, 10, 7]);
+        $value = $prng->integer('key', ['min' => 3, 'max' => 10, 'step' => 5]);
 
         $this->assertGreaterThanOrEqual(3, $value);
         $this->assertLessThanOrEqual(10, $value);
         $this->assertSame($value, (int) floor($value));
-    }
-
-    public function testIntegerReturnsValueWhenMinEqualsMax(): void
-    {
-        $prng = new Prng('test');
-
-        $this->assertSame(5, $prng->integer('key', [5, 5]));
     }
 
     public function testIntegerIsDeterministic(): void
@@ -294,7 +369,34 @@ class PrngTest extends TestCase
         $a = new Prng('test');
         $b = new Prng('test');
 
-        $this->assertSame($a->integer('key', [1, 100]), $b->integer('key', [1, 100]));
+        $this->assertSame(
+            $a->integer('key', ['min' => 1, 'max' => 100]),
+            $b->integer('key', ['min' => 1, 'max' => 100]),
+        );
+    }
+
+    public function testIntegerDistributesValuesRoughlyUniformly(): void
+    {
+        $buckets = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
+        $samples = 2000;
+
+        for ($i = 0; $i < $samples; $i++) {
+            $value = (new Prng("seed-{$i}"))->integer('key', ['min' => 1, 'max' => 5]);
+
+            $this->assertArrayHasKey($value, $buckets, "Unexpected bucket value: {$value}");
+            $buckets[$value]++;
+        }
+
+        $expected = $samples / 5; // 400 per bucket
+        $tolerance = $expected * 0.35; // ±35% — generous for 2000 samples
+
+        foreach ($buckets as $value => $count) {
+            $this->assertLessThan(
+                $tolerance,
+                abs($count - $expected),
+                "Bucket {$value}: expected ~{$expected} ±{$tolerance}, got {$count}",
+            );
+        }
     }
 
     // shuffle
@@ -447,5 +549,29 @@ class PrngTest extends TestCase
 
             $this->assertContains($result, ['a', 'b', 'c']);
         }
+    }
+
+    public function testWeightedPickCollapsesDuplicateItems(): void
+    {
+        $baseline = [['a', 1], ['b', 4], ['c', 2]];
+        $withDuplicates = [['a', 1], ['a', 100], ['b', 4], ['c', 2]];
+
+        for ($i = 0; $i < 50; $i++) {
+            $this->assertSame(
+                (new Prng("seed-{$i}"))->weightedPick('key', $baseline),
+                (new Prng("seed-{$i}"))->weightedPick('key', $withDuplicates),
+            );
+        }
+    }
+
+    // shuffle dedup
+
+    public function testShuffleCollapsesDuplicates(): void
+    {
+        $prng = new Prng('test');
+        $result = $prng->shuffle('key', ['a', 'a', 'b', 'b', 'c', 'c']);
+        sort($result);
+
+        $this->assertSame(['a', 'b', 'c'], $result);
     }
 }

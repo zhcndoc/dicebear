@@ -107,8 +107,8 @@ dicebear lorelei ./avatars --format png
 
 #### 控制输出图像大小
 
-`--size` 用于控制所有格式的输出尺寸（宽度和高度，单位为像素）。默认值为 `512`。对于光栅格式（PNG、JPEG、WebP、AVIF），
-其值上限为 `2048`。
+`--size` 控制所有格式的输出尺寸（宽度和高度，以像素为单位）。默认值为
+`512`。对于光栅格式（PNG、JPEG、WebP、AVIF），该值上限为 `2048`。
 
 ```
 dicebear lorelei ./avatars --format png --size 256
@@ -318,9 +318,8 @@ CLI 不会覆盖现有文件。你可以：
 
 ### 未找到头像样式
 
-样式名称为小写，多词样式使用连字符
-（例如 `pixel-art`、`adventurer-neutral`）。运行 `dicebear --help` 查看所有
-可用样式。
+样式名称为小写，多个单词的样式使用连字符（例如 `pixel-art`、
+`adventurer-neutral`）。运行 `dicebear --help` 查看所有可用样式。
 
 ### 权限被拒绝
 

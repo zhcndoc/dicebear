@@ -15,7 +15,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Notionists Neutral
 
-Notionists Neutral 是 Notionists 向量头像风格的中性版本，为包容性平台提供抽象、专业且可自定义的个人资料图标。
+Notionists Neutral 是 Notionists 风格的简化变体，仅用松散的黑色墨线描绘
+眼睛、鼻子和嘴巴，背景为纯色——
+没有头部、头发或身体。
 
 <StylePreview styleName="notionists-neutral" />
 

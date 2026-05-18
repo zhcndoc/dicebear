@@ -15,7 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Fun Emoji
 
-Fun Emoji 是一种基于色彩丰富、富有表现力的 emoji 字符的矢量头像风格。为聊天应用、社交网络和消息平台生成有趣、可立即识别且可自定义的个人资料图标。
+Fun Emoji 是一种受表情符号启发的矢量头像风格，在纯色方块上呈现一个富有表现力的脸——眼睛、嘴巴，以及偶尔出现的配饰，比如太阳镜或眼泪。为聊天应用、社交网络和消息平台生成俏皮、可一眼识别的个人资料图标。
 
 <StylePreview styleName="fun-emoji" />
 

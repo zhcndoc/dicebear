@@ -8,7 +8,10 @@ import PlaygroundFieldReset from './PlaygroundFieldReset.vue';
 import useStore from '@theme/stores/playground';
 import { useRangeField } from '@theme/composables/useRangeField';
 import { useVariantWeights } from '@theme/composables/useVariantWeights';
-import { componentPreviewKey, componentPreviewDefault } from '@theme/components/styles/styleOptionsKeys';
+import {
+  componentPreviewKey,
+  componentPreviewDefault,
+} from '@theme/components/styles/styleOptionsKeys';
 
 const props = defineProps<{
   componentName: string;
@@ -43,7 +46,10 @@ const { singleComputed } = useRangeField(store.avatarStyleOptions);
 const variantKey = `${props.componentName}Variant`;
 const probabilityKey = `${props.componentName}Probability`;
 
-const probability = singleComputed(probabilityKey, () => props.defaultProbability);
+const probability = singleComputed(
+  probabilityKey,
+  () => props.defaultProbability,
+);
 
 function resetVariants() {
   store.resetOption(variantKey);
@@ -65,20 +71,40 @@ function resetVariants() {
         >
           <Weight :size="14" />
         </Button>
-        <Button label="All" size="small" severity="secondary" @click="selectAll" class="pg-field-toggle" />
-        <Button label="None" size="small" severity="secondary" @click="selectNone" class="pg-field-toggle" />
-        <PlaygroundFieldReset v-if="store.isOptionSet(variantKey)" @click="resetVariants" />
+        <Button
+          label="All"
+          size="small"
+          severity="secondary"
+          @click="selectAll"
+          class="pg-field-toggle"
+        />
+        <Button
+          label="None"
+          size="small"
+          severity="secondary"
+          @click="selectNone"
+          class="pg-field-toggle"
+        />
+        <PlaygroundFieldReset
+          v-if="store.isOptionSet(variantKey)"
+          @click="resetVariants"
+        />
       </div>
       <div class="pg-comp-variants-grid">
         <div
           v-for="variant in variants"
           :key="variant"
           class="pg-comp-variant"
-          :class="{ 'pg-comp-variant-off': variantWeights[variant] === undefined }"
+          :class="{
+            'pg-comp-variant-off': variantWeights[variant] === undefined,
+          }"
         >
           <button
             class="pg-comp-variant-btn"
-            :class="{ 'pg-comp-variant-btn-active': variantWeights[variant] !== undefined }"
+            :class="{
+              'pg-comp-variant-btn-active':
+                variantWeights[variant] !== undefined,
+            }"
             @click="toggleVariant(variant)"
           >
             <img
@@ -93,7 +119,9 @@ function resetVariants() {
             v-if="showWeights && variantWeights[variant] !== undefined"
             v-tooltip="'Weight — higher values increase probability'"
             :model-value="variantWeights[variant]"
-            @update:model-value="(val: number) => setWeight(variant, Math.max(0, val ?? 0))"
+            @update:model-value="
+              (val: number) => setWeight(variant, Math.max(0, val ?? 0))
+            "
             :min="0"
             :min-fraction-digits="0"
             :max-fraction-digits="2"
@@ -108,7 +136,10 @@ function resetVariants() {
     <div class="pg-field" v-if="hasProbability">
       <div class="pg-field-label">
         <span>Probability</span>
-        <PlaygroundFieldReset v-if="store.isOptionSet(probabilityKey)" @click="store.resetOption(probabilityKey)" />
+        <PlaygroundFieldReset
+          v-if="store.isOptionSet(probabilityKey)"
+          @click="store.resetOption(probabilityKey)"
+        />
         <span class="pg-field-value">{{ probability }}%</span>
       </div>
       <Slider v-model="probability" :min="0" :max="100" :step="1" />
@@ -194,5 +225,4 @@ function resetVariants() {
     text-align: center;
   }
 }
-
 </style>

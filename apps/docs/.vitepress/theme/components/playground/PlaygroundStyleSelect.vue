@@ -75,11 +75,7 @@ const currentDisplayName = computed(() => {
 </script>
 
 <template>
-  <button
-    type="button"
-    class="pg-style-select-trigger"
-    @click="open = true"
-  >
+  <button type="button" class="pg-style-select-trigger" @click="open = true">
     <span class="pg-style-select-trigger-avatar">
       <UiAvatar
         :size="40"
@@ -120,8 +116,12 @@ const currentDisplayName = computed(() => {
             v-for="category in availableCategories"
             :key="category"
             class="pg-style-select-chip"
-            :class="{ 'pg-style-select-chip-active': selectedCategory === category }"
-            @click="selectedCategory = selectedCategory === category ? null : category"
+            :class="{
+              'pg-style-select-chip-active': selectedCategory === category,
+            }"
+            @click="
+              selectedCategory = selectedCategory === category ? null : category
+            "
           >
             {{ category }}
           </button>
@@ -157,7 +157,9 @@ const currentDisplayName = computed(() => {
               v-for="cs in customStyleList"
               :key="cs.key"
               class="pg-style-select-card"
-              :class="{ 'pg-style-select-card-selected': cs.key === avatarStyleName }"
+              :class="{
+                'pg-style-select-card-selected': cs.key === avatarStyleName,
+              }"
               @click="selectStyle(cs.key)"
             >
               <button
@@ -179,7 +181,11 @@ const currentDisplayName = computed(() => {
               </div>
               <div class="pg-style-select-card-info">
                 <span class="pg-style-select-card-name">{{ cs.name }}</span>
-                <Tag value="Custom" severity="warn" class="pg-style-select-card-tag" />
+                <Tag
+                  value="Custom"
+                  severity="warn"
+                  class="pg-style-select-card-tag"
+                />
               </div>
             </div>
           </div>
@@ -196,7 +202,9 @@ const currentDisplayName = computed(() => {
               v-for="style in styles"
               :key="style.name"
               class="pg-style-select-card"
-              :class="{ 'pg-style-select-card-selected': style.name === avatarStyleName }"
+              :class="{
+                'pg-style-select-card-selected': style.name === avatarStyleName,
+              }"
               @click="selectStyle(style.name)"
             >
               <div class="pg-style-select-card-avatars">
@@ -210,14 +218,21 @@ const currentDisplayName = computed(() => {
                 />
               </div>
               <div class="pg-style-select-card-info">
-                <span class="pg-style-select-card-name">{{ style.displayName }}</span>
+                <span class="pg-style-select-card-name">{{
+                  style.displayName
+                }}</span>
               </div>
-              <span class="pg-style-select-card-creator">{{ style.creator }}</span>
+              <span class="pg-style-select-card-creator">{{
+                style.creator
+              }}</span>
             </button>
           </div>
         </div>
 
-        <div v-if="styleList.length === 0 && searchQuery" class="pg-style-select-empty">
+        <div
+          v-if="styleList.length === 0 && searchQuery"
+          class="pg-style-select-empty"
+        >
           No styles found matching "{{ searchQuery }}"
         </div>
       </div>

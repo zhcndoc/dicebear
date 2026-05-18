@@ -15,8 +15,8 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Big Ears Neutral
 
-Big Ears Neutral 是 Big Ears 矢量头像风格的中性版本，提供抽象的人物设计，非常适合包容性的用户资料
-图标。
+Big Ears Neutral 是 Big Ears 风格的简化变体，仅在纯色方块上显示
+眼睛和嘴巴——没有头部轮廓、头发或耳朵。
 
 <StylePreview styleName="big-ears-neutral" />
 

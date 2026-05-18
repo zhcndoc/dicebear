@@ -51,36 +51,36 @@ npm start
 
 HTTP API 支持以下环境变量：
 
-| 变量 | 默认值 | 描述 |
-| --- | --- | --- |
-| `PORT` | `3000` | 监听端口。 |
-| `HOST` | `0.0.0.0` | 绑定的主机（默认绑定所有 IPv4 地址）。 |
-| `LOGGER` | `0` | 启用请求日志记录器（1 = 开启，0 = 关闭）。 |
-| `WORKERS` | `1` | Node.js 工作线程数量。 |
-| `VERSIONS` | `10` | 以逗号分隔的受支持 DiceBear 主版本列表。 |
-| `CACHE_CONTROL_AVATARS` | `31536000` | 头像响应的缓存时长，单位为秒（1 年）。 |
-| `PNG` | `1` | 启用 PNG 端点（1 = 开启，0 = 关闭）。 |
-| `PNG_SIZE_MIN` | `1` | 允许的最小 PNG 尺寸，单位为 px。 |
-| `PNG_SIZE_MAX` | `256` | 允许的最大 PNG 尺寸，单位为 px。 |
-| `PNG_SIZE_DEFAULT` | `128` | 默认 PNG 尺寸，单位为 px。 |
-| `PNG_EXIF` | `1` | 为 PNG 启用 EXIF 元数据（1 = 开启，0 = 关闭）。 |
-| `JPEG` | `1` | 启用 JPEG 端点（1 = 开启，0 = 关闭）。 |
-| `JPEG_SIZE_MIN` | `1` | 允许的最小 JPEG 尺寸，单位为 px。 |
-| `JPEG_SIZE_MAX` | `256` | 允许的最大 JPEG 尺寸，单位为 px。 |
-| `JPEG_SIZE_DEFAULT` | `128` | 默认 JPEG 尺寸，单位为 px。 |
-| `JPEG_EXIF` | `1` | 为 JPEG 启用 EXIF 元数据（1 = 开启，0 = 关闭）。 |
-| `WEBP` | `1` | 启用 WebP 端点（1 = 开启，0 = 关闭）。 |
-| `WEBP_SIZE_MIN` | `1` | 允许的最小 WebP 尺寸，单位为 px。 |
-| `WEBP_SIZE_MAX` | `256` | 允许的最大 WebP 尺寸，单位为 px。 |
-| `WEBP_SIZE_DEFAULT` | `128` | 默认 WebP 尺寸，单位为 px。 |
-| `WEBP_EXIF` | `1` | 为 WebP 启用 EXIF 元数据（1 = 开启，0 = 关闭）。 |
-| `AVIF` | `1` | 启用 AVIF 端点（1 = 开启，0 = 关闭）。 |
-| `AVIF_SIZE_MIN` | `1` | 允许的最小 AVIF 尺寸，单位为 px。 |
-| `AVIF_SIZE_MAX` | `256` | 允许的最大 AVIF 尺寸，单位为 px。 |
-| `AVIF_SIZE_DEFAULT` | `128` | 默认 AVIF 尺寸，单位为 px。 |
-| `AVIF_EXIF` | `1` | 为 AVIF 启用 EXIF 元数据（1 = 开启，0 = 关闭）。 |
-| `JSON` | `1` | 启用 JSON 端点（1 = 开启，0 = 关闭）。 |
-| `INITIALS_FILTER` | `1` | 将渲染头像中被屏蔽的文本替换为 `*`（1 = 开启，0 = 关闭）。 |
-| `QUERY_STRING_ARRAY_LIMIT_MIN` | `20` | 每个数组参数允许的最少值数量。 |
-| `EXCLUDED_OPTIONS` | `idRandomization,fontFamily,fontWeight,title` | 以逗号分隔的要排除的选项名称列表。 |
-| `QUERY_STRING_PARAMETER_LIMIT_MIN` | `100` | 允许的最少查询字符串参数数量。 |
+| Variable                           | Default                                       | Description                                                          |
+| ---------------------------------- | --------------------------------------------- | -------------------------------------------------------------------- |
+| `PORT`                             | `3000`                                        | 监听端口。                                                           |
+| `HOST`                             | `0.0.0.0`                                     | 绑定的主机（默认绑定所有 IPv4 地址）。                               |
+| `LOGGER`                           | `0`                                           | 启用请求日志记录器（1 = 开，0 = 关）。                               |
+| `WORKERS`                          | `1`                                           | Node.js 工作线程数量。                                               |
+| `VERSIONS`                         | `10`                                          | 受支持的 DiceBear 主版本号的逗号分隔列表。                            |
+| `CACHE_CONTROL_AVATARS`            | `31536000`                                    | 头像响应的缓存时长（秒）（1 年）。                                   |
+| `PNG`                              | `1`                                           | 启用 PNG 端点（1 = 开，0 = 关）。                                    |
+| `PNG_SIZE_MIN`                     | `1`                                           | 允许的最小 PNG 尺寸（px）。                                           |
+| `PNG_SIZE_MAX`                     | `256`                                         | 允许的最大 PNG 尺寸（px）。                                           |
+| `PNG_SIZE_DEFAULT`                 | `128`                                         | 默认 PNG 尺寸（px）。                                                |
+| `PNG_EXIF`                         | `1`                                           | 为 PNG 启用 EXIF 元数据（1 = 开，0 = 关）。                         |
+| `JPEG`                             | `1`                                           | 启用 JPEG 端点（1 = 开，0 = 关）。                                   |
+| `JPEG_SIZE_MIN`                    | `1`                                           | 允许的最小 JPEG 尺寸（px）。                                          |
+| `JPEG_SIZE_MAX`                    | `256`                                         | 允许的最大 JPEG 尺寸（px）。                                          |
+| `JPEG_SIZE_DEFAULT`                | `128`                                         | 默认 JPEG 尺寸（px）。                                               |
+| `JPEG_EXIF`                        | `1`                                           | 为 JPEG 启用 EXIF 元数据（1 = 开，0 = 关）。                        |
+| `WEBP`                             | `1`                                           | 启用 WebP 端点（1 = 开，0 = 关）。                                   |
+| `WEBP_SIZE_MIN`                    | `1`                                           | 允许的最小 WebP 尺寸（px）。                                          |
+| `WEBP_SIZE_MAX`                    | `256`                                         | 允许的最大 WebP 尺寸（px）。                                          |
+| `WEBP_SIZE_DEFAULT`                | `128`                                         | 默认 WebP 尺寸（px）。                                               |
+| `WEBP_EXIF`                        | `1`                                           | 为 WebP 启用 EXIF 元数据（1 = 开，0 = 关）。                        |
+| `AVIF`                             | `1`                                           | 启用 AVIF 端点（1 = 开，0 = 关）。                                   |
+| `AVIF_SIZE_MIN`                    | `1`                                           | 允许的最小 AVIF 尺寸（px）。                                          |
+| `AVIF_SIZE_MAX`                    | `256`                                         | 允许的最大 AVIF 尺寸（px）。                                          |
+| `AVIF_SIZE_DEFAULT`                | `128`                                         | 默认 AVIF 尺寸（px）。                                               |
+| `AVIF_EXIF`                        | `1`                                           | 为 AVIF 启用 EXIF 元数据（1 = 开，0 = 关）。                        |
+| `JSON`                             | `1`                                           | 启用 JSON 端点（1 = 开，0 = 关）。                                   |
+| `INITIALS_FILTER`                  | `1`                                           | 将渲染头像中的被屏蔽文本替换为 `*`（1 = 开，0 = 关）。               |
+| `QUERY_STRING_ARRAY_LIMIT_MIN`     | `20`                                          | 每个数组参数允许的最小值数量。                                       |
+| `EXCLUDED_OPTIONS`                 | `idRandomization,fontFamily,fontWeight,title` | 要排除的选项名称的逗号分隔列表。                                     |
+| `QUERY_STRING_PARAMETER_LIMIT_MIN` | `100`                                         | 允许的最少查询字符串参数数量。                                       |

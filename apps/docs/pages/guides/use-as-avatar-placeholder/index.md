@@ -35,7 +35,7 @@ const highlights = [
   },
   {
     icon: Palette,
-    title: '30+ 种样式',
+    title: '35+ 样式',
     description:
       '选择适合你产品的视觉风格——从抽象几何图形到插画角色。',
     color: '#a855f7',
@@ -44,7 +44,7 @@ const highlights = [
 
 const styles = [
   {
-    name: 'Initials',
+    name: '首字母',
     styleName: 'initials',
     link: '/styles/initials/',
     bestFor: '适合展示用户首字母是常见做法的应用',
@@ -56,7 +56,7 @@ const styles = [
     bestFor: '开发者工具、版本控制、技术平台',
   },
   {
-    name: 'Pixel Art',
+    name: '像素艺术',
     styleName: 'pixel-art',
     link: '/styles/pixel-art/',
     bestFor: '游戏、复古风或面向开发者的社区',
@@ -78,7 +78,7 @@ const styles = [
 
 # 将 DiceBear 用作头像占位符 API
 
-头像占位符会替代用户尚未上传头像时显示的通用默认图像。DiceBear 不再显示灰色剪影，而是从任意种子生成独特且确定性的 SVG 头像——让每位用户从注册那一刻起就有被代表的感觉。
+头像占位符是在用户尚未上传个人资料图片时显示的通用默认头像的替代方案。DiceBear 不会显示灰色剪影，而是根据任意种子生成一个独特且确定性的 SVG 头像——让每位用户从注册之初就能感受到被呈现。
 
 ## 为什么将 DiceBear 作为占位符？
 
@@ -86,7 +86,7 @@ const styles = [
 
 ## 使用 HTTP API
 
-最简单的方法：将 DiceBear API URL 作为 `<img>` 标签的 `src`。使用稳定的标识符作为种子——数字用户 ID 就很合适。关于完整选项和速率限制详情，请参阅 [HTTP API 文档](/how-to-use/http-api/)。
+最简单的方法是：将 DiceBear API URL 作为 `<img>` 标签的 `src`。使用稳定的标识符作为种子——数字用户 ID 就很合适。关于完整选项和速率限制详情，请参阅 [HTTP API 文档](/how-to-use/http-api/)。
 
 <BrowserPreview url="https://api.dicebear.com/10.x/initials/svg?seed=JD" />
 <BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=user-42" />
@@ -102,7 +102,7 @@ const styles = [
 
 ### 图片错误时的回退
 
-结合 DiceBear 和 `onerror` 处理器，在用户上传的照片加载失败时优雅地回退：
+将 DiceBear 与 `onerror` 处理器结合使用，以便在用户上传的照片加载失败时优雅回退：
 
 ```html
 <img
@@ -114,7 +114,7 @@ const styles = [
 
 ### 使用用户 ID 作为种子
 
-传入一个稳定且唯一的标识符作为种子，以确保每个用户始终获得相同的占位符：
+传入一个稳定且唯一的标识符作为种子，确保每位用户始终获得相同的占位符：
 
 ```js
 const userId = 'user-8f3a2c';
@@ -129,7 +129,7 @@ const avatarUrl = `https://api.dicebear.com/10.x/thumbs/svg?seed=${encodeURIComp
 
 ```js
 import { Avatar } from '@dicebear/core';
-import thumbs from '@dicebear/definitions/thumbs.json' with { type: 'json' };
+import thumbs from '@dicebear/styles/thumbs.json' with { type: 'json' };
 
 function getPlaceholderAvatar(userId) {
   return new Avatar(thumbs, {
@@ -152,7 +152,7 @@ use Composer\InstalledVersions;
 use DiceBear\Style;
 use DiceBear\Avatar;
 
-$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$basePath = InstalledVersions::getInstallPath('dicebear/styles');
 $definition = json_decode(file_get_contents($basePath . '/src/thumbs.json'), true);
 
 $style = new Style($definition);

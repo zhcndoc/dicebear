@@ -2,32 +2,35 @@ import type { ConfigStyleCollection } from '@/types';
 import { Style } from '@dicebear/core';
 import getSchemaOptions from '@/utils/getSchemaOptions';
 
-import adventurerDef from '@dicebear/definitions/adventurer.json';
-import adventurerNeutralDef from '@dicebear/definitions/adventurer-neutral.json';
-import avataaars from '@dicebear/definitions/avataaars.json';
-import avataaarsNeutralDef from '@dicebear/definitions/avataaars-neutral.json';
-import bigEarsDef from '@dicebear/definitions/big-ears.json';
-import bigEarsNeutralDef from '@dicebear/definitions/big-ears-neutral.json';
-import bigSmileDef from '@dicebear/definitions/big-smile.json';
-import botttsDef from '@dicebear/definitions/bottts.json';
-import botttsNeutralDef from '@dicebear/definitions/bottts-neutral.json';
-import croodlesDef from '@dicebear/definitions/croodles.json';
-import croodlesNeutralDef from '@dicebear/definitions/croodles-neutral.json';
-import dylanDef from '@dicebear/definitions/dylan.json';
-import funEmojiDef from '@dicebear/definitions/fun-emoji.json';
-import loreleiDef from '@dicebear/definitions/lorelei.json';
-import loreleiNeutralDef from '@dicebear/definitions/lorelei-neutral.json';
-import micahDef from '@dicebear/definitions/micah.json';
-import mininavsDef from '@dicebear/definitions/miniavs.json';
-import notionistsDef from '@dicebear/definitions/notionists.json';
-import notionistsNeutralDef from '@dicebear/definitions/notionists-neutral.json';
-import openPeepsDef from '@dicebear/definitions/open-peeps.json';
-import personasDef from '@dicebear/definitions/personas.json';
-import pixelArtDef from '@dicebear/definitions/pixel-art.json';
-import pixelArtNeutralDef from '@dicebear/definitions/pixel-art-neutral.json';
-import toonHeadDef from '@dicebear/definitions/toon-head.json';
+import adventurerDef from '@dicebear/styles/adventurer.json';
+import adventurerNeutralDef from '@dicebear/styles/adventurer-neutral.json';
+import avataaars from '@dicebear/styles/avataaars.json';
+import avataaarsNeutralDef from '@dicebear/styles/avataaars-neutral.json';
+import bigEarsDef from '@dicebear/styles/big-ears.json';
+import bigEarsNeutralDef from '@dicebear/styles/big-ears-neutral.json';
+import bigSmileDef from '@dicebear/styles/big-smile.json';
+import botttsDef from '@dicebear/styles/bottts.json';
+import botttsNeutralDef from '@dicebear/styles/bottts-neutral.json';
+import croodlesDef from '@dicebear/styles/croodles.json';
+import croodlesNeutralDef from '@dicebear/styles/croodles-neutral.json';
+import dylanDef from '@dicebear/styles/dylan.json';
+import funEmojiDef from '@dicebear/styles/fun-emoji.json';
+import loreleiDef from '@dicebear/styles/lorelei.json';
+import loreleiNeutralDef from '@dicebear/styles/lorelei-neutral.json';
+import micahDef from '@dicebear/styles/micah.json';
+import mininavsDef from '@dicebear/styles/miniavs.json';
+import notionistsDef from '@dicebear/styles/notionists.json';
+import notionistsNeutralDef from '@dicebear/styles/notionists-neutral.json';
+import openPeepsDef from '@dicebear/styles/open-peeps.json';
+import personasDef from '@dicebear/styles/personas.json';
+import pixelArtDef from '@dicebear/styles/pixel-art.json';
+import pixelArtNeutralDef from '@dicebear/styles/pixel-art-neutral.json';
+import toonHeadDef from '@dicebear/styles/toon-head.json';
 
-function createStyle(definition: unknown): { style: Style; options: ReturnType<typeof getSchemaOptions> } {
+function createStyle(definition: unknown): {
+  style: Style;
+  options: ReturnType<typeof getSchemaOptions>;
+} {
   const style = new Style(definition);
 
   return { style, options: getSchemaOptions(style) };

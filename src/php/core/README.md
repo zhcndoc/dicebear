@@ -1,8 +1,11 @@
 <h1><img src="https://www.dicebear.com/logo-readme.svg" width="28" /> DiceBear Core (PHP)</h1>
 
-PHP implementation of the DiceBear avatar library. Generates deterministic SVG avatars from style definitions and a seed string.
+PHP implementation of the DiceBear avatar library. Generates deterministic SVG
+avatars from style definitions and a seed string.
 
-DiceBear is available for multiple languages. All implementations share the same PRNG and rendering pipeline, producing identical SVG output for the same seed, style, and options — regardless of the language used.
+DiceBear is available for multiple languages. All implementations share the same
+PRNG and rendering pipeline, producing identical SVG output for the same seed,
+style, and options — regardless of the language used.
 
 [Playground](https://www.dicebear.com/playground) |
 [Documentation](https://www.dicebear.com/introduction)
@@ -70,7 +73,8 @@ The source code of DiceBear is released under the **MIT License**.
 
 ## Sponsors
 
-Advertisement: Many thanks to our sponsors who provide us with free or discounted products.
+Advertisement: Many thanks to our sponsors who provide us with free or
+discounted products.
 
 <a href="https://bunny.net/" target="_blank" rel="noopener noreferrer">
     <picture>

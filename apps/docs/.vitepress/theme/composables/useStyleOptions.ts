@@ -43,7 +43,9 @@ export function useStyleOptions(styleName: Ref<string>): StyleOptionsContext {
     }
 
     const keys = Array.from(loadedStyle.value.colors().keys());
-    const rest = keys.filter((n) => n !== 'background').sort((a, b) => a.localeCompare(b));
+    const rest = keys
+      .filter((n) => n !== 'background')
+      .sort((a, b) => a.localeCompare(b));
 
     return keys.includes('background') ? ['background', ...rest] : rest;
   });
@@ -56,5 +58,12 @@ export function useStyleOptions(styleName: Ref<string>): StyleOptionsContext {
     loadedStyle.value ? new ComponentPreview(loadedStyle.value) : null,
   );
 
-  return { loadedStyle, descriptor, componentNames, colorNames, styleColors, preview };
+  return {
+    loadedStyle,
+    descriptor,
+    componentNames,
+    colorNames,
+    styleColors,
+    preview,
+  };
 }

@@ -5,9 +5,9 @@ export interface NumberParts {
 
 export function formatNumberParts(value: number): NumberParts {
   if (value >= 1e12) return { value: (value / 1e12).toFixed(1), unit: 'T' };
-  if (value >= 1e9)  return { value: (value / 1e9).toFixed(1),  unit: 'B' };
-  if (value >= 1e6)  return { value: (value / 1e6).toFixed(0),  unit: 'M' };
-  if (value >= 1e3)  return { value: (value / 1e3).toFixed(0),  unit: 'K' };
+  if (value >= 1e9) return { value: (value / 1e9).toFixed(1), unit: 'B' };
+  if (value >= 1e6) return { value: (value / 1e6).toFixed(0), unit: 'M' };
+  if (value >= 1e3) return { value: (value / 1e3).toFixed(0), unit: 'K' };
 
   return { value: value.toLocaleString('en'), unit: '' };
 }
@@ -20,8 +20,8 @@ export function formatNumber(value: number): string {
 
 export function formatBytesParts(bytes: number): NumberParts {
   if (bytes >= 1e12) return { value: (bytes / 1e12).toFixed(1), unit: 'TB' };
-  if (bytes >= 1e9)  return { value: (bytes / 1e9).toFixed(0),  unit: 'GB' };
-  if (bytes >= 1e6)  return { value: (bytes / 1e6).toFixed(0),  unit: 'MB' };
+  if (bytes >= 1e9) return { value: (bytes / 1e9).toFixed(0), unit: 'GB' };
+  if (bytes >= 1e6) return { value: (bytes / 1e6).toFixed(0), unit: 'MB' };
 
   return { value: String(bytes), unit: '' };
 }

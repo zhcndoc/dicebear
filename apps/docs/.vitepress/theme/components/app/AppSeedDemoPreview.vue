@@ -15,7 +15,8 @@ const emit = defineEmits<{
 }>();
 
 const mainAvatarLink = computed(
-  () => `https://api.dicebear.com/10.x/${props.style}/svg?seed=${encodeURIComponent(seed.value)}`,
+  () =>
+    `https://api.dicebear.com/10.x/${props.style}/svg?seed=${encodeURIComponent(seed.value)}`,
 );
 
 function onSeedInput(event: Event) {
@@ -39,7 +40,10 @@ function onSeedInput(event: Event) {
       </a>
     </div>
 
-    <button class="app-seed-demo-style-picker-trigger" @click="emit('openStylePicker')">
+    <button
+      class="app-seed-demo-style-picker-trigger"
+      @click="emit('openStylePicker')"
+    >
       <span class="app-seed-demo-style-picker-label">风格</span>
       <span class="app-seed-demo-style-picker-value">{{ style }}</span>
       <ChevronDown :size="14" />
@@ -55,7 +59,11 @@ function onSeedInput(event: Event) {
         spellcheck="false"
         autocomplete="off"
       />
-      <button class="app-seed-demo-dice-btn" @click="emit('randomizeSeed')" title="下一个种子">
+      <button
+        class="app-seed-demo-dice-btn"
+        @click="emit('randomizeSeed')"
+        title="下一个种子"
+      >
         <Dice5 :size="16" />
       </button>
     </div>

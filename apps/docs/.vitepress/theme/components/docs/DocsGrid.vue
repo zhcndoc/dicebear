@@ -8,7 +8,7 @@ withDefaults(
   }>(),
   {
     columns: 3,
-  }
+  },
 );
 </script>
 

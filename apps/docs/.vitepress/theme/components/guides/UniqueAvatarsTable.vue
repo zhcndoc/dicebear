@@ -58,14 +58,26 @@ function sortIndicator(column: SortColumn): string {
     <thead>
       <tr>
         <th
-          :aria-sort="sortColumn === 'title' ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'"
+          :aria-sort="
+            sortColumn === 'title'
+              ? sortDirection === 'asc'
+                ? 'ascending'
+                : 'descending'
+              : 'none'
+          "
           class="sortable"
           @click="toggleSort('title')"
         >
           Style{{ sortIndicator('title') }}
         </th>
         <th
-          :aria-sort="sortColumn === 'value' ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'"
+          :aria-sort="
+            sortColumn === 'value'
+              ? sortDirection === 'asc'
+                ? 'ascending'
+                : 'descending'
+              : 'none'
+          "
           class="sortable numeric"
           @click="toggleSort('value')"
         >

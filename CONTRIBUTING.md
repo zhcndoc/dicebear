@@ -8,7 +8,7 @@ the JSON Schema, the avatar style definitions, the HTTP API, and the
 Figma exporter are separate and each have their own `CONTRIBUTING.md`:
 
 - [`dicebear/schema`](https://github.com/dicebear/schema/blob/main/CONTRIBUTING.md): JSON Schema for definitions and options
-- [`dicebear/definitions`](https://github.com/dicebear/definitions/blob/main/CONTRIBUTING.md): Official avatar style definitions
+- [`dicebear/styles`](https://github.com/dicebear/styles/blob/main/CONTRIBUTING.md): Official avatar style definitions
 - [`dicebear/api`](https://github.com/dicebear/api/blob/main/CONTRIBUTING.md): Self-hostable HTTP API
 - [`dicebear/exporter-plugin-for-figma`](https://github.com/dicebear/exporter-plugin-for-figma/blob/main/CONTRIBUTING.md): Figma plugin
 
@@ -21,7 +21,7 @@ The instructions below only cover this monorepo.
   the branch that matches the target major (for DiceBear 10 that's
   `10.x`; the current stable line lives on `9.x`).
 - New avatar styles: contribute them to
-  [`dicebear/definitions`](https://github.com/dicebear/definitions), not
+  [`dicebear/styles`](https://github.com/dicebear/styles), not
   here. The walkthrough is in
   [Create an avatar style with Figma](https://www.dicebear.com/guides/create-an-avatar-style-with-figma/)
   or
@@ -224,5 +224,5 @@ workflow, which:
 
 By opening a pull request you agree that your contribution is released
 under the repository's [MIT license](./LICENSE). Avatar style artwork in
-`dicebear/definitions` may carry other licenses; see that repo's
+`dicebear/styles` may carry other licenses; see that repo's
 `LICENSE.md` for details.

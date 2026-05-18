@@ -66,7 +66,9 @@ const chart = computed<Chart>(() => {
     line,
     area,
     points,
-    labels: h.map((m) => formatMonthKey(m.key, { month: 'short' }).toUpperCase()),
+    labels: h.map((m) =>
+      formatMonthKey(m.key, { month: 'short' }).toUpperCase(),
+    ),
   };
 });
 
@@ -94,7 +96,11 @@ const trend = computed<Trend | null>(() => {
 
 <template>
   <a class="st-card-link no-external-icon" :href="href">
-    <UiCard padding="lg" radius="md" :class="['st-card', feature && 'st-card-feature']">
+    <UiCard
+      padding="lg"
+      radius="md"
+      :class="['st-card', feature && 'st-card-feature']"
+    >
       <div class="st-stat">
         {{ value }}<span class="st-unit">{{ unit }}</span>
       </div>
@@ -107,11 +113,23 @@ const trend = computed<Trend | null>(() => {
           ↑ {{ trend.pct }}% vs {{ trend.prevMonth }}
         </span>
         <div v-if="chart.points.length" class="st-chart">
-          <svg viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true">
+          <svg
+            viewBox="0 0 200 60"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
             <defs>
               <linearGradient :id="fillId" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="var(--vp-c-brand-1)" stop-opacity=".25" />
-                <stop offset="1" stop-color="var(--vp-c-brand-1)" stop-opacity="0" />
+                <stop
+                  offset="0"
+                  stop-color="var(--vp-c-brand-1)"
+                  stop-opacity=".25"
+                />
+                <stop
+                  offset="1"
+                  stop-color="var(--vp-c-brand-1)"
+                  stop-opacity="0"
+                />
               </linearGradient>
             </defs>
             <path :d="chart.area" :fill="`url(#${fillId})`" />
@@ -128,7 +146,10 @@ const trend = computed<Trend | null>(() => {
             <span
               v-for="(p, i) in chart.points"
               :key="i"
-              :style="{ left: `${(p.x / 200) * 100}%`, top: `${(p.y / 60) * 100}%` }"
+              :style="{
+                left: `${(p.x / 200) * 100}%`,
+                top: `${(p.y / 60) * 100}%`,
+              }"
             />
           </div>
           <div class="st-chart-labels">
@@ -161,7 +182,8 @@ const trend = computed<Trend | null>(() => {
   .st-card-link:hover & {
     transform: translateY(-4px);
     border-color: var(--vp-c-brand-1);
-    box-shadow: 0 24px 52px -16px color-mix(in srgb, var(--vp-c-brand-1) 30%, transparent);
+    box-shadow: 0 24px 52px -16px
+      color-mix(in srgb, var(--vp-c-brand-1) 30%, transparent);
   }
 
   &-feature {

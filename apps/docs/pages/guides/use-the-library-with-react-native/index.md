@@ -7,9 +7,7 @@ description: >
 
 # React Native 头像库 – 在 React Native 中使用 DiceBear
 
-DiceBear 可以通过带有 SVG
-渲染器的 JavaScript 库在 React Native 中使用，也可以通过内置的 `Image`
-组件使用 HTTP API 的 PNG 格式——对于 API 方式不需要 SVG 库。
+DiceBear 可通过带有 SVG 渲染器的 JavaScript 库在 React Native 中使用，也可以通过 HTTP API 的 PNG 格式，使用内置的 `Image` 组件来使用——采用 API 方式时不需要 SVG 库。
 
 你可以通过 [React Native](https://reactnative.dev/) 使用 DiceBear，方式可以是
 [JS-Library](/how-to-use/js-library/) 或
@@ -28,7 +26,7 @@ npm install react-native-svg
 import { useMemo } from 'react';
 import { View } from 'react-native';
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 import { SvgXml } from 'react-native-svg';
 
 export default function UserAvatar({ seed = 'Alice' }) {
@@ -68,10 +66,7 @@ export default function Avatar({ seed = 'Alice' }) {
 
   return (
     <View>
-      <Image
-        source={{ uri: avatar }}
-        style={{ width: 128, height: 128 }}
-      />
+      <Image source={{ uri: avatar }} style={{ width: 128, height: 128 }} />
     </View>
   );
 }

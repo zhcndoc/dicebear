@@ -15,7 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Miniavs
 
-Miniavs 是一种紧凑的插画风矢量头像风格，具有小巧、细致的角色设计和迷人的美学。为应用程序生成独特、可自定义的个人资料图标，适用于常见于紧凑显示尺寸的场景。
+Miniavs 是一种扁平设计的矢量头像风格，采用粗壮的半身角色，
+配有醒目的发型、简洁的表情和色彩丰富的上衣。生成
+迷人、友好的 SVG 个人资料图标，即使在较小尺寸下也清晰可读——
+非常适合紧凑的用户列表和移动端 UI。
 
 <StylePreview styleName="miniavs" />
 

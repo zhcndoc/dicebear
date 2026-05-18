@@ -17,7 +17,7 @@ DiceBear 可以通过 Signals（Angular 17+）或 `OnChanges` 生命周期钩子
 ```typescript [Angular 17+]
 import { Component, input, computed } from '@angular/core';
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 @Component({
   selector: 'app-avatar',
@@ -31,7 +31,7 @@ export class AvatarComponent {
       seed: this.seed(),
       size: 128,
       // ... 其他选项
-    }).toDataUri()
+    }).toDataUri(),
   );
 }
 ```
@@ -39,7 +39,7 @@ export class AvatarComponent {
 ```typescript [Angular 16 and earlier]
 import { Component, Input, OnChanges } from '@angular/core';
 import { Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 @Component({
   selector: 'app-avatar',

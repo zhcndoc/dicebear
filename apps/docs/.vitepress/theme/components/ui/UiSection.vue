@@ -36,7 +36,12 @@ defineProps<{
     transform: translateX(-50%);
     width: min(80%, 600px);
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--vp-c-border), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--vp-c-border),
+      transparent
+    );
   }
 
   &-bg {

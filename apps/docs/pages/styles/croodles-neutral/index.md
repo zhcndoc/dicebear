@@ -15,7 +15,8 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Croodles Neutral
 
-Croodles Neutral 是中性涂鸦变体，提供带有随性、富有创意特征的抽象手绘可自定义个人资料图标。
+Croodles Neutral 是 Croodles 风格的简化变体，仅用宽松的黑色墨线在纯色背景上绘制
+眼睛、鼻子和嘴巴——没有头部轮廓或头发。
 
 <StylePreview styleName="croodles-neutral" />
 

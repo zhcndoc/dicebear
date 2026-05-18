@@ -1,18 +1,29 @@
 <script setup lang="ts">
 import { ref, useSlots, computed } from 'vue';
 import { Play, ArrowRight } from '@lucide/vue';
-import { UiButton, UiHeadline, UiDescription, UiBadge, UiContainer, UiSection } from '../ui';
+import {
+  UiButton,
+  UiHeadline,
+  UiDescription,
+  UiBadge,
+  UiContainer,
+  UiSection,
+} from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
-withDefaults(defineProps<{
-  badge?: string;
-  headline?: string;
-  description?: string;
-}>(), {
-  badge: '为什么选择 DiceBear？',
-  headline: '让头像脱颖而出',
-  description: 'DiceBear 是一个开源头像库，能够快速生成独特且确定性的个人资料图片。无论你需要几何图形、可爱角色还是像素风格，这个注重隐私的 SVG 头像库都能用 30+ 种风格为你的项目增色。',
-});
+withDefaults(
+  defineProps<{
+    badge?: string;
+    headline?: string;
+    description?: string;
+  }>(),
+  {
+    badge: '为什么选择 DiceBear？',
+    headline: '脱颖而出的头像',
+    description:
+      'DiceBear 是一个开源头像库，可让你在极短时间内生成独特、可确定的个人资料图片。无论你需要几何图形、可爱角色，还是像素艺术——我们注重隐私的 SVG 头像库拥有 35+ 种风格，能为你的项目注入活力。',
+  },
+);
 
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef, { threshold: 0.1 });
@@ -27,7 +38,10 @@ const hasActions = computed(() => !!slots.actions);
     <template #background>
       <div class="app-small-hero-gradient"></div>
     </template>
-    <UiContainer class="app-small-hero-container" :class="{ 'app-small-hero-container--has-aside': hasAside }">
+    <UiContainer
+      class="app-small-hero-container"
+      :class="{ 'app-small-hero-container--has-aside': hasAside }"
+    >
       <div :class="{ 'app-small-hero-layout': hasAside }">
         <div>
           <UiBadge>{{ badge }}</UiBadge>
@@ -46,7 +60,11 @@ const hasActions = computed(() => !!slots.actions);
               <Play :size="20" />
               试用 Playground
             </UiButton>
-            <UiButton href="/styles/" variant="secondary" class="app-small-hero-action-btn">
+            <UiButton
+              href="/styles/"
+              variant="secondary"
+              class="app-small-hero-action-btn"
+            >
               浏览风格
               <ArrowRight :size="20" class="app-small-hero-arrow-icon" />
             </UiButton>
@@ -67,9 +85,21 @@ const hasActions = computed(() => !!slots.actions);
 .app-small-hero {
   &-gradient {
     background:
-      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(14, 165, 233, 0.12), transparent),
-      radial-gradient(ellipse 60% 40% at 80% 50%, rgba(124, 58, 237, 0.08), transparent),
-      radial-gradient(ellipse 60% 40% at 20% 80%, rgba(20, 184, 166, 0.06), transparent);
+      radial-gradient(
+        ellipse 80% 50% at 50% -20%,
+        rgba(14, 165, 233, 0.12),
+        transparent
+      ),
+      radial-gradient(
+        ellipse 60% 40% at 80% 50%,
+        rgba(124, 58, 237, 0.08),
+        transparent
+      ),
+      radial-gradient(
+        ellipse 60% 40% at 20% 80%,
+        rgba(20, 184, 166, 0.06),
+        transparent
+      );
 
     &::before,
     &::after {
@@ -84,7 +114,11 @@ const hasActions = computed(() => !!slots.actions);
       height: 400px;
       top: -10%;
       right: -5%;
-      background: radial-gradient(circle, color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent) 0%, transparent 70%);
+      background: radial-gradient(
+        circle,
+        color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent) 0%,
+        transparent 70%
+      );
       animation: shape-float 18s ease-in-out infinite;
     }
 
@@ -93,7 +127,11 @@ const hasActions = computed(() => !!slots.actions);
       height: 300px;
       bottom: -5%;
       left: -3%;
-      background: radial-gradient(circle, color-mix(in srgb, var(--vp-c-purple-1) 8%, transparent) 0%, transparent 70%);
+      background: radial-gradient(
+        circle,
+        color-mix(in srgb, var(--vp-c-purple-1) 8%, transparent) 0%,
+        transparent 70%
+      );
       animation: shape-float 22s ease-in-out infinite reverse;
     }
   }

@@ -15,8 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Croodles
 
-Croodles 是一种手绘涂鸦矢量头像风格，带有随性、自然的
-感觉。生成古灵精怪、可自定义的个人资料图标，以艺术化、非正式的美学风格脱颖而出。
+Croodles 是一种手绘涂鸦风格的矢量头像，以松散的黑色
+墨线渲染，呈现带有头发、眼镜和古怪表情的草图风格面孔。
+为博客、创意工具和
+速写本风格的产品生成非正式、富有艺术感的个人资料图标。
 
 <StylePreview styleName="croodles" />
 

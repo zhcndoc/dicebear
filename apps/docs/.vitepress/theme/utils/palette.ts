@@ -3,14 +3,14 @@
 // the DiceBear avatar API (e.g. `?backgroundColor=ffe4e6`); CSS consumers
 // prefix `#` themselves.
 export const PALETTE = {
-  rose:    'ffe4e6',
-  amber:   'fef3c7',
-  cyan:    'cffafe',
-  blue:    'dbeafe',
-  green:   'dcfce7',
+  rose: 'ffe4e6',
+  amber: 'fef3c7',
+  cyan: 'cffafe',
+  blue: 'dbeafe',
+  green: 'dcfce7',
   fuchsia: 'fae8ff',
-  violet:  'ede9fe',
-  pink:    'ffe4f1',
+  violet: 'ede9fe',
+  pink: 'ffe4f1',
 } as const;
 
 export type Pastel = (typeof PALETTE)[keyof typeof PALETTE];

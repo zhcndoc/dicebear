@@ -14,7 +14,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Thumbs
 
-Thumbs 是一种俏皮的矢量头像风格，以带有简单、富有表现力面孔的风格化拇指角色为特色。生成迷人、可自定义的 SVG 个人资料图标，呈现有趣、平易近人的美学风格。
+Thumbs 是一种俏皮的矢量头像风格，特色是圆润的大拇指形角色，采用单一纯色，并在有色背景上配有简洁的眼睛和嘴巴。生成迷人、友好的 SVG 个人资料图标，呈现有趣、平易近人的美学风格。
 
 <StylePreview styleName="thumbs" />
 

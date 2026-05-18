@@ -86,31 +86,33 @@ class Component
     }
 
     /**
-     * Returns the rotation range definition. Aliases delegate to the source.
+     * Returns the rotation range, or `null` when unset.
+     * Aliases delegate to the source.
      *
-     * @return list<int|float>
+     * @return array{min: int|float, max: int|float, step?: int|float}|null
      */
-    public function rotate(): array
+    public function rotate(): ?array
     {
         if ($this->source !== null) {
             return $this->source->rotate();
         }
 
-        return $this->data['rotate'] ?? [];
+        return $this->data['rotate'] ?? null;
     }
 
     /**
-     * Returns the scale range definition. Aliases delegate to the source.
+     * Returns the scale range, or `null` when unset.
+     * Aliases delegate to the source.
      *
-     * @return list<int|float>
+     * @return array{min: int|float, max: int|float, step?: int|float}|null
      */
-    public function scale(): array
+    public function scale(): ?array
     {
         if ($this->source !== null) {
             return $this->source->scale();
         }
 
-        return $this->data['scale'] ?? [];
+        return $this->data['scale'] ?? null;
     }
 
     /**

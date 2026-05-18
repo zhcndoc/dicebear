@@ -12,9 +12,7 @@ DiceBear 可同时用于 Svelte 4 和 Svelte 5。使用 `$derived`（Svelte 5）
 零依赖方案。
 
 你可以通过
-[JS-Library](/how-to-use/js-library/) 或
-[HTTP-API](/how-to-use/http-api/)
-在 Svelte 中使用 DiceBear。
+[JS 库](/how-to-use/js-library/) 或 [HTTP API](/how-to-use/http_api/) 在 Svelte 中使用 DiceBear。
 
 ## 使用 JS 库
 
@@ -23,7 +21,7 @@ DiceBear 可同时用于 Svelte 4 和 Svelte 5。使用 `$derived`（Svelte 5）
 ```svelte [Svelte 5]
 <script>
   import { Avatar } from '@dicebear/core';
-  import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+  import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
   let { seed = 'Alice' } = $props();
 
@@ -42,7 +40,7 @@ DiceBear 可同时用于 Svelte 4 和 Svelte 5。使用 `$derived`（Svelte 5）
 ```svelte [Svelte 4]
 <script>
   import { Avatar } from '@dicebear/core';
-  import lorelei from '@dicebear/definitions/lorelei.json' with { type: 'json' };
+  import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
   export let seed = 'Alice';
 

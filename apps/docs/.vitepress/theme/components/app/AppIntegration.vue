@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Globe, MonitorSmartphone, Server, Terminal } from '@lucide/vue';
-import { UiContainer, UiSection, UiSectionHeader, UiCard, UiIconBox, UiCode } from '../ui';
+import {
+  UiContainer,
+  UiSection,
+  UiSectionHeader,
+  UiCard,
+  UiIconBox,
+  UiCode,
+} from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
 const sectionRef = ref();
@@ -9,7 +16,7 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
 
 const plainCode = {
   js: `import { Style, Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/definitions/lorelei.json';
+import lorelei from '@dicebear/styles/lorelei.json';
 
 const style = new Style(lorelei);
 const svg = new Avatar(style, {
@@ -20,7 +27,7 @@ use Composer\\InstalledVersions;
 use DiceBear\\Style;
 use DiceBear\\Avatar;
 
-$basePath = InstalledVersions::getInstallPath('dicebear/definitions');
+$basePath = InstalledVersions::getInstallPath('dicebear/styles');
 $definition = json_decode(
   file_get_contents($basePath . '/src/lorelei.json'), true
 );
@@ -58,10 +65,17 @@ $svg = (string) new Avatar($style, [
                 <MonitorSmartphone />
               </UiIconBox>
               <h3 class="app-integration-title">JS 库</h3>
-              <p class="app-integration-description">不会向外部发送数据。通过简单的 API 完全掌控头像生成。</p>
+              <p class="app-integration-description">
+                无数据发送到外部。通过简单的 API，完全掌控您的头像创建。
+              </p>
             </div>
 
-            <UiCode :code="plainCode.js" lang="js" scroll-to-bottom class="app-integration-code-block" />
+            <UiCode
+              :code="plainCode.js"
+              lang="js"
+              scroll-to-bottom
+              class="app-integration-code-block"
+            />
 
             <a href="/how-to-use/js-library/" class="app-integration-link">
               JS 文档 &rarr;
@@ -76,10 +90,17 @@ $svg = (string) new Avatar($style, [
                 <Server />
               </UiIconBox>
               <h3 class="app-integration-title">PHP 库</h3>
-              <p class="app-integration-description">适用于 PHP 8.2+ 的服务端头像生成，与 JS 库拥有相同的 API。</p>
+              <p class="app-integration-description">
+                用于 PHP 8.2+ 的服务端头像生成。与 JS 库相同的 API。
+              </p>
             </div>
 
-            <UiCode :code="plainCode.php" lang="php" scroll-to-bottom class="app-integration-code-block" />
+            <UiCode
+              :code="plainCode.php"
+              lang="php"
+              scroll-to-bottom
+              class="app-integration-code-block"
+            />
 
             <a href="/how-to-use/php-library/" class="app-integration-link">
               PHP 文档 &rarr;
@@ -97,7 +118,9 @@ $svg = (string) new Avatar($style, [
                 <Globe />
               </UiIconBox>
               <h3 class="app-integration-title">头像 API</h3>
-              <p class="app-integration-description">免费的头像 API，用于个人资料图片。通过全球 CDN 每天处理数百万请求。</p>
+              <p class="app-integration-description">
+                用于个人资料图片的免费头像 API。通过全球 CDN 每日处理数百万次请求。
+              </p>
             </div>
 
             <UiCode :code="plainCode.api" class="app-integration-code-block" />
@@ -114,8 +137,10 @@ $svg = (string) new Avatar($style, [
               <UiIconBox size="lg" color="#a855f7">
                 <Terminal />
               </UiIconBox>
-              <h3 class="app-integration-title">命令行</h3>
-              <p class="app-integration-description">从命令行生成头像，非常适合脚本和自动化场景。</p>
+              <h3 class="app-integration-title">CLI</h3>
+              <p class="app-integration-description">
+                从命令行生成头像。非常适合脚本和自动化。
+              </p>
             </div>
 
             <UiCode :code="plainCode.cli" class="app-integration-code-block" />
@@ -133,16 +158,28 @@ $svg = (string) new Avatar($style, [
 <style lang="scss" scoped>
 .app-integration {
   &-dots {
-    background-image: radial-gradient(circle, var(--vp-c-text-3) 1px, transparent 1px);
+    background-image: radial-gradient(
+      circle,
+      var(--vp-c-text-3) 1px,
+      transparent 1px
+    );
     background-size: 32px 32px;
     background-repeat: repeat !important;
     opacity: 0.2;
     mask-image: radial-gradient(ellipse 70% 50% at 50% 50%, black, transparent);
-    -webkit-mask-image: radial-gradient(ellipse 70% 50% at 50% 50%, black, transparent);
+    -webkit-mask-image: radial-gradient(
+      ellipse 70% 50% at 50% 50%,
+      black,
+      transparent
+    );
   }
 
   &-gradient {
-    background: radial-gradient(ellipse 80% 60% at 50% 0%, color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent), transparent);
+    background: radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent),
+      transparent
+    );
   }
 
   &-header {

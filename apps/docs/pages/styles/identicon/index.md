@@ -15,9 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Identicon
 
-Identicon 会生成确定性的几何图案头像——这是开发工具和版本控制
-系统中用于用户标识的一种常见方式。每个 SVG identicon 都由其种子唯一
-派生，因此它是技术型个人资料图标以及 identicon API 用例的可靠选择。
+Identicon 以单一颜色在带色调的背景上呈现对称的像素网格图案——这是开发者工具和版本控制平台中流行的经典 identicon 外观。每个图案都根据其种子以确定性方式生成，使其成为技术个人资料图标和 identicon API 使用场景的可靠选择。
 
 <StylePreview styleName="identicon" />
 

@@ -1,15 +1,28 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { Style, OptionsDescriptor } from '../lib/index.js';
 
-const aliasFixture = JSON.parse(
-  readFileSync(
-    join(import.meta.dirname, '..', '..', '..', '..', 'tests', 'fixtures', 'parity', 'styles', 'aliasTest.json'),
-    'utf8',
-  ),
-);
+const aliasFixture = {
+  canvas: {
+    width: 100,
+    height: 100,
+    elements: [
+      { type: 'component', name: 'eyes' },
+      { type: 'component', name: 'eyesRight' },
+    ],
+  },
+  components: {
+    eyes: {
+      width: 20,
+      height: 20,
+      variants: {
+        a: { elements: [] },
+        b: { elements: [] },
+      },
+    },
+    eyesRight: { extends: 'eyes' },
+  },
+};
 
 const minimalStyle = new Style({
   canvas: { width: 100, height: 100, elements: [] },

@@ -15,9 +15,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Toon Head
 
-Toon Head 是一种插画风格的矢量头像，具有细致的角色
-肖像，包含多样的肤色、发型和富有表情的面孔。生成
-具有现代动画剧集美学、逼真且可自定义的 SVG 个人资料图标。
+Toon Head 是一种插画风格的矢量头像，采用半身角色肖像，具有自然比例、多样的肤色、发型和
+面部毛发。生成富有表现力的 SVG 个人资料图标，呈现代动画剧集
+美学风格——非常适合社区应用和社交产品。
 
 <StylePreview styleName="toon-head" />
 

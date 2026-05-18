@@ -3,7 +3,14 @@ import { computed, inject } from 'vue';
 import { getAvatarPropertyPreviewOptions } from '@theme/utils/avatar/preview';
 import { padColors, resolveColors } from '@theme/utils/avatar/colors';
 import { UiAvatar } from '../ui';
-import { componentNamesKey, componentNamesDefault, styleColorsKey, styleColorsDefault, componentPreviewKey, componentPreviewDefault } from './styleOptionsKeys';
+import {
+  componentNamesKey,
+  componentNamesDefault,
+  styleColorsKey,
+  styleColorsDefault,
+  componentPreviewKey,
+  componentPreviewDefault,
+} from './styleOptionsKeys';
 
 const props = defineProps<{
   styleName: string;
@@ -23,20 +30,32 @@ const previewTarget = computed(() => {
   }
 
   if (n.endsWith('Probability')) {
-    return { type: 'probability' as const, component: n.replace(/Probability$/, '') };
+    return {
+      type: 'probability' as const,
+      component: n.replace(/Probability$/, ''),
+    };
   }
 
   // ColorFillStops must come before ColorFill (longer suffix first)
   if (n.endsWith('ColorFillStops')) {
-    return { type: 'colorFillStops' as const, color: n.slice(0, -'ColorFillStops'.length) };
+    return {
+      type: 'colorFillStops' as const,
+      color: n.slice(0, -'ColorFillStops'.length),
+    };
   }
 
   if (n.endsWith('ColorFill')) {
-    return { type: 'colorFill' as const, color: n.slice(0, -'ColorFill'.length) };
+    return {
+      type: 'colorFill' as const,
+      color: n.slice(0, -'ColorFill'.length),
+    };
   }
 
   if (n.endsWith('ColorAngle')) {
-    return { type: 'colorAngle' as const, color: n.slice(0, -'ColorAngle'.length) };
+    return {
+      type: 'colorAngle' as const,
+      color: n.slice(0, -'ColorAngle'.length),
+    };
   }
 
   if (n.endsWith('Color')) {
@@ -91,7 +110,11 @@ const generalOptions = computed(() => {
   const t = previewTarget.value;
   let opts: Record<string, unknown>;
 
-  if (t.type === 'general' || t.type === 'variant' || t.type === 'probability') {
+  if (
+    t.type === 'general' ||
+    t.type === 'variant' ||
+    t.type === 'probability'
+  ) {
     opts = getAvatarPropertyPreviewOptions(props.name, props.value);
   } else {
     const colorKey = `${t.color}Color`;
@@ -103,10 +126,14 @@ const generalOptions = computed(() => {
     } else {
       const stops = t.type === 'colorFillStops' ? Number(props.value) || 2 : 2;
 
-      opts[colorKey] = padColors(resolveColors(t.color, styleColors.value), stops).slice(0, stops);
+      opts[colorKey] = padColors(
+        resolveColors(t.color, styleColors.value),
+        stops,
+      ).slice(0, stops);
       opts[fillKey] = t.type === 'colorFill' ? [props.value] : ['linear'];
 
-      if (t.type === 'colorFillStops') opts[`${t.color}ColorFillStops`] = [props.value];
+      if (t.type === 'colorFillStops')
+        opts[`${t.color}ColorFillStops`] = [props.value];
       if (t.type === 'colorAngle') opts[`${t.color}ColorAngle`] = [props.value];
     }
   }
@@ -119,85 +146,87 @@ const generalOptions = computed(() => {
 });
 
 function selectLabel(event: MouseEvent) {
-    const range = document.createRange();
-    range.selectNodeContents(event.currentTarget as Node);
-    const sel = window.getSelection();
-    sel?.removeAllRanges();
-    sel?.addRange(range);
+  const range = document.createRange();
+  range.selectNodeContents(event.currentTarget as Node);
+  const sel = window.getSelection();
+  sel?.removeAllRanges();
+  sel?.addRange(range);
 }
 </script>
 
 <template>
-    <div class="style-options-preview">
-        <div class="style-options-preview-avatar-wrapper">
-            <div v-if="previewDataUri" class="style-options-preview-img">
-                <img :src="previewDataUri" alt="" />
-            </div>
-            <UiAvatar
-                v-else-if="generalOptions"
-                :size="name === 'size' ? Number(value) : 80"
-                :styleName="styleName"
-                :styleOptions="generalOptions"
-                mode="http-api"
-                class="style-options-preview-avatar"
-            />
-        </div>
-        <code class="style-options-preview-label" @click="selectLabel">{{ value }}</code>
+  <div class="style-options-preview">
+    <div class="style-options-preview-avatar-wrapper">
+      <div v-if="previewDataUri" class="style-options-preview-img">
+        <img :src="previewDataUri" alt="" />
+      </div>
+      <UiAvatar
+        v-else-if="generalOptions"
+        :size="name === 'size' ? Number(value) : 80"
+        :styleName="styleName"
+        :styleOptions="generalOptions"
+        mode="http-api"
+        class="style-options-preview-avatar"
+      />
     </div>
+    <code class="style-options-preview-label" @click="selectLabel">{{
+      value
+    }}</code>
+  </div>
 </template>
 
 <style scoped lang="scss">
 .style-options-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  border-radius: var(--vp-radius-xs);
+  background: var(--vp-c-bg-soft);
+  overflow: hidden;
+
+  &-avatar-wrapper {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 0;
-    border-radius: var(--vp-radius-xs);
-    background: var(--vp-c-bg-soft);
+    align-items: flex-start;
+    justify-content: center;
+    padding: 16px 12px 12px;
+    min-height: 96px;
+  }
+
+  &-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 3px;
+    background: repeating-conic-gradient(
+        var(--ui-avatar-bg-1, rgba(0, 0, 0, 0.02)) 0% 25%,
+        var(--ui-avatar-bg-2, rgba(0, 0, 0, 0.07)) 0% 50%
+      )
+      50% / 12px 12px;
     overflow: hidden;
+    user-select: none;
 
-    &-avatar-wrapper {
-        display: flex;
-        align-items: flex-start;
-        justify-content: center;
-        padding: 16px 12px 12px;
-        min-height: 96px;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      margin: 0;
     }
+  }
 
-    &-img {
-        width: 80px;
-        height: 80px;
-        border-radius: 3px;
-        background: repeating-conic-gradient(
-            var(--ui-avatar-bg-1, rgba(0, 0, 0, 0.02)) 0% 25%,
-            var(--ui-avatar-bg-2, rgba(0, 0, 0, 0.07)) 0% 50%
-          )
-          50% / 12px 12px;
-        overflow: hidden;
-        user-select: none;
+  &-avatar {
+    user-select: none;
+  }
 
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            margin: 0;
-        }
-    }
-
-    &-avatar {
-        user-select: none;
-    }
-
-    &-label {
-        display: block;
-        text-align: center;
-        padding: 6px 4px 10px;
-        font-size: 11px;
-        font-weight: 500;
-        line-height: 1;
-        color: var(--vp-c-text-2);
-        cursor: pointer;
-        background: none;
-    }
+  &-label {
+    display: block;
+    text-align: center;
+    padding: 6px 4px 10px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--vp-c-text-2);
+    cursor: pointer;
+    background: none;
+  }
 }
 </style>

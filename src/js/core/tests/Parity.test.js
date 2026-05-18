@@ -83,16 +83,16 @@ describe('Parity / Prng', () => {
 
   describe('float', () => {
     for (const [i, c] of fixture.float.entries()) {
-      it(`#${i} values=${JSON.stringify(c.values)}`, () => {
-        assert.equal(new Prng(c.seed).float(c.key, c.values), c.result);
+      it(`#${i} range=${JSON.stringify(c.range)}`, () => {
+        assert.equal(new Prng(c.seed).float(c.key, c.range), c.result);
       });
     }
   });
 
   describe('integer', () => {
     for (const [i, c] of fixture.integer.entries()) {
-      it(`#${i} values=${JSON.stringify(c.values)}`, () => {
-        assert.equal(new Prng(c.seed).integer(c.key, c.values), c.result);
+      it(`#${i} range=${JSON.stringify(c.range)}`, () => {
+        assert.equal(new Prng(c.seed).integer(c.key, c.range), c.result);
       });
     }
   });

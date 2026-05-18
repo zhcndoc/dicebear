@@ -144,7 +144,7 @@ class ParityTest extends TestCase
     #[DataProvider('prngFloatProvider')]
     public function testPrngFloat(array $c): void
     {
-        $this->assertSame((float) $c['result'], (new Prng($c['seed']))->float($c['key'], $c['values']));
+        $this->assertSame((float) $c['result'], (new Prng($c['seed']))->float($c['key'], $c['range']));
     }
 
     public static function prngIntegerProvider(): array
@@ -155,7 +155,7 @@ class ParityTest extends TestCase
     #[DataProvider('prngIntegerProvider')]
     public function testPrngInteger(array $c): void
     {
-        $this->assertSame($c['result'], (new Prng($c['seed']))->integer($c['key'], $c['values']));
+        $this->assertSame($c['result'], (new Prng($c['seed']))->integer($c['key'], $c['range']));
     }
 
     public static function prngShuffleProvider(): array

@@ -7,7 +7,10 @@ import * as path from 'node:path';
  * and returns the wrapped style together with a name derived from the file
  * basename.
  */
-export function loadDefinition(filePath: string): { style: Style; name: string } {
+export function loadDefinition(filePath: string): {
+  style: Style;
+  name: string;
+} {
   const definitionPath = path.resolve(process.cwd(), filePath);
   const definition = JSON.parse(fs.readFileSync(definitionPath, 'utf-8'));
   const style = new Style(definition);

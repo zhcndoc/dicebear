@@ -74,9 +74,21 @@ export interface StyleDefinitionColor {
   readonly contrastTo?: string;
 }
 
+/**
+ * A closed numeric range. `min === max` represents a fixed value. `step`
+ * (consumed by {@link Prng.float}; ignored by {@link Prng.integer}) quantizes
+ * the range to multiples of `step` starting at `min`; non-positive or absent
+ * step means continuous.
+ */
+export interface Range {
+  readonly min: number;
+  readonly max: number;
+  readonly step?: number;
+}
+
 export interface StyleDefinitionComponentTranslate {
-  readonly x?: readonly number[];
-  readonly y?: readonly number[];
+  readonly x?: Range;
+  readonly y?: Range;
 }
 
 export interface StyleDefinitionComponentVariant {
@@ -88,8 +100,8 @@ export interface StyleDefinitionComponentBase {
   readonly width: number;
   readonly height: number;
   readonly probability?: number;
-  readonly rotate?: readonly number[];
-  readonly scale?: readonly number[];
+  readonly rotate?: Range;
+  readonly scale?: Range;
   readonly translate?: StyleDefinitionComponentTranslate;
   readonly variants: Readonly<Record<string, StyleDefinitionComponentVariant>>;
 }

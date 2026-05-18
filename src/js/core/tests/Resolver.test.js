@@ -1,7 +1,5 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { Style } from '../lib/index.js';
 import { Options } from '../lib/Options.js';
 import { Resolver } from '../lib/Resolver.js';
@@ -9,12 +7,30 @@ import { CircularColorReferenceError } from '../lib/Error/CircularColorReference
 
 const makeResolver = (style, data = {}) => new Resolver(style, new Options(data));
 
-const aliasFixture = JSON.parse(
-  readFileSync(
-    join(import.meta.dirname, '..', '..', '..', '..', 'tests', 'fixtures', 'parity', 'styles', 'aliasTest.json'),
-    'utf8',
-  ),
-);
+const aliasFixture = {
+  canvas: {
+    width: 100,
+    height: 100,
+    elements: [
+      { type: 'component', name: 'eyes' },
+      { type: 'component', name: 'eyesRight' },
+    ],
+  },
+  components: {
+    eyes: {
+      width: 20,
+      height: 20,
+      variants: {
+        a: { elements: [] },
+        b: { elements: [] },
+        c: { elements: [] },
+        d: { elements: [] },
+        e: { elements: [] },
+      },
+    },
+    eyesRight: { extends: 'eyes' },
+  },
+};
 
 const minimalStyle = new Style({
   canvas: { width: 100, height: 100, elements: [] },
@@ -361,7 +377,7 @@ describe('Resolver', () => {
           eyes: {
             width: 50,
             height: 50,
-            rotate: [-10, 10],
+            rotate: { min: -10, max: 10 },
             variants: { open: { elements: [] } },
           },
         },

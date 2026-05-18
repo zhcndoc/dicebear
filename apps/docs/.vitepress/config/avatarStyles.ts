@@ -7,7 +7,7 @@ import * as fs from 'node:fs';
 const require = createRequire(import.meta.url);
 
 const definitionsDir = path.dirname(
-  require.resolve('@dicebear/definitions/initials.json'),
+  require.resolve('@dicebear/styles/initials.json'),
 );
 
 const avatarStyles: AvatarStyles = {};

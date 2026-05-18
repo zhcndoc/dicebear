@@ -66,13 +66,28 @@ const thirdPartyScripts: HeadConfig[] = isProduction
 export default defineConfig<ThemeOptions>({
   title: 'DiceBear 中文文档',
   description:
-    'DiceBear 是一个免费、开源的头像库和头像 API，提供 30 多种 avatar 风格。可为任何项目生成个人资料图片和用户占位图像。',
+    'DiceBear 是一个免费、开源的头像库和头像 API，提供 35 多种 avatar 风格。可为任何项目生成个人资料图片和用户占位图像。',
   head: [
     ['script', { async: '', src: 'https://www.zhcndoc.com/js/common.js' }],
-    ['link', { rel: 'icon', type: 'image/png', href: '/favicon-96x96.png', sizes: '96x96' }],
+    [
+      'link',
+      {
+        rel: 'icon',
+        type: 'image/png',
+        href: '/favicon-96x96.png',
+        sizes: '96x96',
+      },
+    ],
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
     ['link', { rel: 'shortcut icon', href: '/favicon.ico' }],
-    ['link', { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' }],
+    [
+      'link',
+      {
+        rel: 'apple-touch-icon',
+        sizes: '180x180',
+        href: '/apple-touch-icon.png',
+      },
+    ],
     ['meta', { name: 'apple-mobile-web-app-title', content: 'DiceBear' }],
     ['link', { rel: 'manifest', href: '/site.webmanifest' }],
     ['meta', { property: 'og:site_name', content: 'DiceBear' }],
@@ -87,7 +102,7 @@ export default defineConfig<ThemeOptions>({
         name: 'DiceBear',
         url: 'https://dicebear.zhcndoc.com',
         description:
-          'DiceBear 是一个免费的开源头像库和头像 API。可生成独特、可预测的 SVG 头像和个人资料图片，拥有 30 多种风格——注重隐私且可自托管。',
+          'DiceBear 是一个免费的开源头像库和头像 API。可生成独特、可预测的 SVG 头像和个人资料图片，拥有 35 多种风格——注重隐私且可自托管。',
       }),
     ],
     [
@@ -101,7 +116,7 @@ export default defineConfig<ThemeOptions>({
         operatingSystem: 'Any',
         url: 'https://dicebear.zhcndoc.com',
         description:
-          '注重隐私的开源 SVG 头像库，提供 30 多种样式。可用于生成确定性的个人资料图片和用户占位图像的免费 Avatar API、JavaScript 库和 CLI。',
+          '注重隐私的开源 SVG 头像库，提供 35 多种样式。可用于生成确定性的个人资料图片和用户占位图像的免费 Avatar API、JavaScript 库和 CLI。',
         offers: {
           '@type': 'Offer',
           price: '0',
@@ -133,7 +148,7 @@ export default defineConfig<ThemeOptions>({
       const pageDescription =
         ctx.pageData.frontmatter.description ||
         ctx.pageData.description ||
-        'DiceBear 是一个免费的开源头像库和头像 API，拥有 30 多种 avatar 风格。';
+        'DiceBear 是一个免费的开源头像库和头像 API，拥有 35 多种 avatar 风格。';
 
       result.push(
         ['meta', { property: 'og:title', content: pageTitle }],
@@ -148,12 +163,7 @@ export default defineConfig<ThemeOptions>({
   },
   vite: {
     ssr: {
-      noExternal: [
-        'vue-countup-v3',
-        'vue-chartjs',
-        'globe.gl',
-        'three',
-      ],
+      noExternal: ['vue-countup-v3', 'vue-chartjs', 'globe.gl', 'three'],
     },
     resolve: {
       alias: {

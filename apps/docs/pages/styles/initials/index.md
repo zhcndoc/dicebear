@@ -13,9 +13,9 @@ import StyleUsage from "@theme/components/styles/StyleUsage.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
-# Initials
+# 首字母
 
-Initials 是一种基于文本的矢量头像样式，它使用一到两个字符生成个人资料图标。经典的头像占位符方案——可预测、易读，非常适合用户尚未上传头像的系统。
+首字母是一种基于文本的矢量头像样式，会在纯色方形背景上居中显示一个或两个大字母——经典的字母组合占位符。它具有确定性且易于识别，是用户尚未上传个人头像时的理想备用方案。
 
 <StylePreview styleName="initials" />
 

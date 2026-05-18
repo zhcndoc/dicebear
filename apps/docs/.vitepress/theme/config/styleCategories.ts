@@ -1,9 +1,13 @@
 const minimalistStyles = new Set([
+  'disco',
   'glass',
+  'glyphs',
   'identicon',
   'rings',
   'shape-grid',
   'shapes',
+  'stripes',
+  'triangles',
   'initial-face',
   'initials',
   'icons',

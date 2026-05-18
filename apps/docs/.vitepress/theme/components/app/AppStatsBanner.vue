@@ -13,7 +13,9 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
 const apiStats = useApiStats();
 const apiStatsRaw = useApiStatsRaw();
 
-const monthLabel = computed(() => apiStats.value?.monthLabel ?? 'the past month');
+const monthLabel = computed(
+  () => apiStats.value?.monthLabel ?? 'the past month',
+);
 
 const requests = computed(() =>
   apiStats.value
@@ -45,7 +47,9 @@ const downloads = computed(() =>
         badge="大规模验证"
         description="来自 HTTP API 和 npm 包的真实使用数据，每日更新。"
       >
-        <template #headline>数十亿头像。<strong>一个 API。</strong></template>
+        <template #headline
+          >数十亿头像。<strong>一个 API。</strong></template
+        >
       </UiSectionHeader>
 
       <div class="app-stats-banner-grid">
@@ -90,8 +94,16 @@ const downloads = computed(() =>
 .app-stats-banner {
   &-gradient {
     background:
-      radial-gradient(ellipse 50% 50% at 50% 0%, color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent), transparent),
-      radial-gradient(ellipse 50% 50% at 50% 100%, color-mix(in srgb, var(--vp-c-pink-2) 5%, transparent), transparent);
+      radial-gradient(
+        ellipse 50% 50% at 50% 0%,
+        color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent),
+        transparent
+      ),
+      radial-gradient(
+        ellipse 50% 50% at 50% 100%,
+        color-mix(in srgb, var(--vp-c-pink-2) 5%, transparent),
+        transparent
+      );
   }
 
   &-header {

@@ -35,16 +35,15 @@ import { getStyleCommandOptions } from './utils/getStyleCommandOptions.js';
           const { style } = loadDefinition(filePath);
           options = getStyleCommandOptions(style);
         } catch (error) {
-          const message = error instanceof Error ? error.message : String(error);
+          const message =
+            error instanceof Error ? error.message : String(error);
 
           console.error(chalk.red(`\nError: ${message}`));
           process.exit(1);
         }
       }
 
-      return yargs
-        .default('outputPath', '.')
-        .options(options);
+      return yargs.default('outputPath', '.').options(options);
     },
     handler: async (argv) => {
       try {
@@ -52,8 +51,7 @@ import { getStyleCommandOptions } from './utils/getStyleCommandOptions.js';
 
         await handleStyleCommand(argv, name, style);
       } catch (error) {
-        const message =
-          error instanceof Error ? error.message : String(error);
+        const message = error instanceof Error ? error.message : String(error);
 
         console.error(chalk.red(`\nError: ${message}`));
         process.exit(1);

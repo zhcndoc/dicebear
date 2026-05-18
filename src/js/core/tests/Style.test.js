@@ -43,8 +43,8 @@ const full = {
       width: 50,
       height: 50,
       probability: 100,
-      rotate: [-10, 10],
-      translate: { x: [0, 5], y: [-2, 2] },
+      rotate: { min: -10, max: 10 },
+      translate: { x: { min: 0, max: 5 }, y: { min: -2, max: 2 } },
       variants: {
         open: {
           elements: [
@@ -240,7 +240,7 @@ describe('Style', () => {
       assert.equal(eyes.width(), 50);
       assert.equal(eyes.height(), 50);
       assert.equal(eyes.probability(), 100);
-      assert.deepEqual(eyes.rotate(), [-10, 10]);
+      assert.deepEqual(eyes.rotate(), { min: -10, max: 10 });
     });
 
     it('should return component translate', () => {
@@ -248,8 +248,8 @@ describe('Style', () => {
       const translate = style.components().get('eyes')?.translate();
 
       assert.ok(translate);
-      assert.deepEqual(translate.x(), [0, 5]);
-      assert.deepEqual(translate.y(), [-2, 2]);
+      assert.deepEqual(translate.x(), { min: 0, max: 5 });
+      assert.deepEqual(translate.y(), { min: -2, max: 2 });
     });
 
     it('should return component variants as a Map', () => {
@@ -293,9 +293,9 @@ describe('Style', () => {
           width: 50,
           height: 60,
           probability: 80,
-          rotate: [-10, 10],
-          scale: [0.9, 1.1],
-          translate: { x: [-5, 5], y: [-2, 2] },
+          rotate: { min: -10, max: 10 },
+          scale: { min: 0.9, max: 1.1 },
+          translate: { x: { min: -5, max: 5 }, y: { min: -2, max: 2 } },
           variants: {
             open: { elements: [{ type: 'element', name: 'circle', attributes: { r: '5' } }] },
             closed: { elements: [{ type: 'element', name: 'line', attributes: { x1: '0', x2: '10' } }] },
@@ -330,10 +330,10 @@ describe('Style', () => {
       const alias = new Style(aliasDefinition).components().get('eyesRight');
 
       assert.equal(alias.probability(), 80);
-      assert.deepEqual(alias.rotate(), [-10, 10]);
-      assert.deepEqual(alias.scale(), [0.9, 1.1]);
-      assert.deepEqual(alias.translate().x(), [-5, 5]);
-      assert.deepEqual(alias.translate().y(), [-2, 2]);
+      assert.deepEqual(alias.rotate(), { min: -10, max: 10 });
+      assert.deepEqual(alias.scale(), { min: 0.9, max: 1.1 });
+      assert.deepEqual(alias.translate().x(), { min: -5, max: 5 });
+      assert.deepEqual(alias.translate().y(), { min: -2, max: 2 });
     });
 
     it('should reject definition-level overrides on alias components', () => {
