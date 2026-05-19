@@ -10,6 +10,7 @@ export const productLinks: FooterLink[] = [
   { label: 'Why DiceBear?', href: '/why-dicebear/' },
   { label: 'Playground', href: '/playground/' },
   { label: 'All Styles', href: '/styles/' },
+  { label: 'Tools', href: '/tools/' },
   { label: 'Editor', href: 'https://editor.dicebear.com', external: true },
 ];
 
