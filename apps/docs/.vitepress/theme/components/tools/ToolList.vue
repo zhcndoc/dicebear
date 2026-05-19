@@ -1,10 +1,20 @@
 <script setup lang="ts">
-import { ArrowRight, Contrast } from '@lucide/vue';
+import {
+  Archive,
+  ArrowRight,
+  Contrast,
+  ExternalLink,
+  Paintbrush,
+  Package,
+  PenSquare,
+  Sparkles,
+} from '@lucide/vue';
 import type { Component } from 'vue';
 
 type Tool = {
   slug: string;
   href: string;
+  external?: boolean;
   name: string;
   description: string;
   icon: Component;
@@ -21,6 +31,53 @@ const tools: Tool[] = [
     icon: Contrast,
     iconBg: 'linear-gradient(135deg, #1e293b 50%, #f8fafc 50%)',
   },
+  {
+    slug: 'bundle-size',
+    href: '/tools/bundle-size/',
+    name: 'Bundle Size Estimator',
+    description:
+      'See how much each style adds to your bundle — raw and gzipped numbers, straight from the installed <code>@dicebear/styles</code> package.',
+    icon: Package,
+    iconBg: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+  },
+  {
+    slug: 'batch-download',
+    href: '/tools/batch-download/',
+    name: 'Batch Download',
+    description:
+      'Paste a list of seeds, pick a style, get a ZIP of generated SVG avatars. Handy when migrating styles or snapshotting current avatars.',
+    icon: Archive,
+    iconBg: 'linear-gradient(135deg, #f97316, #ef4444)',
+  },
+  {
+    slug: 'playground',
+    href: '/playground/',
+    name: 'Playground',
+    description:
+      'Pick a style, tune every option, and preview the result live. The full DiceBear configurator with copy-paste-ready code.',
+    icon: Sparkles,
+    iconBg: 'linear-gradient(135deg, #10b981, #06b6d4)',
+  },
+  {
+    slug: 'editor',
+    href: 'https://editor.dicebear.com',
+    external: true,
+    name: 'Editor',
+    description:
+      'Design your own DiceBear-compatible avatar style from scratch in a visual editor. Export the definition and use it like any built-in style.',
+    icon: PenSquare,
+    iconBg: 'linear-gradient(135deg, #ec4899, #f43f5e)',
+  },
+  {
+    slug: 'figma-plugin',
+    href: 'https://www.figma.com/community/plugin/1005765655729342787',
+    external: true,
+    name: 'Figma Plugin',
+    description:
+      'Export DiceBear avatar styles directly from Figma — keeps your design source of truth in sync with what ships in production.',
+    icon: Paintbrush,
+    iconBg: 'linear-gradient(135deg, #0ea5e9, #6366f1)',
+  },
 ];
 </script>
 
@@ -31,6 +88,8 @@ const tools: Tool[] = [
         v-for="tool in tools"
         :key="tool.slug"
         :href="tool.href"
+        :target="tool.external ? '_blank' : undefined"
+        :rel="tool.external ? 'noopener noreferrer' : undefined"
         class="tool-list-card"
       >
         <div class="tool-list-card-icon" :style="{ background: tool.iconBg }">
@@ -38,7 +97,15 @@ const tools: Tool[] = [
         </div>
 
         <div class="tool-list-card-content">
-          <h3 class="tool-list-card-name">{{ tool.name }}</h3>
+          <h3 class="tool-list-card-name">
+            {{ tool.name }}
+            <ExternalLink
+              v-if="tool.external"
+              :size="13"
+              class="tool-list-card-external-icon"
+              aria-label="Opens in new tab"
+            />
+          </h3>
           <p class="tool-list-card-description" v-html="tool.description" />
         </div>
 
@@ -111,6 +178,14 @@ const tools: Tool[] = [
       font-weight: 600;
       color: var(--vp-c-text-1);
       margin: 0 0 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    &-external-icon {
+      color: var(--ui-c-text-subtle);
+      flex-shrink: 0;
     }
 
     &-description {

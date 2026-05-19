@@ -6,6 +6,7 @@ import sidebarDocs from './config/sidebarDocs';
 import sidebarStyles from './config/sidebarStyles';
 import avatarStyles from './config/avatarStyles';
 import avatarUniqueCounts from './config/avatarUniqueCounts';
+import avatarStyleSizes from './config/avatarStyleSizes';
 import { formatStars } from './theme/utils/format';
 
 async function fetchGitHubStars(
@@ -178,6 +179,7 @@ export default defineConfig<ThemeOptions>({
   themeConfig: {
     avatarStyles,
     avatarUniqueCounts,
+    avatarStyleSizes,
     githubStars,
     siteTitle: '',
     logo: {

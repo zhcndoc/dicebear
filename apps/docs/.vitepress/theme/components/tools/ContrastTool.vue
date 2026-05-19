@@ -64,7 +64,7 @@ function updateHsv(next: Hsv) {
 
 <style lang="scss" scoped>
 .contrast-tool {
-  padding-top: 64px;
+  padding-top: 80px;
   padding-bottom: 96px;
   display: flex;
   flex-direction: column;

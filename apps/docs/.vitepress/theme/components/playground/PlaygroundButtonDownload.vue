@@ -4,6 +4,7 @@ import { Download } from '@lucide/vue';
 import { Avatar } from '@dicebear/core';
 import { getAvatarApiUrl } from '@theme/utils/avatar/api';
 import { loadAvatarStyle, clonePlain } from '@theme/utils/avatar/style';
+import { triggerDownload } from '@theme/utils/download';
 import { UiAvatar } from '../ui';
 import PlaygroundConfetti from './PlaygroundConfetti.vue';
 import PlaygroundDialog from './PlaygroundDialog.vue';
@@ -21,17 +22,6 @@ const { store, open, confettiKey, options, showDialog } = usePlaygroundDialog(
   () => props.seed,
 );
 const menu = ref();
-
-function triggerDownload(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-
-  link.href = url;
-  link.download = filename;
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
-}
 
 async function downloadSvg() {
   showDialog();
