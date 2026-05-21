@@ -84,6 +84,12 @@ function ratioFor(hex: string): string {
   </div>
 </template>
 
+<style lang="scss">
+html.dark .contrast-target {
+  background: var(--vp-c-bg-elv);
+}
+</style>
+
 <style lang="scss" scoped>
 .contrast-targets {
   display: grid;
@@ -151,8 +157,8 @@ function ratioFor(hex: string): string {
   }
 
   &-color-input {
-    width: 36px;
-    height: 36px;
+    width: 42px;
+    height: 42px;
     padding: 2px;
     border: 1px solid var(--vp-c-border);
     border-radius: var(--vp-radius-xs);

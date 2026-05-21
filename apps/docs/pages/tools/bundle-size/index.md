@@ -1,11 +1,11 @@
 ---
-layout: page
+layout: doc
 title: Bundle Size Estimator – Tools | DiceBear
 description: >
-  See how much each DiceBear style adds to your bundle. Raw and gzipped sizes
-  taken straight from the installed @dicebear/styles package.
+  Pick the DiceBear styles you plan to use and see how many gzipped kilobytes
+  they'll add to your JavaScript bundle.
 aside: false
-sidebar: false
+editLink: false
 ---
 
 <script setup lang="ts">

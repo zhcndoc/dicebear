@@ -31,6 +31,7 @@ export type AvatarStyleSize = {
 
 export type AvatarStyleSizeBundle = {
   core: AvatarStyleSize;
+  converter: AvatarStyleSize;
   styles: Record<string, AvatarStyleSize>;
 };
 

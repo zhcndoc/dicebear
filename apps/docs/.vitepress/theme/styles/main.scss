@@ -10,14 +10,6 @@
   --pg-border: var(--vp-c-border);
 }
 
-.p-button-outlined.p-button-secondary {
-  background: #ffffff;
-}
-
-.dark .p-button-outlined.p-button-secondary {
-  background: transparent;
-}
-
 /* ----------------------------------------------------------------
  * Playground shared field layout (used across Component/Color/Transform)
  * ---------------------------------------------------------------- */
@@ -247,4 +239,23 @@ img[src^='https://api.dicebear.com/']:not(.next, .prev) {
       var(--avatar-background-color-2) 0% 50%
     )
     50% / 12px 12px;
+}
+
+/* ----------------------------------------------------------------
+ * Component-scoped PrimeVue token overrides
+ *
+ * PrimeVue components read tokens via the global cascade, so setting
+ * them on an ancestor selector is enough — no :deep() needed.
+ * ---------------------------------------------------------------- */
+.style-usage {
+  --p-card-body-padding: 0;
+  --p-tabs-tabpanel-padding: 20px;
+  --p-tabs-tab-padding: 1rem 20px;
+}
+
+.style-options-card-badges {
+  --p-tag-padding: 4px 12px;
+  --p-tag-font-size: 13px;
+  --p-tag-gap: 6px;
+  line-height: 1;
 }

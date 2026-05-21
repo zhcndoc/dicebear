@@ -7,6 +7,7 @@ import SelectButton from 'primevue/selectbutton';
 import {
   hexToRgb,
   hslToRgb,
+  hsvToHex,
   hsvToRgb,
   isValidHex,
   rgbToHex,
@@ -76,9 +77,18 @@ function updateHsvChannel(channel: 'h' | 's' | 'v', value: number) {
 }
 
 function onNativePick(event: Event) {
-  const value = (event.target as HTMLInputElement).value;
+  const value = (event.target as HTMLInputElement).value.toLowerCase();
   const { r, g, b } = hexToRgb(value);
-  emitFromRgb(r, g, b);
+  // Native pickers emit hex from integer-% S/V (keyboard arrows = ±1%), but
+  // 24-bit hex decodes back with sub-% drift on the other axis — a Down arrow
+  // shows up as a diagonal cursor step. Try the rounded HSV first: if it
+  // re-encodes to the same hex, the input came from an integer-% native state
+  // and we can adopt it cleanly. Otherwise (e.g. mouse click landing on
+  // non-integer S/V) keep the exact float HSV so the displayed hex matches.
+  const exact = rgbToHsvPreservingHue({ r, g, b }, props.hsv);
+  const snapped = { h: exact.h, s: Math.round(exact.s), v: Math.round(exact.v) };
+  const hex = hsvToHex(snapped).toLowerCase() === value ? snapped : exact;
+  emit('update:hsv', hex);
 }
 
 type ChannelDef = {
@@ -145,7 +155,6 @@ function updateActiveChannel(key: string, value: number) {
 <template>
   <div class="contrast-sliders">
     <div class="contrast-sliders-hex">
-      <label class="contrast-sliders-hex-label" for="contrast-hex">Hex</label>
       <input
         type="color"
         :value="hex"
@@ -157,6 +166,7 @@ function updateActiveChannel(key: string, value: number) {
         id="contrast-hex"
         v-model="hexInput"
         class="contrast-sliders-hex-input"
+        aria-label="Hex color"
         :maxlength="7"
         spellcheck="false"
         autocomplete="off"
@@ -219,22 +229,13 @@ function updateActiveChannel(key: string, value: number) {
 
   &-hex {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     gap: 12px;
     margin-bottom: 10px;
 
-    &-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--ui-c-text-subtle);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      min-width: 32px;
-    }
-
     &-swatch {
-      width: 36px;
-      height: 36px;
+      width: 42px;
+      height: 42px;
       padding: 2px;
       flex-shrink: 0;
       border: 1px solid var(--vp-c-border);
@@ -259,6 +260,7 @@ function updateActiveChannel(key: string, value: number) {
 
     &-input {
       flex: 1;
+      min-width: 0;
       font-family: var(--vp-font-family-mono);
       font-variant-numeric: tabular-nums;
     }

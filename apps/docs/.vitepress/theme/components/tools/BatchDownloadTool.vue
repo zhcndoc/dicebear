@@ -2,17 +2,21 @@
 import { computed, nextTick, ref, watch } from 'vue';
 import { useData } from 'vitepress';
 import Button from 'primevue/button';
-import Dialog from 'primevue/dialog';
 import InputNumber from 'primevue/inputnumber';
-import ChevronRightIcon from '@primevue/icons/chevronright';
-import { Download, Search, Shuffle } from '@lucide/vue';
+import SelectButton from 'primevue/selectbutton';
+import Textarea from 'primevue/textarea';
+import { Download, Shuffle } from '@lucide/vue';
 import JSZip from 'jszip';
-import { capitalCase } from 'change-case';
 import { Avatar } from '@dicebear/core';
-import { UiAvatar, UiContainer, UiHeadline, UiDescription } from '@theme/components/ui';
+import {
+  UiAvatar,
+  UiContainer,
+  UiHeadline,
+  UiDescription,
+  UiStyleSelect,
+} from '@theme/components/ui';
 import { loadAvatarStyle } from '@theme/utils/avatar/style';
 import { triggerDownload } from '@theme/utils/download';
-import { useStyleFiltering } from '@theme/composables/useStyleFiltering';
 import type { ThemeOptions } from '@theme/types';
 
 const SEED_CAP = 500;
@@ -22,30 +26,16 @@ type Mode = 'paste' | 'random';
 
 const { theme } = useData<ThemeOptions>();
 
-const firstStyleName = Object.keys(theme.value.avatarStyles).sort()[0] ?? '';
-const selectedStyle = ref<string>(firstStyleName);
-const pickerOpen = ref(false);
-
-const {
-  searchQuery,
-  selectedCategory,
-  availableCategories,
-  groupedStyles,
-  styleList,
-  hasActiveFilters,
-  clearFilters,
-} = useStyleFiltering(theme.value.avatarStyles);
-
-const currentDisplayName = computed(() =>
-  capitalCase(selectedStyle.value || ''),
+const availableStyles = computed(() =>
+  Object.keys(theme.value.avatarStyles).sort(),
 );
-
-function selectStyle(name: string) {
-  selectedStyle.value = name;
-  pickerOpen.value = false;
-}
+const selectedStyle = ref<string>(availableStyles.value[0] ?? '');
 
 const mode = ref<Mode>('random');
+const modeOptions: { label: string; value: Mode }[] = [
+  { label: 'Random', value: 'random' },
+  { label: 'Paste', value: 'paste' },
+];
 const seedsInput = ref('');
 const randomCount = ref(12);
 const randomSeeds = ref<string[]>([]);
@@ -180,53 +170,27 @@ async function generate() {
     </header>
 
     <article class="batch-tool-workspace">
-      <button
-        type="button"
-        class="batch-tool-style-strip"
-        @click="pickerOpen = true"
-      >
-        <span class="batch-tool-style-strip-avatar">
-          <UiAvatar
-            :size="48"
-            :style-name="selectedStyle"
-            :style-options="{ seed: 'Felix' }"
-            mode="library"
-          />
-        </span>
-        <span class="batch-tool-style-strip-meta">
-          <span class="batch-tool-eyebrow">Style</span>
-          <span class="batch-tool-style-strip-name">{{ currentDisplayName }}</span>
-        </span>
-        <span class="batch-tool-style-strip-action">
-          Change
-          <ChevronRightIcon class="batch-tool-style-strip-chevron" />
-        </span>
-      </button>
+      <header class="batch-tool-top-bar">
+        <UiStyleSelect
+          v-model="selectedStyle"
+          :styles="availableStyles"
+          :value-avatar-size="28"
+          :option-avatar-size="28"
+          aria-label="Avatar style"
+          class="batch-tool-style-select"
+        />
+        <SelectButton
+          v-model="mode"
+          :options="modeOptions"
+          option-label="label"
+          option-value="value"
+          :allow-empty="false"
+          size="small"
+          aria-label="Seed source"
+        />
+      </header>
 
       <section class="batch-tool-section">
-        <header class="batch-tool-section-header">
-          <span class="batch-tool-eyebrow">Seeds</span>
-          <div class="batch-tool-segmented" role="tablist" aria-label="Seed source">
-            <button
-              role="tab"
-              :aria-selected="mode === 'random'"
-              class="batch-tool-segmented-option"
-              :class="{ 'is-active': mode === 'random' }"
-              @click="mode = 'random'"
-            >
-              Random
-            </button>
-            <button
-              role="tab"
-              :aria-selected="mode === 'paste'"
-              class="batch-tool-segmented-option"
-              :class="{ 'is-active': mode === 'paste' }"
-              @click="mode = 'paste'"
-            >
-              Paste
-            </button>
-          </div>
-        </header>
 
         <div v-if="mode === 'random'" class="batch-tool-random">
           <div class="batch-tool-random-count">
@@ -261,16 +225,17 @@ async function generate() {
         </div>
 
         <div v-else class="batch-tool-paste">
-          <textarea
+          <Textarea
             id="batch-seeds"
             v-model="seedsInput"
-            rows="8"
+            :rows="8"
             placeholder="One seed per line — a username, email, user ID, anything."
             class="batch-tool-textarea"
             spellcheck="false"
             autocomplete="off"
+            fluid
             @keydown.enter="onTextareaEnter"
-          ></textarea>
+          />
           <span
             class="batch-tool-counter"
             :class="{ 'is-over': overCap }"
@@ -331,96 +296,23 @@ async function generate() {
         </p>
       </footer>
     </article>
-
-    <Dialog
-      v-model:visible="pickerOpen"
-      modal
-      :closable="true"
-      dismissable-mask
-      header="Choose avatar style"
-      :style="{ width: '900px' }"
-      :pt="{ content: { class: 'batch-tool-picker-dialog-content' } }"
-    >
-      <div class="batch-tool-picker">
-        <div class="batch-tool-picker-toolbar">
-          <div class="batch-tool-picker-search">
-            <Search :size="16" />
-            <input
-              v-model="searchQuery"
-              type="text"
-              placeholder="Search styles…"
-              class="batch-tool-picker-search-input"
-            />
-          </div>
-
-          <div class="batch-tool-picker-filters">
-            <button
-              v-for="category in availableCategories"
-              :key="category"
-              class="batch-tool-picker-chip"
-              :class="{ 'is-active': selectedCategory === category }"
-              @click="
-                selectedCategory = selectedCategory === category ? null : category
-              "
-            >
-              {{ category }}
-            </button>
-            <button
-              v-if="hasActiveFilters"
-              class="batch-tool-picker-chip is-clear"
-              @click="clearFilters"
-            >
-              Clear
-            </button>
-          </div>
-        </div>
-
-        <div class="batch-tool-picker-body">
-          <div
-            v-for="(styles, category) in groupedStyles"
-            :key="category"
-            class="batch-tool-picker-group"
-          >
-            <h3 class="batch-tool-picker-group-title">{{ category }}</h3>
-            <div class="batch-tool-picker-grid">
-              <button
-                v-for="style in styles"
-                :key="style.name"
-                class="batch-tool-picker-card"
-                :class="{ 'is-selected': style.name === selectedStyle }"
-                @click="selectStyle(style.name)"
-              >
-                <div class="batch-tool-picker-card-avatars">
-                  <UiAvatar
-                    v-for="avatar in style.avatars"
-                    :key="avatar.seed"
-                    :size="40"
-                    :style-name="style.name"
-                    :style-options="{ seed: avatar.seed }"
-                    mode="http-api"
-                  />
-                </div>
-                <span class="batch-tool-picker-card-name">
-                  {{ style.displayName }}
-                </span>
-                <span class="batch-tool-picker-card-creator">
-                  {{ style.creator }}
-                </span>
-              </button>
-            </div>
-          </div>
-
-          <div
-            v-if="styleList.length === 0 && searchQuery"
-            class="batch-tool-picker-empty"
-          >
-            No styles found matching "{{ searchQuery }}"
-          </div>
-        </div>
-      </div>
-    </Dialog>
   </UiContainer>
 </template>
+
+<style lang="scss">
+html.dark {
+  .batch-tool-workspace,
+  .batch-tool-top-bar,
+  .batch-tool-preview-section,
+  .batch-tool-footer {
+    background: var(--vp-c-bg-soft);
+  }
+
+  .batch-tool-step-button {
+    background: var(--p-form-field-background);
+  }
+}
+</style>
 
 <style lang="scss" scoped>
 .batch-tool {
@@ -458,74 +350,20 @@ async function generate() {
   flex-direction: column;
 }
 
-.batch-tool-style-strip {
+.batch-tool-top-bar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 16px;
-  padding: 18px 24px;
-  background: var(--vp-c-bg-soft);
-  border: none;
+  padding: 16px 24px;
+  background: var(--vp-c-bg-elv);
   border-bottom: 1px solid var(--vp-c-divider);
-  cursor: pointer;
-  text-align: left;
-  width: 100%;
-  font: inherit;
-  color: inherit;
-  transition: background-color var(--duration-fast) var(--ease-smooth);
+}
 
-  &:hover {
-    background: var(--vp-c-bg);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--vp-c-brand-1);
-    outline-offset: -2px;
-  }
-
-  &-avatar {
-    flex-shrink: 0;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--vp-c-bg);
-    border-radius: var(--vp-radius-sm);
-    overflow: hidden;
-  }
-
-  &-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    flex: 1;
-    min-width: 0;
-  }
-
-  &-name {
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--vp-c-text-1);
-    line-height: 1.2;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  &-action {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--ui-c-text-subtle);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  &-chevron {
-    color: var(--ui-c-text-subtle);
-  }
+.batch-tool-style-select {
+  flex: 1;
+  min-width: 0;
+  max-width: 320px;
 }
 
 .batch-tool-section {
@@ -543,38 +381,6 @@ async function generate() {
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-  }
-}
-
-.batch-tool-segmented {
-  display: inline-flex;
-  padding: 3px;
-  gap: 2px;
-  background: var(--vp-c-bg-soft);
-  border-radius: 999px;
-  border: 1px solid var(--vp-c-divider);
-
-  &-option {
-    padding: 5px 14px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    border-radius: 999px;
-    border: none;
-    background: transparent;
-    color: var(--ui-c-text-muted);
-    cursor: pointer;
-    transition: all var(--duration-fast) var(--ease-smooth);
-
-    &:hover:not(.is-active) {
-      color: var(--vp-c-text-1);
-    }
-
-    &.is-active {
-      background: var(--vp-c-bg);
-      color: var(--vp-c-text-1);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-    }
   }
 }
 
@@ -603,7 +409,7 @@ async function generate() {
   margin-left: auto;
   padding: 8px 14px;
   background: transparent;
-  border: 1px dashed var(--vp-c-divider);
+  border: 1px dashed var(--vp-c-border);
   border-radius: var(--vp-radius-xs);
   font-size: 12px;
   font-weight: 600;
@@ -635,28 +441,11 @@ async function generate() {
 }
 
 .batch-tool-textarea {
-  width: 100%;
-  resize: vertical;
   font-family: var(--vp-font-family-mono);
   font-size: 13px;
   line-height: 1.55;
   min-height: 180px;
-  padding: 12px 14px;
-  background: var(--vp-c-bg);
-  color: var(--vp-c-text-1);
-  border: 1px solid var(--vp-c-border);
-  border-radius: var(--vp-radius-xs);
-  outline: none;
-  transition: border-color var(--duration-fast) var(--ease-smooth);
-
-  &:focus {
-    border-color: var(--vp-c-brand-1);
-    box-shadow: 0 0 0 3px var(--vp-c-brand-soft);
-  }
-
-  &::placeholder {
-    color: var(--ui-c-text-subtle);
-  }
+  resize: vertical;
 }
 
 .batch-tool-counter {
@@ -684,18 +473,7 @@ async function generate() {
 }
 
 .batch-tool-preview-section {
-  background:
-    radial-gradient(
-      circle at 0% 0%,
-      var(--vp-c-brand-soft) 0,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 100% 100%,
-      rgba(0, 0, 0, 0.02) 0,
-      transparent 50%
-    ),
-    var(--vp-c-bg-soft);
+  background: var(--vp-c-bg-elv);
 }
 
 .batch-tool-preview-count {
@@ -719,6 +497,7 @@ async function generate() {
   align-items: center;
   gap: 8px;
   padding: 12px 8px 10px;
+  margin: 0;
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
   border-radius: var(--vp-radius-sm);
@@ -780,158 +559,14 @@ async function generate() {
   }
 }
 
-.batch-tool-picker {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-
-  &-toolbar {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  &-search {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0 12px;
-    border: 1px solid var(--vp-c-border);
-    border-radius: var(--vp-radius-xs);
-    background: var(--vp-c-bg);
-    color: var(--ui-c-text-subtle);
-
-    &:focus-within {
-      border-color: var(--vp-c-brand-1);
-    }
-
-    &-input {
-      flex: 1;
-      border: none;
-      background: transparent;
-      padding: 8px 0;
-      font-size: 14px;
-      color: var(--vp-c-text-1);
-      outline: none;
-
-      &::placeholder {
-        color: var(--ui-c-text-subtle);
-      }
-    }
-  }
-
-  &-filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  &-chip {
-    padding: 4px 12px;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--ui-c-text-muted);
-    background: var(--vp-c-bg-soft);
-    border: 1px solid var(--vp-c-border);
-    border-radius: var(--vp-radius-md);
-    cursor: pointer;
-    transition: all var(--duration-fast);
-
-    &:hover {
-      border-color: var(--vp-c-brand-1);
-      color: var(--vp-c-brand-1);
-    }
-
-    &.is-active {
-      background: var(--vp-c-brand-1);
-      border-color: var(--vp-c-brand-1);
-      color: white;
-    }
-
-    &.is-clear {
-      border-style: dashed;
-      color: var(--ui-c-text-subtle);
-
-      &:hover {
-        border-color: var(--vp-c-danger-1);
-        color: var(--vp-c-danger-1);
-      }
-    }
-  }
-
-  &-body {
-    max-height: 60vh;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  &-group-title {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--ui-c-text-subtle);
-    margin: 0 0 8px;
-  }
-
-  &-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 12px;
-  }
-
-  &-card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 12px;
-    background: var(--vp-c-bg-soft);
-    border: 2px solid transparent;
-    border-radius: var(--vp-radius-sm);
-    cursor: pointer;
-    text-align: left;
-    transition: all var(--duration-fast);
-
-    &:hover {
-      border-color: var(--vp-c-brand-1);
-    }
-
-    &.is-selected {
-      border-color: var(--vp-c-brand-1);
-      background: var(--vp-c-brand-soft);
-    }
-
-    &-avatars {
-      display: flex;
-      gap: 6px;
-    }
-
-    &-name {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--vp-c-text-1);
-    }
-
-    &-creator {
-      font-size: 12px;
-      color: var(--ui-c-text-subtle);
-    }
-  }
-
-  &-empty {
-    text-align: center;
-    padding: 40px;
-    color: var(--ui-c-text-subtle);
-    font-size: 14px;
-  }
-}
-
 @media (max-width: 640px) {
-  .batch-tool-style-strip {
+  .batch-tool-top-bar {
+    flex-direction: column;
+    align-items: stretch;
     padding: 14px 18px;
+  }
+  .batch-tool-style-select {
+    max-width: none;
   }
   .batch-tool-section,
   .batch-tool-footer {
@@ -942,9 +577,6 @@ async function generate() {
   }
   .batch-tool-shuffle {
     margin-left: 0;
-  }
-  .batch-tool-picker-grid {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   }
 }
 </style>

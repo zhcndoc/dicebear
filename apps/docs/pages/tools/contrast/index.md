@@ -1,12 +1,12 @@
 ---
-layout: page
+layout: doc
 title: WCAG Contrast Picker – Tools | DiceBear
 description: >
   Interactive WCAG 2.1 contrast picker built on the @dicebear/core algorithm.
   Pick a color and see which of two contrast colors DiceBear would choose,
   visualized as an iso-contrast boundary on the canvas.
 aside: false
-sidebar: false
+editLink: false
 ---
 
 <script setup lang="ts">

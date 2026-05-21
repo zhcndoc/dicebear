@@ -2,101 +2,73 @@
 import { useData } from 'vitepress';
 import type { ThemeOptions } from '@theme/types';
 import { useStyleFiltering } from '@theme/composables/useStyleFiltering';
-import { Search, CircleUser, Scale, ArrowRight, Filter, X } from '@lucide/vue';
+import { Search, CircleUser, Scale, ArrowRight, Filter } from '@lucide/vue';
+import Card from 'primevue/card';
+import InputText from 'primevue/inputtext';
+import MultiSelect from 'primevue/multiselect';
 import { UiAvatar } from '../ui';
 
 const { theme } = useData<ThemeOptions>();
 
 const {
   searchQuery,
-  selectedLicense,
-  selectedCategory,
+  selectedLicenses,
+  selectedCategories,
   availableLicenses,
   availableCategories,
   styleList,
   groupedStyles,
   totalStyles,
-  hasActiveFilters,
-  clearFilters,
 } = useStyleFiltering(theme.value.avatarStyles);
 </script>
 
 <template>
   <div class="style-list">
-    <div class="style-list-filters">
-      <div class="style-list-filter-row">
-        <div class="style-list-filter-group style-list-filter-group-search">
-          <span class="style-list-filter-label">
-            <Search />
-            Search
-          </span>
-          <div class="style-list-search">
-            <input
+    <Card class="style-list-filters">
+      <template #content>
+        <div class="style-list-filter-row">
+          <div class="style-list-filter-group">
+            <span class="style-list-filter-label">
+              <Search />
+              Search
+            </span>
+            <InputText
               v-model="searchQuery"
-              type="text"
-              class="style-list-search-input"
               :placeholder="`Search ${totalStyles} styles...`"
+              fluid
+            />
+          </div>
+
+          <div class="style-list-filter-group">
+            <span class="style-list-filter-label">
+              <Filter />
+              Category
+            </span>
+            <MultiSelect
+              v-model="selectedCategories"
+              :options="availableCategories"
+              placeholder="Filter by category"
+              :showToggleAll="false"
+              fluid
+            />
+          </div>
+
+          <div class="style-list-filter-group">
+            <span class="style-list-filter-label">
+              <Scale />
+              License
+            </span>
+            <MultiSelect
+              v-model="selectedLicenses"
+              :options="availableLicenses"
+              placeholder="Filter by license"
+              :showToggleAll="false"
+              fluid
             />
           </div>
         </div>
-
-        <div class="style-list-filter-group">
-          <span class="style-list-filter-label">
-            <Filter />
-            Category
-          </span>
-          <div class="style-list-filter-chips">
-            <button
-              v-for="category in availableCategories"
-              :key="category"
-              class="style-list-filter-chip"
-              :class="{
-                'style-list-filter-chip-active': selectedCategory === category,
-              }"
-              @click="
-                selectedCategory =
-                  selectedCategory === category ? null : category
-              "
-            >
-              {{ category }}
-            </button>
-          </div>
-        </div>
-
-        <div class="style-list-filter-group">
-          <span class="style-list-filter-label">
-            <Scale />
-            License
-          </span>
-          <div class="style-list-filter-chips">
-            <button
-              v-for="license in availableLicenses"
-              :key="license"
-              class="style-list-filter-chip"
-              :class="{
-                'style-list-filter-chip-active': selectedLicense === license,
-              }"
-              @click="
-                selectedLicense = selectedLicense === license ? null : license
-              "
-            >
-              {{ license }}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="style-list-filter-footer">
-        <button
-          v-if="hasActiveFilters"
-          class="style-list-clear-filters"
-          @click="clearFilters"
-        >
-          <X />
-          Clear filters
-        </button>
-      </div>
-    </div>
+      </template>
+    </Card>
 
     <div
       v-for="(styles, category) in groupedStyles"
@@ -111,38 +83,42 @@ const {
           :href="`/styles/${style.slug}/`"
           class="style-list-card"
         >
-          <div class="style-list-card-avatars">
-            <div
-              v-for="avatar in style.avatars"
-              :key="avatar.seed"
-              class="style-list-card-avatar"
-            >
-              <UiAvatar
-                :style-name="style.slug"
-                :style-options="{ seed: avatar.seed, size: 80 }"
-                :alt="`${style.displayName} - ${avatar.seed}`"
-              />
-            </div>
-          </div>
+          <Card>
+            <template #content>
+              <div class="style-list-card-avatars">
+                <div
+                  v-for="avatar in style.avatars"
+                  :key="avatar.seed"
+                  class="style-list-card-avatar"
+                >
+                  <UiAvatar
+                    :style-name="style.slug"
+                    :style-options="{ seed: avatar.seed, size: 80 }"
+                    :alt="`${style.displayName} - ${avatar.seed}`"
+                  />
+                </div>
+              </div>
 
-          <div class="style-list-card-content">
-            <h3 class="style-list-card-name">{{ style.displayName }}</h3>
+              <div class="style-list-card-content">
+                <h3 class="style-list-card-name">{{ style.displayName }}</h3>
 
-            <div class="style-list-card-meta">
-              <span class="style-list-card-creator">
-                <CircleUser />
-                {{ style.creator }}
-              </span>
-              <span class="style-list-card-license">
-                <Scale />
-                {{ style.license }}
-              </span>
-            </div>
-          </div>
+                <div class="style-list-card-meta">
+                  <span class="style-list-card-creator">
+                    <CircleUser />
+                    {{ style.creator }}
+                  </span>
+                  <span class="style-list-card-license">
+                    <Scale />
+                    {{ style.license }}
+                  </span>
+                </div>
+              </div>
 
-          <div class="style-list-card-arrow">
-            <ArrowRight />
-          </div>
+              <div class="style-list-card-arrow">
+                <ArrowRight />
+              </div>
+            </template>
+          </Card>
         </a>
       </div>
     </div>
@@ -159,19 +135,13 @@ const {
   margin-top: 32px;
 
   &-filters {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
     margin-bottom: 32px;
-    padding: 24px;
-    background: var(--vp-c-bg-soft);
-    border-radius: var(--vp-radius-sm);
   }
 
   &-filter-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 32px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 16px;
     align-items: flex-start;
   }
 
@@ -179,18 +149,7 @@ const {
     display: flex;
     flex-direction: column;
     gap: 10px;
-
-    &-search {
-      flex: 1;
-      min-width: 200px;
-      max-width: 300px;
-    }
-  }
-
-  &-filter-footer {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+    min-width: 0;
   }
 
   &-filter-label {
@@ -209,64 +168,6 @@ const {
     }
   }
 
-  &-filter-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  &-filter-chip {
-    padding: 6px 14px;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--vp-c-text-2);
-    background: var(--vp-c-bg);
-    border: 1px solid var(--vp-c-border);
-    border-radius: var(--vp-radius-lg);
-    cursor: pointer;
-    transition: all var(--duration-fast) ease;
-
-    &:hover {
-      border-color: var(--vp-c-brand-1);
-      color: var(--vp-c-brand-1);
-    }
-
-    &-active {
-      background: var(--vp-c-brand-1);
-      border-color: var(--vp-c-brand-1);
-      color: white;
-
-      &:hover {
-        color: white;
-      }
-    }
-  }
-
-  &-clear-filters {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--vp-c-text-3);
-    background: transparent;
-    border: 1px dashed var(--vp-c-border);
-    border-radius: var(--vp-radius-lg);
-    cursor: pointer;
-    transition: all var(--duration-fast) ease;
-
-    &:hover {
-      border-color: var(--vp-c-danger-1);
-      color: var(--vp-c-danger-1);
-    }
-
-    svg {
-      width: 14px;
-      height: 14px;
-    }
-  }
-
   &-category {
     margin-bottom: 48px;
 
@@ -281,43 +182,6 @@ const {
     }
   }
 
-  &-search {
-    display: flex;
-    align-items: center;
-    background: var(--vp-c-bg);
-    border: 1px solid var(--vp-c-border);
-    border-radius: var(--vp-radius-lg);
-    padding: 0 14px;
-    transition: all var(--duration-fast) ease;
-
-    &:focus-within {
-      border-color: var(--vp-c-brand-1);
-      box-shadow: 0 0 0 3px var(--vp-c-brand-soft);
-    }
-
-    &-input {
-      flex: 1;
-      border: none;
-      background: transparent;
-      padding: 6px 0;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--vp-c-text-1);
-      outline: none;
-      min-width: 0;
-
-      &::placeholder {
-        color: var(--vp-c-text-3);
-      }
-    }
-  }
-
-  &-count {
-    font-size: 14px;
-    color: var(--vp-c-text-2);
-    font-weight: 500;
-  }
-
   &-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -325,23 +189,29 @@ const {
   }
 
   &-card {
-    display: flex;
-    flex-direction: column;
-    background: var(--vp-c-bg-soft);
-    border-radius: var(--vp-radius-md);
-    padding: 20px;
+    display: block;
     text-decoration: none;
-    transition: all var(--duration-fast) ease;
-    border: 2px solid transparent;
+    transition: transform var(--duration-fast) ease;
     position: relative;
 
     &::after {
       display: none !important;
     }
 
+    :deep(.p-card) {
+      height: 100%;
+      transition:
+        border-color var(--duration-fast) ease,
+        box-shadow var(--duration-fast) ease;
+      border: 2px solid transparent;
+    }
+
     &:hover {
-      border-color: var(--vp-c-brand-1);
       transform: translateY(-4px);
+    }
+
+    &:hover :deep(.p-card) {
+      border-color: var(--vp-c-brand-1);
       box-shadow: var(--vp-shadow-3);
     }
 
@@ -440,16 +310,8 @@ const {
 
   @media (max-width: 640px) {
     &-filter-row {
-      flex-direction: column;
+      grid-template-columns: 1fr;
       gap: 20px;
-    }
-
-    &-filter-group {
-      width: 100%;
-
-      &-search {
-        max-width: none;
-      }
     }
 
     &-category-title {

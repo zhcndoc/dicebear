@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useData } from 'vitepress';
+import { capitalCase } from 'change-case';
 import Checkbox from 'primevue/checkbox';
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { Search, X } from '@lucide/vue';
-import { UiContainer, UiHeadline, UiDescription } from '@theme/components/ui';
+import { UiAvatar, UiContainer, UiHeadline, UiDescription } from '@theme/components/ui';
+import { useVisibility } from '@theme/composables/useVisibility';
 import type { ThemeOptions } from '@theme/types';
 
 const { theme } = useData<ThemeOptions>();
@@ -14,33 +18,41 @@ const sizes = theme.value.avatarStyleSizes;
 const styleNames = Object.keys(theme.value.avatarStyles).sort();
 
 const selected = ref<Set<string>>(new Set());
+const includeConverter = ref(false);
 const filter = ref('');
+const summarySentinel = ref<HTMLElement | null>(null);
+
+// Sentinel sits at the summary's natural position; when it scrolls past the
+// sticky top edge the summary is "stuck" and we show its drop shadow.
+const sentinelVisible = useVisibility(summarySentinel, {
+  threshold: 0,
+  rootMargin: '-80px 0px 0px 0px',
+  once: false,
+});
+const isSummaryStuck = computed(() => !sentinelVisible.value);
 
 const visibleStyles = computed(() => {
   const q = filter.value.toLowerCase().trim();
   if (!q) return styleNames;
   return styleNames.filter((name) => {
-    const title = theme.value.avatarStyles[name]?.meta?.title?.toLowerCase() ?? '';
-    return name.toLowerCase().includes(q) || title.includes(q);
+    return name.toLowerCase().includes(q) || styleTitle(name).toLowerCase().includes(q);
   });
 });
 
-const selectedTotal = computed(() => {
-  let raw = 0;
-  let gzip = 0;
+const selectedGzip = computed(() => {
+  let total = 0;
   for (const name of selected.value) {
-    const s = sizes.styles[name];
-    if (!s) continue;
-    raw += s.raw;
-    gzip += s.gzip;
+    total += sizes.styles[name]?.gzip ?? 0;
   }
-  return { raw, gzip };
+  return total;
 });
 
-const grandTotal = computed(() => ({
-  raw: sizes.core.raw + selectedTotal.value.raw,
-  gzip: sizes.core.gzip + selectedTotal.value.gzip,
-}));
+const grandTotalGzip = computed(
+  () =>
+    sizes.core.gzip +
+    (includeConverter.value ? sizes.converter.gzip : 0) +
+    selectedGzip.value,
+);
 
 function toggle(name: string) {
   const next = new Set(selected.value);
@@ -64,7 +76,7 @@ function formatSize(bytes: number): string {
 }
 
 function styleTitle(name: string): string {
-  return theme.value.avatarStyles[name]?.meta?.title ?? name;
+  return capitalCase(name);
 }
 </script>
 
@@ -75,53 +87,68 @@ function styleTitle(name: string): string {
         <strong>Bundle Size</strong> Estimator
       </UiHeadline>
       <UiDescription>
-        See how much each style adds to your bundle. Numbers are taken straight from the installed <code>@dicebear/styles</code> package — what you'd ship to production.
+        Pick the styles you plan to use and see how many gzipped kilobytes they'll add to your JavaScript bundle.
       </UiDescription>
     </header>
 
-    <section class="bundle-size-summary">
-      <div class="bundle-size-summary-row">
-        <span class="bundle-size-summary-label">@dicebear/core (all-included)</span>
-        <span class="bundle-size-summary-values">
-          <span class="bundle-size-summary-raw">{{ formatSize(sizes.core.raw) }}</span>
-          <span class="bundle-size-summary-gzip">{{ formatSize(sizes.core.gzip) }} gzip</span>
+    <div ref="summarySentinel" class="bundle-size-summary-sentinel" aria-hidden="true" />
+    <section class="bundle-size-summary" :class="{ 'is-stuck': isSummaryStuck }">
+      <label class="bundle-size-summary-row bundle-size-summary-row-toggle is-disabled">
+        <Checkbox :model-value="true" :binary="true" :disabled="true" />
+        <span class="bundle-size-summary-label">
+          <code>@dicebear/core</code>
+          <span class="bundle-size-summary-hint">always required</span>
         </span>
-      </div>
+        <span class="bundle-size-summary-values">
+          <span class="bundle-size-summary-raw">{{ formatSize(sizes.core.gzip) }}</span>
+          <span class="bundle-size-summary-gzip">gzip</span>
+        </span>
+      </label>
+      <label class="bundle-size-summary-row bundle-size-summary-row-toggle">
+        <Checkbox v-model="includeConverter" :binary="true" />
+        <span class="bundle-size-summary-label">
+          <code>@dicebear/converter</code>
+          <span class="bundle-size-summary-hint">PNG, JPEG, WebP & PDF output</span>
+        </span>
+        <span class="bundle-size-summary-values">
+          <span class="bundle-size-summary-raw">{{ formatSize(sizes.converter.gzip) }}</span>
+          <span class="bundle-size-summary-gzip">gzip</span>
+        </span>
+      </label>
       <div class="bundle-size-summary-row">
         <span class="bundle-size-summary-label">
           {{ selected.size }} style{{ selected.size === 1 ? '' : 's' }} selected
         </span>
         <span class="bundle-size-summary-values">
-          <span class="bundle-size-summary-raw">{{ formatSize(selectedTotal.raw) }}</span>
-          <span class="bundle-size-summary-gzip">{{ formatSize(selectedTotal.gzip) }} gzip</span>
+          <span class="bundle-size-summary-raw">{{ formatSize(selectedGzip) }}</span>
+          <span class="bundle-size-summary-gzip">gzip</span>
         </span>
       </div>
       <div class="bundle-size-summary-row bundle-size-summary-row-total">
         <span class="bundle-size-summary-label">Total</span>
         <span class="bundle-size-summary-values">
-          <span class="bundle-size-summary-raw">{{ formatSize(grandTotal.raw) }}</span>
-          <span class="bundle-size-summary-gzip">{{ formatSize(grandTotal.gzip) }} gzip</span>
+          <span class="bundle-size-summary-raw">{{ formatSize(grandTotalGzip) }}</span>
+          <span class="bundle-size-summary-gzip">gzip</span>
         </span>
       </div>
-      <p class="bundle-size-summary-note">
-        Core is shown as the full <code>lib/</code> output (no tree-shaking applied). Real-world bundles will be smaller depending on which APIs you actually import.
-      </p>
     </section>
 
     <section class="bundle-size-picker">
       <div class="bundle-size-picker-toolbar">
-        <div class="bundle-size-picker-search">
-          <Search :size="16" />
+        <IconField class="bundle-size-picker-search">
+          <InputIcon>
+            <Search :size="16" />
+          </InputIcon>
           <InputText
             v-model="filter"
             placeholder="Filter styles…"
-            class="bundle-size-picker-search-input"
             spellcheck="false"
+            fluid
           />
-        </div>
+        </IconField>
         <div class="bundle-size-picker-actions">
-          <Button label="Select all" severity="secondary" size="small" @click="selectAll" />
-          <Button label="Clear" severity="secondary" variant="outlined" size="small" @click="clear">
+          <Button label="Select all" severity="secondary" @click="selectAll" />
+          <Button label="Clear" severity="secondary" variant="outlined" @click="clear">
             <template #icon><X :size="14" /></template>
           </Button>
         </div>
@@ -140,11 +167,19 @@ function styleTitle(name: string): string {
               :binary="true"
               @update:model-value="toggle(name)"
             />
+            <UiAvatar
+              :style-name="name"
+              :style-options="{ seed: name, size: 28 }"
+              :size="28"
+              alt=""
+              mode="library"
+              class="bundle-size-row-avatar"
+            />
             <span class="bundle-size-row-title">{{ styleTitle(name) }}</span>
             <code class="bundle-size-row-slug">{{ name }}</code>
             <span class="bundle-size-row-values">
-              <span class="bundle-size-row-raw">{{ formatSize(sizes.styles[name]?.raw ?? 0) }}</span>
-              <span class="bundle-size-row-gzip">{{ formatSize(sizes.styles[name]?.gzip ?? 0) }} gzip</span>
+              <span class="bundle-size-row-raw">{{ formatSize(sizes.styles[name]?.gzip ?? 0) }}</span>
+              <span class="bundle-size-row-gzip">gzip</span>
             </span>
           </label>
         </li>
@@ -155,6 +190,36 @@ function styleTitle(name: string): string {
     </section>
   </UiContainer>
 </template>
+
+<style lang="scss">
+html.dark {
+  .bundle-size-summary,
+  .bundle-size-picker {
+    background: var(--vp-c-bg-soft);
+  }
+
+  .bundle-size-row:hover {
+    background: var(--vp-c-bg);
+  }
+
+  .bundle-size-row-slug {
+    background: var(--vp-c-bg);
+  }
+
+  .bundle-size-summary.is-stuck {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* @dicebear/core is always required, so its checkbox is `disabled`. Restore
+ * the checked brand color so it still reads as an active state instead of a
+ * muted disabled control. */
+.bundle-size-summary-row-toggle.is-disabled .p-checkbox-checked .p-checkbox-box {
+  background: var(--p-checkbox-checked-background);
+  border-color: var(--p-checkbox-checked-border-color);
+  color: var(--p-checkbox-icon-checked-color);
+}
+</style>
 
 <style lang="scss" scoped>
 .bundle-size-tool {
@@ -182,6 +247,11 @@ function styleTitle(name: string): string {
   }
 }
 
+.bundle-size-summary-sentinel {
+  height: 1px;
+  margin-bottom: -1px;
+}
+
 .bundle-size-summary {
   background: var(--vp-c-bg-elv);
   border: 1px solid var(--ui-card-border-color, rgba(0, 0, 0, 0.06));
@@ -190,12 +260,29 @@ function styleTitle(name: string): string {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  position: sticky;
+  top: calc(var(--vp-nav-height, 64px) + 16px);
+  z-index: 10;
+  box-shadow: none;
+  transition: box-shadow var(--duration-fast) var(--ease-smooth);
+
+  &.is-stuck {
+    box-shadow: var(--vp-shadow-2);
+  }
 
   &-row {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     gap: 16px;
+
+    &-toggle {
+      cursor: pointer;
+
+      &.is-disabled {
+        cursor: not-allowed;
+      }
+    }
 
     &-total {
       padding-top: 14px;
@@ -206,6 +293,25 @@ function styleTitle(name: string): string {
   &-label {
     font-size: 13px;
     color: var(--ui-c-text-muted);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+
+    code {
+      font-family: var(--vp-font-family-mono);
+      font-size: 13px;
+      color: var(--vp-c-text-1);
+      background: var(--vp-c-bg-soft);
+      padding: 2px 6px;
+      border-radius: var(--vp-radius-xs);
+    }
+  }
+
+  &-hint {
+    font-size: 12px;
+    color: var(--ui-c-text-subtle);
   }
 
   &-row-total &-label {
@@ -237,21 +343,6 @@ function styleTitle(name: string): string {
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
-
-  &-note {
-    margin: 0;
-    padding-top: 4px;
-    font-size: 12px;
-    line-height: 1.55;
-    color: var(--ui-c-text-subtle);
-
-    code {
-      background: var(--vp-c-bg-soft);
-      padding: 1px 5px;
-      border-radius: var(--vp-radius-xs);
-      font-size: 0.95em;
-    }
-  }
 }
 
 .bundle-size-picker {
@@ -271,37 +362,8 @@ function styleTitle(name: string): string {
   }
 
   &-search {
-    display: flex;
-    align-items: center;
-    gap: 8px;
     flex: 1;
     min-width: 200px;
-    background: var(--vp-c-bg);
-    border: 1px solid var(--vp-c-border);
-    border-radius: var(--vp-radius-xs);
-    padding: 4px 12px;
-
-    svg {
-      color: var(--ui-c-text-subtle);
-      flex-shrink: 0;
-    }
-
-    &-input {
-      flex: 1;
-      border: none;
-      background: transparent;
-
-      :deep(input) {
-        border: none;
-        background: transparent;
-        padding: 6px 0;
-        box-shadow: none;
-      }
-
-      :deep(input:focus) {
-        box-shadow: none;
-      }
-    }
   }
 
   &-actions {
@@ -345,6 +407,10 @@ function styleTitle(name: string): string {
     min-width: 0;
   }
 
+  &-avatar {
+    flex-shrink: 0;
+  }
+
   &-title {
     font-size: 14px;
     font-weight: 500;
@@ -363,7 +429,7 @@ function styleTitle(name: string): string {
   &-values {
     display: flex;
     align-items: baseline;
-    gap: 10px;
+    gap: 12px;
     font-variant-numeric: tabular-nums;
     flex-shrink: 0;
     margin-left: auto;
@@ -380,8 +446,6 @@ function styleTitle(name: string): string {
     color: var(--ui-c-text-subtle);
     text-transform: uppercase;
     letter-spacing: 0.4px;
-    min-width: 70px;
-    text-align: right;
   }
 }
 

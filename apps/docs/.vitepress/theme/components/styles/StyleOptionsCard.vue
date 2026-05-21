@@ -13,7 +13,8 @@ import Accordion from 'primevue/accordion';
 import AccordionPanel from 'primevue/accordionpanel';
 import AccordionHeader from 'primevue/accordionheader';
 import AccordionContent from 'primevue/accordioncontent';
-import StyleOptionsTypeBadge from './StyleOptionsTypeBadge.vue';
+import Card from 'primevue/card';
+import Tag from 'primevue/tag';
 import StyleOptionsPreview from './StyleOptionsPreview.vue';
 import StyleOptionsCodePanel from './StyleOptionsCodePanel.vue';
 import Message from 'primevue/message';
@@ -285,20 +286,25 @@ const hasDetails = computed(() => {
 </script>
 
 <template>
-  <div class="style-options-card">
-    <div class="style-options-card-header">
+  <Card class="style-options-card">
+    <template #content>
+      <div class="style-options-card-header">
       <h3 :id="headerId" tabindex="-1" class="style-options-card-title">
         {{ name }}
         <a class="header-anchor" :href="`#${headerId}`" aria-hidden="true"></a>
       </h3>
       <div class="style-options-card-badges">
-        <StyleOptionsTypeBadge
+        <Tag
           v-for="badge in badges"
           :key="badge.label"
-          :label="badge.label"
-          :color="badge.color"
-          :icon="badge.icon"
-        />
+          :style="{
+            background: `color-mix(in srgb, ${badge.color} 10%, transparent)`,
+            color: badge.color,
+          }"
+        >
+          <component v-if="badge.icon" :is="badge.icon" :size="13" />
+          {{ badge.label }}
+        </Tag>
       </div>
     </div>
 
@@ -392,16 +398,13 @@ const hasDetails = computed(() => {
         </AccordionContent>
       </AccordionPanel>
     </Accordion>
-  </div>
+    </template>
+  </Card>
 </template>
 
 <style scoped lang="scss">
 .style-options-card {
-  border: 1px solid var(--pg-border);
-  border-radius: var(--vp-radius-xs);
-  padding: 16px 20px;
   min-width: 0;
-  background: var(--p-content-background);
 
   &-header {
     display: flex;
@@ -478,7 +481,7 @@ const hasDetails = computed(() => {
         font-weight: 600;
         padding: 1px 5px;
         border-radius: 3px;
-        background: var(--vp-c-bg-soft);
+        background-color: var(--vp-code-bg);
         color: var(--vp-c-text-2);
       }
     }

@@ -2,8 +2,7 @@
 import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { Copy, Check } from '@lucide/vue';
 import { escapeHtml } from '@theme/utils/escape';
-
-type Hljs = typeof import('highlight.js/lib/core').default;
+import { loadHljs, type Hljs } from '@theme/utils/hljs';
 
 const props = defineProps<{
   lang?: string;
@@ -15,33 +14,6 @@ const preRef = ref<HTMLPreElement>();
 const codeHtml = ref(escapeHtml(props.code));
 const copied = ref(false);
 let timeout: ReturnType<typeof setTimeout> | null = null;
-let hljsPromise: Promise<Hljs> | null = null;
-
-function loadHljs(): Promise<Hljs> {
-  return (hljsPromise ??= (async () => {
-    const [
-      { default: core },
-      { default: javascript },
-      { default: xml },
-      { default: php },
-    ] = await Promise.all([
-      import('highlight.js/lib/core'),
-      import('highlight.js/lib/languages/javascript'),
-      import('highlight.js/lib/languages/xml'),
-      import('highlight.js/lib/languages/php'),
-    ]);
-
-    for (const [name, language] of [
-      ['js', javascript],
-      ['html', xml],
-      ['php', php],
-    ] as const) {
-      core.registerLanguage(name, language);
-    }
-
-    return core;
-  })());
-}
 
 function scrollPreToBottom() {
   if (props.scrollToBottom && preRef.value) {
@@ -101,7 +73,7 @@ watch(
 
 <template>
   <div class="ui-code">
-    <pre ref="preRef" class="ui-code-text" v-html="codeHtml"></pre>
+    <pre ref="preRef" class="ui-code-text"><code v-html="codeHtml" /></pre>
     <button
       class="ui-code-copy"
       @click="onCopy"
@@ -116,48 +88,65 @@ watch(
 <style lang="scss" scoped>
 .ui-code {
   position: relative;
-  background: var(--vp-c-bg-soft);
-  border-radius: var(--vp-radius-sm);
-  padding: 14px 16px;
+  background-color: var(--vp-code-block-bg);
+  border-radius: 8px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   min-height: 0;
+  transition: background-color 0.5s;
 
   &-text {
-    font-size: 13px;
     font-family: var(--vp-font-family-mono);
-    color: var(--vp-c-text-1);
-    line-height: 1.6;
+    font-size: var(--vp-code-font-size);
+    color: var(--vp-code-block-color);
+    line-height: var(--vp-code-line-height);
     margin: 0;
-    padding-right: 32px;
+    padding: 20px 0;
     white-space: pre;
     overflow: auto;
     flex: 1;
     min-height: 0;
+    transition: color 0.5s;
+
+    code {
+      display: block;
+      padding: 0 24px;
+      width: fit-content;
+      min-width: 100%;
+    }
   }
 
   &-copy {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 28px;
-    height: 28px;
+    top: 12px;
+    right: 12px;
+    z-index: 3;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--vp-c-bg);
-    border: 1px solid var(--vp-c-border);
-    border-radius: var(--vp-radius-xs);
+    background-color: var(--vp-code-copy-code-bg);
+    border: 1px solid var(--vp-code-copy-code-border-color);
+    border-radius: 4px;
+    color: var(--vp-code-copy-code-active-text);
     cursor: pointer;
-    transition: all var(--duration-fast) ease;
-    color: var(--ui-c-text-subtle);
+    opacity: 0;
+    transition:
+      border-color 0.25s,
+      background-color 0.25s,
+      opacity 0.25s;
+  }
 
-    &:hover {
-      background: var(--vp-c-brand-soft);
-      color: var(--vp-c-brand-1);
-      border-color: transparent;
-    }
+  &:hover &-copy,
+  &-copy:focus {
+    opacity: 1;
+  }
+
+  &-copy:hover {
+    border-color: var(--vp-code-copy-code-hover-border-color);
+    background-color: var(--vp-code-copy-code-hover-bg);
   }
 }
 </style>

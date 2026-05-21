@@ -2,6 +2,7 @@
 import { kebabCase } from 'change-case';
 import { UiCode as Code } from '../ui';
 import { computed, ref } from 'vue';
+import Card from 'primevue/card';
 import Tabs from 'primevue/tabs';
 import TabList from 'primevue/tablist';
 import Tab from 'primevue/tab';
@@ -75,8 +76,9 @@ const exampleCliUsage = computed(() => {
 </script>
 
 <template>
-  <div class="style-usage">
-    <Tabs v-model:value="tab">
+  <Card class="style-usage">
+    <template #content>
+      <Tabs v-model:value="tab">
       <TabList>
         <Tab value="http-api">HTTP-API</Tab>
         <Tab value="js-library">JS</Tab>
@@ -127,19 +129,17 @@ const exampleCliUsage = computed(() => {
             See <a href="/how-to-use/cli">CLI</a> docs for more information.
           </p>
         </TabPanel>
-      </TabPanels>
-    </Tabs>
-  </div>
+        </TabPanels>
+      </Tabs>
+    </template>
+  </Card>
 </template>
 
 <style lang="scss" scoped>
 .style-usage {
-  border: 1px solid var(--pg-border);
-  border-radius: var(--vp-radius-xs);
-  background: var(--p-content-background);
   overflow: hidden;
 
-  &-body {
+  :deep(.style-usage-body) {
     > *:first-child {
       margin-top: 0 !important;
     }

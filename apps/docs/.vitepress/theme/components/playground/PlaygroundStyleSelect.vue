@@ -3,14 +3,17 @@ import { ref, computed } from 'vue';
 import { capitalCase } from 'change-case';
 import { useData } from 'vitepress';
 import { storeToRefs } from 'pinia';
-import { Search, X, Plus, Trash2 } from '@lucide/vue';
+import { Plus, Trash2 } from '@lucide/vue';
 import ChevronRightIcon from '@primevue/icons/chevronright';
 import { useStyleFiltering } from '@theme/composables/useStyleFiltering';
+import { CUSTOM_CATEGORY } from '@theme/config/styleCategories';
 import useStore from '@theme/stores/playground';
 import { ThemeOptions } from '@theme/types';
 import { UiAvatar } from '../ui';
 import PlaygroundCustomStyleUpload from './PlaygroundCustomStyleUpload.vue';
 import Dialog from 'primevue/dialog';
+import InputText from 'primevue/inputtext';
+import MultiSelect from 'primevue/multiselect';
 import Tag from 'primevue/tag';
 
 const store = useStore();
@@ -22,12 +25,12 @@ const uploadOpen = ref(false);
 
 const {
   searchQuery,
-  selectedCategory,
+  selectedCategories,
+  selectedLicenses,
   availableCategories,
+  availableLicenses,
   groupedStyles,
   styleList,
-  hasActiveFilters,
-  clearFilters,
 } = useStyleFiltering(theme.value.avatarStyles, customStyles);
 
 function selectStyle(name: string) {
@@ -57,7 +60,7 @@ const builtInGroupedStyles = computed(() => {
   const result: Record<string, (typeof groupedStyles.value)[string]> = {};
 
   for (const [category, styles] of Object.entries(groupedStyles.value)) {
-    if (category !== 'Custom') {
+    if (category !== CUSTOM_CATEGORY) {
       result[category] = styles;
     }
   }
@@ -101,44 +104,35 @@ const currentDisplayName = computed(() => {
   >
     <div class="pg-style-select">
       <div class="pg-style-select-toolbar">
-        <div class="pg-style-select-search">
-          <Search :size="16" />
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="Search styles..."
-            class="pg-style-select-search-input"
-          />
-        </div>
+        <InputText
+          v-model="searchQuery"
+          placeholder="Search styles..."
+          fluid
+        />
 
-        <div class="pg-style-select-filters">
-          <button
-            v-for="category in availableCategories"
-            :key="category"
-            class="pg-style-select-chip"
-            :class="{
-              'pg-style-select-chip-active': selectedCategory === category,
-            }"
-            @click="
-              selectedCategory = selectedCategory === category ? null : category
-            "
-          >
-            {{ category }}
-          </button>
-          <button
-            v-if="hasActiveFilters"
-            class="pg-style-select-chip pg-style-select-chip-clear"
-            @click="clearFilters"
-          >
-            <X :size="12" />
-            Clear
-          </button>
-        </div>
+        <MultiSelect
+          v-model="selectedCategories"
+          :options="availableCategories"
+          placeholder="Filter by category"
+          :showToggleAll="false"
+          fluid
+        />
+
+        <MultiSelect
+          v-model="selectedLicenses"
+          :options="availableLicenses"
+          placeholder="Filter by license"
+          :showToggleAll="false"
+          fluid
+        />
       </div>
 
       <div class="pg-style-select-body">
         <div
-          v-if="!selectedCategory || selectedCategory === 'Custom'"
+          v-if="
+            selectedCategories.length === 0 ||
+            selectedCategories.includes(CUSTOM_CATEGORY)
+          "
           class="pg-style-select-group"
         >
           <h3 class="pg-style-select-group-title">Custom</h3>
@@ -311,84 +305,12 @@ const currentDisplayName = computed(() => {
 }
 
 .pg-style-select-toolbar {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
   gap: 12px;
-}
 
-.pg-style-select-search {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0 12px;
-  border: 1px solid var(--vp-c-border);
-  border-radius: var(--vp-radius-xs);
-  background: var(--vp-c-bg);
-  color: var(--ui-c-text-subtle);
-  transition: border-color var(--duration-fast);
-
-  &:focus-within {
-    border-color: var(--vp-c-brand-1);
-  }
-
-  &-input {
-    flex: 1;
-    border: none;
-    background: transparent;
-    padding: 8px 0;
-    font-size: 14px;
-    color: var(--vp-c-text-1);
-    outline: none;
-
-    &::placeholder {
-      color: var(--ui-c-text-subtle);
-    }
-  }
-}
-
-.pg-style-select-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.pg-style-select-chip {
-  padding: 4px 12px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--ui-c-text-muted);
-  background: var(--vp-c-bg-soft);
-  border: 1px solid var(--vp-c-border);
-  border-radius: var(--vp-radius-md);
-  cursor: pointer;
-  transition: all var(--duration-fast);
-
-  &:hover {
-    border-color: var(--vp-c-brand-1);
-    color: var(--vp-c-brand-1);
-  }
-
-  &-active {
-    background: var(--vp-c-brand-1);
-    border-color: var(--vp-c-brand-1);
-    color: white;
-
-    &:hover {
-      color: white;
-    }
-  }
-
-  &-clear {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    border-style: dashed;
-    color: var(--ui-c-text-subtle);
-
-    &:hover {
-      border-color: var(--vp-c-danger-1);
-      color: var(--vp-c-danger-1);
-    }
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
   }
 }
 

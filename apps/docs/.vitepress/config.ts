@@ -4,6 +4,7 @@ import { ThemeOptions } from '@theme/types';
 
 import sidebarDocs from './config/sidebarDocs';
 import sidebarStyles from './config/sidebarStyles';
+import sidebarTools from './config/sidebarTools';
 import avatarStyles from './config/avatarStyles';
 import avatarUniqueCounts from './config/avatarUniqueCounts';
 import avatarStyleSizes from './config/avatarStyleSizes';
@@ -216,6 +217,7 @@ export default defineConfig<ThemeOptions>({
       '/how-to-use/': sidebarDocs,
       '/guides/': sidebarDocs,
       '/specification/': sidebarDocs,
+      '/tools/': sidebarTools,
     },
   },
   sitemap: {

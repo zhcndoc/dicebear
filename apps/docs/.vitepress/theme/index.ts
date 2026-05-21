@@ -77,11 +77,15 @@ const DiceBearPreset = definePreset(Aura, {
           950: '#111115',
         },
         content: {
-          background: 'var(--vp-c-bg)',
+          background: 'var(--vp-c-bg-soft)',
           hoverBackground: 'var(--vp-c-bg-soft)',
           borderColor: 'var(--pg-border)',
           color: 'var(--vp-c-text-1)',
           hoverColor: 'var(--vp-c-text-1)',
+        },
+        formField: {
+          background: 'var(--vp-c-bg-soft)',
+          hoverBorderColor: 'var(--vp-c-gray-1)',
         },
         text: {
           mutedColor: 'rgba(235, 235, 245, 0.78)',
@@ -95,6 +99,7 @@ const DiceBearPreset = definePreset(Aura, {
         light: {
           outlined: {
             secondary: {
+              background: 'var(--vp-c-bg-elv)',
               hoverBackground: 'var(--vp-c-bg-soft)',
               activeBackground: 'var(--vp-c-bg-soft)',
               borderColor: 'var(--p-form-field-border-color)',
@@ -108,11 +113,22 @@ const DiceBearPreset = definePreset(Aura, {
           },
         },
         dark: {
+          root: {
+            secondary: {
+              background: 'var(--vp-c-bg-soft)',
+              hoverBackground: 'var(--vp-c-bg-elv)',
+              activeBackground: 'var(--vp-c-bg-elv)',
+              borderColor: 'var(--vp-c-border)',
+              hoverBorderColor: 'var(--vp-c-border)',
+              activeBorderColor: 'var(--vp-c-border)',
+            },
+          },
           outlined: {
             secondary: {
-              hoverBackground: 'var(--vp-c-bg-soft)',
-              activeBackground: 'var(--vp-c-bg-soft)',
-              borderColor: 'var(--p-form-field-border-color)',
+              background: 'var(--vp-c-bg-soft)',
+              hoverBackground: 'var(--vp-c-bg-elv)',
+              activeBackground: 'var(--vp-c-bg-elv)',
+              borderColor: 'var(--vp-c-border)',
               color: 'var(--vp-c-text-1)',
             },
           },
@@ -120,6 +136,53 @@ const DiceBearPreset = definePreset(Aura, {
             color: 'var(--p-text-muted-color)',
             hoverColor: 'var(--p-text-color)',
             activeColor: 'var(--p-text-color)',
+          },
+        },
+      },
+      // Aura hardcodes `background: transparent` for `.p-button-outlined`, so the
+      // outlined.secondary.background token above is otherwise ignored.
+      css: () => `
+        .p-button-outlined.p-button-secondary {
+          background: var(--p-button-outlined-secondary-background);
+        }
+      `,
+    },
+    accordion: {
+      colorScheme: {
+        dark: {
+          header: {
+            background: 'var(--vp-c-bg-soft)',
+            hoverBackground: 'var(--vp-c-bg-soft)',
+            activeBackground: 'var(--vp-c-bg-soft)',
+            activeHoverBackground: 'var(--vp-c-bg-soft)',
+          },
+          content: {
+            background: 'var(--vp-c-bg-soft)',
+          },
+        },
+      },
+    },
+    tag: {
+      colorScheme: {
+        dark: {
+          secondary: {
+            background: 'var(--vp-c-bg)',
+          },
+        },
+      },
+    },
+    togglebutton: {
+      colorScheme: {
+        dark: {
+          root: {
+            background: 'var(--vp-c-bg)',
+            hoverBackground: 'var(--vp-c-bg)',
+            checkedBackground: 'var(--vp-c-bg)',
+            borderColor: 'var(--vp-c-bg)',
+            checkedBorderColor: 'var(--vp-c-bg)',
+          },
+          content: {
+            checkedBackground: 'var(--vp-c-bg-soft)',
           },
         },
       },

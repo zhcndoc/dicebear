@@ -112,7 +112,7 @@ function hueFromRgb(rgb: Rgb, max: number, min: number): number {
   if (max === rn) h = ((gn - bn) / delta) % 6;
   else if (max === gn) h = (bn - rn) / delta + 2;
   else h = (rn - gn) / delta + 4;
-  h = Math.round(h * 60);
+  h *= 60;
   if (h < 0) h += 360;
   return h;
 }

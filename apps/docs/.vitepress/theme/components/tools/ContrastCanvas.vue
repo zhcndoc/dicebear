@@ -110,8 +110,8 @@ const ariaValueText = computed(
     `${hsvToHex(props.hsv)}, saturation ${Math.round(props.hsv.s)} percent, value ${Math.round(props.hsv.v)} percent`,
 );
 
-// Solid hue background that the white-overlay + black-overlay gradient
-// layers in CSS turn into the canonical HSV saturation/value square.
+// Layered gradients (white→hue overlaid with transparent→black) compose to
+// the canonical HSV saturation/value square at the current hue.
 const hueOnlyBackground = computed(() => {
   const hueColor = hsvToHex({ h: props.hsv.h, s: 100, v: 100 });
   return `linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, ${hueColor})`;

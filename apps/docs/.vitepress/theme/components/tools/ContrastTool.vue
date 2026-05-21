@@ -62,6 +62,18 @@ function updateHsv(next: Hsv) {
   </UiContainer>
 </template>
 
+<style lang="scss">
+html.dark {
+  .contrast-tool-pane {
+    background: var(--vp-c-bg-soft);
+  }
+
+  .contrast-tool-hint {
+    background: var(--vp-c-bg);
+  }
+}
+</style>
+
 <style lang="scss" scoped>
 .contrast-tool {
   padding-top: 80px;

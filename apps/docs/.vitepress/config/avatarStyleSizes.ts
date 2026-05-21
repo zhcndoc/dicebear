@@ -27,6 +27,10 @@ function walkJsFiles(dir: string): string[] {
 
 const stylesDir = path.dirname(require.resolve('@dicebear/styles/initials.json'));
 const coreLibDir = path.dirname(require.resolve('@dicebear/core'));
+// @dicebear/converter `main` points to lib/node/index.js; step up to lib/
+const converterLibDir = path.dirname(
+  path.dirname(require.resolve('@dicebear/converter')),
+);
 
 const styles: Record<string, { raw: number; gzip: number }> = {};
 for (const file of fs.readdirSync(stylesDir)) {
@@ -35,16 +39,23 @@ for (const file of fs.readdirSync(stylesDir)) {
   styles[name] = sizeFor(path.join(stylesDir, file));
 }
 
-let coreRaw = 0;
-let coreGzip = 0;
-for (const file of walkJsFiles(coreLibDir)) {
-  const s = sizeFor(file);
-  coreRaw += s.raw;
-  coreGzip += s.gzip;
+function bundleSize(dir: string, exclude: (file: string) => boolean = () => false) {
+  let raw = 0;
+  let gzip = 0;
+  for (const file of walkJsFiles(dir)) {
+    if (exclude(file)) continue;
+    const s = sizeFor(file);
+    raw += s.raw;
+    gzip += s.gzip;
+  }
+  return { raw, gzip };
 }
 
 const avatarStyleSizes: AvatarStyleSizeBundle = {
-  core: { raw: coreRaw, gzip: coreGzip },
+  core: bundleSize(coreLibDir),
+  converter: bundleSize(converterLibDir, (file) =>
+    file.includes(`${path.sep}node${path.sep}`),
+  ),
   styles,
 };
 
