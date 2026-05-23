@@ -1,16 +1,12 @@
 <script setup lang="ts">
-import { useAvatarStyleMeta } from '@theme/composables/avatar';
 import { loadAvatarStyle } from '@theme/utils/avatar/style';
-import { capitalCase, kebabCase } from 'change-case';
-import { computed, toRef } from 'vue';
+import { computed } from 'vue';
 import { computedAsync } from '@vueuse/core';
 import useStore from '@theme/stores/playground';
-import { formatLicenseName } from '@theme/utils/format';
 import { safeHttpUrl } from '@theme/utils/url';
+import { UiLicenseText } from '@theme/components/ui';
 
 const store = useStore();
-
-const avatarStyleMeta = useAvatarStyleMeta(toRef(store, 'avatarStyleName'));
 
 // For custom styles, load meta from the Style object directly
 const customStyleMeta = computedAsync(async () => {
@@ -47,35 +43,18 @@ const customLicenseUrl = computed(() =>
   safeHttpUrl(customStyleMeta.value?.license?.url),
 );
 
-const builtInSourceUrl = computed(() =>
-  safeHttpUrl(avatarStyleMeta.value?.source),
-);
-const builtInHomepageUrl = computed(() =>
-  safeHttpUrl(avatarStyleMeta.value?.homepage),
-);
-const builtInLicenseUrl = computed(() =>
-  safeHttpUrl(avatarStyleMeta.value?.license?.url),
-);
-
-const avatarStyleName = computed(() => {
-  if (store.isCustomStyle) {
-    return store.customStyles[store.avatarStyleName]?.name ?? 'Custom Style';
-  }
-
-  return capitalCase(store.avatarStyleName);
-});
-
-const avatarStyleLink = computed(() =>
-  store.isCustomStyle
-    ? undefined
-    : `/styles/${kebabCase(store.avatarStyleName)}/`,
+const customStyleDisplayName = computed(
+  () =>
+    store.customStyles[store.avatarStyleName]?.name ?? 'Custom Style',
 );
 </script>
 
 <template>
   <p class="playground-license-text" v-if="store.isCustomStyle">
     <template v-if="hasCustomMeta">
-      <span class="playground-license-text-name">{{ avatarStyleName }}</span>
+      <span class="playground-license-text-name">{{
+        customStyleDisplayName
+      }}</span>
       <template v-if="customStyleMeta?.title">
         is based on:
         <a
@@ -109,55 +88,7 @@ const avatarStyleLink = computed(() =>
     </template>
   </p>
 
-  <p class="playground-license-text" v-else>
-    <template v-if="avatarStyleMeta?.creator !== 'DiceBear'">
-      The avatar style
-    </template>
-    <a :href="avatarStyleLink">{{ avatarStyleName }}</a>
-    <template v-if="avatarStyleMeta?.creator !== 'DiceBear'">
-      <template
-        v-if="
-          avatarStyleMeta?.license?.name !== 'MIT' &&
-          avatarStyleMeta?.creator !== 'DiceBear' &&
-          avatarStyleMeta?.title
-        "
-      >
-        is a remix of:
-      </template>
-      <template v-else> is based on: </template>
-      <a
-        v-if="builtInSourceUrl"
-        :href="builtInSourceUrl"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {{ avatarStyleMeta?.title ?? 'Design' }}
-      </a>
-      <template v-else>{{ avatarStyleMeta?.title ?? 'Design' }}</template>
-    </template>
-    by
-    <a
-      v-if="builtInHomepageUrl"
-      :href="builtInHomepageUrl"
-      target="_blank"
-      rel="noopener noreferrer"
-      >{{ avatarStyleMeta?.creator }}</a
-    >
-    <template v-else>{{ avatarStyleMeta?.creator }}</template
-    >, licensed under
-    <a
-      v-if="builtInLicenseUrl"
-      :href="builtInLicenseUrl"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {{ formatLicenseName(avatarStyleMeta?.license?.name) }}
-    </a>
-    <template v-else>{{
-      formatLicenseName(avatarStyleMeta?.license?.name)
-    }}</template>
-    .
-  </p>
+  <UiLicenseText v-else :style-name="store.avatarStyleName" />
 </template>
 
 <style scoped lang="scss">

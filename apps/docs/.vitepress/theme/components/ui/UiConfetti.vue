@@ -64,11 +64,11 @@ onMounted(async () => {
 </script>
 
 <template>
-  <canvas ref="canvas" class="playground-confetti"></canvas>
+  <canvas ref="canvas" class="ui-confetti"></canvas>
 </template>
 
 <style scoped>
-.playground-confetti {
+.ui-confetti {
   position: absolute;
   top: 0;
   right: 0;

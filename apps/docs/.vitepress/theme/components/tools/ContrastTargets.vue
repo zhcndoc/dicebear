@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { Sparkles } from '@lucide/vue';
 import { Color } from '@dicebear/core';
+import { UiCard } from '../ui';
 
 const props = defineProps<{
   pickedHex: string;
@@ -44,9 +45,10 @@ function ratioFor(hex: string): string {
 
 <template>
   <div class="contrast-targets">
-    <article
+    <UiCard
       v-for="target in targets"
       :key="target.id"
+      padding="sm"
       class="contrast-target"
       :class="{ 'contrast-target-picked': pickedId === target.id }"
     >
@@ -80,15 +82,9 @@ function ratioFor(hex: string): string {
           <span class="contrast-target-ratio-label">Contrast ratio</span>
         </div>
       </div>
-    </article>
+    </UiCard>
   </div>
 </template>
-
-<style lang="scss">
-html.dark .contrast-target {
-  background: var(--vp-c-bg-elv);
-}
-</style>
 
 <style lang="scss" scoped>
 .contrast-targets {
@@ -102,16 +98,15 @@ html.dark .contrast-target {
 }
 
 .contrast-target {
-  background: var(--vp-c-bg-soft);
-  border: 2px solid transparent;
-  border-radius: var(--vp-radius-md);
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  transition: border-color var(--duration-fast) var(--ease-smooth);
+  :deep(.ui-card-body) {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
 
-  &-picked {
+  // Compound selector to beat UiCard's `.ui-card` rule in cascade
+  // (both selectors otherwise have identical specificity).
+  &.contrast-target-picked {
     border-color: var(--vp-c-brand-1);
     box-shadow: 0 0 0 4px var(--vp-c-brand-soft);
   }

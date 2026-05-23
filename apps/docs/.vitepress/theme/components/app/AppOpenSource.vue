@@ -6,9 +6,9 @@ import { ThemeOptions } from '@theme/types';
 import { useData } from 'vitepress';
 import { kebabCase } from 'change-case';
 import Prando from 'prando';
+import Button from 'primevue/button';
 import {
   UiAvatar,
-  UiButton,
   UiHeadline,
   UiDescription,
   UiContainer,
@@ -123,23 +123,29 @@ const scatteredAvatars = computed(() => {
       </div>
 
       <div class="app-open-source-actions">
-        <UiButton
+        <Button
+          as="a"
           href="https://github.com/dicebear/dicebear"
-          variant="github"
-          :external="true"
+          target="_blank"
+          rel="noopener"
+          size="large"
+          severity="contrast"
           class="app-open-source-star-btn"
         >
           <UiIcon :path="siGithub.path" :size="20" />
           Star on GitHub
-        </UiButton>
-        <UiButton
+        </Button>
+        <Button
+          as="a"
           href="/guides/contribute-to-the-library/"
-          variant="secondary"
+          size="large"
+          severity="secondary"
+          variant="outlined"
           class="app-open-source-contribute"
         >
-          <Heart :size="20" class="app-open-source-heart-icon" />
+          <Heart :size="20" />
           Contribute
-        </UiButton>
+        </Button>
       </div>
     </UiContainer>
   </UiSection>

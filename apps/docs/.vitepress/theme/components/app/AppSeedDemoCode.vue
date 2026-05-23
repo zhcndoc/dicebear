@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { Play } from '@lucide/vue';
+import { PawPrint } from '@lucide/vue';
+import Button from 'primevue/button';
 import SelectButton from 'primevue/selectbutton';
-import { UiButton, UiCode } from '../ui';
+import { UiCode } from '../ui';
 import { escapeJsString, escapeShellArg } from '../../utils/escape';
 
 type CodeTab = 'api' | 'js' | 'php' | 'cli';
@@ -106,14 +107,16 @@ const playgroundLink = '/playground/';
     </div>
 
     <div class="app-seed-demo-code-cta">
-      <UiButton
+      <Button
+        as="a"
         :href="playgroundLink"
-        variant="primary"
+        size="large"
+        severity="contrast"
         class="app-seed-demo-code-cta-btn"
       >
-        <Play :size="20" />
+        <PawPrint :size="20" />
         Open Playground
-      </UiButton>
+      </Button>
     </div>
   </div>
 </template>
@@ -124,6 +127,10 @@ const playgroundLink = '/playground/';
   flex-direction: column;
   border-left: 1px solid var(--ui-window-divider-color);
   min-width: 0;
+
+  // Align the code block surface with the togglebutton tab bar above it
+  // (both sit on --vp-c-bg inside this editor window mockup).
+  --vp-code-block-bg: var(--vp-c-bg);
 
   &-wrapper {
     padding: 16px;
@@ -163,7 +170,6 @@ const playgroundLink = '/playground/';
     &-btn {
       width: 100%;
       justify-content: center;
-      font-size: 13px;
     }
   }
 }

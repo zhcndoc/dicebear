@@ -13,7 +13,7 @@ import Accordion from 'primevue/accordion';
 import AccordionPanel from 'primevue/accordionpanel';
 import AccordionHeader from 'primevue/accordionheader';
 import AccordionContent from 'primevue/accordioncontent';
-import Card from 'primevue/card';
+import { UiCard } from '../ui';
 import Tag from 'primevue/tag';
 import StyleOptionsPreview from './StyleOptionsPreview.vue';
 import StyleOptionsCodePanel from './StyleOptionsCodePanel.vue';
@@ -286,9 +286,8 @@ const hasDetails = computed(() => {
 </script>
 
 <template>
-  <Card class="style-options-card">
-    <template #content>
-      <div class="style-options-card-header">
+  <UiCard class="style-options-card">
+    <div class="style-options-card-header">
       <h3 :id="headerId" tabindex="-1" class="style-options-card-title">
         {{ name }}
         <a class="header-anchor" :href="`#${headerId}`" aria-hidden="true"></a>
@@ -398,8 +397,7 @@ const hasDetails = computed(() => {
         </AccordionContent>
       </AccordionPanel>
     </Accordion>
-    </template>
-  </Card>
+  </UiCard>
 </template>
 
 <style scoped lang="scss">

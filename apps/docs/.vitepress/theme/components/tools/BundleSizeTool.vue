@@ -8,7 +8,7 @@ import InputIcon from 'primevue/inputicon';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { Search, X } from '@lucide/vue';
-import { UiAvatar, UiContainer, UiHeadline, UiDescription } from '@theme/components/ui';
+import { UiAvatar, UiCard, UiContainer, UiHeadline, UiDescription } from '@theme/components/ui';
 import { useVisibility } from '@theme/composables/useVisibility';
 import type { ThemeOptions } from '@theme/types';
 
@@ -92,48 +92,56 @@ function styleTitle(name: string): string {
     </header>
 
     <div ref="summarySentinel" class="bundle-size-summary-sentinel" aria-hidden="true" />
-    <section class="bundle-size-summary" :class="{ 'is-stuck': isSummaryStuck }">
-      <label class="bundle-size-summary-row bundle-size-summary-row-toggle is-disabled">
-        <Checkbox :model-value="true" :binary="true" :disabled="true" />
-        <span class="bundle-size-summary-label">
-          <code>@dicebear/core</code>
-          <span class="bundle-size-summary-hint">always required</span>
-        </span>
-        <span class="bundle-size-summary-values">
-          <span class="bundle-size-summary-raw">{{ formatSize(sizes.core.gzip) }}</span>
-          <span class="bundle-size-summary-gzip">gzip</span>
-        </span>
-      </label>
-      <label class="bundle-size-summary-row bundle-size-summary-row-toggle">
-        <Checkbox v-model="includeConverter" :binary="true" />
-        <span class="bundle-size-summary-label">
-          <code>@dicebear/converter</code>
-          <span class="bundle-size-summary-hint">PNG, JPEG, WebP & PDF output</span>
-        </span>
-        <span class="bundle-size-summary-values">
-          <span class="bundle-size-summary-raw">{{ formatSize(sizes.converter.gzip) }}</span>
-          <span class="bundle-size-summary-gzip">gzip</span>
-        </span>
-      </label>
+    <UiCard padding="lg" class="bundle-size-summary" :class="{ 'is-stuck': isSummaryStuck }">
+      <div class="bundle-size-summary-row bundle-size-summary-row-toggle is-disabled">
+        <label class="bundle-size-summary-row-label">
+          <Checkbox :model-value="true" :binary="true" :disabled="true" />
+          <span class="bundle-size-summary-label">
+            <code>@dicebear/core</code>
+            <span class="bundle-size-summary-hint">always required</span>
+          </span>
+          <span class="bundle-size-summary-values">
+            <span class="bundle-size-summary-raw">{{ formatSize(sizes.core.gzip) }}</span>
+            <span class="bundle-size-summary-gzip">gzip</span>
+          </span>
+        </label>
+      </div>
+      <div class="bundle-size-summary-row bundle-size-summary-row-toggle">
+        <label class="bundle-size-summary-row-label">
+          <Checkbox v-model="includeConverter" :binary="true" />
+          <span class="bundle-size-summary-label">
+            <code>@dicebear/converter</code>
+            <span class="bundle-size-summary-hint">PNG, JPEG, WebP & PDF output</span>
+          </span>
+          <span class="bundle-size-summary-values">
+            <span class="bundle-size-summary-raw">{{ formatSize(sizes.converter.gzip) }}</span>
+            <span class="bundle-size-summary-gzip">gzip</span>
+          </span>
+        </label>
+      </div>
       <div class="bundle-size-summary-row">
-        <span class="bundle-size-summary-label">
-          {{ selected.size }} style{{ selected.size === 1 ? '' : 's' }} selected
-        </span>
-        <span class="bundle-size-summary-values">
-          <span class="bundle-size-summary-raw">{{ formatSize(selectedGzip) }}</span>
-          <span class="bundle-size-summary-gzip">gzip</span>
-        </span>
+        <div class="bundle-size-summary-row-label">
+          <span class="bundle-size-summary-label">
+            {{ selected.size }} style{{ selected.size === 1 ? '' : 's' }} selected
+          </span>
+          <span class="bundle-size-summary-values">
+            <span class="bundle-size-summary-raw">{{ formatSize(selectedGzip) }}</span>
+            <span class="bundle-size-summary-gzip">gzip</span>
+          </span>
+        </div>
       </div>
       <div class="bundle-size-summary-row bundle-size-summary-row-total">
-        <span class="bundle-size-summary-label">Total</span>
-        <span class="bundle-size-summary-values">
-          <span class="bundle-size-summary-raw">{{ formatSize(grandTotalGzip) }}</span>
-          <span class="bundle-size-summary-gzip">gzip</span>
-        </span>
+        <div class="bundle-size-summary-row-label">
+          <span class="bundle-size-summary-label">Total</span>
+          <span class="bundle-size-summary-values">
+            <span class="bundle-size-summary-raw">{{ formatSize(grandTotalGzip) }}</span>
+            <span class="bundle-size-summary-gzip">gzip</span>
+          </span>
+        </div>
       </div>
-    </section>
+    </UiCard>
 
-    <section class="bundle-size-picker">
+    <UiCard padding="lg" class="bundle-size-picker">
       <div class="bundle-size-picker-toolbar">
         <IconField class="bundle-size-picker-search">
           <InputIcon>
@@ -147,7 +155,7 @@ function styleTitle(name: string): string {
           />
         </IconField>
         <div class="bundle-size-picker-actions">
-          <Button label="Select all" severity="secondary" @click="selectAll" />
+          <Button label="Select all" severity="secondary" variant="outlined" @click="selectAll" />
           <Button label="Clear" severity="secondary" variant="outlined" @click="clear">
             <template #icon><X :size="14" /></template>
           </Button>
@@ -187,7 +195,7 @@ function styleTitle(name: string): string {
           No styles match "{{ filter }}".
         </li>
       </ul>
-    </section>
+    </UiCard>
   </UiContainer>
 </template>
 
@@ -198,7 +206,8 @@ html.dark {
     background: var(--vp-c-bg-soft);
   }
 
-  .bundle-size-row:hover {
+  .bundle-size-row:hover,
+  .bundle-size-summary-row-toggle:not(.is-disabled):hover {
     background: var(--vp-c-bg);
   }
 
@@ -253,41 +262,61 @@ html.dark {
 }
 
 .bundle-size-summary {
-  background: var(--vp-c-bg-elv);
-  border: 1px solid var(--ui-card-border-color, rgba(0, 0, 0, 0.06));
-  border-radius: var(--vp-radius-lg);
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
   position: sticky;
   top: calc(var(--vp-nav-height, 64px) + 16px);
   z-index: 10;
   box-shadow: none;
   transition: box-shadow var(--duration-fast) var(--ease-smooth);
 
+  :deep(.ui-card-body) {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
   &.is-stuck {
     box-shadow: var(--vp-shadow-2);
   }
 
+  // Row container mirrors `.bundle-size-row` from the picker below.
   &-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
+    border-radius: var(--vp-radius-xs);
+    transition: background-color var(--duration-fast) var(--ease-smooth);
 
-    &-toggle {
-      cursor: pointer;
-
-      &.is-disabled {
-        cursor: not-allowed;
-      }
+    &-toggle:not(.is-disabled):hover {
+      background: var(--vp-c-bg-soft);
     }
 
     &-total {
-      padding-top: 14px;
+      margin-top: 8px;
+      padding-top: 12px;
       border-top: 1px solid var(--vp-c-divider);
+      border-radius: 0;
     }
+  }
+
+  // Inner label mirrors `.bundle-size-row-label` from the picker.
+  &-row-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 12px;
+    min-width: 0;
+  }
+
+  &-row-toggle &-row-label {
+    cursor: pointer;
+  }
+
+  &-row-toggle.is-disabled &-row-label {
+    cursor: not-allowed;
+  }
+
+  // Info rows (no checkbox) get extra left padding so their label aligns
+  // with the package name in the toggle rows above (checkbox width + gap).
+  &-row:not(&-row-toggle) &-row-label {
+    padding-left: 40px;
   }
 
   &-label {
@@ -325,6 +354,8 @@ html.dark {
     align-items: baseline;
     gap: 12px;
     font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+    margin-left: auto;
   }
 
   &-raw {
@@ -346,13 +377,11 @@ html.dark {
 }
 
 .bundle-size-picker {
-  background: var(--vp-c-bg-elv);
-  border: 1px solid var(--ui-card-border-color, rgba(0, 0, 0, 0.06));
-  border-radius: var(--vp-radius-lg);
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  :deep(.ui-card-body) {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
 
   &-toolbar {
     display: flex;
@@ -456,13 +485,75 @@ html.dark {
   font-size: 13px;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
+  // On small screens the sticky summary card eats too much of the viewport;
+  // drop the sticky behavior so it scrolls away with the rest of the content.
+  .bundle-size-summary {
+    position: static;
+    box-shadow: none !important;
+  }
+
+  // Tighter row padding + smaller "raw" value so summary rows fit on narrow
+  // viewports without the value crashing into the label. Allow wrapping so
+  // the values drop to a second line if the label needs the full width.
+  .bundle-size-summary-row-label {
+    flex-wrap: wrap;
+    padding: 8px 10px;
+    gap: 6px 10px;
+  }
+
+  // Force the values onto a second row so the code/label can use the full
+  // width above without being clipped by the value column. Left-align so
+  // the size reads directly under the package name.
+  .bundle-size-summary-values {
+    flex-basis: 100%;
+    margin-left: 0;
+    justify-content: flex-start;
+  }
+
+  // Toggle rows have a checkbox before the label; indent the values to sit
+  // under the package name instead of the checkbox.
+  .bundle-size-summary-row-toggle .bundle-size-summary-values {
+    margin-left: 30px;
+  }
+
+  .bundle-size-summary-raw {
+    font-size: 15px;
+  }
+
+  .bundle-size-summary-row-total .bundle-size-summary-raw {
+    font-size: 18px;
+  }
+
+  // Allow the label/hint to wrap to a second line on tiny viewports if needed.
+  .bundle-size-summary-label {
+    flex-wrap: wrap;
+    gap: 2px 10px;
+  }
+
+  // Hide the secondary "always required" / "PNG, JPEG, …" hint to save
+  // vertical space — the package name + size carry the meaning.
+  .bundle-size-summary-hint {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  // Mirror the summary row layout: name on top, size on a second line,
+  // left-aligned under the title so it reads as a labelled column.
   .bundle-size-row-label {
     flex-wrap: wrap;
     gap: 6px 12px;
   }
+
   .bundle-size-row-slug {
     display: none;
+  }
+
+  .bundle-size-row-values {
+    flex-basis: 100%;
+    margin-left: 72px; // checkbox (20) + gap (12) + avatar (28) + gap (12)
+    justify-content: flex-start;
   }
 }
 </style>

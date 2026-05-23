@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { Code as CodeIcon } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
-import { UiCode } from '../ui';
+import { UiCode, UiDialog } from '../ui';
 import {
   getAvatarApiUrl,
   getAvatarApiCommand,
   unsupportedHttpApiOptions,
 } from '@theme/utils/avatar/api';
 import { formatPhpValue } from '@theme/utils/code-examples';
-import PlaygroundDialog from './PlaygroundDialog.vue';
 import Button from 'primevue/button';
 import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
@@ -124,7 +123,7 @@ const exampleCli = computed(() =>
     </template>
   </Button>
 
-  <PlaygroundDialog v-model:open="open" max-width="800px" header="How to use">
+  <UiDialog v-model:open="open" max-width="800px" header="How to use">
     <div class="playground-button-how-to-use-text">
       <div class="playground-button-how-to-use-tabs-card">
         <Tabs v-model:value="tab">
@@ -220,7 +219,7 @@ const exampleCli = computed(() =>
 
       <PlaygroundLicenseAlert />
     </div>
-  </PlaygroundDialog>
+  </UiDialog>
 </template>
 
 <style scoped lang="scss">

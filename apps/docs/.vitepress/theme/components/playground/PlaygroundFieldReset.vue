@@ -9,6 +9,7 @@ defineEmits<{ click: [] }>();
   <Button
     size="small"
     severity="secondary"
+    variant="outlined"
     v-tooltip="'Reset to default'"
     class="pg-field-reset pg-field-toggle"
     @click="$emit('click')"

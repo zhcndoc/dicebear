@@ -17,8 +17,6 @@ withDefaults(
     <UiCard
       v-for="item in items"
       :key="item.title"
-      padding="md"
-      radius="md"
       class="docs-grid-card"
     >
       <div class="docs-grid-header">
@@ -58,9 +56,11 @@ withDefaults(
   }
 
   &-card {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    :deep(.ui-card-body) {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
   }
 
   &-header {

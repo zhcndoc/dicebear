@@ -2,10 +2,9 @@
 import { computed } from 'vue';
 import { useData } from 'vitepress';
 import { ThemeOptions } from '@theme/types';
-import { UiCode as Code } from '../ui';
+import { UiCard, UiCode as Code } from '../ui';
 import { kebabCase } from 'change-case';
 import { safeHttpUrl } from '@theme/utils/url';
-import Card from 'primevue/card';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
@@ -90,54 +89,48 @@ const sourceRows = computed<Row[]>(() => {
 </script>
 
 <template>
-  <Card class="style-info-section">
-    <template #title>Naming</template>
-    <template #content>
-      <DataTable :value="namingRows">
-        <Column field="label" style="width: 200px" />
-        <Column>
-          <template #body="{ data }">
-            <Code
-              v-if="data.type === 'code'"
-              :lang="data.lang"
-              :code="data.code"
-            />
-            <a
-              v-else-if="data.type === 'link'"
-              :href="data.href"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {{ data.text ?? data.href }}
-            </a>
-            <template v-else>{{ data.text }}</template>
-          </template>
-        </Column>
-      </DataTable>
-    </template>
-  </Card>
+  <UiCard class="style-info-section" title="Naming">
+    <DataTable :value="namingRows">
+      <Column field="label" style="width: 200px" />
+      <Column>
+        <template #body="{ data }">
+          <Code
+            v-if="data.type === 'code'"
+            :lang="data.lang"
+            :code="data.code"
+          />
+          <a
+            v-else-if="data.type === 'link'"
+            :href="data.href"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {{ data.text ?? data.href }}
+          </a>
+          <template v-else>{{ data.text }}</template>
+        </template>
+      </Column>
+    </DataTable>
+  </UiCard>
 
-  <Card class="style-info-section">
-    <template #title>Source</template>
-    <template #content>
-      <DataTable :value="sourceRows">
-        <Column field="label" style="width: 200px" />
-        <Column>
-          <template #body="{ data }">
-            <a
-              v-if="data.type === 'link'"
-              :href="data.href"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {{ data.text ?? data.href }}
-            </a>
-            <template v-else>{{ data.text }}</template>
-          </template>
-        </Column>
-      </DataTable>
-    </template>
-  </Card>
+  <UiCard class="style-info-section" title="Source">
+    <DataTable :value="sourceRows">
+      <Column field="label" style="width: 200px" />
+      <Column>
+        <template #body="{ data }">
+          <a
+            v-if="data.type === 'link'"
+            :href="data.href"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {{ data.text ?? data.href }}
+          </a>
+          <template v-else>{{ data.text }}</template>
+        </template>
+      </Column>
+    </DataTable>
+  </UiCard>
 </template>
 
 <style lang="scss" scoped>

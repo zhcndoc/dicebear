@@ -96,7 +96,6 @@ const highlights = [
           v-for="(highlight, index) in highlights"
           :key="index"
           padding="lg"
-          radius="md"
           class="app-highlights-card"
           :style="{
             '--accent-color': highlight.color,
@@ -149,16 +148,9 @@ const highlights = [
   &-card {
     opacity: 0;
     transform: translateY(30px);
-    transition: box-shadow var(--duration-mid) var(--ease-spring);
 
     .visible & {
       animation: reveal-up var(--duration-mid) var(--ease-spring) forwards;
-    }
-
-    &:hover {
-      box-shadow:
-        inset 0 3px 0 var(--accent-color),
-        0 0 20px color-mix(in srgb, var(--accent-color) 20%, transparent);
     }
   }
 

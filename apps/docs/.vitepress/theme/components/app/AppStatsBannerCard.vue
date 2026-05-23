@@ -95,98 +95,84 @@ const trend = computed<Trend | null>(() => {
 </script>
 
 <template>
-  <a class="st-card-link no-external-icon" :href="href">
-    <UiCard
-      padding="lg"
-      radius="md"
-      :class="['st-card', feature && 'st-card-feature']"
-    >
-      <div class="st-stat">
-        {{ value }}<span class="st-unit">{{ unit }}</span>
-      </div>
-      <div class="st-meta">
-        <strong>{{ title }}</strong>
-        <span>{{ description }}</span>
-      </div>
-      <div class="st-trend">
-        <span v-if="trend" class="st-trend-pill">
-          ↑ {{ trend.pct }}% vs {{ trend.prevMonth }}
-        </span>
-        <div v-if="chart.points.length" class="st-chart">
-          <svg
-            viewBox="0 0 200 60"
-            preserveAspectRatio="none"
-            aria-hidden="true"
-          >
-            <defs>
-              <linearGradient :id="fillId" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="0"
-                  stop-color="var(--vp-c-brand-1)"
-                  stop-opacity=".25"
-                />
-                <stop
-                  offset="1"
-                  stop-color="var(--vp-c-brand-1)"
-                  stop-opacity="0"
-                />
-              </linearGradient>
-            </defs>
-            <path :d="chart.area" :fill="`url(#${fillId})`" />
-            <path
-              :d="chart.line"
-              fill="none"
-              stroke="var(--vp-c-brand-1)"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-          <div class="st-chart-dots">
-            <span
-              v-for="(p, i) in chart.points"
-              :key="i"
-              :style="{
-                left: `${(p.x / 200) * 100}%`,
-                top: `${(p.y / 60) * 100}%`,
-              }"
-            />
-          </div>
-          <div class="st-chart-labels">
-            <span v-for="label in chart.labels" :key="label">{{ label }}</span>
-          </div>
+  <UiCard
+    padding="xl"
+    :href="href"
+    :class="['st-card', feature && 'st-card-feature']"
+  >
+    <div class="st-stat">
+      {{ value }}<span class="st-unit">{{ unit }}</span>
+    </div>
+    <div class="st-meta">
+      <strong>{{ title }}</strong>
+      <span>{{ description }}</span>
+    </div>
+    <div class="st-trend">
+      <span v-if="trend" class="st-trend-pill">
+        ↑ {{ trend.pct }}% vs {{ trend.prevMonth }}
+      </span>
+      <div v-if="chart.points.length" class="st-chart">
+        <svg
+          viewBox="0 0 200 60"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <defs>
+            <linearGradient :id="fillId" x1="0" y1="0" x2="0" y2="1">
+              <stop
+                offset="0"
+                stop-color="var(--vp-c-brand-1)"
+                stop-opacity=".25"
+              />
+              <stop
+                offset="1"
+                stop-color="var(--vp-c-brand-1)"
+                stop-opacity="0"
+              />
+            </linearGradient>
+          </defs>
+          <path :d="chart.area" :fill="`url(#${fillId})`" />
+          <path
+            :d="chart.line"
+            fill="none"
+            stroke="var(--vp-c-brand-1)"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <div class="st-chart-dots">
+          <span
+            v-for="(p, i) in chart.points"
+            :key="i"
+            :style="{
+              left: `${(p.x / 200) * 100}%`,
+              top: `${(p.y / 60) * 100}%`,
+            }"
+          />
+        </div>
+        <div class="st-chart-labels">
+          <span v-for="label in chart.labels" :key="label">{{ label }}</span>
         </div>
       </div>
-    </UiCard>
-  </a>
+    </div>
+  </UiCard>
 </template>
 
 <style lang="scss" scoped>
-.st-card-link {
-  display: flex;
-  text-decoration: none;
-  color: inherit;
-}
-
 .st-card {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  min-height: 280px;
-  transition:
-    transform var(--duration-mid) var(--ease-spring),
-    border-color var(--duration-mid) var(--ease-smooth),
-    box-shadow var(--duration-mid) var(--ease-smooth);
+  min-height: 320px;
 
-  .st-card-link:hover & {
-    transform: translateY(-4px);
-    border-color: var(--vp-c-brand-1);
-    box-shadow: 0 24px 52px -16px
-      color-mix(in srgb, var(--vp-c-brand-1) 30%, transparent);
+  :deep(.ui-card-body) {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
   }
 
-  &-feature {
+  // Use compound selector to beat UiCard's `.ui-card` rule in cascade
+  // (both selectors otherwise have identical specificity).
+  &.st-card-feature {
     background: linear-gradient(
       160deg,
       color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent),

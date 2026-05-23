@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useData } from 'vitepress';
-import { Play, ArrowRight, Star } from '@lucide/vue';
+import { PawPrint, ArrowRight, Star } from '@lucide/vue';
 import { siGithub } from 'simple-icons';
 import type { ThemeOptions } from '@theme/types';
-import { UiButton, UiIcon } from '../ui';
+import Button from 'primevue/button';
+import { UiIcon } from '../ui';
 
 const { theme } = useData<ThemeOptions>();
 </script>
@@ -41,21 +42,27 @@ const { theme } = useData<ThemeOptions>();
     </p>
 
     <div class="app-hero-actions">
-      <UiButton
+      <Button
+        as="a"
         href="/playground/"
-        class="app-hero-btn-primary app-hero-action-btn"
+        size="large"
+        severity="contrast"
+        class="app-hero-action-btn"
       >
-        <Play :size="20" />
+        <PawPrint :size="20" />
         Try Playground
-      </UiButton>
-      <UiButton
+      </Button>
+      <Button
+        as="a"
         href="/introduction/"
-        variant="secondary"
+        size="large"
+        severity="secondary"
+        variant="outlined"
         class="app-hero-action-btn"
       >
         Get Started
-        <ArrowRight :size="20" class="app-hero-arrow-icon" />
-      </UiButton>
+        <ArrowRight :size="20" />
+      </Button>
     </div>
   </div>
 </template>

@@ -10,6 +10,7 @@ import {
   Sparkles,
 } from '@lucide/vue';
 import type { Component } from 'vue';
+import { UiCard } from '../ui';
 
 type Tool = {
   slug: string;
@@ -84,12 +85,12 @@ const tools: Tool[] = [
 <template>
   <div class="tool-list">
     <div class="tool-list-grid">
-      <a
+      <UiCard
         v-for="tool in tools"
         :key="tool.slug"
         :href="tool.href"
         :target="tool.external ? '_blank' : undefined"
-        :rel="tool.external ? 'noopener noreferrer' : undefined"
+        padding="lg"
         class="tool-list-card"
       >
         <div class="tool-list-card-icon" :style="{ background: tool.iconBg }">
@@ -112,7 +113,7 @@ const tools: Tool[] = [
         <div class="tool-list-card-arrow">
           <ArrowRight :size="18" />
         </div>
-      </a>
+      </UiCard>
     </div>
   </div>
 </template>
@@ -129,25 +130,10 @@ const tools: Tool[] = [
   }
 
   &-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 18px;
-    background: var(--vp-c-bg-soft);
-    border-radius: var(--vp-radius-md);
-    padding: 24px;
-    text-decoration: none;
-    transition: all var(--duration-fast) ease;
-    border: 2px solid transparent;
-    position: relative;
-
-    &::after {
-      display: none !important;
-    }
-
-    &:hover {
-      border-color: var(--vp-c-brand-1);
-      transform: translateY(-4px);
-      box-shadow: var(--vp-shadow-3);
+    :deep(.ui-card-body) {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
     }
 
     &-icon {

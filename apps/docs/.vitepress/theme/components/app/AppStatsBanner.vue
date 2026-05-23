@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { ArrowRight } from '@lucide/vue';
-import { UiContainer, UiSection, UiSectionHeader, UiButton } from '../ui';
+import { ArrowRight, ChartNoAxesCombined } from '@lucide/vue';
+import Button from 'primevue/button';
+import { UiContainer, UiSection, UiSectionHeader } from '../ui';
 import AppStatsBannerCard from './AppStatsBannerCard.vue';
 import { useVisibility } from '../../composables/useVisibility';
 import { useApiStats, useApiStatsRaw } from '../../composables/useApiStats';
@@ -45,7 +46,7 @@ const downloads = computed(() =>
       <UiSectionHeader
         class="app-stats-banner-header"
         badge="Trusted at Scale"
-        description="Real usage data from our HTTP-API and npm packages — updated daily."
+        description="Usage data from our HTTP-API and npm packages — updated weekly."
       >
         <template #headline
           >Billions of avatars. <strong>One API.</strong></template
@@ -81,10 +82,17 @@ const downloads = computed(() =>
       </div>
 
       <div class="app-stats-banner-action">
-        <UiButton href="/stats/" variant="secondary">
-          View Live Statistics
+        <Button
+          as="a"
+          href="/stats/"
+          size="large"
+          severity="secondary"
+          variant="outlined"
+        >
+          <ChartNoAxesCombined :size="20" />
+          View Full Statistics
           <ArrowRight :size="18" />
-        </UiButton>
+        </Button>
       </div>
     </UiContainer>
   </UiSection>

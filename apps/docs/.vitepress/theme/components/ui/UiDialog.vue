@@ -16,6 +16,12 @@ const visible = computed({
   get: () => props.open,
   set: (val: boolean) => emit('update:open', val),
 });
+
+const hasHeaderText = computed(() => !!props.header?.trim());
+
+const rootClass = computed(() =>
+  hasHeaderText.value ? 'ui-dialog' : 'ui-dialog ui-dialog--headerless',
+);
 </script>
 
 <template>
@@ -24,10 +30,11 @@ const visible = computed({
     modal
     :closable="true"
     dismissable-mask
-    :header="header || ' '"
+    :header="hasHeaderText ? header : ' '"
     :style="{ width: maxWidth || '540px' }"
     :pt="{
-      content: { class: 'playground-dialog-content' },
+      root: { class: rootClass },
+      content: { class: 'ui-dialog-content' },
     }"
   >
     <slot />

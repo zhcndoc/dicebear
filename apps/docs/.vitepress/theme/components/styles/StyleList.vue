@@ -3,10 +3,9 @@ import { useData } from 'vitepress';
 import type { ThemeOptions } from '@theme/types';
 import { useStyleFiltering } from '@theme/composables/useStyleFiltering';
 import { Search, CircleUser, Scale, ArrowRight, Filter } from '@lucide/vue';
-import Card from 'primevue/card';
 import InputText from 'primevue/inputtext';
 import MultiSelect from 'primevue/multiselect';
-import { UiAvatar } from '../ui';
+import { UiAvatar, UiCard } from '../ui';
 
 const { theme } = useData<ThemeOptions>();
 
@@ -24,51 +23,49 @@ const {
 
 <template>
   <div class="style-list">
-    <Card class="style-list-filters">
-      <template #content>
-        <div class="style-list-filter-row">
-          <div class="style-list-filter-group">
-            <span class="style-list-filter-label">
-              <Search />
-              Search
-            </span>
-            <InputText
-              v-model="searchQuery"
-              :placeholder="`Search ${totalStyles} styles...`"
-              fluid
-            />
-          </div>
-
-          <div class="style-list-filter-group">
-            <span class="style-list-filter-label">
-              <Filter />
-              Category
-            </span>
-            <MultiSelect
-              v-model="selectedCategories"
-              :options="availableCategories"
-              placeholder="Filter by category"
-              :showToggleAll="false"
-              fluid
-            />
-          </div>
-
-          <div class="style-list-filter-group">
-            <span class="style-list-filter-label">
-              <Scale />
-              License
-            </span>
-            <MultiSelect
-              v-model="selectedLicenses"
-              :options="availableLicenses"
-              placeholder="Filter by license"
-              :showToggleAll="false"
-              fluid
-            />
-          </div>
+    <UiCard class="style-list-filters">
+      <div class="style-list-filter-row">
+        <div class="style-list-filter-group">
+          <span class="style-list-filter-label">
+            <Search />
+            Search
+          </span>
+          <InputText
+            v-model="searchQuery"
+            :placeholder="`Search ${totalStyles} styles...`"
+            fluid
+          />
         </div>
-      </template>
-    </Card>
+
+        <div class="style-list-filter-group">
+          <span class="style-list-filter-label">
+            <Filter />
+            Category
+          </span>
+          <MultiSelect
+            v-model="selectedCategories"
+            :options="availableCategories"
+            placeholder="Filter by category"
+            :showToggleAll="false"
+            fluid
+          />
+        </div>
+
+        <div class="style-list-filter-group">
+          <span class="style-list-filter-label">
+            <Scale />
+            License
+          </span>
+          <MultiSelect
+            v-model="selectedLicenses"
+            :options="availableLicenses"
+            placeholder="Filter by license"
+            :showToggleAll="false"
+            fluid
+          />
+        </div>
+      </div>
+    </UiCard>
 
     <div
       v-for="(styles, category) in groupedStyles"
@@ -77,49 +74,45 @@ const {
     >
       <h2 class="style-list-category-title">{{ category }}</h2>
       <div class="style-list-grid">
-        <a
+        <UiCard
           v-for="style in styles"
           :key="style.name"
           :href="`/styles/${style.slug}/`"
           class="style-list-card"
         >
-          <Card>
-            <template #content>
-              <div class="style-list-card-avatars">
-                <div
-                  v-for="avatar in style.avatars"
-                  :key="avatar.seed"
-                  class="style-list-card-avatar"
-                >
-                  <UiAvatar
-                    :style-name="style.slug"
-                    :style-options="{ seed: avatar.seed, size: 80 }"
-                    :alt="`${style.displayName} - ${avatar.seed}`"
-                  />
-                </div>
-              </div>
+          <div class="style-list-card-avatars">
+            <div
+              v-for="avatar in style.avatars"
+              :key="avatar.seed"
+              class="style-list-card-avatar"
+            >
+              <UiAvatar
+                :style-name="style.slug"
+                :style-options="{ seed: avatar.seed, size: 80 }"
+                :alt="`${style.displayName} - ${avatar.seed}`"
+              />
+            </div>
+          </div>
 
-              <div class="style-list-card-content">
-                <h3 class="style-list-card-name">{{ style.displayName }}</h3>
+          <div class="style-list-card-content">
+            <h3 class="style-list-card-name">{{ style.displayName }}</h3>
 
-                <div class="style-list-card-meta">
-                  <span class="style-list-card-creator">
-                    <CircleUser />
-                    {{ style.creator }}
-                  </span>
-                  <span class="style-list-card-license">
-                    <Scale />
-                    {{ style.license }}
-                  </span>
-                </div>
-              </div>
+            <div class="style-list-card-meta">
+              <span class="style-list-card-creator">
+                <CircleUser />
+                {{ style.creator }}
+              </span>
+              <span class="style-list-card-license">
+                <Scale />
+                {{ style.license }}
+              </span>
+            </div>
+          </div>
 
-              <div class="style-list-card-arrow">
-                <ArrowRight />
-              </div>
-            </template>
-          </Card>
-        </a>
+          <div class="style-list-card-arrow">
+            <ArrowRight />
+          </div>
+        </UiCard>
       </div>
     </div>
 
@@ -189,31 +182,8 @@ const {
   }
 
   &-card {
-    display: block;
-    text-decoration: none;
-    transition: transform var(--duration-fast) ease;
+    height: 100%;
     position: relative;
-
-    &::after {
-      display: none !important;
-    }
-
-    :deep(.p-card) {
-      height: 100%;
-      transition:
-        border-color var(--duration-fast) ease,
-        box-shadow var(--duration-fast) ease;
-      border: 2px solid transparent;
-    }
-
-    &:hover {
-      transform: translateY(-4px);
-    }
-
-    &:hover :deep(.p-card) {
-      border-color: var(--vp-c-brand-1);
-      box-shadow: var(--vp-shadow-3);
-    }
 
     &-avatars {
       display: flex;

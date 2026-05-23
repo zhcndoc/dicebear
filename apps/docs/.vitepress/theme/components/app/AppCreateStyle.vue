@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { ArrowRight } from '@lucide/vue';
+import { ArrowRight, BookOpen } from '@lucide/vue';
+import { siFigma } from 'simple-icons';
+import Button from 'primevue/button';
 import {
-  UiButton,
   UiContainer,
   UiSection,
   UiSectionHeader,
   UiCard,
+  UiIcon,
 } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
@@ -56,8 +58,6 @@ const steps = [
             <UiCard
               v-for="(step, index) in steps"
               :key="index"
-              padding="sm"
-              radius="sm"
               class="app-create-style-step-card"
               :style="{ animationDelay: `${index * 0.15}s` }"
             >
@@ -72,18 +72,29 @@ const steps = [
           </div>
 
           <div class="app-create-style-actions">
-            <UiButton href="/guides/create-an-avatar-style-with-figma/">
-              Read the Figma Guide
-              <ArrowRight :size="20" />
-            </UiButton>
-            <UiButton
-              href="https://www.figma.com/community/plugin/1005765655729342787"
-              variant="secondary"
-              target="_blank"
+            <Button
+              as="a"
+              href="/guides/create-an-avatar-style-with-figma/"
+              size="large"
+              severity="contrast"
             >
+              <BookOpen :size="20" />
+              Read the Guide
+              <ArrowRight :size="20" />
+            </Button>
+            <Button
+              as="a"
+              href="https://www.figma.com/community/plugin/1005765655729342787"
+              target="_blank"
+              rel="noopener"
+              size="large"
+              severity="secondary"
+              variant="outlined"
+            >
+              <UiIcon :path="siFigma.path" :size="20" />
               Get the Plugin
               <ArrowRight :size="20" />
-            </UiButton>
+            </Button>
           </div>
         </div>
 
@@ -238,14 +249,17 @@ const steps = [
   }
 
   &-step-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
     opacity: 0;
     transform: translateX(-20px);
 
     .visible & {
       animation: reveal-up 0.6s var(--ease-smooth) forwards;
+    }
+
+    :deep(.ui-card-body) {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
     }
   }
 

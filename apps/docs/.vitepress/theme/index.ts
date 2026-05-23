@@ -13,10 +13,10 @@ import Tooltip from 'primevue/tooltip';
 const DiceBearPreset = definePreset(Aura, {
   semantic: {
     formField: {
-      borderRadius: 'var(--vp-radius-xs)',
+      borderRadius: 'var(--vp-radius-sm)',
     },
     content: {
-      borderRadius: 'var(--vp-radius-xs)',
+      borderRadius: 'var(--vp-radius-sm)',
     },
     text: {
       color: 'var(--vp-c-text-1)',
@@ -96,14 +96,24 @@ const DiceBearPreset = definePreset(Aura, {
   components: {
     button: {
       colorScheme: {
+        // Aura's outlined-secondary uses surface tokens that render almost
+        // invisible against our bg-soft surface in dark mode and read very
+        // muted in light mode. Lift border + text to VitePress tokens so
+        // outlined buttons stay legible in both themes.
+        //
+        // Aura's contrast hover is also too subtle (one step on the surface
+        // scale). Bump it a few steps so the hover state is noticeable.
         light: {
           outlined: {
             secondary: {
-              background: 'var(--vp-c-bg-elv)',
-              hoverBackground: 'var(--vp-c-bg-soft)',
-              activeBackground: 'var(--vp-c-bg-soft)',
-              borderColor: 'var(--p-form-field-border-color)',
+              borderColor: 'var(--vp-c-border)',
               color: 'var(--vp-c-text-1)',
+            },
+          },
+          root: {
+            contrast: {
+              hoverBackground: '{surface.800}',
+              hoverBorderColor: '{surface.800}',
             },
           },
           link: {
@@ -113,23 +123,16 @@ const DiceBearPreset = definePreset(Aura, {
           },
         },
         dark: {
-          root: {
-            secondary: {
-              background: 'var(--vp-c-bg-soft)',
-              hoverBackground: 'var(--vp-c-bg-elv)',
-              activeBackground: 'var(--vp-c-bg-elv)',
-              borderColor: 'var(--vp-c-border)',
-              hoverBorderColor: 'var(--vp-c-border)',
-              activeBorderColor: 'var(--vp-c-border)',
-            },
-          },
           outlined: {
             secondary: {
-              background: 'var(--vp-c-bg-soft)',
-              hoverBackground: 'var(--vp-c-bg-elv)',
-              activeBackground: 'var(--vp-c-bg-elv)',
               borderColor: 'var(--vp-c-border)',
               color: 'var(--vp-c-text-1)',
+            },
+          },
+          root: {
+            contrast: {
+              hoverBackground: '{surface.100}',
+              hoverBorderColor: '{surface.100}',
             },
           },
           link: {
@@ -139,11 +142,13 @@ const DiceBearPreset = definePreset(Aura, {
           },
         },
       },
-      // Aura hardcodes `background: transparent` for `.p-button-outlined`, so the
-      // outlined.secondary.background token above is otherwise ignored.
+      // Buttons used here put icon + label in the default slot, so PrimeVue
+      // does not wrap the text in `.p-button-label`. Apply Aura's label
+      // weight to the button root so default-slot text picks it up via
+      // inheritance (Aura default is 500).
       css: () => `
-        .p-button-outlined.p-button-secondary {
-          background: var(--p-button-outlined-secondary-background);
+        .p-button {
+          font-weight: 500;
         }
       `,
     },
@@ -183,6 +188,24 @@ const DiceBearPreset = definePreset(Aura, {
           },
           content: {
             checkedBackground: 'var(--vp-c-bg-soft)',
+          },
+        },
+      },
+    },
+    menu: {
+      colorScheme: {
+        // The shared content tokens map background and hoverBackground to
+        // the same VitePress surface, so the default menu-item hover is
+        // invisible against the menu's own background. Lift hover to an
+        // adjacent surface step so it actually shows.
+        dark: {
+          item: {
+            focusBackground: '{surface.700}',
+          },
+        },
+        light: {
+          item: {
+            focusBackground: '{surface.100}',
           },
         },
       },

@@ -5,9 +5,7 @@ import { Avatar } from '@dicebear/core';
 import { getAvatarApiUrl } from '@theme/utils/avatar/api';
 import { loadAvatarStyle, clonePlain } from '@theme/utils/avatar/style';
 import { triggerDownload } from '@theme/utils/download';
-import { UiAvatar } from '../ui';
-import PlaygroundConfetti from './PlaygroundConfetti.vue';
-import PlaygroundDialog from './PlaygroundDialog.vue';
+import { UiAvatar, UiConfetti, UiDialog } from '../ui';
 import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
 import Button from 'primevue/button';
@@ -80,8 +78,8 @@ function onDownloadClick(e: Event) {
   </Button>
   <Menu ref="menu" :model="menuItems" :popup="true" />
 
-  <PlaygroundDialog v-model:open="open">
-    <PlaygroundConfetti :key="confettiKey" />
+  <UiDialog v-model:open="open">
+    <UiConfetti :key="confettiKey" />
     <div class="dialog-preview">
       <UiAvatar
         :style-name="store.avatarStyleName"
@@ -97,5 +95,5 @@ function onDownloadClick(e: Event) {
     <div class="dialog-text">
       <PlaygroundLicenseAlert />
     </div>
-  </PlaygroundDialog>
+  </UiDialog>
 </template>

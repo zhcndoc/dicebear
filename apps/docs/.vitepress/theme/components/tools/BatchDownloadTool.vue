@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from 'vue';
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import { useData } from 'vitepress';
 import Button from 'primevue/button';
 import InputNumber from 'primevue/inputnumber';
@@ -10,9 +10,14 @@ import JSZip from 'jszip';
 import { Avatar } from '@dicebear/core';
 import {
   UiAvatar,
+  UiCard,
+  UiConfetti,
   UiContainer,
-  UiHeadline,
   UiDescription,
+  UiDialog,
+  UiHeadline,
+  UiLicenseAlert,
+  UiLicenseText,
   UiStyleSelect,
 } from '@theme/components/ui';
 import { loadAvatarStyle } from '@theme/utils/avatar/style';
@@ -84,6 +89,10 @@ const isGenerating = ref(false);
 const progress = ref({ done: 0, total: 0 });
 const errorMessage = ref('');
 
+const dialogOpen = ref(false);
+const confettiKey = ref(0);
+const dialogPreviewSeed = computed(() => previewSeeds.value[0] ?? '');
+
 const canGenerate = computed(
   () =>
     !isGenerating.value &&
@@ -127,6 +136,13 @@ function safeName(seed: string, used: Set<string>): string {
   return name;
 }
 
+// Set on unmount so an in-flight generate() bails out before triggering a
+// download against a component the user has already navigated away from.
+let aborted = false;
+onBeforeUnmount(() => {
+  aborted = true;
+});
+
 async function generate() {
   if (!canGenerate.value) return;
 
@@ -136,10 +152,13 @@ async function generate() {
 
   try {
     const style = await loadAvatarStyle(selectedStyle.value);
+    if (aborted) return;
+
     const zip = new JSZip();
     const used = new Set<string>();
 
     for (const seed of seeds.value) {
+      if (aborted) return;
       const svg = new Avatar(style, { seed }).toString();
       zip.file(safeName(seed, used), svg);
       progress.value = { done: progress.value.done + 1, total: seedCount.value };
@@ -149,8 +168,15 @@ async function generate() {
     }
 
     const blob = await zip.generateAsync({ type: 'blob' });
+    if (aborted) return;
+
     triggerDownload(blob, `${selectedStyle.value}-avatars.zip`);
+
+    // Only celebrate after the ZIP has actually been handed to the browser.
+    confettiKey.value++;
+    dialogOpen.value = true;
   } catch (err) {
+    if (aborted) return;
     errorMessage.value = err instanceof Error ? err.message : String(err);
   } finally {
     isGenerating.value = false;
@@ -169,7 +195,7 @@ async function generate() {
       </UiDescription>
     </header>
 
-    <article class="batch-tool-workspace">
+    <UiCard flush class="batch-tool-workspace">
       <header class="batch-tool-top-bar">
         <UiStyleSelect
           v-model="selectedStyle"
@@ -287,6 +313,7 @@ async function generate() {
           :disabled="!canGenerate"
           :loading="isGenerating"
           size="large"
+          severity="contrast"
           @click="generate"
         >
           <template #icon><Download :size="16" /></template>
@@ -295,7 +322,31 @@ async function generate() {
           {{ errorMessage }}
         </p>
       </footer>
-    </article>
+    </UiCard>
+
+    <div v-if="selectedStyle" class="batch-tool-license">
+      <UiLicenseText :style-name="selectedStyle" />
+    </div>
+
+    <UiDialog v-model:open="dialogOpen">
+      <UiConfetti :key="confettiKey" />
+      <div class="dialog-preview">
+        <UiAvatar
+          v-if="dialogPreviewSeed"
+          :style-name="selectedStyle"
+          :style-options="{ seed: dialogPreviewSeed }"
+          :size="128"
+          mode="library"
+        />
+      </div>
+      <div class="dialog-title">Your avatars will be downloaded! 🎉</div>
+      <div class="dialog-subtitle">
+        Please note the license below before using.
+      </div>
+      <div class="dialog-text">
+        <UiLicenseAlert :style-name="selectedStyle" />
+      </div>
+    </UiDialog>
   </UiContainer>
 </template>
 
@@ -341,14 +392,6 @@ html.dark {
   color: var(--ui-c-text-subtle);
 }
 
-.batch-tool-workspace {
-  background: var(--vp-c-bg-elv);
-  border: 1px solid var(--ui-card-border-color, rgba(0, 0, 0, 0.06));
-  border-radius: var(--vp-radius-lg);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
 
 .batch-tool-top-bar {
   display: flex;
@@ -553,10 +596,15 @@ html.dark {
   :deep(.p-button) {
     width: 100%;
     justify-content: center;
-    padding: 14px 20px;
-    font-weight: 600;
-    letter-spacing: 0.01em;
   }
+}
+
+.batch-tool-license {
+  margin-top: -16px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ui-c-text-subtle);
+  text-align: center;
 }
 
 @media (max-width: 640px) {

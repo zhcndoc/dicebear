@@ -89,7 +89,7 @@ watch(
 .ui-code {
   position: relative;
   background-color: var(--vp-code-block-bg);
-  border-radius: 8px;
+  border-radius: var(--vp-radius-sm);
   overflow: hidden;
   display: flex;
   flex-direction: column;

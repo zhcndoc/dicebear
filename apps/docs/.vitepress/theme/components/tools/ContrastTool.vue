@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { UiContainer, UiHeadline, UiDescription } from '@theme/components/ui';
+import { UiCard, UiContainer, UiHeadline, UiDescription } from '@theme/components/ui';
 import { hsvToHex } from '@theme/utils/colorSpaces';
 import type { Hsv } from '@theme/utils/colorSpaces';
 import ContrastCanvas from './ContrastCanvas.vue';
@@ -31,7 +31,7 @@ function updateHsv(next: Hsv) {
       </UiDescription>
     </header>
 
-    <section class="contrast-tool-pane contrast-tool-pane-targets">
+    <UiCard padding="lg" class="contrast-tool-pane contrast-tool-pane-targets">
       <ContrastTargets
         :picked-hex="hex"
         :contrast-a="contrastA"
@@ -39,35 +39,31 @@ function updateHsv(next: Hsv) {
         @update:contrast-a="contrastA = $event"
         @update:contrast-b="contrastB = $event"
       />
-    </section>
+    </UiCard>
 
     <div class="contrast-tool-grid">
-      <section class="contrast-tool-pane contrast-tool-pane-canvas">
+      <UiCard padding="lg" class="contrast-tool-pane contrast-tool-pane-canvas">
         <ContrastCanvas
           :hsv="hsv"
           :contrast-a="contrastA"
           :contrast-b="contrastB"
           @update:hsv="updateHsv"
         />
-      </section>
+      </UiCard>
 
-      <section class="contrast-tool-pane contrast-tool-pane-form">
+      <UiCard padding="lg" class="contrast-tool-pane contrast-tool-pane-form">
         <ContrastSliders :hsv="hsv" :hex="hex" @update:hsv="updateHsv" />
 
         <p class="contrast-tool-hint">
           The dashed line on the canvas marks where DiceBear's pick switches between the two contrast colors. Points above the line favor one color; points below favor the other.
         </p>
-      </section>
+      </UiCard>
     </div>
   </UiContainer>
 </template>
 
 <style lang="scss">
 html.dark {
-  .contrast-tool-pane {
-    background: var(--vp-c-bg-soft);
-  }
-
   .contrast-tool-hint {
     background: var(--vp-c-bg);
   }
@@ -103,13 +99,11 @@ html.dark {
   }
 
   &-pane {
-    background: var(--vp-c-bg-elv);
-    border: 1px solid var(--ui-card-border-color, rgba(0, 0, 0, 0.06));
-    border-radius: var(--vp-radius-lg);
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    :deep(.ui-card-body) {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
   }
 
   &-hint {
@@ -136,7 +130,7 @@ html.dark {
     }
 
     &-pane {
-      padding: 20px;
+      --ui-card-padding: 20px;
     }
   }
 }

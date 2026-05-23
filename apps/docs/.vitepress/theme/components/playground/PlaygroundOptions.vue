@@ -323,7 +323,7 @@ const onSeedFocus = (e: FocusEvent) => {
 
 .pg-options-accordion {
   border: 1px solid var(--pg-border);
-  border-radius: var(--vp-radius-xs);
+  border-radius: var(--vp-radius-sm);
   overflow: hidden;
 
   :deep(.p-accordionpanel:last-child) {

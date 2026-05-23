@@ -48,6 +48,7 @@ const displayRange = computed<[number, number]>(() => {
       <Button
         size="small"
         :severity="isRangeMode(optionKey) ? 'primary' : 'secondary'"
+        variant="outlined"
         v-tooltip="
           isRangeMode(optionKey) ? 'Switch to fixed value' : 'Switch to range'
         "

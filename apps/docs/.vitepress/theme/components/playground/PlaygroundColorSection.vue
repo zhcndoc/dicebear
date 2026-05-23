@@ -153,6 +153,7 @@ const fillStopsRange = rangeComputed(fillStopsKey, 2);
           <Button
             size="small"
             :severity="isRangeMode(angleKey) ? 'primary' : 'secondary'"
+            variant="outlined"
             v-tooltip="
               isRangeMode(angleKey)
                 ? 'Switch to fixed value'
@@ -189,6 +190,7 @@ const fillStopsRange = rangeComputed(fillStopsKey, 2);
           <Button
             size="small"
             :severity="isRangeMode(fillStopsKey) ? 'primary' : 'secondary'"
+            variant="outlined"
             v-tooltip="
               isRangeMode(fillStopsKey)
                 ? 'Switch to fixed value'

@@ -1,6 +1,6 @@
 @use './vars.scss' as *;
 @use './animations';
-@use './playground-dialog.scss';
+@use './ui-dialog.scss';
 
 :root {
   --pg-border: var(--vp-c-divider);
@@ -248,7 +248,6 @@ img[src^='https://api.dicebear.com/']:not(.next, .prev) {
  * them on an ancestor selector is enough — no :deep() needed.
  * ---------------------------------------------------------------- */
 .style-usage {
-  --p-card-body-padding: 0;
   --p-tabs-tabpanel-padding: 20px;
   --p-tabs-tab-padding: 1rem 20px;
 }

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { MousePointerClick, Palette, Download, ArrowRight } from '@lucide/vue';
+import { MousePointerClick, Palette, Download, ArrowRight, Brush } from '@lucide/vue';
+import Button from 'primevue/button';
 import {
   UiAvatar,
-  UiButton,
   UiHeadline,
   UiDescription,
   UiBadge,
@@ -276,10 +276,18 @@ const features = [
         </div>
 
         <div class="app-editor-actions">
-          <UiButton href="https://editor.dicebear.com" :external="true">
+          <Button
+            as="a"
+            href="https://editor.dicebear.com"
+            target="_blank"
+            rel="noopener"
+            size="large"
+            severity="contrast"
+          >
+            <Brush :size="20" />
             Open Editor
             <ArrowRight :size="20" />
-          </UiButton>
+          </Button>
         </div>
       </div>
     </UiContainer>

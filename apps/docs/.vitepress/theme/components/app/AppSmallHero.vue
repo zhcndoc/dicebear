@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, useSlots, computed } from 'vue';
-import { Play, ArrowRight } from '@lucide/vue';
+import { PawPrint, ArrowRight } from '@lucide/vue';
+import Button from 'primevue/button';
 import {
-  UiButton,
   UiHeadline,
   UiDescription,
   UiBadge,
@@ -56,18 +56,27 @@ const hasActions = computed(() => !!slots.actions);
             <slot name="actions" />
           </div>
           <div v-else class="app-small-hero-actions">
-            <UiButton href="/playground/" class="app-small-hero-action-btn">
-              <Play :size="20" />
+            <Button
+              as="a"
+              href="/playground/"
+              size="large"
+              severity="contrast"
+              class="app-small-hero-action-btn"
+            >
+              <PawPrint :size="20" />
               Try Playground
-            </UiButton>
-            <UiButton
+            </Button>
+            <Button
+              as="a"
               href="/styles/"
-              variant="secondary"
+              size="large"
+              severity="secondary"
+              variant="outlined"
               class="app-small-hero-action-btn"
             >
               Browse Styles
-              <ArrowRight :size="20" class="app-small-hero-arrow-icon" />
-            </UiButton>
+              <ArrowRight :size="20" />
+            </Button>
           </div>
 
           <slot name="below-actions" />

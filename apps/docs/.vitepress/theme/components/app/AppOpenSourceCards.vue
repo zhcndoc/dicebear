@@ -2,8 +2,8 @@
 import { ref } from 'vue';
 import { Star, Heart, Scale, ArrowRight } from '@lucide/vue';
 import { siGithub } from 'simple-icons';
+import Button from 'primevue/button';
 import {
-  UiButton,
   UiContainer,
   UiSection,
   UiCard,
@@ -23,11 +23,7 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
     </template>
     <UiContainer>
       <div class="app-open-source-cards-grid">
-        <UiCard
-          padding="xl"
-          radius="lg"
-          class="app-open-source-cards-opensource-card"
-        >
+        <UiCard padding="2xl" class="app-open-source-cards-opensource-card">
           <UiIconBox size="lg" color="#f59e0b">
             <Star />
           </UiIconBox>
@@ -37,31 +33,31 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
             free to contribute, fork, or simply use it with confidence.
           </p>
           <div class="app-open-source-cards-actions">
-            <UiButton
+            <Button
+              as="a"
               href="https://github.com/dicebear/dicebear"
-              variant="github"
-              :external="true"
+              target="_blank"
+              rel="noopener"
+              severity="contrast"
               class="app-open-source-cards-action-btn"
             >
               <UiIcon :path="siGithub.path" :size="20" />
               Star on GitHub
-            </UiButton>
-            <UiButton
+            </Button>
+            <Button
+              as="a"
               href="/guides/contribute-to-the-library/"
-              variant="secondary"
+              severity="secondary"
+              variant="outlined"
               class="app-open-source-cards-action-btn"
             >
               <Heart />
               Contribute
-            </UiButton>
+            </Button>
           </div>
         </UiCard>
 
-        <UiCard
-          padding="xl"
-          radius="lg"
-          class="app-open-source-cards-license-card"
-        >
+        <UiCard padding="2xl" class="app-open-source-cards-license-card">
           <UiIconBox size="lg" color="#22c55e">
             <Scale />
           </UiIconBox>
@@ -72,14 +68,16 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
             details.
           </p>
           <div class="app-open-source-cards-actions">
-            <UiButton
+            <Button
+              as="a"
               href="/licenses/"
-              variant="secondary"
+              severity="secondary"
+              variant="outlined"
               class="app-open-source-cards-action-btn app-open-source-cards-license-btn"
             >
               License Overview
               <ArrowRight :size="20" />
-            </UiButton>
+            </Button>
           </div>
         </UiCard>
       </div>
@@ -119,8 +117,11 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
 
   &-opensource-card,
   &-license-card {
-    display: flex;
-    flex-direction: column;
+    :deep(.ui-card-body) {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
   }
 
   &-title {
@@ -149,6 +150,11 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
   .app-open-source-cards {
     &-grid {
       grid-template-columns: 1fr;
+    }
+
+    &-opensource-card,
+    &-license-card {
+      --ui-card-padding: 32px 24px;
     }
 
     &-actions {

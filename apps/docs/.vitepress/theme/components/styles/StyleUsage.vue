@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { kebabCase } from 'change-case';
-import { UiCode as Code } from '../ui';
+import { UiCard, UiCode as Code } from '../ui';
 import { computed, ref } from 'vue';
-import Card from 'primevue/card';
 import Tabs from 'primevue/tabs';
 import TabList from 'primevue/tablist';
 import Tab from 'primevue/tab';
@@ -76,9 +75,8 @@ const exampleCliUsage = computed(() => {
 </script>
 
 <template>
-  <Card class="style-usage">
-    <template #content>
-      <Tabs v-model:value="tab">
+  <UiCard class="style-usage" flush>
+    <Tabs v-model:value="tab">
       <TabList>
         <Tab value="http-api">HTTP-API</Tab>
         <Tab value="js-library">JS</Tab>
@@ -129,10 +127,9 @@ const exampleCliUsage = computed(() => {
             See <a href="/how-to-use/cli">CLI</a> docs for more information.
           </p>
         </TabPanel>
-        </TabPanels>
-      </Tabs>
-    </template>
-  </Card>
+      </TabPanels>
+    </Tabs>
+  </UiCard>
 </template>
 
 <style lang="scss" scoped>

@@ -439,10 +439,6 @@ onMounted(() => {
       }
     }
 
-    &-btn-primary {
-      padding: 16px 28px;
-    }
-
     &-shape {
       &-1 {
         width: 250px;

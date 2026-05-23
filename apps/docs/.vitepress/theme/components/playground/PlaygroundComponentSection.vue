@@ -59,12 +59,25 @@ function resetVariants() {
 
 <template>
   <div class="pg-comp-body">
-    <template v-if="variants.length > 0">
+    <div class="pg-field" v-if="hasProbability">
+      <div class="pg-field-label">
+        <span>Probability</span>
+        <PlaygroundFieldReset
+          v-if="store.isOptionSet(probabilityKey)"
+          @click="store.resetOption(probabilityKey)"
+        />
+        <span class="pg-field-value">{{ probability }}%</span>
+      </div>
+      <Slider v-model="probability" :min="0" :max="100" :step="1" />
+    </div>
+
+    <div v-if="variants.length > 0" class="pg-comp-variants">
       <div class="pg-field-label">
         <span>Variants</span>
         <Button
           size="small"
           :severity="showWeights ? 'primary' : 'secondary'"
+          variant="outlined"
           v-tooltip="showWeights ? 'Hide weights' : 'Show weights'"
           @click="toggleWeights"
           class="pg-field-toggle"
@@ -75,6 +88,7 @@ function resetVariants() {
           label="All"
           size="small"
           severity="secondary"
+          variant="outlined"
           @click="selectAll"
           class="pg-field-toggle"
         />
@@ -82,6 +96,7 @@ function resetVariants() {
           label="None"
           size="small"
           severity="secondary"
+          variant="outlined"
           @click="selectNone"
           class="pg-field-toggle"
         />
@@ -131,18 +146,6 @@ function resetVariants() {
           />
         </div>
       </div>
-    </template>
-
-    <div class="pg-field" v-if="hasProbability">
-      <div class="pg-field-label">
-        <span>Probability</span>
-        <PlaygroundFieldReset
-          v-if="store.isOptionSet(probabilityKey)"
-          @click="store.resetOption(probabilityKey)"
-        />
-        <span class="pg-field-value">{{ probability }}%</span>
-      </div>
-      <Slider v-model="probability" :min="0" :max="100" :step="1" />
     </div>
   </div>
 </template>
@@ -151,14 +154,19 @@ function resetVariants() {
 .pg-comp-body {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
+}
+
+.pg-comp-variants {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .pg-comp-variants-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 8px;
-  margin-top: 8px;
 }
 
 .pg-comp-variant {

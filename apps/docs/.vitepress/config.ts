@@ -69,6 +69,7 @@ export default defineConfig<ThemeOptions>({
   title: 'DiceBear',
   description:
     'DiceBear is a free, open source avatar library and avatar API with 35+ avatar styles. Generate profile pictures and user placeholder images for any project.',
+  appearance: 'dark',
   head: [
     [
       'link',

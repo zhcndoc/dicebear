@@ -87,6 +87,7 @@ function addPreset(hex: string) {
       <Button
         :label="`Add #${pickerHexWithAlpha()}`"
         severity="secondary"
+        variant="outlined"
         size="small"
         @click="addFromPicker"
       />

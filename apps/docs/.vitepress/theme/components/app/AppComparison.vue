@@ -34,7 +34,7 @@ const rows = buildComparisonRows({
         <template #headline>How DiceBear <strong>Compares</strong></template>
       </UiSectionHeader>
 
-      <UiCard padding="md" radius="lg" class="app-comparison-table-card">
+      <UiCard flush class="app-comparison-table-card">
         <div class="app-comparison-table-wrapper">
           <table class="app-comparison-table">
             <thead>
