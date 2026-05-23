@@ -6,7 +6,6 @@ const sidebar: DefaultTheme.SidebarItem[] = [
     items: [
       { text: 'WCAG Contrast Picker', link: '/tools/contrast/' },
       { text: 'Bundle Size Estimator', link: '/tools/bundle-size/' },
-      { text: 'Batch Download', link: '/tools/batch-download/' },
     ],
   },
 ];

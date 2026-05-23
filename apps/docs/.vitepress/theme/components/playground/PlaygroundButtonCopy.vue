@@ -44,7 +44,6 @@ async function onClick() {
   <Button
     label="Copy SVG"
     severity="secondary"
-    variant="outlined"
     @click="onClick"
   >
     <template #icon>

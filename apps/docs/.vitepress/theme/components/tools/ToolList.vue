@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {
-  Archive,
   ArrowRight,
   Contrast,
   ExternalLink,
@@ -42,20 +41,11 @@ const tools: Tool[] = [
     iconBg: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
   },
   {
-    slug: 'batch-download',
-    href: '/tools/batch-download/',
-    name: 'Batch Download',
-    description:
-      'Paste a list of seeds, pick a style, get a ZIP of generated SVG avatars. Handy when migrating styles or snapshotting current avatars.',
-    icon: Archive,
-    iconBg: 'linear-gradient(135deg, #f97316, #ef4444)',
-  },
-  {
     slug: 'playground',
     href: '/playground/',
     name: 'Playground',
     description:
-      'Pick a style, tune every option, and preview the result live. The full DiceBear configurator with copy-paste-ready code.',
+      'Pick a style, tune every option, preview the result live, and batch-download SVGs with your configuration. The full DiceBear configurator with copy-paste-ready code.',
     icon: Sparkles,
     iconBg: 'linear-gradient(135deg, #10b981, #06b6d4)',
   },

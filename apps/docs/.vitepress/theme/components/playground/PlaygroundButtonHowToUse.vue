@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Code as CodeIcon } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
-import { UiCode, UiDialog } from '../ui';
+import { UiCard, UiCode, UiDialog } from '../ui';
 import {
   getAvatarApiUrl,
   getAvatarApiCommand,
@@ -114,8 +114,7 @@ const exampleCli = computed(() =>
 <template>
   <Button
     label="How to use"
-    severity="secondary"
-    variant="outlined"
+    severity="contrast"
     @click="open = true"
   >
     <template #icon>
@@ -125,7 +124,7 @@ const exampleCli = computed(() =>
 
   <UiDialog v-model:open="open" max-width="800px" header="How to use">
     <div class="playground-button-how-to-use-text">
-      <div class="playground-button-how-to-use-tabs-card">
+      <UiCard flush class="playground-button-how-to-use-tabs-card">
         <Tabs v-model:value="tab">
           <TabList>
             <Tab v-if="!store.isCustomStyle" value="http-api">HTTP-API</Tab>
@@ -215,7 +214,7 @@ const exampleCli = computed(() =>
             </TabPanel>
           </TabPanels>
         </Tabs>
-      </div>
+      </UiCard>
 
       <PlaygroundLicenseAlert />
     </div>
@@ -235,12 +234,6 @@ const exampleCli = computed(() =>
         color: var(--vp-c-brand-2);
       }
     }
-  }
-
-  &-tabs-card {
-    border: 1px solid var(--vp-c-border);
-    border-radius: var(--vp-radius-xs);
-    overflow: hidden;
   }
 
   &-tab-content {

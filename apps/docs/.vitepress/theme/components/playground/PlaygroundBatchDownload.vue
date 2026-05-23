@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
-import { useData } from 'vitepress';
 import Button from 'primevue/button';
 import InputNumber from 'primevue/inputnumber';
 import SelectButton from 'primevue/selectbutton';
@@ -10,31 +9,19 @@ import JSZip from 'jszip';
 import { Avatar } from '@dicebear/core';
 import {
   UiAvatar,
-  UiCard,
   UiConfetti,
-  UiContainer,
-  UiDescription,
-  UiDialog,
-  UiHeadline,
   UiLicenseAlert,
-  UiLicenseText,
-  UiStyleSelect,
 } from '@theme/components/ui';
+import useStore from '@theme/stores/playground';
 import { loadAvatarStyle } from '@theme/utils/avatar/style';
 import { triggerDownload } from '@theme/utils/download';
-import type { ThemeOptions } from '@theme/types';
 
 const SEED_CAP = 500;
 const PREVIEW_LIMIT = 12;
 
 type Mode = 'paste' | 'random';
 
-const { theme } = useData<ThemeOptions>();
-
-const availableStyles = computed(() =>
-  Object.keys(theme.value.avatarStyles).sort(),
-);
-const selectedStyle = ref<string>(availableStyles.value[0] ?? '');
+const store = useStore();
 
 const mode = ref<Mode>('random');
 const modeOptions: { label: string; value: Mode }[] = [
@@ -88,17 +75,14 @@ const previewSeeds = computed(() => seeds.value.slice(0, PREVIEW_LIMIT));
 const isGenerating = ref(false);
 const progress = ref({ done: 0, total: 0 });
 const errorMessage = ref('');
-
-const dialogOpen = ref(false);
-const confettiKey = ref(0);
-const dialogPreviewSeed = computed(() => previewSeeds.value[0] ?? '');
+const successState = ref(false);
 
 const canGenerate = computed(
   () =>
     !isGenerating.value &&
     seedCount.value > 0 &&
     !overCap.value &&
-    !!selectedStyle.value,
+    !!store.avatarStyleName,
 );
 
 const generateLabel = computed(() => {
@@ -109,9 +93,17 @@ const generateLabel = computed(() => {
   return `Download ${seedCount.value} SVG${seedCount.value === 1 ? '' : 's'} as ZIP`;
 });
 
+const cleanStyleName = computed(() =>
+  store.avatarStyleName.replace(/^custom:/, ''),
+);
+
+const previewStyleOptions = computed(() => ({
+  ...store.avatarStyleOptionsWithoutDefaults,
+}));
+
 // Some ancestor (likely VitePress local search or a PrimeVue listener) is
-// suppressing the default Enter newline in capture phase. Manually insert the
-// newline so the textarea behaves normally regardless of who calls
+// suppressing the default Enter newline in capture phase. Manually insert
+// the newline so the textarea behaves normally regardless of who calls
 // preventDefault upstream.
 async function onTextareaEnter(event: KeyboardEvent) {
   event.preventDefault();
@@ -136,8 +128,6 @@ function safeName(seed: string, used: Set<string>): string {
   return name;
 }
 
-// Set on unmount so an in-flight generate() bails out before triggering a
-// download against a component the user has already navigated away from.
 let aborted = false;
 onBeforeUnmount(() => {
   aborted = true;
@@ -148,20 +138,25 @@ async function generate() {
 
   isGenerating.value = true;
   errorMessage.value = '';
+  successState.value = false;
   progress.value = { done: 0, total: seedCount.value };
 
   try {
-    const style = await loadAvatarStyle(selectedStyle.value);
+    const style = await loadAvatarStyle(store.avatarStyleName);
     if (aborted) return;
 
     const zip = new JSZip();
     const used = new Set<string>();
+    const baseOptions = { ...store.avatarStyleOptionsWithoutDefaults };
 
     for (const seed of seeds.value) {
       if (aborted) return;
-      const svg = new Avatar(style, { seed }).toString();
+      const svg = new Avatar(style, { ...baseOptions, seed }).toString();
       zip.file(safeName(seed, used), svg);
-      progress.value = { done: progress.value.done + 1, total: seedCount.value };
+      progress.value = {
+        done: progress.value.done + 1,
+        total: seedCount.value,
+      };
       if (progress.value.done % 25 === 0) {
         await new Promise((r) => setTimeout(r, 0));
       }
@@ -170,11 +165,8 @@ async function generate() {
     const blob = await zip.generateAsync({ type: 'blob' });
     if (aborted) return;
 
-    triggerDownload(blob, `${selectedStyle.value}-avatars.zip`);
-
-    // Only celebrate after the ZIP has actually been handed to the browser.
-    confettiKey.value++;
-    dialogOpen.value = true;
+    triggerDownload(blob, `${cleanStyleName.value}-avatars.zip`);
+    successState.value = true;
   } catch (err) {
     if (aborted) return;
     errorMessage.value = err instanceof Error ? err.message : String(err);
@@ -182,29 +174,18 @@ async function generate() {
     isGenerating.value = false;
   }
 }
+
+function reset() {
+  successState.value = false;
+  errorMessage.value = '';
+  progress.value = { done: 0, total: 0 };
+}
 </script>
 
 <template>
-  <UiContainer size="sm" class="batch-tool">
-    <header class="batch-tool-hero">
-      <UiHeadline tag="h1">
-        <strong>Batch</strong> Download
-      </UiHeadline>
-      <UiDescription>
-        Pick a style, point it at a list of seeds, get a ZIP of SVGs.
-      </UiDescription>
-    </header>
-
-    <UiCard flush class="batch-tool-workspace">
-      <header class="batch-tool-top-bar">
-        <UiStyleSelect
-          v-model="selectedStyle"
-          :styles="availableStyles"
-          :value-avatar-size="28"
-          :option-avatar-size="28"
-          aria-label="Avatar style"
-          class="batch-tool-style-select"
-        />
+  <div class="pg-batch">
+    <template v-if="!successState">
+      <header class="pg-batch-top">
         <SelectButton
           v-model="mode"
           :options="modeOptions"
@@ -216,69 +197,66 @@ async function generate() {
         />
       </header>
 
-      <section class="batch-tool-section">
-
-        <div v-if="mode === 'random'" class="batch-tool-random">
-          <div class="batch-tool-random-count">
-            <InputNumber
-              v-model="randomCount"
-              :min="1"
-              :max="SEED_CAP"
-              :step="1"
-              :show-buttons="true"
-              button-layout="horizontal"
-              :input-style="{ width: '5em', textAlign: 'center' }"
-              decrement-button-class="batch-tool-step-button"
-              increment-button-class="batch-tool-step-button"
-              aria-label="Number of random seeds"
-            >
-              <template #incrementicon>+</template>
-              <template #decrementicon>−</template>
-            </InputNumber>
-            <span class="batch-tool-random-count-suffix">
-              random seed{{ randomCount === 1 ? '' : 's' }}
-            </span>
-            <button
-              type="button"
-              class="batch-tool-shuffle"
-              @click="shuffleRandom"
-              aria-label="Regenerate random seeds"
-            >
-              <Shuffle :size="14" />
-              <span>Shuffle</span>
-            </button>
-          </div>
+      <section class="pg-batch-section">
+        <div v-if="mode === 'random'" class="pg-batch-random">
+          <InputNumber
+            v-model="randomCount"
+            :min="1"
+            :max="SEED_CAP"
+            :step="1"
+            :show-buttons="true"
+            button-layout="horizontal"
+            :input-style="{ width: '5em', textAlign: 'center' }"
+            decrement-button-class="pg-batch-step-button"
+            increment-button-class="pg-batch-step-button"
+            aria-label="Number of random seeds"
+          >
+            <template #incrementicon>+</template>
+            <template #decrementicon>−</template>
+          </InputNumber>
+          <span class="pg-batch-random-suffix">
+            random seed{{ randomCount === 1 ? '' : 's' }}
+          </span>
+          <button
+            type="button"
+            class="pg-batch-shuffle"
+            @click="shuffleRandom"
+            aria-label="Regenerate random seeds"
+          >
+            <Shuffle :size="14" />
+            <span>Shuffle</span>
+          </button>
         </div>
 
-        <div v-else class="batch-tool-paste">
+        <div v-else class="pg-batch-paste">
           <Textarea
-            id="batch-seeds"
+            id="pg-batch-seeds"
             v-model="seedsInput"
-            :rows="8"
+            :rows="6"
             placeholder="One seed per line — a username, email, user ID, anything."
-            class="batch-tool-textarea"
+            class="pg-batch-textarea"
             spellcheck="false"
             autocomplete="off"
             fluid
             @keydown.enter="onTextareaEnter"
           />
           <span
-            class="batch-tool-counter"
+            class="pg-batch-counter"
             :class="{ 'is-over': overCap }"
           >
             {{ seedCount }} / {{ SEED_CAP }}
           </span>
         </div>
 
-        <p v-if="overCap" class="batch-tool-hint is-error">
+        <p v-if="overCap" class="pg-batch-hint is-error">
           That's more than the {{ SEED_CAP }}-seed cap. Trim the list and try again.
         </p>
       </section>
 
-      <section v-if="previewSeeds.length > 0" class="batch-tool-section batch-tool-preview-section">
-        <header class="batch-tool-section-header">
-          <span class="batch-tool-eyebrow">Preview</span>
-          <span class="batch-tool-preview-count">
+      <section v-if="previewSeeds.length > 0" class="pg-batch-section pg-batch-preview-section">
+        <header class="pg-batch-section-header">
+          <span class="pg-batch-eyebrow">Preview</span>
+          <span class="pg-batch-preview-count">
             <span v-if="seedCount > PREVIEW_LIMIT">
               first {{ previewSeeds.length }} of {{ seedCount }}
             </span>
@@ -288,136 +266,80 @@ async function generate() {
           </span>
         </header>
 
-        <ul class="batch-tool-preview-grid">
+        <ul class="pg-batch-preview-grid">
           <li
             v-for="seed in previewSeeds"
             :key="seed"
-            class="batch-tool-preview-tile"
+            class="pg-batch-preview-tile"
           >
-            <div class="batch-tool-preview-tile-avatar">
+            <div class="pg-batch-preview-tile-avatar">
               <UiAvatar
-                :size="72"
-                :style-name="selectedStyle"
-                :style-options="{ seed }"
+                :size="64"
+                :style-name="store.avatarStyleName"
+                :style-options="{ ...previewStyleOptions, seed }"
                 mode="library"
               />
             </div>
-            <code class="batch-tool-preview-tile-seed">{{ seed }}</code>
+            <code class="pg-batch-preview-tile-seed">{{ seed }}</code>
           </li>
         </ul>
       </section>
 
-      <footer class="batch-tool-footer">
+      <footer class="pg-batch-footer">
         <Button
           :label="generateLabel"
           :disabled="!canGenerate"
           :loading="isGenerating"
-          size="large"
           severity="contrast"
           @click="generate"
         >
           <template #icon><Download :size="16" /></template>
         </Button>
-        <p v-if="errorMessage" class="batch-tool-hint is-error">
+        <p v-if="errorMessage" class="pg-batch-hint is-error">
           {{ errorMessage }}
         </p>
       </footer>
-    </UiCard>
+    </template>
 
-    <div v-if="selectedStyle" class="batch-tool-license">
-      <UiLicenseText :style-name="selectedStyle" />
-    </div>
-
-    <UiDialog v-model:open="dialogOpen">
-      <UiConfetti :key="confettiKey" />
-      <div class="dialog-preview">
-        <UiAvatar
-          v-if="dialogPreviewSeed"
-          :style-name="selectedStyle"
-          :style-options="{ seed: dialogPreviewSeed }"
-          :size="128"
-          mode="library"
-        />
+    <template v-else>
+      <div class="pg-batch-success">
+        <UiConfetti />
+        <div class="dialog-title">Your avatars will be downloaded! 🎉</div>
+        <div class="dialog-subtitle">
+          Please note the license below before using.
+        </div>
+        <div class="dialog-text">
+          <UiLicenseAlert :style-name="store.avatarStyleName" />
+        </div>
+        <div class="pg-batch-success-actions">
+          <Button
+            label="Download another batch"
+            severity="secondary"
+            variant="outlined"
+            @click="reset"
+          />
+        </div>
       </div>
-      <div class="dialog-title">Your avatars will be downloaded! 🎉</div>
-      <div class="dialog-subtitle">
-        Please note the license below before using.
-      </div>
-      <div class="dialog-text">
-        <UiLicenseAlert :style-name="selectedStyle" />
-      </div>
-    </UiDialog>
-  </UiContainer>
+    </template>
+  </div>
 </template>
 
-<style lang="scss">
-html.dark {
-  .batch-tool-workspace,
-  .batch-tool-top-bar,
-  .batch-tool-preview-section,
-  .batch-tool-footer {
-    background: var(--vp-c-bg-soft);
-  }
-
-  .batch-tool-step-button {
-    background: var(--p-form-field-background);
-  }
-}
-</style>
-
 <style lang="scss" scoped>
-.batch-tool {
-  padding-top: 80px;
-  padding-bottom: 96px;
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-
-  &-hero {
-    text-align: center;
-    max-width: 640px;
-    margin: 0 auto;
-  }
-
-  @media (max-width: 640px) {
-    padding-top: 32px;
-  }
-}
-
-.batch-tool-eyebrow {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--ui-c-text-subtle);
-}
-
-
-.batch-tool-top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 16px 24px;
-  background: var(--vp-c-bg-elv);
-  border-bottom: 1px solid var(--vp-c-divider);
-}
-
-.batch-tool-style-select {
-  flex: 1;
-  min-width: 0;
-  max-width: 320px;
-}
-
-.batch-tool-section {
-  padding: 24px;
+.pg-batch {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
 
-  & + & {
-    border-top: 1px solid var(--vp-c-divider);
-  }
+.pg-batch-top {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.pg-batch-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 
   &-header {
     display: flex;
@@ -427,25 +349,27 @@ html.dark {
   }
 }
 
-.batch-tool-random {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-
-  &-count {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  &-count-suffix {
-    font-size: 14px;
-    color: var(--ui-c-text-muted);
-  }
+.pg-batch-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ui-c-text-subtle);
 }
 
-.batch-tool-shuffle {
+.pg-batch-random {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pg-batch-random-suffix {
+  font-size: 14px;
+  color: var(--ui-c-text-muted);
+}
+
+.pg-batch-shuffle {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -477,23 +401,22 @@ html.dark {
   }
 }
 
-.batch-tool-paste {
-  position: relative;
+.pg-batch-paste {
   display: flex;
   flex-direction: column;
 }
 
-.batch-tool-textarea {
+.pg-batch-textarea {
   font-family: var(--vp-font-family-mono);
   font-size: 13px;
   line-height: 1.55;
-  min-height: 180px;
+  min-height: 160px;
   resize: vertical;
 }
 
-.batch-tool-counter {
+.pg-batch-counter {
   align-self: flex-end;
-  margin-top: 8px;
+  margin-top: 6px;
   font-size: 12px;
   font-variant-numeric: tabular-nums;
   color: var(--ui-c-text-subtle);
@@ -504,7 +427,7 @@ html.dark {
   }
 }
 
-.batch-tool-hint {
+.pg-batch-hint {
   margin: 0;
   font-size: 13px;
   line-height: 1.5;
@@ -515,47 +438,46 @@ html.dark {
   }
 }
 
-.batch-tool-preview-section {
-  background: var(--vp-c-bg-elv);
+.pg-batch-preview-section {
+  padding-top: 12px;
+  border-top: 1px solid var(--vp-c-divider);
 }
 
-.batch-tool-preview-count {
+.pg-batch-preview-count {
   font-size: 12px;
   font-variant-numeric: tabular-nums;
   color: var(--ui-c-text-muted);
 }
 
-.batch-tool-preview-grid {
+.pg-batch-preview-grid {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 10px;
 }
 
-.batch-tool-preview-tile {
+.pg-batch-preview-tile {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 12px 8px 10px;
+  gap: 6px;
+  padding: 10px 6px 8px;
   margin: 0;
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
   border-radius: var(--vp-radius-sm);
-  transition: transform var(--duration-fast) var(--ease-smooth);
-  animation: batch-tool-tile-in var(--duration-mid, 0.4s) var(--ease-smooth) both;
 
   &-avatar {
-    width: 72px;
-    height: 72px;
+    width: 64px;
+    height: 64px;
     display: flex;
     align-items: center;
     justify-content: center;
     background:
-      linear-gradient(45deg, var(--vp-c-bg-soft) 25%, transparent 25%) 0 0/8px 8px,
-      linear-gradient(-45deg, var(--vp-c-bg-soft) 25%, transparent 25%) 0 0/8px 8px,
+      linear-gradient(45deg, var(--vp-c-bg-soft) 25%, transparent 25%) 0 0 / 8px 8px,
+      linear-gradient(-45deg, var(--vp-c-bg-soft) 25%, transparent 25%) 0 0 / 8px 8px,
       var(--vp-c-bg);
     border-radius: var(--vp-radius-xs);
     overflow: hidden;
@@ -567,31 +489,19 @@ html.dark {
     text-overflow: ellipsis;
     white-space: nowrap;
     font-family: var(--vp-font-family-mono);
-    font-size: 11px;
+    font-size: 10px;
     color: var(--ui-c-text-muted);
     padding: 0;
     background: transparent;
   }
 }
 
-@keyframes batch-tool-tile-in {
-  from {
-    opacity: 0;
-    transform: translateY(4px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.batch-tool-footer {
-  padding: 24px;
+.pg-batch-footer {
+  padding-top: 12px;
   border-top: 1px solid var(--vp-c-divider);
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  background: var(--vp-c-bg-elv);
+  gap: 10px;
 
   :deep(.p-button) {
     width: 100%;
@@ -599,32 +509,26 @@ html.dark {
   }
 }
 
-.batch-tool-license {
-  margin-top: -16px;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--ui-c-text-subtle);
+.pg-batch-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
   text-align: center;
 }
 
-@media (max-width: 640px) {
-  .batch-tool-top-bar {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 14px 18px;
-  }
-  .batch-tool-style-select {
-    max-width: none;
-  }
-  .batch-tool-section,
-  .batch-tool-footer {
-    padding: 18px;
-  }
-  .batch-tool-random {
-    flex-wrap: wrap;
-  }
-  .batch-tool-shuffle {
-    margin-left: 0;
+.pg-batch-success-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 8px;
+}
+</style>
+
+<style lang="scss">
+html.dark {
+  .pg-batch-step-button {
+    background: var(--p-form-field-background);
   }
 }
 </style>

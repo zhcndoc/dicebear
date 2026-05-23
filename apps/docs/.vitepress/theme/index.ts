@@ -108,9 +108,30 @@ const DiceBearPreset = definePreset(Aura, {
             secondary: {
               borderColor: 'var(--vp-c-border)',
               color: 'var(--vp-c-text-1)',
+              // Aura's hover background is `surface.50` (#fafaf9) — identical
+              // to VitePress's `--vp-c-bg` in light mode, so the hover state
+              // is invisible against the page. `bg-elv` is pure white and
+              // semantically right for an "elevated on hover" effect.
+              hoverBackground: 'var(--vp-c-bg-elv)',
+              activeBackground: 'var(--vp-c-bg-soft)',
             },
           },
           root: {
+            // Filled secondary defaults to ~surface-100 which blends with
+            // VitePress's --vp-c-bg-soft (also surface-100). Lift to bg-elv
+            // (#ffffff) so filled buttons sit a step above the page surface,
+            // matching the card-like "elevated" presence the design calls for.
+            secondary: {
+              background: 'var(--vp-c-bg-elv)',
+              hoverBackground: 'var(--vp-c-bg-soft)',
+              activeBackground: 'var(--vp-c-bg-soft)',
+              borderColor: 'var(--vp-c-border)',
+              hoverBorderColor: 'var(--vp-c-border)',
+              activeBorderColor: 'var(--vp-c-border)',
+              color: 'var(--vp-c-text-1)',
+              hoverColor: 'var(--vp-c-text-1)',
+              activeColor: 'var(--vp-c-text-1)',
+            },
             contrast: {
               hoverBackground: '{surface.800}',
               hoverBorderColor: '{surface.800}',
@@ -130,6 +151,21 @@ const DiceBearPreset = definePreset(Aura, {
             },
           },
           root: {
+            // Filled secondary defaults to bg-soft (#242429), identical to
+            // the card surface around them — buttons read flat. Lift to
+            // bg-elv (#2c2c32) for a clear one-step elevation above the
+            // card, matching the visual presence of the primary CTA group.
+            secondary: {
+              background: 'var(--vp-c-bg-elv)',
+              hoverBackground: '{surface.600}',
+              activeBackground: '{surface.600}',
+              borderColor: 'var(--vp-c-bg-elv)',
+              hoverBorderColor: '{surface.600}',
+              activeBorderColor: '{surface.600}',
+              color: 'var(--vp-c-text-1)',
+              hoverColor: 'var(--vp-c-text-1)',
+              activeColor: 'var(--vp-c-text-1)',
+            },
             contrast: {
               hoverBackground: '{surface.100}',
               hoverBorderColor: '{surface.100}',

@@ -1,27 +1,21 @@
 <script setup lang="ts">
-import Message from 'primevue/message';
+import { UiCard } from '@theme/components/ui';
 import PlaygroundLicenseText from './PlaygroundLicenseText.vue';
 </script>
 
 <template>
-  <Message
-    severity="secondary"
-    :closable="false"
-    class="playground-license-alert"
-  >
+  <UiCard padding="sm" class="playground-license-alert">
     <strong>
       Please note the following license before using the avatar:
     </strong>
     <PlaygroundLicenseText />
-  </Message>
+  </UiCard>
 </template>
 
 <style scoped lang="scss">
 .playground-license-alert {
-  :deep(.p-message-text) {
-    font-size: 14px;
-    line-height: 1.5;
-  }
+  font-size: 14px;
+  line-height: 1.5;
 
   :deep(strong) {
     display: block;
