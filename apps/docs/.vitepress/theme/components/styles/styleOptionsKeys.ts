@@ -18,3 +18,6 @@ export const componentPreviewDefault = readonly(
 export const styleDefaultsKey: InjectionKey<Ref<Record<string, unknown>>> =
   Symbol('styleDefaults');
 export const styleDefaultsDefault = readonly(ref<Record<string, unknown>>({}));
+
+export const navigateToColorKey: InjectionKey<(colorName: string) => void> =
+  Symbol('navigateToColor');

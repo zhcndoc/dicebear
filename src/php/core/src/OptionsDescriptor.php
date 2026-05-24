@@ -81,9 +81,17 @@ class OptionsDescriptor
         }
 
         $colorNames = array_merge(array_keys($this->style->colors()), ['background']);
+        $colors = $this->style->colors();
 
         foreach ($colorNames as $name) {
-            $result["{$name}Color"] = ['type' => 'color', 'list' => true];
+            $colorField = ['type' => 'color', 'list' => true];
+            $contrastTo = isset($colors[$name]) ? $colors[$name]->contrastTo() : null;
+
+            if ($contrastTo !== null) {
+                $colorField['contrastTo'] = $contrastTo;
+            }
+
+            $result["{$name}Color"] = $colorField;
             $result["{$name}ColorFill"] = [
                 'type' => 'enum',
                 'values' => ['solid', 'linear', 'radial'],

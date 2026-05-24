@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { computed, provide } from 'vue';
+import { computed, nextTick, provide, ref, watch } from 'vue';
 import { styleUsesVariable } from '@theme/utils/avatar/style';
-import { componentPreviewKey } from '@theme/components/styles/styleOptionsKeys';
+import {
+  componentPreviewKey,
+  navigateToColorKey,
+} from '@theme/components/styles/styleOptionsKeys';
 import { useStyleOptions } from '@theme/composables/useStyleOptions';
 import { capitalCase } from 'change-case';
 import useStore from '@theme/stores/playground';
@@ -36,6 +39,7 @@ type ColorInfo = {
   hasFill: boolean;
   hasAngle: boolean;
   hasFillStops: boolean;
+  contrastTo: string | null;
 };
 
 const seed = defineModel<string>('seed', { required: true });
@@ -123,6 +127,10 @@ const allColors = computed(() => {
       hasFill: `${key}Fill` in descriptor.value,
       hasAngle: `${key}Angle` in descriptor.value,
       hasFillStops: `${key}FillStops` in descriptor.value,
+      contrastTo:
+        field.type === 'color' && typeof field.contrastTo === 'string'
+          ? field.contrastTo
+          : null,
     });
   }
 
@@ -137,6 +145,32 @@ const sortedColors = computed(() => {
 
   return [...bg, ...rest];
 });
+
+const openColorPanels = ref<string[]>([]);
+watch(avatarStyleName, () => {
+  openColorPanels.value = [];
+});
+
+async function navigateToColor(colorName: string) {
+  const targetKey = `${colorName}Color`;
+
+  if (!openColorPanels.value.includes(targetKey)) {
+    openColorPanels.value = [...openColorPanels.value, targetKey];
+  }
+
+  await nextTick();
+
+  const header = document.querySelector(
+    `[id$="_accordionheader_${targetKey}"]`,
+  );
+
+  if (header instanceof HTMLElement) {
+    header.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    header.focus({ preventScroll: true });
+  }
+}
+
+provide(navigateToColorKey, navigateToColor);
 
 function activeCount(comp: ComponentInfo): number {
   const val = store.avatarStyleOptions[`${comp.name}Variant`];
@@ -273,7 +307,11 @@ const onSeedFocus = (e: FocusEvent) => {
 
     <div class="pg-options-group" v-if="allColors.length > 0">
       <h3 class="pg-options-group-title">Colors</h3>
-      <Accordion :multiple="true" class="pg-options-accordion">
+      <Accordion
+        v-model:value="openColorPanels"
+        :multiple="true"
+        class="pg-options-accordion"
+      >
         <AccordionPanel
           v-for="color in sortedColors"
           :key="`${avatarStyleName}-${color.key}`"
@@ -295,6 +333,7 @@ const onSeedFocus = (e: FocusEvent) => {
               :has-fill="color.hasFill"
               :has-angle="color.hasAngle"
               :has-fill-stops="color.hasFillStops"
+              :contrast-to="color.contrastTo"
             />
           </AccordionContent>
         </AccordionPanel>
