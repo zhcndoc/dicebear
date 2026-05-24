@@ -161,142 +161,78 @@
     {
       "seed": "test",
       "key": "k",
-      "entries": [
-        [
-          "a",
-          1
-        ],
-        [
-          "b",
-          4
-        ],
-        [
-          "c",
-          2
-        ]
-      ],
+      "weights": {
+        "a": 1,
+        "b": 4,
+        "c": 2
+      },
       "result": "b"
     },
     {
       "seed": "test",
       "key": "l",
-      "entries": [
-        [
-          "a",
-          1
-        ],
-        [
-          "b",
-          4
-        ],
-        [
-          "c",
-          2
-        ]
-      ],
+      "weights": {
+        "a": 1,
+        "b": 4,
+        "c": 2
+      },
       "result": "b"
     },
     {
       "seed": "hello",
       "key": "k",
-      "entries": [
-        [
-          "a",
-          1
-        ],
-        [
-          "b",
-          4
-        ],
-        [
-          "c",
-          2
-        ]
-      ],
+      "weights": {
+        "a": 1,
+        "b": 4,
+        "c": 2
+      },
       "result": "b"
     },
     {
       "seed": "test",
       "key": "k",
-      "entries": [
-        [
-          "heavy",
-          100
-        ],
-        [
-          "light",
-          1
-        ]
-      ],
+      "weights": {
+        "heavy": 100,
+        "light": 1
+      },
       "result": "heavy"
     },
     {
       "seed": "test",
       "key": "k",
-      "entries": [
-        [
-          "rare",
-          0
-        ],
-        [
-          "common",
-          1
-        ]
-      ],
+      "weights": {
+        "rare": 0,
+        "common": 1
+      },
       "result": "common"
     },
     {
       "seed": "test",
       "key": "k",
-      "entries": [
-        [
-          "c",
-          2
-        ],
-        [
-          "a",
-          1
-        ],
-        [
-          "b",
-          4
-        ]
-      ],
+      "weights": {
+        "c": 2,
+        "a": 1,
+        "b": 4
+      },
       "result": "b"
     },
     {
       "seed": "test",
       "key": "k",
-      "entries": [
-        [
-          "only",
-          1
-        ]
-      ],
+      "weights": {
+        "only": 1
+      },
       "result": "only"
     },
     {
       "seed": "test",
       "key": "k",
-      "entries": [
-        [
-          "a",
-          1
-        ],
-        [
-          "a",
-          100
-        ],
-        [
-          "b",
-          4
-        ],
-        [
-          "c",
-          2
-        ]
-      ],
-      "result": "b"
+      "weights": {
+        "c": 0.1,
+        "a": 0.2,
+        "b": 0.3
+      },
+      "result": "a"
     }
   ],
   "bool": [

@@ -122,7 +122,7 @@ class ParityTest extends TestCase
     #[DataProvider('prngWeightedPickProvider')]
     public function testPrngWeightedPick(array $c): void
     {
-        $this->assertSame($c['result'], (new Prng($c['seed']))->weightedPick($c['key'], $c['entries']));
+        $this->assertSame($c['result'], (new Prng($c['seed']))->weightedPick($c['key'], $c['weights']));
     }
 
     public static function prngBoolProvider(): array

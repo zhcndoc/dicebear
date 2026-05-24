@@ -467,24 +467,24 @@ class PrngTest extends TestCase
 
     // weightedPick
 
-    public function testWeightedPickReturnsNullForEmptyArray(): void
+    public function testWeightedPickReturnsNullForEmptyMap(): void
     {
         $prng = new Prng('test');
 
         $this->assertNull($prng->weightedPick('key', []));
     }
 
-    public function testWeightedPickReturnsSingleItem(): void
+    public function testWeightedPickReturnsSingleKey(): void
     {
         $prng = new Prng('test');
 
-        $this->assertSame('only', $prng->weightedPick('key', [['only', 1]]));
+        $this->assertSame('only', $prng->weightedPick('key', ['only' => 1]));
     }
 
     public function testWeightedPickFallsBackToUniformWhenAllWeightsZero(): void
     {
         $prng = new Prng('test');
-        $result = $prng->weightedPick('key', [['a', 0], ['b', 0], ['c', 0]]);
+        $result = $prng->weightedPick('key', ['a' => 0, 'b' => 0, 'c' => 0]);
 
         $this->assertContains($result, ['a', 'b', 'c']);
     }
@@ -493,34 +493,34 @@ class PrngTest extends TestCase
     {
         $a = new Prng('test');
         $b = new Prng('test');
-        $entries = [['a', 1], ['b', 5], ['c', 2]];
+        $weights = ['a' => 1, 'b' => 5, 'c' => 2];
 
         $this->assertSame(
-            $a->weightedPick('key', $entries),
-            $b->weightedPick('key', $entries),
+            $a->weightedPick('key', $weights),
+            $b->weightedPick('key', $weights),
         );
     }
 
-    public function testWeightedPickNeverPicksWeightZeroItem(): void
+    public function testWeightedPickNeverPicksWeightZeroKey(): void
     {
-        $entries = [['rare', 0], ['common', 1]];
+        $weights = ['rare' => 0, 'common' => 1];
 
         for ($i = 0; $i < 100; $i++) {
             $prng = new Prng("seed-{$i}");
 
-            $this->assertSame('common', $prng->weightedPick('key', $entries));
+            $this->assertSame('common', $prng->weightedPick('key', $weights));
         }
     }
 
-    public function testWeightedPickFavorsHigherWeightedItems(): void
+    public function testWeightedPickFavorsHigherWeightedKeys(): void
     {
-        $entries = [['heavy', 100], ['light', 1]];
+        $weights = ['heavy' => 100, 'light' => 1];
         $heavyCount = 0;
 
         for ($i = 0; $i < 200; $i++) {
             $prng = new Prng("seed-{$i}");
 
-            if ($prng->weightedPick('key', $entries) === 'heavy') {
+            if ($prng->weightedPick('key', $weights) === 'heavy') {
                 $heavyCount++;
             }
         }
@@ -528,39 +528,26 @@ class PrngTest extends TestCase
         $this->assertGreaterThan(150, $heavyCount, "Expected heavy to be picked most of the time, got {$heavyCount}/200");
     }
 
-    public function testWeightedPickProducesOrderIndependentResults(): void
+    public function testWeightedPickProducesInsertionOrderIndependentResults(): void
     {
         $a = new Prng('test');
         $b = new Prng('test');
 
-        $resultA = $a->weightedPick('key', [['x', 1], ['y', 5], ['z', 2]]);
-        $resultB = $b->weightedPick('key', [['z', 2], ['x', 1], ['y', 5]]);
+        $resultA = $a->weightedPick('key', ['x' => 1, 'y' => 5, 'z' => 2]);
+        $resultB = $b->weightedPick('key', ['z' => 2, 'x' => 1, 'y' => 5]);
 
         $this->assertSame($resultA, $resultB);
     }
 
-    public function testWeightedPickAlwaysReturnsValidItem(): void
+    public function testWeightedPickAlwaysReturnsValidKey(): void
     {
-        $entries = [['a', 1], ['b', 1], ['c', 1]];
+        $weights = ['a' => 1, 'b' => 1, 'c' => 1];
 
         for ($i = 0; $i < 50; $i++) {
             $prng = new Prng("seed-{$i}");
-            $result = $prng->weightedPick('key', $entries);
+            $result = $prng->weightedPick('key', $weights);
 
             $this->assertContains($result, ['a', 'b', 'c']);
-        }
-    }
-
-    public function testWeightedPickCollapsesDuplicateItems(): void
-    {
-        $baseline = [['a', 1], ['b', 4], ['c', 2]];
-        $withDuplicates = [['a', 1], ['a', 100], ['b', 4], ['c', 2]];
-
-        for ($i = 0; $i < 50; $i++) {
-            $this->assertSame(
-                (new Prng("seed-{$i}"))->weightedPick('key', $baseline),
-                (new Prng("seed-{$i}"))->weightedPick('key', $withDuplicates),
-            );
         }
     }
 

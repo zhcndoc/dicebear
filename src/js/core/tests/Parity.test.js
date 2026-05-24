@@ -68,7 +68,7 @@ describe('Parity / Prng', () => {
   describe('weightedPick', () => {
     for (const [i, c] of fixture.weightedPick.entries()) {
       it(`#${i} seed=${JSON.stringify(c.seed)} key=${JSON.stringify(c.key)}`, () => {
-        assert.equal(new Prng(c.seed).weightedPick(c.key, c.entries), c.result);
+        assert.equal(new Prng(c.seed).weightedPick(c.key, c.weights), c.result);
       });
     }
   });

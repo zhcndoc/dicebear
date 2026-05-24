@@ -157,21 +157,22 @@ for (const c of pickCases) {
 }
 
 const weightedPickCases = [
-  { seed: 'test', key: 'k', entries: [['a', 1], ['b', 4], ['c', 2]] },
-  { seed: 'test', key: 'l', entries: [['a', 1], ['b', 4], ['c', 2]] },
-  { seed: 'hello', key: 'k', entries: [['a', 1], ['b', 4], ['c', 2]] },
-  { seed: 'test', key: 'k', entries: [['heavy', 100], ['light', 1]] },
-  { seed: 'test', key: 'k', entries: [['rare', 0], ['common', 1]] },
-  // order-independence: same expected result as the first entry above
-  { seed: 'test', key: 'k', entries: [['c', 2], ['a', 1], ['b', 4]] },
-  { seed: 'test', key: 'k', entries: [['only', 1]] },
-  // duplicates: first occurrence's weight wins, later duplicates are ignored
-  { seed: 'test', key: 'k', entries: [['a', 1], ['a', 100], ['b', 4], ['c', 2]] },
+  { seed: 'test', key: 'k', weights: { a: 1, b: 4, c: 2 } },
+  { seed: 'test', key: 'l', weights: { a: 1, b: 4, c: 2 } },
+  { seed: 'hello', key: 'k', weights: { a: 1, b: 4, c: 2 } },
+  { seed: 'test', key: 'k', weights: { heavy: 100, light: 1 } },
+  { seed: 'test', key: 'k', weights: { rare: 0, common: 1 } },
+  // insertion-order independence: same expected result as the first entry above
+  { seed: 'test', key: 'k', weights: { c: 2, a: 1, b: 4 } },
+  { seed: 'test', key: 'k', weights: { only: 1 } },
+  // fractional weights in non-sorted insertion order — locks in that JS and
+  // PHP sum in the same order (sorted), since float addition is non-associative
+  { seed: 'test', key: 'k', weights: { c: 0.1, a: 0.2, b: 0.3 } },
 ];
 for (const c of weightedPickCases) {
   prngFixtures.weightedPick.push({
     ...c,
-    result: new Prng(c.seed).weightedPick(c.key, c.entries),
+    result: new Prng(c.seed).weightedPick(c.key, c.weights),
   });
 }
 

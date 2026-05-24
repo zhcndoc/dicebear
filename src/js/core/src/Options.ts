@@ -74,22 +74,25 @@ export class Options<D = unknown> {
   }
 
   /**
-   * Returns the user-set variant constraint for `name`:
-   * - `undefined` when the user did not set `${name}Variant`,
-   * - `string[]` when the user gave a string or string list (each weighted 1),
-   * - `Record<string, number>` when the user gave a weighted map.
+   * Returns the user-set variant constraint for `name` as a weighted map, or
+   * `undefined` when `${name}Variant` is unset. A bare string or string list
+   * is normalized to a map with each entry weighted `1`.
    */
   componentVariant(
     name: string,
-  ): readonly string[] | Readonly<Record<string, number>> | undefined {
+  ): Readonly<Record<string, number>> | undefined {
     const raw = this.#dynamic(`${name}Variant`);
 
     if (raw === undefined) {
       return undefined;
     }
 
-    if (typeof raw === 'string' || Array.isArray(raw)) {
-      return this.#asArray(raw as string | readonly string[]);
+    if (typeof raw === 'string') {
+      return { [raw]: 1 };
+    }
+
+    if (Array.isArray(raw)) {
+      return Object.fromEntries((raw as readonly string[]).map((v) => [v, 1]));
     }
 
     return raw as Readonly<Record<string, number>>;

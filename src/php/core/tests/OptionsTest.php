@@ -128,16 +128,16 @@ class OptionsTest extends TestCase
         $this->assertNull((new Options([]))->componentVariant('eyes'));
     }
 
-    public function testComponentVariantNormalizesString(): void
+    public function testComponentVariantNormalizesStringToWeightedMap(): void
     {
         $options = new Options(['eyesVariant' => 'open']);
-        $this->assertSame(['open'], $options->componentVariant('eyes'));
+        $this->assertSame(['open' => 1], $options->componentVariant('eyes'));
     }
 
-    public function testComponentVariantPassesListThrough(): void
+    public function testComponentVariantNormalizesListToWeightedMap(): void
     {
         $options = new Options(['eyesVariant' => ['open', 'closed']]);
-        $this->assertSame(['open', 'closed'], $options->componentVariant('eyes'));
+        $this->assertSame(['open' => 1, 'closed' => 1], $options->componentVariant('eyes'));
     }
 
     public function testComponentVariantPassesWeightedRecordThrough(): void

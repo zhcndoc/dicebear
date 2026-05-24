@@ -124,16 +124,16 @@ describe('Options', () => {
       assert.equal(new Options({}).componentVariant('eyes'), undefined);
     });
 
-    it('should normalize a string to a one-element array', () => {
+    it('should normalize a string to a single-entry weighted map', () => {
       const options = new Options({ eyesVariant: 'open' });
 
-      assert.deepEqual(options.componentVariant('eyes'), ['open']);
+      assert.deepEqual(options.componentVariant('eyes'), { open: 1 });
     });
 
-    it('should pass a string array through', () => {
+    it('should normalize a string array to a weighted map (weight 1 each)', () => {
       const options = new Options({ eyesVariant: ['open', 'closed'] });
 
-      assert.deepEqual(options.componentVariant('eyes'), ['open', 'closed']);
+      assert.deepEqual(options.componentVariant('eyes'), { open: 1, closed: 1 });
     });
 
     it('should pass a weighted record through', () => {

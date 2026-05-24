@@ -59,45 +59,50 @@ class Prng
     }
 
     /**
-     * Picks an item from `$entries` proportional to its weight. Duplicate
-     * items (by string representation) are collapsed before picking — only
-     * the first occurrence's weight is kept. When all weights are zero,
-     * falls back to an unweighted {@see pick()}. Returns `null` for an
-     * empty list.
+     * Picks a key from `$weights` proportional to its weight. When all
+     * weights are zero, falls back to an unweighted {@see pick()}. Returns
+     * `null` for an empty map.
      *
-     * @param list<array{0: mixed, 1: int|float}> $entries
+     * @param array<string, int|float> $weights
      */
-    public function weightedPick(string $key, array $entries): mixed
+    public function weightedPick(string $key, array $weights): ?string
     {
-        if (count($entries) === 0) {
+        if (count($weights) === 0) {
             return null;
         }
 
-        if (count($entries) === 1) {
-            return $entries[0][0];
+        $keys = array_keys($weights);
+
+        if (count($keys) === 1) {
+            return (string) $keys[0];
         }
 
-        $unique = self::uniqueByCodePoint($entries, fn($e) => (string) $e[0]);
-        $sorted = $unique;
-        usort($sorted, fn($a, $b) => self::compareByCodePoint($a[0], $b[0]));
-        $totalWeight = (float) array_sum(array_column($sorted, 1));
+        usort($keys, self::compareByCodePoint(...));
+
+        // Sum in sorted-key order to match JS reduce-over-sorted parity —
+        // float addition is non-associative, so iterating $weights directly
+        // (insertion order) would diverge from JS for fractional weights.
+        $totalWeight = 0.0;
+        foreach ($keys as $k) {
+            $totalWeight += $weights[$k];
+        }
 
         if ($totalWeight === 0.0) {
-            return $this->pick($key, array_column($sorted, 0));
+            return $this->pick($key, array_map('strval', $keys));
         }
 
         $threshold = $this->getValue($key) * $totalWeight;
         $cumulative = 0;
 
-        foreach ($sorted as [$item, $weight]) {
-            $cumulative += $weight;
+        foreach ($keys as $k) {
+            $cumulative += $weights[$k];
 
             if ($threshold < $cumulative) {
-                return $item;
+                return (string) $k;
             }
         }
 
-        return $sorted[count($sorted) - 1][0];
+        return (string) $keys[count($keys) - 1];
     }
 
     /**
