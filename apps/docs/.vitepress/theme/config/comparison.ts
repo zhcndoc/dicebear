@@ -98,6 +98,16 @@ export function buildComparisonRows({
       },
     },
     {
+      feature: 'Weighted Variants',
+      values: {
+        dicebear: 'yes',
+        boringAvatars: 'no',
+        avvvatars: 'no',
+        multiavatar: 'no',
+        jdenticon: 'no',
+      },
+    },
+    {
       feature: 'HTTP API',
       values: {
         dicebear: 'free',
@@ -120,7 +130,7 @@ export function buildComparisonRows({
     {
       feature: 'Languages',
       values: {
-        dicebear: 'JS/TS',
+        dicebear: 'JS/TS, PHP',
         boringAvatars: 'JS',
         avvvatars: 'JS/TS',
         multiavatar: 'JS, PHP, Python',

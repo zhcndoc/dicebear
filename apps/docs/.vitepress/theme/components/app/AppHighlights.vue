@@ -8,8 +8,8 @@ import {
   UiCard,
   UiIcon,
 } from '../ui';
-import { Target, Palette, Zap, SlidersHorizontal, Globe } from '@lucide/vue';
-import { siGithub } from 'simple-icons';
+import { Target, Palette, Server, Terminal, SlidersHorizontal, Globe } from '@lucide/vue';
+import { siGithub, siFigma, siJavascript } from 'simple-icons';
 import { useVisibility } from '../../composables/useVisibility';
 
 withDefaults(
@@ -52,11 +52,32 @@ const highlights = [
     color: '#22c55e',
   },
   {
-    icon: Zap,
-    title: 'JS Library & CLI',
+    iconPath: siJavascript.path,
+    title: 'JS Library',
     description:
       'No data sent to external servers. Full control over avatar generation in your app.',
-    color: '#f59e0b',
+    color: '#f7df1e',
+  },
+  {
+    icon: Server,
+    title: 'PHP Library',
+    description:
+      'Server-side avatar generation for PHP 8.2+. Same seed, same result — identical API to the JS library.',
+    color: '#777BB4',
+  },
+  {
+    icon: Terminal,
+    title: 'CLI',
+    description:
+      'Generate avatars directly from the command line. Perfect for batch processing and build pipelines.',
+    color: '#64748b',
+  },
+  {
+    iconPath: siFigma.path,
+    title: 'Figma Plugin',
+    description:
+      'Design custom avatar styles in Figma and export them as ready-to-use DiceBear definitions — no code required.',
+    color: 'var(--vp-c-text-1)',
   },
   {
     icon: SlidersHorizontal,
@@ -95,7 +116,7 @@ const highlights = [
         <UiCard
           v-for="(highlight, index) in highlights"
           :key="index"
-          padding="lg"
+          padding="xl"
           class="app-highlights-card"
           :style="{
             '--accent-color': highlight.color,

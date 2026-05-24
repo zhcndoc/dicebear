@@ -38,7 +38,7 @@ const { theme } = useData<ThemeOptions>();
       <span class="app-hero-highlight" style="white-space: nowrap"
         >35+ avatar styles</span
       >&nbsp;crafted by talented artists. Generate deterministic profile
-      pictures via API, JS&nbsp;library &amp; CLI.
+      pictures via API, JS&nbsp;library, PHP&nbsp;library &amp; CLI.
     </p>
 
     <div class="app-hero-actions">

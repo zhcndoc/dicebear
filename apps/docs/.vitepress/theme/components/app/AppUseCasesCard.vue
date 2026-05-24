@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-  <UiCard padding="lg" class="uc-card">
+  <UiCard padding="xl" class="uc-card">
     <div class="uc-card-visual">
       <slot />
     </div>
