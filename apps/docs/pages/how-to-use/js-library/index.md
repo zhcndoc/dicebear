@@ -195,61 +195,67 @@ const dataUri = avatar.toDataUri(); // [!code focus]
 
 ## Core options
 
-These options are available for all avatar styles:
+These options are available for all avatar styles. Where the type lists
+`[min, max]`, you may pass either a fixed value or a two-element tuple — the
+PRNG samples a value from the tuple's range.
 
-| Option            | Type                                             | Default       | Description                                                                   |
-| ----------------- | ------------------------------------------------ | ------------- | ----------------------------------------------------------------------------- |
-| `seed`            | `string`                                         | `''`          | Seed for deterministic generation                                             |
-| `flip`            | `'none' \| 'horizontal' \| 'vertical' \| 'both'` | `'none'`      | Flip the avatar                                                               |
-| `rotate`          | `number \| [min, max]`                           | `0`           | Rotate the avatar (-360 to 360 degrees)                                       |
-| `scale`           | `number \| [min, max]`                           | `1`           | Uniform scale factor around the canvas center (0 to 10; `1` is original size) |
-| `borderRadius`    | `number \| [min, max]`                           | `0`           | Border radius (0-50 percent, 50 = circle)                                     |
-| `size`            | `number`                                         | _undefined_   | Fixed size in pixels                                                          |
-| `translateX`      | `number \| [min, max]`                           | `0`           | Horizontal translation as a percentage of the canvas width (-1000 to 1000)    |
-| `translateY`      | `number \| [min, max]`                           | `0`           | Vertical translation as a percentage of the canvas height (-1000 to 1000)     |
-| `idRandomization` | `boolean`                                        | `false`       | Randomize SVG element IDs                                                     |
-| `title`           | `string`                                         | _undefined_   | Accessible title for the SVG                                                  |
-| `fontFamily`      | `string \| string[]`                             | `'system-ui'` | Font family for text-based styles                                             |
-| `fontWeight`      | `number \| number[]`                             | `400`         | Font weight for text-based styles (1-1000)                                    |
+| Option            | Type                                             | Default       | Description                                                                    |
+| ----------------- | ------------------------------------------------ | ------------- | ------------------------------------------------------------------------------ |
+| `seed`            | `string`                                         | `''`          | Seed for deterministic generation                                              |
+| `flip`            | `'none' \| 'horizontal' \| 'vertical' \| 'both'` | `'none'`      | Flip the avatar (accepts an array of values to randomize)                      |
+| `rotate`          | `number \| [min, max]`                           | `0`           | Rotation in degrees (−360 to 360)                                              |
+| `scale`           | `number \| [min, max]`                           | `1`           | Uniform scale factor around the canvas center (0 to 10; `1` is original size)  |
+| `borderRadius`    | `number \| [min, max]`                           | `0`           | Border radius in percent of the canvas (0 to 50; `50` makes a circle)          |
+| `size`            | `integer`                                        | _unset_       | Output size in pixels (1 to 4096); when unset the SVG scales to its container  |
+| `translateX`      | `number \| [min, max]`                           | `0`           | Horizontal translation in percent of the canvas width (−1000 to 1000)          |
+| `translateY`      | `number \| [min, max]`                           | `0`           | Vertical translation in percent of the canvas height (−1000 to 1000)           |
+| `idRandomization` | `boolean`                                        | `false`       | Suffix every SVG `id` with a random non-deterministic value (see below)        |
+| `title`           | `string`                                         | _unset_       | Accessible title — when set, the SVG becomes `role="img"` with `<title>`       |
+| `fontFamily`      | `string \| string[]`                             | `'system-ui'` | Font family for text-based styles (CSS-style font stack, no quotes)            |
+| `fontWeight`      | `integer \| integer[]`                           | `400`         | Font weight for text-based styles (1 to 1000)                                  |
 
 ### Background options
 
 These options are available for every style — even ones that don't declare a
 `background` color group in their definition.
 
-| Option                     | Type                              | Default     | Description                                            |
-| -------------------------- | --------------------------------- | ----------- | ------------------------------------------------------ |
-| `backgroundColor`          | `string \| string[]`              | _undefined_ | Background colors (hex with #)                         |
-| `backgroundColorFill`      | `'solid' \| 'linear' \| 'radial'` | `'solid'`   | Background fill type                                   |
-| `backgroundColorFillStops` | `number \| [min, max]`            | `2`         | Number of gradient stops; ignored when fill is `solid` |
-| `backgroundColorAngle`     | `number \| [min, max]`            | `0`         | Gradient angle (-360 to 360 degrees)                   |
+| Option                     | Type                              | Default | Description                                                    |
+| -------------------------- | --------------------------------- | ------- | -------------------------------------------------------------- |
+| `backgroundColor`          | `string \| string[]`              | _unset_ | Background colors as hex (`#` optional, `#RGB`–`#RRGGBBAA`)    |
+| `backgroundColorFill`      | `'solid' \| 'linear' \| 'radial'` | `'solid'` | Background fill type (accepts an array of values to randomize) |
+| `backgroundColorFillStops` | `integer \| [min, max]`           | `2`     | Number of gradient stops (minimum 2); ignored when fill is `solid` |
+| `backgroundColorAngle`     | `number \| [min, max]`            | `0`     | Gradient angle in degrees (−360 to 360)                        |
 
 ### Dynamic component options
 
 For each component in a style (e.g. `eyes`, `mouth`, `hair`), the following
 options are available:
 
-| Pattern                  | Type                                           | Description                             |
-| ------------------------ | ---------------------------------------------- | --------------------------------------- |
-| `{component}Variant`     | `string \| string[] \| Record<string, number>` | Select specific variants or set weights |
-| `{component}Probability` | `number`                                       | Visibility probability (0-100)          |
+| Pattern                  | Type                                           | Description                                             |
+| ------------------------ | ---------------------------------------------- | ------------------------------------------------------- |
+| `{component}Variant`     | `string \| string[] \| Record<string, number>` | Restrict to specific variants, optionally with weights  |
+| `{component}Probability` | `number`                                       | Visibility probability in percent (0 to 100)            |
 
 A component's rotation, translation, and scale are sampled at render time from
 the component definition and are **not** user options — there are no
 `{component}Rotate`, `{component}TranslateX`, `{component}TranslateY`, or
 `{component}Scale` options.
 
+Component aliases (declared via `extends` in the style definition) do not
+expose their own option keys — they share `{source}Variant` and
+`{source}Probability` with the component they extend.
+
 ### Dynamic color options
 
 For each color group in a style (e.g. `skin`, `hair`) and `background`, the
 following options are available:
 
-| Pattern                 | Type                              | Description                          |
-| ----------------------- | --------------------------------- | ------------------------------------ |
-| `{color}Color`          | `string \| string[]`              | Override color palette (hex with #)  |
-| `{color}ColorFill`      | `'solid' \| 'linear' \| 'radial'` | Color fill type                      |
-| `{color}ColorFillStops` | `number \| [min, max]`            | Number of gradient stops             |
-| `{color}ColorAngle`     | `number \| [min, max]`            | Gradient angle (-360 to 360 degrees) |
+| Pattern                 | Type                              | Description                                                    |
+| ----------------------- | --------------------------------- | -------------------------------------------------------------- |
+| `{color}Color`          | `string \| string[]`              | Override the palette — hex values (`#` optional)               |
+| `{color}ColorFill`      | `'solid' \| 'linear' \| 'radial'` | Fill type (accepts an array of values to randomize)            |
+| `{color}ColorFillStops` | `integer \| [min, max]`           | Number of gradient stops (minimum 2); ignored when fill is `solid` |
+| `{color}ColorAngle`     | `number \| [min, max]`            | Gradient angle in degrees (−360 to 360)                        |
 
 ## Examples
 
@@ -298,8 +304,10 @@ const avatar = new Avatar(avataaars, {
 
 ### Multiple avatars on the same page
 
-When rendering multiple avatars on the same page, use `idRandomization` to
-prevent SVG ID conflicts:
+When inlining multiple avatars into the same document (e.g. dropping the SVG
+markup into the page rather than using `<img src={dataUri}>`), use
+`idRandomization` to suffix each SVG's internal IDs and avoid `<defs>` /
+`url(#…)` collisions:
 
 ```js
 import { Avatar } from '@dicebear/core';
@@ -316,9 +324,20 @@ const avatars = users.map((user) =>
 );
 ```
 
+The suffix is drawn from `Math.random()` — **not** from the DiceBear PRNG — so
+two avatars rendered with the same seed get different IDs. This also means the
+rendered SVG is no longer deterministic; only the visual output is. Skip
+`idRandomization` for snapshot tests, SSR/hydration, or anywhere you depend
+on identical markup. When you only embed avatars via `<img>` (data URI or HTTP
+API) the IDs live inside isolated documents and ID randomization is
+unnecessary.
+
 ### Weighted variant selection
 
-You can influence the PRNG to prefer certain variants by passing a weight map:
+You can influence the PRNG to prefer certain variants by passing a weight map.
+Variants not listed in the map are excluded; weights of `0` exclude that
+variant unless **every** mapped variant has weight `0`, in which case the PRNG
+falls back to an unweighted pick across them:
 
 ```js
 import { Avatar } from '@dicebear/core';

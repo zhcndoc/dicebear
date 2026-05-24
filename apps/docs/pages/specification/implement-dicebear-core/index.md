@@ -149,15 +149,21 @@ after.
 
 ### Selection methods
 
-All selection methods **sort their inputs by string representation** using
-UTF-16 code unit comparison (JavaScript's default `.sort()` order) before
-operating on them. This ensures cross-language determinism.
+For inputs with more than one entry, every selection method first normalizes:
 
-In practice, the only values ever sorted are component variant names and hex
-colour strings — both guaranteed to be ASCII. Implementations may use
-locale-independent byte comparison (`strcmp`-style) and stay parity-correct,
-even though the JavaScript reference compares full UTF-16 code units. The PHP
-reference does exactly this with `strcmp`.
+1. **Deduplicate** by the item's string representation, keeping the first
+   occurrence (`pick` and `shuffle` only — `weightedPick` operates on a map and
+   has unique keys by construction).
+2. **Sort** by the item's string representation using UTF-16 code unit
+   comparison (JavaScript's default `.sort()` order).
+
+Empty inputs return `undefined` (or an empty array for `shuffle`); single-entry
+inputs are returned verbatim without deduplication or sorting. Both
+normalization steps make multi-entry output independent of caller ordering and
+duplicates. In practice the only values ever sorted are component variant names
+and hex color strings — both guaranteed to be ASCII — so an implementation may
+compare with `strcmp` and stay parity-correct, even though the JavaScript
+reference compares full UTF-16 code units. The PHP reference does exactly this.
 
 #### `pick(key, items) -> item | undefined`
 
@@ -166,78 +172,102 @@ Selects one item from an array.
 ```
 function pick(seed, key, items):
     if items is empty: return undefined
-    sorted = sort items by string representation (UTF-16 code unit order)
-    if sorted has 1 item: return sorted[0]
+    if items has 1 item: return items[0]
+    unique = deduplicate items by string representation
+    if unique has 1 item: return unique[0]
+    sorted = sort unique by string representation
     index = floor(getValue(seed, key) * length(sorted))
     return sorted[index]
 ```
 
-#### `weightedPick(key, entries) -> item | undefined`
+#### `weightedPick(key, weights) -> key | undefined`
 
-Selects from `[item, weight]` tuples, respecting weights.
+Takes a map of `string → weight` and returns one of the map's keys, biased by
+weight. When every weight is `0`, falls back to an unweighted `pick` across the
+keys.
 
 ```
-function weightedPick(seed, key, entries):
-    if entries is empty: return undefined
-    sorted = sort entries by item string representation
-    totalWeight = sum of all weights
-    if totalWeight == 0: return pick(seed, key, items from entries)
+function weightedPick(seed, key, weights):
+    keys = keys of weights
+    if keys is empty: return undefined
+    if keys has 1 item: return keys[0]
+    sorted = sort keys by string representation
+    totalWeight = sum of weights[k] for k in sorted
+    if totalWeight == 0: return pick(seed, key, sorted)
     threshold = getValue(seed, key) * totalWeight
     cumulative = 0
-    for each (item, weight) in sorted:
-        cumulative += weight
-        if cumulative > threshold: return item
-    return last item
+    for each k in sorted:
+        cumulative += weights[k]
+        if threshold < cumulative: return k
+    return last(sorted)
 ```
 
 #### `bool(key, likelihood) -> boolean`
 
-Returns `true` with probability `likelihood / 100`.
+Returns `true` with probability `likelihood / 100`. `likelihood` defaults to
+`50`.
 
 ```
 function bool(seed, key, likelihood = 50):
     return getValue(seed, key) * 100 < likelihood
 ```
 
-#### `float(key, values) -> number | undefined`
+#### `float(key, range) -> number`
 
-Returns a float within a range, rounded to 4 decimal places.
+Returns a float in the closed range, rounded to four decimal places. `range`
+is the schema's `{ min, max, step? }` object. If `min > max`, swap them
+internally. With `step > 0`, sample uniformly from
+`{ min + i × step | 0 ≤ i ≤ ⌊(max − min) / step⌋ }` — so when `(max − min)` is
+not a multiple of `step`, the last bucket is `≤ max` and `max` itself is only
+hit when the division is exact. Without `step`, the range is continuous.
 
 ```
-function float(seed, key, values):
-    if values is empty: return undefined
-    if values has 1 item: return values[0]
-    min = minimum(values)
-    max = maximum(values)
-    raw = min + getValue(seed, key) * (max - min)
+function float(seed, key, range):
+    min = min(range.min, range.max)
+    max = max(range.min, range.max)
+    step = range.step if range.step > 0 else 0
+
+    if step > 0:
+        buckets = floor((max - min) / step) + 1
+        i = floor(getValue(seed, key) * buckets)
+        raw = min + i * step
+    else:
+        raw = min + getValue(seed, key) * (max - min)
+
     return round(raw * 10000) / 10000
 ```
 
-#### `integer(key, values) -> number | undefined`
+#### `integer(key, range) -> number`
 
-Returns an integer within a range (inclusive).
+Returns an integer in the closed range, inclusive on both ends. Accepts the
+same `{ min, max, step? }` object as `float`; `step` is accepted for symmetry
+but ignored — integers already step by 1.
 
 ```
-function integer(seed, key, values):
-    if values is empty: return undefined
-    if values has 1 item: return values[0]
-    min = minimum(values)
-    max = maximum(values)
+function integer(seed, key, range):
+    min = min(range.min, range.max)
+    max = max(range.min, range.max)
     return floor(getValue(seed, key) * (max - min + 1)) + min
 ```
 
 #### `shuffle(key, items) -> items[]`
 
 Fisher-Yates shuffle using a **stateful** Mulberry32 instance (not key-based).
+For inputs of length ≤ 1 the items are returned as a copy without
+deduplication.
 
 ```
 function shuffle(seed, key, items):
-    sorted = sort items by string representation
-    result = copy of sorted
-    prng = new Mulberry32(fnv1a_hash(seed + ":" + key))
+    if length(items) <= 1: return copy of items
+    unique  = deduplicate items by string representation
+    sorted  = sort unique by string representation
+    result  = copy of sorted
+    prng    = new Mulberry32(fnv1a_hash(seed + ":" + key))
+
     for i from length(result) - 1 down to 1:
         j = floor(prng.nextFloat() * (i + 1))
         swap result[i] and result[j]
+
     return result
 ```
 
@@ -275,27 +305,39 @@ default.
 
 For each component (e.g. `eyes`) the user can supply exactly two options:
 
-| Option            | PRNG key          | Resolution                                                                             |
-| ----------------- | ----------------- | -------------------------------------------------------------------------------------- |
-| `eyesProbability` | `eyesProbability` | `bool` with likelihood, default from the component's `probability` (or `100` if unset) |
-| `eyesVariant`     | `eyesVariant`     | `weightedPick` from the component's variants                                           |
+| Option            | PRNG key          | Resolution                                                                                  |
+| ----------------- | ----------------- | ------------------------------------------------------------------------------------------- |
+| `eyesProbability` | `eyesProbability` | `bool` with likelihood from the user option, falling back to the component's `probability` (or `100` if unset) |
+| `eyesVariant`     | `eyesVariant`     | `weightedPick` over a weighted map (see below)                                              |
 
-If the probability check fails, the component is not rendered (variant returns
-`undefined`).
+If the probability check fails, the component is not rendered and `variant`
+returns `undefined`.
 
-For **component aliases** (declared via `extends` in the definition), the
-options behave differently: aliases reuse the source component's
-`${sourceName}Probability` user option, and they do not expose their own
-`${aliasName}Probability`. The `${aliasName}Variant` option, however, is unique
-to each alias — the PRNG samples a fresh variant per alias.
+`eyesVariant` accepts three shapes from the user: a single variant name, an
+array of names, or a `Record<string, number>` weight map. Normalize the first
+two to a map where each named variant has weight `1`. Then drop any keys that
+are not declared in the component's `variants` block, and feed the remaining
+map to `weightedPick`. When the user did not supply the option, build the map
+from the variants' own `weight` values (defaulting to `1`).
+
+For **component aliases** (declared via `extends` in the definition), the user
+side is shared and only the PRNG side is independent. An alias does not expose
+its own `${aliasName}Probability` or `${aliasName}Variant` user option — both
+are read from the source component's `${sourceName}Probability` and
+`${sourceName}Variant`. The PRNG, however, uses the alias's own name as the
+key (`${aliasName}Probability`, `${aliasName}Variant`), so each alias rolls
+its visibility and variant independently while still being constrained by the
+same user-set weights.
 
 ### Per-component transforms (render-time)
 
 Each component reference also has a rotation, two translations, and a scale
 applied at render time. These are **not user options** — they are sampled per
-render from the component definition's `rotate`/`translate`/`scale` ranges and
-**never appear in `resolvedOptions`**. Implementations that round-trip user
-input must not expose them.
+render from the component definition's `rotate`/`translate`/`scale` ranges.
+They land in the introspective `resolvedOptions` snapshot under
+`${name}Rotate` / `${name}TranslateX` / `${name}TranslateY` / `${name}Scale`,
+but they are not part of the user-facing `StyleOptions<D>` type and feeding
+them back into a new `Avatar` is not supported.
 
 | Value      | PRNG key         | Sampling                                          |
 | ---------- | ---------------- | ------------------------------------------------- |
@@ -310,42 +352,61 @@ round to four decimal places (`round(x * 10000) / 10000`). The transform center
 `(cx, cy)` for rotate and scale is the component's own center —
 `(width / 2, height / 2)`.
 
-In the emitted SVG, the values appear in a single `transform=""` attribute on
-the `<use>` element, in this textual order (read left to right):
+In the emitted SVG, the non-identity values are concatenated (space-separated)
+into a single `transform` attribute on the `<use>` element, in this textual
+order (read left to right):
 
 ```
 transform="translate(tx, ty) rotate(angle, cx, cy) translate(cx, cy) scale(s) translate(-cx, -cy)"
 ```
 
-Any segment whose value is the identity (`tx=ty=0`, `angle=0`, `s=1`) is
-omitted; if all segments are identity, the `transform` attribute is omitted
-entirely.
+Rules:
+
+- Translate is one segment — emitted if either `tx ≠ 0` or `ty ≠ 0`.
+- Rotate is one segment — emitted if `angle ≠ 0`.
+- Scale is the three-part `translate cx,cy / scale s / translate -cx,-cy`
+  fragment — emitted as a single unit if `s ≠ 1`.
+- If all of `(tx, ty, angle, s)` are identity, the `transform` attribute is
+  omitted entirely.
+- If the style author wrote a `transform` on the component reference, it is
+  prepended verbatim ahead of these segments (see
+  [Component rendering](#component-rendering)).
 
 ### Color options
 
 For each color group declared in the definition — **plus** an implicit
 `background` group — the user can supply four options:
 
-| Option                  | Type                               | PRNG key                | Notes                                                               |
-| ----------------------- | ---------------------------------- | ----------------------- | ------------------------------------------------------------------- |
-| `${name}Color`          | hex string or list                 | `${name}Color`          | Candidate colors (overrides the definition palette)                 |
-| `${name}ColorFill`      | enum `solid` / `linear` / `radial` | `${name}ColorFill`      | Picks one when supplied as a list, default `solid`                  |
-| `${name}ColorFillStops` | range (min 2)                      | `${name}ColorFillStops` | Number of gradient stops; ignored when fill is `solid`, default `2` |
-| `${name}ColorAngle`     | range -360…360                     | `${name}ColorAngle`     | Gradient rotation, default `0`                                      |
+| Option                  | Type                                  | PRNG key                | Notes                                                                          |
+| ----------------------- | ------------------------------------- | ----------------------- | ------------------------------------------------------------------------------ |
+| `${name}Color`          | hex string or list                    | `${name}Color`          | Candidate colors (overrides the definition palette); normalized via `Color.toHex` |
+| `${name}ColorFill`      | enum `solid` / `linear` / `radial`    | `${name}ColorFill`      | `pick` over a list, default `'solid'`                                          |
+| `${name}ColorFillStops` | integer ≥ 2, or `[min, max]` of same  | `${name}ColorFillStops` | `integer` sample, default `2`; ignored when fill is `solid`                    |
+| `${name}ColorAngle`     | number in `[-360, 360]`, or `[min, max]` | `${name}ColorAngle`  | `float` sample, default `0`                                                    |
 
 Resolution for each group:
 
 1. Get candidate colors from the user option (`${name}Color`) or fall back to
-   the style definition's palette
-2. Normalize all colors to hex
-3. Determine number of stops: `1` if fill is `solid`, else sample
-   `${name}ColorFillStops` (PRNG `integer`, default `2`)
+   the style definition's palette.
+2. Normalize every candidate to lowercase hex (6 or 8 digits, leading `#`).
+   3-/4-digit shorthand expands to 6/8.
+3. Determine the number of stops: `1` if fill is `solid`, otherwise sample
+   `${name}ColorFillStops` (PRNG `integer`, default `2`).
 4. Apply constraints from the style definition:
-   - **`contrastTo`**: Sort candidates by WCAG 2.1 contrast ratio (descending)
-     against the referenced color — do not shuffle
-   - **`notEqualTo`**: Filter out colors already selected for referenced groups
-5. If no `contrastTo` constraint: shuffle candidates
-6. Slice to the number of stops
+   - **`contrastTo`**: Sort the candidates by WCAG 2.1 contrast ratio
+     (descending) against the referenced color. The reference is resolved by
+     calling the color-resolver recursively, so cycles must be detected and
+     rejected.
+   - **`notEqualTo`**: Strip the alpha channel from every candidate and every
+     already-picked color in the referenced groups, then drop the matches. If
+     filtering would empty the candidate list, fall back to the unfiltered
+     list — color constraints are best-effort, not hard.
+5. If there is no `contrastTo` constraint, shuffle the candidates.
+6. Slice to the number of stops.
+
+A group declared without a color entry in the style definition — the implicit
+`background` group is the most common case — skips constraint handling
+entirely and just shuffles the user-supplied candidates.
 
 #### WCAG 2.1 contrast ratio
 
@@ -384,25 +445,36 @@ produce different output.
 
 ### 1. Background
 
-If a `backgroundColor` is set, render a `<rect>` covering the full canvas as the
-first element.
+The renderer unconditionally asks the resolver for the `background` color
+group — every style has it implicitly, even when the style definition declares
+no `background` group. If the resolved list is non-empty, emit a
+`<rect width="{w}" height="{h}" fill="{fill}"/>` as the first body element.
+`{fill}` is either a literal hex string (solid fill, or a single candidate
+color) or a `url(#…)` reference to a gradient registered in `<defs>` — see
+[Gradient rendering](#gradient-rendering).
 
 ### 2. Element tree
 
 Walk the `canvas.elements` array recursively:
 
-- **`element`**: Render as SVG tag with attributes. Resolve color references and
-  variable references in attribute values.
-- **`text`**: Render as escaped text content. Resolve variable references.
+- **`element`**: Render as `<{name} {attrs}/>` (self-closing) when there are no
+  children, otherwise `<{name} {attrs}>{children}</{name}>`. Resolve color and
+  variable references in attribute values, then XML-escape the resolved values.
+  Element names and attribute keys are written verbatim because the schema
+  validator already restricted them to a safe allowlist.
+- **`text`**: Resolve any variable reference, then XML-escape and emit the
+  result as the parent's text content.
 - **`component`**: Look up the selected variant (from options resolution). If
   the component is visible, emit a `<use>` element pointing at a `<defs>` entry
   that holds the variant body — see below.
 
 When an `element` has the name `defs`, the renderer **does not** emit a `<defs>`
-tag inline. Instead, each child of that element is rendered and pushed into the
-shared `<defs>` block that the renderer accumulates over the whole walk
-(alongside generated gradients, clip paths, and component variant bodies). This
-lets style definitions ship reusable fragments without breaking the
+tag inline. Instead, each child is rendered and pushed into the shared `<defs>`
+block that the renderer accumulates over the whole walk (alongside generated
+gradients, clip paths, and component variant bodies). The map key is the child's
+`id` attribute when present, otherwise a synthetic `_{n}` slot — so two children
+with the same `id` collapse to one entry, last writer wins. This lets style
+definitions ship reusable fragments without breaking the
 single-`<defs>`-per-document invariant.
 
 #### Component rendering
@@ -416,9 +488,16 @@ A component reference is never inlined. The first time the renderer encounters a
    — for an alias declared via `extends`, this is the name of the component the
    alias points to, so every alias referencing the same source shares a single
    `<defs>` entry.
-3. At the call site, emits `<use transform="…" href="#{id}"/>` (transform
-   omitted when all per-component transforms are identity — see
-   [Per-component transforms](#per-component-transforms-render-time)).
+3. At the call site, emits `<use {attributes} href="#{id}"/>` where
+   `{attributes}` carries:
+   - Every attribute the style author wrote on the component reference itself
+     (rendered first, in iteration order).
+   - A `transform` attribute composed of the per-component transforms (see
+     [Per-component transforms](#per-component-transforms-render-time)). If the
+     author also supplied a `transform`, it is **prepended** so it acts as the
+     outermost (placement) transform, with the per-component values applied
+     inside it. If all per-component values are identity and the author did
+     not supply a transform, the attribute is omitted entirely.
 
 `seedHash` is the FNV-1a hex hash of the seed, lowercased and zero-padded to 8
 characters.
@@ -458,7 +537,8 @@ The root `<svg>` element's attributes, in this order:
 
 1. `xmlns="http://www.w3.org/2000/svg"`
 2. `viewBox="0 0 {width} {height}"`
-3. Global `attributes` from the style definition (each escaped via `Xml.escape`)
+3. Global `attributes` from the style definition — keys verbatim from the
+   allowlist, values XML-escaped
 4. Either `role="img" aria-label="{title}"` (when `title` is set, escaped) or
    `aria-hidden="true"`
 5. `width="{size}"` and `height="{size}"` (only when the `size` option is set)
@@ -522,25 +602,44 @@ avatar fixtures use the default of `idRandomization: false`.
 
 ## Gradient rendering
 
-When a color group has multiple stops (fill is `linear` or `radial`):
+A gradient is emitted only when the fill is `linear` or `radial` **and** the
+color list has at least two entries. Otherwise the renderer returns a literal
+hex string (`colors[0]`, or `'none'` when the list is empty).
 
-1. Create a `<linearGradient>` or `<radialGradient>` in `<defs>`
-2. Calculate stop offsets: `round(i / (count - 1) * 100)%`
-3. Apply gradient rotation via `gradientTransform="rotate(angle, 0.5, 0.5)"`
-4. Reference via `url(#gradient-id)` in fill attributes
-5. Gradient ID format: `{colorName}-color-{seedHash}` where `seedHash` is the
-   FNV-1a hex hash of the seed (8 chars, zero-padded)
+When a gradient is needed:
+
+1. Create a `<linearGradient>` (for `linear`) or `<radialGradient>` (for
+   `radial`) in `<defs>`.
+2. Calculate per-stop offsets: `round(i / (colors.length - 1) * 100)%`.
+3. Emit each color as `<stop offset="{offset}%" stop-color="{hex}"/>`.
+4. Add `gradientTransform="rotate(angle, 0.5, 0.5)"` only when the resolved
+   `${name}ColorAngle` is non-zero; omit the attribute entirely otherwise.
+5. Reference the gradient via `url(#{id})` in the fill attribute that asked
+   for it.
+6. Gradient ID format: `{colorName}-color-{seedHash}` where `seedHash` is the
+   FNV-1a hex hash of the seed (8 chars, zero-padded, lowercased).
 
 ## Initials extraction
 
-The `initial` and `initials` variables are derived from the seed:
+The `initial` and `initials` variables are derived from the seed via the
+`Initials.fromSeed(seed)` helper:
 
-1. Strip `@...` suffix (for email addresses)
-2. Remove apostrophe-like characters (`` ` ´ ' ʼ ``)
-3. Match Unicode letter sequences (`\p{L}[\p{L}\p{M}]*`)
-4. If one word: take first 1-2 characters (respecting combining marks)
-5. If multiple words: take first character of first and last word
-6. Convert to uppercase
+1. Strip the `@...` suffix so that an email yields a single name (`alice@x`
+   → `alice`, not `[alice, x]`).
+2. Remove apostrophe-like characters (`` ` ´ ' ʼ ``) so that `O'Neill` is
+   treated as one word.
+3. Match Unicode letter sequences with `\p{L}[\p{L}\p{M}]*` — each match is
+   one "word".
+4. **No words found?** Retry once without step 1 (so a seed of just `@bob`
+   still yields `B`). If that still returns nothing, the variable resolves to
+   the empty string.
+5. **One word?** Take the first one or two grapheme-like units
+   (`\p{L}\p{M}*`), uppercased.
+6. **Multiple words?** Take the first grapheme of the first word and the
+   first grapheme of the last word, uppercased.
+
+`initial` is `initials.charAt(0)` — the first code unit of the result, which
+matches the first letter for every input the regex produces.
 
 ## Testing your implementation
 

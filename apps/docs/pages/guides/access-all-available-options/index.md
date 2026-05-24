@@ -44,15 +44,23 @@ print_r($descriptor->toJSON());
 The `toJSON()` method returns a map of option names to field descriptors. Each
 descriptor has a `type` and additional properties depending on the type:
 
-| Type      | Properties                     | Example option           |
-| --------- | ------------------------------ | ------------------------ |
-| `string`  | `list?`                        | `seed`, `fontFamily`     |
-| `number`  | `min?`, `max?`, `list?`        | `fontWeight`             |
-| `boolean` |                                | `idRandomization`        |
-| `enum`    | `values`, `list?`, `weighted?` | `flip`, `*Variant`       |
-| `color`   | `list?`                        | `*Color`                 |
-| `range`   | `min?`, `max?`                 | `rotate`, `borderRadius` |
+| Type      | Properties                       | Example option           |
+| --------- | -------------------------------- | ------------------------ |
+| `string`  | `list?`                          | `seed`, `fontFamily`     |
+| `number`  | `min?`, `max?`, `list?`          | `fontWeight`             |
+| `boolean` |                                  | `idRandomization`        |
+| `enum`    | `values`, `list?`, `weighted?`   | `flip`, `*Variant`       |
+| `color`   | `list?`, `contrastTo?`           | `*Color`                 |
+| `range`   | `min?`, `max?`                   | `rotate`, `borderRadius` |
 
-The `list` flag indicates the option accepts an array. The `weighted` flag (on
-enum fields) indicates the option accepts a `Record<string, number>` for
-weighted PRNG selection.
+- `list` indicates the option also accepts an array of values.
+- `weighted` (on enum fields) means the option additionally accepts a
+  `Record<string, number>` weight map for PRNG selection.
+- `contrastTo` (on color fields) names the color group the renderer will
+  contrast against, so UIs can flag that this group's selection is
+  contrast-driven rather than random. Only set when the style definition
+  declares a `contrastTo` constraint on the group.
+
+Component aliases (declared via `extends` in the definition) do not contribute
+their own `${alias}Variant` / `${alias}Probability` entries to the descriptor —
+they share their source component's user options.

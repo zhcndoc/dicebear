@@ -80,7 +80,7 @@ const styles = [
 # Using DiceBear as an Avatar Placeholder API
 
 An avatar placeholder replaces the generic default shown when a user hasn't
-uploaded a profile picture yet. Instead of a grey silhouette, DiceBear generates
+uploaded a profile picture yet. Instead of a gray silhouette, DiceBear generates
 a unique, deterministic SVG avatar from any seed — making every user feel
 represented from the moment they sign up.
 

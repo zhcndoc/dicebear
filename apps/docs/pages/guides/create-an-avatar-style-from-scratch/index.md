@@ -213,23 +213,29 @@ other weights are also `0`. Default weight is `1`.
 
 ### Component transforms
 
-Components can have default rotation, translation, and scale ranges:
+Components can have default rotation, translation, and scale ranges that the
+PRNG samples per render. All four fields use the same `{ min, max, step? }`
+range object — see
+[Ranges](/specification/definition-schema/#ranges) for the full reference.
 
 ```json
 {
   "eyes": {
     "width": 80,
     "height": 40,
-    "rotate": [-5, 5],
-    "scale": [0.95, 1.05],
+    "rotate": { "min": -5, "max": 5 },
+    "scale": { "min": 0.95, "max": 1.05 },
     "translate": {
-      "x": [-2, 2],
-      "y": [-3, 3]
+      "x": { "min": -2, "max": 2 },
+      "y": { "min": -3, "max": 3 }
     },
     "variants": { ... }
   }
 }
 ```
+
+Set `min === max` for a fixed value, or add `"step": <n>` to quantize the
+range to discrete buckets.
 
 ## Color palettes
 

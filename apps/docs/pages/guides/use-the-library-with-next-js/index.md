@@ -2,7 +2,7 @@
 title: Next.js Avatar Library – DiceBear Integration
 description: >
   Use DiceBear SVG avatars in Next.js (App Router and Pages Router). Server
-  component rendering, client component rendering, and image optimisation
+  component rendering, client component rendering, and image optimization
   patterns for deterministic profile pictures.
 ---
 
@@ -152,7 +152,7 @@ export function UserAvatar({ seed = 'Alice' }: { seed?: string }) {
 ```
 
 If you want to use `next/image` with the HTTP API, request a raster format (PNG,
-WebP, AVIF) — `next/image` does not optimise SVG sources — and add
+WebP, AVIF) — `next/image` does not optimize SVG sources — and add
 `api.dicebear.com` to `images.remotePatterns` in `next.config.js`.
 
 ```js
