@@ -17,5 +17,5 @@ declare module 'three';
 interface ImportMetaEnv {
   readonly VITE_PRIVACY_POLICY_URL?: string;
   readonly VITE_COOKIE_POLICY_URL?: string;
-  readonly VITE_SITE_NOTICE_URL?: string;
+  readonly VITE_LEGAL_NOTICE_URL?: string;
 }

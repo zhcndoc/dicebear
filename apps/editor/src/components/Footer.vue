@@ -7,7 +7,7 @@ import { useI18n } from 'vue-i18n';
 import {
   privacyPolicyUrl,
   cookiePolicyUrl,
-  siteNoticeUrl,
+  legalNoticeUrl,
 } from '@/config/legal';
 
 const props = defineProps<{
@@ -90,9 +90,9 @@ const metaList = computed(() => {
           {{ t('cookiePolicy') }}
         </a>
       </li>
-      <li v-if="siteNoticeUrl">
-        <a :href="siteNoticeUrl" target="_blank">
-          {{ t('siteNotice') }}
+      <li v-if="legalNoticeUrl">
+        <a :href="legalNoticeUrl" target="_blank">
+          {{ t('legalNotice') }}
         </a>
       </li>
       <li>

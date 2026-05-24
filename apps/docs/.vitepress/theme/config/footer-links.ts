@@ -43,5 +43,5 @@ export const legalLinks: FooterLink[] = [
   { label: 'Licenses', href: '/licenses/' },
   buildLegalLink('Privacy Policy', import.meta.env.VITE_PRIVACY_POLICY_URL),
   buildLegalLink('Cookie Policy', import.meta.env.VITE_COOKIE_POLICY_URL),
-  buildLegalLink('Site Notice', import.meta.env.VITE_SITE_NOTICE_URL),
+  buildLegalLink('Legal Notice', import.meta.env.VITE_LEGAL_NOTICE_URL),
 ].filter((link): link is FooterLink => link !== null);

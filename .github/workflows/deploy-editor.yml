@@ -34,7 +34,7 @@ jobs:
         env:
           VITE_PRIVACY_POLICY_URL: ${{ vars.VITE_PRIVACY_POLICY_URL }}
           VITE_COOKIE_POLICY_URL: ${{ vars.VITE_COOKIE_POLICY_URL }}
-          VITE_SITE_NOTICE_URL: ${{ vars.VITE_SITE_NOTICE_URL }}
+          VITE_LEGAL_NOTICE_URL: ${{ vars.VITE_LEGAL_NOTICE_URL }}
         run: npx turbo run build --filter='@dicebear/editor...'
 
       - name: Deploy to Bunny.net
