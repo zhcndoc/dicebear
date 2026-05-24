@@ -204,6 +204,10 @@ export default defineConfig<ThemeOptions>({
         activeMatch: '^/styles',
       },
       { text: 'Editor', link: 'https://editor.dicebear.com' },
+      {
+        text: '10.x',
+        items: [{ text: '9.x', link: 'https://v9.dicebear.com' }],
+      },
     ],
     outline: [2, 2],
     socialLinks: [],
