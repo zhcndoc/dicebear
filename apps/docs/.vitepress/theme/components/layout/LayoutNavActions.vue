@@ -152,12 +152,16 @@ function openSearch() {
   }
 }
 
-/* Hide "Star" label and theme toggle on smaller screens to save space */
-@media (max-width: 768px) {
+/* Hide "Star" label on tighter desktop layouts where the full nav would overflow */
+@media (max-width: 959px) {
   .layout-nav-actions-star-label {
     display: none;
   }
+}
 
+/* Below VitePress' nav breakpoint (768px) the desktop menu collapses into the
+   hamburger — align our own mobile-only rules with that same boundary. */
+@media (max-width: 767px) {
   .layout-nav-actions-theme {
     display: none;
   }

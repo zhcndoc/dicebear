@@ -194,7 +194,7 @@ export default defineConfig<ThemeOptions>({
     nav: [
       { text: 'Playground', link: '/playground/', activeMatch: '^/playground' },
       {
-        text: 'Documentation',
+        text: 'Docs',
         link: '/introduction/',
         activeMatch: '^/(introduction|how-to-use|guides|specification)',
       },
