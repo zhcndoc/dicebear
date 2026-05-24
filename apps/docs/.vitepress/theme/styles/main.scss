@@ -242,6 +242,20 @@ img[src^='https://api.dicebear.com/']:not(.next, .prev) {
 }
 
 /* ----------------------------------------------------------------
+ * PrimeVue Accordion overflow fix
+ *
+ * PrimeVue's `.p-accordioncontent` uses `display: grid` with the
+ * default `grid-template-columns: auto`, which sizes the column to
+ * the intrinsic width of its content. Wide children (SelectButtons,
+ * Sliders, etc.) therefore expand the grid track past its container,
+ * producing horizontal overflow on narrow viewports. Constraining the
+ * column track to `minmax(0, 1fr)` lets the wrapper shrink to fit.
+ * ---------------------------------------------------------------- */
+.p-accordioncontent {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* ----------------------------------------------------------------
  * Component-scoped PrimeVue token overrides
  *
  * PrimeVue components read tokens via the global cascade, so setting

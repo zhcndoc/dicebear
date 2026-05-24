@@ -132,7 +132,7 @@ const canSubmit = computed(
     :closable="true"
     dismissable-mask
     header="Add Custom Style"
-    :style="{ width: '600px' }"
+    :style="{ width: '600px', maxWidth: 'calc(100vw - 32px)' }"
     :pt="{ content: { class: 'pg-custom-upload-dialog-content' } }"
   >
     <div class="pg-custom-upload">

@@ -99,7 +99,7 @@ const currentDisplayName = computed(() => {
     :closable="true"
     dismissable-mask
     header="Choose Avatar Style"
-    :style="{ width: '900px' }"
+    :style="{ width: '900px', maxWidth: 'calc(100vw - 32px)' }"
     :pt="{ content: { class: 'pg-style-select-dialog-content' } }"
   >
     <div class="pg-style-select">

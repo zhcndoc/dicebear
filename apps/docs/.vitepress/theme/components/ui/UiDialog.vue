@@ -31,7 +31,7 @@ const rootClass = computed(() =>
     :closable="true"
     dismissable-mask
     :header="hasHeaderText ? header : ' '"
-    :style="{ width: maxWidth || '540px' }"
+    :style="{ width: maxWidth || '540px', maxWidth: 'calc(100vw - 32px)' }"
     :pt="{
       root: { class: rootClass },
       content: { class: 'ui-dialog-content' },

@@ -165,7 +165,10 @@ function resetVariants() {
 
 .pg-comp-variants-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  /* `minmax(0, 1fr)` allows the columns to shrink below the intrinsic
+     content width — without it long variant names would push the
+     tracks wider than the container. */
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 8px;
 }
 
@@ -174,6 +177,9 @@ function resetVariants() {
   flex-direction: column;
   align-items: center;
   gap: 3px;
+  /* Allow flex children (e.g. the variant name) to shrink so the
+     ellipsis can engage. */
+  min-width: 0;
   transition: opacity var(--duration-fast) ease;
 
   &-off {
@@ -215,7 +221,9 @@ function resetVariants() {
 .pg-comp-variant-name {
   font-size: 9px;
   color: var(--ui-c-text-subtle);
-  max-width: 100%;
+  /* `width: 100%` (not `max-width`) ensures the span fills the
+     column so the ellipsis can clip long names cleanly. */
+  width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

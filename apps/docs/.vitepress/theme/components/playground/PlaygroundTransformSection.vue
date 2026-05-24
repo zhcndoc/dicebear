@@ -48,6 +48,7 @@ const borderRadius = singleComputed(borderRadiusKey, 0);
           v-model="flip"
           :options="flipOptions"
           :allow-empty="false"
+          class="pg-transform-flip"
         />
       </div>
 
@@ -116,5 +117,20 @@ const borderRadius = singleComputed(borderRadiusKey, 0);
   display: flex;
   flex-direction: column;
   gap: 24px;
+}
+
+/* Let the Flip SelectButton keep its natural button widths and scroll
+   horizontally on narrow viewports instead of squeezing the labels. */
+.pg-transform-flip {
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  :deep(.p-togglebutton) {
+    flex: 0 0 auto;
+  }
 }
 </style>
