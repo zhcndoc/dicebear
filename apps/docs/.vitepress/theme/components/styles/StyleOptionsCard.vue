@@ -8,6 +8,7 @@ import {
   Palette,
   SlidersHorizontal,
   Weight,
+  Link2,
 } from '@lucide/vue';
 import Accordion from 'primevue/accordion';
 import AccordionPanel from 'primevue/accordionpanel';
@@ -15,6 +16,7 @@ import AccordionHeader from 'primevue/accordionheader';
 import AccordionContent from 'primevue/accordioncontent';
 import { UiCard } from '../ui';
 import Tag from 'primevue/tag';
+import { capitalCase } from 'change-case';
 import StyleOptionsPreview from './StyleOptionsPreview.vue';
 import StyleOptionsCodePanel from './StyleOptionsCodePanel.vue';
 import Message from 'primevue/message';
@@ -38,6 +40,7 @@ export interface OptionValue {
   max?: number;
   list?: boolean;
   weighted?: boolean;
+  contrastTo?: string;
 }
 
 const props = defineProps<{
@@ -212,6 +215,24 @@ const headerId = computed(() => {
   return `options-${props.name.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
 });
 
+const contrastTo = computed(() =>
+  fieldType.value === 'color' && typeof props.value.contrastTo === 'string'
+    ? props.value.contrastTo
+    : null,
+);
+
+const contrastTargetHref = computed(() => {
+  const name = contrastTo.value;
+  if (!name) return null;
+  const optionName = `${name}Color`;
+  return `#options-${optionName.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
+});
+
+const contrastTargetLabel = computed(() => {
+  const name = contrastTo.value;
+  return name ? capitalCase(name) : '';
+});
+
 const description = computed(() => getOptionDescription(props.name));
 
 interface MetaItem {
@@ -310,6 +331,26 @@ const hasDetails = computed(() => {
     <p class="style-options-card-description" v-if="descriptionWithHints">
       {{ descriptionWithHints }}
     </p>
+
+    <div
+      v-if="contrastTo"
+      class="style-options-card-contrast-banner"
+      role="note"
+    >
+      <Link2 :size="14" class="style-options-card-contrast-banner-icon" />
+      <p class="style-options-card-contrast-banner-text">
+        Linked to
+        <a
+          :href="contrastTargetHref ?? undefined"
+          class="style-options-card-contrast-banner-link"
+        >
+          {{ contrastTargetLabel }}
+        </a>
+        — the renderer picks the value with the strongest contrast against the
+        selected {{ contrastTargetLabel.toLowerCase() }} color, so additional
+        values mainly serve as fallbacks.
+      </p>
+    </div>
 
     <div class="style-options-card-meta" v-if="metaItems.length > 0">
       <span
@@ -461,6 +502,39 @@ const hasDetails = computed(() => {
 
     :deep(.p-accordioncontent-wrapper) {
       min-width: 0;
+    }
+  }
+
+  &-contrast-banner {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 10px 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--vp-c-text-2);
+    background: var(--vp-c-bg-soft);
+    border: 1px solid var(--vp-c-divider);
+    border-radius: var(--vp-radius-xs);
+
+    &-icon {
+      flex-shrink: 0;
+      margin-top: 2px;
+      opacity: 0.7;
+    }
+
+    &-text {
+      margin: 0;
+    }
+
+    &-link {
+      color: var(--vp-c-brand-1);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+
+      &:hover {
+        color: var(--vp-c-brand-2);
+      }
     }
   }
 
