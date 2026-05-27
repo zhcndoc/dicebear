@@ -30,8 +30,8 @@ async function downloadSvg() {
   const avatar = new Avatar(
     avatarStyle,
     clonePlain({
-      ...options.value,
       size: DOWNLOAD_AVATAR_SIZE,
+      ...options.value,
     }),
   );
 

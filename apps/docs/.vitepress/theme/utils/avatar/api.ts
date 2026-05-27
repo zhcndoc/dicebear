@@ -117,7 +117,7 @@ export function getAvatarApiCommand(
     })
     .join(' \\\n');
 
-  return `dicebear ${shellQuote(avatarStyle)} .${
+  return `dicebear ${avatarStyle} .${
     args.length > 0 ? ` \\\n${args}` : ''
   }`.trim();
 }

@@ -15,13 +15,16 @@ import AccordionHeader from 'primevue/accordionheader';
 import AccordionContent from 'primevue/accordioncontent';
 import Tag from 'primevue/tag';
 import InputText from 'primevue/inputtext';
+import InputNumber from 'primevue/inputnumber';
 import Button from 'primevue/button';
+import ToggleSwitch from 'primevue/toggleswitch';
 import { Shuffle } from '@lucide/vue';
 import PlaygroundComponentSection from './PlaygroundComponentSection.vue';
 import PlaygroundColorSection from './PlaygroundColorSection.vue';
 import PlaygroundTransformSection from './PlaygroundTransformSection.vue';
 import PlaygroundFontSection from './PlaygroundFontSection.vue';
 import PlaygroundStyleSelect from './PlaygroundStyleSelect.vue';
+import PlaygroundFieldReset from './PlaygroundFieldReset.vue';
 
 type ComponentInfo = {
   name: string;
@@ -197,6 +200,51 @@ function randomizeSeed() {
   seed.value = Math.random().toString(36).substring(2, 10);
 }
 
+const sizeKey = 'size';
+const titleKey = 'title';
+const idRandomizationKey = 'idRandomization';
+
+const size = computed({
+  get: () => {
+    const val = store.avatarStyleOptions[sizeKey];
+
+    return typeof val === 'number' ? val : null;
+  },
+  set: (val: number | null) => {
+    if (val === null || Number.isNaN(val)) {
+      delete store.avatarStyleOptions[sizeKey];
+    } else {
+      store.avatarStyleOptions[sizeKey] = val;
+    }
+  },
+});
+
+const title = computed({
+  get: () => {
+    const val = store.avatarStyleOptions[titleKey];
+
+    return typeof val === 'string' ? val : '';
+  },
+  set: (val: string) => {
+    if (val === '') {
+      delete store.avatarStyleOptions[titleKey];
+    } else {
+      store.avatarStyleOptions[titleKey] = val;
+    }
+  },
+});
+
+const idRandomization = computed({
+  get: () => store.avatarStyleOptions[idRandomizationKey] === true,
+  set: (val: boolean) => {
+    if (val) {
+      store.avatarStyleOptions[idRandomizationKey] = true;
+    } else {
+      delete store.avatarStyleOptions[idRandomizationKey];
+    }
+  },
+});
+
 const onSeedFocus = (e: FocusEvent) => {
   const input = e.target as HTMLInputElement;
 
@@ -269,6 +317,87 @@ const onSeedFocus = (e: FocusEvent) => {
           </AccordionHeader>
           <AccordionContent>
             <PlaygroundTransformSection :key="avatarStyleName" />
+          </AccordionContent>
+        </AccordionPanel>
+        <AccordionPanel value="__output">
+          <AccordionHeader>
+            <span class="pg-options-label">Output</span>
+          </AccordionHeader>
+          <AccordionContent>
+            <div class="pg-options-output">
+              <div class="pg-field">
+                <div class="pg-field-label">
+                  <span>Size</span>
+                  <PlaygroundFieldReset
+                    v-if="store.isOptionSet(sizeKey)"
+                    @click="store.resetOption(sizeKey)"
+                  />
+                </div>
+                <InputNumber
+                  v-model="size"
+                  :min="1"
+                  :max="4096"
+                  :step="1"
+                  :use-grouping="false"
+                  placeholder="Auto"
+                  suffix=" px"
+                  show-buttons
+                  button-layout="horizontal"
+                  :input-style="{ width: '6em', textAlign: 'center' }"
+                >
+                  <template #incrementicon>+</template>
+                  <template #decrementicon>−</template>
+                </InputNumber>
+                <p class="pg-options-field-help">
+                  Output size in pixels. If left empty, the avatar scales to
+                  100% of its container.
+                </p>
+              </div>
+
+              <div class="pg-field">
+                <div class="pg-field-label">
+                  <span>Title</span>
+                  <PlaygroundFieldReset
+                    v-if="store.isOptionSet(titleKey)"
+                    @click="store.resetOption(titleKey)"
+                  />
+                </div>
+                <InputText
+                  v-model="title"
+                  placeholder="Accessible title"
+                  class="pg-options-input"
+                />
+                <p class="pg-options-field-help">
+                  Accessible <code>&lt;title&gt;</code> element rendered
+                  inside the SVG. Useful for screen readers.
+                </p>
+              </div>
+
+              <div class="pg-field">
+                <div class="pg-field-label pg-options-toggle-row">
+                  <ToggleSwitch v-model="idRandomization" />
+                  <span>Randomize element IDs</span>
+                  <PlaygroundFieldReset
+                    v-if="store.isOptionSet(idRandomizationKey)"
+                    @click="store.resetOption(idRandomizationKey)"
+                  />
+                </div>
+                <p class="pg-options-field-help">
+                  Randomizes all SVG element IDs to avoid conflicts when
+                  embedding multiple avatars in the same page.
+                </p>
+              </div>
+
+              <p class="pg-options-field-help pg-options-field-help-warn">
+                <strong>Title</strong> and <strong>Randomize element IDs</strong>
+                are not supported by our public
+                <a href="/how-to-use/http-api/">HTTP-API</a>. You can enable
+                them by
+                <a href="/guides/host-the-http-api-yourself/"
+                  >hosting your own instance</a
+                >.
+              </p>
+            </div>
           </AccordionContent>
         </AccordionPanel>
       </Accordion>
@@ -395,5 +524,47 @@ const onSeedFocus = (e: FocusEvent) => {
   font-size: 12px;
   line-height: 1.5;
   color: var(--ui-c-text-muted);
+}
+
+.pg-options-output {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pg-options-input {
+  width: 100%;
+}
+
+.pg-options-toggle-row {
+  flex-wrap: wrap;
+
+  span {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.pg-options-field-help {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ui-c-text-muted);
+
+  a {
+    color: var(--vp-c-brand-1);
+    text-decoration: underline;
+
+    &:hover {
+      color: var(--vp-c-brand-2);
+    }
+  }
+}
+
+.pg-options-field-help-warn {
+  padding: 8px 10px;
+  border-radius: var(--vp-radius-xs);
+  background: color-mix(in srgb, var(--p-orange-500) 10%, transparent);
+  color: var(--ui-c-text);
 }
 </style>
