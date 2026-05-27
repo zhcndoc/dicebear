@@ -37,9 +37,15 @@ export function getStyleCommandOptions(style: Style): Record<string, Options> {
     switch (field.type) {
       case 'string':
         option.type = 'string';
+        if (field.list) {
+          option.array = true;
+        }
         break;
       case 'number':
         option.type = 'number';
+        if (field.list) {
+          option.array = true;
+        }
         break;
       case 'range':
         option.type = 'string';
@@ -49,6 +55,9 @@ export function getStyleCommandOptions(style: Style): Record<string, Options> {
         break;
       case 'enum':
         option.type = 'string';
+        if (field.list) {
+          option.array = true;
+        }
         if (!field.weighted) {
           option.choices = field.values as string[];
         }
@@ -56,6 +65,9 @@ export function getStyleCommandOptions(style: Style): Record<string, Options> {
         break;
       case 'color':
         option.type = 'string';
+        if (field.list) {
+          option.array = true;
+        }
         break;
     }
 
