@@ -53,7 +53,8 @@ const count = useCombinationCount();
     text-decoration-color: var(--pg-border);
     text-underline-offset: 2px;
     white-space: nowrap;
-    transition: color var(--duration-fast),
+    transition:
+      color var(--duration-fast),
       text-decoration-color var(--duration-fast);
 
     &:hover {

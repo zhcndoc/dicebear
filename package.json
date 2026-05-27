@@ -16,7 +16,7 @@
     "prepare-publish": "node scripts/version.mjs",
     "lint": "eslint . --cache",
     "lint:fix": "eslint . --cache --fix",
-    "prettier": "prettier --write \"{src,apps}/**/*.{js,ts,vue,json,md}\""
+    "prettier": "prettier --write \"{src,apps}/**/*.{js,ts,vue,json,md}\" \"*.md\""
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

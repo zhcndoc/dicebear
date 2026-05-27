@@ -12,7 +12,9 @@ import useStore from '@theme/stores/playground';
  * playground's currently selected style and option restrictions. Returns
  * `undefined` until the style's raw definition is loaded.
  */
-export function useCombinationCount(): ComputedRef<AvatarUniqueCount | undefined> {
+export function useCombinationCount(): ComputedRef<
+  AvatarUniqueCount | undefined
+> {
   const store = useStore();
   const { avatarStyleName, avatarStyleOptionsWithoutDefaults } =
     storeToRefs(store);

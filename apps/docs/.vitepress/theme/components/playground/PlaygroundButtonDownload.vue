@@ -79,11 +79,7 @@ function onDownloadClick(e: Event) {
 </script>
 
 <template>
-  <Button
-    label="Download"
-    severity="secondary"
-    @click="onDownloadClick"
-  >
+  <Button label="Download" severity="secondary" @click="onDownloadClick">
     <template #icon>
       <Download :size="15" />
     </template>
@@ -133,4 +129,3 @@ function onDownloadClick(e: Event) {
   width: 100%;
 }
 </style>
-

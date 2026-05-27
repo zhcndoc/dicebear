@@ -4,12 +4,7 @@ import { kebabCase } from 'change-case';
 import Prando from 'prando';
 import { ArrowRight, ArrowLeft, Shapes } from '@lucide/vue';
 import Button from 'primevue/button';
-import {
-  UiAvatar,
-  UiContainer,
-  UiSection,
-  UiSectionHeader,
-} from '../ui';
+import { UiAvatar, UiContainer, UiSection, UiSectionHeader } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 import { useAvatarStyleList } from '../../composables/avatar';
 

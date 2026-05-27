@@ -214,9 +214,9 @@ function bool(seed, key, likelihood = 50):
 
 #### `float(key, range) -> number`
 
-Returns a float in the closed range, rounded to four decimal places. `range`
-is the schema's `{ min, max, step? }` object. If `min > max`, swap them
-internally. With `step > 0`, sample uniformly from
+Returns a float in the closed range, rounded to four decimal places. `range` is
+the schema's `{ min, max, step? }` object. If `min > max`, swap them internally.
+With `step > 0`, sample uniformly from
 `{ min + i × step | 0 ≤ i ≤ ⌊(max − min) / step⌋ }` — so when `(max − min)` is
 not a multiple of `step`, the last bucket is `≤ max` and `max` itself is only
 hit when the division is exact. Without `step`, the range is continuous.
@@ -239,9 +239,9 @@ function float(seed, key, range):
 
 #### `integer(key, range) -> number`
 
-Returns an integer in the closed range, inclusive on both ends. Accepts the
-same `{ min, max, step? }` object as `float`; `step` is accepted for symmetry
-but ignored — integers already step by 1.
+Returns an integer in the closed range, inclusive on both ends. Accepts the same
+`{ min, max, step? }` object as `float`; `step` is accepted for symmetry but
+ignored — integers already step by 1.
 
 ```
 function integer(seed, key, range):
@@ -253,8 +253,7 @@ function integer(seed, key, range):
 #### `shuffle(key, items) -> items[]`
 
 Fisher-Yates shuffle using a **stateful** Mulberry32 instance (not key-based).
-For inputs of length ≤ 1 the items are returned as a copy without
-deduplication.
+For inputs of length ≤ 1 the items are returned as a copy without deduplication.
 
 ```
 function shuffle(seed, key, items):
@@ -305,10 +304,10 @@ default.
 
 For each component (e.g. `eyes`) the user can supply exactly two options:
 
-| Option            | PRNG key          | Resolution                                                                                  |
-| ----------------- | ----------------- | ------------------------------------------------------------------------------------------- |
+| Option            | PRNG key          | Resolution                                                                                                     |
+| ----------------- | ----------------- | -------------------------------------------------------------------------------------------------------------- |
 | `eyesProbability` | `eyesProbability` | `bool` with likelihood from the user option, falling back to the component's `probability` (or `100` if unset) |
-| `eyesVariant`     | `eyesVariant`     | `weightedPick` over a weighted map (see below)                                              |
+| `eyesVariant`     | `eyesVariant`     | `weightedPick` over a weighted map (see below)                                                                 |
 
 If the probability check fails, the component is not rendered and `variant`
 returns `undefined`.
@@ -316,28 +315,28 @@ returns `undefined`.
 `eyesVariant` accepts three shapes from the user: a single variant name, an
 array of names, or a `Record<string, number>` weight map. Normalize the first
 two to a map where each named variant has weight `1`. Then drop any keys that
-are not declared in the component's `variants` block, and feed the remaining
-map to `weightedPick`. When the user did not supply the option, build the map
-from the variants' own `weight` values (defaulting to `1`).
+are not declared in the component's `variants` block, and feed the remaining map
+to `weightedPick`. When the user did not supply the option, build the map from
+the variants' own `weight` values (defaulting to `1`).
 
 For **component aliases** (declared via `extends` in the definition), the user
 side is shared and only the PRNG side is independent. An alias does not expose
 its own `${aliasName}Probability` or `${aliasName}Variant` user option — both
 are read from the source component's `${sourceName}Probability` and
-`${sourceName}Variant`. The PRNG, however, uses the alias's own name as the
-key (`${aliasName}Probability`, `${aliasName}Variant`), so each alias rolls
-its visibility and variant independently while still being constrained by the
-same user-set weights.
+`${sourceName}Variant`. The PRNG, however, uses the alias's own name as the key
+(`${aliasName}Probability`, `${aliasName}Variant`), so each alias rolls its
+visibility and variant independently while still being constrained by the same
+user-set weights.
 
 ### Per-component transforms (render-time)
 
 Each component reference also has a rotation, two translations, and a scale
 applied at render time. These are **not user options** — they are sampled per
-render from the component definition's `rotate`/`translate`/`scale` ranges.
-They land in the introspective `resolvedOptions` snapshot under
-`${name}Rotate` / `${name}TranslateX` / `${name}TranslateY` / `${name}Scale`,
-but they are not part of the user-facing `StyleOptions<D>` type and feeding
-them back into a new `Avatar` is not supported.
+render from the component definition's `rotate`/`translate`/`scale` ranges. They
+land in the introspective `resolvedOptions` snapshot under `${name}Rotate` /
+`${name}TranslateX` / `${name}TranslateY` / `${name}Scale`, but they are not
+part of the user-facing `StyleOptions<D>` type and feeding them back into a new
+`Avatar` is not supported.
 
 | Value      | PRNG key         | Sampling                                          |
 | ---------- | ---------------- | ------------------------------------------------- |
@@ -377,12 +376,12 @@ Rules:
 For each color group declared in the definition — **plus** an implicit
 `background` group — the user can supply four options:
 
-| Option                  | Type                                  | PRNG key                | Notes                                                                          |
-| ----------------------- | ------------------------------------- | ----------------------- | ------------------------------------------------------------------------------ |
-| `${name}Color`          | hex string or list                    | `${name}Color`          | Candidate colors (overrides the definition palette); normalized via `Color.toHex` |
-| `${name}ColorFill`      | enum `solid` / `linear` / `radial`    | `${name}ColorFill`      | `pick` over a list, default `'solid'`                                          |
-| `${name}ColorFillStops` | integer ≥ 2, or `[min, max]` of same  | `${name}ColorFillStops` | `integer` sample, default `2`; ignored when fill is `solid`                    |
-| `${name}ColorAngle`     | number in `[-360, 360]`, or `[min, max]` | `${name}ColorAngle`  | `float` sample, default `0`                                                    |
+| Option                  | Type                                     | PRNG key                | Notes                                                                             |
+| ----------------------- | ---------------------------------------- | ----------------------- | --------------------------------------------------------------------------------- |
+| `${name}Color`          | hex string or list                       | `${name}Color`          | Candidate colors (overrides the definition palette); normalized via `Color.toHex` |
+| `${name}ColorFill`      | enum `solid` / `linear` / `radial`       | `${name}ColorFill`      | `pick` over a list, default `'solid'`                                             |
+| `${name}ColorFillStops` | integer ≥ 2, or `[min, max]` of same     | `${name}ColorFillStops` | `integer` sample, default `2`; ignored when fill is `solid`                       |
+| `${name}ColorAngle`     | number in `[-360, 360]`, or `[min, max]` | `${name}ColorAngle`     | `float` sample, default `0`                                                       |
 
 Resolution for each group:
 
@@ -399,14 +398,14 @@ Resolution for each group:
      rejected.
    - **`notEqualTo`**: Strip the alpha channel from every candidate and every
      already-picked color in the referenced groups, then drop the matches. If
-     filtering would empty the candidate list, fall back to the unfiltered
-     list — color constraints are best-effort, not hard.
+     filtering would empty the candidate list, fall back to the unfiltered list
+     — color constraints are best-effort, not hard.
 5. If there is no `contrastTo` constraint, shuffle the candidates.
 6. Slice to the number of stops.
 
 A group declared without a color entry in the style definition — the implicit
-`background` group is the most common case — skips constraint handling
-entirely and just shuffles the user-supplied candidates.
+`background` group is the most common case — skips constraint handling entirely
+and just shuffles the user-supplied candidates.
 
 #### WCAG 2.1 contrast ratio
 
@@ -445,9 +444,9 @@ produce different output.
 
 ### 1. Background
 
-The renderer unconditionally asks the resolver for the `background` color
-group — every style has it implicitly, even when the style definition declares
-no `background` group. If the resolved list is non-empty, emit a
+The renderer unconditionally asks the resolver for the `background` color group
+— every style has it implicitly, even when the style definition declares no
+`background` group. If the resolved list is non-empty, emit a
 `<rect width="{w}" height="{h}" fill="{fill}"/>` as the first body element.
 `{fill}` is either a literal hex string (solid fill, or a single candidate
 color) or a `url(#…)` reference to a gradient registered in `<defs>` — see
@@ -496,8 +495,8 @@ A component reference is never inlined. The first time the renderer encounters a
      [Per-component transforms](#per-component-transforms-render-time)). If the
      author also supplied a `transform`, it is **prepended** so it acts as the
      outermost (placement) transform, with the per-component values applied
-     inside it. If all per-component values are identity and the author did
-     not supply a transform, the attribute is omitted entirely.
+     inside it. If all per-component values are identity and the author did not
+     supply a transform, the attribute is omitted entirely.
 
 `seedHash` is the FNV-1a hex hash of the seed, lowercased and zero-padded to 8
 characters.
@@ -614,8 +613,8 @@ When a gradient is needed:
 3. Emit each color as `<stop offset="{offset}%" stop-color="{hex}"/>`.
 4. Add `gradientTransform="rotate(angle, 0.5, 0.5)"` only when the resolved
    `${name}ColorAngle` is non-zero; omit the attribute entirely otherwise.
-5. Reference the gradient via `url(#{id})` in the fill attribute that asked
-   for it.
+5. Reference the gradient via `url(#{id})` in the fill attribute that asked for
+   it.
 6. Gradient ID format: `{colorName}-color-{seedHash}` where `seedHash` is the
    FNV-1a hex hash of the seed (8 chars, zero-padded, lowercased).
 
@@ -624,19 +623,19 @@ When a gradient is needed:
 The `initial` and `initials` variables are derived from the seed via the
 `Initials.fromSeed(seed)` helper:
 
-1. Strip the `@...` suffix so that an email yields a single name (`alice@x`
-   → `alice`, not `[alice, x]`).
+1. Strip the `@...` suffix so that an email yields a single name (`alice@x` →
+   `alice`, not `[alice, x]`).
 2. Remove apostrophe-like characters (`` ` ´ ' ʼ ``) so that `O'Neill` is
    treated as one word.
-3. Match Unicode letter sequences with `\p{L}[\p{L}\p{M}]*` — each match is
-   one "word".
-4. **No words found?** Retry once without step 1 (so a seed of just `@bob`
-   still yields `B`). If that still returns nothing, the variable resolves to
-   the empty string.
-5. **One word?** Take the first one or two grapheme-like units
-   (`\p{L}\p{M}*`), uppercased.
-6. **Multiple words?** Take the first grapheme of the first word and the
-   first grapheme of the last word, uppercased.
+3. Match Unicode letter sequences with `\p{L}[\p{L}\p{M}]*` — each match is one
+   "word".
+4. **No words found?** Retry once without step 1 (so a seed of just `@bob` still
+   yields `B`). If that still returns nothing, the variable resolves to the
+   empty string.
+5. **One word?** Take the first one or two grapheme-like units (`\p{L}\p{M}*`),
+   uppercased.
+6. **Multiple words?** Take the first grapheme of the first word and the first
+   grapheme of the last word, uppercased.
 
 `initial` is `initials.charAt(0)` — the first code unit of the result, which
 matches the first letter for every input the regex produces.

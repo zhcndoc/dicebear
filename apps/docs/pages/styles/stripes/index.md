@@ -15,9 +15,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Stripes
 
-Stripes is an abstract vector avatar style of two-tone parallel bands rotated
-at varying angles across a colored background. Generate clean, graphic SVG
-profile icons that work as avatar placeholders or minimalist user identifiers.
+Stripes is an abstract vector avatar style of two-tone parallel bands rotated at
+varying angles across a colored background. Generate clean, graphic SVG profile
+icons that work as avatar placeholders or minimalist user identifiers.
 
 <StylePreview styleName="stripes" />
 

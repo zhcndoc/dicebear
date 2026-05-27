@@ -25,7 +25,9 @@ function walkJsFiles(dir: string): string[] {
   return out;
 }
 
-const stylesDir = path.dirname(require.resolve('@dicebear/styles/initials.json'));
+const stylesDir = path.dirname(
+  require.resolve('@dicebear/styles/initials.json'),
+);
 const coreLibDir = path.dirname(require.resolve('@dicebear/core'));
 // @dicebear/converter `main` points to lib/node/index.js; step up to lib/
 const converterLibDir = path.dirname(
@@ -39,7 +41,10 @@ for (const file of fs.readdirSync(stylesDir)) {
   styles[name] = sizeFor(path.join(stylesDir, file));
 }
 
-function bundleSize(dir: string, exclude: (file: string) => boolean = () => false) {
+function bundleSize(
+  dir: string,
+  exclude: (file: string) => boolean = () => false,
+) {
   let raw = 0;
   let gzip = 0;
   for (const file of walkJsFiles(dir)) {

@@ -8,7 +8,13 @@ import InputIcon from 'primevue/inputicon';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { Search, X } from '@lucide/vue';
-import { UiAvatar, UiCard, UiContainer, UiHeadline, UiDescription } from '@theme/components/ui';
+import {
+  UiAvatar,
+  UiCard,
+  UiContainer,
+  UiHeadline,
+  UiDescription,
+} from '@theme/components/ui';
 import { useVisibility } from '@theme/composables/useVisibility';
 import type { ThemeOptions } from '@theme/types';
 
@@ -35,7 +41,10 @@ const visibleStyles = computed(() => {
   const q = filter.value.toLowerCase().trim();
   if (!q) return styleNames;
   return styleNames.filter((name) => {
-    return name.toLowerCase().includes(q) || styleTitle(name).toLowerCase().includes(q);
+    return (
+      name.toLowerCase().includes(q) ||
+      styleTitle(name).toLowerCase().includes(q)
+    );
   });
 });
 
@@ -83,17 +92,26 @@ function styleTitle(name: string): string {
 <template>
   <UiContainer size="sm" class="bundle-size-tool">
     <header class="bundle-size-tool-hero">
-      <UiHeadline tag="h1">
-        <strong>Bundle Size</strong> Estimator
-      </UiHeadline>
+      <UiHeadline tag="h1"> <strong>Bundle Size</strong> Estimator </UiHeadline>
       <UiDescription>
-        Pick the styles you plan to use and see how many gzipped kilobytes they'll add to your JavaScript bundle.
+        Pick the styles you plan to use and see how many gzipped kilobytes
+        they'll add to your JavaScript bundle.
       </UiDescription>
     </header>
 
-    <div ref="summarySentinel" class="bundle-size-summary-sentinel" aria-hidden="true" />
-    <UiCard padding="lg" class="bundle-size-summary" :class="{ 'is-stuck': isSummaryStuck }">
-      <div class="bundle-size-summary-row bundle-size-summary-row-toggle is-disabled">
+    <div
+      ref="summarySentinel"
+      class="bundle-size-summary-sentinel"
+      aria-hidden="true"
+    />
+    <UiCard
+      padding="lg"
+      class="bundle-size-summary"
+      :class="{ 'is-stuck': isSummaryStuck }"
+    >
+      <div
+        class="bundle-size-summary-row bundle-size-summary-row-toggle is-disabled"
+      >
         <label class="bundle-size-summary-row-label">
           <Checkbox :model-value="true" :binary="true" :disabled="true" />
           <span class="bundle-size-summary-label">
@@ -101,7 +119,9 @@ function styleTitle(name: string): string {
             <span class="bundle-size-summary-hint">always required</span>
           </span>
           <span class="bundle-size-summary-values">
-            <span class="bundle-size-summary-raw">{{ formatSize(sizes.core.gzip) }}</span>
+            <span class="bundle-size-summary-raw">{{
+              formatSize(sizes.core.gzip)
+            }}</span>
             <span class="bundle-size-summary-gzip">gzip</span>
           </span>
         </label>
@@ -111,10 +131,14 @@ function styleTitle(name: string): string {
           <Checkbox v-model="includeConverter" :binary="true" />
           <span class="bundle-size-summary-label">
             <code>@dicebear/converter</code>
-            <span class="bundle-size-summary-hint">PNG, JPEG, WebP & PDF output</span>
+            <span class="bundle-size-summary-hint"
+              >PNG, JPEG, WebP & PDF output</span
+            >
           </span>
           <span class="bundle-size-summary-values">
-            <span class="bundle-size-summary-raw">{{ formatSize(sizes.converter.gzip) }}</span>
+            <span class="bundle-size-summary-raw">{{
+              formatSize(sizes.converter.gzip)
+            }}</span>
             <span class="bundle-size-summary-gzip">gzip</span>
           </span>
         </label>
@@ -122,10 +146,13 @@ function styleTitle(name: string): string {
       <div class="bundle-size-summary-row">
         <div class="bundle-size-summary-row-label">
           <span class="bundle-size-summary-label">
-            {{ selected.size }} style{{ selected.size === 1 ? '' : 's' }} selected
+            {{ selected.size }} style{{ selected.size === 1 ? '' : 's' }}
+            selected
           </span>
           <span class="bundle-size-summary-values">
-            <span class="bundle-size-summary-raw">{{ formatSize(selectedGzip) }}</span>
+            <span class="bundle-size-summary-raw">{{
+              formatSize(selectedGzip)
+            }}</span>
             <span class="bundle-size-summary-gzip">gzip</span>
           </span>
         </div>
@@ -134,7 +161,9 @@ function styleTitle(name: string): string {
         <div class="bundle-size-summary-row-label">
           <span class="bundle-size-summary-label">Total</span>
           <span class="bundle-size-summary-values">
-            <span class="bundle-size-summary-raw">{{ formatSize(grandTotalGzip) }}</span>
+            <span class="bundle-size-summary-raw">{{
+              formatSize(grandTotalGzip)
+            }}</span>
             <span class="bundle-size-summary-gzip">gzip</span>
           </span>
         </div>
@@ -155,8 +184,18 @@ function styleTitle(name: string): string {
           />
         </IconField>
         <div class="bundle-size-picker-actions">
-          <Button label="Select all" severity="secondary" variant="outlined" @click="selectAll" />
-          <Button label="Clear" severity="secondary" variant="outlined" @click="clear">
+          <Button
+            label="Select all"
+            severity="secondary"
+            variant="outlined"
+            @click="selectAll"
+          />
+          <Button
+            label="Clear"
+            severity="secondary"
+            variant="outlined"
+            @click="clear"
+          >
             <template #icon><X :size="14" /></template>
           </Button>
         </div>
@@ -186,7 +225,9 @@ function styleTitle(name: string): string {
             <span class="bundle-size-row-title">{{ styleTitle(name) }}</span>
             <code class="bundle-size-row-slug">{{ name }}</code>
             <span class="bundle-size-row-values">
-              <span class="bundle-size-row-raw">{{ formatSize(sizes.styles[name]?.gzip ?? 0) }}</span>
+              <span class="bundle-size-row-raw">{{
+                formatSize(sizes.styles[name]?.gzip ?? 0)
+              }}</span>
               <span class="bundle-size-row-gzip">gzip</span>
             </span>
           </label>
@@ -223,7 +264,9 @@ html.dark {
 /* @dicebear/core is always required, so its checkbox is `disabled`. Restore
  * the checked brand color so it still reads as an active state instead of a
  * muted disabled control. */
-.bundle-size-summary-row-toggle.is-disabled .p-checkbox-checked .p-checkbox-box {
+.bundle-size-summary-row-toggle.is-disabled
+  .p-checkbox-checked
+  .p-checkbox-box {
   background: var(--p-checkbox-checked-background);
   border-color: var(--p-checkbox-checked-border-color);
   color: var(--p-checkbox-icon-checked-color);

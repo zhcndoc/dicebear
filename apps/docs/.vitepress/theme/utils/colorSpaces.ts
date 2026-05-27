@@ -55,7 +55,11 @@ export function rgbToHsl({ r, g, b }: Rgb): Hsl {
   const l = (max + min) / 2;
   const h = max === min ? 0 : hueFromRgb({ r, g, b }, max, min);
   const s =
-    max === min ? 0 : l > 0.5 ? (max - min) / (2 - max - min) : (max - min) / (max + min);
+    max === min
+      ? 0
+      : l > 0.5
+        ? (max - min) / (2 - max - min)
+        : (max - min) / (max + min);
 
   return { h, s: s * 100, l: l * 100 };
 }
@@ -77,7 +81,11 @@ export function hslToRgb({ h, s, l }: Hsl): Rgb {
   };
 }
 
-function hueSegment(hp: number, c: number, x: number): [number, number, number] {
+function hueSegment(
+  hp: number,
+  c: number,
+  x: number,
+): [number, number, number] {
   if (hp < 1) return [c, x, 0];
   if (hp < 2) return [x, c, 0];
   if (hp < 3) return [0, c, x];

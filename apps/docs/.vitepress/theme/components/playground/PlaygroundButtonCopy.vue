@@ -41,11 +41,7 @@ async function onClick() {
 </script>
 
 <template>
-  <Button
-    label="Copy SVG"
-    severity="secondary"
-    @click="onClick"
-  >
+  <Button label="Copy SVG" severity="secondary" @click="onClick">
     <template #icon>
       <Copy :size="15" />
     </template>

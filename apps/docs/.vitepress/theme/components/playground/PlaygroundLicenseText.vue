@@ -44,8 +44,7 @@ const customLicenseUrl = computed(() =>
 );
 
 const customStyleDisplayName = computed(
-  () =>
-    store.customStyles[store.avatarStyleName]?.name ?? 'Custom Style',
+  () => store.customStyles[store.avatarStyleName]?.name ?? 'Custom Style',
 );
 </script>
 

@@ -103,7 +103,9 @@ function formatSize(bytes: number): string {
 .pg-def-icon {
   flex-shrink: 0;
   color: var(--ui-c-text-subtle);
-  transition: color var(--duration-fast), transform var(--duration-fast) var(--ease-smooth);
+  transition:
+    color var(--duration-fast),
+    transform var(--duration-fast) var(--ease-smooth);
 }
 
 .pg-def-size {

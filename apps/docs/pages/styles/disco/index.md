@@ -15,10 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Disco
 
-Disco is an abstract vector avatar style built from halftone-like grids of
-small shapes that grow and shrink across a colored background. Generate
-graphic, eye-catching SVG profile icons — ideal as avatar placeholders or
-decorative user identifiers.
+Disco is an abstract vector avatar style built from halftone-like grids of small
+shapes that grow and shrink across a colored background. Generate graphic,
+eye-catching SVG profile icons — ideal as avatar placeholders or decorative user
+identifiers.
 
 <StylePreview styleName="disco" />
 

@@ -215,8 +215,8 @@ other weights are also `0`. Default weight is `1`.
 
 Components can have default rotation, translation, and scale ranges that the
 PRNG samples per render. All four fields use the same `{ min, max, step? }`
-range object — see
-[Ranges](/specification/definition-schema/#ranges) for the full reference.
+range object — see [Ranges](/specification/definition-schema/#ranges) for the
+full reference.
 
 ```json
 {
@@ -234,8 +234,8 @@ range object — see
 }
 ```
 
-Set `min === max` for a fixed value, or add `"step": <n>` to quantize the
-range to discrete buckets.
+Set `min === max` for a fixed value, or add `"step": <n>` to quantize the range
+to discrete buckets.
 
 ## Color palettes
 

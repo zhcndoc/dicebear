@@ -15,7 +15,9 @@ const url = computed(() => `/styles/${kebabCase(store.avatarStyleName)}/`);
       <span class="pg-doc-label">Style documentation</span>
       <ArrowRight :size="13" class="pg-doc-arrow" />
     </span>
-    <span class="pg-doc-hint">Full options reference, code examples, and integration guides.</span>
+    <span class="pg-doc-hint"
+      >Full options reference, code examples, and integration guides.</span
+    >
   </a>
 </template>
 
@@ -63,7 +65,8 @@ const url = computed(() => `/styles/${kebabCase(store.avatarStyleName)}/`);
 .pg-doc-arrow {
   flex-shrink: 0;
   color: var(--ui-c-text-subtle);
-  transition: color var(--duration-fast),
+  transition:
+    color var(--duration-fast),
     transform var(--duration-fast) var(--ease-smooth);
 }
 

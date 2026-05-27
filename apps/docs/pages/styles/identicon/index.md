@@ -18,8 +18,8 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 Identicon renders symmetrical pixel-grid patterns in a single color on a tinted
 background — the classic identicon look popularised by developer tools and
 version control hosts. Each pattern is deterministically derived from its seed,
-making it a dependable choice for technical profile icons and identicon API
-use cases.
+making it a dependable choice for technical profile icons and identicon API use
+cases.
 
 <StylePreview styleName="identicon" />
 

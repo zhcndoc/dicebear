@@ -78,9 +78,7 @@ export class Options<D = unknown> {
    * `undefined` when `${name}Variant` is unset. A bare string or string list
    * is normalized to a map with each entry weighted `1`.
    */
-  componentVariant(
-    name: string,
-  ): Readonly<Record<string, number>> | undefined {
+  componentVariant(name: string): Readonly<Record<string, number>> | undefined {
     const raw = this.#dynamic(`${name}Variant`);
 
     if (raw === undefined) {

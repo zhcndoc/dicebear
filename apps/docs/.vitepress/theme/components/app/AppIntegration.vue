@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Globe, MonitorSmartphone, Server, Terminal, ArrowRight } from '@lucide/vue';
+import {
+  Globe,
+  MonitorSmartphone,
+  Server,
+  Terminal,
+  ArrowRight,
+} from '@lucide/vue';
 import Button from 'primevue/button';
 import {
   UiContainer,

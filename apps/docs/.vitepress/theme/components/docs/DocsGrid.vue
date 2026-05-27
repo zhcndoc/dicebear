@@ -14,11 +14,7 @@ withDefaults(
 
 <template>
   <div class="docs-grid" :class="`docs-grid-cols-${columns}`">
-    <UiCard
-      v-for="item in items"
-      :key="item.title"
-      class="docs-grid-card"
-    >
+    <UiCard v-for="item in items" :key="item.title" class="docs-grid-card">
       <div class="docs-grid-header">
         <span class="docs-grid-title">{{ item.title }}</span>
         <Badge v-if="item.badge" type="tip">{{ item.badge }}</Badge>

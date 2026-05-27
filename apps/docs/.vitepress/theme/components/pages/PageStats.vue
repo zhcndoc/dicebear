@@ -105,9 +105,7 @@ const downloadsData = computed(() => {
   return aggregateWeekly(stats.value.downloads.npm);
 });
 
-function buildSeries(
-  source: Record<string, [string, number][]>,
-): {
+function buildSeries(source: Record<string, [string, number][]>): {
   labels: string[];
   series: Array<{ name: string; values: number[] }>;
 } | null {

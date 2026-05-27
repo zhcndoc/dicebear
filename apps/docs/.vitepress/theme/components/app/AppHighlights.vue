@@ -8,7 +8,14 @@ import {
   UiCard,
   UiIcon,
 } from '../ui';
-import { Target, Palette, Server, Terminal, SlidersHorizontal, Globe } from '@lucide/vue';
+import {
+  Target,
+  Palette,
+  Server,
+  Terminal,
+  SlidersHorizontal,
+  Globe,
+} from '@lucide/vue';
 import { siGithub, siFigma, siJavascript } from 'simple-icons';
 import { useVisibility } from '../../composables/useVisibility';
 

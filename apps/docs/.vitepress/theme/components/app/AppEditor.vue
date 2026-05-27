@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { MousePointerClick, Palette, Download, ArrowRight, Brush } from '@lucide/vue';
+import {
+  MousePointerClick,
+  Palette,
+  Download,
+  ArrowRight,
+  Brush,
+} from '@lucide/vue';
 import Button from 'primevue/button';
 import {
   UiAvatar,

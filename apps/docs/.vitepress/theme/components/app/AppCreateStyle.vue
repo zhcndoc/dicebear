@@ -3,13 +3,7 @@ import { ref } from 'vue';
 import { ArrowRight, BookOpen } from '@lucide/vue';
 import { siFigma } from 'simple-icons';
 import Button from 'primevue/button';
-import {
-  UiContainer,
-  UiSection,
-  UiSectionHeader,
-  UiCard,
-  UiIcon,
-} from '../ui';
+import { UiContainer, UiSection, UiSectionHeader, UiCard, UiIcon } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
 const sectionRef = ref();

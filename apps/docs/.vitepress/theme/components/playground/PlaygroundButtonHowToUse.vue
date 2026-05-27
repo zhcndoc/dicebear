@@ -112,11 +112,7 @@ const exampleCli = computed(() =>
 </script>
 
 <template>
-  <Button
-    label="How to use"
-    severity="contrast"
-    @click="open = true"
-  >
+  <Button label="How to use" severity="contrast" @click="open = true">
     <template #icon>
       <CodeIcon :size="15" />
     </template>

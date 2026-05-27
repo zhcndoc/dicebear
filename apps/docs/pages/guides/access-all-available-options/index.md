@@ -44,14 +44,14 @@ print_r($descriptor->toJSON());
 The `toJSON()` method returns a map of option names to field descriptors. Each
 descriptor has a `type` and additional properties depending on the type:
 
-| Type      | Properties                       | Example option           |
-| --------- | -------------------------------- | ------------------------ |
-| `string`  | `list?`                          | `seed`, `fontFamily`     |
-| `number`  | `min?`, `max?`, `list?`          | `fontWeight`             |
-| `boolean` |                                  | `idRandomization`        |
-| `enum`    | `values`, `list?`, `weighted?`   | `flip`, `*Variant`       |
-| `color`   | `list?`, `contrastTo?`           | `*Color`                 |
-| `range`   | `min?`, `max?`                   | `rotate`, `borderRadius` |
+| Type      | Properties                     | Example option           |
+| --------- | ------------------------------ | ------------------------ |
+| `string`  | `list?`                        | `seed`, `fontFamily`     |
+| `number`  | `min?`, `max?`, `list?`        | `fontWeight`             |
+| `boolean` |                                | `idRandomization`        |
+| `enum`    | `values`, `list?`, `weighted?` | `flip`, `*Variant`       |
+| `color`   | `list?`, `contrastTo?`         | `*Color`                 |
+| `range`   | `min?`, `max?`                 | `rotate`, `borderRadius` |
 
 - `list` indicates the option also accepts an array of values.
 - `weighted` (on enum fields) means the option additionally accepts a

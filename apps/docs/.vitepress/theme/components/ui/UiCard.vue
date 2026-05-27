@@ -18,7 +18,9 @@ const slots = useSlots();
 
 // Treat only non-empty hrefs as actual links — an empty string from a
 // loading-state computed should not silently degrade to a non-interactive div.
-const hasHref = computed(() => typeof props.href === 'string' && props.href.length > 0);
+const hasHref = computed(
+  () => typeof props.href === 'string' && props.href.length > 0,
+);
 const tag = computed(() => (hasHref.value ? 'a' : 'div'));
 const hasHeader = computed(() => Boolean(props.title) || Boolean(slots.header));
 </script>

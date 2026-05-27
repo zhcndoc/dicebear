@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { UiCard, UiContainer, UiHeadline, UiDescription } from '@theme/components/ui';
+import {
+  UiCard,
+  UiContainer,
+  UiHeadline,
+  UiDescription,
+} from '@theme/components/ui';
 import { hsvToHex } from '@theme/utils/colorSpaces';
 import type { Hsv } from '@theme/utils/colorSpaces';
 import ContrastCanvas from './ContrastCanvas.vue';
@@ -23,11 +28,10 @@ function updateHsv(next: Hsv) {
 <template>
   <UiContainer size="sm" class="contrast-tool">
     <header class="contrast-tool-hero">
-      <UiHeadline tag="h1">
-        <strong>WCAG</strong> Contrast Picker
-      </UiHeadline>
+      <UiHeadline tag="h1"> <strong>WCAG</strong> Contrast Picker </UiHeadline>
       <UiDescription>
-        See which of two contrast colors DiceBear picks for any color — using the exact WCAG 2.1 algorithm from <code>@dicebear/core</code>.
+        See which of two contrast colors DiceBear picks for any color — using
+        the exact WCAG 2.1 algorithm from <code>@dicebear/core</code>.
       </UiDescription>
     </header>
 
@@ -55,7 +59,9 @@ function updateHsv(next: Hsv) {
         <ContrastSliders :hsv="hsv" :hex="hex" @update:hsv="updateHsv" />
 
         <p class="contrast-tool-hint">
-          The dashed line on the canvas marks where DiceBear's pick switches between the two contrast colors. Points above the line favor one color; points below favor the other.
+          The dashed line on the canvas marks where DiceBear's pick switches
+          between the two contrast colors. Points above the line favor one
+          color; points below favor the other.
         </p>
       </UiCard>
     </div>

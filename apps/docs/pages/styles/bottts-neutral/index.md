@@ -16,9 +16,8 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Bottts Neutral
 
-Bottts Neutral is a reduced variant of the Bottts style, showing only the
-robot eyes and mouth on a solid colored square — no head, antennas, or side
-units.
+Bottts Neutral is a reduced variant of the Bottts style, showing only the robot
+eyes and mouth on a solid colored square — no head, antennas, or side units.
 
 <StylePreview styleName="bottts-neutral" />
 

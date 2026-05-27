@@ -112,11 +112,7 @@ const trend = computed<Trend | null>(() => {
         ↑ {{ trend.pct }}% vs {{ trend.prevMonth }}
       </span>
       <div v-if="chart.points.length" class="st-chart">
-        <svg
-          viewBox="0 0 200 60"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
+        <svg viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true">
           <defs>
             <linearGradient :id="fillId" x1="0" y1="0" x2="0" y2="1">
               <stop

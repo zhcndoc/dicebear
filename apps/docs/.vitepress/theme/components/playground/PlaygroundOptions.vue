@@ -368,8 +368,8 @@ const onSeedFocus = (e: FocusEvent) => {
                   class="pg-options-input"
                 />
                 <p class="pg-options-field-help">
-                  Accessible <code>&lt;title&gt;</code> element rendered
-                  inside the SVG. Useful for screen readers.
+                  Accessible <code>&lt;title&gt;</code> element rendered inside
+                  the SVG. Useful for screen readers.
                 </p>
               </div>
 
@@ -389,7 +389,8 @@ const onSeedFocus = (e: FocusEvent) => {
               </div>
 
               <p class="pg-options-field-help pg-options-field-help-warn">
-                <strong>Title</strong> and <strong>Randomize element IDs</strong>
+                <strong>Title</strong> and
+                <strong>Randomize element IDs</strong>
                 are not supported by our public
                 <a href="/how-to-use/http-api/">HTTP-API</a>. You can enable
                 them by

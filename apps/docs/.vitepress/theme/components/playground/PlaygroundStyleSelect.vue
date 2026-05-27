@@ -104,11 +104,7 @@ const currentDisplayName = computed(() => {
   >
     <div class="pg-style-select">
       <div class="pg-style-select-toolbar">
-        <InputText
-          v-model="searchQuery"
-          placeholder="Search styles..."
-          fluid
-        />
+        <InputText v-model="searchQuery" placeholder="Search styles..." fluid />
 
         <MultiSelect
           v-model="selectedCategories"

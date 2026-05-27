@@ -15,10 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Big Ears
 
-Big Ears is a playful vector avatar style featuring cartoon heads with
-oversized round ears, varied hairstyles, and simple expressive faces. Generate
-cheerful, distinctive profile icons for community apps, kids' platforms, and
-casual social products.
+Big Ears is a playful vector avatar style featuring cartoon heads with oversized
+round ears, varied hairstyles, and simple expressive faces. Generate cheerful,
+distinctive profile icons for community apps, kids' platforms, and casual social
+products.
 
 <StylePreview styleName="big-ears" />
 

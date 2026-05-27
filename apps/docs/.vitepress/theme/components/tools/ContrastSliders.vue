@@ -86,7 +86,11 @@ function onNativePick(event: Event) {
   // and we can adopt it cleanly. Otherwise (e.g. mouse click landing on
   // non-integer S/V) keep the exact float HSV so the displayed hex matches.
   const exact = rgbToHsvPreservingHue({ r, g, b }, props.hsv);
-  const snapped = { h: exact.h, s: Math.round(exact.s), v: Math.round(exact.v) };
+  const snapped = {
+    h: exact.h,
+    s: Math.round(exact.s),
+    v: Math.round(exact.v),
+  };
   const hex = hsvToHex(snapped).toLowerCase() === value ? snapped : exact;
   emit('update:hsv', hex);
 }
@@ -203,7 +207,9 @@ function updateActiveChannel(key: string, value: number) {
           :max="channel.max"
           :step="channel.step"
           class="contrast-sliders-row-slider"
-          @update:model-value="updateActiveChannel(channel.key, $event as number)"
+          @update:model-value="
+            updateActiveChannel(channel.key, $event as number)
+          "
         />
         <InputNumber
           :model-value="activeValues[channel.key]"

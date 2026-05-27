@@ -16,9 +16,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 # Rings
 
 Rings is a geometric abstract vector avatar style that arranges segmented
-concentric rings and arcs into a single monochrome composition on a
-transparent background. Generate clean, algorithmic SVG profile icons that
-work as modern placeholders or decorative user identifiers.
+concentric rings and arcs into a single monochrome composition on a transparent
+background. Generate clean, algorithmic SVG profile icons that work as modern
+placeholders or decorative user identifiers.
 
 <StylePreview styleName="rings" />
 

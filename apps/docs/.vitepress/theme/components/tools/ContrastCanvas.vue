@@ -25,11 +25,7 @@ function setFromPointer(event: PointerEvent) {
   if (!surface.value) return;
   const rect = surface.value.getBoundingClientRect();
   const s = clamp(((event.clientX - rect.left) / rect.width) * 100, 0, 100);
-  const v = clamp(
-    (1 - (event.clientY - rect.top) / rect.height) * 100,
-    0,
-    100,
-  );
+  const v = clamp((1 - (event.clientY - rect.top) / rect.height) * 100, 0, 100);
   if (s === props.hsv.s && v === props.hsv.v) return;
   emit('update:hsv', { h: props.hsv.h, s, v });
 }

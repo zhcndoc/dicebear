@@ -7,11 +7,7 @@ import Textarea from 'primevue/textarea';
 import { Download, Shuffle } from '@lucide/vue';
 import JSZip from 'jszip';
 import { Avatar } from '@dicebear/core';
-import {
-  UiAvatar,
-  UiConfetti,
-  UiLicenseAlert,
-} from '@theme/components/ui';
+import { UiAvatar, UiConfetti, UiLicenseAlert } from '@theme/components/ui';
 import useStore from '@theme/stores/playground';
 import { loadAvatarStyle } from '@theme/utils/avatar/style';
 import { triggerDownload } from '@theme/utils/download';
@@ -240,20 +236,21 @@ function reset() {
             fluid
             @keydown.enter="onTextareaEnter"
           />
-          <span
-            class="pg-batch-counter"
-            :class="{ 'is-over': overCap }"
-          >
+          <span class="pg-batch-counter" :class="{ 'is-over': overCap }">
             {{ seedCount }} / {{ SEED_CAP }}
           </span>
         </div>
 
         <p v-if="overCap" class="pg-batch-hint is-error">
-          That's more than the {{ SEED_CAP }}-seed cap. Trim the list and try again.
+          That's more than the {{ SEED_CAP }}-seed cap. Trim the list and try
+          again.
         </p>
       </section>
 
-      <section v-if="previewSeeds.length > 0" class="pg-batch-section pg-batch-preview-section">
+      <section
+        v-if="previewSeeds.length > 0"
+        class="pg-batch-section pg-batch-preview-section"
+      >
         <header class="pg-batch-section-header">
           <span class="pg-batch-eyebrow">Preview</span>
           <span class="pg-batch-preview-count">
@@ -476,8 +473,10 @@ function reset() {
     align-items: center;
     justify-content: center;
     background:
-      linear-gradient(45deg, var(--vp-c-bg-soft) 25%, transparent 25%) 0 0 / 8px 8px,
-      linear-gradient(-45deg, var(--vp-c-bg-soft) 25%, transparent 25%) 0 0 / 8px 8px,
+      linear-gradient(45deg, var(--vp-c-bg-soft) 25%, transparent 25%) 0 0 / 8px
+        8px,
+      linear-gradient(-45deg, var(--vp-c-bg-soft) 25%, transparent 25%) 0 0 /
+        8px 8px,
       var(--vp-c-bg);
     border-radius: var(--vp-radius-xs);
     overflow: hidden;

@@ -243,8 +243,7 @@ const licenseUrl = computed(() =>
   &-dice-icon {
     cursor: pointer;
     color: var(--vp-c-text-3);
-    transition:
-      color var(--duration-fast) ease;
+    transition: color var(--duration-fast) ease;
     outline: none;
     user-select: none;
     -webkit-user-select: none;
@@ -325,7 +324,6 @@ const licenseUrl = computed(() =>
       transform: scale(1.05);
     }
   }
-
 }
 
 @keyframes app-seed-demo-glow-pulse {
