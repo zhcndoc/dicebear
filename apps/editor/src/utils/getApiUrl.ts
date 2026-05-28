@@ -27,7 +27,7 @@ export default function getApiUrl(
     })
     .join('&');
 
-  return `https://api.dicebear.com/9.x/${kebabCase(styleName)}/${format}${
+  return `https://api.dicebear.com/10.x/${kebabCase(styleName)}/${format}${
     qs ? `?${qs}` : ''
   }`;
 }
