@@ -10,11 +10,9 @@ export default function getApiUrl(
   const qs = Object.entries(getAvatarOptions(styleName, options))
     .map(([k, v]) => {
       if (Array.isArray(v)) {
-        return v.length === 0
-          ? `${encodeURIComponent(k)}[]`
-          : `${encodeURIComponent(k)}=${v
-              .map((c) => encodeURIComponent(c))
-              .join(',')}`;
+        return `${encodeURIComponent(k)}=${v
+          .map((c) => encodeURIComponent(c))
+          .join(',')}`;
       }
 
       if (

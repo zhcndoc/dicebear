@@ -45,11 +45,9 @@ export function getAvatarApiUrl(
       const classified = classifyOptionValue(v);
       switch (classified.kind) {
         case 'array':
-          return classified.values.length === 0
-            ? `${encodeURIComponent(k)}[]`
-            : `${encodeURIComponent(k)}=${classified.values
-                .map((c) => encodeURIComponent(String(c)))
-                .join(',')}`;
+          return `${encodeURIComponent(k)}=${classified.values
+            .map((c) => encodeURIComponent(String(c)))
+            .join(',')}`;
         case 'primitive':
           return `${encodeURIComponent(k)}=${encodeURIComponent(classified.value)}`;
         case 'object': {
