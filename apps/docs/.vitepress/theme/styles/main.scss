@@ -130,7 +130,8 @@ h6,
 }
 
 .VPLink:not(.no-icon),
-.VPButton:not(.no-icon) {
+.VPButton:not(.no-icon),
+.vp-doc th a:not(.no-icon) {
   $styles: (
     'big-ears-neutral',
     'adventurer',
