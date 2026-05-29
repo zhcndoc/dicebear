@@ -23,7 +23,7 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
 
 const plainCode = {
   js: `import { Style, Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/styles/lorelei.json';
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 const style = new Style(lorelei);
 const svg = new Avatar(style, {

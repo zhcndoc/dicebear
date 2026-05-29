@@ -63,7 +63,7 @@ const svg = avatar.toString();`;
   }
 
   return `import { Style, Avatar } from '@dicebear/core';
-import definition from '@dicebear/styles/${store.avatarStyleName}.json';
+import definition from '@dicebear/styles/${store.avatarStyleName}.json' with { type: 'json' };
 
 const style = new Style(definition);
 const avatar = new Avatar(style, ${JSON.stringify(options.value, null, 2)});

@@ -30,7 +30,7 @@ const apiExample = computed(
 const jsExample = computed(
   () =>
     `import { Style, Avatar } from '@dicebear/core';
-import definition from '@dicebear/styles/${props.style}.json';
+import definition from '@dicebear/styles/${props.style}.json' with { type: 'json' };
 
 const style = new Style(definition);
 const avatar = new Avatar(style, {

@@ -23,7 +23,7 @@ const exampleHttpApiUrl = computed(() => {
 });
 
 const exampleDefinitionImport = computed(() => {
-  return `import definition from '@dicebear/styles/${kebabCase(props.styleName)}.json';`;
+  return `import definition from '@dicebear/styles/${kebabCase(props.styleName)}.json' with { type: 'json' };`;
 });
 
 const exampleCliCommand = computed(() => {
