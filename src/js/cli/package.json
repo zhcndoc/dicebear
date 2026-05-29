@@ -22,7 +22,8 @@
   "scripts": {
     "prebuild": "del-cli lib",
     "build": "tsc",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "test": "node --test"
   },
   "dependencies": {
     "@dicebear/converter": "10.0.0",
