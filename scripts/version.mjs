@@ -1,7 +1,7 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { execSync } from "node:child_process";
-import { isValidVersion, updatePackageJson, collectWorkspaceNames } from "./lib/version.mjs";
+import { isValidVersion, updatePackageJson, collectWorkspaceNames, updateChangelog } from "./lib/version.mjs";
 import { resolveWorkspacePackages } from "./lib/workspace.mjs";
 
 const ROOT = resolve(import.meta.dirname, "..");
@@ -34,6 +34,21 @@ for (const pkgPath of packageJsonPaths) {
   if (newRaw !== null) {
     writeFileSync(pkgPath, newRaw);
     console.log(`  ${pkg.name ?? "root"}: ${oldVersion ?? "-"} → ${version}`);
+  }
+}
+
+// Promote the changelog's Unreleased section to the new version
+const changelogPath = join(ROOT, "CHANGELOG.md");
+if (existsSync(changelogPath)) {
+  const raw = readFileSync(changelogPath, "utf-8");
+  const date = new Date().toISOString().slice(0, 10);
+  const updated = updateChangelog(raw, version, date);
+
+  if (updated !== null) {
+    writeFileSync(changelogPath, updated);
+    console.log(`\nCHANGELOG.md: Unreleased → ${version} (${date})`);
+  } else {
+    console.log("\nCHANGELOG.md: nothing to promote (skipped)");
   }
 }
 
