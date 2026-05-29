@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [10.0.1] - 2026-05-29
+
 ### Fixed
 
 - **CLI:** `dicebear --version` and `dicebear --help` no longer fail by trying
@@ -53,5 +55,6 @@ See the [v10.0.0 release notes](https://github.com/dicebear/dicebear/releases/ta
 - **BREAKING:** Individual style packages (e.g. `@dicebear/initials`) have been
   removed in favor of `@dicebear/styles`.
 
-[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.0.0...HEAD
+[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.0.1...HEAD
+[10.0.1]: https://github.com/dicebear/dicebear/compare/v10.0.0...v10.0.1
 [10.0.0]: https://github.com/dicebear/dicebear/releases/tag/v10.0.0
