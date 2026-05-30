@@ -104,7 +104,8 @@ export default function getSchemaOptions(style: Style): ConfigStyleOptions {
     }
 
     const isArray = 'list' in field && field.list === true;
-    const hasProbability = `${key}Probability` in descriptor;
+    const componentName = key.replace(/Variant$/, '');
+    const hasProbability = `${componentName}Probability` in descriptor;
 
     const values = new Set<string>();
 

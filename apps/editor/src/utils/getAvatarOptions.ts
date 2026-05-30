@@ -39,7 +39,8 @@ export default function getAvatarOptions(
     }
 
     if (styleOption.hasProbability) {
-      result[`${key}Probability`] = avatarOption ? 100 : 0;
+      const componentName = key.replace(/Variant$/, '');
+      result[`${componentName}Probability`] = avatarOption ? 100 : 0;
     }
   }
 
