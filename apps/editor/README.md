@@ -1,6 +1,6 @@
 # DiceBear Editor (Beta)
 
-[![Preview](./preview.png)](https://editor.dicebear.com)
+[![Preview](https://raw.githubusercontent.com/dicebear/dicebear/10.x/apps/editor/preview.png)](https://editor.dicebear.com)
 
 Read more about the project here:
 [https://github.com/dicebear/dicebear/discussions/286](https://github.com/dicebear/dicebear/discussions/286)
