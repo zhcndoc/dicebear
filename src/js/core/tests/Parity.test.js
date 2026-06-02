@@ -17,6 +17,7 @@ import { Prng } from '../lib/Prng.js';
 import { Fnv1a } from '../lib/Prng/Fnv1a.js';
 import { Mulberry32 } from '../lib/Prng/Mulberry32.js';
 import { Number } from '../lib/Utils/Number.js';
+import { Initials } from '../lib/Utils/Initials.js';
 
 const fixturesDir = join(import.meta.dirname, '..', '..', '..', '..', 'tests', 'fixtures', 'parity');
 
@@ -113,6 +114,17 @@ describe('Parity / Numbers', () => {
   for (const entry of loadFixture('numbers.json')) {
     it(`formats ${entry.output}`, () => {
       assert.equal(Number.format(entry.input), entry.output);
+    });
+  }
+});
+
+describe('Parity / Initials', () => {
+  // Initials.fromSeed must be byte-identical across ports; accented seeds
+  // (ô/ü) and quote/@/CJK/emoji cases pin the @-strip, quote-strip, and
+  // \p{L} word matching against per-language regex pitfalls.
+  for (const entry of loadFixture('initials.json')) {
+    it(`derives ${JSON.stringify(entry.seed)} → ${JSON.stringify(entry.result)}`, () => {
+      assert.equal(Initials.fromSeed(entry.seed), entry.result);
     });
   }
 });

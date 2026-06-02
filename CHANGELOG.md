@@ -23,6 +23,11 @@ and this project adheres to
   exactly on a `.5` boundary, so a PHP-rendered avatar could differ from the
   JavaScript one by `0.0001` in a rotate/translate transform or color angle for
   certain seeds. Output is now byte-identical across languages.
+- **Core (PHP):** Initials are now derived correctly from seeds containing
+  multibyte letters such as `ü` or `ô`. The quote-stripping step was missing the
+  `/u` (Unicode) flag, so it removed raw UTF-8 bytes and corrupted those
+  letters — e.g. `über` and `côté` produced wrong or empty initials instead of
+  `ÜB` / `CÔ`. The PHP output now matches the JavaScript reference.
 
 ## [10.0.1] - 2026-05-29
 

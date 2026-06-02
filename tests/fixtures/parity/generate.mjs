@@ -14,6 +14,7 @@ import { Prng } from '../../../src/js/core/lib/Prng.js';
 import { Fnv1a } from '../../../src/js/core/lib/Prng/Fnv1a.js';
 import { Mulberry32 } from '../../../src/js/core/lib/Prng/Mulberry32.js';
 import { Number } from '../../../src/js/core/lib/Utils/Number.js';
+import { Initials } from '../../../src/js/core/lib/Utils/Initials.js';
 
 const definitionsDir = join(
   import.meta.dirname,
@@ -260,7 +261,7 @@ writeJson('prng.json', prngFixtures);
 // which rounds to at most 5 decimal places. PHP's native float cast and
 // Python's `repr` would diverge from JS for small/large magnitudes, so each
 // port reimplements it (`DiceBear\Utils\Number::format`,
-// `dicebear._numbers.num`) and must reproduce it byte-for-byte. These cases pin
+// `dicebear.utils.Number.format`) and must reproduce it byte-for-byte. These pin
 // that contract — covering integers, plain decimals, values that round at the
 // 5th decimal, and tiny values that round down to 0.
 
@@ -278,6 +279,41 @@ const numberInputs = [
 writeJson(
   'numbers.json',
   numberInputs.map((input) => ({ input, output: Number.format(input) })),
+);
+
+// ---------------------------------------------------------------------------
+// Initials fixtures
+// ---------------------------------------------------------------------------
+//
+// `Initials.fromSeed` derives display initials for the `initials` style. The
+// `@`-stripping, quote-stripping, and `\p{L}` word matching are easy to get
+// subtly wrong per language (e.g. a regex that strips raw bytes instead of code
+// points would corrupt multibyte letters like ô/ü). These cases pin the
+// contract across ASCII, accented, quote-prefixed, email, CJK, and emoji seeds.
+
+console.log('Generating initials.json…');
+
+const initialsSeeds = [
+  'AB CD',
+  'café',
+  'über',
+  'côté',
+  'grün rot',
+  "l'eau",
+  'd´or',
+  'ʼtest',
+  'user@example.com',
+  'a',
+  '',
+  '日本語',
+  '🎲 spiel',
+  'Œuvre',
+  'rock-paper',
+];
+
+writeJson(
+  'initials.json',
+  initialsSeeds.map((seed) => ({ seed, result: Initials.fromSeed(seed) })),
 );
 
 // ---------------------------------------------------------------------------

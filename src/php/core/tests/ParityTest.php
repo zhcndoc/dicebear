@@ -8,6 +8,7 @@ use DiceBear\Avatar;
 use DiceBear\Prng;
 use DiceBear\Prng\Fnv1a;
 use DiceBear\Prng\Mulberry32;
+use DiceBear\Utils\Initials;
 use DiceBear\Utils\Number;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -187,6 +188,25 @@ class ParityTest extends TestCase
     public function testNumberFormatting(array $entry): void
     {
         $this->assertSame($entry['output'], Number::format($entry['input']));
+    }
+
+    // -----------------------------------------------------------------------
+    // Initials
+    // -----------------------------------------------------------------------
+
+    public static function initialsProvider(): array
+    {
+        $cases = [];
+        foreach (self::loadFixture('initials.json') as $i => $entry) {
+            $cases["#$i " . json_encode($entry['seed'])] = [$entry];
+        }
+        return $cases;
+    }
+
+    #[DataProvider('initialsProvider')]
+    public function testInitials(array $entry): void
+    {
+        $this->assertSame($entry['result'], Initials::fromSeed($entry['seed']));
     }
 
     // -----------------------------------------------------------------------
