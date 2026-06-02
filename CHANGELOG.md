@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [10.1.0-rc.1] - 2026-06-02
+
 ## [10.0.2] - 2026-06-02
 
 ### Fixed
@@ -87,7 +89,8 @@ See the
 - **BREAKING:** Individual style packages (e.g. `@dicebear/initials`) have been
   removed in favor of `@dicebear/styles`.
 
-[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.0.2...HEAD
+[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.1.0-rc.1...HEAD
+[10.1.0-rc.1]: https://github.com/dicebear/dicebear/compare/v10.0.2...v10.1.0-rc.1
 [10.0.2]: https://github.com/dicebear/dicebear/compare/v10.0.1...v10.0.2
 [10.0.1]: https://github.com/dicebear/dicebear/compare/v10.0.0...v10.0.1
 [10.0.0]: https://github.com/dicebear/dicebear/releases/tag/v10.0.0
