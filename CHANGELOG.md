@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [10.0.2] - 2026-06-02
+
 ### Fixed
 
 - **Core:** Numeric values in rendered SVGs are now consistently rounded to at
@@ -85,6 +87,7 @@ See the
 - **BREAKING:** Individual style packages (e.g. `@dicebear/initials`) have been
   removed in favor of `@dicebear/styles`.
 
-[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.0.1...HEAD
+[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.0.2...HEAD
+[10.0.2]: https://github.com/dicebear/dicebear/compare/v10.0.1...v10.0.2
 [10.0.1]: https://github.com/dicebear/dicebear/compare/v10.0.0...v10.0.1
 [10.0.0]: https://github.com/dicebear/dicebear/releases/tag/v10.0.0
