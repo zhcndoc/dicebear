@@ -103,6 +103,13 @@ class OptionsTest extends TestCase
         $this->assertSame(['min' => 0.8, 'max' => 1.2], $options->scale());
     }
 
+    public function testSingleElementRangeArrayIsAFixedValue(): void
+    {
+        // `[n]` behaves like the scalar `n`; an empty array is unset (default).
+        $this->assertSame(['min' => 2, 'max' => 2], (new Options(['scale' => [2]]))->scale());
+        $this->assertNull((new Options(['scale' => []]))->scale());
+    }
+
     public function testReturnsNullForUnsetRangeOptions(): void
     {
         $options = new Options([]);

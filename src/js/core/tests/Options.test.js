@@ -100,6 +100,13 @@ describe('Options', () => {
       assert.deepEqual(options.scale(), { min: 0.8, max: 1.2 });
     });
 
+    it('should treat a single-element range array as a fixed value', () => {
+      // `[n]` behaves like the scalar `n`; an empty array is unset (default,
+      // not a Range with a missing bound that would render as NaN).
+      assert.deepEqual(new Options({ scale: [2] }).scale(), { min: 2, max: 2 });
+      assert.equal(new Options({ scale: [] }).scale(), undefined);
+    });
+
     it('should return undefined for unset range options', () => {
       const options = new Options({});
 

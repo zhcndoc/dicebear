@@ -238,10 +238,10 @@ function float(seed, key, range):
 ```
 
 The `round` here is the same as in [number formatting](#number-formatting):
-halves round **toward +Infinity** (JavaScript's `Math.round`), not your language's
-native rounding. PHP's `round()` and many others round halves _away from zero_,
-which diverges for negative values landing exactly on a `.5` boundary (e.g.
-`round(-0.40625 × 10000) / 10000` is `-0.4062`, not `-0.4063`).
+halves round **toward +Infinity** (JavaScript's `Math.round`), not your
+language's native rounding. PHP's `round()` and many others round halves _away
+from zero_, which diverges for negative values landing exactly on a `.5`
+boundary (e.g. `round(-0.40625 × 10000) / 10000` is `-0.4062`, not `-0.4063`).
 
 #### `integer(key, range) -> number`
 
@@ -305,6 +305,21 @@ renderer. Each resolution uses the PRNG with a specific key.
 Options with no PRNG key are read directly from the user input. The rest sample
 from a user-supplied range/list under the given key, falling back to the listed
 default.
+
+The range options (`rotate`, `scale`, `borderRadius`, `translateX`,
+`translateY`, and the per-color `${name}ColorAngle` / `${name}ColorFillStops`)
+accept a number or an array, normalized to a `{ min, max }` range before
+`float`/`integer` sampling:
+
+- a bare number `n` → `{ min: n, max: n }` (a fixed value);
+- a single-element array `[n]` → `{ min: n, max: n }` (same as the bare number);
+- a two-element array → `{ min, max }` taken as the smaller/larger of the two
+  (order does not matter — sampling swaps them anyway);
+- an empty array `[]`, or the option unset, → fall back to the listed default.
+
+Note the edge cases: `[n]` is a fixed value (**not** the default), and `[]`
+falls back to the default (**not** a range with a missing bound). A fixed range
+where `min === max` always samples that exact value.
 
 ### Component options
 
@@ -473,11 +488,12 @@ function formatNumber(value):
 This rounds to at most **5 decimal places** and always uses plain decimal
 notation — never scientific/exponential — with no trailing zeros and no trailing
 `.0` (e.g. `1`, `-50`, `2.5`, `0.00001`). Build the string from the integer
-`scaled` rather than the language's native float-to-string: PHP's precision-based
-cast and Python's `repr` both diverge from JavaScript for small, large, or
-fractional values. The `round` step rounds halves toward +Infinity (JavaScript's
-`Math.round`); emulate it precisely — `floor(x + 0.5)` is **not** equivalent (it
-is wrong for the largest double below `0.5`, where it yields `1` instead of `0`).
+`scaled` rather than the language's native float-to-string: PHP's
+precision-based cast and Python's `repr` both diverge from JavaScript for small,
+large, or fractional values. The `round` step rounds halves toward +Infinity
+(JavaScript's `Math.round`); emulate it precisely — `floor(x + 0.5)` is **not**
+equivalent (it is wrong for the largest double below `0.5`, where it yields `1`
+instead of `0`).
 
 ### 1. Background
 

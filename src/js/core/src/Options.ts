@@ -126,7 +126,7 @@ export class Options<D = unknown> {
     return this.#toRange(
       this.#dynamic(`${name}ColorAngle`) as
         | number
-        | readonly [number, number]
+        | readonly number[]
         | undefined,
     );
   }
@@ -135,7 +135,7 @@ export class Options<D = unknown> {
     return this.#toRange(
       this.#dynamic(`${name}ColorFillStops`) as
         | number
-        | readonly [number, number]
+        | readonly number[]
         | undefined,
     );
   }
@@ -163,12 +163,16 @@ export class Options<D = unknown> {
   }
 
   /**
-   * Normalizes a user-facing range option (bare number, `[min, max]` tuple,
-   * or `undefined`) into the internal {@link Range} struct. A bare number
-   * `n` becomes `{ min: n, max: n }` — i.e. a fixed value.
+   * Normalizes a user-facing range option (bare number, `[n]`, `[min, max]`,
+   * or `undefined`) into the internal {@link Range} struct. A bare number `n`
+   * — or a single-element array `[n]` — becomes `{ min: n, max: n }` (a fixed
+   * value). An array's smaller/larger element is taken as min/max. An empty
+   * array is treated as unset so the resolver applies the option's default
+   * (rather than yielding `NaN` from a missing bound). Matches the PHP and
+   * Python ports.
    */
   #toRange(
-    value: number | readonly [number, number] | undefined,
+    value: number | readonly number[] | undefined,
   ): Range | undefined {
     if (value === undefined) {
       return undefined;
@@ -178,6 +182,10 @@ export class Options<D = unknown> {
       return { min: value, max: value };
     }
 
-    return { min: value[0], max: value[1] };
+    if (value.length === 0) {
+      return undefined;
+    }
+
+    return { min: Math.min(...value), max: Math.max(...value) };
   }
 }

@@ -25,9 +25,16 @@ and this project adheres to
   certain seeds. Output is now byte-identical across languages.
 - **Core (PHP):** Initials are now derived correctly from seeds containing
   multibyte letters such as `ü` or `ô`. The quote-stripping step was missing the
-  `/u` (Unicode) flag, so it removed raw UTF-8 bytes and corrupted those
-  letters — e.g. `über` and `côté` produced wrong or empty initials instead of
-  `ÜB` / `CÔ`. The PHP output now matches the JavaScript reference.
+  `/u` (Unicode) flag, so it removed raw UTF-8 bytes and corrupted those letters
+  — e.g. `über` and `côté` produced wrong or empty initials instead of `ÜB` /
+  `CÔ`. The PHP output now matches the JavaScript reference.
+- **Core:** Range options (`scale`, `borderRadius`, `rotate`,
+  `translateX`/`translateY`, and per-color angle/fill-stops) given as a
+  single-element array `[n]` are now treated as the fixed value `n` — identical
+  to the scalar `n` — and an empty array `[]` falls back to the option's
+  default. Both forms are permitted by the schema. Previously the behaviour
+  diverged: the JavaScript library emitted `NaN` (e.g. `scale(NaN)`), while PHP
+  dropped `[n]` to the default. All three now agree.
 
 ## [10.0.1] - 2026-05-29
 
