@@ -6,6 +6,7 @@ namespace DiceBear;
 
 use DiceBear\Prng\Fnv1a;
 use DiceBear\Prng\Mulberry32;
+use DiceBear\Utils\Number;
 
 /**
  * Key-based pseudorandom number generator.
@@ -137,7 +138,10 @@ class Prng
             $value = $min + $this->getValue($key) * ($max - $min);
         }
 
-        return round($value * 10000) / 10000;
+        // Number::roundHalfUp matches JS Math.round (half toward +Infinity);
+        // PHP's native round() rounds half away from zero, diverging from the
+        // reference for negative values landing exactly on a .5 boundary.
+        return Number::roundHalfUp($value * 10000) / 10000;
     }
 
     /**

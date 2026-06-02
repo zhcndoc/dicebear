@@ -3,7 +3,8 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+and this project adheres to
+[Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
@@ -16,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   component transforms, or gradient stop offsets — could be stringified
   differently between languages (scientific notation, differing precision).
   Avatars built from whole-number options are unaffected.
+- **Core (PHP):** `Prng::float` now rounds halves toward +Infinity (matching the
+  JavaScript reference's `Math.round`) instead of PHP's native `round()`, which
+  rounds halves away from zero. The two diverged for negative values landing
+  exactly on a `.5` boundary, so a PHP-rendered avatar could differ from the
+  JavaScript one by `0.0001` in a rotate/translate transform or color angle for
+  certain seeds. Output is now byte-identical across languages.
 
 ## [10.0.1] - 2026-05-29
 
@@ -29,14 +36,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [10.0.0] - 2026-05-27
 
-See the [v10.0.0 release notes](https://github.com/dicebear/dicebear/releases/tag/v10.0.0).
+See the
+[v10.0.0 release notes](https://github.com/dicebear/dicebear/releases/tag/v10.0.0).
 
 ### Added
 
 - **6 new avatar styles:** Disco, Glyphs, Initial Face, Shape Grid, Stripes, and
   Triangles.
-- **PHP library:** A new PHP implementation that produces identical output to the
-  JavaScript library when given the same styles and options.
+- **PHP library:** A new PHP implementation that produces identical output to
+  the JavaScript library when given the same styles and options.
 - **CLI support for custom styles:** Generate avatars from a JSON style
   definition, e.g. `dicebear ./path/to/style.json --seed test --format svg`.
 - **Weighted variants:** Assign weights to component variants to control how
@@ -44,8 +52,8 @@ See the [v10.0.0 release notes](https://github.com/dicebear/dicebear/releases/ta
 - **Gradient support:** Colors can be defined as gradients, including an angle
   parameter.
 - **Integrated validation:** Built-in validation for avatar styles and options.
-- **Redesigned playground:** Adjust options, upload custom styles, batch download
-  avatars, and view the number of possible combinations.
+- **Redesigned playground:** Adjust options, upload custom styles, batch
+  download avatars, and view the number of possible combinations.
 - **New tools:** WCAG Contrast Picker and Bundle Size Estimator.
 - Reorganized and improved documentation, with better style docs and component
   previews.
@@ -57,8 +65,8 @@ See the [v10.0.0 release notes](https://github.com/dicebear/dicebear/releases/ta
 - Styles are now distributed via `@dicebear/styles` as JSON definitions.
 - The JavaScript API now uses `Style` and `Avatar` classes together with
   definition imports.
-- **BREAKING:** Component options are now suffixed with `Variant`
-  (e.g. `eyesVariant` instead of `eyes`).
+- **BREAKING:** Component options are now suffixed with `Variant` (e.g.
+  `eyesVariant` instead of `eyes`).
 
 ### Removed
 

@@ -234,8 +234,14 @@ function float(seed, key, range):
     else:
         raw = min + getValue(seed, key) * (max - min)
 
-    return round(raw * 10000) / 10000
+    return round(raw * 10000) / 10000   # round halves toward +Infinity
 ```
+
+The `round` here is the same as in [number formatting](#number-formatting):
+halves round **toward +Infinity** (JavaScript's `Math.round`), not your language's
+native rounding. PHP's `round()` and many others round halves _away from zero_,
+which diverges for negative values landing exactly on a `.5` boundary (e.g.
+`round(-0.40625 × 10000) / 10000` is `-0.4062`, not `-0.4063`).
 
 #### `integer(key, range) -> number`
 

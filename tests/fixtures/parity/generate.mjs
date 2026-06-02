@@ -204,6 +204,10 @@ const floatCases = [
   { seed: 'test', key: 'k', range: { min: 10, max: 20, step: 0 } }, // step 0 → continuous
   { seed: 'hello', key: 'scale', range: { min: 0.5, max: 1.5 } },
   { seed: 'test', key: 'k', range: { min: 42, max: 42 } }, // fixed
+  // Negative value landing exactly on a .5 boundary after *10000
+  // (value = -0.40625 → -4062.5). Pins the rounding mode: the reference rounds
+  // half toward +Infinity (-0.4062), not away from zero (-0.4063).
+  { seed: '549449', key: 'colorAngle', range: { min: -1, max: 1 } },
 ];
 for (const c of floatCases) {
   prngFixtures.float.push({
