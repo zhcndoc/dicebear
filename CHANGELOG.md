@@ -8,7 +8,24 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- **Schema:** Bumped the bundled `@dicebear/schema` to `1.1.0` across the
+  JavaScript, PHP, and Python libraries. It adds an upper bound of `1000000` to
+  the canvas and component `width`/`height`, preventing the language ports'
+  number-to-string formatting from diverging at extreme values. Official styles
+  use ~100, so no real avatar is affected.
+- **Styles:** Bumped `@dicebear/styles` to `10.1.0`. Lorelei's mouth is now
+  visible through `beard` variants (the overlaying mask was previously rendered
+  at `0` opacity), and all style definitions now reference
+  `@dicebear/schema@1.1.0`.
+
 ## [10.1.0-rc.1] - 2026-06-02
+
+### Added
+
+- **Python library:** A new Python implementation that produces identical output
+  to the JavaScript library when given the same styles and options.
 
 ## [10.0.2] - 2026-06-02
 
