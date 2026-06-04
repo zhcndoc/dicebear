@@ -2,14 +2,9 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { kebabCase } from 'change-case';
 import Prando from 'prando';
-import { ArrowRight, ArrowLeft } from '@lucide/vue';
-import {
-  UiAvatar,
-  UiButton,
-  UiContainer,
-  UiSection,
-  UiSectionHeader,
-} from '../ui';
+import { ArrowRight, ArrowLeft, Shapes } from '@lucide/vue';
+import Button from 'primevue/button';
+import { UiAvatar, UiContainer, UiSection, UiSectionHeader } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 import { useAvatarStyleList } from '../../composables/avatar';
 
@@ -222,10 +217,11 @@ onUnmounted(() => {
     </div>
 
     <UiContainer class="app-style-showcase-cta">
-      <UiButton href="/styles/">
+      <Button as="a" href="/styles/" size="large" severity="contrast">
+        <Shapes :size="20" />
         浏览全部风格
         <ArrowRight :size="20" />
-      </UiButton>
+      </Button>
     </UiContainer>
   </UiSection>
 </template>

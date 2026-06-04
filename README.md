@@ -1,6 +1,3 @@
-> [!WARNING]  
-> This is the **unstable v10** development branch. For the current stable release, see the [`9.x` branch](https://github.com/dicebear/dicebear/tree/9.x).
-
 <h1><img src="https://www.dicebear.com/logo-readme.svg" width="28" /> DiceBear</h1>
 
 <p>
@@ -28,15 +25,10 @@ Playground, your next avatar is always just a stone's throw away!
 [Playground](https://www.dicebear.com/playground) |
 [Documentation](https://www.dicebear.com/introduction)
 
-## License
-
-The source code of DiceBear is released under the **MIT License**.
-
-The avatar styles are based on designs by various artists and may be licensed differently. Please check the `LICENSE` file in each individual package for details.
-
 ## Sponsors
 
-Advertisement: Many thanks to our sponsors who provide us with free or discounted products.
+Advertisement: Many thanks to our sponsors who provide us with free or
+discounted products.
 
 <a href="https://bunny.net/" target="_blank" rel="noopener noreferrer">
     <picture>

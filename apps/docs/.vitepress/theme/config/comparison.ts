@@ -90,11 +90,21 @@ export function buildComparisonRows({
     {
       feature: '可自定义选项',
       values: {
-        dicebear: '丰富',
-        boringAvatars: '丰富',
+        dicebear: '广泛',
+        boringAvatars: '广泛',
         avvvatars: '有限',
         multiavatar: '有限',
         jdenticon: '有限',
+      },
+    },
+    {
+      feature: '加权变体',
+      values: {
+        dicebear: 'yes',
+        boringAvatars: 'no',
+        avvvatars: 'no',
+        multiavatar: 'no',
+        jdenticon: 'no',
       },
     },
     {
@@ -120,7 +130,7 @@ export function buildComparisonRows({
     {
       feature: '语言支持',
       values: {
-        dicebear: 'JavaScript/TypeScript',
+        dicebear: 'JavaScript/TypeScript, PHP',
         boringAvatars: 'JavaScript',
         avvvatars: 'JavaScript/TypeScript',
         multiavatar: 'JavaScript、PHP、Python',

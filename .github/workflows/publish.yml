@@ -11,18 +11,18 @@ permissions:
 
 jobs:
   test:
-    uses: dicebear/dicebear/.github/workflows/test.yml@9.x
+    uses: dicebear/dicebear/.github/workflows/test.yml@10.x
 
   publish:
     needs: test
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 24
           registry-url: 'https://registry.npmjs.org'
@@ -49,3 +49,27 @@ jobs:
           fi
 
       - run: node scripts/publish.mjs "$DIST_TAG"
+
+  publish-python:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Build dicebear-core
+        working-directory: src/python/core
+        run: |
+          python -m pip install --upgrade build
+          python -m build
+
+      # Trusted Publishing (OIDC) — no token. Configure the publisher on PyPI:
+      # project dicebear-core, repo dicebear/dicebear, workflow publish.yml.
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: src/python/core/dist/

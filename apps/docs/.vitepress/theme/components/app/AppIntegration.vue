@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Globe, MonitorSmartphone, Server, Terminal } from '@lucide/vue';
+import {
+  Globe,
+  MonitorSmartphone,
+  Server,
+  Terminal,
+  ArrowRight,
+} from '@lucide/vue';
+import Button from 'primevue/button';
 import {
   UiContainer,
   UiSection,
@@ -16,7 +23,7 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
 
 const plainCode = {
   js: `import { Style, Avatar } from '@dicebear/core';
-import lorelei from '@dicebear/styles/lorelei.json';
+import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
 const style = new Style(lorelei);
 const svg = new Avatar(style, {
@@ -59,7 +66,7 @@ $svg = (string) new Avatar($style, [
       <!-- JS & PHP Libraries - Side by Side -->
       <div class="app-integration-grid app-integration-grid-libraries">
         <div class="app-integration-item" :style="{ animationDelay: '0s' }">
-          <UiCard padding="lg" radius="md" class="app-integration-card">
+          <UiCard padding="xl" class="app-integration-card">
             <div class="app-integration-card-header">
               <UiIconBox size="lg" color="#1689cc">
                 <MonitorSmartphone />
@@ -77,14 +84,21 @@ $svg = (string) new Avatar($style, [
               class="app-integration-code-block"
             />
 
-            <a href="/how-to-use/js-library/" class="app-integration-link">
-              JS 文档 &rarr;
-            </a>
+            <Button
+              as="a"
+              href="/how-to-use/js-library/"
+              severity="secondary"
+              variant="outlined"
+              class="app-integration-link"
+            >
+              JS 文档
+              <ArrowRight :size="18" />
+            </Button>
           </UiCard>
         </div>
 
         <div class="app-integration-item" :style="{ animationDelay: '0.15s' }">
-          <UiCard padding="lg" radius="md" class="app-integration-card">
+          <UiCard padding="xl" class="app-integration-card">
             <div class="app-integration-card-header">
               <UiIconBox size="lg" color="#7b83eb">
                 <Server />
@@ -102,9 +116,16 @@ $svg = (string) new Avatar($style, [
               class="app-integration-code-block"
             />
 
-            <a href="/how-to-use/php-library/" class="app-integration-link">
-              PHP 文档 &rarr;
-            </a>
+            <Button
+              as="a"
+              href="/how-to-use/php-library/"
+              severity="secondary"
+              variant="outlined"
+              class="app-integration-link"
+            >
+              PHP 文档
+              <ArrowRight :size="18" />
+            </Button>
           </UiCard>
         </div>
       </div>
@@ -112,7 +133,7 @@ $svg = (string) new Avatar($style, [
       <!-- HTTP 接口与命令行 - 并排展示 -->
       <div class="app-integration-grid">
         <div class="app-integration-item" :style="{ animationDelay: '0.3s' }">
-          <UiCard padding="lg" radius="md" class="app-integration-card">
+          <UiCard padding="xl" class="app-integration-card">
             <div class="app-integration-card-header">
               <UiIconBox size="lg" color="#22c55e">
                 <Globe />
@@ -125,14 +146,21 @@ $svg = (string) new Avatar($style, [
 
             <UiCode :code="plainCode.api" class="app-integration-code-block" />
 
-            <a href="/how-to-use/http-api/" class="app-integration-link">
-              API 文档 &rarr;
-            </a>
+            <Button
+              as="a"
+              href="/how-to-use/http-api/"
+              severity="secondary"
+              variant="outlined"
+              class="app-integration-link"
+            >
+              API 文档
+              <ArrowRight :size="18" />
+            </Button>
           </UiCard>
         </div>
 
         <div class="app-integration-item" :style="{ animationDelay: '0.45s' }">
-          <UiCard padding="lg" radius="md" class="app-integration-card">
+          <UiCard padding="xl" class="app-integration-card">
             <div class="app-integration-card-header">
               <UiIconBox size="lg" color="#a855f7">
                 <Terminal />
@@ -145,9 +173,16 @@ $svg = (string) new Avatar($style, [
 
             <UiCode :code="plainCode.cli" class="app-integration-code-block" />
 
-            <a href="/how-to-use/cli/" class="app-integration-link">
-              命令行文档 &rarr;
-            </a>
+            <Button
+              as="a"
+              href="/how-to-use/cli/"
+              severity="secondary"
+              variant="outlined"
+              class="app-integration-link"
+            >
+              命令行文档
+              <ArrowRight :size="18" />
+            </Button>
           </UiCard>
         </div>
       </div>
@@ -219,9 +254,13 @@ $svg = (string) new Avatar($style, [
   }
 
   &-card {
-    display: flex;
-    flex-direction: column;
     height: 100%;
+
+    :deep(.ui-card-body) {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
 
     &-header {
       margin-bottom: 24px;
@@ -249,23 +288,7 @@ $svg = (string) new Avatar($style, [
   }
 
   &-link {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--vp-c-brand-1);
-    text-decoration: none;
-    transition: all var(--duration-fast) ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-
-    &::after {
-      display: none !important;
-    }
-
-    &:hover {
-      color: var(--vp-c-brand-2);
-      gap: 8px;
-    }
+    align-self: flex-start;
   }
 }
 @media (max-width: 1000px) {
@@ -274,6 +297,14 @@ $svg = (string) new Avatar($style, [
       grid-template-columns: 1fr;
       max-width: 500px;
       margin: 0 auto;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .app-integration {
+    &-card {
+      --ui-card-padding: 24px;
     }
   }
 }

@@ -14,9 +14,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Dylan
 
-Dylan 是一种大胆的扁平插画风格矢量头像样式，具有粗线条轮廓的
-面部、手绘胡茬，以及在饱和背景上的极简面部特征。为创意项目
-和现代应用生成独特、富有个性的 SVG 个人资料图标。
+Dylan 是一种大胆的扁平插画风矢量头像风格，具有粗线勾勒的
+面部、手绘胡茬和极简面部特征，背景采用高饱和度色彩。
+为创意项目和现代应用生成独特且富有个性的 SVG 头像图标。
 
 <StylePreview styleName="dylan" />
 

@@ -37,7 +37,7 @@ defineProps<{
 <style lang="scss" scoped>
 .ui-window {
   position: relative;
-  border-radius: var(--window-radius, var(--vp-radius-md));
+  border-radius: var(--window-radius, var(--vp-radius-sm));
   overflow: hidden;
   background: var(--vp-c-bg-elv);
   border: 1px solid var(--ui-window-border-color);

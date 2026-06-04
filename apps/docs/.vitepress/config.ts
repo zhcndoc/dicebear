@@ -4,8 +4,10 @@ import { ThemeOptions } from '@theme/types';
 
 import sidebarDocs from './config/sidebarDocs';
 import sidebarStyles from './config/sidebarStyles';
+import sidebarTools from './config/sidebarTools';
 import avatarStyles from './config/avatarStyles';
 import avatarUniqueCounts from './config/avatarUniqueCounts';
+import avatarStyleSizes from './config/avatarStyleSizes';
 import { formatStars } from './theme/utils/format';
 
 async function fetchGitHubStars(
@@ -139,7 +141,7 @@ export default defineConfig<ThemeOptions>({
 
       result.push(['link', { rel: 'canonical', href: canonicalUrl }]);
 
-      if (canonicalPath.startsWith('legal/site-notice')) {
+      if (canonicalPath.startsWith('legal/legal-notice')) {
         result.push(['meta', { name: 'robots', content: 'noindex, nofollow' }]);
       }
 
@@ -179,6 +181,7 @@ export default defineConfig<ThemeOptions>({
   themeConfig: {
     avatarStyles,
     avatarUniqueCounts,
+    avatarStyleSizes,
     githubStars,
     siteTitle: '',
     logo: {
@@ -202,6 +205,10 @@ export default defineConfig<ThemeOptions>({
         activeMatch: '^/styles',
       },
       { text: 'Editor', link: 'https://editor.dicebear.com' },
+      {
+        text: '10.x',
+        items: [{ text: '9.x', link: 'https://v9.dicebear.com' }],
+      },
       { text: '简中文档', link: 'https://www.zhcndoc.com', target: '_blank' },
     ],
     outline: [2, 2],
@@ -216,6 +223,7 @@ export default defineConfig<ThemeOptions>({
       '/how-to-use/': sidebarDocs,
       '/guides/': sidebarDocs,
       '/specification/': sidebarDocs,
+      '/tools/': sidebarTools,
     },
   },
   sitemap: {

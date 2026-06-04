@@ -79,7 +79,6 @@ const optionCount = computed(() => Object.keys(props.options).length);
     display: flex;
     flex-direction: column;
     gap: 16px;
-    overflow: hidden;
   }
 }
 </style>

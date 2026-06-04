@@ -15,8 +15,8 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Bottts Neutral
 
-Bottts Neutral 是 Bottts 风格的精简变体，仅在纯色方块上显示机器人眼睛和嘴巴——没有头部、天线或侧边
-单元。
+Bottts Neutral 是 Bottts 风格的简化变体，只在纯色方块上显示机器人
+的眼睛和嘴巴——没有头部、天线或侧边组件。
 
 <StylePreview styleName="bottts-neutral" />
 

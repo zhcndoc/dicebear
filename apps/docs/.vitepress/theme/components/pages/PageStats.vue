@@ -105,9 +105,7 @@ const downloadsData = computed(() => {
   return aggregateWeekly(stats.value.downloads.npm);
 });
 
-function buildSeries(
-  source: Record<string, [string, number][]>,
-): {
+function buildSeries(source: Record<string, [string, number][]>): {
   labels: string[];
   series: Array<{ name: string; values: number[] }>;
 } | null {
@@ -328,6 +326,7 @@ const monthlyStats = computed(() => {
       <ClientOnly>
         <UiCard
           v-if="requestsData && activeTab === 'api'"
+          padding="xl"
           class="page-stats-chart-card"
         >
           <h3 class="page-stats-chart-title">API 请求</h3>
@@ -341,6 +340,7 @@ const monthlyStats = computed(() => {
 
         <UiCard
           v-if="downloadsData && activeTab === 'npm'"
+          padding="xl"
           class="page-stats-chart-card"
         >
           <h3 class="page-stats-chart-title">包下载量</h3>
@@ -365,7 +365,7 @@ const monthlyStats = computed(() => {
       </UiSectionHeader>
 
       <ClientOnly>
-        <UiCard v-if="stylesData" class="page-stats-styles-card">
+        <UiCard v-if="stylesData" padding="xl" class="page-stats-styles-card">
           <h3 class="page-stats-chart-title">Popular Styles</h3>
           <AppStatsMultiLineChart
             :labels="stylesData.labels"
@@ -386,7 +386,7 @@ const monthlyStats = computed(() => {
         </UiCard>
 
         <div class="page-stats-breakdown-grid">
-          <UiCard v-if="versionsData">
+          <UiCard v-if="versionsData" padding="xl">
             <h3 class="page-stats-chart-title">API Versions</h3>
             <AppStatsMultiLineChart
               :labels="versionsData.labels"
@@ -395,7 +395,7 @@ const monthlyStats = computed(() => {
             />
           </UiCard>
 
-          <UiCard v-if="formatsData">
+          <UiCard v-if="formatsData" padding="xl">
             <h3 class="page-stats-chart-title">Output Formats</h3>
             <AppStatsMultiLineChart
               :labels="formatsData.labels"

@@ -100,12 +100,11 @@ class Options
     }
 
     /**
-     * Returns the user-set variant constraint for `$name`:
-     * - `null` when the user did not set `${name}Variant`,
-     * - `list<string>` when the user gave a string or string list,
-     * - associative `array<string, int|float>` when the user gave a weighted map.
+     * Returns the user-set variant constraint for `$name` as a weighted map,
+     * or `null` when `${name}Variant` is unset. A bare string or string list
+     * is normalized to a map with each entry weighted `1`.
      *
-     * @return list<string>|array<string, int|float>|null
+     * @return array<string, int|float>|null
      */
     public function componentVariant(string $name): ?array
     {
@@ -115,9 +114,13 @@ class Options
             return null;
         }
 
-        if (is_string($raw) || (is_array($raw) && array_is_list($raw))) {
-            /** @var list<string> */
-            return $this->asArray($raw);
+        if (is_string($raw)) {
+            return [$raw => 1];
+        }
+
+        if (is_array($raw) && array_is_list($raw)) {
+            /** @var array<string, int|float> */
+            return array_fill_keys($raw, 1);
         }
 
         /** @var array<string, int|float> */
@@ -181,9 +184,11 @@ class Options
     }
 
     /**
-     * Normalizes a user-facing range option (bare number, `[min, max]`
-     * 2-tuple, or `null`) into the internal range struct. A bare number
-     * `n` becomes `['min' => n, 'max' => n]` — i.e. a fixed value.
+     * Normalizes a user-facing range option (bare number, `[n]`, `[min, max]`,
+     * or `null`) into the internal range struct. A bare number `n` — or a
+     * single-element array `[n]` — becomes `['min' => n, 'max' => n]` (a fixed
+     * value). An array's smaller/larger element is taken as min/max. An empty
+     * array is treated as unset so the resolver applies the option's default.
      *
      * @return array{min: int|float, max: int|float}|null
      */
@@ -197,8 +202,8 @@ class Options
             return ['min' => $value, 'max' => $value];
         }
 
-        if (is_array($value) && array_is_list($value) && count($value) === 2) {
-            return ['min' => $value[0], 'max' => $value[1]];
+        if (is_array($value) && array_is_list($value) && count($value) > 0) {
+            return ['min' => min($value), 'max' => max($value)];
         }
 
         return null;

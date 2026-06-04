@@ -90,6 +90,10 @@ const licenseUrl = computed(() => safeHttpUrl(style.value.meta?.license?.url));
 </template>
 
 <style lang="scss" scoped>
+.custom-block {
+  padding: 20px;
+}
+
 .style-description {
   &-btn {
     display: inline-flex;

@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { Code as CodeIcon } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
-import { UiCode } from '../ui';
+import { UiCard, UiCode, UiDialog } from '../ui';
 import {
   getAvatarApiUrl,
   getAvatarApiCommand,
   unsupportedHttpApiOptions,
 } from '@theme/utils/avatar/api';
 import { formatPhpValue } from '@theme/utils/code-examples';
-import PlaygroundDialog from './PlaygroundDialog.vue';
 import Button from 'primevue/button';
 import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
@@ -64,7 +63,7 @@ const svg = avatar.toString();`;
   }
 
   return `import { Style, Avatar } from '@dicebear/core';
-import definition from '@dicebear/styles/${store.avatarStyleName}.json';
+import definition from '@dicebear/styles/${store.avatarStyleName}.json' with { type: 'json' };
 
 const style = new Style(definition);
 const avatar = new Avatar(style, ${JSON.stringify(options.value, null, 2)});
@@ -113,20 +112,15 @@ const exampleCli = computed(() =>
 </script>
 
 <template>
-  <Button
-    label="How to use"
-    severity="secondary"
-    variant="outlined"
-    @click="open = true"
-  >
+  <Button label="How to use" severity="contrast" @click="open = true">
     <template #icon>
       <CodeIcon :size="15" />
     </template>
   </Button>
 
-  <PlaygroundDialog v-model:open="open" max-width="800px" header="How to use">
+  <UiDialog v-model:open="open" max-width="800px" header="How to use">
     <div class="playground-button-how-to-use-text">
-      <div class="playground-button-how-to-use-tabs-card">
+      <UiCard flush class="playground-button-how-to-use-tabs-card">
         <Tabs v-model:value="tab">
           <TabList>
             <Tab v-if="!store.isCustomStyle" value="http-api">HTTP-API</Tab>
@@ -216,11 +210,11 @@ const exampleCli = computed(() =>
             </TabPanel>
           </TabPanels>
         </Tabs>
-      </div>
+      </UiCard>
 
       <PlaygroundLicenseAlert />
     </div>
-  </PlaygroundDialog>
+  </UiDialog>
 </template>
 
 <style scoped lang="scss">
@@ -236,12 +230,6 @@ const exampleCli = computed(() =>
         color: var(--vp-c-brand-2);
       }
     }
-  }
-
-  &-tabs-card {
-    border: 1px solid var(--vp-c-border);
-    border-radius: var(--vp-radius-xs);
-    overflow: hidden;
   }
 
   &-tab-content {

@@ -15,9 +15,8 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Notionists Neutral
 
-Notionists Neutral 是 Notionists 风格的简化变体，仅用松散的黑色墨线描绘
-眼睛、鼻子和嘴巴，背景为纯色——
-没有头部、头发或身体。
+Notionists Neutral 是 Notionists 风格的简化变体，只用松散的黑色墨线在纯色背景上描绘
+眼睛、鼻子和嘴巴——没有头部、头发或身体。
 
 <StylePreview styleName="notionists-neutral" />
 

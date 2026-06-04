@@ -11,7 +11,7 @@ description: >
 [HTTP API](/how-to-use/http-api/)
 或 [CLI](/how-to-use/cli/) 感兴趣。
 
-该库是一个纯 [ESM package](https://developer.mozilla.org/en-US/Web/JavaScript/Guide/Modules)。
+该库是一个纯 [ESM package](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)。
 如果你是 ESM package 新手， [Sindre Sorhus](https://github.com/sindresorhus) 写了一份很棒的 [帮助页面](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)。
 
 ## 安装
@@ -176,57 +176,60 @@ const dataUri = avatar.toDataUri(); // [!code focus]
 
 ## 核心选项
 
-这些选项适用于所有头像样式：
+这些选项适用于所有头像样式。若类型中写作 `[min, max]`，你既可以传入固定值，也可以传入一个包含两个元素的元组——PRNG 会从该范围内采样一个值。
 
 | Option            | Type                                             | Default       | Description                                                                   |
 | ----------------- | ------------------------------------------------ | ------------- | ----------------------------------------------------------------------------- |
-| `seed`            | `string`                                         | `''`          | 用于确定性生成的种子                                                          |
-| `flip`            | `'none' \| 'horizontal' \| 'vertical' \| 'both'` | `'none'`      | 翻转头像                                                                     |
-| `rotate`          | `number \| [min, max]`                           | `0`           | 旋转头像（-360 到 360 度）                                                    |
-| `scale`           | `number \| [min, max]`                           | `1`           | 画布中心周围的统一缩放因子（0 到 10；`1` 为原始尺寸）                         |
-| `borderRadius`    | `number \| [min, max]`                           | `0`           | 边框圆角（0-50%，50 = 圆形）                                                  |
-| `size`            | `number`                                         | _undefined_   | 以像素为单位的固定尺寸                                                        |
-| `translateX`      | `number \| [min, max]`                           | `0`           | 作为画布宽度百分比的水平位移（-1000 到 1000）                                 |
-| `translateY`      | `number \| [min, max]`                           | `0`           | 作为画布高度百分比的垂直位移（-1000 到 1000）                                 |
-| `idRandomization` | `boolean`                                        | `false`       | 随机化 SVG 元素 ID                                                          |
-| `title`           | `string`                                         | _undefined_   | SVG 的可访问标题                                                            |
-| `fontFamily`      | `string \| string[]`                             | `'system-ui'` | 基于文本样式的字体族                                                        |
-| `fontWeight`      | `number \| number[]`                             | `400`         | 基于文本样式的字体粗细（1-1000）                                             |
+| `seed`            | `string`                                         | `''`          | 用于确定性生成的种子                                                         |
+| `flip`            | `'none' \| 'horizontal' \| 'vertical' \| 'both'` | `'none'`      | 翻转头像（接受值数组以实现随机化）                                           |
+| `rotate`          | `number \| [min, max]`                           | `0`           | 旋转角度（−360 到 360）                                                      |
+| `scale`           | `number \| [min, max]`                           | `1`           | 以画布中心为基准的统一缩放系数（0 到 10；`1` 为原始大小）                    |
+| `borderRadius`    | `number \| [min, max]`                           | `0`           | 画布的圆角半径百分比（0 到 50；`50` 时为圆形）                               |
+| `size`            | `integer`                                        | _unset_       | 输出尺寸（像素）（1 到 4096）；未设置时 SVG 会按容器大小缩放                  |
+| `translateX`      | `number \| [min, max]`                           | `0`           | 画布宽度百分比的水平平移（−1000 到 1000）                                    |
+| `translateY`      | `number \| [min, max]`                           | `0`           | 画布高度百分比的垂直平移（−1000 到 1000）                                    |
+| `idRandomization` | `boolean`                                        | `false`       | 为每个 SVG 的 `id` 添加随机的非确定性后缀（见下文）                          |
+| `title`           | `string`                                         | _unset_       | 无障碍标题——设置后，SVG 会变为带 `<title>` 的 `role="img"`                   |
+| `fontFamily`      | `string \| string[]`                             | `'system-ui'` | 基于文本的样式所用字体族（CSS 风格字体栈，不带引号）                          |
+| `fontWeight`      | `integer \| integer[]`                             | `400`         | 基于文本的样式所用字体粗细（1 到 1000）                                      |
 
 ### 背景选项
 
 这些选项适用于每种样式——即使其定义中没有声明 `background` 颜色组。
 
-| Option                     | Type                              | Default     | Description                                            |
-| -------------------------- | --------------------------------- | ----------- | ------------------------------------------------------ |
-| `backgroundColor`          | `string \| string[]`              | _undefined_ | 背景颜色（带 # 的十六进制）                             |
-| `backgroundColorFill`      | `'solid' \| 'linear' \| 'radial'` | `'solid'`   | 背景填充类型                                           |
-| `backgroundColorFillStops` | `number \| [min, max]`            | `2`         | 渐变色标数量；当填充为 `solid` 时忽略                  |
-| `backgroundColorAngle`     | `number \| [min, max]`            | `0`         | 渐变角度（-360 到 360 度）                              |
+| Option                     | Type                              | Default   | Description                                                        |
+| -------------------------- | --------------------------------- | --------- | ------------------------------------------------------------------ |
+| `backgroundColor`          | `string \| string[]`              | _unset_   | 背景颜色，十六进制格式（`#` 可选，`#RGB`–`#RRGGBBAA`）             |
+| `backgroundColorFill`      | `'solid' \| 'linear' \| 'radial'` | `'solid'` | 背景填充类型（接受值数组以实现随机化）                             |
+| `backgroundColorFillStops` | `integer \| [min, max]`           | `2`       | 渐变色标数量（至少 2 个）；当填充为 `solid` 时忽略                |
+| `backgroundColorAngle`     | `number \| [min, max]`            | `0`       | 渐变角度（−360 到 360）                                            |
 
 ### 动态组件选项
 
 对于样式中的每个组件（例如 `eyes`、`mouth`、`hair`），都可使用以下选项：
 
-| Pattern                  | Type                                           | Description                             |
-| ------------------------ | ---------------------------------------------- | --------------------------------------- |
-| `{component}Variant`     | `string \| string[] \| Record<string, number>` | 选择特定变体或设置权重                   |
-| `{component}Probability` | `number`                                       | 可见性概率（0-100）                     |
+| Pattern                  | Type                                           | Description                                            |
+| ------------------------ | ---------------------------------------------- | ------------------------------------------------------ |
+| `{component}Variant`     | `string \| string[] \| Record<string, number>` | 限制为特定变体，可选地带权重                                |
+| `{component}Probability` | `number`                                       | 可见性概率，百分比（0 到 100）                           |
 
 组件的旋转、平移和缩放会在渲染时根据组件定义进行采样，且**不是**用户选项——不存在
 `{component}Rotate`、`{component}TranslateX`、`{component}TranslateY` 或
 `{component}Scale` 选项。
 
+组件别名（在样式定义中通过 `extends` 声明）不会暴露
+它们自己的选项键——它们与所扩展的组件共享 `{source}Variant` 和 `{source}Probability`。
+
 ### 动态颜色选项
 
 对于样式中的每个颜色组（例如 `skin`、`hair`）以及 `background`，都可使用以下选项：
 
-| Pattern                 | Type                              | Description                          |
-| ----------------------- | --------------------------------- | ------------------------------------ |
-| `{color}Color`          | `string \| string[]`              | 覆盖颜色调色板（带 # 的十六进制）      |
-| `{color}ColorFill`      | `'solid' \| 'linear' \| 'radial'` | 颜色填充类型                          |
-| `{color}ColorFillStops` | `number \| [min, max]`            | 渐变色标数量                         |
-| `{color}ColorAngle`     | `number \| [min, max]`            | 渐变角度（-360 到 360 度）             |
+| Pattern                 | Type                              | Description                                                        |
+| ----------------------- | --------------------------------- | ------------------------------------------------------------------ |
+| `{color}Color`          | `string \| string[]`              | 覆盖调色板——十六进制值（`#` 可选）                                  |
+| `{color}ColorFill`      | `'solid' \| 'linear' \| 'radial'` | 填充类型（接受值数组以实现随机化）                                 |
+| `{color}ColorFillStops` | `integer \| [min, max]`           | 渐变色标数量（至少 2 个）；当填充为 `solid` 时忽略                |
+| `{color}ColorAngle`     | `number \| [min, max]`            | 渐变角度（−360 到 360）                                            |
 
 ## 示例
 
@@ -275,7 +278,9 @@ const avatar = new Avatar(avataaars, {
 
 ### 同一页面上的多个头像
 
-在同一页面渲染多个头像时，使用 `idRandomization` 以防止 SVG ID 冲突：
+当将多个头像内联到同一个文档中时（例如直接把 SVG 标记插入页面，而不是使用 `<img src={dataUri}>`），请使用
+`idRandomization` 为每个 SVG 的内部 ID 添加后缀，以避免 `<defs>` /
+`url(#…)` 冲突：
 
 ```js
 import { Avatar } from '@dicebear/core';
@@ -292,9 +297,16 @@ const avatars = users.map((user) =>
 );
 ```
 
+该后缀来自 `Math.random()` —— **不是**来自 DiceBear PRNG —— 因此
+两个使用相同 seed 渲染的头像会获得不同的 ID。这也意味着渲染后的
+SVG 不再是确定性的；只有视觉输出是确定性的。对于快照测试、SSR/水合，或任何依赖
+完全相同标记的场景，请不要使用 `idRandomization`。当你仅通过 `<img>`（data URI 或 HTTP API）
+嵌入头像时，ID 位于隔离的文档中，因此不需要 ID 随机化。
+
 ### 带权重的变体选择
 
-你可以通过传入权重映射来影响 PRNG，使其更偏好某些变体：
+你可以通过传入权重映射来影响 PRNG 以偏好某些变体。
+映射中未列出的变体会被排除；权重为 `0` 的变体也会被排除，除非**所有**映射的变体权重都为 `0`，在这种情况下，PRNG 会回退为在这些变体上进行无权重选择：
 
 ```js
 import { Avatar } from '@dicebear/core';

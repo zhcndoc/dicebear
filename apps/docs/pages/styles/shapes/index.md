@@ -15,7 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Shapes
 
-Shapes 是一种抽象的矢量头像样式，由两个或三个大型几何图形组成——方形、圆形和三角形——叠放并旋转在一个有颜色的背景上。生成简洁、注重设计感的 SVG 个人资料图标，可用作头像占位符或抽象的用户标识。
+Shapes 是一种抽象的矢量头像样式，由两到三个大型几何图形组成——方形、圆形和三角形——在彩色背景上层叠并旋转。生成极简、强调设计感的 SVG 个人资料图标，可用作头像占位符或抽象用户标识。
 
 <StylePreview styleName="shapes" />
 

@@ -13,6 +13,8 @@ import { Avatar } from '../../../src/js/core/lib/index.js';
 import { Prng } from '../../../src/js/core/lib/Prng.js';
 import { Fnv1a } from '../../../src/js/core/lib/Prng/Fnv1a.js';
 import { Mulberry32 } from '../../../src/js/core/lib/Prng/Mulberry32.js';
+import { Number } from '../../../src/js/core/lib/Utils/Number.js';
+import { Initials } from '../../../src/js/core/lib/Utils/Initials.js';
 
 const definitionsDir = join(
   import.meta.dirname,
@@ -157,21 +159,22 @@ for (const c of pickCases) {
 }
 
 const weightedPickCases = [
-  { seed: 'test', key: 'k', entries: [['a', 1], ['b', 4], ['c', 2]] },
-  { seed: 'test', key: 'l', entries: [['a', 1], ['b', 4], ['c', 2]] },
-  { seed: 'hello', key: 'k', entries: [['a', 1], ['b', 4], ['c', 2]] },
-  { seed: 'test', key: 'k', entries: [['heavy', 100], ['light', 1]] },
-  { seed: 'test', key: 'k', entries: [['rare', 0], ['common', 1]] },
-  // order-independence: same expected result as the first entry above
-  { seed: 'test', key: 'k', entries: [['c', 2], ['a', 1], ['b', 4]] },
-  { seed: 'test', key: 'k', entries: [['only', 1]] },
-  // duplicates: first occurrence's weight wins, later duplicates are ignored
-  { seed: 'test', key: 'k', entries: [['a', 1], ['a', 100], ['b', 4], ['c', 2]] },
+  { seed: 'test', key: 'k', weights: { a: 1, b: 4, c: 2 } },
+  { seed: 'test', key: 'l', weights: { a: 1, b: 4, c: 2 } },
+  { seed: 'hello', key: 'k', weights: { a: 1, b: 4, c: 2 } },
+  { seed: 'test', key: 'k', weights: { heavy: 100, light: 1 } },
+  { seed: 'test', key: 'k', weights: { rare: 0, common: 1 } },
+  // insertion-order independence: same expected result as the first entry above
+  { seed: 'test', key: 'k', weights: { c: 2, a: 1, b: 4 } },
+  { seed: 'test', key: 'k', weights: { only: 1 } },
+  // fractional weights in non-sorted insertion order — locks in that JS and
+  // PHP sum in the same order (sorted), since float addition is non-associative
+  { seed: 'test', key: 'k', weights: { c: 0.1, a: 0.2, b: 0.3 } },
 ];
 for (const c of weightedPickCases) {
   prngFixtures.weightedPick.push({
     ...c,
-    result: new Prng(c.seed).weightedPick(c.key, c.entries),
+    result: new Prng(c.seed).weightedPick(c.key, c.weights),
   });
 }
 
@@ -202,6 +205,10 @@ const floatCases = [
   { seed: 'test', key: 'k', range: { min: 10, max: 20, step: 0 } }, // step 0 → continuous
   { seed: 'hello', key: 'scale', range: { min: 0.5, max: 1.5 } },
   { seed: 'test', key: 'k', range: { min: 42, max: 42 } }, // fixed
+  // Negative value landing exactly on a .5 boundary after *10000
+  // (value = -0.40625 → -4062.5). Pins the rounding mode: the reference rounds
+  // half toward +Infinity (-0.4062), not away from zero (-0.4063).
+  { seed: '549449', key: 'colorAngle', range: { min: -1, max: 1 } },
 ];
 for (const c of floatCases) {
   prngFixtures.float.push({
@@ -245,6 +252,69 @@ for (const c of shuffleCases) {
 }
 
 writeJson('prng.json', prngFixtures);
+
+// ---------------------------------------------------------------------------
+// Number formatting fixtures
+// ---------------------------------------------------------------------------
+//
+// The renderer stringifies every numeric SVG attribute via `Number.format`,
+// which rounds to at most 5 decimal places. PHP's native float cast and
+// Python's `repr` would diverge from JS for small/large magnitudes, so each
+// port reimplements it (`DiceBear\Utils\Number::format`,
+// `dicebear.utils.Number.format`) and must reproduce it byte-for-byte. These pin
+// that contract — covering integers, plain decimals, values that round at the
+// 5th decimal, and tiny values that round down to 0.
+
+console.log('Generating numbers.json…');
+
+const numberInputs = [
+  0, 1, -1, 100, -50, 4096, 1000000,
+  0.5, 1.5, -1.5, 2.5, 0.1, 0.3, 12.34, 123.456, -148.722, 9999.9999,
+  0.00001, 0.00005, 0.0001, 0.000005, 0.0000005, 0.0000123456,
+  4.567872, 0.123456, 1.999995, 1.999994, 0.123455, 0.123445,
+  5e-7, 1e-7, 1.5e-6, 0.0009999999999999998, 4.9999999999999996e-6,
+  -4.567872, -0.000005, -0.0001,
+];
+
+writeJson(
+  'numbers.json',
+  numberInputs.map((input) => ({ input, output: Number.format(input) })),
+);
+
+// ---------------------------------------------------------------------------
+// Initials fixtures
+// ---------------------------------------------------------------------------
+//
+// `Initials.fromSeed` derives display initials for the `initials` style. The
+// `@`-stripping, quote-stripping, and `\p{L}` word matching are easy to get
+// subtly wrong per language (e.g. a regex that strips raw bytes instead of code
+// points would corrupt multibyte letters like ô/ü). These cases pin the
+// contract across ASCII, accented, quote-prefixed, email, CJK, and emoji seeds.
+
+console.log('Generating initials.json…');
+
+const initialsSeeds = [
+  'AB CD',
+  'café',
+  'über',
+  'côté',
+  'grün rot',
+  "l'eau",
+  'd´or',
+  'ʼtest',
+  'user@example.com',
+  'a',
+  '',
+  '日本語',
+  '🎲 spiel',
+  'Œuvre',
+  'rock-paper',
+];
+
+writeJson(
+  'initials.json',
+  initialsSeeds.map((seed) => ({ seed, result: Initials.fromSeed(seed) })),
+);
 
 // ---------------------------------------------------------------------------
 // Avatar fixtures

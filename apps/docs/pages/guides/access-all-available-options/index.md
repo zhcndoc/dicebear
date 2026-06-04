@@ -49,8 +49,11 @@ print_r($descriptor->toJSON());
 | `number`  | `min?`, `max?`, `list?`        | `fontWeight`             |
 | `boolean` |                                | `idRandomization`        |
 | `enum`    | `values`, `list?`, `weighted?` | `flip`, `*Variant`       |
-| `color`   | `list?`                        | `*Color`                 |
+| `color`   | `list?`, `contrastTo?`         | `*Color`                 |
 | `range`   | `min?`, `max?`                 | `rotate`, `borderRadius` |
 
-`list` 标志表示该选项接受一个数组。`weighted` 标志（用于
-enum 字段）表示该选项接受一个 `Record<string, number>`，用于加权 PRNG 选择。
+- `list` 表示该选项也接受值数组。
+- `weighted`（在枚举字段上）表示该选项还接受一个用于 PRNG 选择的 `Record<string, number>` 权重映射。
+- `contrastTo`（在颜色字段上）指定渲染器要与之形成对比的颜色组，因此 UI 可以标记该组的选择是由对比驱动而非随机驱动。仅当样式定义在该组上声明了 `contrastTo` 约束时才会设置。
+
+通过 `extends` 在定义中声明的组件别名，不会向描述符中贡献它们自己的 `${alias}Variant` / `${alias}Probability` 条目——它们共享其源组件的用户选项。

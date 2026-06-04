@@ -39,6 +39,7 @@ class OptionsDescriptorTest extends TestCase
             'colors' => [
                 'skin' => ['values' => ['#ff0000', '#00ff00']],
                 'hair' => ['values' => ['#000000']],
+                'text' => ['values' => ['#ffffff', '#000000'], 'contrastTo' => 'background'],
             ],
         ]);
     }
@@ -120,6 +121,18 @@ class OptionsDescriptorTest extends TestCase
         $this->assertSame(['type' => 'color', 'list' => true], $schema['skinColor']);
         $this->assertSame(['type' => 'color', 'list' => true], $schema['hairColor']);
         $this->assertSame(['type' => 'enum', 'values' => ['solid', 'linear', 'radial'], 'list' => true], $schema['skinColorFill']);
+    }
+
+    public function testExposesContrastToOnColorFields(): void
+    {
+        $schema = (new OptionsDescriptor(self::fullStyle()))->toJSON();
+
+        $this->assertSame([
+            'type' => 'color',
+            'list' => true,
+            'contrastTo' => 'background',
+        ], $schema['textColor']);
+        $this->assertArrayNotHasKey('contrastTo', $schema['skinColor']);
     }
 
     // caching

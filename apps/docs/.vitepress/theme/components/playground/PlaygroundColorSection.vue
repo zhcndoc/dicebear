@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import { Trash2, ArrowLeftRight } from '@lucide/vue';
+import { computed, inject } from 'vue';
+import { Trash2, ArrowLeftRight, Link2 } from '@lucide/vue';
 import Button from 'primevue/button';
 import Select from 'primevue/select';
 import Slider from 'primevue/slider';
+import { capitalCase } from 'change-case';
 import useStore from '@theme/stores/playground';
 import { useRangeField } from '@theme/composables/useRangeField';
 import { stripHash } from '@theme/utils/avatar/colors';
+import { navigateToColorKey } from '@theme/components/styles/styleOptionsKeys';
 import PlaygroundColorPicker from './PlaygroundColorPicker.vue';
 import PlaygroundFieldReset from './PlaygroundFieldReset.vue';
 
@@ -16,7 +18,16 @@ const props = defineProps<{
   hasFill: boolean;
   hasAngle: boolean;
   hasFillStops: boolean;
+  contrastTo?: string | null;
 }>();
+
+const navigateToColor = inject(navigateToColorKey, null);
+
+function onContrastLinkClick() {
+  if (props.contrastTo && navigateToColor) {
+    navigateToColor(props.contrastTo);
+  }
+}
 
 const store = useStore();
 
@@ -103,6 +114,24 @@ const fillStopsRange = rangeComputed(fillStopsKey, 2);
 
 <template>
   <div class="pg-color">
+    <div v-if="contrastTo" class="pg-color-contrast-banner" role="note">
+      <Link2 :size="14" class="pg-color-contrast-banner-icon" />
+      <p class="pg-color-contrast-banner-text">
+        Linked to
+        <button
+          type="button"
+          class="pg-color-contrast-banner-link"
+          @click="onContrastLinkClick"
+        >
+          {{ capitalCase(contrastTo) }}
+        </button>
+        — the value with the strongest contrast against the chosen
+        {{ capitalCase(contrastTo).toLowerCase() }} is preferred. Adding more
+        options here introduces variation, but the highest-contrast value still
+        dominates.
+      </p>
+    </div>
+
     <div class="pg-color-label">
       <span>Color</span>
       <PlaygroundFieldReset
@@ -153,6 +182,7 @@ const fillStopsRange = rangeComputed(fillStopsKey, 2);
           <Button
             size="small"
             :severity="isRangeMode(angleKey) ? 'primary' : 'secondary'"
+            variant="outlined"
             v-tooltip="
               isRangeMode(angleKey)
                 ? 'Switch to fixed value'
@@ -189,6 +219,7 @@ const fillStopsRange = rangeComputed(fillStopsKey, 2);
           <Button
             size="small"
             :severity="isRangeMode(fillStopsKey) ? 'primary' : 'secondary'"
+            variant="outlined"
             v-tooltip="
               isRangeMode(fillStopsKey)
                 ? 'Switch to fixed value'
@@ -287,5 +318,44 @@ const fillStopsRange = rangeComputed(fillStopsKey, 2);
 
 .pg-color-fill-select {
   width: 100%;
+}
+
+.pg-color-contrast-banner {
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ui-c-text-muted);
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--pg-border);
+  border-radius: var(--vp-radius-xs);
+}
+
+.pg-color-contrast-banner-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  opacity: 0.7;
+}
+
+.pg-color-contrast-banner-text {
+  margin: 0;
+}
+
+.pg-color-contrast-banner-link {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: var(--vp-c-brand-1);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover {
+    color: var(--vp-c-brand-2);
+  }
 }
 </style>

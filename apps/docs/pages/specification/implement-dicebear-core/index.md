@@ -138,10 +138,14 @@ function getValue(seed: string, key: string) -> float:
 
 ### 选择方法
 
-所有选择方法在操作前都会使用 UTF-16 代码单元比较（JavaScript 默认的 `.sort()` 顺序）按字符串表示对其输入进行排序。这确保了跨语言确定性。
+对于输入中有多个条目的情况，每种选择方法都会先进行标准化：
 
-实际上，唯一会被排序的值是组件变体名称和十六进制颜色字符串——两者都保证是 ASCII。实现可以使用与区域设置无关的字节比较（类似 `strcmp` 的方式）并保持结果一致，
-尽管 JavaScript 参考实现比较的是完整的 UTF-16 代码单元。PHP 参考实现正是这样使用 `strcmp` 的。
+1. 按项目的字符串表示进行 **去重**，保留第一次出现的项
+   （仅 `pick` 和 `shuffle` —— `weightedPick` 作用于 map，并且按构造天然具有唯一键）。
+2. 按项目的字符串表示进行 **排序**，使用 UTF-16 代码单元
+   比较（JavaScript 默认的 `.sort()` 顺序）。
+
+空输入返回 `undefined`（`shuffle` 则返回空数组）；单条目输入会原样返回，不进行去重或排序。两步标准化使多条目输出不受调用者顺序和重复项影响。实际上，唯一会被排序的值是组件变体名称和十六进制颜色字符串——二者都保证是 ASCII——因此实现可以使用 `strcmp` 并保持结果一致，即使 JavaScript 参考实现比较的是完整 UTF-16 代码单元。PHP 参考实现正是如此。
 
 #### `pick(key, items) -> item | undefined`
 
@@ -150,78 +154,98 @@ function getValue(seed: string, key: string) -> float:
 ```
 function pick(seed, key, items):
     if items is empty: return undefined
-    sorted = sort items by string representation (UTF-16 code unit order)
-    if sorted has 1 item: return sorted[0]
+    if items has 1 item: return items[0]
+    unique = deduplicate items by string representation
+    if unique has 1 item: return unique[0]
+    sorted = sort unique by string representation
     index = floor(getValue(seed, key) * length(sorted))
     return sorted[index]
 ```
 
-#### `weightedPick(key, entries) -> item | undefined`
+#### `weightedPick(key, weights) -> key | undefined`
 
-从 `[item, weight]` 元组中选择，同时考虑权重。
+接受一个 `string → weight` 的 map，并返回其中一个键，按权重偏向选择。当所有权重都为 `0` 时，会退回到对这些键进行无权重的 `pick`。
 
 ```
-function weightedPick(seed, key, entries):
-    if entries is empty: return undefined
-    sorted = sort entries by item string representation
-    totalWeight = sum of all weights
-    if totalWeight == 0: return pick(seed, key, items from entries)
+function weightedPick(seed, key, weights):
+    keys = keys of weights
+    if keys is empty: return undefined
+    if keys has 1 item: return keys[0]
+    sorted = sort keys by string representation
+    totalWeight = sum of weights[k] for k in sorted
+    if totalWeight == 0: return pick(seed, key, sorted)
     threshold = getValue(seed, key) * totalWeight
     cumulative = 0
-    for each (item, weight) in sorted:
-        cumulative += weight
-        if cumulative > threshold: return item
-    return last item
+    for each k in sorted:
+        cumulative += weights[k]
+        if threshold < cumulative: return k
+    return last(sorted)
 ```
 
 #### `bool(key, likelihood) -> boolean`
 
-以 `likelihood / 100` 的概率返回 `true`。
+以 `likelihood / 100` 的概率返回 `true`。`likelihood` 默认值为
+`50`。
 
 ```
 function bool(seed, key, likelihood = 50):
     return getValue(seed, key) * 100 < likelihood
 ```
 
-#### `float(key, values) -> number | undefined`
+#### `float(key, range) -> number`
 
-返回范围内的浮点数，保留 4 位小数。
-
-```
-function float(seed, key, values):
-    if values is empty: return undefined
-    if values has 1 item: return values[0]
-    min = minimum(values)
-    max = maximum(values)
-    raw = min + getValue(seed, key) * (max - min)
-    return round(raw * 10000) / 10000
-```
-
-#### `integer(key, values) -> number | undefined`
-
-返回范围内的整数（包含端点）。
+返回闭区间内的浮点数，四舍五入到小数点后四位。`range` 是模式里的 `{ min, max, step? }` 对象。如果 `min > max`，则内部交换它们。若 `step > 0`，则从
+`{ min + i × step | 0 ≤ i ≤ ⌊(max − min) / step⌋ }` 中均匀采样——因此当 `(max − min)`
+不是 `step` 的整数倍时，最后一个桶会 `≤ max`，而 `max` 本身只有在整除时才会被命中。不带 `step` 时，范围是连续的。
 
 ```
-function integer(seed, key, values):
-    if values is empty: return undefined
-    if values has 1 item: return values[0]
-    min = minimum(values)
-    max = maximum(values)
+function float(seed, key, range):
+    min = min(range.min, range.max)
+    max = max(range.min, range.max)
+    step = range.step if range.step > 0 else 0
+
+    if step > 0:
+        buckets = floor((max - min) / step) + 1
+        i = floor(getValue(seed, key) * buckets)
+        raw = min + i * step
+    else:
+        raw = min + getValue(seed, key) * (max - min)
+
+    return round(raw * 10000) / 10000   # 四舍五入，.5 进位到 +Infinity
+```
+
+这里的 `round` 与 [number formatting](#number-formatting) 中相同：
+.5 会朝 **+Infinity** 方向舍入（JavaScript 的 `Math.round`），而不是你所用语言的原生舍入。PHP 的 `round()` 和许多其他实现会把 .5
+**远离零** 舍入，这在负值正好落在 `.5` 边界时会产生差异（例如 `round(-0.40625 × 10000) / 10000` 是 `-0.4062`，不是 `-0.4063`）。
+
+#### `integer(key, range) -> number`
+
+返回闭区间内的整数，两端都包含。接受与 `float` 相同的
+`{ min, max, step? }` 对象；`step` 为保持对称性而接受，但会被忽略——整数本来就是按 1 递增的。
+
+```
+function integer(seed, key, range):
+    min = min(range.min, range.max)
+    max = max(range.min, range.max)
     return floor(getValue(seed, key) * (max - min + 1)) + min
 ```
 
 #### `shuffle(key, items) -> items[]`
 
-使用一个 **有状态** 的 Mulberry32 实例进行 Fisher-Yates 洗牌（不是基于 key 的）。
+使用一个 **有状态** 的 Mulberry32 实例（不是基于 key 的）进行 Fisher-Yates 洗牌。对于长度 ≤ 1 的输入，项目会在不去重的情况下以副本形式返回。
 
 ```
 function shuffle(seed, key, items):
-    sorted = sort items by string representation
-    result = copy of sorted
-    prng = new Mulberry32(fnv1a_hash(seed + ":" + key))
+    if length(items) <= 1: return copy of items
+    unique  = deduplicate items by string representation
+    sorted  = sort unique by string representation
+    result  = copy of sorted
+    prng    = new Mulberry32(fnv1a_hash(seed + ":" + key))
+
     for i from length(result) - 1 down to 1:
         j = floor(prng.nextFloat() * (i + 1))
         swap result[i] and result[j]
+
     return result
 ```
 
@@ -253,26 +277,55 @@ function shuffle(seed, key, items):
 没有 PRNG key 的选项会直接从用户输入中读取。其余选项会在给定 key 下从用户提供的范围/列表中采样，
 并在未提供时回退到列出的默认值。
 
-### 组件选项
+The range options (`rotate`, `scale`, `borderRadius`, `translateX`,
+`translateY`, and the per-color `${name}ColorAngle` / `${name}ColorFillStops`)
+accept a number or an array, normalized to a `{ min, max }` range before
+`float`/`integer` sampling:
+
+- a bare number `n` → `{ min: n, max: n }` (a fixed value);
+- a single-element array `[n]` → `{ min: n, max: n }` (same as the bare number);
+- a two-element array → `{ min, max }` taken as the smaller/larger of the two
+  (order does not matter — sampling swaps them anyway);
+- an empty array `[]`, or the option unset, → fall back to the listed default.
+
+Note the edge cases: `[n]` is a fixed value (**not** the default), and `[]`
+falls back to the default (**not** a range with a missing bound). A fixed range
+where `min === max` always samples that exact value.
+
+### Component options
 
 对于每个组件（例如 `eyes`），用户可以提供恰好两个选项：
 
-| Option            | PRNG key          | Resolution                                                                             |
-| ----------------- | ----------------- | -------------------------------------------------------------------------------------- |
-| `eyesProbability` | `eyesProbability` | `bool` with likelihood, default from the component's `probability` (or `100` if unset) |
-| `eyesVariant`     | `eyesVariant`     | `weightedPick` from the component's variants                                           |
+| Option            | PRNG key          | Resolution                                                                                                     |
+| ----------------- | ----------------- | -------------------------------------------------------------------------------------------------------------- |
+| `eyesProbability` | `eyesProbability` | `bool` with likelihood from the user option, falling back to the component's `probability` (or `100` if unset) |
+| `eyesVariant`     | `eyesVariant`     | `weightedPick` over a weighted map (see below)                                                                 |
 
-如果概率检查失败，则组件不会被渲染（variant 返回 `undefined`）。
+If the probability check fails, the component is not rendered and `variant`
+returns `undefined`.
 
-对于 **组件别名**（在定义中通过 `extends` 声明），选项行为不同：别名会复用源组件的
-`${sourceName}Probability` 用户选项，并且不会暴露自己的
-`${aliasName}Probability`。不过，`${aliasName}Variant` 选项对每个别名都是唯一的——PRNG 会为每个别名采样一个新的变体。
+`eyesVariant` accepts three shapes from the user: a single variant name, an
+array of names, or a `Record<string, number>` weight map. Normalize the first
+two to a map where each named variant has weight `1`. Then drop any keys that
+are not declared in the component's `variants` block, and feed the remaining map
+to `weightedPick`. When the user did not supply the option, build the map from
+the variants' own `weight` values (defaulting to `1`).
+
+For **component aliases** (declared via `extends` in the definition), the user
+side is shared and only the PRNG side is independent. An alias does not expose
+its own `${aliasName}Probability` or `${aliasName}Variant` user option — both
+are read from the source component's `${sourceName}Probability` and
+`${sourceName}Variant`. The PRNG, however, uses the alias's own name as the key
+(`${aliasName}Probability`, `${aliasName}Variant`), so each alias rolls its
+visibility and variant independently while still being constrained by the same
+user-set weights.
 
 ### 每个组件的变换（渲染时）
 
-每个组件引用在渲染时还会应用旋转、两个平移和缩放。
-这些都 **不是用户选项**——它们会在每次渲染时从组件定义的 `rotate`/`translate`/`scale` 范围中采样，
-并且 **永远不会出现在 `resolvedOptions` 中**。实现如果要对用户输入进行往返处理，也不得暴露它们。
+每个组件引用在渲染时还会应用旋转、两个平移和缩放。这些 **不是用户选项**——它们会在每次渲染时根据组件定义中的 `rotate`/`translate`/`scale` 范围采样。它们会出现在内省用的 `resolvedOptions` 快照中的 `${name}Rotate` /
+`${name}TranslateX` / `${name}TranslateY` / `${name}Scale` 下，但它们不是
+面向用户的 `StyleOptions<D>` 类型的一部分，也不支持把它们再传回一个新的
+`Avatar`。
 
 | Value      | PRNG key         | Sampling                                          |
 | ---------- | ---------------- | ------------------------------------------------- |
@@ -281,51 +334,58 @@ function shuffle(seed, key, items):
 | translateY | `eyesTranslateY` | 来自 `component.translate.y` 的 `float`，默认 `0` |
 | scale      | `eyesScale`      | 来自 `component.scale` 的 `float`，默认 `1`       |
 
-平移值是组件自身 `width` 和 `height` 的百分比（不是 avatar canvas）。
-先乘以组件尺寸，然后四舍五入到小数点后四位（`round(x * 10000) / 10000`）。旋转和缩放的变换中心
-`(cx, cy)` 是组件自身中心——
+平移值是 **组件自身** 的 `width` 和 `height` 的百分比（不是头像画布）；将其乘以组件尺寸即可得到偏移量。与输出的每个数字一样，它随后会经过
+[`formatNumber`](#number-formatting) 处理（将其最多保留到小数点后 5 位）。旋转和缩放的变换中心 `(cx, cy)` 是组件自身中心——
 `(width / 2, height / 2)`。
 
-在输出的 SVG 中，这些值会作为一个单独的 `transform=""` 属性出现在
-`<use>` 元素上，且文本顺序如下（从左到右读取）：
+在生成的 SVG 中，非恒等值会以空格分隔后连接成一个单独的 `transform` 属性，写在 `<use>` 元素上，顺序如下（从左到右读取）：
 
 ```
 transform="translate(tx, ty) rotate(angle, cx, cy) translate(cx, cy) scale(s) translate(-cx, -cy)"
 ```
 
-任何值为恒等变换的片段（`tx=ty=0`、`angle=0`、`s=1`）都会被省略；如果所有片段都是恒等变换，则整个 `transform` 属性完全省略。
+规则：
+
+- Translate 是一个片段——当 `tx ≠ 0` 或 `ty ≠ 0` 时输出。
+- Rotate 是一个片段——当 `angle ≠ 0` 时输出。
+- Scale 是三部分的 `translate cx,cy / scale s / translate -cx,-cy`
+  片段——当 `s ≠ 1` 时作为一个整体输出。
+- 如果 `(tx, ty, angle, s)` 全都为恒等值，则完全省略 `transform` 属性。
+- 如果样式作者在组件引用上写了 `transform`，它会原样前置于这些片段之前（见
+  [Component rendering](#component-rendering)）。
 
 ### 颜色选项
 
 对于定义中声明的每个颜色组——**加上**一个隐式的
 `background` 组——用户可以提供四个选项：
 
-| Option                  | Type                               | PRNG key                | Notes                                                               |
-| ----------------------- | ---------------------------------- | ----------------------- | ------------------------------------------------------------------- |
-| `${name}Color`          | hex string or list                 | `${name}Color`          | 候选颜色（覆盖定义中的调色板）                 |
-| `${name}ColorFill`      | enum `solid` / `linear` / `radial` | `${name}ColorFill`      | 以列表形式提供时从中选取一个，默认 `solid`                  |
-| `${name}ColorFillStops` | range (min 2)                      | `${name}ColorFillStops` | 渐变停靠点数量；当 fill 为 `solid` 时忽略，默认 `2` |
-| `${name}ColorAngle`     | range -360…360                     | `${name}ColorAngle`     | 渐变旋转，默认 `0`                                      |
+| Option                  | Type                                     | PRNG key                | Notes                                                                             |
+| ----------------------- | ---------------------------------------- | ----------------------- | --------------------------------------------------------------------------------- |
+| `${name}Color`          | hex string or list                       | `${name}Color`          | 候选颜色（覆盖定义中的调色板）；通过 `Color.toHex` 归一化 |
+| `${name}ColorFill`      | enum `solid` / `linear` / `radial`       | `${name}ColorFill`      | 对列表进行 `pick`，默认 `'solid'`                                             |
+| `${name}ColorFillStops` | integer ≥ 2, or `[min, max]` of same     | `${name}ColorFillStops` | `integer` 采样，默认 `2`；当 fill 为 `solid` 时忽略                       |
+| `${name}ColorAngle`     | number in `[-360, 360]`, or `[min, max]` | `${name}ColorAngle`     | `float` 采样，默认 `0`                                                       |
 
 每个组的解析规则：
 
-1. 从用户选项（`${name}Color`）获取候选颜色，或回退到
-   样式定义的调色板
-2. 将所有颜色规范化为十六进制
-3. 确定停靠点数量：若 fill 为 `solid` 则为 `1`，否则采样
-   `${name}ColorFillStops`（PRNG `integer`，默认 `2`）
+1. 从用户选项（`${name}Color`）获取候选颜色，或回退到样式定义的调色板。
+2. 将每个候选项归一化为小写十六进制（6 或 8 位，前导 `#`）。
+   3/4 位简写会展开为 6/8 位。
+3. 确定 stop 的数量：如果 fill 是 `solid` 则为 `1`，否则采样
+   `${name}ColorFillStops`（PRNG `integer`，默认 `2`）。
 4. 应用样式定义中的约束：
-   - **`contrastTo`**：按 WCAG 2.1 对比度比值（降序）对候选项排序
-     ，相对于引用颜色——不要洗牌
-   - **`notEqualTo`**：过滤掉已为引用组选择的颜色
-5. 如果没有 `contrastTo` 约束：对候选项进行洗牌
-6. 截取到停靠点数量
+   - **`contrastTo`**：根据相对于引用颜色的 WCAG 2.1 对比度比值对候选项排序
+     （降序）。引用颜色通过递归调用 color-resolver 解析，因此必须检测并拒绝循环。
+   - **`notEqualTo`**：从每个候选颜色以及引用组中所有已选颜色中去掉 alpha 通道，然后删除匹配项。如果过滤会导致候选列表为空，则回退到未过滤列表——颜色约束只是尽力而为，不是硬约束。
+5. 如果没有 `contrastTo` 约束，则对候选项进行洗牌。
+6. 截取到 stop 数量。
+
+对于在样式定义中未声明颜色条目的组——最常见的是隐式的
+`background` 组——会完全跳过约束处理，只对用户提供的候选项进行洗牌。
 
 #### WCAG 2.1 对比度
 
-The contrast sort is the most likely source of subtle parity drift between ports
-— small differences in the linearization cutoff or the luminance coefficients
-change the ordering on certain palettes. Use these formulas exactly:
+对比度排序是各语言实现之间最容易出现细微偏差的地方之一——线性化阈值或亮度系数的微小差异都会改变某些调色板的排序。请严格使用以下公式：
 
 ```
 function linearize(channel: uint8) -> float:
@@ -346,35 +406,56 @@ function contrastRatio(a: hex, b: hex) -> float:
     return (max(la, lb) + 0.05) / (min(la, lb) + 0.05)
 ```
 
-The cutoff is `0.04045`, the exponent is `2.4`, and the coefficients are
-`0.2126 / 0.7152 / 0.0722` for R/G/B respectively. Sorting is descending by
-`contrastRatio(candidate, refColor)`.
+阈值是 `0.04045`，指数是 `2.4`，R/G/B 的系数分别是
+`0.2126 / 0.7152 / 0.0722`。排序按 `contrastRatio(candidate, refColor)` 的降序进行。
 
 ## SVG 渲染流水线
 
 渲染器会遍历元素树并生成一个 SVG 字符串。转换会按特定顺序应用——顺序弄错会产生不同的输出。
 
+### 数字格式化
+
+所有输出到 SVG 的数字——`viewBox` 尺寸、`width`/`height`、`translate`/`rotate`/`scale` 的偏移及其中心点、`rx`/`ry`、渐变停止点偏移、`fontWeight` 变量等等——都必须通过同一个辅助函数转成字符串，这样所有实现才能产生字节级一致的输出：
+
+```
+function formatNumber(value):
+    scaled = round(value * 100000)   # 四舍五入时，半数向 +Infinity 方向取整
+    sign = "-" if scaled < 0 else ""
+    scaled = abs(scaled)
+
+    integer  = floor(scaled / 100000)
+    fraction = (scaled mod 100000), padded to 5 digits, then trailing zeros removed
+
+    if fraction is empty:
+        return sign + integer
+    return sign + integer + "." + fraction
+```
+
+这会最多保留 **5 位小数**，并且始终使用普通十进制表示——绝不使用科学计数法/指数表示法——且不会有尾随零，也不会有尾随的 `.0`（例如 `1`、`-50`、`2.5`、`0.00001`）。字符串必须基于整数 `scaled` 来构建，而不是依赖语言自身的浮点转字符串：PHP 基于精度的强制转换和 Python 的 `repr` 在小数、大数或分数值上都与 JavaScript 不一致。`round` 这一步采用的是半数向 +Infinity 方向取整（JavaScript 的 `Math.round`）；请精确模拟它——`floor(x + 0.5)` **并不**等价（对于小于 `0.5` 的最大双精度浮点数，它会返回 `1` 而不是 `0`）。
+
 ### 1. 背景
 
-如果设置了 `backgroundColor`，则将一个 `<rect>` 作为第一个元素渲染出来，覆盖整个画布。
+渲染器会无条件向解析器请求 `background` 颜色组——每种样式都隐式包含它，即使样式定义中没有声明 `background` 组。如果解析后的列表非空，则将 `<rect width="{w}" height="{h}" fill="{fill}"/>` 作为第一个主体元素输出。`{fill}` 要么是字面量十六进制字符串（纯色填充，或单一候选颜色），要么是指向注册在 `<defs>` 中的渐变的 `url(#…)` 引用——参见 [渐变渲染](#渐变渲染)。
 
 ### 2. 元素树
 
 递归遍历 `canvas.elements` 数组：
 
-- **`element`**：渲染为带属性的 SVG 标签。在属性值中解析颜色引用和变量引用。
-- **`text`**：渲染为转义后的文本内容。解析变量引用。
-- **`component`**：查找选定的变体（来自选项解析）。如果组件可见，则输出一个 `<use>` 元素，指向一个保存该变体主体的 `<defs>` 条目——见下文。
+- **`element`**：当没有子元素时，渲染为 `<{name} {attrs}/>`（自闭合）；否则渲染为 `<{name} {attrs}>{children}</{name}>`。先解析属性值中的颜色和变量引用，再对解析结果进行 XML 转义。元素名和属性键按字面值写出，因为 schema 验证器已经将它们限制在安全白名单内。
+- **`text`**：解析任何变量引用，然后对结果进行 XML 转义，并将其作为父元素的文本内容输出。
+- **`component`**：查找所选变体（来自选项解析）。如果该组件可见，则输出一个 `<use>` 元素，指向 `<defs>` 中保存该变体主体的条目——见下文。
 
-当某个 `element` 的名称为 `defs` 时，渲染器**不会**就地输出 `<defs>` 标签。相反，该元素的每个子元素都会被渲染并推入渲染器在整个遍历过程中累积的共享 `<defs>` 块中（同时还包括生成的渐变、裁剪路径和组件变体主体）。这样样式定义就可以提供可复用片段，而不会破坏每个文档只存在一个 `<defs>` 的不变量。
+当 `element` 的名称为 `defs` 时，渲染器**不会**在内联位置输出 `<defs>` 标签。相反，它会渲染每个子元素，并将其推入渲染器在整个遍历过程中累积的共享 `<defs>` 块中（同时还会加入生成的渐变、裁剪路径和组件变体主体）。映射键在有 `id` 属性时使用子元素的 `id`，否则使用合成的 `_{n}` 槽位——因此两个具有相同 `id` 的子元素会折叠为同一条目，最后写入者获胜。这使得样式定义能够提供可复用片段，而不会破坏“每个文档只允许一个 `<defs>`”的不变量。
 
 #### 组件渲染
 
-组件引用从不内联。渲染器第一次遇到一个 `(component, variant)` 对时，会：
+组件引用从不内联。渲染器第一次遇到某个 `(component, variant)` 对时，会：
 
 1. 渲染该变体的元素树。
-2. 将其包裹在 `<g id="{sourceName}-{variantName}-{seedHash}">…</g>` 中，并追加到共享 `<defs>` 块。`sourceName` 是 _源_ 组件名称——对于通过 `extends` 声明的别名，这是别名所指向的组件名称，因此引用同一源的所有别名都会共享一个 `<defs>` 条目。
-3. 在调用点输出 `<use transform="…" href="#{id}"/>`（当所有按组件变换都为 identity 时省略 transform——见 [按组件变换](#per-component-transforms-render-time)）。
+2. 将其包裹在 `<g id="{sourceName}-{variantName}-{seedHash}">…</g>` 中，并追加到共享 `<defs>` 块。`sourceName` 是 _源_ 组件名称——对于通过 `extends` 声明的别名，这是别名所指向的组件名称，因此所有引用同一源的别名会共享一个 `<defs>` 条目。
+3. 在调用处输出 `<use {attributes} href="#{id}"/>`，其中 `{attributes}` 包含：
+   - 样式作者写在组件引用本身上的每个属性（按迭代顺序先输出）。
+   - 一个由组件级变换组成的 `transform` 属性（见 [组件级变换（渲染时）](#组件级变换渲染时)）。如果作者也提供了 `transform`，则会将其**前置**，使其作为最外层（定位）变换，组件级值在其内部应用。如果所有组件级值都是 identity 且作者未提供 `transform`，则整个属性会被省略。
 
 `seedHash` 是 seed 的 FNV-1a 十六进制哈希，使用小写并左侧零填充到 8 个字符。
 
@@ -400,11 +481,11 @@ The cutoff is `0.04045`, the exponent is `2.4`, and the coefficients are
 
 1. `xmlns="http://www.w3.org/2000/svg"`
 2. `viewBox="0 0 {width} {height}"`
-3. 来自样式定义的全局 `attributes`（每个值都通过 `Xml.escape` 转义）
-4. 要么是 `role="img" aria-label="{title}"`（当设置了 `title` 时，并进行转义），要么是 `aria-hidden="true"`
-5. `width="{size}"` 和 `height="{size}"`（仅当设置了 `size` 选项时）
+3. 来自样式定义的全局 `attributes`——键按白名单原样写出，值进行 XML 转义
+4. 要么是 `role="img" aria-label="{title}"`（当设置了 `title` 时，内容会被转义），要么是 `aria-hidden="true"`
+5. `width="{size}"` 和 `height="{size}"`（仅在设置了 `size` 选项时）
 
-其子元素，按这个精确顺序：
+其子元素按这个精确顺序排列：
 
 1. `<metadata>` — 来自 `meta` 的 Dublin Core / RDF 块（见下文）；如果 `meta` 为空，则完全省略。
 2. `<defs>` — 累积的定义（clip path、渐变、组件变体主体）。实际上总是存在，因为边框圆角裁剪总会注册。
@@ -445,24 +526,29 @@ The cutoff is `0.04045`, the exponent is `2.4`, and the coefficients are
 
 ## 渐变渲染
 
-当一个颜色组有多个 stop（fill 为 `linear` 或 `radial`）时：
+只有当填充为 `linear` 或 `radial`，并且颜色列表至少包含两个条目时，才会输出渐变。否则渲染器会返回一个字面量十六进制字符串（`colors[0]`，如果列表为空则返回 `'none'`）。
 
-1. 在 `<defs>` 中创建一个 `<linearGradient>` 或 `<radialGradient>`
-2. 计算 stop 偏移：`round(i / (count - 1) * 100)%`
-3. 通过 `gradientTransform="rotate(angle, 0.5, 0.5)"` 应用渐变旋转
-4. 在 fill 属性中通过 `url(#gradient-id)` 引用
-5. 渐变 ID 格式：`{colorName}-color-{seedHash}`，其中 `seedHash` 是 seed 的 FNV-1a 十六进制哈希（8 个字符，左侧零填充）
+当需要渐变时：
+
+1. 在 `<defs>` 中创建一个 `<linearGradient>`（用于 `linear`）或 `<radialGradient>`（用于 `radial`）。
+2. 计算每个停止点的偏移：`formatNumber(i / (colors.length - 1) * 100)`，后接 `%`（偏移格式与其他数字一样——见 [数字格式化](#数字格式化)）。
+3. 将每个颜色输出为 `<stop offset="{offset}%" stop-color="{hex}"/>`。
+4. 仅当解析后的 `${name}ColorAngle` 非零时，才添加 `gradientTransform="rotate(angle, 0.5, 0.5)"`；否则完全省略该属性。
+5. 在请求它的 fill 属性中通过 `url(#{id})` 引用该渐变。
+6. 渐变 ID 格式：`{colorName}-color-{seedHash}`，其中 `seedHash` 是 seed 的 FNV-1a 十六进制哈希（8 个字符，左侧零填充，小写）。
 
 ## 首字母提取
 
-`initial` 和 `initials` 变量从 seed 派生：
+`initial` 和 `initials` 变量通过 `Initials.fromSeed(seed)` 辅助函数从 seed 派生：
 
-1. 去除 `@...` 后缀（用于电子邮件地址）
-2. 移除类撇号字符（`` ` ´ ' ʼ ``）
-3. 匹配 Unicode 字母序列（`\p{L}[\p{L}[\p{M}]*`）
-4. 如果只有一个单词：取前 1-2 个字符（保留组合音标）
-5. 如果有多个单词：取第一个和最后一个单词的首字母
-6. 转换为大写
+1. 去掉 `@...` 后缀，这样电子邮件只会得到一个名字（`alice@x` → `alice`，而不是 `[alice, x]`）。
+2. 移除撇号类字符（`` ` ´ ' ʼ ``），这样 `O'Neill` 会被当作一个单词。
+3. 使用 `\p{L}[\p{L}\p{M}]*` 匹配 Unicode 字母序列——每个匹配都是一个“单词”。
+4. **没有找到单词？** 再试一次，但跳过第 1 步（这样仅为 `@bob` 的 seed 仍会得到 `B`）。如果仍然没有结果，则变量解析为空字符串。
+5. **只有一个单词？** 取第一个或前两个类似字素的单位（`\p{L}\p{M}*`），并转为大写。
+6. **多个单词？** 取第一个单词的第一个字素和最后一个单词的第一个字素，并转为大写。
+
+`initial` 等于 `initials.charAt(0)`——也就是结果的第一个代码单元，对 regex 产生的每一种输入都与第一个字母一致。
 
 ## 测试你的实现
 
@@ -520,6 +606,6 @@ dicebear avataaars ./reference --seed "Alice" --count 1
 ## 参考实现
 
 | 语言        | 包              | 源码                                                                                 |
-| ---------- | ---------------- | ------------------------------------------------------------------------------------ |
+| ---------- | ------------------------------------------------------------------------------------ | ---------- |
 | JavaScript | `@dicebear/core` | [src/js/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/js/core/src)   |
 | PHP        | `dicebear/core`  | [src/php/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/php/core/src) |

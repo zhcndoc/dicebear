@@ -52,6 +52,7 @@ const fullStyle = new Style({
   colors: {
     skin: { values: ['#ff0000', '#00ff00'] },
     hair: { values: ['#000000'] },
+    text: { values: ['#ffffff', '#000000'], contrastTo: 'background' },
   },
 });
 
@@ -135,6 +136,17 @@ describe('OptionsDescriptor', () => {
       assert.deepEqual(schema.skinColor, { type: 'color', list: true });
       assert.deepEqual(schema.hairColor, { type: 'color', list: true });
       assert.deepEqual(schema.skinColorFill, { type: 'enum', values: ['solid', 'linear', 'radial'], list: true });
+    });
+
+    it('should expose contrastTo on color fields when set', () => {
+      const schema = new OptionsDescriptor(fullStyle).toJSON();
+
+      assert.deepEqual(schema.textColor, {
+        type: 'color',
+        list: true,
+        contrastTo: 'background',
+      });
+      assert.ok(!('contrastTo' in schema.skinColor));
     });
   });
 

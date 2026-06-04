@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { siReact, siVuedotjs, siAngular, siSvelte } from 'simple-icons';
 import {
+  UiCard,
   UiContainer,
   UiSection,
   UiSectionHeader,
@@ -58,13 +59,15 @@ const frameworks = [
       </UiSectionHeader>
 
       <div class="app-frameworks-grid">
-        <a
+        <UiCard
           v-for="(framework, index) in frameworks"
           :key="framework.name"
           :href="framework.href"
+          padding="lg"
           class="app-frameworks-item"
           :style="{
             '--framework-color': framework.color,
+            '--ui-card-hover-border-color': framework.color,
             animationDelay: `${index * 0.1}s`,
           }"
         >
@@ -72,20 +75,11 @@ const frameworks = [
             <UiIcon :path="framework.icon" />
           </UiIconBox>
           <span class="app-frameworks-name">{{ framework.name }}</span>
-        </a>
+        </UiCard>
       </div>
     </UiContainer>
   </UiSection>
 </template>
-
-<style lang="scss">
-:root {
-  --app-frameworks-item-border: rgba(0, 0, 0, 0.08);
-}
-.dark {
-  --app-frameworks-item-border: rgba(255, 255, 255, 0.08);
-}
-</style>
 
 <style lang="scss" scoped>
 .app-frameworks {
@@ -134,34 +128,19 @@ const frameworks = [
   }
 
   &-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-    padding: 28px 36px;
     min-width: 150px;
-    border-radius: var(--vp-radius-lg);
-    background: var(--vp-c-bg-elv);
-    border: 1px solid var(--app-frameworks-item-border);
-    transition: all var(--duration-mid) var(--ease-spring);
     opacity: 0;
     transform: translateY(20px);
 
+    :deep(.ui-card-body) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
     .visible & {
       animation: reveal-up var(--duration-mid) var(--ease-spring) forwards;
-    }
-
-    &::after {
-      display: none !important;
-    }
-
-    &:hover {
-      transform: translateY(-4px) scale(1.02);
-      border-color: var(--framework-color);
-      box-shadow:
-        var(--vp-shadow-3),
-        0 0 0 3px color-mix(in srgb, var(--framework-color) 15%, transparent);
     }
   }
 

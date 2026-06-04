@@ -15,7 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Open Peeps
 
-Open Peeps 是一种手绘插画矢量头像风格，采用多样化的半身角色，具有草图般的轮廓、可自由搭配的发型、表情和配饰。可为社区平台、营销页面和社交应用生成包容、友好的 SVG 个人资料图标。
+Open Peeps 是一种手绘插画风格的矢量头像，具有多样化的半身角色，带有草图般的轮廓、可混搭的发型、表情和配饰。为社区平台、营销页面和社交应用生成包容、友好的 SVG 个人资料图标。
 
 <StylePreview styleName="open-peeps" />
 

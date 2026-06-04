@@ -102,8 +102,9 @@ export class Resolver<D = unknown> {
    * as `${name}Variant` in the input data:
    *
    * - `undefined`: PRNG picks from all style variants using their weights.
-   * - `string` or `string[]`: PRNG picks from the given subset (weight 1 each).
-   * - `Record<string, number>`: PRNG picks using the provided weights.
+   * - otherwise: PRNG picks using the user-supplied weighted map (a bare
+   *   string or string list is normalized to weight `1` each in
+   *   {@link Options.componentVariant}).
    *
    * Only variants that exist in the style definition are considered.
    */
@@ -117,22 +118,21 @@ export class Resolver<D = unknown> {
 
       const raw = this.#options.componentVariant(component.sourceName());
       const variants = component.variants();
-      let entries: [string, number][];
+      const weights: Record<string, number> = {};
 
       if (raw === undefined) {
-        entries = Array.from(variants).map(([v, variant]) => [
-          v,
-          variant.weight(),
-        ]);
-      } else if (Array.isArray(raw)) {
-        entries = raw
-          .filter((v): v is string => variants.has(v))
-          .map((v) => [v, 1]);
+        for (const [v, variant] of variants) {
+          weights[v] = variant.weight();
+        }
       } else {
-        entries = Object.entries(raw).filter(([v]) => variants.has(v));
+        for (const [v, w] of Object.entries(raw)) {
+          if (variants.has(v)) {
+            weights[v] = w;
+          }
+        }
       }
 
-      return this.#prng.weightedPick(`${name}Variant`, entries);
+      return this.#prng.weightedPick(`${name}Variant`, weights);
     });
   }
 

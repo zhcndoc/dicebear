@@ -108,8 +108,9 @@ class Resolver
      * as `${name}Variant` in the input data:
      *
      * - `null`: PRNG picks from all style variants using their weights.
-     * - `string` or `string[]`: PRNG picks from the given subset (weight 1 each).
-     * - assoc array: PRNG picks using the provided weights.
+     * - otherwise: PRNG picks using the user-supplied weighted map (a bare
+     *   string or string list is normalized to weight `1` each in
+     *   {@see Options::componentVariant()}).
      *
      * Only variants that exist in the style definition are considered.
      */
@@ -125,29 +126,21 @@ class Resolver
 
             $raw = $this->options->componentVariant($component->sourceName());
             $variants = $component->variants();
+            $weights = [];
 
             if ($raw === null) {
-                $entries = [];
                 foreach ($variants as $v => $variant) {
-                    $entries[] = [$v, $variant->weight()];
-                }
-            } elseif (array_is_list($raw)) {
-                $entries = [];
-                foreach ($raw as $v) {
-                    if (isset($variants[$v])) {
-                        $entries[] = [$v, 1];
-                    }
+                    $weights[$v] = $variant->weight();
                 }
             } else {
-                $entries = [];
                 foreach ($raw as $v => $weight) {
                     if (isset($variants[$v])) {
-                        $entries[] = [$v, $weight];
+                        $weights[$v] = $weight;
                     }
                 }
             }
 
-            return $this->prng->weightedPick("{$name}Variant", $entries);
+            return $this->prng->weightedPick("{$name}Variant", $weights);
         });
     }
 

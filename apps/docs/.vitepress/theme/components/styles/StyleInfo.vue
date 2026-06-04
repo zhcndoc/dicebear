@@ -2,9 +2,11 @@
 import { computed } from 'vue';
 import { useData } from 'vitepress';
 import { ThemeOptions } from '@theme/types';
-import { UiCode as Code } from '../ui';
+import { UiCard, UiCode as Code } from '../ui';
 import { kebabCase } from 'change-case';
 import { safeHttpUrl } from '@theme/utils/url';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
 
 const { theme } = useData<ThemeOptions>();
 
@@ -21,142 +23,122 @@ const exampleHttpApiUrl = computed(() => {
 });
 
 const exampleDefinitionImport = computed(() => {
-  return `import definition from '@dicebear/styles/${kebabCase(props.styleName)}.json';`;
+  return `import definition from '@dicebear/styles/${kebabCase(props.styleName)}.json' with { type: 'json' };`;
 });
 
 const exampleCliCommand = computed(() => {
   return `dicebear ${props.styleName}`;
 });
+
+type Row =
+  | { label: string; type: 'code'; code: string; lang?: string }
+  | { label: string; type: 'link'; href: string; text?: string }
+  | { label: string; type: 'text'; text: string };
+
+const namingRows = computed<Row[]>(() => {
+  const rows: Row[] = [
+    {
+      label: 'Definition Import',
+      type: 'code',
+      code: exampleDefinitionImport.value,
+      lang: 'js',
+    },
+    { label: 'CLI', type: 'code', code: exampleCliCommand.value },
+    { label: 'HTTP-API', type: 'link', href: exampleHttpApiUrl.value },
+  ];
+
+  if (style.value.definitionUrl) {
+    rows.push({
+      label: 'Definition',
+      type: 'link',
+      href: style.value.definitionUrl,
+    });
+  }
+
+  return rows;
+});
+
+function linkOrText(
+  label: string,
+  text: string | undefined,
+  url: string | undefined,
+): Row | null {
+  if (!text) {
+    return null;
+  }
+
+  const href = safeHttpUrl(url);
+
+  return href
+    ? { label, type: 'link', href, text }
+    : { label, type: 'text', text };
+}
+
+const sourceRows = computed<Row[]>(() => {
+  const meta = style.value.meta;
+
+  return [
+    linkOrText('Title', meta.title, undefined),
+    // Creator/Website both link to the homepage URL.
+    linkOrText('Creator', meta.creator, meta.homepage),
+    linkOrText('Website', meta.homepage, meta.homepage),
+    linkOrText('License', meta.license?.name, meta.license?.url),
+    linkOrText('Source', meta.source, meta.source),
+  ].filter((row): row is Row => row !== null);
+});
 </script>
 
 <template>
-  <table>
-    <colgroup>
-      <col width="200px" />
-      <col />
-    </colgroup>
-
-    <thead>
-      <tr>
-        <th colSpan="2">Naming</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr>
-        <td>Definition Import</td>
-        <td>
-          <Code lang="js" :code="exampleDefinitionImport" />
-        </td>
-      </tr>
-      <tr>
-        <td>CLI</td>
-        <td>
-          <Code :code="exampleCliCommand" />
-        </td>
-      </tr>
-      <tr>
-        <td>HTTP-API</td>
-        <td>
+  <UiCard class="style-info-section" title="Naming">
+    <DataTable :value="namingRows">
+      <Column field="label" style="width: 200px" />
+      <Column>
+        <template #body="{ data }">
+          <Code
+            v-if="data.type === 'code'"
+            :lang="data.lang"
+            :code="data.code"
+          />
           <a
-            :href="exampleHttpApiUrl"
+            v-else-if="data.type === 'link'"
+            :href="data.href"
             target="_blank"
             rel="noopener noreferrer"
           >
-            {{ exampleHttpApiUrl }}
+            {{ data.text ?? data.href }}
           </a>
-        </td>
-      </tr>
-      <tr v-if="style.definitionUrl">
-        <td>Definition</td>
-        <td>
-          <a
-            :href="style.definitionUrl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {{ style.definitionUrl }}
-          </a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          <template v-else>{{ data.text }}</template>
+        </template>
+      </Column>
+    </DataTable>
+  </UiCard>
 
-  <table>
-    <colgroup>
-      <col width="200px" />
-      <col />
-    </colgroup>
-
-    <thead>
-      <tr>
-        <th colSpan="2">Source</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr v-if="style.meta.title">
-        <td>Title</td>
-        <td>{{ style.meta.title }}</td>
-      </tr>
-      <tr v-if="style.meta.creator">
-        <td>Creator</td>
-        <td>
+  <UiCard class="style-info-section" title="Source">
+    <DataTable :value="sourceRows">
+      <Column field="label" style="width: 200px" />
+      <Column>
+        <template #body="{ data }">
           <a
-            v-if="safeHttpUrl(style.meta.homepage)"
-            :href="safeHttpUrl(style.meta.homepage)"
+            v-if="data.type === 'link'"
+            :href="data.href"
             target="_blank"
             rel="noopener noreferrer"
           >
-            {{ style.meta.creator }}
+            {{ data.text ?? data.href }}
           </a>
-          <template v-else>
-            {{ style.meta.creator }}
-          </template>
-        </td>
-      </tr>
-      <tr v-if="style.meta.homepage">
-        <td>Website</td>
-        <td>
-          <a
-            v-if="safeHttpUrl(style.meta.homepage)"
-            :href="safeHttpUrl(style.meta.homepage)"
-            target="_blank"
-            rel="noopener noreferrer"
-            >{{ style.meta.homepage }}</a
-          >
-          <template v-else>{{ style.meta.homepage }}</template>
-        </td>
-      </tr>
-      <tr v-if="style.meta.license">
-        <td>License</td>
-        <td>
-          <a
-            v-if="safeHttpUrl(style.meta.license.url)"
-            :href="safeHttpUrl(style.meta.license.url)"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {{ style.meta.license.name }}
-          </a>
-          <template v-else>
-            {{ style.meta.license.name }}
-          </template>
-        </td>
-      </tr>
-      <tr v-if="style.meta.source">
-        <td>Source</td>
-        <td>
-          <a
-            v-if="safeHttpUrl(style.meta.source)"
-            :href="safeHttpUrl(style.meta.source)"
-            target="_blank"
-            rel="noopener noreferrer"
-            >{{ style.meta.source }}</a
-          >
-          <template v-else>{{ style.meta.source }}</template>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          <template v-else>{{ data.text }}</template>
+        </template>
+      </Column>
+    </DataTable>
+  </UiCard>
 </template>
+
+<style lang="scss" scoped>
+.style-info-section {
+  margin-bottom: 16px;
+
+  :deep(.p-datatable-thead) {
+    display: none;
+  }
+}
+</style>

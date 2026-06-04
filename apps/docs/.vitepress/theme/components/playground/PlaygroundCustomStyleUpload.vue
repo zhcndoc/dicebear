@@ -7,6 +7,7 @@ import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Message from 'primevue/message';
+import Textarea from 'primevue/textarea';
 import { Upload } from '@lucide/vue';
 import { MAX_CUSTOM_STYLE_UPLOAD_BYTES } from './constants';
 
@@ -131,7 +132,7 @@ const canSubmit = computed(
     :closable="true"
     dismissable-mask
     header="Add Custom Style"
-    :style="{ width: '600px' }"
+    :style="{ width: '600px', maxWidth: 'calc(100vw - 32px)' }"
     :pt="{ content: { class: 'pg-custom-upload-dialog-content' } }"
   >
     <div class="pg-custom-upload">
@@ -146,11 +147,12 @@ const canSubmit = computed(
 
       <div class="pg-custom-upload-field">
         <label class="pg-custom-upload-label">Style Definition (JSON)</label>
-        <textarea
+        <Textarea
           v-model="jsonInput"
           class="pg-custom-upload-textarea"
           placeholder="Paste your style definition JSON here..."
-          rows="12"
+          :rows="12"
+          fluid
         />
       </div>
 
@@ -219,27 +221,11 @@ const canSubmit = computed(
 }
 
 .pg-custom-upload-textarea {
-  width: 100%;
   min-height: 200px;
-  padding: 12px;
   font-family: var(--vp-font-family-mono);
   font-size: 12px;
   line-height: 1.5;
-  color: var(--vp-c-text-1);
-  background: var(--vp-c-bg-soft);
-  border: 1px solid var(--vp-c-border);
-  border-radius: var(--vp-radius-xs);
   resize: vertical;
-  outline: none;
-  transition: border-color var(--duration-fast);
-
-  &:focus {
-    border-color: var(--vp-c-brand-1);
-  }
-
-  &::placeholder {
-    color: var(--ui-c-text-subtle);
-  }
 }
 
 .pg-custom-upload-or {

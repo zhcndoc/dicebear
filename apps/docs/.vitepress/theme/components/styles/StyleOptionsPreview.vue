@@ -185,6 +185,10 @@ function selectLabel(event: MouseEvent) {
   background: var(--vp-c-bg-soft);
   overflow: hidden;
 
+  html.dark & {
+    background: var(--vp-c-bg);
+  }
+
   &-avatar-wrapper {
     display: flex;
     align-items: flex-start;

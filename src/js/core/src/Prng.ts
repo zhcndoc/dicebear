@@ -44,48 +44,44 @@ export class Prng {
   }
 
   /**
-   * Picks an item from `entries` proportional to its weight. Duplicate items
-   * (by string representation) are collapsed before picking — only the
-   * first occurrence's weight is kept. When all weights are zero, falls
-   * back to an unweighted {@link pick}. Returns `undefined` for an empty
-   * list.
+   * Picks a key from `weights` proportional to its weight. When all weights
+   * are zero, falls back to an unweighted {@link pick}. Returns `undefined`
+   * for an empty map.
    */
-  weightedPick<T>(
+  weightedPick(
     key: string,
-    entries: readonly (readonly [T, number])[],
-  ): T | undefined {
-    if (entries.length === 0) {
+    weights: Readonly<Record<string, number>>,
+  ): string | undefined {
+    const keys = Object.keys(weights);
+
+    if (keys.length === 0) {
       return undefined;
     }
 
-    if (entries.length === 1) {
-      return entries[0][0];
+    if (keys.length === 1) {
+      return keys[0];
     }
 
-    const unique = this.#uniqueByCodePoint(entries, (e) => String(e[0]));
-    const sorted = unique.sort((a, b) => this.#compareByCodePoint(a[0], b[0]));
-    const totalWeight = sorted.reduce((sum, e) => sum + e[1], 0);
+    const sorted = keys.sort(this.#compareByCodePoint);
+    const totalWeight = sorted.reduce((sum, k) => sum + weights[k], 0);
 
     if (totalWeight === 0) {
-      return this.pick(
-        key,
-        sorted.map((e) => e[0]),
-      );
+      return this.pick(key, sorted);
     }
 
     const threshold = this.getValue(key) * totalWeight;
 
     let cumulative = 0;
 
-    for (const [item, weight] of sorted) {
-      cumulative += weight;
+    for (const k of sorted) {
+      cumulative += weights[k];
 
       if (threshold < cumulative) {
-        return item;
+        return k;
       }
     }
 
-    return sorted[sorted.length - 1][0];
+    return sorted[sorted.length - 1];
   }
 
   /**

@@ -2,6 +2,7 @@ import { ref, computed, type Ref } from 'vue';
 import { kebabCase, capitalCase } from 'change-case';
 import type { CustomStyleEntry } from '@theme/types';
 import {
+  CUSTOM_CATEGORY,
   categoryOrder,
   previewSeeds,
   getStyleCategory,
@@ -20,8 +21,8 @@ export function useStyleFiltering(
   customStyles?: Ref<Record<string, CustomStyleEntry>>,
 ) {
   const searchQuery = ref('');
-  const selectedLicense = ref<string | null>(null);
-  const selectedCategory = ref<string | null>(null);
+  const selectedLicenses = ref<string[]>([]);
+  const selectedCategories = ref<string[]>([]);
 
   const allStyles = computed(() => {
     const builtIn = Object.entries(styles)
@@ -52,10 +53,10 @@ export function useStyleFiltering(
       name: key,
       displayName: entry.name,
       slug: key,
-      creator: 'Custom',
+      creator: CUSTOM_CATEGORY,
       license: 'Unknown',
       licenseNormalized: 'Unknown',
-      category: 'Custom',
+      category: CUSTOM_CATEGORY,
       isCustom: true,
       avatars: previewSeeds.map((seed) => ({
         seed,
@@ -92,13 +93,16 @@ export function useStyleFiltering(
       }
 
       if (
-        selectedLicense.value &&
-        style.licenseNormalized !== selectedLicense.value
+        selectedLicenses.value.length > 0 &&
+        !selectedLicenses.value.includes(style.licenseNormalized)
       ) {
         return false;
       }
 
-      if (selectedCategory.value && style.category !== selectedCategory.value) {
+      if (
+        selectedCategories.value.length > 0 &&
+        !selectedCategories.value.includes(style.category)
+      ) {
         return false;
       }
 
@@ -127,26 +131,16 @@ export function useStyleFiltering(
   });
 
   const totalStyles = computed(() => Object.keys(styles).length);
-  const hasActiveFilters = computed(
-    () => selectedLicense.value !== null || selectedCategory.value !== null,
-  );
-
-  function clearFilters() {
-    selectedLicense.value = null;
-    selectedCategory.value = null;
-  }
 
   return {
     searchQuery,
-    selectedLicense,
-    selectedCategory,
+    selectedLicenses,
+    selectedCategories,
     allStyles,
     availableLicenses,
     availableCategories,
     styleList,
     groupedStyles,
     totalStyles,
-    hasActiveFilters,
-    clearFilters,
   };
 }

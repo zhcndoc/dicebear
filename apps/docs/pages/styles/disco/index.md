@@ -14,7 +14,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Disco
 
-Disco 是一种抽象的矢量头像风格，由类似半色调网格的小形状组成，这些形状会在有色背景上不断变大和缩小。生成图形感强、引人注目的 SVG 个人资料图标——非常适合作为头像占位符或装饰性的用户标识。
+Disco 是一种抽象的矢量头像风格，由类似半色调网格的小形状构成，这些形状会在有色背景上不断放大和缩小。生成具有图形感、吸引眼球的 SVG 个人资料图标——非常适合作为头像占位符或装饰性用户标识。
 
 <StylePreview styleName="disco" />
 

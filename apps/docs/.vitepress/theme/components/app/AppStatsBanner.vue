@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { ArrowRight } from '@lucide/vue';
-import { UiContainer, UiSection, UiSectionHeader, UiButton } from '../ui';
+import { ArrowRight, ChartNoAxesCombined } from '@lucide/vue';
+import Button from 'primevue/button';
+import { UiContainer, UiSection, UiSectionHeader } from '../ui';
 import AppStatsBannerCard from './AppStatsBannerCard.vue';
 import { useVisibility } from '../../composables/useVisibility';
 import { useApiStats, useApiStatsRaw } from '../../composables/useApiStats';
@@ -44,8 +45,8 @@ const downloads = computed(() =>
     <UiContainer>
       <UiSectionHeader
         class="app-stats-banner-header"
-        badge="大规模验证"
-        description="来自 HTTP API 和 npm 包的真实使用数据，每日更新。"
+        badge="Trusted at Scale"
+        description="Usage data from our HTTP-API and npm packages — updated weekly."
       >
         <template #headline
           >数十亿头像。<strong>一个 API。</strong></template
@@ -81,10 +82,17 @@ const downloads = computed(() =>
       </div>
 
       <div class="app-stats-banner-action">
-        <UiButton href="/stats/" variant="secondary">
-          查看实时统计
+        <Button
+          as="a"
+          href="/stats/"
+          size="large"
+          severity="secondary"
+          variant="outlined"
+        >
+          <ChartNoAxesCombined :size="20" />
+          View Full Statistics
           <ArrowRight :size="18" />
-        </UiButton>
+        </Button>
       </div>
     </UiContainer>
   </UiSection>

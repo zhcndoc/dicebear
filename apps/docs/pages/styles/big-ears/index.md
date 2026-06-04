@@ -1,5 +1,5 @@
 ---
-title: 大耳朵 – Avatar 风格 | DiceBear
+title: 大耳朵 – 头像风格 | DiceBear
 description: >
   使用 DiceBear 头像库创建大耳朵头像。通过我们的免费头像 API 或 JavaScript 头像库生成独特的
   个人资料图片。
@@ -15,7 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # 大耳朵
 
-大耳朵是一种充满趣味的矢量头像风格，特点是卡通头部、夸张的圆形耳朵、多样的发型以及简洁而富有表现力的面孔。为社区应用、儿童平台和轻松的社交产品生成欢快、独特的个人资料图标。
+大耳朵是一种充满趣味的矢量头像风格，特点是卡通头部、夸张的圆耳朵、各式各样的发型，以及简洁而富有表现力的面孔。可为社区应用、儿童平台和轻松社交产品生成愉快且独具特色的个人资料图标。
 
 <StylePreview styleName="big-ears" />
 

@@ -14,7 +14,14 @@ const minimalistStyles = new Set([
   'thumbs',
 ]);
 
-export const categoryOrder = ['Custom', 'Minimalist', 'Characters', 'Other'];
+export const CUSTOM_CATEGORY = 'Custom';
+
+export const categoryOrder = [
+  CUSTOM_CATEGORY,
+  'Minimalist',
+  'Characters',
+  'Other',
+];
 
 export const previewSeeds = ['Felix', 'Aneka', 'Milo', 'Luna'];
 

@@ -24,7 +24,10 @@ class Initials
             $input = preg_replace('/@.*/', '', $seed);
         }
 
-        $input = preg_replace('/[`´\'ʼ]/', '', $input);
+        // The /u flag is required so the character class strips whole code
+        // points; without it preg_replace removes the raw UTF-8 bytes 0xB4/0xBC
+        // that also occur inside multibyte letters (e.g. ô, ü), corrupting them.
+        $input = preg_replace('/[`´\'ʼ]/u', '', $input);
 
         if (!preg_match_all('/(\p{L}[\p{L}\p{M}]*)/u', $input, $matches)) {
             return $discardAtSymbol ? self::fromSeed($seed, false) : '';

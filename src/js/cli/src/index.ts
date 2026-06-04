@@ -4,6 +4,7 @@ import { hideBin } from 'yargs/helpers';
 import chalk from 'chalk';
 
 import { getPackageJson } from './utils/getPackageJson.js';
+import { resolveDefinitionPath } from './utils/resolveDefinitionPath.js';
 import { addStyleCommand } from './utils/addStyleCommand.js';
 import { loadStyles } from './utils/loadStyles.js';
 import { loadDefinition } from './utils/loadDefinition.js';
@@ -25,8 +26,7 @@ import { getStyleCommandOptions } from './utils/getStyleCommandOptions.js';
     command: '* <definition> [outputPath]',
     describe: false,
     builder: (yargs) => {
-      const args = hideBin(process.argv);
-      const filePath = args[0];
+      const filePath = resolveDefinitionPath(hideBin(process.argv));
 
       let options = {};
 
@@ -59,5 +59,5 @@ import { getStyleCommandOptions } from './utils/getStyleCommandOptions.js';
     },
   });
 
-  cli.demandCommand().help().locale('en').parse();
+  cli.demandCommand().help().version(pkg.version).locale('en').parse();
 })();

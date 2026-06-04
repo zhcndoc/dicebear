@@ -13,10 +13,9 @@
     "test": "turbo run test",
     "test:scripts": "node --test 'tests/**/*.test.js'",
     "fixtures:parity": "node tests/fixtures/parity/generate.mjs",
-    "prepare-publish": "node scripts/version.mjs",
     "lint": "eslint . --cache",
     "lint:fix": "eslint . --cache --fix",
-    "prettier": "prettier --write \"{src,apps}/**/*.{js,ts,vue,json,md}\""
+    "prettier": "prettier --write \"{src,apps}/**/*.{js,ts,vue,json,md}\" \"*.md\""
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

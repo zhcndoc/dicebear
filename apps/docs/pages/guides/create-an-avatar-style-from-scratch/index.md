@@ -205,23 +205,25 @@ PRNG 会为每个种子选择不同的背景颜色。
 
 ### 组件变换
 
-组件可以有默认的旋转、平移和缩放范围：
+组件可以具有默认的旋转、平移和缩放范围，PRNG 会在每次渲染时对其进行采样。这四个字段都使用相同的 `{ min, max, step? }` 范围对象——完整参考请参见 [范围](/specification/definition-schema/#ranges)。
 
 ```json
 {
   "eyes": {
     "width": 80,
     "height": 40,
-    "rotate": [-5, 5],
-    "scale": [0.95, 1.05],
+    "rotate": { "min": -5, "max": 5 },
+    "scale": { "min": 0.95, "max": 1.05 },
     "translate": {
-      "x": [-2, 2],
-      "y": [-3, 3]
+      "x": { "min": -2, "max": 2 },
+      "y": { "min": -3, "max": 3 }
     },
     "variants": { ... }
   }
 }
 ```
+
+如果要固定值，请将 `min === max`；或者添加 `"step": <n>`，将范围量化为离散区间。
 
 ## 颜色调色板
 

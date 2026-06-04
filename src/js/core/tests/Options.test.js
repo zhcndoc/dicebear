@@ -100,6 +100,13 @@ describe('Options', () => {
       assert.deepEqual(options.scale(), { min: 0.8, max: 1.2 });
     });
 
+    it('should treat a single-element range array as a fixed value', () => {
+      // `[n]` behaves like the scalar `n`; an empty array is unset (default,
+      // not a Range with a missing bound that would render as NaN).
+      assert.deepEqual(new Options({ scale: [2] }).scale(), { min: 2, max: 2 });
+      assert.equal(new Options({ scale: [] }).scale(), undefined);
+    });
+
     it('should return undefined for unset range options', () => {
       const options = new Options({});
 
@@ -124,16 +131,16 @@ describe('Options', () => {
       assert.equal(new Options({}).componentVariant('eyes'), undefined);
     });
 
-    it('should normalize a string to a one-element array', () => {
+    it('should normalize a string to a single-entry weighted map', () => {
       const options = new Options({ eyesVariant: 'open' });
 
-      assert.deepEqual(options.componentVariant('eyes'), ['open']);
+      assert.deepEqual(options.componentVariant('eyes'), { open: 1 });
     });
 
-    it('should pass a string array through', () => {
+    it('should normalize a string array to a weighted map (weight 1 each)', () => {
       const options = new Options({ eyesVariant: ['open', 'closed'] });
 
-      assert.deepEqual(options.componentVariant('eyes'), ['open', 'closed']);
+      assert.deepEqual(options.componentVariant('eyes'), { open: 1, closed: 1 });
     });
 
     it('should pass a weighted record through', () => {

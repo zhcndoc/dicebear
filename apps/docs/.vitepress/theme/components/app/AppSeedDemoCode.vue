@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { Play } from '@lucide/vue';
-import { UiButton, UiCode } from '../ui';
+import { computed, ref } from 'vue';
+import { PawPrint } from '@lucide/vue';
+import Button from 'primevue/button';
+import SelectButton from 'primevue/selectbutton';
+import { UiCode } from '../ui';
 import { escapeJsString, escapeShellArg } from '../../utils/escape';
+
+type CodeTab = 'api' | 'js' | 'php' | 'cli';
 
 const props = defineProps<{
   seed: string;
@@ -10,9 +14,13 @@ const props = defineProps<{
   styleCamel: string;
 }>();
 
-const activeTab = ref<'api' | 'js' | 'php' | 'cli'>('api');
-const tabs = ['api', 'js', 'php', 'cli'] as const;
-const activeTabIndex = computed(() => tabs.indexOf(activeTab.value));
+const activeTab = ref<CodeTab>('api');
+const tabOptions: { label: string; value: CodeTab }[] = [
+  { label: 'HTTP API', value: 'api' },
+  { label: 'JS Library', value: 'js' },
+  { label: 'PHP Library', value: 'php' },
+  { label: 'CLI', value: 'cli' },
+];
 
 const apiExample = computed(
   () =>
@@ -22,7 +30,7 @@ const apiExample = computed(
 const jsExample = computed(
   () =>
     `import { Style, Avatar } from '@dicebear/core';
-import definition from '@dicebear/styles/${props.style}.json';
+import definition from '@dicebear/styles/${props.style}.json' with { type: 'json' };
 
 const style = new Style(definition);
 const avatar = new Avatar(style, {
@@ -57,29 +65,16 @@ const playgroundLink = '/playground/';
 <template>
   <div class="app-seed-demo-code">
     <div class="app-seed-demo-code-wrapper">
-      <div class="app-seed-demo-code-tabs">
-        <div
-          class="app-seed-demo-code-tabs-indicator"
-          :style="{ transform: `translateX(${activeTabIndex * 100}%)` }"
-        ></div>
-        <button
-          v-for="tab in tabs"
-          :key="tab"
-          class="app-seed-demo-code-tab"
-          :class="{ active: activeTab === tab }"
-          @click="activeTab = tab"
-        >
-          {{
-            tab === 'api'
-              ? 'HTTP API'
-              : tab === 'js'
-                ? 'JS Library'
-                : tab === 'php'
-                  ? 'PHP Library'
-                  : 'CLI'
-          }}
-        </button>
-      </div>
+      <SelectButton
+        v-model="activeTab"
+        :options="tabOptions"
+        option-label="label"
+        option-value="value"
+        :allow-empty="false"
+        size="small"
+        aria-label="Code example"
+        class="app-seed-demo-code-tabs"
+      />
 
       <div class="app-seed-demo-code-body">
         <UiCode
@@ -112,14 +107,16 @@ const playgroundLink = '/playground/';
     </div>
 
     <div class="app-seed-demo-code-cta">
-      <UiButton
+      <Button
+        as="a"
         :href="playgroundLink"
-        variant="primary"
+        size="large"
+        severity="contrast"
         class="app-seed-demo-code-cta-btn"
       >
-        <Play :size="20" />
+        <PawPrint :size="20" />
         Open Playground
-      </UiButton>
+      </Button>
     </div>
   </div>
 </template>
@@ -131,6 +128,10 @@ const playgroundLink = '/playground/';
   border-left: 1px solid var(--ui-window-divider-color);
   min-width: 0;
 
+  // Align the code block surface with the togglebutton tab bar above it
+  // (both sit on --vp-c-bg inside this editor window mockup).
+  --vp-code-block-bg: var(--vp-c-bg);
+
   &-wrapper {
     padding: 16px;
     flex: 1;
@@ -141,46 +142,10 @@ const playgroundLink = '/playground/';
   }
 
   &-tabs {
-    display: flex;
-    position: relative;
-    background: var(--vp-c-bg-soft);
-    padding: 4px;
-    border-radius: var(--vp-radius-xs);
+    width: 100%;
 
-    &-indicator {
-      position: absolute;
-      top: 4px;
-      left: 4px;
-      width: calc((100% - 8px) / 4);
-      height: calc(100% - 8px);
-      background: var(--vp-c-brand-soft);
-      border-radius: var(--vp-radius-xs);
-      transition: transform var(--duration-mid) var(--ease-smooth);
-      pointer-events: none;
-    }
-  }
-
-  &-tab {
-    flex: 1;
-    padding: 8px 12px;
-    font-size: 12px;
-    font-weight: 600;
-    background: transparent;
-    border: none;
-    border-radius: var(--vp-radius-xs);
-    cursor: pointer;
-    color: var(--vp-c-text-2);
-    transition: color var(--duration-fast) ease;
-    position: relative;
-    z-index: 1;
-    white-space: nowrap;
-
-    &:hover {
-      color: var(--vp-c-text-1);
-    }
-
-    &.active {
-      color: var(--vp-c-brand-1);
+    :deep(.p-togglebutton) {
+      flex: 1;
     }
   }
 
@@ -205,7 +170,6 @@ const playgroundLink = '/playground/';
     &-btn {
       width: 100%;
       justify-content: center;
-      font-size: 13px;
     }
   }
 }
@@ -214,18 +178,6 @@ const playgroundLink = '/playground/';
   .app-seed-demo-code {
     border-left: none;
     border-top: 1px solid var(--ui-window-divider-color);
-  }
-}
-
-@media (max-width: 480px) {
-  .app-seed-demo-code {
-    &-tabs-indicator {
-      display: none;
-    }
-
-    &-tab.active {
-      background: var(--vp-c-brand-soft);
-    }
   }
 }
 </style>

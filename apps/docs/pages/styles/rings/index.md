@@ -15,9 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Rings
 
-Rings 是一种几何抽象矢量头像风格，它将分段的同心环和弧线排列成
-一个在透明背景上的单色构图。生成简洁、算法化的 SVG 个人资料图标，
-可作为现代占位符或装饰性用户标识。
+Rings 是一种几何抽象矢量头像风格，将分段的同心圆环和圆弧排列成透明背景上的单色构图。生成简洁、算法化的 SVG 个人资料图标，可用作现代占位符或装饰性的用户标识。
 
 <StylePreview styleName="rings" />
 

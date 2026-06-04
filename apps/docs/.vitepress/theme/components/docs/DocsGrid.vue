@@ -14,13 +14,7 @@ withDefaults(
 
 <template>
   <div class="docs-grid" :class="`docs-grid-cols-${columns}`">
-    <UiCard
-      v-for="item in items"
-      :key="item.title"
-      padding="md"
-      radius="md"
-      class="docs-grid-card"
-    >
+    <UiCard v-for="item in items" :key="item.title" class="docs-grid-card">
       <div class="docs-grid-header">
         <span class="docs-grid-title">{{ item.title }}</span>
         <Badge v-if="item.badge" type="tip">{{ item.badge }}</Badge>
@@ -58,9 +52,11 @@ withDefaults(
   }
 
   &-card {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    :deep(.ui-card-body) {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
   }
 
   &-header {

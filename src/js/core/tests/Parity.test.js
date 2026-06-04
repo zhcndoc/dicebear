@@ -16,6 +16,8 @@ import { Avatar } from '../lib/index.js';
 import { Prng } from '../lib/Prng.js';
 import { Fnv1a } from '../lib/Prng/Fnv1a.js';
 import { Mulberry32 } from '../lib/Prng/Mulberry32.js';
+import { Number } from '../lib/Utils/Number.js';
+import { Initials } from '../lib/Utils/Initials.js';
 
 const fixturesDir = join(import.meta.dirname, '..', '..', '..', '..', 'tests', 'fixtures', 'parity');
 
@@ -68,7 +70,7 @@ describe('Parity / Prng', () => {
   describe('weightedPick', () => {
     for (const [i, c] of fixture.weightedPick.entries()) {
       it(`#${i} seed=${JSON.stringify(c.seed)} key=${JSON.stringify(c.key)}`, () => {
-        assert.equal(new Prng(c.seed).weightedPick(c.key, c.entries), c.result);
+        assert.equal(new Prng(c.seed).weightedPick(c.key, c.weights), c.result);
       });
     }
   });
@@ -104,6 +106,27 @@ describe('Parity / Prng', () => {
       });
     }
   });
+});
+
+describe('Parity / Numbers', () => {
+  // The renderer formats every numeric attribute via Number.format (rounded to
+  // 5 decimals); this pins that contract so the PHP/Python ports stay identical.
+  for (const entry of loadFixture('numbers.json')) {
+    it(`formats ${entry.output}`, () => {
+      assert.equal(Number.format(entry.input), entry.output);
+    });
+  }
+});
+
+describe('Parity / Initials', () => {
+  // Initials.fromSeed must be byte-identical across ports; accented seeds
+  // (ô/ü) and quote/@/CJK/emoji cases pin the @-strip, quote-strip, and
+  // \p{L} word matching against per-language regex pitfalls.
+  for (const entry of loadFixture('initials.json')) {
+    it(`derives ${JSON.stringify(entry.seed)} → ${JSON.stringify(entry.result)}`, () => {
+      assert.equal(Initials.fromSeed(entry.seed), entry.result);
+    });
+  }
 });
 
 describe('Parity / Avatar', () => {

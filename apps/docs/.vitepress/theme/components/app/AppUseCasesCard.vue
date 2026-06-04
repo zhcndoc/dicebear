@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-  <UiCard padding="md" radius="md" class="uc-card">
+  <UiCard padding="xl" class="uc-card">
     <div class="uc-card-visual">
       <slot />
     </div>
@@ -19,34 +19,12 @@ defineProps<{
 
 <style lang="scss" scoped>
 .uc-card {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
   min-height: 340px;
-  transition:
-    transform var(--duration-mid) var(--ease-spring),
-    box-shadow var(--duration-mid) var(--ease-smooth),
-    border-color var(--duration-mid) var(--ease-smooth);
 
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 24px 48px -16px rgba(15, 23, 42, 0.14);
-    border-color: var(--vp-c-brand-1);
-  }
-
-  &-title {
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    color: var(--vp-c-text-1);
-    margin: 0;
-  }
-
-  &-text {
-    font-size: 14.5px;
-    line-height: 1.5;
-    color: var(--vp-c-text-2);
-    margin: 0;
+  :deep(.ui-card-body) {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   &-visual {
@@ -55,10 +33,26 @@ defineProps<{
     align-items: center;
     justify-content: center;
     min-height: 0;
+    margin-bottom: 24px;
 
     > * {
       width: 100%;
     }
+  }
+
+  &-title {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--vp-c-text-1);
+    margin: 0 0 8px;
+  }
+
+  &-text {
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--vp-c-text-2);
+    margin: 0;
   }
 }
 </style>

@@ -4,9 +4,7 @@ import { ref } from 'vue';
 import copy from 'copy-to-clipboard';
 import { Avatar } from '@dicebear/core';
 import { loadAvatarStyle, clonePlain } from '@theme/utils/avatar/style';
-import { UiAvatar } from '../ui';
-import PlaygroundConfetti from './PlaygroundConfetti.vue';
-import PlaygroundDialog from './PlaygroundDialog.vue';
+import { UiAvatar, UiConfetti, UiDialog } from '../ui';
 import Button from 'primevue/button';
 import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
@@ -27,8 +25,8 @@ async function onClick() {
   const avatar = new Avatar(
     avatarStyle,
     clonePlain({
-      ...options.value,
       size: DOWNLOAD_AVATAR_SIZE,
+      ...options.value,
     }),
   );
 
@@ -43,19 +41,14 @@ async function onClick() {
 </script>
 
 <template>
-  <Button
-    label="Copy SVG"
-    severity="secondary"
-    variant="outlined"
-    @click="onClick"
-  >
+  <Button label="Copy SVG" severity="secondary" @click="onClick">
     <template #icon>
       <Copy :size="15" />
     </template>
   </Button>
 
-  <PlaygroundDialog v-model:open="open">
-    <PlaygroundConfetti :key="confettiKey" />
+  <UiDialog v-model:open="open">
+    <UiConfetti :key="confettiKey" />
     <div class="dialog-preview">
       <UiAvatar
         :style-name="store.avatarStyleName"
@@ -71,5 +64,5 @@ async function onClick() {
     <div class="dialog-text">
       <PlaygroundLicenseAlert />
     </div>
-  </PlaygroundDialog>
+  </UiDialog>
 </template>

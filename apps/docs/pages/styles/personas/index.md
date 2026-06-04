@@ -15,7 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Personas
 
-Personas 是一种扁平设计的矢量头像风格，采用半身人物形象，带有细微的皮肤阴影、不同的发型、胡须和眼镜，穿着纯色上衣。生成具有代表性的 SVG 个人资料图标，以反映广泛的年龄、身份和外貌特征。
+Personas 是一种扁平设计的矢量头像风格，特征是半身人物，带有细微的肤色阴影、多样的发型、胡须和眼镜，穿着纯色上衣。生成具有代表性的 SVG 个人资料图标，展现广泛的年龄、身份和外貌特征。
 
 <StylePreview styleName="personas" />
 

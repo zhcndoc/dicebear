@@ -24,9 +24,21 @@ export type AvatarUniqueCount = {
   log10: number;
 };
 
+export type AvatarStyleSize = {
+  raw: number;
+  gzip: number;
+};
+
+export type AvatarStyleSizeBundle = {
+  core: AvatarStyleSize;
+  converter: AvatarStyleSize;
+  styles: Record<string, AvatarStyleSize>;
+};
+
 export type ThemeOptions = {
   avatarStyles: AvatarStyles;
   avatarUniqueCounts: Record<string, AvatarUniqueCount>;
+  avatarStyleSizes: AvatarStyleSizeBundle;
   githubStars: Record<string, string>;
 } & DefaultTheme.Config;
 

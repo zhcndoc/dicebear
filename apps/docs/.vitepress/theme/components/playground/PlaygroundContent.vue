@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
 import { kebabCase } from 'change-case';
-import { BookOpen, RotateCcw } from '@lucide/vue';
-import { computed } from 'vue';
+import { RotateCcw } from '@lucide/vue';
 import PlaygroundOptions from './PlaygroundOptions.vue';
 import PlaygroundPreviewPanel from './PlaygroundPreviewPanel.vue';
 import useStore from '@theme/stores/playground';
@@ -10,10 +9,6 @@ import Button from 'primevue/button';
 
 const store = useStore();
 const { seed } = storeToRefs(store);
-
-const documentationUrl = computed(
-  () => `/styles/${kebabCase(store.avatarStyleName)}/`,
-);
 
 // ?style= query param overrides persisted style (used by "Open in Playground" links)
 const styleParam = new URL(window.location.href).searchParams.get('style');
@@ -38,19 +33,6 @@ if (styleParam) {
       </aside>
       <main class="pg-main">
         <div class="pg-main-actions">
-          <Button
-            v-if="!store.isCustomStyle"
-            as="a"
-            label="Documentation"
-            severity="secondary"
-            variant="link"
-            size="small"
-            :href="documentationUrl"
-          >
-            <template #icon>
-              <BookOpen :size="14" />
-            </template>
-          </Button>
           <Button
             label="Reset"
             severity="secondary"

@@ -15,9 +15,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Avataaars Neutral
 
-Avataaars Neutral 是 Avataaars 风格的简化变体，仅在纯色方形背景上显示
-眼睛、眉毛和嘴巴——没有头部、头发或
-服装。
+Avataaars Neutral 是 Avataaars 风格的简化变体，只显示
+眼睛、眉毛和嘴巴，位于一个纯色方形中——没有头部、头发或
+衣物。
 
 <StylePreview styleName="avataaars-neutral" />
 

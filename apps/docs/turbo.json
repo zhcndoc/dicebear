@@ -6,7 +6,7 @@
       "env": [
         "VITE_PRIVACY_POLICY_URL",
         "VITE_COOKIE_POLICY_URL",
-        "VITE_SITE_NOTICE_URL"
+        "VITE_LEGAL_NOTICE_URL"
       ]
     }
   }

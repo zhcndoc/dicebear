@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/core",
-  "version": "10.0.0-rc.5",
+  "version": "10.1.0-rc.1",
   "description": "Unique avatars from dozens of styles — deterministic, customizable, vector-based.",
   "keywords": [
     "avatar",
@@ -38,7 +38,7 @@
     "test": "node --test"
   },
   "devDependencies": {
-    "@dicebear/schema": "^1.0.0",
+    "@dicebear/schema": "^1.1.0",
     "@tsconfig/recommended": "^1.0.13",
     "ajv": "^8.17.1",
     "del-cli": "^7.0.0",

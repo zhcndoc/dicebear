@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Component } from 'vue';
-import { UiIconBox } from '../ui';
+import { UiCard, UiIconBox } from '../ui';
 
 defineProps<{
   highlights: Array<{
@@ -15,13 +15,12 @@ defineProps<{
 
 <template>
   <div class="docs-highlights">
-    <component
-      :is="highlight.link ? 'a' : 'div'"
+    <UiCard
       v-for="highlight in highlights"
       :key="highlight.title"
       :href="highlight.link"
+      padding="xl"
       class="docs-highlights-card"
-      :class="{ 'docs-highlights-card-link': highlight.link }"
     >
       <UiIconBox
         size="md"
@@ -32,7 +31,7 @@ defineProps<{
       </UiIconBox>
       <h3 class="docs-highlights-title">{{ highlight.title }}</h3>
       <p class="docs-highlights-desc">{{ highlight.description }}</p>
-    </component>
+    </UiCard>
   </div>
 </template>
 
@@ -47,33 +46,9 @@ defineProps<{
     grid-template-columns: 1fr;
   }
 
-  &-card {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    background: var(--vp-c-bg);
-    border: 1px solid var(--ui-card-border-color);
-    border-radius: var(--vp-radius-lg);
-    padding: 32px;
-    transition: all var(--duration-mid) var(--ease-smooth);
-
-    @media (max-width: 640px) {
-      padding: 24px;
-      border-radius: var(--vp-radius-lg);
-    }
-
-    &-link {
-      text-decoration: none;
-      cursor: pointer;
-
-      &:hover {
-        border-color: var(--vp-c-brand-1);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-      }
-
-      &::after {
-        display: none !important;
-      }
+  @media (max-width: 640px) {
+    &-card {
+      --ui-card-padding: 24px;
     }
   }
 

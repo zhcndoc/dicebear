@@ -8,8 +8,15 @@ import {
   UiCard,
   UiIcon,
 } from '../ui';
-import { Target, Palette, Zap, SlidersHorizontal, Globe } from '@lucide/vue';
-import { siGithub } from 'simple-icons';
+import {
+  Target,
+  Palette,
+  Server,
+  Terminal,
+  SlidersHorizontal,
+  Globe,
+} from '@lucide/vue';
+import { siGithub, siFigma, siJavascript } from 'simple-icons';
 import { useVisibility } from '../../composables/useVisibility';
 
 withDefaults(
@@ -52,11 +59,32 @@ const highlights = [
     color: '#22c55e',
   },
   {
-    icon: Zap,
-    title: 'JS 库与 CLI',
+    iconPath: siJavascript.path,
+    title: 'JS 库',
     description:
-      '不会向外部服务器发送数据。在你的应用中完全掌控头像生成。',
-    color: '#f59e0b',
+      '无数据发送到外部服务器。完全掌控你应用中的头像生成。',
+    color: '#f7df1e',
+  },
+  {
+    icon: Server,
+    title: 'PHP 库',
+    description:
+      '用于 PHP 8.2+ 的服务端头像生成。相同的种子，相同的结果——与 JS 库完全相同的 API。',
+    color: '#777BB4',
+  },
+  {
+    icon: Terminal,
+    title: 'CLI',
+    description:
+      '直接从命令行生成头像。非常适合批量处理和构建管道。',
+    color: '#64748b',
+  },
+  {
+    iconPath: siFigma.path,
+    title: 'Figma 插件',
+    description:
+      '在 Figma 中设计自定义头像样式，并将它们导出为即用型 DiceBear 定义 —— 无需编写代码。',
+    color: 'var(--vp-c-text-1)',
   },
   {
     icon: SlidersHorizontal,
@@ -95,8 +123,7 @@ const highlights = [
         <UiCard
           v-for="(highlight, index) in highlights"
           :key="index"
-          padding="lg"
-          radius="md"
+          padding="xl"
           class="app-highlights-card"
           :style="{
             '--accent-color': highlight.color,
@@ -149,16 +176,9 @@ const highlights = [
   &-card {
     opacity: 0;
     transform: translateY(30px);
-    transition: box-shadow var(--duration-mid) var(--ease-spring);
 
     .visible & {
       animation: reveal-up var(--duration-mid) var(--ease-spring) forwards;
-    }
-
-    &:hover {
-      box-shadow:
-        inset 0 3px 0 var(--accent-color),
-        0 0 20px color-mix(in srgb, var(--accent-color) 20%, transparent);
     }
   }
 

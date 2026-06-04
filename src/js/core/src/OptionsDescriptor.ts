@@ -26,6 +26,7 @@ interface EnumField {
 interface ColorField {
   readonly type: 'color';
   readonly list?: true;
+  readonly contrastTo?: string;
 }
 
 interface RangeField {
@@ -109,7 +110,13 @@ export class OptionsDescriptor {
     }
 
     for (const name of [...this.#style.colors().keys(), 'background']) {
-      result[`${name}Color`] = { type: 'color', list: true };
+      const contrastTo = this.#style.colors().get(name)?.contrastTo();
+
+      result[`${name}Color`] = {
+        type: 'color',
+        list: true,
+        ...(contrastTo ? { contrastTo } : {}),
+      };
       result[`${name}ColorFill`] = {
         type: 'enum',
         values: ['solid', 'linear', 'radial'],

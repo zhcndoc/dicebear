@@ -1,8 +1,8 @@
 ---
 title: Next.js 头像库 – DiceBear 集成
 description: >
-  在 Next.js（App Router 和 Pages Router）中使用 DiceBear SVG 头像。服务
-  端组件渲染、客户端组件渲染，以及用于确定性个人资料图片的图像优化
+  在 Next.js 中使用 DiceBear SVG 头像（App Router 和 Pages Router）。
+  服务端组件渲染、客户端组件渲染，以及用于确定性个人资料图片的图像优化
   模式。
 ---
 
@@ -144,9 +144,9 @@ export function UserAvatar({ seed = 'Alice' }: { seed?: string }) {
 }
 ```
 
-如果你想将 `next/image` 与 HTTP API 一起使用，请请求栅格格式（PNG、
-WebP、AVIF）——`next/image` 不会优化 SVG 源——并将
-`api.dicebear.com` 添加到 `next.config.js` 中的 `images.remotePatterns`。
+如果你想在使用 HTTP API 时配合 `next/image`，请请求栅格格式（PNG、
+WebP、AVIF）——`next/image` 不会优化 SVG 源——并在 `next.config.js` 中将
+`api.dicebear.com` 添加到 `images.remotePatterns`。
 
 ```js
 // next.config.js

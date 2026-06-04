@@ -1,6 +1,6 @@
 @use './vars.scss' as *;
 @use './animations';
-@use './playground-dialog.scss';
+@use './ui-dialog.scss';
 
 :root {
   --pg-border: var(--vp-c-divider);
@@ -8,14 +8,6 @@
 
 .dark {
   --pg-border: var(--vp-c-border);
-}
-
-.p-button-outlined.p-button-secondary {
-  background: #ffffff;
-}
-
-.dark .p-button-outlined.p-button-secondary {
-  background: transparent;
 }
 
 /* ----------------------------------------------------------------
@@ -138,7 +130,8 @@ h6,
 }
 
 .VPLink:not(.no-icon),
-.VPButton:not(.no-icon) {
+.VPButton:not(.no-icon),
+.vp-doc th a:not(.no-icon) {
   $styles: (
     'big-ears-neutral',
     'adventurer',
@@ -247,4 +240,36 @@ img[src^='https://api.dicebear.com/']:not(.next, .prev) {
       var(--avatar-background-color-2) 0% 50%
     )
     50% / 12px 12px;
+}
+
+/* ----------------------------------------------------------------
+ * PrimeVue Accordion overflow fix
+ *
+ * PrimeVue's `.p-accordioncontent` uses `display: grid` with the
+ * default `grid-template-columns: auto`, which sizes the column to
+ * the intrinsic width of its content. Wide children (SelectButtons,
+ * Sliders, etc.) therefore expand the grid track past its container,
+ * producing horizontal overflow on narrow viewports. Constraining the
+ * column track to `minmax(0, 1fr)` lets the wrapper shrink to fit.
+ * ---------------------------------------------------------------- */
+.p-accordioncontent {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* ----------------------------------------------------------------
+ * Component-scoped PrimeVue token overrides
+ *
+ * PrimeVue components read tokens via the global cascade, so setting
+ * them on an ancestor selector is enough — no :deep() needed.
+ * ---------------------------------------------------------------- */
+.style-usage {
+  --p-tabs-tabpanel-padding: 20px;
+  --p-tabs-tab-padding: 1rem 20px;
+}
+
+.style-options-card-badges {
+  --p-tag-padding: 4px 12px;
+  --p-tag-font-size: 13px;
+  --p-tag-gap: 6px;
+  line-height: 1;
 }

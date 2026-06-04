@@ -1,4 +1,4 @@
-import { Style } from '@dicebear/core';
+import { Style, type StyleDefinition } from '@dicebear/core';
 import { kebabCase } from 'change-case';
 
 export function clonePlain<T>(obj: T): T {
@@ -83,6 +83,28 @@ export function unregisterCustomStyle(key: string): void {
   styleCache.delete(key);
   definitionRawCache.delete(key);
   variableResultCache.delete(key);
+}
+
+/**
+ * Returns the cached raw definition for a previously-loaded style, or
+ * loads and caches it on demand. Used where the runtime needs the
+ * `StyleDefinition` shape directly — e.g. to compute combination counts
+ * over a narrowed copy.
+ */
+export async function loadAvatarStyleDefinition(
+  avatarStyle: string,
+): Promise<StyleDefinition> {
+  await loadAvatarStyle(avatarStyle);
+
+  const name = kebabCase(avatarStyle);
+  const key = definitionRawCache.has(name) ? name : avatarStyle;
+  const raw = definitionRawCache.get(key);
+
+  if (!raw) {
+    throw new Error(`Definition for "${avatarStyle}" not available.`);
+  }
+
+  return raw as StyleDefinition;
 }
 
 export async function loadAvatarStyle(avatarStyle: string): Promise<Style> {

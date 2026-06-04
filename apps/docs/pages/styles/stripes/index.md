@@ -15,7 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Stripes
 
-Stripes 是一种抽象的矢量头像风格，由两种颜色的平行条带组成，条带以不同角度旋转，分布在有色背景上。生成简洁、图形化的 SVG 个人资料图标，可用作头像占位符或极简用户标识。
+Stripes 是一种抽象的矢量头像风格，由两种颜色的平行条带组成，这些条带以不同角度旋转，铺展在有色背景上。生成简洁、图形化的 SVG 个人资料图标，可用作头像占位符或极简用户标识。
 
 <StylePreview styleName="stripes" />
 

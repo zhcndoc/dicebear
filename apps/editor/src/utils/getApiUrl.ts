@@ -10,11 +10,9 @@ export default function getApiUrl(
   const qs = Object.entries(getAvatarOptions(styleName, options))
     .map(([k, v]) => {
       if (Array.isArray(v)) {
-        return v.length === 0
-          ? `${encodeURIComponent(k)}[]`
-          : `${encodeURIComponent(k)}=${v
-              .map((c) => encodeURIComponent(c))
-              .join(',')}`;
+        return `${encodeURIComponent(k)}=${v
+          .map((c) => encodeURIComponent(c))
+          .join(',')}`;
       }
 
       if (
@@ -29,7 +27,7 @@ export default function getApiUrl(
     })
     .join('&');
 
-  return `https://api.dicebear.com/9.x/${kebabCase(styleName)}/${format}${
+  return `https://api.dicebear.com/10.x/${kebabCase(styleName)}/${format}${
     qs ? `?${qs}` : ''
   }`;
 }

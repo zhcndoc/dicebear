@@ -103,6 +103,13 @@ class OptionsTest extends TestCase
         $this->assertSame(['min' => 0.8, 'max' => 1.2], $options->scale());
     }
 
+    public function testSingleElementRangeArrayIsAFixedValue(): void
+    {
+        // `[n]` behaves like the scalar `n`; an empty array is unset (default).
+        $this->assertSame(['min' => 2, 'max' => 2], (new Options(['scale' => [2]]))->scale());
+        $this->assertNull((new Options(['scale' => []]))->scale());
+    }
+
     public function testReturnsNullForUnsetRangeOptions(): void
     {
         $options = new Options([]);
@@ -128,16 +135,16 @@ class OptionsTest extends TestCase
         $this->assertNull((new Options([]))->componentVariant('eyes'));
     }
 
-    public function testComponentVariantNormalizesString(): void
+    public function testComponentVariantNormalizesStringToWeightedMap(): void
     {
         $options = new Options(['eyesVariant' => 'open']);
-        $this->assertSame(['open'], $options->componentVariant('eyes'));
+        $this->assertSame(['open' => 1], $options->componentVariant('eyes'));
     }
 
-    public function testComponentVariantPassesListThrough(): void
+    public function testComponentVariantNormalizesListToWeightedMap(): void
     {
         $options = new Options(['eyesVariant' => ['open', 'closed']]);
-        $this->assertSame(['open', 'closed'], $options->componentVariant('eyes'));
+        $this->assertSame(['open' => 1, 'closed' => 1], $options->componentVariant('eyes'));
     }
 
     public function testComponentVariantPassesWeightedRecordThrough(): void

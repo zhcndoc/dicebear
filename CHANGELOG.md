@@ -1,38 +1,113 @@
 # Changelog
 
-## 10.0.0
+All notable changes to this project will be documented in this file.
 
-### Breaking Changes
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to
+[Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-#### Avatar styles are no longer bundled with DiceBear
+## [Unreleased]
 
-All individual avatar style packages (e.g. `@dicebear/initials`, `@dicebear/adventurer`, etc.) and the `@dicebear/collection` package have been removed from this repository.
+### Changed
 
-Avatar styles are now distributed as JSON definition files via the separate [`dicebear/styles`](https://github.com/dicebear/styles) repository and installed through the `@dicebear/styles` package. The format follows the new [DiceBear Avatar Style JSON Schema](https://github.com/dicebear/schema).
+- **Schema:** Bumped the bundled `@dicebear/schema` to `1.1.0` across the
+  JavaScript, PHP, and Python libraries. It adds an upper bound of `1000000` to
+  the canvas and component `width`/`height`, preventing the language ports'
+  number-to-string formatting from diverging at extreme values. Official styles
+  use ~100, so no real avatar is affected.
+- **Styles:** Bumped `@dicebear/styles` to `10.1.0`. Lorelei's mouth is now
+  visible through `beard` variants (the overlaying mask was previously rendered
+  at `0` opacity), and all style definitions now reference
+  `@dicebear/schema@1.1.0`.
 
-**Before:**
-```bash
-npm install @dicebear/core @dicebear/initials
-```
+## [10.1.0-rc.1] - 2026-06-02
 
-```js
-import { createAvatar } from '@dicebear/core';
-import { initials } from '@dicebear/initials';
+### Added
 
-const avatar = createAvatar(initials, { seed: 'Jane' });
-```
+- **Python library:** A new Python implementation that produces identical output
+  to the JavaScript library when given the same styles and options.
 
-**After:**
-```bash
-npm install @dicebear/core @dicebear/styles
-```
+## [10.0.2] - 2026-06-02
 
-```js
-import { createAvatar } from '@dicebear/core';
-import initials from '@dicebear/styles/initials.json' with { type: 'json' };
+### Fixed
 
-const avatar = createAvatar(initials, { seed: 'Jane' });
-```
+- **Core:** Numeric values in rendered SVGs are now consistently rounded to at
+  most 5 decimal places, so the JavaScript and PHP libraries produce
+  byte-identical output for every input. Previously, fractional or very
+  small/large values — e.g. a fractional `borderRadius` or `translateX`,
+  component transforms, or gradient stop offsets — could be stringified
+  differently between languages (scientific notation, differing precision).
+  Avatars built from whole-number options are unaffected.
+- **Core (PHP):** `Prng::float` now rounds halves toward +Infinity (matching the
+  JavaScript reference's `Math.round`) instead of PHP's native `round()`, which
+  rounds halves away from zero. The two diverged for negative values landing
+  exactly on a `.5` boundary, so a PHP-rendered avatar could differ from the
+  JavaScript one by `0.0001` in a rotate/translate transform or color angle for
+  certain seeds. Output is now byte-identical across languages.
+- **Core (PHP):** Initials are now derived correctly from seeds containing
+  multibyte letters such as `ü` or `ô`. The quote-stripping step was missing the
+  `/u` (Unicode) flag, so it removed raw UTF-8 bytes and corrupted those letters
+  — e.g. `über` and `côté` produced wrong or empty initials instead of `ÜB` /
+  `CÔ`. The PHP output now matches the JavaScript reference.
+- **Core:** Range options (`scale`, `borderRadius`, `rotate`,
+  `translateX`/`translateY`, and per-color angle/fill-stops) given as a
+  single-element array `[n]` are now treated as the fixed value `n` — identical
+  to the scalar `n` — and an empty array `[]` falls back to the option's
+  default. Both forms are permitted by the schema. Previously the behaviour
+  diverged: the JavaScript library emitted `NaN` (e.g. `scale(NaN)`), while PHP
+  dropped `[n]` to the default. All three now agree.
 
-This separation of design assets and code keeps the license of this repository clean and means avatar styles only need to be created once to be usable across all future DiceBear implementations in other programming languages.
+## [10.0.1] - 2026-05-29
 
+### Fixed
+
+- **CLI:** `dicebear --version` and `dicebear --help` no longer fail by trying
+  to read a file named `--version`/`--help`. The definition path is now resolved
+  via the argument parser, so flags (and the values they consume) before the
+  path are handled correctly — e.g. `dicebear --json my-style.json` and
+  `dicebear --count 2 my-style.json`.
+
+## [10.0.0] - 2026-05-27
+
+See the
+[v10.0.0 release notes](https://github.com/dicebear/dicebear/releases/tag/v10.0.0).
+
+### Added
+
+- **6 new avatar styles:** Disco, Glyphs, Initial Face, Shape Grid, Stripes, and
+  Triangles.
+- **PHP library:** A new PHP implementation that produces identical output to
+  the JavaScript library when given the same styles and options.
+- **CLI support for custom styles:** Generate avatars from a JSON style
+  definition, e.g. `dicebear ./path/to/style.json --seed test --format svg`.
+- **Weighted variants:** Assign weights to component variants to control how
+  frequently each appears.
+- **Gradient support:** Colors can be defined as gradients, including an angle
+  parameter.
+- **Integrated validation:** Built-in validation for avatar styles and options.
+- **Redesigned playground:** Adjust options, upload custom styles, batch
+  download avatars, and view the number of possible combinations.
+- **New tools:** WCAG Contrast Picker and Bundle Size Estimator.
+- Reorganized and improved documentation, with better style docs and component
+  previews.
+
+### Changed
+
+- Each avatar style is now stored as a JSON definition file instead of
+  JavaScript code, separating licensing concerns from implementation.
+- Styles are now distributed via `@dicebear/styles` as JSON definitions.
+- The JavaScript API now uses `Style` and `Avatar` classes together with
+  definition imports.
+- **BREAKING:** Component options are now suffixed with `Variant` (e.g.
+  `eyesVariant` instead of `eyes`).
+
+### Removed
+
+- **BREAKING:** Individual style packages (e.g. `@dicebear/initials`) have been
+  removed in favor of `@dicebear/styles`.
+
+[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.1.0-rc.1...HEAD
+[10.1.0-rc.1]: https://github.com/dicebear/dicebear/compare/v10.0.2...v10.1.0-rc.1
+[10.0.2]: https://github.com/dicebear/dicebear/compare/v10.0.1...v10.0.2
+[10.0.1]: https://github.com/dicebear/dicebear/compare/v10.0.0...v10.0.1
+[10.0.0]: https://github.com/dicebear/dicebear/releases/tag/v10.0.0

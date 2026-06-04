@@ -10,6 +10,7 @@ export const productLinks: FooterLink[] = [
   { label: '为什么选择 DiceBear？', href: '/why-dicebear/' },
   { label: 'Playground', href: '/playground/' },
   { label: '全部风格', href: '/styles/' },
+  { label: 'Tools', href: '/tools/' },
   { label: '编辑器', href: 'https://editor.dicebear.com', external: true },
 ];
 
@@ -42,5 +43,5 @@ export const legalLinks: FooterLink[] = [
   { label: '许可证', href: '/licenses/' },
   buildLegalLink('隐私政策', import.meta.env.VITE_PRIVACY_POLICY_URL),
   buildLegalLink('Cookie 政策', import.meta.env.VITE_COOKIE_POLICY_URL),
-  buildLegalLink('网站声明', import.meta.env.VITE_SITE_NOTICE_URL),
+  buildLegalLink('法律声明', import.meta.env.VITE_LEGAL_NOTICE_URL),
 ].filter((link): link is FooterLink => link !== null);

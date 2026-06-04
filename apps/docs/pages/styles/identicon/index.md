@@ -15,7 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Identicon
 
-Identicon 以单一颜色在带色调的背景上呈现对称的像素网格图案——这是开发者工具和版本控制平台中流行的经典 identicon 外观。每个图案都根据其种子以确定性方式生成，使其成为技术个人资料图标和 identicon API 使用场景的可靠选择。
+Identicon 会在带有色调的背景上，以单一颜色渲染对称的像素网格图案——这是开发者工具和版本控制平台中流行的经典 identicon 风格。每个图案都由其种子确定性地生成，因此非常适合作为技术类个人资料图标以及 identicon API 的使用场景。
 
 <StylePreview styleName="identicon" />
 

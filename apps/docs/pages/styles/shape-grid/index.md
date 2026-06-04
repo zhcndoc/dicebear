@@ -15,10 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Shape Grid
 
-Shape Grid 是一种抽象的矢量头像样式，它将四种简单的
-形状——正方形、圆形、三角形和六边形——以 2×2 网格排列在
-带色调的背景上。生成富有趣味、独具特色的 SVG 个人资料图标，
-可用作头像占位符或装饰性的用户标识符。
+Shape Grid 是一种抽象的矢量头像样式，它将四种简单形状——
+方形、圆形、三角形和六边形——排列在一个带有色调的
+背景上的 2×2 网格中。生成俏皮、独特的 SVG 个人资料图标，可用作头像
+占位符或装饰性的用户标识。
 
 <StylePreview styleName="shape-grid" />
 

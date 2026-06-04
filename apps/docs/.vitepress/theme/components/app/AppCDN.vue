@@ -47,7 +47,7 @@ const stats = computed(() => [
       </UiSectionHeader>
 
       <div class="app-cdn-content">
-        <UiCard padding="xl" radius="lg" class="app-cdn-card">
+        <UiCard padding="2xl" class="app-cdn-card">
           <div class="app-cdn-card-layout">
             <div class="app-cdn-card-info">
               <div class="app-cdn-sponsor">
@@ -228,16 +228,11 @@ const stats = computed(() => [
     align-items: center;
     gap: 16px;
     padding: 20px 24px;
-    background: var(--vp-c-bg-soft);
+    background: var(--vp-c-bg);
     border-radius: var(--vp-radius-sm);
     opacity: 0;
     transform: translateX(20px);
     transition: all var(--duration-mid) ease;
-
-    &:hover {
-      background: var(--vp-c-bg);
-      box-shadow: var(--vp-shadow-2);
-    }
 
     .visible & {
       animation: app-cdn-stat-reveal 0.5s var(--ease-spring) forwards;
@@ -275,6 +270,10 @@ const stats = computed(() => [
 
 @media (max-width: 768px) {
   .app-cdn {
+    &-card {
+      --ui-card-padding: 32px 24px;
+    }
+
     &-card-layout {
       grid-template-columns: 1fr;
       gap: 32px;

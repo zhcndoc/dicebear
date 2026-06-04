@@ -19,7 +19,6 @@ import { formatLicenseName } from '../../utils/format';
 import { safeHttpUrl } from '../../utils/url';
 import AppSeedDemoCode from './AppSeedDemoCode.vue';
 import AppSeedDemoPreview from './AppSeedDemoPreview.vue';
-import AppSeedDemoStylePicker from './AppSeedDemoStylePicker.vue';
 
 const DEFAULT_STYLE = 'lorelei';
 
@@ -33,14 +32,17 @@ const RANDOM_SEEDS: readonly string[] = [
 
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef);
-const activeStyleIndex = ref(0);
-const styleDialogOpen = ref(false);
 
 const avatarStyleList = useAvatarStyleList();
-const activeStyleName = computed(
-  () => avatarStyleList.value[activeStyleIndex.value] || DEFAULT_STYLE,
+const availableStyles = computed(() =>
+  avatarStyleList.value.map((s) => kebabCase(s)),
 );
-const currentStyle = computed(() => kebabCase(activeStyleName.value));
+const currentStyle = ref<string>(DEFAULT_STYLE);
+const activeStyleName = computed(
+  () =>
+    avatarStyleList.value.find((s) => kebabCase(s) === currentStyle.value) ??
+    DEFAULT_STYLE,
+);
 const currentStyleCamel = computed(() => camelCase(activeStyleName.value));
 const currentStyleDisplay = computed(() => capitalCase(activeStyleName.value));
 const currentStyleLink = computed(() => `/styles/${currentStyle.value}/`);
@@ -58,24 +60,12 @@ function randomizeSeed() {
   seed.value = RANDOM_SEEDS[nextIndex];
 }
 
-function selectStyle(index: number) {
-  activeStyleIndex.value = index;
-}
-
 const sourceUrl = computed(() => safeHttpUrl(avatarStyleMeta.value?.source));
 const homepageUrl = computed(() =>
   safeHttpUrl(avatarStyleMeta.value?.homepage),
 );
 const licenseUrl = computed(() =>
   safeHttpUrl(avatarStyleMeta.value?.license?.url),
-);
-
-const allStyleAvatars = computed(() =>
-  avatarStyleList.value.map((style, index) => ({
-    index,
-    style: kebabCase(style),
-    seed: seed.value,
-  })),
 );
 </script>
 
@@ -105,10 +95,10 @@ const allStyleAvatars = computed(() =>
         <UiWindow title="种子演示器">
           <div class="app-seed-demo-body">
             <AppSeedDemoPreview
-              :style="currentStyle"
+              v-model:style-name="currentStyle"
+              :styles="availableStyles"
               :model-value="seed"
               @update:model-value="onSeedUpdate"
-              @open-style-picker="styleDialogOpen = true"
               @randomize-seed="randomizeSeed"
             />
 
@@ -166,13 +156,6 @@ const allStyleAvatars = computed(() =>
         </p>
       </div>
     </UiContainer>
-
-    <AppSeedDemoStylePicker
-      v-model:open="styleDialogOpen"
-      :avatars="allStyleAvatars"
-      :active-style-index="activeStyleIndex"
-      @select-style="selectStyle"
-    />
   </UiSection>
 </template>
 
@@ -248,44 +231,43 @@ const allStyleAvatars = computed(() =>
     }
   }
 
-  &-style-picker-trigger,
-  &-seed-display {
+  &-control {
     width: 220px;
   }
 
-  &-style-picker-trigger {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    height: 42px;
-    padding: 0 10px 0 14px;
-    background: var(--vp-c-bg);
-    border: 1px solid var(--vp-c-border);
-    border-radius: var(--vp-radius-xs);
-    cursor: pointer;
-    transition: all var(--duration-fast) ease;
-    font-size: 14px;
-
-    &:hover {
-      border-color: var(--vp-c-text-3);
+  &-seed-field {
+    .p-inputtext {
+      width: 100%;
     }
+  }
+
+  &-dice-icon {
+    cursor: pointer;
+    color: var(--vp-c-text-3);
+    transition: color var(--duration-fast) ease;
+    outline: none;
+    user-select: none;
+    -webkit-user-select: none;
 
     svg {
-      color: var(--vp-c-text-3);
+      transition: transform var(--duration-mid) var(--ease-spring);
     }
-  }
 
-  &-style-picker-label {
-    color: var(--vp-c-text-3);
-    font-weight: 400;
-    margin-right: -2px;
-  }
+    &:hover {
+      color: var(--vp-c-brand-1);
 
-  &-style-picker-value {
-    color: var(--vp-c-text-1);
-    font-weight: 500;
-    flex: 1;
-    text-align: left;
+      svg {
+        transform: rotate(90deg);
+      }
+    }
+
+    &:active svg {
+      transform: rotate(180deg) scale(0.9);
+    }
+
+    &:focus-visible {
+      color: var(--vp-c-brand-1);
+    }
   }
 
   &-body {
@@ -341,73 +323,6 @@ const allStyleAvatars = computed(() =>
 
     &:hover {
       transform: scale(1.05);
-    }
-  }
-
-  &-seed-display {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    height: 42px;
-    padding: 0 6px 0 14px;
-    background: var(--vp-c-bg);
-    border: 1px solid var(--vp-c-border);
-    border-radius: calc(var(--vp-radius-sm) - 2px);
-    transition: border-color var(--duration-fast) var(--ease-smooth);
-
-    &:hover {
-      border-color: var(--vp-c-text-3);
-    }
-
-    &:focus-within {
-      border-color: var(--vp-c-brand-1);
-    }
-  }
-
-  &-seed-label {
-    color: var(--vp-c-text-3);
-    font-size: 14px;
-    font-weight: 400;
-  }
-
-  &-seed-input {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--vp-c-text-1);
-    background: transparent;
-    border: none;
-    outline: none;
-    padding: 0;
-    flex: 1;
-    min-width: 0;
-
-    &::placeholder {
-      color: var(--vp-c-text-3);
-      font-weight: 400;
-    }
-  }
-
-  &-dice-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 30px;
-    height: 30px;
-    border-radius: var(--vp-radius-xs);
-    border: none;
-    background: var(--vp-c-bg);
-    color: var(--vp-c-text-3);
-    cursor: pointer;
-    transition: all var(--duration-mid) var(--ease-spring);
-
-    &:hover {
-      background: var(--vp-c-brand-soft);
-      color: var(--vp-c-brand-1);
-      transform: rotate(90deg);
-    }
-
-    &:active {
-      transform: rotate(180deg) scale(0.9);
     }
   }
 }
