@@ -49,7 +49,7 @@ const tiles: Tile[] = [
   {
     styleName: 'fun-emoji',
     seed: 'Sage',
-    background: PALETTE.fuchsia,
+    background: PALETTE.lime,
     size: 128,
     delay: -1.6,
   },
@@ -183,7 +183,7 @@ function url(tile: Tile): string {
     translate: 0 0;
   }
   50% {
-    translate: 0 -8px;
+    translate: 0 -5px;
   }
 }
 

@@ -2,6 +2,7 @@
 defineProps<{
   divider?: boolean;
   center?: boolean;
+  surface?: 'base' | 'alt';
 }>();
 </script>
 
@@ -11,6 +12,7 @@ defineProps<{
     :class="{
       'ui-section-has-divider': divider,
       'ui-section-text-center': center,
+      'ui-section-surface-alt': surface === 'alt',
     }"
   >
     <div v-if="$slots.background" class="ui-section-bg">
@@ -27,6 +29,14 @@ defineProps<{
   padding: 120px 0;
   position: relative;
   overflow: hidden;
+  /* Subtle dotted-grid texture, shared with the hero and demo frames, so every
+     landing section reads as part of the same system. Sits
+     behind the per-section gradient glows (#background slot) and the content. */
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--vp-c-divider) 55%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
 
   &-has-divider::before {
     content: '';
@@ -53,6 +63,10 @@ defineProps<{
 
   &-text-center {
     text-align: center;
+  }
+
+  &-surface-alt {
+    background: var(--vp-c-bg-alt);
   }
 
   &-foreground {

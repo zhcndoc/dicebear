@@ -46,7 +46,7 @@ defineProps<{
   border-radius: var(--vp-radius-sm);
   overflow: hidden;
   background: var(--vp-c-bg);
-  border: 1px solid var(--vp-c-divider);
+  border: 1px solid var(--ui-window-border-color);
   margin: 16px 0;
 
   &-header {
@@ -55,7 +55,7 @@ defineProps<{
     gap: 16px;
     padding: 16px 20px;
     background: var(--vp-c-bg-soft);
-    border-bottom: 1px solid var(--vp-c-divider);
+    border-bottom: 1px solid var(--ui-window-border-color);
   }
 
   &-dots {

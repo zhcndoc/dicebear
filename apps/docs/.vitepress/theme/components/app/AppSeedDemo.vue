@@ -170,12 +170,12 @@ const licenseUrl = computed(() =>
       ),
       radial-gradient(
         ellipse 50% 40% at 20% 80%,
-        color-mix(in srgb, var(--vp-c-green-1) 6%, transparent),
+        color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent),
         transparent
       ),
       radial-gradient(
         ellipse 50% 40% at 80% 60%,
-        color-mix(in srgb, var(--vp-c-purple-1) 5%, transparent),
+        color-mix(in srgb, var(--vp-c-brand-1) 5%, transparent),
         transparent
       );
   }

@@ -53,15 +53,14 @@ const hasHeader = computed(() => Boolean(props.title) || Boolean(slots.header));
 
 <style lang="scss">
 :root {
-  --ui-card-bg: var(--vp-c-bg-elv);
-  --ui-card-border-color: var(--pg-border);
+  /* Elevated surface shared with UiWindow / attribution boxes (both themes).
+     Previously dark cards used --vp-c-bg-soft, which made them differ from the
+     elevated demo-frame; unified here so every framed box shares one fill. */
+  --ui-card-bg: var(--ui-window-bg);
+  --ui-card-border-color: var(--ui-window-border-color);
   --ui-card-hover-border-color: var(--vp-c-brand-1);
   --ui-card-radius: var(--vp-radius-sm);
   --ui-card-padding: 1.125rem;
-}
-
-.dark {
-  --ui-card-bg: var(--vp-c-bg-soft);
 }
 </style>
 
@@ -73,7 +72,10 @@ const hasHeader = computed(() => Boolean(props.title) || Boolean(slots.header));
   border-radius: var(--ui-card-radius);
   color: var(--vp-c-text-1);
   text-decoration: none;
-  transition: border-color var(--duration-fast) var(--ease-smooth);
+  transition:
+    border-color var(--duration-fast) var(--ease-smooth),
+    transform var(--duration-mid) var(--ease-spring),
+    box-shadow var(--duration-mid) var(--ease-smooth);
   position: relative;
   overflow: hidden;
 
@@ -83,6 +85,8 @@ const hasHeader = computed(() => Boolean(props.title) || Boolean(slots.header));
 
   &--interactive:hover {
     border-color: var(--ui-card-hover-border-color);
+    transform: translateY(-4px);
+    box-shadow: var(--vp-shadow-2);
   }
 
   &--interactive:focus-visible {

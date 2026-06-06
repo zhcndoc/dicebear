@@ -7,7 +7,6 @@ defineProps<{
 <template>
   <div class="ui-window">
     <div class="ui-window-header">
-      <span v-if="title" class="ui-window-accent" aria-hidden="true"></span>
       <span v-if="title" class="ui-window-title">{{ title }}</span>
       <div class="ui-window-header-actions">
         <slot name="header-actions" />
@@ -21,16 +20,10 @@ defineProps<{
 
 <style lang="scss">
 :root {
-  --ui-window-border-color: rgba(0, 0, 0, 0.1);
   --ui-window-divider-color: rgba(0, 0, 0, 0.05);
-  --ui-window-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.04), 0 18px 40px -16px rgba(0, 0, 0, 0.14);
 }
 .dark {
-  --ui-window-border-color: rgba(255, 255, 255, 0.07);
   --ui-window-divider-color: rgba(255, 255, 255, 0.04);
-  --ui-window-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.2), 0 8px 24px -16px rgba(0, 0, 0, 0.35);
 }
 </style>
 
@@ -39,12 +32,9 @@ defineProps<{
   position: relative;
   border-radius: var(--window-radius, var(--vp-radius-sm));
   overflow: hidden;
-  background: var(--vp-c-bg-elv);
+  background: var(--ui-window-bg);
   border: 1px solid var(--ui-window-border-color);
-  box-shadow: var(--ui-window-shadow);
-  transition:
-    box-shadow var(--duration-mid) var(--ease-smooth),
-    border-color var(--duration-mid) var(--ease-smooth);
+  transition: border-color var(--duration-mid) var(--ease-smooth);
 
   &-header {
     display: flex;
@@ -54,22 +44,13 @@ defineProps<{
     position: relative;
     z-index: 1;
     background: var(--vp-c-bg-soft);
-    border-bottom: 1px solid var(--ui-window-divider-color);
+    border-bottom: 1px solid var(--ui-window-border-color);
 
     &-actions {
       display: flex;
       align-items: center;
       gap: 8px;
     }
-  }
-
-  &-accent {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--vp-c-brand-1);
-    box-shadow: 0 0 0 3px var(--vp-c-brand-soft);
-    flex-shrink: 0;
   }
 
   &-title {

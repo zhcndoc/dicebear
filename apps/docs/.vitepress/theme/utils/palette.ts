@@ -8,8 +8,8 @@ export const PALETTE = {
   cyan: 'cffafe',
   blue: 'dbeafe',
   green: 'dcfce7',
-  fuchsia: 'fae8ff',
-  violet: 'ede9fe',
+  lime: 'ecfccb',
+  peach: 'ffedd5',
   pink: 'ffe4f1',
 } as const;
 

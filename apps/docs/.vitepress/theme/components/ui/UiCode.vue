@@ -129,7 +129,7 @@ watch(
     justify-content: center;
     background-color: var(--vp-code-copy-code-bg);
     border: 1px solid var(--vp-code-copy-code-border-color);
-    border-radius: 4px;
+    border-radius: var(--vp-radius-chrome);
     color: var(--vp-code-copy-code-active-text);
     cursor: pointer;
     opacity: 0;
@@ -162,7 +162,7 @@ watch(
   color: var(--vp-c-yellow-1);
 }
 .ui-code-text .hljs-attr {
-  color: var(--vp-c-indigo-1);
+  color: var(--vp-c-brand-1);
 }
 .ui-code-text .hljs-name {
   color: var(--vp-c-brand-1);

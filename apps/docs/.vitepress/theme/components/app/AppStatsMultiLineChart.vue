@@ -27,31 +27,24 @@ const props = defineProps<{
   formatValue: (value: number) => string;
 }>();
 
-const palette = [
-  '#1689cc',
-  '#6f42c1',
-  '#cb3837',
-  '#2ea043',
-  '#d29922',
-  '#0969da',
-  '#8250df',
-  '#cf222e',
-  '#1a7f37',
-  '#bf8700',
-  '#e85d04',
-  '#3a86ff',
-  '#8338ec',
-  '#ff006e',
-  '#06d6a0',
-  '#118ab2',
-];
+// Generate one distinct colour per series so the palette never repeats, even
+// with all 36+ styles. Golden-angle hue spacing (137.5°) keeps adjacent lines
+// far apart on the colour wheel; starting near the brand-blue hue keeps the
+// first (top) series on-brand. Alternating lightness adds extra separation.
+const palette = computed(() =>
+  props.series.map((_, i) => {
+    const hue = (i * 137.508 + 205) % 360;
+    const lightness = i % 2 === 0 ? 58 : 46;
+    return `hsl(${hue.toFixed(1)} 65% ${lightness}%)`;
+  }),
+);
 
 const { chartKey, tooltipConfig, gridColor, tickColor } = useChartTheme();
 
 const chartData = computed(() => ({
   labels: props.labels,
   datasets: props.series.map((s, i) => {
-    const color = palette[i % palette.length];
+    const color = palette.value[i];
 
     return {
       label: s.name,

@@ -231,7 +231,7 @@ onUnmounted(() => {
     background:
       radial-gradient(
         ellipse 60% 80% at 0% 50%,
-        color-mix(in srgb, var(--vp-c-purple-1) 6%, transparent),
+        color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent),
         transparent
       ),
       radial-gradient(
@@ -386,7 +386,7 @@ onUnmounted(() => {
       background: linear-gradient(
         135deg,
         transparent 40%,
-        rgba(22, 137, 204, 0.2)
+        rgba(2, 132, 199, 0.2)
       );
       opacity: 0;
       transition: opacity var(--duration-mid) ease;

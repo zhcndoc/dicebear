@@ -334,7 +334,7 @@ const monthlyStats = computed(() => {
           <AppStatsChart
             :labels="requestsData.labels"
             :values="requestsData.values"
-            color="#1689cc"
+            color="#0284c7"
             :format-value="formatNumber"
           />
         </UiCard>

@@ -84,7 +84,7 @@ svg = Avatar(style, {"seed": "Mia"}).to_string()`,
         <div class="app-integration-item" :style="{ animationDelay: '0s' }">
           <UiCard padding="xl" class="app-integration-card">
             <div class="app-integration-card-header">
-              <UiIconBox size="lg" color="#f59e0b">
+              <UiIconBox size="lg" color="var(--vp-c-brand-1)">
                 <Library />
               </UiIconBox>
               <h3 class="app-integration-title">Libraries</h3>
@@ -166,7 +166,7 @@ svg = Avatar(style, {"seed": "Mia"}).to_string()`,
         <div class="app-integration-item" :style="{ animationDelay: '0.3s' }">
           <UiCard padding="xl" class="app-integration-card">
             <div class="app-integration-card-header">
-              <UiIconBox size="lg" color="#22c55e">
+              <UiIconBox size="lg" color="var(--vp-c-pink-2)">
                 <Globe />
               </UiIconBox>
               <h3 class="app-integration-title">Avatar API</h3>
@@ -194,7 +194,7 @@ svg = Avatar(style, {"seed": "Mia"}).to_string()`,
         <div class="app-integration-item" :style="{ animationDelay: '0.45s' }">
           <UiCard padding="xl" class="app-integration-card">
             <div class="app-integration-card-header">
-              <UiIconBox size="lg" color="#a855f7">
+              <UiIconBox size="lg" color="var(--vp-c-brand-1)">
                 <Terminal />
               </UiIconBox>
               <h3 class="app-integration-title">CLI</h3>

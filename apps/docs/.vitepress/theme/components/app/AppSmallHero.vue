@@ -134,7 +134,7 @@ const hasActions = computed(() => !!slots.actions);
       left: -3%;
       background: radial-gradient(
         circle,
-        color-mix(in srgb, var(--vp-c-purple-1) 8%, transparent) 0%,
+        color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent) 0%,
         transparent 70%
       );
       animation: shape-float 22s ease-in-out infinite reverse;

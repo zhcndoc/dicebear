@@ -70,7 +70,7 @@ function avatar(
               decoding="async"
             />
             <img
-              :src="avatar('personas', 'Sage', 96, PALETTE.violet)"
+              :src="avatar('personas', 'Sage', 96, PALETTE.peach)"
               alt=""
               width="80"
               height="80"
@@ -169,7 +169,7 @@ function avatar(
           <div class="uc-thread">
             <div class="uc-post">
               <img
-                :src="avatar('notionists', 'Posy', 56, PALETTE.fuchsia)"
+                :src="avatar('notionists', 'Posy', 56, PALETTE.lime)"
                 alt=""
                 width="28"
                 height="28"
@@ -314,7 +314,7 @@ function avatar(
               decoding="async"
             />
             <img
-              :src="avatar('shapes', 'F', 160, PALETTE.violet)"
+              :src="avatar('shapes', 'F', 160, PALETTE.peach)"
               alt=""
               width="160"
               height="160"
@@ -347,7 +347,7 @@ function avatar(
     height: 50%;
     background: radial-gradient(
       ellipse 100% 100% at 80% 100%,
-      color-mix(in srgb, var(--vp-c-pink-2) 6%, transparent),
+      color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent),
       transparent
     );
   }

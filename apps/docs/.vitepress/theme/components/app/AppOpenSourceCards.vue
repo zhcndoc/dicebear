@@ -18,7 +18,7 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
     <UiContainer>
       <div class="app-open-source-cards-grid">
         <UiCard padding="2xl" class="app-open-source-cards-opensource-card">
-          <UiIconBox size="lg" color="#f59e0b">
+          <UiIconBox size="lg" color="var(--vp-c-brand-1)">
             <Star />
           </UiIconBox>
           <h3 class="app-open-source-cards-title">Open Source</h3>
@@ -52,7 +52,7 @@ const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
         </UiCard>
 
         <UiCard padding="2xl" class="app-open-source-cards-license-card">
-          <UiIconBox size="lg" color="#22c55e">
+          <UiIconBox size="lg" color="var(--vp-c-pink-2)">
             <Scale />
           </UiIconBox>
           <h3 class="app-open-source-cards-title">License</h3>

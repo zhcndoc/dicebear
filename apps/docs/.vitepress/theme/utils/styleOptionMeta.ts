@@ -67,7 +67,8 @@ export function getOptionExamples(
   if (name === 'rotate') return [0, 90, 180, 270];
   if (name === 'scale') return [0.5, 0.75, 1, 1.5];
   if (name === 'borderRadius') return [0, 10, 25, 50];
-  if (name === 'size') return [32, 64, 96, 128];
+  // Cap at 96: the preview grid cells are ~104px, so 128 would overflow the box.
+  if (name === 'size') return [32, 64, 96];
   if (name === 'translateX') return [-50, -25, 0, 25, 50];
   if (name === 'translateY') return [-50, -25, 0, 25, 50];
   if (name === 'fontWeight') return [100, 400, 700, 900];

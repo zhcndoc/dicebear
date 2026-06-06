@@ -205,7 +205,7 @@ const steps = [
   &-gradient {
     background: radial-gradient(
       ellipse 80% 50% at 50% 0%,
-      color-mix(in srgb, var(--vp-c-green-1) 8%, transparent),
+      color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent),
       transparent
     );
   }

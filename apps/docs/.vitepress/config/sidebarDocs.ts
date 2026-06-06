@@ -1,5 +1,9 @@
 import { DefaultTheme } from 'vitepress';
 
+// NOTE: VitePress renders sidebar item `text` with `v-html`, so inline markup is
+// allowed — we use it to attach small status badges (styled via
+// `.vp-sidebar-badge` in theme/styles/main.scss). Groups are intentionally NOT
+// collapsible (no `collapsed` key), so every section stays expanded.
 const sidebar: DefaultTheme.SidebarItem[] = [
   {
     text: 'Introduction',
@@ -16,8 +20,14 @@ const sidebar: DefaultTheme.SidebarItem[] = [
           { text: 'Converter', link: '/how-to-use/js-library/converter/' },
         ],
       },
-      { text: 'PHP Library', link: '/how-to-use/php-library/' },
-      { text: 'Python Library', link: '/how-to-use/python-library/' },
+      {
+        text: 'PHP Library <span class="vp-sidebar-badge is-new">New</span>',
+        link: '/how-to-use/php-library/',
+      },
+      {
+        text: 'Python Library <span class="vp-sidebar-badge is-new">New</span>',
+        link: '/how-to-use/python-library/',
+      },
       { text: 'HTTP-API', link: '/how-to-use/http-api/' },
       { text: 'CLI', link: '/how-to-use/cli/' },
     ],

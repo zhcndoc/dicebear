@@ -167,6 +167,7 @@ const {
     &-title {
       font-size: 24px;
       font-weight: 700;
+      letter-spacing: -0.025em;
       color: var(--vp-c-text-1);
       margin: 0 0 20px;
       border-top: 0 !important;

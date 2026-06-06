@@ -8,17 +8,15 @@ import Button from 'primevue/button';
     <h1 class="app-hero-title">
       <span class="app-hero-title-line">Pick a seed.</span>
       <span class="app-hero-title-line"
-        >Get an <span class="app-hero-title-text">avatar</span>.</span
+        >Get an <span class="app-hero-title-accent">avatar</span>.</span
       >
     </h1>
 
     <p class="app-hero-description">
       DiceBear is a privacy-focused, open source avatar library with
-      <span class="app-hero-highlight" style="white-space: nowrap"
-        >35+ avatar styles</span
-      >&nbsp;crafted by talented artists. Generate deterministic profile
-      pictures via API, JS&nbsp;library, PHP&nbsp;library, Python&nbsp;library
-      &amp; CLI.
+      <span class="app-hero-underline">35+&nbsp;avatar&nbsp;styles</span> crafted
+      by talented artists. Generate deterministic profile pictures via API,
+      JS&nbsp;library, PHP&nbsp;library, Python&nbsp;library &amp; CLI.
     </p>
 
     <div class="app-hero-actions">
