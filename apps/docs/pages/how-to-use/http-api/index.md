@@ -69,6 +69,29 @@ themselves. For a quick overview we have created an
 
 :::
 
+## Listing available styles
+
+To discover which avatar styles an instance supports, send a request to the
+version root. It returns the available style names as JSON, sorted
+alphabetically:
+
+```
+https://api.dicebear.com/10.x
+```
+
+```json
+{
+  "styles": ["adventurer", "adventurer-neutral", "avataaars", "..."]
+}
+```
+
+::: info
+
+This endpoint is available from version `10.x` onwards. Earlier versions do not
+support listing styles.
+
+:::
+
 ## Options
 
 All [core options](/how-to-use/js-library/#core-options) — such as `seed`,
