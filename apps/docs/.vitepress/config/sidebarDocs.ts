@@ -17,6 +17,7 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         ],
       },
       { text: 'PHP Library', link: '/how-to-use/php-library/' },
+      { text: 'Python Library', link: '/how-to-use/python-library/' },
       { text: 'HTTP-API', link: '/how-to-use/http-api/' },
       { text: 'CLI', link: '/how-to-use/cli/' },
     ],

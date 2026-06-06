@@ -39,6 +39,24 @@ $descriptor = new OptionsDescriptor($style);
 print_r($descriptor->toJSON());
 ```
 
+## Python
+
+```python
+import json
+from importlib.resources import files
+
+from dicebear import OptionsDescriptor, Style
+
+definition = json.loads(
+    files("dicebear_styles").joinpath("micah.json").read_text("utf-8")
+)
+
+style = Style(definition)
+descriptor = OptionsDescriptor(style)
+
+print(descriptor.to_json())
+```
+
 ## Field descriptor types
 
 The `toJSON()` method returns a map of option names to field descriptors. Each

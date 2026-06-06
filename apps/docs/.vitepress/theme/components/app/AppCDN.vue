@@ -38,7 +38,6 @@ const stats = computed(() => [
     <UiContainer>
       <UiSectionHeader
         class="app-cdn-header"
-        badge="Content Delivery Network"
         description="Our HTTP-API is powered by a global CDN — delivering avatars with low latency, high reliability, and completely free of charge."
       >
         <template #headline

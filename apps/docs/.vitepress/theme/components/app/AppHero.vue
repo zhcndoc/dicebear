@@ -72,9 +72,6 @@ onMounted(() => {
       rgba(20, 184, 166, 0.06),
       transparent
     );
-  --app-hero-badge-bg: rgba(255, 255, 255, 0.8);
-  --app-hero-badge-border: rgba(0, 0, 0, 0.08);
-  --app-hero-star-color: #f59e0b;
 }
 .dark {
   --app-hero-gradient:
@@ -93,9 +90,6 @@ onMounted(() => {
       rgba(20, 184, 166, 0.08),
       transparent
     );
-  --app-hero-badge-bg: rgba(35, 35, 40, 0.85);
-  --app-hero-badge-border: rgba(255, 255, 255, 0.1);
-  --app-hero-star-color: #fbbf24;
 }
 
 .app-hero {
@@ -204,56 +198,6 @@ onMounted(() => {
     align-items: flex-start;
     text-align: left;
     animation: fade-up var(--duration-reveal) var(--ease-smooth);
-  }
-
-  &-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 18px;
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--vp-c-text-2);
-    background: var(--app-hero-badge-bg);
-    border: 1px solid var(--app-hero-badge-border);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    text-decoration: none;
-    margin-bottom: 32px;
-    transition: all var(--duration-mid) var(--ease-spring);
-    animation: fade-up var(--duration-reveal) var(--ease-smooth) 0.1s both;
-
-    &::after {
-      display: none !important;
-    }
-
-    &:hover {
-      transform: translateY(-2px) scale(1.03);
-      border-color: var(--app-hero-star-color);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-    }
-
-    &-icon {
-      color: var(--vp-c-text-1);
-    }
-
-    &-divider {
-      width: 1px;
-      height: 14px;
-      background: var(--vp-c-border);
-    }
-
-    &-star {
-      color: var(--app-hero-star-color);
-      fill: var(--app-hero-star-color);
-      animation: app-hero-star-pulse 2s ease-in-out infinite;
-    }
-
-    &-count {
-      font-weight: 800;
-      color: var(--vp-c-text-1);
-    }
   }
 
   &-title {
@@ -372,16 +316,6 @@ onMounted(() => {
   }
   50% {
     transform: translateX(-50%) translateY(8px);
-  }
-}
-
-@keyframes app-hero-star-pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.2);
   }
 }
 

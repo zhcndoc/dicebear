@@ -178,6 +178,32 @@ function getPlaceholderAvatar(Style $style, string $userId): string {
 }
 ```
 
+## With the Python Library
+
+Use the Python library for server-side rendering without an additional HTTP
+request. For full installation and API details, see the
+[Python library documentation](/how-to-use/python-library/).
+
+```python
+import json
+from importlib.resources import files
+
+from dicebear import Avatar, Style
+
+definition = json.loads(
+    files("dicebear_styles").joinpath("thumbs.json").read_text("utf-8")
+)
+
+style = Style(definition)
+
+def get_placeholder_avatar(user_id: str) -> str:
+    return Avatar(style, {
+        "seed": user_id,
+        "size": 48,
+        "borderRadius": 50,
+    }).to_string()
+```
+
 ## Choosing a Style
 
 Different styles suit different use cases. Click a style to see all available
@@ -197,6 +223,11 @@ new Avatar(thumbs, { seed: userId, size: 48, borderRadius: 50 });
 ```php
 // PHP library
 new Avatar($style, ['seed' => $userId, 'size' => 48, 'borderRadius' => 50]);
+```
+
+```python
+# Python library
+Avatar(style, {"seed": user_id, "size": 48, "borderRadius": 50})
 ```
 
 ```

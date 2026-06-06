@@ -252,7 +252,7 @@ const monthlyStats = computed(() => {
 </script>
 
 <template>
-  <AppSmallHero badge="Statistics">
+  <AppSmallHero>
     <template #headline
       >Billions of Avatars.<br /><strong>One API.</strong></template
     >
@@ -304,7 +304,6 @@ const monthlyStats = computed(() => {
   <UiSection divider>
     <UiContainer>
       <UiSectionHeader
-        badge="Weekly Trends"
         description="Weekly request and download volumes — toggle between the HTTP API and npm packages."
       >
         <template #headline>Usage Over <strong>Time</strong></template>
@@ -360,7 +359,6 @@ const monthlyStats = computed(() => {
   <UiSection divider>
     <UiContainer>
       <UiSectionHeader
-        badge="Breakdown"
         description="Based on API request data — which styles, versions, and output formats are used most."
       >
         <template #headline>Usage <strong>Details</strong></template>

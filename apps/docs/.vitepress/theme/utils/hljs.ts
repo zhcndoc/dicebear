@@ -9,17 +9,20 @@ export function loadHljs(): Promise<Hljs> {
       { default: javascript },
       { default: xml },
       { default: php },
+      { default: python },
     ] = await Promise.all([
       import('highlight.js/lib/core'),
       import('highlight.js/lib/languages/javascript'),
       import('highlight.js/lib/languages/xml'),
       import('highlight.js/lib/languages/php'),
+      import('highlight.js/lib/languages/python'),
     ]);
 
     for (const [name, language] of [
       ['js', javascript],
       ['html', xml],
       ['php', php],
+      ['python', python],
     ] as const) {
       core.registerLanguage(name, language);
     }

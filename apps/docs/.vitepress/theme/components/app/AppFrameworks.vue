@@ -31,7 +31,9 @@ const frameworks = [
     name: 'Angular',
     icon: siAngular.path,
     href: '/guides/use-the-library-with-angular/',
-    color: '#dd0031',
+    // Angular forbids its former (red) logo; black/white are its default
+    // variations. simple-icons already ships the current shield shape.
+    color: 'var(--logo-monochrome)',
   },
   {
     name: 'Svelte',
@@ -50,7 +52,6 @@ const frameworks = [
     </template>
     <UiContainer class="app-frameworks-container">
       <UiSectionHeader
-        badge="Framework Support"
         description="Use DiceBear with React, Vue, Svelte, Angular and more. Simply use our HTTP-API as image source or install the JS-library."
       >
         <template #headline

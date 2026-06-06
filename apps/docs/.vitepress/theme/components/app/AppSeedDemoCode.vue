@@ -2,11 +2,11 @@
 import { computed, ref } from 'vue';
 import { PawPrint } from '@lucide/vue';
 import Button from 'primevue/button';
-import SelectButton from 'primevue/selectbutton';
+import Select from 'primevue/select';
 import { UiCode } from '../ui';
 import { escapeJsString, escapeShellArg } from '../../utils/escape';
 
-type CodeTab = 'api' | 'js' | 'php' | 'cli';
+type CodeExample = 'api' | 'js' | 'php' | 'python' | 'cli';
 
 const props = defineProps<{
   seed: string;
@@ -14,11 +14,12 @@ const props = defineProps<{
   styleCamel: string;
 }>();
 
-const activeTab = ref<CodeTab>('api');
-const tabOptions: { label: string; value: CodeTab }[] = [
+const activeExample = ref<CodeExample>('api');
+const exampleOptions: { label: string; value: CodeExample }[] = [
   { label: 'HTTP API', value: 'api' },
   { label: 'JS Library', value: 'js' },
   { label: 'PHP Library', value: 'php' },
+  { label: 'Python Library', value: 'python' },
   { label: 'CLI', value: 'cli' },
 ];
 
@@ -55,6 +56,23 @@ $avatar = new Avatar($style, [
 ]);`,
 );
 
+const pythonExample = computed(
+  () =>
+    `import json
+from importlib.resources import files
+
+from dicebear import Avatar, Style
+
+definition = json.loads(
+    files("dicebear_styles").joinpath("${props.style}.json").read_text("utf-8")
+)
+
+style = Style(definition)
+avatar = Avatar(style, {
+    "seed": "${escapeJsString(props.seed)}"
+})`,
+);
+
 const cliExample = computed(
   () => `npx dicebear ${props.style} --seed '${escapeShellArg(props.seed)}'`,
 );
@@ -65,15 +83,15 @@ const playgroundLink = '/playground/';
 <template>
   <div class="app-seed-demo-code">
     <div class="app-seed-demo-code-wrapper">
-      <SelectButton
-        v-model="activeTab"
-        :options="tabOptions"
+      <Select
+        v-model="activeExample"
+        :options="exampleOptions"
         option-label="label"
         option-value="value"
-        :allow-empty="false"
-        size="small"
+        size="large"
+        fluid
         aria-label="Code example"
-        class="app-seed-demo-code-tabs"
+        class="app-seed-demo-code-select"
       />
 
       <div class="app-seed-demo-code-body">
@@ -81,27 +99,34 @@ const playgroundLink = '/playground/';
           :code="apiExample"
           scroll-to-bottom
           class="app-seed-demo-code-block"
-          :class="{ active: activeTab === 'api' }"
+          :class="{ active: activeExample === 'api' }"
         />
         <UiCode
           :code="jsExample"
           lang="js"
           scroll-to-bottom
           class="app-seed-demo-code-block"
-          :class="{ active: activeTab === 'js' }"
+          :class="{ active: activeExample === 'js' }"
         />
         <UiCode
           :code="phpExample"
           lang="php"
           scroll-to-bottom
           class="app-seed-demo-code-block"
-          :class="{ active: activeTab === 'php' }"
+          :class="{ active: activeExample === 'php' }"
+        />
+        <UiCode
+          :code="pythonExample"
+          lang="python"
+          scroll-to-bottom
+          class="app-seed-demo-code-block"
+          :class="{ active: activeExample === 'python' }"
         />
         <UiCode
           :code="cliExample"
           scroll-to-bottom
           class="app-seed-demo-code-block"
-          :class="{ active: activeTab === 'cli' }"
+          :class="{ active: activeExample === 'cli' }"
         />
       </div>
     </div>
@@ -128,7 +153,7 @@ const playgroundLink = '/playground/';
   border-left: 1px solid var(--ui-window-divider-color);
   min-width: 0;
 
-  // Align the code block surface with the togglebutton tab bar above it
+  // Align the code block surface with the example select above it
   // (both sit on --vp-c-bg inside this editor window mockup).
   --vp-code-block-bg: var(--vp-c-bg);
 
@@ -141,11 +166,11 @@ const playgroundLink = '/playground/';
     min-width: 0;
   }
 
-  &-tabs {
-    width: 100%;
-
-    :deep(.p-togglebutton) {
-      flex: 1;
+  &-select {
+    // size="large" renders the label at 18px; keep the large, full-width
+    // control but bring its text in line with the other demo controls (16px).
+    :deep(.p-select-label) {
+      font-size: 16px;
     }
   }
 

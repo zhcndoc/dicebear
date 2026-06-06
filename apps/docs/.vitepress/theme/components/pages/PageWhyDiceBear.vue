@@ -15,7 +15,7 @@ import AppFrameworks from '../app/AppFrameworks.vue';
       <AppHeroAsideUserList />
     </template>
   </AppSmallHero>
-  <AppHighlights badge="Features">
+  <AppHighlights>
     <template #headline>Everything You <strong>Need</strong></template>
   </AppHighlights>
   <AppIntegration />

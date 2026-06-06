@@ -1,31 +1,10 @@
 <script setup lang="ts">
-import { useData } from 'vitepress';
-import { PawPrint, ArrowRight, Star } from '@lucide/vue';
-import { siGithub } from 'simple-icons';
-import type { ThemeOptions } from '@theme/types';
+import { PawPrint, ArrowRight } from '@lucide/vue';
 import Button from 'primevue/button';
-import { UiIcon } from '../ui';
-
-const { theme } = useData<ThemeOptions>();
 </script>
 
 <template>
   <div class="app-hero-content">
-    <a
-      href="https://github.com/dicebear/dicebear"
-      target="_blank"
-      rel="noopener"
-      class="app-hero-badge"
-    >
-      <UiIcon :path="siGithub.path" :size="14" class="app-hero-badge-icon" />
-      <span>Open Source Avatar Library</span>
-      <span class="app-hero-badge-divider"></span>
-      <Star :size="13" class="app-hero-badge-star" />
-      <span class="app-hero-badge-count">{{
-        theme.githubStars?.['dicebear/dicebear'] || '8k+'
-      }}</span>
-    </a>
-
     <h1 class="app-hero-title">
       <span class="app-hero-title-line">Pick a seed.</span>
       <span class="app-hero-title-line"
@@ -38,7 +17,8 @@ const { theme } = useData<ThemeOptions>();
       <span class="app-hero-highlight" style="white-space: nowrap"
         >35+ avatar styles</span
       >&nbsp;crafted by talented artists. Generate deterministic profile
-      pictures via API, JS&nbsp;library, PHP&nbsp;library &amp; CLI.
+      pictures via API, JS&nbsp;library, PHP&nbsp;library, Python&nbsp;library
+      &amp; CLI.
     </p>
 
     <div class="app-hero-actions">

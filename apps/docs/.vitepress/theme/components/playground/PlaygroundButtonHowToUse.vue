@@ -7,7 +7,7 @@ import {
   getAvatarApiCommand,
   unsupportedHttpApiOptions,
 } from '@theme/utils/avatar/api';
-import { formatPhpValue } from '@theme/utils/code-examples';
+import { formatPhpValue, formatPythonValue } from '@theme/utils/code-examples';
 import Button from 'primevue/button';
 import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
@@ -102,6 +102,38 @@ $avatar = new Avatar($style, ${phpOptions});
 
 $svg = (string) $avatar;`;
 });
+const examplePython = computed(() => {
+  const pythonOptions = formatPythonValue(options.value, 1);
+
+  if (store.isCustomStyle) {
+    return `import json
+
+from dicebear import Avatar, Style
+
+# Your custom style definition
+with open("./my-style.json", encoding="utf-8") as file:
+    definition = json.load(file)
+
+style = Style(definition)
+avatar = Avatar(style, ${pythonOptions})
+
+svg = avatar.to_string()`;
+  }
+
+  return `import json
+from importlib.resources import files
+
+from dicebear import Avatar, Style
+
+definition = json.loads(
+    files("dicebear_styles").joinpath("${store.avatarStyleName}.json").read_text("utf-8")
+)
+
+style = Style(definition)
+avatar = Avatar(style, ${pythonOptions})
+
+svg = avatar.to_string()`;
+});
 
 const exampleCli = computed(() =>
   getAvatarApiCommand(
@@ -126,6 +158,7 @@ const exampleCli = computed(() =>
             <Tab v-if="!store.isCustomStyle" value="http-api">HTTP-API</Tab>
             <Tab value="js-library">JS</Tab>
             <Tab value="php-library">PHP</Tab>
+            <Tab value="python-library">Python</Tab>
             <Tab value="cli">CLI</Tab>
           </TabList>
           <TabPanels>
@@ -189,6 +222,28 @@ const exampleCli = computed(() =>
                 <p v-if="store.isCustomStyle">
                   Replace <code>./my-style.json</code> with the path to your
                   style definition.
+                </p>
+              </div>
+            </TabPanel>
+            <TabPanel value="python-library">
+              <div class="playground-button-how-to-use-tab-content">
+                <p>First install the required packages via pip:</p>
+                <UiCode
+                  :code="
+                    store.isCustomStyle
+                      ? 'pip install dicebear-core'
+                      : 'pip install dicebear-core dicebear-styles'
+                  "
+                />
+                <p>Then you can create this avatar as follows:</p>
+                <UiCode :code="examplePython" lang="python" />
+                <p v-if="store.isCustomStyle">
+                  Replace <code>./my-style.json</code> with the path to your
+                  style definition.
+                </p>
+                <p>
+                  See <a href="/how-to-use/python-library">Python</a> docs for
+                  more information.
                 </p>
               </div>
             </TabPanel>

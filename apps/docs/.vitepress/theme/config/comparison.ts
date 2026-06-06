@@ -130,7 +130,7 @@ export function buildComparisonRows({
     {
       feature: 'Languages',
       values: {
-        dicebear: 'JS/TS, PHP',
+        dicebear: 'JS/TS, PHP, Python',
         boringAvatars: 'JS',
         avvvatars: 'JS/TS',
         multiavatar: 'JS, PHP, Python',

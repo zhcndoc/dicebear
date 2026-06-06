@@ -2,12 +2,16 @@
 import { ref } from 'vue';
 import {
   Globe,
-  MonitorSmartphone,
-  Server,
+  Library,
   Terminal,
   ArrowRight,
 } from '@lucide/vue';
 import Button from 'primevue/button';
+import Tabs from 'primevue/tabs';
+import TabList from 'primevue/tablist';
+import Tab from 'primevue/tab';
+import TabPanels from 'primevue/tabpanels';
+import TabPanel from 'primevue/tabpanel';
 import {
   UiContainer,
   UiSection,
@@ -20,6 +24,8 @@ import { useVisibility } from '../../composables/useVisibility';
 
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
+
+const libraryTab = ref('js');
 
 const plainCode = {
   js: `import { Style, Avatar } from '@dicebear/core';
@@ -43,6 +49,17 @@ $style = new Style($definition);
 $svg = (string) new Avatar($style, [
   'seed' => 'Mia',
 ]);`,
+  python: `import json
+from importlib.resources import files
+
+from dicebear import Avatar, Style
+
+definition = json.loads(
+    files("dicebear_styles").joinpath("lorelei.json").read_text("utf-8")
+)
+
+style = Style(definition)
+svg = Avatar(style, {"seed": "Mia"}).to_string()`,
   api: `https://api.dicebear.com/10.x/lorelei/svg?seed=Mia`,
   cli: `npx dicebear lorelei --seed "Mia" --format svg`,
 };
@@ -57,77 +74,89 @@ $svg = (string) new Avatar($style, [
     <UiContainer>
       <UiSectionHeader
         class="app-integration-header"
-        badge="Easy to Use"
         description="Choose the integration that works best for your project."
       >
         <template #headline>Integrate in <strong>Minutes</strong></template>
       </UiSectionHeader>
 
-      <!-- JS & PHP Libraries - Side by Side -->
-      <div class="app-integration-grid app-integration-grid-libraries">
+      <!-- JS, PHP & Python Libraries - combined into one tabbed card -->
+      <div class="app-integration-libraries">
         <div class="app-integration-item" :style="{ animationDelay: '0s' }">
           <UiCard padding="xl" class="app-integration-card">
             <div class="app-integration-card-header">
-              <UiIconBox size="lg" color="#1689cc">
-                <MonitorSmartphone />
+              <UiIconBox size="lg" color="#f59e0b">
+                <Library />
               </UiIconBox>
-              <h3 class="app-integration-title">JS Library</h3>
+              <h3 class="app-integration-title">Libraries</h3>
               <p class="app-integration-description">
-                No data sent externally. Full control over your avatar creation
-                with a simple API.
+                Run DiceBear entirely in your own code — no data leaves your
+                servers. JavaScript, PHP, and Python share one identical API.
               </p>
             </div>
 
-            <UiCode
-              :code="plainCode.js"
-              lang="js"
-              scroll-to-bottom
-              class="app-integration-code-block"
-            />
-
-            <Button
-              as="a"
-              href="/how-to-use/js-library/"
-              severity="secondary"
-              variant="outlined"
-              class="app-integration-link"
-            >
-              JS Documentation
-              <ArrowRight :size="18" />
-            </Button>
-          </UiCard>
-        </div>
-
-        <div class="app-integration-item" :style="{ animationDelay: '0.15s' }">
-          <UiCard padding="xl" class="app-integration-card">
-            <div class="app-integration-card-header">
-              <UiIconBox size="lg" color="#7b83eb">
-                <Server />
-              </UiIconBox>
-              <h3 class="app-integration-title">PHP Library</h3>
-              <p class="app-integration-description">
-                Server-side avatar generation for PHP 8.2+. The same API as the
-                JS library.
-              </p>
-            </div>
-
-            <UiCode
-              :code="plainCode.php"
-              lang="php"
-              scroll-to-bottom
-              class="app-integration-code-block"
-            />
-
-            <Button
-              as="a"
-              href="/how-to-use/php-library/"
-              severity="secondary"
-              variant="outlined"
-              class="app-integration-link"
-            >
-              PHP Documentation
-              <ArrowRight :size="18" />
-            </Button>
+            <Tabs v-model:value="libraryTab" class="app-integration-tabs">
+              <TabList>
+                <Tab value="js">JavaScript</Tab>
+                <Tab value="php">PHP</Tab>
+                <Tab value="python">Python</Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel value="js" class="app-integration-tabpanel">
+                  <UiCode
+                    :code="plainCode.js"
+                    lang="js"
+                    scroll-to-bottom
+                    class="app-integration-code-block"
+                  />
+                  <Button
+                    as="a"
+                    href="/how-to-use/js-library/"
+                    severity="secondary"
+                    variant="outlined"
+                    class="app-integration-link"
+                  >
+                    JS Documentation
+                    <ArrowRight :size="18" />
+                  </Button>
+                </TabPanel>
+                <TabPanel value="php" class="app-integration-tabpanel">
+                  <UiCode
+                    :code="plainCode.php"
+                    lang="php"
+                    scroll-to-bottom
+                    class="app-integration-code-block"
+                  />
+                  <Button
+                    as="a"
+                    href="/how-to-use/php-library/"
+                    severity="secondary"
+                    variant="outlined"
+                    class="app-integration-link"
+                  >
+                    PHP Documentation
+                    <ArrowRight :size="18" />
+                  </Button>
+                </TabPanel>
+                <TabPanel value="python" class="app-integration-tabpanel">
+                  <UiCode
+                    :code="plainCode.python"
+                    lang="python"
+                    scroll-to-bottom
+                    class="app-integration-code-block"
+                  />
+                  <Button
+                    as="a"
+                    href="/how-to-use/python-library/"
+                    severity="secondary"
+                    variant="outlined"
+                    class="app-integration-link"
+                  >
+                    Python Documentation
+                    <ArrowRight :size="18" />
+                  </Button>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
           </UiCard>
         </div>
       </div>
@@ -241,9 +270,21 @@ $svg = (string) new Avatar($style, [
     }
   }
 
-  /* Grid for JS & PHP Libraries */
-  &-grid-libraries {
+  /* Combined libraries card (JS / PHP / Python via tabs) */
+  &-libraries {
     margin-bottom: 24px;
+  }
+
+  &-tabs {
+    // The card already supplies xl padding; drop the panel's own padding so
+    // the code block and doc link sit flush with the card edges, with a little
+    // breathing room under the tab bar.
+    --p-tabs-tabpanel-padding: 16px 0 0;
+  }
+
+  &-tabpanel {
+    display: flex;
+    flex-direction: column;
   }
 
   /* Grid for HTTP API & CLI */

@@ -60,6 +60,20 @@ const DiceBearPreset = definePreset(Aura, {
           color: 'var(--vp-c-text-1)',
           hoverColor: 'var(--vp-c-text-1)',
         },
+        formField: {
+          // Same fix as the dark block below: Aura's light form-field border
+          // defaults to {surface.300} (#d6d3d1, a warm stone). Pin it to the
+          // shared --pg-border token (#e2e2e3) so inputs/selects match the
+          // slider tracks and content borders instead of reading warm.
+          borderColor: 'var(--pg-border)',
+          // Placeholders + form-field icons (select chevron, input icons,
+          // number +/- buttons) all default to {surface.400} (#78716c, a warm
+          // stone) — browner and darker than the app's neutral greys. These
+          // are muted *foreground* colours, so pin them to the shared
+          // subtle-text token instead of a surface step.
+          placeholderColor: 'var(--ui-c-text-subtle)',
+          iconColor: 'var(--ui-c-text-subtle)',
+        },
       },
       dark: {
         surface: {
@@ -85,7 +99,17 @@ const DiceBearPreset = definePreset(Aura, {
         },
         formField: {
           background: 'var(--vp-c-bg-soft)',
+          // Aura's resting form-field border defaults to {surface.600}
+          // (#3f3f46, a cool zinc step) — the one control token not on a
+          // VitePress grey. Inputs/selects therefore read colder than the
+          // cards, slider tracks and dividers around them (all #3c3f44).
+          // Pull it onto the shared --pg-border token so every border matches.
+          borderColor: 'var(--pg-border)',
           hoverBorderColor: 'var(--vp-c-gray-1)',
+          // Match the light block: pull placeholder + icon colours off the
+          // warm {surface.400} stone onto the app's subtle-text token.
+          placeholderColor: 'var(--ui-c-text-subtle)',
+          iconColor: 'var(--ui-c-text-subtle)',
         },
         text: {
           mutedColor: 'rgba(235, 235, 245, 0.78)',
@@ -242,6 +266,23 @@ const DiceBearPreset = definePreset(Aura, {
         light: {
           item: {
             focusBackground: '{surface.100}',
+          },
+        },
+      },
+    },
+    inputnumber: {
+      colorScheme: {
+        // The +/- button colour is independent of formField.iconColor and
+        // still resolves to {surface.400} (#78716c, warm stone). Pull it onto
+        // the same subtle-text token as the other form-field affordances.
+        light: {
+          button: {
+            color: 'var(--ui-c-text-subtle)',
+          },
+        },
+        dark: {
+          button: {
+            color: 'var(--ui-c-text-subtle)',
           },
         },
       },

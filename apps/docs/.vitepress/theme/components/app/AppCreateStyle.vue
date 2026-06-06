@@ -37,8 +37,6 @@ const steps = [
 
     <UiContainer class="app-create-style-container">
       <UiSectionHeader
-        badge="For Artists"
-        badge-variant="green"
         description="Design your avatar style visually in Figma. Our plugin handles the technical export – no coding required."
       >
         <template #headline

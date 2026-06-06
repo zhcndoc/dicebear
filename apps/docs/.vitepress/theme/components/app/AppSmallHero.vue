@@ -5,7 +5,6 @@ import Button from 'primevue/button';
 import {
   UiHeadline,
   UiDescription,
-  UiBadge,
   UiContainer,
   UiSection,
 } from '../ui';
@@ -13,12 +12,10 @@ import { useVisibility } from '../../composables/useVisibility';
 
 withDefaults(
   defineProps<{
-    badge?: string;
     headline?: string;
     description?: string;
   }>(),
   {
-    badge: 'Why DiceBear?',
     headline: 'Avatars That Stand Out',
     description:
       'DiceBear is an open source avatar library that lets you generate unique, deterministic profile pictures in no time. Whether you need geometric shapes, cute characters, or pixel art — our privacy-focused SVG avatar library with 35+ styles brings your projects to life.',
@@ -44,7 +41,6 @@ const hasActions = computed(() => !!slots.actions);
     >
       <div :class="{ 'app-small-hero-layout': hasAside }">
         <div>
-          <UiBadge>{{ badge }}</UiBadge>
           <UiHeadline tag="h1">
             <slot name="headline">{{ headline }}</slot>
           </UiHeadline>

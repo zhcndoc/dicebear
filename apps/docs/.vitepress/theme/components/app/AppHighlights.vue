@@ -11,22 +11,21 @@ import {
 import {
   Target,
   Palette,
-  Server,
+  Shapes,
+  Globe,
+  Library,
   Terminal,
   SlidersHorizontal,
-  Globe,
 } from '@lucide/vue';
-import { siGithub, siFigma, siJavascript } from 'simple-icons';
+import { siGithub, siFigma } from 'simple-icons';
 import { useVisibility } from '../../composables/useVisibility';
 
 withDefaults(
   defineProps<{
-    badge?: string;
     headline?: string;
     description?: string;
   }>(),
   {
-    badge: 'Why DiceBear?',
     headline: 'Built for Developers, Loved by Users',
     description:
       'Everything you need to create beautiful, unique avatars for your applications.',
@@ -37,6 +36,7 @@ const sectionRef = ref();
 const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
 
 const highlights = [
+  // Row 1 — the avatars themselves
   {
     icon: Target,
     title: 'Deterministic Avatars',
@@ -52,6 +52,14 @@ const highlights = [
     color: '#a855f7',
   },
   {
+    icon: Shapes,
+    title: 'Scalable SVG',
+    description:
+      'Pure SVG output stays razor-sharp at any size — from tiny favicons to full-screen — and weighs just a few kilobytes.',
+    color: '#06b6d4',
+  },
+  // Row 2 — how you generate them
+  {
     icon: Globe,
     title: 'Free Avatar API',
     description:
@@ -59,18 +67,14 @@ const highlights = [
     color: '#22c55e',
   },
   {
-    iconPath: siJavascript.path,
-    title: 'JS Library',
+    // One box for the language libraries (was JS / PHP / Python). Generic
+    // Library icon — no language logos — so the named languages stay pure
+    // nominative use with no trademark/logo-modification questions.
+    icon: Library,
+    title: 'Official Libraries',
     description:
-      'No data sent to external servers. Full control over avatar generation in your app.',
-    color: '#f7df1e',
-  },
-  {
-    icon: Server,
-    title: 'PHP Library',
-    description:
-      'Server-side avatar generation for PHP 8.2+. Same seed, same result — identical API to the JS library.',
-    color: '#777BB4',
+      'JavaScript, PHP, and Python — one identical API across every language, same seed, same result, and no data leaves your servers.',
+    color: '#f59e0b',
   },
   {
     icon: Terminal,
@@ -79,12 +83,13 @@ const highlights = [
       'Generate avatars directly from the command line. Perfect for batch processing and build pipelines.',
     color: '#64748b',
   },
+  // Row 3 — design & trust
   {
     iconPath: siFigma.path,
     title: 'Figma Plugin',
     description:
       'Design custom avatar styles in Figma and export them as ready-to-use DiceBear definitions — no code required.',
-    color: 'var(--vp-c-text-1)',
+    color: 'var(--logo-monochrome)',
   },
   {
     icon: SlidersHorizontal,
@@ -98,7 +103,7 @@ const highlights = [
     title: '100% Open Source',
     description:
       'MIT licensed core, transparent development. Contribute, fork, or self-host with confidence.',
-    color: 'var(--vp-c-text-1)',
+    color: 'var(--logo-monochrome)',
   },
 ];
 </script>
@@ -111,7 +116,6 @@ const highlights = [
     <UiContainer>
       <UiSectionHeader
         class="app-highlights-header"
-        :badge="badge"
         :description="description"
       >
         <template #headline>

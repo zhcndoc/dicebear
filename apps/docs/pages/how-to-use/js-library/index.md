@@ -12,8 +12,9 @@ The library is written in [TypeScript](https://www.typescriptlang.org/) /
 [JavaScript](https://developer.mozilla.org/en-US/Web/JavaScript) and can be used
 in the browser and also in [Node.js](https://nodejs.org/en/) (version 22 or
 higher). In other environments you may be interested in the
-[PHP Library](/how-to-use/php-library/), the [HTTP API](/how-to-use/http-api/)
-or the [CLI](/how-to-use/cli/).
+[PHP Library](/how-to-use/php-library/), the
+[Python Library](/how-to-use/python-library/), the
+[HTTP API](/how-to-use/http-api/) or the [CLI](/how-to-use/cli/).
 
 The library is a pure
 [ESM package](https://developer.mozilla.org/en-US/Web/JavaScript/Guide/Modules).

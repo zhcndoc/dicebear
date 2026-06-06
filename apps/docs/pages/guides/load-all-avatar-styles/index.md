@@ -2,7 +2,7 @@
 title: Load All Avatar Styles from @dicebear/styles | DiceBear
 description: >
   Learn how to load every avatar style shipped with @dicebear/styles at once —
-  in Node.js and PHP.
+  in Node.js, PHP and Python.
 ---
 
 # How to load all avatar styles from `@dicebear/styles`?
@@ -11,11 +11,12 @@ The [DiceBear styles repository](https://github.com/dicebear/styles) ships every
 official avatar style as a separate JSON file — distributed as
 [`@dicebear/styles`](https://www.npmjs.com/package/@dicebear/styles) on npm and
 [`dicebear/styles`](https://packagist.org/packages/dicebear/styles) on
-Packagist. Most projects only need one or two styles, but sometimes — for a
-style picker, a gallery page, or a batch job — you want to load all of them at
-once.
+Packagist and
+[`dicebear-styles`](https://pypi.org/project/dicebear-styles/) on PyPI. Most
+projects only need one or two styles, but sometimes — for a style picker, a
+gallery page, or a batch job — you want to load all of them at once.
 
-This guide shows how to do that in Node.js and PHP.
+This guide shows how to do that in Node.js, PHP and Python.
 
 ## Node.js
 
@@ -77,4 +78,26 @@ foreach ($files as $file) {
 }
 
 $avatar = new Avatar($styles['lorelei'], ['seed' => 'Alice']);
+```
+
+## Python
+
+The `dicebear-styles` package ships the definitions as JSON resources under the
+`dicebear_styles` import name. Iterate over them with `importlib.resources`.
+
+```python
+import json
+from importlib.resources import files
+
+from dicebear import Avatar, Style
+
+styles = {
+    resource.name.removesuffix(".json"): Style(
+        json.loads(resource.read_text("utf-8"))
+    )
+    for resource in files("dicebear_styles").iterdir()
+    if resource.name.endswith(".json")
+}
+
+avatar = Avatar(styles["lorelei"], {"seed": "Alice"})
 ```

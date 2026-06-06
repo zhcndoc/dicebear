@@ -109,7 +109,8 @@ This generates 10 sample avatars in the `./test-output` directory.
 
 Congratulations! You can now use your avatar style with the
 [JS Library](/how-to-use/js-library/), the
-[PHP Library](/how-to-use/php-library/), or the [CLI](/how-to-use/cli/).
+[PHP Library](/how-to-use/php-library/), the
+[Python Library](/how-to-use/python-library/), or the [CLI](/how-to-use/cli/).
 
 ### With the JS Library
 
@@ -134,6 +135,22 @@ $avatar = new Avatar($definition, [
   'seed' => 'dicebear',
   // ... other options
 ]);
+```
+
+### With the Python Library
+
+```python
+import json
+
+from dicebear import Avatar
+
+with open("./your-style.json", encoding="utf-8") as file:
+    definition = json.load(file)
+
+avatar = Avatar(definition, {
+    "seed": "dicebear",
+    # ... other options
+})
 ```
 
 ### With the CLI

@@ -12,7 +12,6 @@ import {
   UiAvatar,
   UiHeadline,
   UiDescription,
-  UiBadge,
   UiContainer,
   UiSection,
   UiWindow,
@@ -252,7 +251,6 @@ const features = [
       </div>
 
       <div class="app-editor-content">
-        <UiBadge variant="brand">Visual Editor</UiBadge>
         <UiHeadline class="app-editor-title-text"
           >Avatar Maker <strong>Without Code</strong></UiHeadline
         >

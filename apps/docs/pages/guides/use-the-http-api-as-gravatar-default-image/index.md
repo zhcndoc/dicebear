@@ -52,6 +52,20 @@ $gravatarImage = sprintf(
 // https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng
 ```
 
+<!-- prettier-ignore -->
+```python [Python]
+import urllib.parse
+
+email_hash = urllib.parse.quote("00000000000000000000000000000000")
+default_image = urllib.parse.quote(
+    "https://api.dicebear.com/10.x/lorelei/svg"  # [!code --]
+    "https://api.dicebear.com/10.x/lorelei/png"  # [!code ++]
+)
+
+gravatar_image = f"https://www.gravatar.com/avatar/{email_hash}?d={default_image}"
+# https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng
+```
+
 :::
 
 Usually we set options in the query string, such as the seed. Since a query
@@ -88,6 +102,21 @@ $gravatarImage = sprintf(
   $defaultImage
 );
 // https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
+```
+
+<!-- prettier-ignore -->
+```python [Python]
+import urllib.parse
+
+email_hash = urllib.parse.quote("00000000000000000000000000000000")
+options = f"seed={email_hash}"
+default_image = urllib.parse.quote(
+    f"https://api.dicebear.com/10.x/lorelei/png?{options}"  # [!code --]
+    f"https://api.dicebear.com/10.x/lorelei/png/{urllib.parse.quote(options)}"  # [!code ++]
+)
+
+gravatar_image = f"https://www.gravatar.com/avatar/{email_hash}?d={default_image}"
+# https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
 ```
 
 :::

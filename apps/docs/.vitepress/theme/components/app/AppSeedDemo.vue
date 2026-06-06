@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { kebabCase, camelCase, capitalCase } from 'change-case';
-import { Sparkles } from '@lucide/vue';
 import {
   UiHeadline,
   UiDescription,
-  UiBadge,
   UiContainer,
   UiSection,
   UiWindow,
@@ -77,10 +75,6 @@ const licenseUrl = computed(() =>
 
     <UiContainer class="app-seed-demo-container">
       <div class="app-seed-demo-header">
-        <UiBadge variant="green">
-          <Sparkles :size="16" />
-          Deterministic Avatars
-        </UiBadge>
         <UiHeadline class="app-seed-demo-title">
           Same Seed, Same Avatar.<br />
           <strong>Every Time.</strong>

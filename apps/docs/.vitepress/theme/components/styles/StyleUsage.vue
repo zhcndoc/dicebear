@@ -69,6 +69,29 @@ $svg = (string) $avatar;
 `;
 });
 
+const examplePythonInstall = computed(() => {
+  return `pip install dicebear-core dicebear-styles`;
+});
+
+const examplePythonUsage = computed(() => {
+  return `import json
+from importlib.resources import files
+
+from dicebear import Avatar, Style
+
+definition = json.loads(
+    files("dicebear_styles").joinpath("${kebabCase(props.styleName)}.json").read_text("utf-8")
+)
+
+style = Style(definition)
+avatar = Avatar(style, {
+    # ... options
+})
+
+svg = avatar.to_string()
+`;
+});
+
 const exampleCliUsage = computed(() => {
   return `dicebear ${props.styleName}`;
 });
@@ -81,6 +104,7 @@ const exampleCliUsage = computed(() => {
         <Tab value="http-api">HTTP-API</Tab>
         <Tab value="js-library">JS</Tab>
         <Tab value="php-library">PHP</Tab>
+        <Tab value="python-library">Python</Tab>
         <Tab value="cli">CLI</Tab>
       </TabList>
       <TabPanels>
@@ -114,6 +138,17 @@ const exampleCliUsage = computed(() => {
           <Code lang="php" :code="examplePhpUsage" />
           <p>
             See <a href="/how-to-use/php-library">PHP</a> docs for more
+            information.
+          </p>
+        </TabPanel>
+        <TabPanel value="python-library" class="style-usage-body">
+          <p>First install the required packages via pip:</p>
+          <Code :code="examplePythonInstall" />
+
+          <p>Then you can create this avatar as follows:</p>
+          <Code lang="python" :code="examplePythonUsage" />
+          <p>
+            See <a href="/how-to-use/python-library">Python</a> docs for more
             information.
           </p>
         </TabPanel>

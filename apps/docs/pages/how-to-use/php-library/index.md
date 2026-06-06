@@ -8,8 +8,9 @@ description: >
 # PHP Avatar Library
 
 The PHP library provides an API identical to the
-[JavaScript library](/how-to-use/js-library/). It requires PHP 8.2 or higher.
-The same seed and style definition will produce byte-identical SVGs in both
+[JavaScript library](/how-to-use/js-library/) and the
+[Python library](/how-to-use/python-library/). It requires PHP 8.2 or higher.
+The same seed and style definition will produce byte-identical SVGs across all
 implementations.
 
 ## Installation

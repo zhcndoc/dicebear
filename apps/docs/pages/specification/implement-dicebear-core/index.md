@@ -9,9 +9,10 @@ description: >
 
 This guide explains how to implement DiceBear Core in any programming language.
 A correct implementation produces **byte-identical SVGs** to the
-[JavaScript](https://github.com/dicebear/dicebear/tree/10.x/src/js/core) and
-[PHP](https://github.com/dicebear/dicebear/tree/10.x/src/php/core) reference
-implementations for the same seed and style definition.
+[JavaScript](https://github.com/dicebear/dicebear/tree/10.x/src/js/core),
+[PHP](https://github.com/dicebear/dicebear/tree/10.x/src/php/core) and
+[Python](https://github.com/dicebear/dicebear/tree/10.x/src/python/core)
+reference implementations for the same seed and style definition.
 
 ## Architecture overview
 
@@ -646,8 +647,8 @@ JavaScript,
 `Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0')`.
 
 The suffix **must be non-deterministic**: derive it from the host language's
-non-seeded RNG (`Math.random()` in JavaScript, `random_int()` in PHP), not from
-the DiceBear PRNG. Two avatars rendered with the same seed would otherwise still
+non-seeded RNG (`Math.random()` in JavaScript, `random_int()` in PHP,
+`random.randint()` in Python), not from the DiceBear PRNG. Two avatars rendered with the same seed would otherwise still
 collide on their IDs, defeating the purpose of the feature. Because the
 randomized output is non-deterministic, it is excluded from parity testing — the
 avatar fixtures use the default of `idRandomization: false`.
@@ -699,10 +700,10 @@ matches the first letter for every input the regex produces.
 
 The DiceBear repository ships a language-neutral parity test suite at
 [`tests/fixtures/parity/`](https://github.com/dicebear/dicebear/tree/10.x/tests/fixtures/parity).
-It is the canonical way to verify a new implementation: the JavaScript and PHP
-reference implementations both consume the same JSON fixtures and assert the
-same outputs, so any port that reads these fixtures gets the same coverage for
-free.
+It is the canonical way to verify a new implementation: the JavaScript, PHP and
+Python reference implementations all consume the same JSON fixtures and assert
+the same outputs, so any port that reads these fixtures gets the same coverage
+for free.
 
 The fixture tree contains:
 
@@ -748,8 +749,9 @@ The `resolvedOptions` field on each avatar fixture contains only the options
 that were actually touched during resolution — unset options (`title`, `size`
 when not provided, etc.) do not appear. The JavaScript reference relies on
 `JSON.stringify()` dropping `undefined` values at the serialization boundary;
-the PHP reference filters `null` values explicitly in `Options::resolved()`.
-Both produce the same shape. A port that returns the full memo map verbatim will
+the PHP reference filters `null` values explicitly in `Options::resolved()`, and
+the Python reference does the same in `Resolver.resolved()`. All produce the
+same shape. A port that returns the full memo map verbatim will
 fail the comparison — strip unset entries before serializing.
 
 ### Regenerating the fixtures
@@ -782,5 +784,6 @@ with multiple components and color constraints.
 
 | Language   | Package          | Source                                                                               |
 | ---------- | ---------------- | ------------------------------------------------------------------------------------ |
-| JavaScript | `@dicebear/core` | [src/js/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/js/core/src)   |
-| PHP        | `dicebear/core`  | [src/php/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/php/core/src) |
+| JavaScript | `@dicebear/core` | [src/js/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/js/core/src)         |
+| PHP        | `dicebear/core`  | [src/php/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/php/core/src)       |
+| Python     | `dicebear-core`  | [src/python/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/python/core/src) |

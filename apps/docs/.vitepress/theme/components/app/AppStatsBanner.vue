@@ -45,7 +45,6 @@ const downloads = computed(() =>
     <UiContainer>
       <UiSectionHeader
         class="app-stats-banner-header"
-        badge="Trusted at Scale"
         description="Usage data from our HTTP-API and npm packages — updated weekly."
       >
         <template #headline

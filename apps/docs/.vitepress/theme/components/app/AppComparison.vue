@@ -28,7 +28,6 @@ const rows = buildComparisonRows({
     <UiContainer>
       <UiSectionHeader
         class="app-comparison-header"
-        badge="Comparison"
         description="Every tool has its strengths. Choose what works best for your project."
       >
         <template #headline>How DiceBear <strong>Compares</strong></template>

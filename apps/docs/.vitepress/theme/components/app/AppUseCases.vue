@@ -32,7 +32,6 @@ function avatar(
     <UiContainer>
       <UiSectionHeader
         class="app-use-cases-header"
-        badge="Use Cases"
         description="From two-person side projects to global platforms, DiceBear powers the avatar layer wherever identity needs a face."
       >
         <template #headline

@@ -357,6 +357,20 @@ $avatar = new Avatar($definition, ['seed' => 'test']);
 echo (string) $avatar;
 ```
 
+### With the Python Library
+
+```python
+import json
+
+from dicebear import Avatar
+
+with open("./my-style.json", encoding="utf-8") as file:
+    definition = json.load(file)
+
+avatar = Avatar(definition, {"seed": "test"})
+print(avatar.to_string())
+```
+
 ## Next steps
 
 - See the [Definition Schema Reference](/specification/definition-schema/) for
