@@ -6,7 +6,7 @@ import Select from 'primevue/select';
 import { UiCode } from '../ui';
 import { escapeJsString, escapeShellArg } from '../../utils/escape';
 
-type CodeExample = 'api' | 'js' | 'php' | 'python' | 'cli';
+type CodeExample = 'api' | 'js' | 'php' | 'python' | 'rust' | 'cli';
 
 const props = defineProps<{
   seed: string;
@@ -20,6 +20,7 @@ const exampleOptions: { label: string; value: CodeExample }[] = [
   { label: 'JS Library', value: 'js' },
   { label: 'PHP Library', value: 'php' },
   { label: 'Python Library', value: 'python' },
+  { label: 'Rust Library', value: 'rust' },
   { label: 'CLI', value: 'cli' },
 ];
 
@@ -73,6 +74,17 @@ avatar = Avatar(style, {
 })`,
 );
 
+const rustExample = computed(
+  () =>
+    `use dicebear_core::{Avatar, Style};
+use serde_json::json;
+
+let style = Style::from_str(dicebear_styles::${props.style.toUpperCase().replace(/-/g, '_')})?;
+let avatar = Avatar::new(&style, json!({
+    "seed": "${escapeJsString(props.seed)}"
+}))?;`,
+);
+
 const cliExample = computed(
   () => `npx dicebear ${props.style} --seed '${escapeShellArg(props.seed)}'`,
 );
@@ -121,6 +133,13 @@ const playgroundLink = '/playground/';
           scroll-to-bottom
           class="app-seed-demo-code-block"
           :class="{ active: activeExample === 'python' }"
+        />
+        <UiCode
+          :code="rustExample"
+          lang="rust"
+          scroll-to-bottom
+          class="app-seed-demo-code-block"
+          :class="{ active: activeExample === 'rust' }"
         />
         <UiCode
           :code="cliExample"

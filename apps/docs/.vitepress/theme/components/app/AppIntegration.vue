@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import {
-  Globe,
-  Library,
-  Terminal,
-  ArrowRight,
-} from '@lucide/vue';
+import { Globe, Library, Terminal, ArrowRight } from '@lucide/vue';
 import Button from 'primevue/button';
 import Tabs from 'primevue/tabs';
 import TabList from 'primevue/tablist';
@@ -60,6 +55,11 @@ definition = json.loads(
 
 style = Style(definition)
 svg = Avatar(style, {"seed": "Mia"}).to_string()`,
+  rust: `use dicebear_core::{Avatar, Style};
+use serde_json::json;
+
+let style = Style::from_str(dicebear_styles::LORELEI)?;
+let svg = Avatar::new(&style, json!({ "seed": "Mia" }))?.to_svg();`,
   api: `https://api.dicebear.com/10.x/lorelei/svg?seed=Mia`,
   cli: `npx dicebear lorelei --seed "Mia" --format svg`,
 };
@@ -90,7 +90,8 @@ svg = Avatar(style, {"seed": "Mia"}).to_string()`,
               <h3 class="app-integration-title">Libraries</h3>
               <p class="app-integration-description">
                 Run DiceBear entirely in your own code — no data leaves your
-                servers. JavaScript, PHP, and Python share one identical API.
+                servers. JavaScript, PHP, Python, and Rust share one identical
+                API.
               </p>
             </div>
 
@@ -99,6 +100,7 @@ svg = Avatar(style, {"seed": "Mia"}).to_string()`,
                 <Tab value="js">JavaScript</Tab>
                 <Tab value="php">PHP</Tab>
                 <Tab value="python">Python</Tab>
+                <Tab value="rust">Rust</Tab>
               </TabList>
               <TabPanels>
                 <TabPanel value="js" class="app-integration-tabpanel">
@@ -152,6 +154,24 @@ svg = Avatar(style, {"seed": "Mia"}).to_string()`,
                     class="app-integration-link"
                   >
                     Python Documentation
+                    <ArrowRight :size="18" />
+                  </Button>
+                </TabPanel>
+                <TabPanel value="rust" class="app-integration-tabpanel">
+                  <UiCode
+                    :code="plainCode.rust"
+                    lang="rust"
+                    scroll-to-bottom
+                    class="app-integration-code-block"
+                  />
+                  <Button
+                    as="a"
+                    href="/how-to-use/rust-library/"
+                    severity="secondary"
+                    variant="outlined"
+                    class="app-integration-link"
+                  >
+                    Rust Documentation
                     <ArrowRight :size="18" />
                   </Button>
                 </TabPanel>

@@ -28,6 +28,10 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         text: 'Python Library <span class="vp-sidebar-badge is-new">New</span>',
         link: '/how-to-use/python-library/',
       },
+      {
+        text: 'Rust Library <span class="vp-sidebar-badge is-new">New</span>',
+        link: '/how-to-use/rust-library/',
+      },
       { text: 'HTTP-API', link: '/how-to-use/http-api/' },
       { text: 'CLI', link: '/how-to-use/cli/' },
     ],

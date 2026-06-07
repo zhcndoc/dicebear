@@ -1,9 +1,9 @@
 # DiceBear Core (Python)
 
 Deterministic, customizable, vector-based avatars — the Python port of the
-DiceBear core engine. It produces **byte-identical** SVG output to the
-JavaScript (`@dicebear/core`) and PHP (`dicebear/core`) implementations for the
-same style definition and options.
+DiceBear core engine. It produces **byte-identical** SVG output to the reference
+JavaScript implementation (`@dicebear/core`) for the same style definition and
+options.
 
 This package contains only the rendering engine. Avatar **style definitions**
 ship separately as language-agnostic JSON via

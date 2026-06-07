@@ -3,11 +3,11 @@ title: DiceBear – Open Source Avatar Library & API
 description: >
   DiceBear is a free, open source avatar library and avatar API. Generate
   deterministic SVG profile pictures and user placeholder images via JavaScript
-  library, PHP library, Python library, HTTP API, or CLI.
+  library, PHP library, Python library, Rust library, HTTP API, or CLI.
 ---
 
 <script setup>
-import { Palette, Code2, Globe, Terminal, Server, Library } from '@lucide/vue';
+import { Palette, Code2, Globe, Terminal, Server, Library, Boxes } from '@lucide/vue';
 import DocsHighlights from '@theme/components/docs/DocsHighlights.vue';
 
 const highlights = [
@@ -42,6 +42,14 @@ const highlights = [
       'Generate avatars on the server with Python 3.10+. Identical API to the JS library — same seed, same result.',
     color: '#3b82f6',
     link: '/how-to-use/python-library/',
+  },
+  {
+    icon: Boxes,
+    title: 'Rust Library',
+    description:
+      'Generate avatars on the server with Rust 1.80+. Identical API to the JS library — same seed, same result.',
+    color: '#14b8a6',
+    link: '/how-to-use/rust-library/',
   },
   {
     icon: Terminal,
@@ -81,7 +89,8 @@ are possible! Just use the countless options that each avatar style provides.
 And thanks to the [JavaScript library](/how-to-use/js-library/),
 [PHP library](/how-to-use/php-library/),
 [Python library](/how-to-use/python-library/),
-[HTTP API](/how-to-use/http-api/), [CLI](/how-to-use/cli/),
+[Rust library](/how-to-use/rust-library/), [HTTP API](/how-to-use/http-api/),
+[CLI](/how-to-use/cli/),
 [Figma plugin](https://www.figma.com/community/plugin/1005765655729342787/DiceBear-Exporter),
 [Editor](https://editor.dicebear.com) and [Playground](/playground/), your next
 avatar is always just a stone's throw away! Explore our
@@ -111,8 +120,9 @@ important to note that the PRNG **does not** attempt to be
 
 DiceBear is built with privacy in mind. When using the
 [JavaScript library](/how-to-use/js-library/),
-[PHP library](/how-to-use/php-library/) or
-[Python library](/how-to-use/python-library/), avatars are generated entirely on
+[PHP library](/how-to-use/php-library/),
+[Python library](/how-to-use/python-library/) or
+[Rust library](/how-to-use/rust-library/), avatars are generated entirely on
 your infrastructure — no personal data ever leaves your systems. For teams that
 require full control over data retention and infrastructure, DiceBear can be
 [self-hosted](/guides/host-the-http-api-yourself/) — making it a privacy-focused

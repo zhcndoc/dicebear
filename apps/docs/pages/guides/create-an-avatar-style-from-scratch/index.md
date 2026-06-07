@@ -371,6 +371,20 @@ avatar = Avatar(definition, {"seed": "test"})
 print(avatar.to_string())
 ```
 
+### With the Rust Library
+
+```rust
+use dicebear_core::{Avatar, Style};
+use serde_json::json;
+use std::fs;
+
+let definition = fs::read_to_string("./my-style.json")?;
+let style = Style::from_str(&definition)?;
+
+let avatar = Avatar::new(&style, json!({ "seed": "test" }))?;
+println!("{}", avatar.to_svg());
+```
+
 ## Next steps
 
 - See the [Definition Schema Reference](/specification/definition-schema/) for

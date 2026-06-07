@@ -51,6 +51,20 @@ if (existsSync(pyprojectPath)) {
   }
 }
 
+// The Rust core is not an npm workspace either; bump its Cargo.toml so it ships
+// on the same version as the other ports. Only the [package] version line (at
+// column 0) matches `^version = "…"`, not the indented dependency versions.
+const cargoPath = join(ROOT, "src/rust/core/Cargo.toml");
+if (existsSync(cargoPath)) {
+  const raw = readFileSync(cargoPath, "utf-8");
+  const updated = raw.replace(/^version = "[^"]*"$/m, `version = "${version}"`);
+
+  if (updated !== raw) {
+    writeFileSync(cargoPath, updated);
+    console.log(`  dicebear-core (rust): → ${version}`);
+  }
+}
+
 // Promote the changelog's Unreleased section to the new version
 const changelogPath = join(ROOT, "CHANGELOG.md");
 if (existsSync(changelogPath)) {

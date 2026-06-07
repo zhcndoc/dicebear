@@ -40,6 +40,12 @@ const tabs = computed<Tab[]>(() => {
     lang: 'python',
     code: examples.value.python,
   });
+  list.push({
+    key: 'rust',
+    label: 'Rust',
+    lang: 'rust',
+    code: examples.value.rust,
+  });
   list.push({ key: 'cli', label: 'CLI', code: examples.value.cli });
   return list;
 });

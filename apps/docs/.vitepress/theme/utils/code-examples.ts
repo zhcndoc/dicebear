@@ -5,6 +5,7 @@ export interface CodeExamples {
   js: string;
   php: string;
   python: string;
+  rust: string;
   cli: string;
 }
 
@@ -105,7 +106,9 @@ export function generateCodeExamples(
 
   const python = `Avatar(style, {\n    "${optionName}": ${formatPythonValue(value)}\n})`;
 
+  const rust = `Avatar::new(&style, json!({\n    "${optionName}": ${JSON.stringify(value)}\n}))?;`;
+
   const cli = getAvatarApiCommand(styleName, { [optionName]: value });
 
-  return { httpApi, js, php, python, cli };
+  return { httpApi, js, php, python, rust, cli };
 }

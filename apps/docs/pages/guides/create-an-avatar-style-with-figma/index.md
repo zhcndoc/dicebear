@@ -110,7 +110,8 @@ This generates 10 sample avatars in the `./test-output` directory.
 Congratulations! You can now use your avatar style with the
 [JS Library](/how-to-use/js-library/), the
 [PHP Library](/how-to-use/php-library/), the
-[Python Library](/how-to-use/python-library/), or the [CLI](/how-to-use/cli/).
+[Python Library](/how-to-use/python-library/), the
+[Rust Library](/how-to-use/rust-library/), or the [CLI](/how-to-use/cli/).
 
 ### With the JS Library
 
@@ -151,6 +152,22 @@ avatar = Avatar(definition, {
     "seed": "dicebear",
     # ... other options
 })
+```
+
+### With the Rust Library
+
+```rust
+use dicebear_core::{Avatar, Style};
+use serde_json::json;
+use std::fs;
+
+let definition = fs::read_to_string("./your-style.json")?;
+let style = Style::from_str(&definition)?;
+
+let avatar = Avatar::new(&style, json!({
+    "seed": "dicebear",
+    // ... other options
+}))?;
 ```
 
 ### With the CLI

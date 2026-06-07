@@ -1,7 +1,7 @@
 """DiceBear core — deterministic, customizable, vector-based avatars.
 
-A faithful port of ``@dicebear/core`` (JS) and ``dicebear/core`` (PHP) that
-produces byte-identical SVG output for the same style and options.
+A faithful port of the reference JavaScript core (``@dicebear/core``), producing
+byte-identical SVG output for the same style and options.
 """
 
 from __future__ import annotations

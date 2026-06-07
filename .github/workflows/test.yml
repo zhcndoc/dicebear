@@ -79,3 +79,22 @@ jobs:
       - name: Run tests
         working-directory: src/python/core
         run: pytest
+
+  test-rust:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+      - name: Check formatting
+        working-directory: src/rust/core
+        run: cargo fmt --check
+      - name: Run Clippy
+        working-directory: src/rust/core
+        run: cargo clippy --all-targets --all-features -- -D warnings
+      - name: Run tests
+        working-directory: src/rust/core
+        run: cargo test

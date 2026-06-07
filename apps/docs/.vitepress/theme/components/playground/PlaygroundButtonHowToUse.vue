@@ -134,6 +134,35 @@ avatar = Avatar(style, ${pythonOptions})
 
 svg = avatar.to_string()`;
 });
+const installRust = computed(() =>
+  store.isCustomStyle
+    ? 'cargo add dicebear-core serde_json'
+    : `cargo add dicebear-core serde_json\ncargo add dicebear-styles --features ${store.avatarStyleName}`,
+);
+const exampleRust = computed(() => {
+  const rustOptions = JSON.stringify(options.value, null, 2);
+
+  if (store.isCustomStyle) {
+    return `use dicebear_core::{Avatar, Style};
+use serde_json::json;
+
+// Your custom style definition
+let definition = std::fs::read_to_string("./my-style.json")?;
+
+let style = Style::from_str(&definition)?;
+let avatar = Avatar::new(&style, json!(${rustOptions}))?;
+
+let svg = avatar.to_svg();`;
+  }
+
+  return `use dicebear_core::{Avatar, Style};
+use serde_json::json;
+
+let style = Style::from_str(dicebear_styles::${store.avatarStyleName.toUpperCase().replace(/-/g, '_')})?;
+let avatar = Avatar::new(&style, json!(${rustOptions}))?;
+
+let svg = avatar.to_svg();`;
+});
 
 const exampleCli = computed(() =>
   getAvatarApiCommand(
@@ -159,6 +188,7 @@ const exampleCli = computed(() =>
             <Tab value="js-library">JS</Tab>
             <Tab value="php-library">PHP</Tab>
             <Tab value="python-library">Python</Tab>
+            <Tab value="rust-library">Rust</Tab>
             <Tab value="cli">CLI</Tab>
           </TabList>
           <TabPanels>
@@ -244,6 +274,22 @@ const exampleCli = computed(() =>
                 <p>
                   See <a href="/how-to-use/python-library">Python</a> docs for
                   more information.
+                </p>
+              </div>
+            </TabPanel>
+            <TabPanel value="rust-library">
+              <div class="playground-button-how-to-use-tab-content">
+                <p>First add the required crates with Cargo:</p>
+                <UiCode :code="installRust" />
+                <p>Then you can create this avatar as follows:</p>
+                <UiCode :code="exampleRust" lang="rust" />
+                <p v-if="store.isCustomStyle">
+                  Replace <code>./my-style.json</code> with the path to your
+                  style definition.
+                </p>
+                <p>
+                  See <a href="/how-to-use/rust-library">Rust</a> docs for more
+                  information.
                 </p>
               </div>
             </TabPanel>

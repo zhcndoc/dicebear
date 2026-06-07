@@ -204,6 +204,29 @@ def get_placeholder_avatar(user_id: str) -> str:
     }).to_string()
 ```
 
+## With the Rust Library
+
+Use the Rust library for server-side rendering without an additional HTTP
+request. For full installation and API details, see the
+[Rust library documentation](/how-to-use/rust-library/).
+
+```rust
+use dicebear_core::{Avatar, Error, Style};
+use serde_json::json;
+
+let style = Style::from_str(dicebear_styles::THUMBS)?;
+
+fn placeholder_avatar(style: &Style, user_id: &str) -> Result<String, Error> {
+    let avatar = Avatar::new(style, json!({
+        "seed": user_id,
+        "size": 48,
+        "borderRadius": 50,
+    }))?;
+
+    Ok(avatar.to_string())
+}
+```
+
 ## Choosing a Style
 
 Different styles suit different use cases. Click a style to see all available
@@ -228,6 +251,11 @@ new Avatar($style, ['seed' => $userId, 'size' => 48, 'borderRadius' => 50]);
 ```python
 # Python library
 Avatar(style, {"seed": user_id, "size": 48, "borderRadius": 50})
+```
+
+```rust
+// Rust library
+Avatar::new(&style, json!({ "seed": user_id, "size": 48, "borderRadius": 50 }))?;
 ```
 
 ```

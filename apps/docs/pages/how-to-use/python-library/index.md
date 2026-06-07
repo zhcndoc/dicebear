@@ -2,16 +2,16 @@
 title: Python Avatar Library | DiceBear
 description: >
   Use the DiceBear Python library to generate SVG profile pictures on the
-  server. Python 3.10+ with an API identical to the JavaScript and PHP libraries.
+  server. Python 3.10+ with an API identical to the JavaScript, PHP, and Rust
+  libraries.
 ---
 
 # Python Avatar Library
 
 The Python library provides an API identical to the
-[JavaScript library](/how-to-use/js-library/) and the
-[PHP library](/how-to-use/php-library/). It requires Python 3.10 or higher. The
-same seed and style definition will produce byte-identical SVGs across all three
-implementations.
+[JavaScript library](/how-to-use/js-library/). It requires Python 3.10 or
+higher. The same seed and style definition produce SVGs byte-identical to the
+JavaScript reference.
 
 ## Installation
 
