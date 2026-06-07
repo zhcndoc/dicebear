@@ -21,7 +21,10 @@ class Initials
         $input = $seed;
 
         if ($discardAtSymbol) {
-            $input = preg_replace('/@.*/', '', $seed);
+            // Strip the entire @ suffix (e.g. an email domain), including any
+            // line terminators — the /s (dotall) modifier makes . match
+            // newlines too.
+            $input = preg_replace('/@.*/s', '', $seed);
         }
 
         // The /u flag is required so the character class strips whole code

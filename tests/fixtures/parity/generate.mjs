@@ -28,10 +28,28 @@ const definitionsDir = join(
 
 const STYLE_NAMES = ['initials', 'thumbs', 'glass', 'notionists', 'shape-grid'];
 
+// JSON.stringify leaves U+2028/U+2029 (line/paragraph separators) and BMP
+// private-use code points literal; editors flag those as unusual line
+// terminators or invisible glyphs. Rewrite them as \uXXXX so the committed
+// fixtures hold no such characters. Built from char codes so this source file
+// stays clean too.
+function escapeInvisible(json) {
+  let out = '';
+  for (const ch of json) {
+    const cp = ch.codePointAt(0);
+    if (cp === 0x2028 || cp === 0x2029 || (cp >= 0xe000 && cp <= 0xf8ff)) {
+      out += String.fromCharCode(0x5c) + 'u' + cp.toString(16).padStart(4, '0');
+    } else {
+      out += ch;
+    }
+  }
+  return out;
+}
+
 function writeJson(relPath, data) {
   const filePath = join(import.meta.dirname, relPath);
   mkdirSync(dirname(filePath), { recursive: true });
-  writeFileSync(filePath, JSON.stringify(data, null, 2) + '\n');
+  writeFileSync(filePath, escapeInvisible(JSON.stringify(data, null, 2)) + '\n');
   console.log('  wrote', relPath);
 }
 
@@ -138,6 +156,13 @@ for (const c of getValueCases) {
   });
 }
 
+// Supplementary-plane test characters, built via code point / code unit so the
+// source holds no literal control characters. U+1F600's UTF-16 lead surrogate
+// (D83D) sorts BEFORE U+E000 by code unit but AFTER it by code point — so these
+// pin that every port sorts by UTF-16 code units, not scalar values.
+const EMOJI = String.fromCodePoint(0x1f600);
+const PUA = String.fromCharCode(0xe000);
+
 const pickCases = [
   { seed: 'test', key: 'a', items: ['a', 'b', 'c', 'd', 'e'] },
   { seed: 'test', key: 'b', items: ['a', 'b', 'c', 'd', 'e'] },
@@ -150,6 +175,9 @@ const pickCases = [
   // duplicates must be collapsed — same result as the unique set
   { seed: 'test', key: 'a', items: ['a', 'a', 'b', 'b', 'c', 'c', 'd', 'd', 'e', 'e'] },
   { seed: 'test', key: 'single', items: ['only', 'only', 'only'] },
+  // A two-element astral/BMP pair distinguishes the sort whichever index hits.
+  { seed: 'test', key: 'a', items: [EMOJI, PUA] },
+  { seed: 'hello', key: 'k', items: ['z', PUA, EMOJI, 'a'] },
 ];
 for (const c of pickCases) {
   prngFixtures.pick.push({
@@ -170,6 +198,8 @@ const weightedPickCases = [
   // fractional weights in non-sorted insertion order — locks in that JS and
   // PHP sum in the same order (sorted), since float addition is non-associative
   { seed: 'test', key: 'k', weights: { c: 0.1, a: 0.2, b: 0.3 } },
+  // Astral-plane keys: UTF-16 vs code-point sort order (see EMOJI/PUA above).
+  { seed: 'test', key: 'k', weights: { [EMOJI]: 1, [PUA]: 2, a: 3 } },
 ];
 for (const c of weightedPickCases) {
   prngFixtures.weightedPick.push({
@@ -243,6 +273,8 @@ const shuffleCases = [
   { seed: 'test', key: 'k', items: ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'] },
   // duplicates collapse — output length matches unique-set length
   { seed: 'test', key: 'k', items: ['a', 'a', 'b', 'b', 'c', 'c'] },
+  // Astral-plane items: UTF-16 vs code-point sort order (see EMOJI/PUA above).
+  { seed: 'test', key: 'k', items: ['z', PUA, EMOJI, 'a'] },
 ];
 for (const c of shuffleCases) {
   prngFixtures.shuffle.push({
@@ -309,6 +341,11 @@ const initialsSeeds = [
   '🎲 spiel',
   'Œuvre',
   'rock-paper',
+  // The whole @ suffix is stripped, including line terminators (dotall): these
+  // seeds verify a CR / U+2028 / U+2029 right after `@` is removed, not kept.
+  'a@b' + String.fromCharCode(0x0d) + 'cd',
+  'a@b' + String.fromCharCode(0x2028) + 'cd',
+  'a@b' + String.fromCharCode(0x2029) + 'cd',
 ];
 
 writeJson(

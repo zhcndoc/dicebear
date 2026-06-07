@@ -53,7 +53,7 @@ class Prng:
         if len(unique) == 1:
             return unique[0]
 
-        ordered = sorted(unique, key=_code_point_key)
+        ordered = sorted(unique, key=_utf16_sort_key)
         index = math.floor(self.get_value(key) * len(ordered))
 
         return ordered[index]
@@ -72,7 +72,7 @@ class Prng:
         if len(keys) == 1:
             return str(keys[0])
 
-        keys = sorted(keys, key=_code_point_key)
+        keys = sorted(keys, key=_utf16_sort_key)
 
         # Sum in sorted-key order to match JS reduce-over-sorted parity — float
         # addition is non-associative, so iterating in insertion order would
@@ -142,7 +142,7 @@ class Prng:
         if len(items) <= 1:
             return list(items)
 
-        result = sorted(_unique_by_code_point(items), key=_code_point_key)
+        result = sorted(_unique_by_code_point(items), key=_utf16_sort_key)
         prng = Mulberry32(Fnv1a.hash(self._seed + ":" + key))
 
         for i in range(len(result) - 1, 0, -1):
@@ -159,14 +159,14 @@ class Prng:
         return Mulberry32(Fnv1a.hash(self._seed + ":" + key)).next_float()
 
 
-def _code_point_key(value: object) -> str:
-    """Cross-language deterministic sort key.
+def _utf16_sort_key(value: object) -> bytes:
+    """Cross-language deterministic sort key: UTF-16 code units.
 
-    Compare by the string representation's code points, matching JS
-    ``String(a) < String(b)`` and PHP ``strcmp`` for the ASCII values sorted in
-    practice (variant names, hex colors).
+    Matches JS ``String(a) < String(b)``, which compares by UTF-16 code unit.
+    Encoding to big-endian UTF-16 makes Python's byte comparison reproduce that
+    order; it differs from code-point order only for supplementary-plane chars.
     """
-    return str(value)
+    return str(value).encode("utf-16-be")
 
 
 def _unique_by_code_point(

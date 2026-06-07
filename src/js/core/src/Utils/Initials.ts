@@ -13,7 +13,8 @@ export class Initials {
     let input = seed;
 
     if (discardAtSymbol) {
-      input = seed.replace(/@.*/, '');
+      // Strip the whole @ suffix, including any line terminators (dotall `s`).
+      input = seed.replace(/@.*/s, '');
     }
 
     input = input.replace(/[`´'ʼ]/g, '');
