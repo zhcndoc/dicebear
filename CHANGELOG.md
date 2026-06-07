@@ -8,6 +8,20 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
+- **Rust library:** A new Rust implementation (the `dicebear-core` crate) that
+  produces identical output to the JavaScript library when given the same styles
+  and options.
+
+### Fixed
+
+- **Core:** Initials now strip the entire `@` suffix (e.g. an email domain),
+  including any line terminators. Previously the strip stopped at the first
+  carriage return or `U+2028`/`U+2029` line separator, so a seed with a line
+  break just after the `@` kept the trailing text as a second word. All language
+  libraries are affected and stay byte-identical.
+
 ## [10.1.0] - 2026-06-06
 
 ### Changed
@@ -110,7 +124,8 @@ See the
 
 [Unreleased]: https://github.com/dicebear/dicebear/compare/v10.1.0...HEAD
 [10.1.0]: https://github.com/dicebear/dicebear/compare/v10.1.0-rc.1...v10.1.0
-[10.1.0-rc.1]: https://github.com/dicebear/dicebear/compare/v10.0.2...v10.1.0-rc.1
+[10.1.0-rc.1]:
+  https://github.com/dicebear/dicebear/compare/v10.0.2...v10.1.0-rc.1
 [10.0.2]: https://github.com/dicebear/dicebear/compare/v10.0.1...v10.0.2
 [10.0.1]: https://github.com/dicebear/dicebear/compare/v10.0.0...v10.0.1
 [10.0.0]: https://github.com/dicebear/dicebear/releases/tag/v10.0.0
