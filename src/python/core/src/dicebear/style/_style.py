@@ -5,12 +5,12 @@ from __future__ import annotations
 import copy
 from typing import Any, cast
 
-from .errors import ErrorDetail, StyleValidationError
-from .style_def.canvas import Canvas
-from .style_def.color import Color
-from .style_def.component import Component
-from .style_def.meta import Meta
-from .validator import StyleValidator
+from ..errors import ErrorDetail, StyleValidationError
+from ..validator import StyleValidator
+from .canvas import Canvas
+from .color import Color
+from .component import Component
+from .meta import Meta
 
 
 class Style:

@@ -9,7 +9,7 @@ from .errors import CircularColorReferenceError
 from .options import Options, Range
 from .prng import Prng
 from .style import Style
-from .style_def.component import Component
+from .style.component import Component
 from .utils.color import Color as ColorUtil
 
 T = TypeVar("T")

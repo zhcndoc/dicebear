@@ -1,7 +1,13 @@
-"""Read-only value objects mirroring the ``Style/*`` sub-views (PHP/JS ports)."""
+"""Validated style wrapper and its read-only sub-views.
+
+:class:`Style` is the validated, lazily-decomposed wrapper around a style
+definition; the sub-views (:class:`Canvas`, :class:`Component`, :class:`Meta`,
+…) mirror the ``Style/*`` types of the PHP/JS ports.
+"""
 
 from __future__ import annotations
 
+from ._style import Style
 from .canvas import Canvas
 from .color import Color
 from .component import Component
@@ -24,4 +30,5 @@ __all__ = [
     "MetaCreator",
     "MetaLicense",
     "MetaSource",
+    "Style",
 ]

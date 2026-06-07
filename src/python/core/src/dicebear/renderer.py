@@ -9,9 +9,9 @@ from typing import Any
 from .prng import Fnv1a
 from .resolver import Resolver
 from .style import Style
-from .style_def.canvas import Canvas
-from .style_def.component import Component
-from .style_def.element import Element
+from .style.canvas import Canvas
+from .style.component import Component
+from .style.element import Element
 from .utils.initials import Initials
 from .utils.license import License
 from .utils.number import Number
