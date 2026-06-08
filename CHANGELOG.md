@@ -8,6 +8,17 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Fixed
+
+- **Core (Python):** `Avatar.to_json()` now serializes whole-number floats in
+  the resolved-options snapshot as integers (`1`, not `1.0`), matching the
+  JavaScript, Rust, and PHP libraries. Previously snapshot values such as
+  `scale`, `rotate`, `translateX`/`translateY`, `borderRadius`, color angles,
+  and per-component transforms were emitted as `1.0`/`0.0`, so the serialized
+  JSON diverged from the other ports — the rendered SVG was unaffected. The
+  values were already numerically equal, so only consumers comparing or hashing
+  the serialized options JSON across languages were affected.
+
 ## [10.2.0-rc.1] - 2026-06-07
 
 ### Added
