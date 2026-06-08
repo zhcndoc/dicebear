@@ -164,9 +164,13 @@ class Resolver:
         """Return an informational snapshot of every value the resolver picked.
 
         Unset entries (``None``) are filtered out so they disappear on JSON
-        encode, mirroring the JS behavior. The raw seed is excluded.
+        encode, mirroring the JS behavior. Whole-number floats are emitted as
+        ints (``1``, not ``1.0``) so ``to_json()`` is byte-identical to the JS
+        and Rust ports. The raw seed is excluded.
         """
-        return {k: v for k, v in self._result.items() if v is not None}
+        return {
+            k: _num_value(v) for k, v in self._result.items() if v is not None
+        }
 
     def _probability(self, component: Component) -> int | float:
         """Return the visibility probability (0–100) for the component.
@@ -257,3 +261,17 @@ class Resolver:
         self._result[key] = value
 
         return value
+
+
+def _num_value(value: Any) -> Any:
+    """Encode a numeric snapshot value the way the JS/Rust ports do.
+
+    A whole-number float becomes a JSON integer (``1``, not ``1.0``) so the
+    resolved-options snapshot is byte-identical across ports. ``bool`` is an
+    ``int`` subclass but never a ``float``, so it is left untouched; non-floats,
+    fractional floats, and non-finite floats (``NaN`` / ``inf``) pass through.
+    """
+    if isinstance(value, float) and value.is_integer() and abs(value) < 2**53:
+        return int(value)
+
+    return value

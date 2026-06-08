@@ -169,6 +169,8 @@ def test_avatar(style_name: str, entry: dict[str, Any]) -> None:
     result = Avatar(style_data, entry["options"]).to_json()
 
     assert result["svg"] == entry["svg"]
-    # Round-trip the resolved options through JSON so int-vs-float typing matches
-    # the JS-generated fixture (Python 1.0 and JS 1 both become JSON 1).
-    assert json.loads(json.dumps(result["options"])) == entry["resolvedOptions"]
+    # Compare the serialized options, not just structural equality: Python treats
+    # ``1.0 == 1`` as True, so a plain ``==`` would hide int-vs-float drift in
+    # to_json(). The resolver normalizes whole-number floats to ints (matching
+    # JS/Rust), so the JSON is byte-identical to the JS-generated fixture.
+    assert json.dumps(result["options"]) == json.dumps(entry["resolvedOptions"])
