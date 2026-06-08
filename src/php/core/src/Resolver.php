@@ -201,6 +201,12 @@ class Resolver
      * Unset entries (null) are filtered out so they disappear on JSON encode,
      * mirroring the JS behavior.
      *
+     * Whole-number floats (e.g. `scale` 1.0, `rotate` 0.0) are left as floats
+     * here. `json_encode()` drops the zero fraction by default — `1.0` encodes
+     * to `1` — so the snapshot stays byte-identical to the JS, Rust, and Python
+     * ports. This relies on the default encoder behavior: passing
+     * `JSON_PRESERVE_ZERO_FRACTION` would emit `1.0` and break that parity.
+     *
      * @return array<string, mixed>
      */
     public function resolved(): array
