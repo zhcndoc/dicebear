@@ -168,9 +168,7 @@ class Resolver:
         ints (``1``, not ``1.0``) so ``to_json()`` is byte-identical to the JS
         and Rust ports. The raw seed is excluded.
         """
-        return {
-            k: _num_value(v) for k, v in self._result.items() if v is not None
-        }
+        return {k: _num_value(v) for k, v in self._result.items() if v is not None}
 
     def _probability(self, component: Component) -> int | float:
         """Return the visibility probability (0–100) for the component.
