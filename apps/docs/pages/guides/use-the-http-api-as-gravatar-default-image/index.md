@@ -66,6 +66,23 @@ gravatar_image = f"https://www.gravatar.com/avatar/{email_hash}?d={default_image
 # https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng
 ```
 
+<!-- prettier-ignore -->
+```go [Go]
+import (
+	"fmt"
+	"net/url"
+)
+
+emailHash := url.QueryEscape("00000000000000000000000000000000")
+defaultImage := url.QueryEscape(
+	"https://api.dicebear.com/10.x/lorelei/svg", // [!code --]
+	"https://api.dicebear.com/10.x/lorelei/png", // [!code ++]
+)
+
+gravatarImage := fmt.Sprintf("https://www.gravatar.com/avatar/%s?d=%s", emailHash, defaultImage)
+// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng
+```
+
 :::
 
 Usually we set options in the query string, such as the seed. Since a query
@@ -117,6 +134,24 @@ default_image = urllib.parse.quote(
 
 gravatar_image = f"https://www.gravatar.com/avatar/{email_hash}?d={default_image}"
 # https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
+```
+
+<!-- prettier-ignore -->
+```go [Go]
+import (
+	"fmt"
+	"net/url"
+)
+
+emailHash := url.QueryEscape("00000000000000000000000000000000")
+options := fmt.Sprintf("seed=%s", emailHash)
+defaultImage := url.QueryEscape(
+	fmt.Sprintf("https://api.dicebear.com/10.x/lorelei/png?%s", options), // [!code --]
+	fmt.Sprintf("https://api.dicebear.com/10.x/lorelei/png/%s", url.QueryEscape(options)), // [!code ++]
+)
+
+gravatarImage := fmt.Sprintf("https://www.gravatar.com/avatar/%s?d=%s", emailHash, defaultImage)
+// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
 ```
 
 :::

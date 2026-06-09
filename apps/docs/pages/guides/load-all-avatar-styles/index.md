@@ -2,7 +2,7 @@
 title: Load All Avatar Styles from @dicebear/styles | DiceBear
 description: >
   Learn how to load every avatar style shipped with @dicebear/styles at once —
-  in Node.js, PHP, Python and Rust.
+  in Node.js, PHP, Python, Rust and Go.
 ---
 
 # How to load all avatar styles from `@dicebear/styles`?
@@ -17,7 +17,7 @@ Packagist,
 projects only need one or two styles, but sometimes — for a style picker, a
 gallery page, or a batch job — you want to load all of them at once.
 
-This guide shows how to do that in Node.js, PHP, Python and Rust.
+This guide shows how to do that in Node.js, PHP, Python, Rust and Go.
 
 ## Node.js
 
@@ -130,4 +130,37 @@ for name in dicebear_styles::all() {
 }
 
 let avatar = Avatar::new(&styles["lorelei"], json!({ "seed": "Alice" }))?;
+```
+
+## Go
+
+The `github.com/dicebear/styles/v10` module embeds every style — unlike the Rust
+crate, there is no per-style opt-in, so the whole set is available once the
+module is added.
+
+```sh
+go get github.com/dicebear/dicebear-go/v10
+go get github.com/dicebear/styles/v10
+```
+
+`styles.All()` lists every embedded style and `styles.Get(name)` returns its raw
+JSON definition.
+
+```go
+import (
+	dicebear "github.com/dicebear/dicebear-go/v10"
+	"github.com/dicebear/styles/v10"
+)
+
+parsed := map[string]*dicebear.Style{}
+for _, name := range styles.All() {
+	definition, _ := styles.Get(name)
+	style, err := dicebear.NewStyle([]byte(definition))
+	if err != nil {
+		panic(err)
+	}
+	parsed[name] = style
+}
+
+avatar, _ := dicebear.NewAvatar(parsed["lorelei"], map[string]any{"seed": "Alice"})
 ```

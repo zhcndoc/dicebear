@@ -7,7 +7,7 @@ description: >
 ---
 
 <script setup>
-import { Palette, Code2, Globe, Terminal, Server, Library, Boxes } from '@lucide/vue';
+import { Palette, Code2, Globe, Terminal, Server, Library, Boxes, Hexagon } from '@lucide/vue';
 import DocsHighlights from '@theme/components/docs/DocsHighlights.vue';
 
 const highlights = [
@@ -52,6 +52,14 @@ const highlights = [
     link: '/how-to-use/rust-library/',
   },
   {
+    icon: Hexagon,
+    title: 'Go Library',
+    description:
+      'Generate avatars on the server with Go 1.23+. Identical API to the JS library — same seed, same result.',
+    color: '#00add8',
+    link: '/how-to-use/go-library/',
+  },
+  {
     icon: Terminal,
     title: 'CLI',
     description:
@@ -89,7 +97,8 @@ are possible! Just use the countless options that each avatar style provides.
 And thanks to the [JavaScript library](/how-to-use/js-library/),
 [PHP library](/how-to-use/php-library/),
 [Python library](/how-to-use/python-library/),
-[Rust library](/how-to-use/rust-library/), [HTTP API](/how-to-use/http-api/),
+[Rust library](/how-to-use/rust-library/),
+[Go library](/how-to-use/go-library/), [HTTP API](/how-to-use/http-api/),
 [CLI](/how-to-use/cli/),
 [Figma plugin](https://www.figma.com/community/plugin/1005765655729342787/DiceBear-Exporter),
 [Editor](https://editor.dicebear.com) and [Playground](/playground/), your next
@@ -121,8 +130,9 @@ important to note that the PRNG **does not** attempt to be
 DiceBear is built with privacy in mind. When using the
 [JavaScript library](/how-to-use/js-library/),
 [PHP library](/how-to-use/php-library/),
-[Python library](/how-to-use/python-library/) or
-[Rust library](/how-to-use/rust-library/), avatars are generated entirely on
+[Python library](/how-to-use/python-library/),
+[Rust library](/how-to-use/rust-library/) or
+[Go library](/how-to-use/go-library/), avatars are generated entirely on
 your infrastructure — no personal data ever leaves your systems. For teams that
 require full control over data retention and infrastructure, DiceBear can be
 [self-hosted](/guides/host-the-http-api-yourself/) — making it a privacy-focused

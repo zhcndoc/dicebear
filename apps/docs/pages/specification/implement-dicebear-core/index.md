@@ -10,8 +10,10 @@ description: >
 This guide explains how to implement DiceBear Core in any programming language.
 A correct implementation produces **byte-identical SVGs** to the
 [JavaScript](https://github.com/dicebear/dicebear/tree/10.x/src/js/core),
-[PHP](https://github.com/dicebear/dicebear/tree/10.x/src/php/core) and
-[Python](https://github.com/dicebear/dicebear/tree/10.x/src/python/core)
+[PHP](https://github.com/dicebear/dicebear/tree/10.x/src/php/core),
+[Python](https://github.com/dicebear/dicebear/tree/10.x/src/python/core),
+[Rust](https://github.com/dicebear/dicebear/tree/10.x/src/rust/core) and
+[Go](https://github.com/dicebear/dicebear/tree/10.x/src/go/core)
 reference implementations for the same seed and style definition.
 
 ## Architecture overview

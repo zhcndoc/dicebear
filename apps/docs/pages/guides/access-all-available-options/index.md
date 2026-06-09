@@ -57,6 +57,22 @@ descriptor = OptionsDescriptor(style)
 print(descriptor.to_json())
 ```
 
+## Go
+
+```go
+import (
+	"fmt"
+
+	dicebear "github.com/dicebear/dicebear-go/v10"
+	"github.com/dicebear/styles/v10"
+)
+
+style, _ := dicebear.NewStyle([]byte(styles.Micah))
+descriptor := dicebear.NewOptionsDescriptor(style).ToJSON()
+
+fmt.Println(descriptor)
+```
+
 ## Field descriptor types
 
 The `toJSON()` method returns a map of option names to field descriptors. Each

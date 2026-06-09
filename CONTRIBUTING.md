@@ -2,8 +2,8 @@
 
 Thanks for your interest in contributing to DiceBear.
 
-This is the main monorepo: the JavaScript, PHP, Python, and Rust core libraries,
-the CLI, the docs site, and the editor all live here. Repositories covering the
+This is the main monorepo: the JavaScript, PHP, Python, Rust, and Go core
+libraries, the CLI, the docs site, and the editor all live here. Repositories covering the
 JSON Schema, the avatar style definitions, the HTTP API, and the Figma exporter
 are separate and each have their own `CONTRIBUTING.md`:
 
@@ -49,6 +49,8 @@ instructions below only cover this monorepo.
 - For Rust work: Rust 1.80+ with the `clippy` and `rustfmt` components; build
   and test with `cargo test`, `cargo clippy`, and `cargo fmt` inside
   `src/rust/core/`
+- For Go work: Go 1.23+ (CI runs on 1.23–1.25); test with `go test ./...` and
+  check with `gofmt -l .` and `go vet ./...` inside `src/go/core/`
 
 ## Local setup
 
@@ -92,7 +94,8 @@ src/
 │   └── converter/     # SVG → raster converter
 ├── php/             # PHP port (Composer package `dicebear/core`)
 ├── python/          # Python port (PyPI package `dicebear-core`)
-└── rust/            # Rust port (crates.io crate `dicebear-core`)
+├── rust/            # Rust port (crates.io crate `dicebear-core`)
+└── go/              # Go port (module `github.com/dicebear/dicebear-go/v10`)
 apps/
 ├── docs/            # VitePress documentation site (dicebear.com), including the Playground
 └── editor/          # The in-browser editor (editor.dicebear.com)
@@ -155,6 +158,22 @@ The Rust core reads the two draft-07 schemas from the `dicebear-schema` crate
 (the Rust counterpart of `@dicebear/schema` / `dicebear/schema`) as a runtime
 dependency — nothing is vendored.
 
+### Go core (`src/go/core/`)
+
+```sh
+cd src/go/core
+go test ./...
+go vet ./...
+gofmt -l .   # prints nothing when formatting is correct
+```
+
+The Go core reads the two draft-07 schemas from the `github.com/dicebear/schema`
+module (the Go counterpart of `@dicebear/schema` / `dicebear/schema`) as a
+dependency — nothing is vendored. Style definitions come from
+`github.com/dicebear/styles/v10`. The module path carries the major version
+(`/v10`), so a major bump changes the path by hand; `scripts/version.mjs` only
+creates the Git tag the module proxy reads.
+
 ### Cross-language parity
 
 Every port must produce output **byte-identical** to the reference JavaScript
@@ -169,6 +188,8 @@ each side consumes it:
 - Python side: `tests/test_parity.py`, run via `pytest` in `src/python/core/`.
 - Rust side: the module unit tests plus `tests/avatars.rs`, run via `cargo test`
   in `src/rust/core/`.
+- Go side: the in-package tests (`parity_test.go`, `avatars_test.go`), run via
+  `go test ./...` in `src/go/core/`.
 
 The fixtures cover `Fnv1a` (hash + hex), `Mulberry32` (chained sequences), every
 `Prng` method, number-to-string formatting (`numbers.json` — the `formatNumber`
@@ -184,7 +205,7 @@ fixtures from the JS reference and commit the diff:
 npm run fixtures:parity
 ```
 
-The PHP, Python, and Rust suites will then fail loudly until those sides are
+The PHP, Python, Rust, and Go suites will then fail loudly until those sides are
 brought back in sync. That is the intended signal. If you only intend to touch
 one language, expect to update both before your PR can be merged.
 
@@ -229,6 +250,8 @@ npm run build --workspace @dicebear/editor
   denied); run `cargo fmt` and
   `cargo clippy --all-targets --all-features -- -D warnings` in `src/rust/core/`
   before you open a PR.
+- Go code is formatted with `gofmt` and vetted with `go vet`; run `gofmt -w .`
+  and `go vet ./...` in `src/go/core/` before you open a PR.
 
 ## Releasing (maintainers only)
 

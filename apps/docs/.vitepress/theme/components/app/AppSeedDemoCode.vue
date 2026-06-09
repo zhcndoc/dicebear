@@ -6,7 +6,7 @@ import Select from 'primevue/select';
 import { UiCode } from '../ui';
 import { escapeJsString, escapeShellArg } from '../../utils/escape';
 
-type CodeExample = 'api' | 'js' | 'php' | 'python' | 'rust' | 'cli';
+type CodeExample = 'api' | 'js' | 'php' | 'python' | 'rust' | 'go' | 'cli';
 
 const props = defineProps<{
   seed: string;
@@ -21,6 +21,7 @@ const exampleOptions: { label: string; value: CodeExample }[] = [
   { label: 'PHP Library', value: 'php' },
   { label: 'Python Library', value: 'python' },
   { label: 'Rust Library', value: 'rust' },
+  { label: 'Go Library', value: 'go' },
   { label: 'CLI', value: 'cli' },
 ];
 
@@ -85,6 +86,25 @@ let avatar = Avatar::new(&style, json!({
 }))?;`,
 );
 
+const goExample = computed(() => {
+  // The Go styles module exports each style as a PascalCase variable
+  // (e.g. "big-ears" → BigEars).
+  const styleConst = props.style
+    .split('-')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join('');
+
+  return `import (
+	dicebear "github.com/dicebear/dicebear-go/v10"
+	"github.com/dicebear/styles/v10"
+)
+
+style, _ := dicebear.NewStyle([]byte(styles.${styleConst}))
+avatar, _ := dicebear.NewAvatar(style, map[string]any{
+	"seed": "${escapeJsString(props.seed)}",
+})`;
+});
+
 const cliExample = computed(
   () => `npx dicebear ${props.style} --seed '${escapeShellArg(props.seed)}'`,
 );
@@ -140,6 +160,13 @@ const playgroundLink = '/playground/';
           scroll-to-bottom
           class="app-seed-demo-code-block"
           :class="{ active: activeExample === 'rust' }"
+        />
+        <UiCode
+          :code="goExample"
+          lang="go"
+          scroll-to-bottom
+          class="app-seed-demo-code-block"
+          :class="{ active: activeExample === 'go' }"
         />
         <UiCode
           :code="cliExample"

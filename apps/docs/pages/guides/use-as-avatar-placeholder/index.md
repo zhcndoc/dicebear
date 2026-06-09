@@ -227,6 +227,34 @@ fn placeholder_avatar(style: &Style, user_id: &str) -> Result<String, Error> {
 }
 ```
 
+## With the Go Library
+
+Use the Go library for server-side rendering without an additional HTTP request.
+For full installation and API details, see the
+[Go library documentation](/how-to-use/go-library/).
+
+```go
+import (
+	dicebear "github.com/dicebear/dicebear-go/v10"
+	"github.com/dicebear/styles/v10"
+)
+
+style, _ := dicebear.NewStyle([]byte(styles.Thumbs))
+
+func placeholderAvatar(style *dicebear.Style, userID string) (string, error) {
+	avatar, err := dicebear.NewAvatar(style, map[string]any{
+		"seed":         userID,
+		"size":         48,
+		"borderRadius": 50,
+	})
+	if err != nil {
+		return "", err
+	}
+
+	return avatar.SVG(), nil
+}
+```
+
 ## Choosing a Style
 
 Different styles suit different use cases. Click a style to see all available
@@ -256,6 +284,11 @@ Avatar(style, {"seed": user_id, "size": 48, "borderRadius": 50})
 ```rust
 // Rust library
 Avatar::new(&style, json!({ "seed": user_id, "size": 48, "borderRadius": 50 }))?;
+```
+
+```go
+// Go library
+dicebear.NewAvatar(style, map[string]any{"seed": userID, "size": 48, "borderRadius": 50})
 ```
 
 ```

@@ -98,3 +98,26 @@ jobs:
       - name: Run tests
         working-directory: src/rust/core
         run: cargo test
+
+  test-go:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        go-version: ['1.23', '1.24', '1.25']
+
+    steps:
+      - uses: actions/checkout@v5
+      - name: Use Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Check formatting
+        working-directory: src/go/core
+        run: test -z "$(gofmt -l .)" || (gofmt -l . && exit 1)
+      - name: Run go vet
+        working-directory: src/go/core
+        run: go vet ./...
+      - name: Run tests
+        working-directory: src/go/core
+        run: go test ./...

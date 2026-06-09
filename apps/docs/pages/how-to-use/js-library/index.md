@@ -14,7 +14,8 @@ in the browser and also in [Node.js](https://nodejs.org/en/) (version 22 or
 higher). In other environments you may be interested in the
 [PHP Library](/how-to-use/php-library/), the
 [Python Library](/how-to-use/python-library/), the
-[Rust Library](/how-to-use/rust-library/), the [HTTP API](/how-to-use/http-api/)
+[Rust Library](/how-to-use/rust-library/), the
+[Go Library](/how-to-use/go-library/), the [HTTP API](/how-to-use/http-api/)
 or the [CLI](/how-to-use/cli/).
 
 The library is a pure

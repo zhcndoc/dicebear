@@ -65,6 +65,13 @@ if (existsSync(cargoPath)) {
   }
 }
 
+// The Go core (src/go/core) needs no file bump: a Go module's version lives
+// entirely in the Git tag, which the module proxy reads directly. The tag
+// created below (e.g. v10.2.0) is mirrored to the standalone dicebear-go repo by
+// split-go-core.yml, and `github.com/dicebear/dicebear-go/v10` resolves it from
+// there. The major version is encoded in the module path (/v10), so it only
+// changes by hand on a major bump — not here.
+
 // Promote the changelog's Unreleased section to the new version
 const changelogPath = join(ROOT, "CHANGELOG.md");
 if (existsSync(changelogPath)) {

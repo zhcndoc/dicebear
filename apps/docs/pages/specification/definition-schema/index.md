@@ -553,10 +553,13 @@ ship two files (both JSON Schema **draft-07**):
 
 Install via your package manager:
 
-| Ecosystem | Install                            |
-| --------- | ---------------------------------- |
-| npm       | `npm install @dicebear/schema`     |
-| Composer  | `composer require dicebear/schema` |
+| Ecosystem | Install                              |
+| --------- | ------------------------------------ |
+| npm       | `npm install @dicebear/schema`       |
+| Composer  | `composer require dicebear/schema`   |
+| PyPI      | `pip install dicebear-schema`        |
+| Cargo     | `cargo add dicebear-schema`          |
+| Go        | `go get github.com/dicebear/schema`  |
 
 Or reference the schema directly from a CDN — handy for the `$schema` field of
 your style definition so editors like VS Code provide autocomplete and inline

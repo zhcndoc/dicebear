@@ -32,6 +32,10 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         text: 'Rust Library <span class="vp-sidebar-badge is-new">New</span>',
         link: '/how-to-use/rust-library/',
       },
+      {
+        text: 'Go Library <span class="vp-sidebar-badge is-new">New</span>',
+        link: '/how-to-use/go-library/',
+      },
       { text: 'HTTP-API', link: '/how-to-use/http-api/' },
       { text: 'CLI', link: '/how-to-use/cli/' },
     ],

@@ -385,6 +385,23 @@ let avatar = Avatar::new(&style, json!({ "seed": "test" }))?;
 println!("{}", avatar.to_svg());
 ```
 
+### With the Go Library
+
+```go
+import (
+	"fmt"
+	"os"
+
+	dicebear "github.com/dicebear/dicebear-go/v10"
+)
+
+definition, _ := os.ReadFile("./my-style.json")
+style, _ := dicebear.NewStyle(definition)
+
+avatar, _ := dicebear.NewAvatar(style, map[string]any{"seed": "test"})
+fmt.Println(avatar.SVG())
+```
+
 ## Next steps
 
 - See the [Definition Schema Reference](/specification/definition-schema/) for

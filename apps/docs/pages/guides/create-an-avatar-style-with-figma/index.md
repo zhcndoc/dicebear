@@ -111,7 +111,8 @@ Congratulations! You can now use your avatar style with the
 [JS Library](/how-to-use/js-library/), the
 [PHP Library](/how-to-use/php-library/), the
 [Python Library](/how-to-use/python-library/), the
-[Rust Library](/how-to-use/rust-library/), or the [CLI](/how-to-use/cli/).
+[Rust Library](/how-to-use/rust-library/), the
+[Go Library](/how-to-use/go-library/), or the [CLI](/how-to-use/cli/).
 
 ### With the JS Library
 
@@ -168,6 +169,24 @@ let avatar = Avatar::new(&style, json!({
     "seed": "dicebear",
     // ... other options
 }))?;
+```
+
+### With the Go Library
+
+```go
+import (
+	"os"
+
+	dicebear "github.com/dicebear/dicebear-go/v10"
+)
+
+definition, _ := os.ReadFile("./your-style.json")
+style, _ := dicebear.NewStyle(definition)
+
+avatar, _ := dicebear.NewAvatar(style, map[string]any{
+	"seed": "dicebear",
+	// ... other options
+})
 ```
 
 ### With the CLI
