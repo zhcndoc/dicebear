@@ -542,8 +542,13 @@ export class Renderer {
    */
   #resolveVariable(name: StyleDefinitionVariableReference['name']): string {
     switch (name) {
-      case 'initial':
-        return this.#initials().charAt(0);
+      case 'initial': {
+        // charAt(0) would return a lone surrogate (ill-formed XML) for
+        // supplementary-plane initials; take the full first code point
+        // instead, like the PHP/Python/Rust/Go ports.
+        const first = this.#initials().codePointAt(0);
+        return first !== undefined ? String.fromCodePoint(first) : '';
+      }
       case 'initials':
         return this.#initials();
       case 'fontWeight':
