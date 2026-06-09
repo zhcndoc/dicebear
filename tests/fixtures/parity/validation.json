@@ -1,0 +1,371 @@
+{
+  "styles": [
+    {
+      "id": "minimal",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": []
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "with-component-and-color",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": []
+        },
+        "components": {
+          "shape": {
+            "width": 100,
+            "height": 100,
+            "variants": {
+              "a": {
+                "elements": []
+              },
+              "b": {
+                "elements": []
+              }
+            }
+          }
+        },
+        "colors": {
+          "fill": {
+            "values": [
+              "#000000"
+            ]
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "id": "empty",
+      "definition": {},
+      "valid": false
+    },
+    {
+      "id": "missing-canvas",
+      "definition": {
+        "components": {}
+      },
+      "valid": false
+    },
+    {
+      "id": "canvas-not-object",
+      "definition": {
+        "canvas": "nope"
+      },
+      "valid": false
+    },
+    {
+      "id": "canvas-missing-size",
+      "definition": {
+        "canvas": {
+          "elements": []
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "alias-to-unknown-component",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": []
+        },
+        "components": {
+          "a": {
+            "extends": "missing"
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "id": "unknown-root-key",
+      "definition": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": []
+        },
+        "unexpected": true
+      },
+      "valid": false
+    }
+  ],
+  "options": [
+    {
+      "id": "empty",
+      "options": {},
+      "valid": true
+    },
+    {
+      "id": "seed-string",
+      "options": {
+        "seed": "x"
+      },
+      "valid": true
+    },
+    {
+      "id": "seed-number",
+      "options": {
+        "seed": 123
+      },
+      "valid": false
+    },
+    {
+      "id": "size-min",
+      "options": {
+        "size": 1
+      },
+      "valid": true
+    },
+    {
+      "id": "size-zero",
+      "options": {
+        "size": 0
+      },
+      "valid": false
+    },
+    {
+      "id": "size-negative",
+      "options": {
+        "size": -5
+      },
+      "valid": false
+    },
+    {
+      "id": "size-float",
+      "options": {
+        "size": 12.5
+      },
+      "valid": false
+    },
+    {
+      "id": "size-huge",
+      "options": {
+        "size": 2000000
+      },
+      "valid": false
+    },
+    {
+      "id": "flip-valid",
+      "options": {
+        "flip": "horizontal"
+      },
+      "valid": true
+    },
+    {
+      "id": "flip-invalid",
+      "options": {
+        "flip": "diagonal"
+      },
+      "valid": false
+    },
+    {
+      "id": "rotate-in-range",
+      "options": {
+        "rotate": 360
+      },
+      "valid": true
+    },
+    {
+      "id": "rotate-out-of-range",
+      "options": {
+        "rotate": 361
+      },
+      "valid": false
+    },
+    {
+      "id": "scale-negative",
+      "options": {
+        "scale": -1
+      },
+      "valid": false
+    },
+    {
+      "id": "title-number",
+      "options": {
+        "title": 123
+      },
+      "valid": false
+    },
+    {
+      "id": "id-randomization-string",
+      "options": {
+        "idRandomization": "yes"
+      },
+      "valid": false
+    },
+    {
+      "id": "background-color-string",
+      "options": {
+        "backgroundColor": "ff0000"
+      },
+      "valid": true
+    },
+    {
+      "id": "background-color-list",
+      "options": {
+        "backgroundColor": [
+          "ff0000"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "id": "background-color-invalid-hex",
+      "options": {
+        "backgroundColor": [
+          "zzz"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "id": "unknown-option",
+      "options": {
+        "unknownOption": 1
+      },
+      "valid": false
+    }
+  ],
+  "circularColors": [
+    {
+      "id": "self-reference",
+      "style": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": {
+                  "type": "color",
+                  "name": "a"
+                }
+              }
+            }
+          ]
+        },
+        "colors": {
+          "a": {
+            "values": [
+              "#000000"
+            ],
+            "contrastTo": "a"
+          }
+        }
+      },
+      "options": {
+        "seed": "x"
+      },
+      "chain": [
+        "a",
+        "a"
+      ]
+    },
+    {
+      "id": "two-color-cycle",
+      "style": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": {
+                  "type": "color",
+                  "name": "a"
+                }
+              }
+            }
+          ]
+        },
+        "colors": {
+          "a": {
+            "values": [
+              "#000000"
+            ],
+            "contrastTo": "b"
+          },
+          "b": {
+            "values": [
+              "#ffffff"
+            ],
+            "contrastTo": "a"
+          }
+        }
+      },
+      "options": {
+        "seed": "x"
+      },
+      "chain": [
+        "a",
+        "b",
+        "a"
+      ]
+    },
+    {
+      "id": "three-color-cycle",
+      "style": {
+        "canvas": {
+          "width": 100,
+          "height": 100,
+          "elements": [
+            {
+              "type": "element",
+              "name": "rect",
+              "attributes": {
+                "fill": {
+                  "type": "color",
+                  "name": "a"
+                }
+              }
+            }
+          ]
+        },
+        "colors": {
+          "a": {
+            "values": [
+              "#000000"
+            ],
+            "contrastTo": "b"
+          },
+          "b": {
+            "values": [
+              "#ffffff"
+            ],
+            "contrastTo": "c"
+          },
+          "c": {
+            "values": [
+              "#ff0000"
+            ],
+            "contrastTo": "a"
+          }
+        }
+      },
+      "options": {
+        "seed": "x"
+      },
+      "chain": [
+        "a",
+        "b",
+        "c",
+        "a"
+      ]
+    }
+  ]
+}

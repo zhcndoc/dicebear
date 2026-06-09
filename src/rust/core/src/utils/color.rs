@@ -145,7 +145,91 @@ fn linearize(channel: u8) -> f64 {
 
 #[cfg(test)]
 mod tests {
+    use std::fs;
+    use std::path::PathBuf;
+
+    use serde_json::Value;
+
     use super::*;
+
+    fn fixture(name: &str) -> Value {
+        let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("../../../tests/fixtures/parity")
+            .join(name);
+        let text =
+            fs::read_to_string(&path).unwrap_or_else(|e| panic!("read {}: {e}", path.display()));
+        serde_json::from_str(&text).unwrap()
+    }
+
+    fn strings(v: &Value) -> Vec<String> {
+        v.as_array()
+            .unwrap()
+            .iter()
+            .map(|x| x.as_str().unwrap().to_string())
+            .collect()
+    }
+
+    #[test]
+    fn color_parity() {
+        let f = fixture("colors.json");
+
+        for c in f["toHex"].as_array().unwrap() {
+            assert_eq!(
+                to_hex(c["input"].as_str().unwrap()),
+                c["result"].as_str().unwrap(),
+                "toHex {c}"
+            );
+        }
+
+        for c in f["toRgbHex"].as_array().unwrap() {
+            assert_eq!(
+                to_rgb_hex(c["input"].as_str().unwrap()),
+                c["result"].as_str().unwrap(),
+                "toRgbHex {c}"
+            );
+        }
+
+        for c in f["parseHex"].as_array().unwrap() {
+            let (r, g, b) = parse_hex(c["input"].as_str().unwrap());
+            let want = c["result"].as_array().unwrap();
+            assert_eq!(
+                [u64::from(r), u64::from(g), u64::from(b)],
+                [
+                    want[0].as_u64().unwrap(),
+                    want[1].as_u64().unwrap(),
+                    want[2].as_u64().unwrap()
+                ],
+                "parseHex {c}"
+            );
+        }
+
+        for c in f["luminance"].as_array().unwrap() {
+            assert_eq!(
+                luminance(c["input"].as_str().unwrap()),
+                c["result"].as_f64().unwrap(),
+                "luminance {c}"
+            );
+        }
+
+        for c in f["sortByContrast"].as_array().unwrap() {
+            let candidates = strings(&c["candidates"]);
+            assert_eq!(
+                sort_by_contrast(&candidates, c["refColor"].as_str().unwrap()),
+                strings(&c["result"]),
+                "sortByContrast {c}"
+            );
+        }
+
+        for c in f["filterNotEqualTo"].as_array().unwrap() {
+            let candidates = strings(&c["candidates"]);
+            let excluded = strings(&c["excluded"]);
+            assert_eq!(
+                filter_not_equal_to(&candidates, &excluded),
+                strings(&c["result"]),
+                "filterNotEqualTo {c}"
+            );
+        }
+    }
 
     #[test]
     fn normalizes_hex() {

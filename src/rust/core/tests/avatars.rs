@@ -6,7 +6,7 @@
 use std::fs;
 use std::path::PathBuf;
 
-use dicebear_core::{Avatar, Style};
+use dicebear_core::{Avatar, OptionsDescriptor, Style};
 use serde_json::Value;
 
 fn parity_dir() -> PathBuf {
@@ -50,6 +50,38 @@ fn avatar_parity() {
                 case["resolvedOptions"],
                 "{name} / {id} resolved options"
             );
+
+            // Only select cases carry a dataUri — it pins the percent-encoding
+            // contract (JS encodeURIComponent) without bloating every fixture.
+            if let Some(data_uri) = case["dataUri"].as_str() {
+                assert_eq!(avatar.to_data_uri(), data_uri, "{name} / {id} data URI");
+            }
         }
+    }
+}
+
+/// Cross-language descriptor parity: the field map every port derives from a
+/// style (types, ranges, sorted variant lists, per-color fields) must deep-equal
+/// the JS-generated fixture. Like the resolved-options assertion above, the
+/// `Value` comparison also pins whole numbers as JSON integers.
+#[test]
+fn descriptor_parity() {
+    let styles = ["initials", "thumbs", "glass", "shape-grid", "notionists"];
+
+    for name in styles {
+        let style_json = read(parity_dir().join("styles").join(format!("{name}.json")));
+        let style =
+            Style::from_str(&style_json).unwrap_or_else(|e| panic!("parse style {name}: {e}"));
+
+        let expected: Value = serde_json::from_str(&read(
+            parity_dir().join("descriptors").join(format!("{name}.json")),
+        ))
+        .unwrap();
+
+        assert_eq!(
+            OptionsDescriptor::new(&style).to_json(),
+            expected,
+            "{name} descriptor"
+        );
     }
 }
