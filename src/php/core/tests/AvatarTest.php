@@ -107,6 +107,9 @@ class AvatarTest extends TestCase
         $style = new Style(self::minimalStyleData());
         $avatar = new Avatar($style, ['seed' => 'test']);
 
-        $this->assertStringContainsString(rawurlencode($avatar->toString()), $avatar->toDataUri());
+        // The exact byte-level encoding (JS encodeURIComponent) is pinned by
+        // the parity fixtures; here only the round-trip is asserted.
+        $payload = substr($avatar->toDataUri(), strlen('data:image/svg+xml;charset=utf-8,'));
+        $this->assertSame($avatar->toString(), rawurldecode($payload));
     }
 }
