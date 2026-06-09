@@ -436,7 +436,7 @@ and just shuffles the user-supplied candidates.
 
 The contrast sort is the most likely source of subtle parity drift between ports
 — small differences in the linearization cutoff or the luminance coefficients
-change the ordering on certain palettes. Use these formulas exactly:
+change the ordering on certain palettes. These are the defining formulas:
 
 ```
 function linearize(channel: uint8) -> float:
@@ -459,7 +459,30 @@ function contrastRatio(a: hex, b: hex) -> float:
 
 The cutoff is `0.04045`, the exponent is `2.4`, and the coefficients are
 `0.2126 / 0.7152 / 0.0722` for R/G/B respectively. Sorting is descending by
-`contrastRatio(candidate, refColor)`.
+`contrastRatio(candidate, refColor)` and must be **stable** (equal ratios keep
+their input order).
+
+::: warning Do not compute the linearization at runtime
+IEEE 754 does not require `pow` to be correctly rounded, and real
+implementations disagree in the last bit: V8's `Math.pow`, the C math library
+(used by PHP, Python, and Rust), and Go's pure-Go `math.Pow` each produce a
+different result for some channel values. A port that evaluates
+`((s + 0.055) / 1.055) ^ 2.4` at runtime will fail the parity fixtures on some
+inputs — and a JavaScript build would even differ between browser engines.
+
+`linearize` has only 256 possible inputs, so every reference implementation
+embeds a precomputed lookup table with the 256 results instead — copy it from
+any reference port (e.g.
+[`Color.ts`](https://github.com/dicebear/dicebear/blob/10.x/src/js/core/src/Utils/Color.ts)).
+Decimal-literal parsing is correctly rounded in every mainstream language, so
+the table yields bit-identical doubles everywhere, and the remaining arithmetic
+(`+`, `×`, `÷`) is exactly specified by IEEE 754.
+
+One more trap: compilers that fuse `a × b + c` into a single FMA instruction
+(e.g. Go on arm64) round once instead of twice and drift in the last ULP. The
+weighted sum in `luminance` must round after every product — in Go that takes
+explicit `float64(...)` conversions around each product.
+:::
 
 ## SVG rendering pipeline
 
@@ -702,10 +725,10 @@ matches the first letter for every input the regex produces.
 
 The DiceBear repository ships a language-neutral parity test suite at
 [`tests/fixtures/parity/`](https://github.com/dicebear/dicebear/tree/10.x/tests/fixtures/parity).
-It is the canonical way to verify a new implementation: the JavaScript, PHP and
-Python reference implementations all consume the same JSON fixtures and assert
-the same outputs, so any port that reads these fixtures gets the same coverage
-for free.
+It is the canonical way to verify a new implementation: the JavaScript, PHP,
+Python, Rust, and Go reference implementations all consume the same JSON
+fixtures and assert the same outputs, so any port that reads these fixtures gets
+the same coverage for free.
 
 The fixture tree contains:
 
@@ -718,14 +741,33 @@ The fixture tree contains:
   `bool`, `float`, `integer`, `shuffle`) with `{seed, key, args, result}` test
   cases, including order-independence checks for `pick` / `weightedPick` /
   `shuffle`.
-- **`styles/{initials,thumbs,glass,notionists}.json`** — vendored copies of four
-  style definitions chosen to cover most rendering features (text, components,
-  color overrides, gradient fills, root SVG attributes).
-- **`avatars/{initials,thumbs,glass,notionists}.json`** —
+- **`numbers.json`** — the number-to-string formatting contract (at most 5
+  decimal places, halves toward +Infinity), including negative half-way
+  boundaries and tiny values that collapse to `0`.
+- **`initials.json`** — seed-to-initials extraction, covering accents, quotes,
+  email `@`-stripping, CJK, and emoji.
+- **`colors.json`** — the `Color` helpers (`toHex`, `toRgbHex`, `parseHex`,
+  `luminance`, `sortByContrast`, `filterNotEqualTo`). The luminance entries pin
+  exact doubles (including values around the linearization threshold — see the
+  warning above), and the sort cases include a stability check.
+- **`validation.json`** — style definitions and options with their expected
+  accept/reject outcome (error *messages* are language-specific and not part of
+  the contract), plus circular `contrastTo` chains with the expected resolution
+  path.
+- **`styles/{initials,thumbs,glass,notionists,shape-grid}.json`** — vendored
+  copies of five style definitions chosen to cover most rendering features
+  (text, components, color overrides, gradient fills, root SVG attributes).
+- **`avatars/{initials,thumbs,glass,notionists,shape-grid}.json`** —
   `{id, options, svg, resolvedOptions}` cases per style, exercising seed, size,
   scale, rotate, translate, border radius, flip, background gradients
-  (solid/linear/radial), component variant overrides, and style-specific options
-  like `fontFamily` and `gestureVariant`.
+  (solid/linear/radial), `title` escaping, component variant overrides, and
+  style-specific options like `fontFamily` and `gestureVariant`. Select cases
+  also carry a `dataUri` field that pins the percent-encoding contract
+  (JavaScript's `encodeURIComponent`: every byte except `A-Za-z0-9-_.!~*'()` is
+  escaped).
+- **`descriptors/{initials,thumbs,glass,notionists,shape-grid}.json`** — the
+  `OptionsDescriptor` field map per style (types, ranges, sorted variant lists,
+  per-color fields).
 
 ### How to use the fixtures
 
@@ -739,7 +781,14 @@ mulberry32: m = Mulberry32(seed);
             for each {float, state} in sequence:
               m.nextFloat() == float && m.state() == state
 prng:       Prng(seed).<method>(key, args) == result
-avatar:     Avatar(style, options).toString() == svg   (byte-for-byte)
+numbers:    formatNumber(input)       == entry.output
+initials:   Initials::fromSeed(seed)  == entry.result
+colors:     Color::<method>(args)     == entry.result   (floats bit-exact)
+validation: Style/Avatar construction succeeds iff entry.valid;
+            circular cases throw with chain == entry.chain
+descriptor: OptionsDescriptor(style).toJSON() deep-equals the fixture
+avatar:     Avatar(style, options).toString() == svg    (byte-for-byte)
+            Avatar(style, options).toDataUri() == dataUri (when present)
 ```
 
 Start with `fnv1a.json` and `mulberry32.json` — these are pure functions and the
@@ -784,8 +833,10 @@ with multiple components and color constraints.
 
 ## Reference implementations
 
-| Language   | Package          | Source                                                                               |
-| ---------- | ---------------- | ------------------------------------------------------------------------------------ |
-| JavaScript | `@dicebear/core` | [src/js/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/js/core/src)         |
-| PHP        | `dicebear/core`  | [src/php/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/php/core/src)       |
-| Python     | `dicebear-core`  | [src/python/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/python/core/src) |
+| Language   | Package                              | Source                                                                                      |
+| ---------- | ------------------------------------ | ------------------------------------------------------------------------------------------- |
+| JavaScript | `@dicebear/core`                     | [src/js/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/js/core/src)         |
+| PHP        | `dicebear/core`                      | [src/php/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/php/core/src)       |
+| Python     | `dicebear-core`                      | [src/python/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/python/core/src) |
+| Rust       | `dicebear-core`                      | [src/rust/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/rust/core/src)     |
+| Go         | `github.com/dicebear/dicebear-go/v10` | [src/go/core/](https://github.com/dicebear/dicebear/tree/10.x/src/go/core)                 |

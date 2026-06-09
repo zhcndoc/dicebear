@@ -194,9 +194,21 @@ each side consumes it:
 The fixtures cover `Fnv1a` (hash + hex), `Mulberry32` (chained sequences), every
 `Prng` method, number-to-string formatting (`numbers.json` — the `formatNumber`
 contract: every emitted number rounded to at most 5 decimal places, which every
-port must reproduce identically), and full `Avatar.toString()` output for the
-`initials`, `thumbs`, `glass`, and `notionists` styles. That last bucket covers
-seed, size, transforms, gradients, and component-variant overrides.
+port must reproduce identically), initials extraction, the `Color` helpers
+(including bit-exact luminance doubles), accept/reject validation outcomes plus
+circular color-reference chains, the `OptionsDescriptor` field map, and full
+`Avatar.toString()` (plus selected `toDataUri()`) output for the `initials`,
+`thumbs`, `glass`, `notionists`, and `shape-grid` styles. That last bucket
+covers seed, size, transforms, gradients, `title` escaping, and
+component-variant overrides.
+
+Float determinism is part of the parity contract: `pow` is not correctly
+rounded (JS engines, libm, and Go all differ in the last bit), so the sRGB
+linearization ships as a precomputed 256-entry table in every port, and
+languages that fuse multiply-add into FMA instructions (e.g. Go on arm64) must
+force intermediate rounding. The details live in the
+[Implement DiceBear Core](https://www.dicebear.com/specification/implement-dicebear-core/)
+spec.
 
 If your change affects rendering or the PRNG in `@dicebear/core`, regenerate the
 fixtures from the JS reference and commit the diff:

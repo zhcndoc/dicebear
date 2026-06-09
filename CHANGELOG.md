@@ -16,6 +16,23 @@ and this project adheres to
 
 ### Fixed
 
+- **Core:** `Color.luminance()` now derives the sRGB linearization from a
+  precomputed lookup table (one entry per 8-bit channel value) instead of
+  calling `pow` at runtime. `pow` is not required to be correctly rounded and
+  produced last-ULP differences between JS engines (V8 vs. others), the C math
+  library (PHP, Python, Rust), and Go's pure-Go implementation — so luminance
+  values, and in contrived cases contrast-based color ordering, could diverge
+  across languages and even across browsers. The table holds the values the
+  JavaScript reference produces today, so JavaScript output is unchanged; the
+  other libraries move by at most one ULP. The Go library additionally forces
+  intermediate rounding in the weighted sum, which the compiler could otherwise
+  fuse into FMA instructions on arm64. Rendered SVGs are unaffected.
+- **Core (PHP):** `Avatar::toDataUri()` now percent-encodes exactly like
+  JavaScript's `encodeURIComponent`. Previously the PHP library used plain
+  `rawurlencode`, which additionally escapes `!*'()` — characters that occur in
+  every rendered SVG (e.g. `url(#…)` references and `translate(…)` transforms) —
+  so the data URI diverged byte-wise from the JavaScript, Python, Rust, and Go
+  libraries. The decoded SVG was unaffected.
 - **Core:** The `initial` style variable now resolves to the full first code
   point of the initials. Previously the JavaScript library emitted a lone
   UTF-16 surrogate — ill-formed XML — when the initials started with a
