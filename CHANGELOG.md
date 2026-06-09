@@ -8,7 +8,24 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
+- **Go library:** A new Go implementation (the
+  `github.com/dicebear/dicebear-go/v10` module) that produces identical output
+  to the JavaScript library when given the same styles and options.
+
 ### Fixed
+
+- **Core:** The `initial` style variable now resolves to the full first code
+  point of the initials. Previously the JavaScript library emitted a lone
+  UTF-16 surrogate — ill-formed XML — when the initials started with a
+  character outside the Basic Multilingual Plane (e.g. an emoji). The PHP,
+  Python, Rust, and Go libraries already returned the full character; all
+  libraries are now byte-identical for such seeds.
+- **Core (Rust):** `Avatar.to_json()` now records `size` before `title` in the
+  resolved-options snapshot, matching the JavaScript, PHP, and Python
+  libraries. The rendered SVG was unaffected; only consumers comparing or
+  hashing the serialized options JSON across languages were affected.
 
 - **Core (Python):** `Avatar.to_json()` now serializes whole-number floats in
   the resolved-options snapshot as integers (`1`, not `1.0`), matching the
