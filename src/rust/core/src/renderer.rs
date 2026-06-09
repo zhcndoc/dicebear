@@ -64,6 +64,11 @@ impl<'a> Renderer<'a> {
             )
         };
 
+        // Resolve size before title and the root attributes so the resolver memo
+        // records the keys in the same order as the JS/PHP/Python ports — the
+        // JSON envelope emits the resolved options in first-recorded order.
+        let size = resolver.size();
+
         let escaped_title = resolver.title().map(|t| xml::escape(&t));
 
         let mut attrs = vec![
@@ -88,7 +93,7 @@ impl<'a> Renderer<'a> {
             None => attrs.push("aria-hidden=\"true\"".to_string()),
         }
 
-        if let Some(size) = resolver.size() {
+        if let Some(size) = size {
             let size = number::format(size);
             attrs.push(format!("width=\"{size}\""));
             attrs.push(format!("height=\"{size}\""));

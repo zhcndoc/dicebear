@@ -78,6 +78,22 @@ fn to_json_serializes_whole_number_options_as_integers() {
 }
 
 #[test]
+fn to_json_emits_options_in_resolution_order() {
+    // The envelope must match the JS port byte-for-byte, including the key
+    // order (size before title — both resolved before the root attributes).
+    // The expected string is the verbatim output of the JS core for the same
+    // style and options.
+    let style =
+        Style::from_str(r##"{"canvas":{"width":100,"height":100,"elements":[]}}"##).unwrap();
+    let avatar = Avatar::new(&style, json!({ "seed": "x", "size": 128, "title": "t" })).unwrap();
+
+    assert_eq!(
+        avatar.to_json()["options"].to_string(),
+        r#"{"backgroundColorFill":"solid","backgroundColor":[],"scale":1,"flip":"none","rotate":0,"translateX":0,"translateY":0,"borderRadius":0,"size":128,"title":"t","idRandomization":false}"#
+    );
+}
+
+#[test]
 fn deeply_nested_colors_resolve_without_exponential_blowup() {
     // Each color references the next via BOTH `contrastTo` and `notEqualTo`,
     // which without memoization fans out to 2^depth color resolutions — a
