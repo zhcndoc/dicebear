@@ -52,6 +52,27 @@ npm run build
 npm start
 ```
 
+## Optional style metadata endpoints
+
+Besides the avatar endpoints, your instance can expose two metadata endpoints
+per style. Both are disabled by default and can be enabled individually with an
+environment variable:
+
+```
+http://localhost:3000/10.x/<styleName>/definition.json
+http://localhost:3000/10.x/<styleName>/options.json
+```
+
+- `definition.json` returns the raw
+  [style definition](/guides/create-an-avatar-style-from-scratch/), the same
+  JSON that is shipped with the style package. Enable it with `DEFINITION=1`.
+- `options.json` returns a descriptor of all options the style accepts — field
+  types, allowed enum values, and value ranges. Options listed in
+  `EXCLUDED_OPTIONS` are omitted, so the response always matches what your
+  instance actually accepts. Enable it with `OPTIONS=1`.
+
+Both responses are cached according to `CACHE_CONTROL_STYLES`.
+
 ## Environment variables
 
 The HTTP API supports the following environment variables:
@@ -86,6 +107,8 @@ The HTTP API supports the following environment variables:
 | `AVIF_SIZE_DEFAULT`                | `128`                                         | Default AVIF size in px.                                             |
 | `AVIF_EXIF`                        | `1`                                           | Enable EXIF metadata for AVIF (1 = on, 0 = off).                     |
 | `JSON`                             | `1`                                           | Enable the JSON endpoint (1 = on, 0 = off).                          |
+| `DEFINITION`                       | `0`                                           | Enable the per-style `definition.json` endpoint (1 = on, 0 = off).   |
+| `OPTIONS`                          | `0`                                           | Enable the per-style `options.json` endpoint (1 = on, 0 = off).      |
 | `INITIALS_FILTER`                  | `1`                                           | Replace blocked text in rendered avatars with `*` (1 = on, 0 = off). |
 | `QUERY_STRING_ARRAY_LIMIT_MIN`     | `20`                                          | Minimum number of values allowed per array parameter.                |
 | `EXCLUDED_OPTIONS`                 | `idRandomization,fontFamily,fontWeight,title` | Comma-separated list of option names to exclude.                     |
