@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [10.2.0] - 2026-06-10
+
 ### Added
 
 - **Go library:** A new Go implementation (the
@@ -170,7 +172,8 @@ See the
 - **BREAKING:** Individual style packages (e.g. `@dicebear/initials`) have been
   removed in favor of `@dicebear/styles`.
 
-[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.2.0-rc.1...HEAD
+[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.2.0...HEAD
+[10.2.0]: https://github.com/dicebear/dicebear/compare/v10.2.0-rc.1...v10.2.0
 [10.2.0-rc.1]:
   https://github.com/dicebear/dicebear/compare/v10.1.0...v10.2.0-rc.1
 [10.1.0]: https://github.com/dicebear/dicebear/compare/v10.1.0-rc.1...v10.1.0
