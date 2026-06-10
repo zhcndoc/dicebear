@@ -117,7 +117,7 @@ export default defineConfig<ThemeOptions>({
         operatingSystem: 'Any',
         url: 'https://www.dicebear.com',
         description:
-          'Privacy-focused, open source SVG avatar library with 35+ styles. Free Avatar API, JavaScript library, PHP library, Python library, Rust library, and CLI for generating deterministic profile pictures and user placeholder images.',
+          'Privacy-focused, open source SVG avatar library with 35+ styles. Free Avatar API, JavaScript library, PHP library, Python library, Rust library, Go library, and CLI for generating deterministic profile pictures and user placeholder images.',
         offers: {
           '@type': 'Offer',
           price: '0',

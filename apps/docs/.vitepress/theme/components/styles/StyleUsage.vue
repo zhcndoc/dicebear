@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { kebabCase, constantCase } from 'change-case';
+import { kebabCase, constantCase, pascalCase } from 'change-case';
 import { UiCard, UiCode as Code } from '../ui';
 import { computed, ref } from 'vue';
 import Tabs from 'primevue/tabs';
@@ -57,6 +57,26 @@ let avatar = Avatar::new(&style, json!({
 }))?;
 
 let svg = avatar.to_svg();
+`;
+});
+
+const exampleGoInstall = computed(() => {
+  return `go get github.com/dicebear/dicebear-go/v10
+go get github.com/dicebear/styles/v10`;
+});
+
+const exampleGoUsage = computed(() => {
+  return `import (
+	dicebear "github.com/dicebear/dicebear-go/v10"
+	"github.com/dicebear/styles/v10"
+)
+
+style, _ := dicebear.NewStyle([]byte(styles.${pascalCase(props.styleName)}))
+avatar, _ := dicebear.NewAvatar(style, map[string]any{
+	// ... options
+})
+
+svg := avatar.SVG()
 `;
 });
 
@@ -124,6 +144,7 @@ const exampleCliUsage = computed(() => {
         <Tab value="php-library">PHP</Tab>
         <Tab value="python-library">Python</Tab>
         <Tab value="rust-library">Rust</Tab>
+        <Tab value="go-library">Go</Tab>
         <Tab value="cli">CLI</Tab>
       </TabList>
       <TabPanels>
@@ -179,6 +200,17 @@ const exampleCliUsage = computed(() => {
           <Code lang="rust" :code="exampleRustUsage" />
           <p>
             See <a href="/how-to-use/rust-library">Rust</a> docs for more
+            information.
+          </p>
+        </TabPanel>
+        <TabPanel value="go-library" class="style-usage-body">
+          <p>First add the required modules with go get:</p>
+          <Code :code="exampleGoInstall" />
+
+          <p>Then you can create this avatar as follows:</p>
+          <Code lang="go" :code="exampleGoUsage" />
+          <p>
+            See <a href="/how-to-use/go-library">Go</a> docs for more
             information.
           </p>
         </TabPanel>

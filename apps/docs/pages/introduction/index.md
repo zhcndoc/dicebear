@@ -3,7 +3,8 @@ title: DiceBear – Open Source Avatar Library & API
 description: >
   DiceBear is a free, open source avatar library and avatar API. Generate
   deterministic SVG profile pictures and user placeholder images via JavaScript
-  library, PHP library, Python library, Rust library, HTTP API, or CLI.
+  library, PHP library, Python library, Rust library, Go library, HTTP API, or
+  CLI.
 ---
 
 <script setup>

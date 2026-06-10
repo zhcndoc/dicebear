@@ -7,7 +7,11 @@ import {
   getAvatarApiCommand,
   unsupportedHttpApiOptions,
 } from '@theme/utils/avatar/api';
-import { formatPhpValue, formatPythonValue } from '@theme/utils/code-examples';
+import {
+  formatPhpValue,
+  formatPythonValue,
+  formatGoValue,
+} from '@theme/utils/code-examples';
 import Button from 'primevue/button';
 import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
@@ -163,6 +167,42 @@ let avatar = Avatar::new(&style, json!(${rustOptions}))?;
 
 let svg = avatar.to_svg();`;
 });
+const exampleGo = computed(() => {
+  const goOptions = formatGoValue(options.value, 1);
+
+  if (store.isCustomStyle) {
+    return `import (
+	"os"
+
+	dicebear "github.com/dicebear/dicebear-go/v10"
+)
+
+// Your custom style definition
+definition, _ := os.ReadFile("./my-style.json")
+
+style, _ := dicebear.NewStyle(definition)
+avatar, _ := dicebear.NewAvatar(style, ${goOptions})
+
+svg := avatar.SVG()`;
+  }
+
+  // The Go styles module exports each style as a PascalCase variable
+  // (e.g. "big-ears" → BigEars).
+  const styleConst = store.avatarStyleName
+    .split('-')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join('');
+
+  return `import (
+	dicebear "github.com/dicebear/dicebear-go/v10"
+	"github.com/dicebear/styles/v10"
+)
+
+style, _ := dicebear.NewStyle([]byte(styles.${styleConst}))
+avatar, _ := dicebear.NewAvatar(style, ${goOptions})
+
+svg := avatar.SVG()`;
+});
 
 const exampleCli = computed(() =>
   getAvatarApiCommand(
@@ -189,6 +229,7 @@ const exampleCli = computed(() =>
             <Tab value="php-library">PHP</Tab>
             <Tab value="python-library">Python</Tab>
             <Tab value="rust-library">Rust</Tab>
+            <Tab value="go-library">Go</Tab>
             <Tab value="cli">CLI</Tab>
           </TabList>
           <TabPanels>
@@ -289,6 +330,28 @@ const exampleCli = computed(() =>
                 </p>
                 <p>
                   See <a href="/how-to-use/rust-library">Rust</a> docs for more
+                  information.
+                </p>
+              </div>
+            </TabPanel>
+            <TabPanel value="go-library">
+              <div class="playground-button-how-to-use-tab-content">
+                <p>First add the required modules with go get:</p>
+                <UiCode
+                  :code="
+                    store.isCustomStyle
+                      ? 'go get github.com/dicebear/dicebear-go/v10'
+                      : 'go get github.com/dicebear/dicebear-go/v10\ngo get github.com/dicebear/styles/v10'
+                  "
+                />
+                <p>Then you can create this avatar as follows:</p>
+                <UiCode :code="exampleGo" lang="go" />
+                <p v-if="store.isCustomStyle">
+                  Replace <code>./my-style.json</code> with the path to your
+                  style definition.
+                </p>
+                <p>
+                  See <a href="/how-to-use/go-library">Go</a> docs for more
                   information.
                 </p>
               </div>

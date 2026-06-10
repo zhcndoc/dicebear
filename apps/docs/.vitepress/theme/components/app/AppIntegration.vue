@@ -60,6 +60,14 @@ use serde_json::json;
 
 let style = Style::from_str(dicebear_styles::LORELEI)?;
 let svg = Avatar::new(&style, json!({ "seed": "Mia" }))?.to_svg();`,
+  go: `import (
+	dicebear "github.com/dicebear/dicebear-go/v10"
+	"github.com/dicebear/styles/v10"
+)
+
+style, _ := dicebear.NewStyle([]byte(styles.Lorelei))
+avatar, _ := dicebear.NewAvatar(style, map[string]any{"seed": "Mia"})
+svg := avatar.SVG()`,
   api: `https://api.dicebear.com/10.x/lorelei/svg?seed=Mia`,
   cli: `npx dicebear lorelei --seed "Mia" --format svg`,
 };
@@ -79,7 +87,7 @@ let svg = Avatar::new(&style, json!({ "seed": "Mia" }))?.to_svg();`,
         <template #headline>Integrate in <strong>Minutes</strong></template>
       </UiSectionHeader>
 
-      <!-- JS, PHP & Python Libraries - combined into one tabbed card -->
+      <!-- Language libraries - combined into one tabbed card -->
       <div class="app-integration-libraries">
         <div class="app-integration-item" :style="{ animationDelay: '0s' }">
           <UiCard padding="xl" class="app-integration-card">
@@ -90,8 +98,8 @@ let svg = Avatar::new(&style, json!({ "seed": "Mia" }))?.to_svg();`,
               <h3 class="app-integration-title">Libraries</h3>
               <p class="app-integration-description">
                 Run DiceBear entirely in your own code — no data leaves your
-                servers. JavaScript, PHP, Python, and Rust share one identical
-                API.
+                servers. JavaScript, PHP, Python, Rust, and Go share one
+                identical API.
               </p>
             </div>
 
@@ -101,6 +109,7 @@ let svg = Avatar::new(&style, json!({ "seed": "Mia" }))?.to_svg();`,
                 <Tab value="php">PHP</Tab>
                 <Tab value="python">Python</Tab>
                 <Tab value="rust">Rust</Tab>
+                <Tab value="go">Go</Tab>
               </TabList>
               <TabPanels>
                 <TabPanel value="js" class="app-integration-tabpanel">
@@ -172,6 +181,24 @@ let svg = Avatar::new(&style, json!({ "seed": "Mia" }))?.to_svg();`,
                     class="app-integration-link"
                   >
                     Rust Documentation
+                    <ArrowRight :size="18" />
+                  </Button>
+                </TabPanel>
+                <TabPanel value="go" class="app-integration-tabpanel">
+                  <UiCode
+                    :code="plainCode.go"
+                    lang="go"
+                    scroll-to-bottom
+                    class="app-integration-code-block"
+                  />
+                  <Button
+                    as="a"
+                    href="/how-to-use/go-library/"
+                    severity="secondary"
+                    variant="outlined"
+                    class="app-integration-link"
+                  >
+                    Go Documentation
                     <ArrowRight :size="18" />
                   </Button>
                 </TabPanel>
@@ -290,7 +317,7 @@ let svg = Avatar::new(&style, json!({ "seed": "Mia" }))?.to_svg();`,
     }
   }
 
-  /* Combined libraries card (JS / PHP / Python via tabs) */
+  /* Combined libraries card (language libraries via tabs) */
   &-libraries {
     margin-bottom: 24px;
   }

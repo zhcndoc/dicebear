@@ -17,7 +17,7 @@ import Button from 'primevue/button';
       <span class="app-hero-underline">35+&nbsp;avatar&nbsp;styles</span>
       crafted by talented artists. Generate deterministic profile pictures via
       API, JS&nbsp;library, PHP&nbsp;library, Python&nbsp;library,
-      Rust&nbsp;library &amp; CLI.
+      Rust&nbsp;library, Go&nbsp;library &amp; CLI.
     </p>
 
     <div class="app-hero-actions">
