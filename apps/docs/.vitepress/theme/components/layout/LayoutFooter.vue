@@ -88,7 +88,11 @@ const { hasSidebar } = useLayout();
     margin-bottom: 16px;
 
     img {
+      /* The width/height attributes only provide the aspect ratio for
+       * pre-load layout; without width: auto they would also act as a
+       * presentational hint and fix the width at the intrinsic 183px. */
       height: 24px;
+      width: auto;
     }
 
     &-light {
@@ -203,6 +207,7 @@ const { hasSidebar } = useLayout();
 
       img {
         height: 52px;
+        width: auto;
       }
 
       &-light {
