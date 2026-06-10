@@ -33,17 +33,16 @@ and this project adheres to
   every rendered SVG (e.g. `url(#…)` references and `translate(…)` transforms) —
   so the data URI diverged byte-wise from the JavaScript, Python, Rust, and Go
   libraries. The decoded SVG was unaffected.
-- **Core:** The `initial` style variable now resolves to the full first code
-  point of the initials. Previously the JavaScript library emitted a lone
-  UTF-16 surrogate — ill-formed XML — when the initials started with a
-  character outside the Basic Multilingual Plane (e.g. an emoji). The PHP,
-  Python, Rust, and Go libraries already returned the full character; all
-  libraries are now byte-identical for such seeds.
+- **Core (JS):** The `initial` style variable now resolves to the full first
+  code point of the initials. Previously the JavaScript library emitted a lone
+  UTF-16 surrogate — ill-formed XML — when the initials started with a character
+  outside the Basic Multilingual Plane (e.g. an emoji). The PHP, Python, Rust,
+  and Go libraries already returned the full character; all libraries are now
+  byte-identical for such seeds.
 - **Core (Rust):** `Avatar.to_json()` now records `size` before `title` in the
-  resolved-options snapshot, matching the JavaScript, PHP, and Python
-  libraries. The rendered SVG was unaffected; only consumers comparing or
-  hashing the serialized options JSON across languages were affected.
-
+  resolved-options snapshot, matching the JavaScript, PHP, and Python libraries.
+  The rendered SVG was unaffected; only consumers comparing or hashing the
+  serialized options JSON across languages were affected.
 - **Core (Python):** `Avatar.to_json()` now serializes whole-number floats in
   the resolved-options snapshot as integers (`1`, not `1.0`), matching the
   JavaScript, Rust, and PHP libraries. Previously snapshot values such as
@@ -172,7 +171,8 @@ See the
   removed in favor of `@dicebear/styles`.
 
 [Unreleased]: https://github.com/dicebear/dicebear/compare/v10.2.0-rc.1...HEAD
-[10.2.0-rc.1]: https://github.com/dicebear/dicebear/compare/v10.1.0...v10.2.0-rc.1
+[10.2.0-rc.1]:
+  https://github.com/dicebear/dicebear/compare/v10.1.0...v10.2.0-rc.1
 [10.1.0]: https://github.com/dicebear/dicebear/compare/v10.1.0-rc.1...v10.1.0
 [10.1.0-rc.1]:
   https://github.com/dicebear/dicebear/compare/v10.0.2...v10.1.0-rc.1
