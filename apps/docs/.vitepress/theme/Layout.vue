@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import DefaultTheme from 'vitepress/theme';
-import { VPDocAsideSponsors } from 'vitepress/theme';
+import DefaultTheme from 'vitepress/theme-without-fonts';
+import { VPDocAsideSponsors } from 'vitepress/theme-without-fonts';
 import { withBase } from 'vitepress';
 import LayoutFooter from './components/layout/LayoutFooter.vue';
 import LayoutNavActions from './components/layout/LayoutNavActions.vue';

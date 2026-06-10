@@ -39,7 +39,11 @@ const isVisible = useVisibility('.app-hero', { once: false, threshold: 0.1 });
 
   &--paused {
     .app-hero-swarm-tile {
-      animation-play-state: paused;
+      /* Pause only the bob (second animation). SSR renders --paused until the
+       * IntersectionObserver fires after hydration — if the fade were paused
+       * too, the tiles would stay at opacity 0 until all JS has loaded, which
+       * delays LCP by seconds on slow connections. */
+      animation-play-state: running, paused;
     }
   }
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useLayout } from 'vitepress/theme';
+import { useLayout } from 'vitepress/theme-without-fonts';
 import LayoutFooterBrand from './LayoutFooterBrand.vue';
 import LayoutFooterLinks from './LayoutFooterLinks.vue';
 import LayoutFooterSponsor from './LayoutFooterSponsor.vue';

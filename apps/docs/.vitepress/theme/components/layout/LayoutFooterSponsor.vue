@@ -16,11 +16,15 @@ import { withBase } from 'vitepress';
             class="layout-footer-sponsor-logo-light"
             :src="withBase('/sponsors/bunny-light.svg')"
             alt="bunny.net"
+            width="149"
+            height="43"
           />
           <img
             class="layout-footer-sponsor-logo-dark"
             :src="withBase('/sponsors/bunny-dark.svg')"
             alt="bunny.net"
+            width="149"
+            height="43"
           />
         </a>
         <span class="layout-footer-sponsor-meta"
