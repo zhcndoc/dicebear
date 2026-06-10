@@ -4,6 +4,7 @@ import { ref } from 'vue';
 import copy from 'copy-to-clipboard';
 import { Avatar } from '@dicebear/core';
 import { loadAvatarStyle, clonePlain } from '@theme/utils/avatar/style';
+import { track, styleLabel } from '@theme/utils/track';
 import { UiAvatar, UiConfetti, UiDialog } from '../ui';
 import Button from 'primevue/button';
 import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
@@ -31,6 +32,12 @@ async function onClick() {
   );
 
   const successful = copy(avatar.toString());
+
+  if (successful) {
+    track('Playground: Copy SVG', {
+      style: styleLabel(store.avatarStyleName),
+    });
+  }
 
   text.value = successful
     ? 'Your avatar was successfully copied! 🎉'

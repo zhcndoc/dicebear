@@ -10,6 +10,7 @@ import { CUSTOM_CATEGORY } from '@theme/config/styleCategories';
 import useStore from '@theme/stores/playground';
 import { ThemeOptions } from '@theme/types';
 import { UiAvatar } from '../ui';
+import { track, styleLabel } from '@theme/utils/track';
 import PlaygroundCustomStyleUpload from './PlaygroundCustomStyleUpload.vue';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
@@ -36,6 +37,8 @@ const {
 function selectStyle(name: string) {
   avatarStyleName.value = name;
   open.value = false;
+
+  track('Playground: Style Selected', { style: styleLabel(name) });
 }
 
 function onCustomStyleAdded(key: string) {

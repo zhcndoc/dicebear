@@ -5,6 +5,7 @@ import { Avatar } from '@dicebear/core';
 import { getAvatarApiUrl } from '@theme/utils/avatar/api';
 import { loadAvatarStyle, clonePlain } from '@theme/utils/avatar/style';
 import { triggerDownload } from '@theme/utils/download';
+import { track, styleLabel } from '@theme/utils/track';
 import { UiAvatar, UiConfetti, UiDialog } from '../ui';
 import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
 import PlaygroundBatchDownload from './PlaygroundBatchDownload.vue';
@@ -26,6 +27,11 @@ const batchOpen = ref(false);
 async function downloadSvg() {
   showDialog();
 
+  track('Playground: Download', {
+    style: styleLabel(store.avatarStyleName),
+    format: 'svg',
+  });
+
   const avatarStyle = await loadAvatarStyle(store.avatarStyleName);
   const avatar = new Avatar(
     avatarStyle,
@@ -41,6 +47,11 @@ async function downloadSvg() {
 
 async function downloadBinary(format: string) {
   showDialog();
+
+  track('Playground: Download', {
+    style: styleLabel(store.avatarStyleName),
+    format,
+  });
 
   const response = await fetch(
     getAvatarApiUrl(store.avatarStyleName, options.value, format),

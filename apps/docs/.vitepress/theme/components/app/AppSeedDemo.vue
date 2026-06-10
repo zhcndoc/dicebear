@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
+import { useDebounceFn } from '@vueuse/core';
 import { kebabCase, camelCase, capitalCase } from 'change-case';
+import { track } from '@theme/utils/track';
 import {
   UiHeadline,
   UiDescription,
@@ -48,15 +50,28 @@ const avatarStyleMeta = useAvatarStyleMeta(activeStyleName);
 
 const seed = ref<string>(RANDOM_SEEDS[0]);
 
+// Never send the seed text itself — only that the user edited it. Debounced so
+// typing counts as one interaction.
+const trackSeedEdited = useDebounceFn(() => {
+  track('Home Demo: Seed Edited', { style: currentStyle.value });
+}, 700);
+
 function onSeedUpdate(value: string) {
   seed.value = value;
+  trackSeedEdited();
 }
 
 function randomizeSeed() {
   const currentIndex = RANDOM_SEEDS.indexOf(seed.value);
   const nextIndex = (currentIndex + 1) % RANDOM_SEEDS.length;
   seed.value = RANDOM_SEEDS[nextIndex];
+
+  track('Home Demo: Seed Randomized', { style: currentStyle.value });
 }
+
+watch(currentStyle, (style) => {
+  track('Home Demo: Style Selected', { style });
+});
 
 const sourceUrl = computed(() => safeHttpUrl(avatarStyleMeta.value?.source));
 const homepageUrl = computed(() =>

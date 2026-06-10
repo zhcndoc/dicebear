@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { computed, watch } from 'vue';
-import { useLocalStorage } from '@vueuse/core';
+import { useLocalStorage, watchDebounced } from '@vueuse/core';
 import { useIDBKeyval } from '@vueuse/integrations/useIDBKeyval';
 import type {
   CustomStyleEntry,
@@ -14,6 +14,7 @@ import {
   unregisterCustomStyle,
   flushPendingCustomStyles,
 } from '@theme/utils/avatar/style';
+import { track, styleLabel } from '@theme/utils/track';
 
 export default defineStore('playground', () => {
   const data = useData();
@@ -112,6 +113,11 @@ export default defineStore('playground', () => {
 
   function resetOption(key: string) {
     delete avatarStyleOptions.value[key];
+
+    track('Playground: Option Reset', {
+      style: styleLabel(avatarStyleName.value),
+      option: key,
+    });
   }
 
   function isOptionSet(key: string): boolean {
@@ -119,6 +125,31 @@ export default defineStore('playground', () => {
   }
 
   watch(avatarStyleName, resetOptions);
+
+  // Track which options users tune. Debounced so dragging a slider collapses
+  // into one event, and diffed per key so only newly changed keys are sent.
+  // Removed keys (reset / style switch clears options) are intentionally not
+  // reported here — those have their own events.
+  let optionSnapshot: Record<string, unknown> = clonePlain(
+    avatarStyleOptions.value,
+  );
+
+  watchDebounced(
+    avatarStyleOptions,
+    (val) => {
+      for (const key of Object.keys(val)) {
+        if (JSON.stringify(val[key]) !== JSON.stringify(optionSnapshot[key])) {
+          track('Playground: Option Changed', {
+            style: styleLabel(avatarStyleName.value),
+            option: key,
+          });
+        }
+      }
+
+      optionSnapshot = clonePlain(val);
+    },
+    { deep: true, debounce: 700 },
+  );
 
   return {
     availableAvatarStyles,

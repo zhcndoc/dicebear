@@ -21,6 +21,7 @@ import StyleOptionsPreview from './StyleOptionsPreview.vue';
 import StyleOptionsCodePanel from './StyleOptionsCodePanel.vue';
 import Message from 'primevue/message';
 import { padColors } from '@theme/utils/avatar/colors';
+import { track } from '@theme/utils/track';
 import { unsupportedHttpApiOptions } from '@theme/utils/avatar/api';
 import {
   getOptionDescription,
@@ -304,6 +305,23 @@ const hasDetails = computed(() => {
     excludeHttpApi.value
   );
 });
+
+// Track when a reader expands an option's "Examples" panel. PrimeVue's
+// Accordion `update:value` emits the same panel value on both open and close,
+// so instead we read the header's resulting `aria-expanded` state after the
+// click and only count opens.
+function onExamplesToggle(event: MouseEvent) {
+  const header = event.currentTarget as HTMLElement | null;
+
+  requestAnimationFrame(() => {
+    if (header?.getAttribute('aria-expanded') === 'true') {
+      track('Docs Options: Examples Opened', {
+        style: props.styleName,
+        option: props.name,
+      });
+    }
+  });
+}
 </script>
 
 <template>
@@ -370,7 +388,7 @@ const hasDetails = computed(() => {
       class="style-options-card-details"
     >
       <AccordionPanel value="0">
-        <AccordionHeader>Examples</AccordionHeader>
+        <AccordionHeader @click="onExamplesToggle">Examples</AccordionHeader>
         <AccordionContent>
           <div class="style-options-card-details-body">
             <div

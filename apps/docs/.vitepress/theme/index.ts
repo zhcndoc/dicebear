@@ -9,6 +9,7 @@ import PrimeVue from 'primevue/config';
 import Aura from '@primeuix/themes/aura';
 import { definePreset } from '@primeuix/themes';
 import Tooltip from 'primevue/tooltip';
+import { track } from '@theme/utils/track';
 
 const DiceBearPreset = definePreset(Aura, {
   semantic: {
@@ -333,9 +334,7 @@ export default {
 
           if (link && link.hostname) {
             if (link.hostname !== window.location.hostname) {
-              if (typeof umami !== 'undefined') {
-                umami.track('Outbound Link', { url: link.hostname });
-              }
+              track('Outbound Link', { url: link.hostname });
             }
           }
         });

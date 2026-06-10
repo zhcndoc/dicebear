@@ -15,6 +15,7 @@ import {
 import Button from 'primevue/button';
 import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
+import { track, styleLabel } from '@theme/utils/track';
 import Message from 'primevue/message';
 import Tabs from 'primevue/tabs';
 import TabList from 'primevue/tablist';
@@ -38,6 +39,22 @@ watch(
     }
   },
 );
+
+watch(open, (isOpen) => {
+  if (isOpen) {
+    track('Playground: How To Use', {
+      style: styleLabel(store.avatarStyleName),
+    });
+  }
+});
+
+// Only count tabs the user actively picks while the dialog is open, not the
+// automatic http-api → js-library switch for custom styles.
+watch(tab, (value) => {
+  if (open.value) {
+    track('Playground: How To Use Tab', { tab: value });
+  }
+});
 
 const exampleHttpApi = computed(() =>
   getAvatarApiUrl(store.avatarStyleName, options.value),
