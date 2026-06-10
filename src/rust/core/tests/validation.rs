@@ -44,8 +44,7 @@ fn rejects_options_with_a_wrong_type() {
 fn validation_parity() {
     let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("../../../tests/fixtures/parity/validation.json");
-    let text =
-        fs::read_to_string(&path).unwrap_or_else(|e| panic!("read {}: {e}", path.display()));
+    let text = fs::read_to_string(&path).unwrap_or_else(|e| panic!("read {}: {e}", path.display()));
     let f: Value = serde_json::from_str(&text).unwrap();
 
     let mut minimal = None;
@@ -68,7 +67,11 @@ fn validation_parity() {
         let id = c["id"].as_str().unwrap();
         let result = Avatar::new(&minimal, c["options"].clone());
 
-        assert_eq!(result.is_ok(), c["valid"].as_bool().unwrap(), "options {id}");
+        assert_eq!(
+            result.is_ok(),
+            c["valid"].as_bool().unwrap(),
+            "options {id}"
+        );
     }
 
     for c in f["circularColors"].as_array().unwrap() {

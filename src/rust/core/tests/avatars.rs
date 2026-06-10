@@ -74,7 +74,9 @@ fn descriptor_parity() {
             Style::from_str(&style_json).unwrap_or_else(|e| panic!("parse style {name}: {e}"));
 
         let expected: Value = serde_json::from_str(&read(
-            parity_dir().join("descriptors").join(format!("{name}.json")),
+            parity_dir()
+                .join("descriptors")
+                .join(format!("{name}.json")),
         ))
         .unwrap();
 

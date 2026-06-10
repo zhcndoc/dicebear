@@ -585,7 +585,10 @@ const validationFixtures = {
       new Avatar(c.style, { seed: 'x' });
     } catch (e) {
       if (e.name !== 'CircularColorReferenceError') {
-        throw new Error(`${c.id}: expected CircularColorReferenceError, got ${e.name}`);
+        throw new Error(
+          `${c.id}: expected CircularColorReferenceError, got ${e.name}`,
+          { cause: e },
+        );
       }
 
       return { ...c, options: { seed: 'x' }, chain: e.chain };
