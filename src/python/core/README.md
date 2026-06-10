@@ -1,18 +1,18 @@
-# DiceBear Core (Python)
+<h1><img src="https://www.dicebear.com/logo-readme.svg" width="28" /> DiceBear Core (Python)</h1>
 
-Deterministic, customizable, vector-based avatars — the Python port of the
-DiceBear core engine. It produces **byte-identical** SVG output to the reference
-JavaScript implementation (`@dicebear/core`) for the same style definition and
-options.
+Python implementation of the DiceBear avatar library. Generates deterministic SVG
+avatars from style definitions and a seed string.
 
-This package contains only the rendering engine. Avatar **style definitions**
-ship separately as language-agnostic JSON via
-[`dicebear-styles`](https://pypi.org/project/dicebear-styles/) (or any other
-source of a DiceBear style definition).
+DiceBear is available for multiple languages. All implementations share the same
+PRNG and rendering pipeline, producing identical SVG output for the same seed,
+style, and options — regardless of the language used.
+
+[Playground](https://www.dicebear.com/playground) |
+[Documentation](https://www.dicebear.com/introduction)
 
 ## Installation
 
-```bash
+```sh
 pip install dicebear-core
 ```
 
@@ -26,47 +26,38 @@ from importlib.resources import files
 
 from dicebear import Avatar
 
-# Load a style definition (here from the dicebear-styles package).
-style = json.loads(
-    files("dicebear_styles").joinpath("adventurer.json").read_text("utf-8")
+# From a style definition (here from the dicebear-styles package)
+definition = json.loads(
+    files("dicebear_styles").joinpath("lorelei.json").read_text("utf-8")
 )
 
-avatar = Avatar(style, {"seed": "John"})
+avatar = Avatar(definition, {"seed": "John Doe", "size": 128})
 
-avatar.to_string()    # the SVG markup
+avatar.to_string()    # SVG string
 avatar.to_data_uri()  # data:image/svg+xml;charset=utf-8,...
-avatar.to_json()      # {"svg": ..., "options": {...resolved options...}}
 ```
 
-`Avatar` accepts either a raw style-definition dict or a `Style` instance, plus
-an optional options dict:
+### Using the Style class
 
 ```python
 from dicebear import Avatar, Style
 
-style = Style(style_data)
-Avatar(style, {"seed": "John", "size": 128, "backgroundColor": ["b6e3f4"]})
+style = Style(definition)
+
+# Create multiple avatars from the same style
+avatar1 = Avatar(style, {"seed": "Alice"})
+avatar2 = Avatar(style, {"seed": "Bob"})
 ```
 
-## Development
+## Sponsors
 
-This package lives in the
-[DiceBear monorepo](https://github.com/dicebear/dicebear) under
-`src/python/core`. See `CONTRIBUTING.md` in the repository root for the full
-workflow.
+Advertisement: Many thanks to our sponsors who provide us with free or
+discounted products.
 
-```bash
-cd src/python/core
-pip install -e ".[dev]"
-ruff check .
-mypy src
-pytest
-```
-
-The decisive check is `tests/test_parity.py`, which asserts byte-identical
-output against the shared fixtures in `tests/fixtures/parity/` (generated from
-the JavaScript reference).
-
-## License
-
-[MIT](https://github.com/dicebear/dicebear/blob/10.x/src/python/core/LICENSE)
+<a href="https://bunny.net/" target="_blank" rel="noopener noreferrer">
+    <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="https://www.dicebear.com/sponsors/bunny-light.svg">
+        <source media="(prefers-color-scheme: light)" srcset="https://www.dicebear.com/sponsors/bunny-dark.svg">
+        <img alt="bunny.net" src="https://www.dicebear.com/sponsors/bunny-dark.svg" height="64">
+    </picture>
+</a>

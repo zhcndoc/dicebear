@@ -36,39 +36,18 @@ avatar.to_svg();       // SVG string
 avatar.to_data_uri();  // data:image/svg+xml;charset=utf-8,...
 ```
 
-### With options
-
-```rust
-let avatar = Avatar::new(&style, json!({
-    "seed": "Jane",
-    "size": 64,
-    "flip": "horizontal",
-    "backgroundColor": ["#0077b6", "#00b4d8"],
-    "backgroundColorFill": "linear",
-    "scale": [0.8, 1.0],
-    "borderRadius": 10,
-}))?;
-```
-
 ### Using the Style type
 
 ```rust
-use dicebear_core::{Avatar, OptionsDescriptor, Style};
+use dicebear_core::{Avatar, Style};
 use serde_json::json;
 
 let style = Style::from_str(definition_json)?;
-
-// Inspect available options for a style
-let descriptor = OptionsDescriptor::new(&style).to_json();
 
 // Create multiple avatars from the same style
 let avatar1 = Avatar::new(&style, json!({ "seed": "Alice" }))?;
 let avatar2 = Avatar::new(&style, json!({ "seed": "Bob" }))?;
 ```
-
-## License
-
-The source code of DiceBear is released under the **MIT License**.
 
 ## Sponsors
 
