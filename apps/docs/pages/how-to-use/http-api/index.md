@@ -92,6 +92,50 @@ support listing styles.
 
 :::
 
+## Style definition and options
+
+Each style also exposes two metadata endpoints. They are handy for building
+tooling on top of the API, such as avatar editors:
+
+```
+https://api.dicebear.com/10.x/<styleName>/definition.json
+https://api.dicebear.com/10.x/<styleName>/options.json
+```
+
+`definition.json` returns the raw style definition — the same JSON that is
+shipped with the style's npm package.
+
+`options.json` describes every option the style accepts as query parameter,
+including field types, allowed enum values, and value ranges. An excerpt for
+[Pixel Art](/styles/pixel-art/):
+
+```json
+{
+  "seed": { "type": "string" },
+  "flip": {
+    "type": "enum",
+    "values": ["none", "horizontal", "vertical", "both"],
+    "list": true
+  },
+  "backgroundColor": { "type": "color", "list": true },
+  "hairVariant": {
+    "type": "enum",
+    "values": ["long01", "long02", "...", "short24"],
+    "list": true,
+    "weighted": true
+  },
+  "hairProbability": { "type": "number", "min": 0, "max": 100 }
+}
+```
+
+::: info
+
+These endpoints are available from version `10.x` onwards. On self-hosted
+instances they are disabled by default — see the
+[self-hosting guide](/guides/host-the-http-api-yourself/#optional-style-metadata-endpoints).
+
+:::
+
 ## Options
 
 All [core options](/how-to-use/js-library/#core-options) — such as `seed`,
