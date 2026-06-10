@@ -63,11 +63,13 @@ and this project adheres to
 
 ### Fixed
 
-- **Core:** Initials now strip the entire `@` suffix (e.g. an email domain),
-  including any line terminators. Previously the strip stopped at the first
-  carriage return or `U+2028`/`U+2029` line separator, so a seed with a line
-  break just after the `@` kept the trailing text as a second word. All language
-  libraries are affected and stay byte-identical.
+- **Core:** Initials now discard everything from the first `@` to the end of the
+  seed (e.g. an email domain). Previously the strip stopped at the first line
+  terminator — at a line feed in PHP and Python, and additionally at a carriage
+  return or `U+2028`/`U+2029` in JavaScript — so a seed with a line break after
+  the `@` kept the trailing text as a second word, and the libraries could even
+  diverge from each other. All language libraries now produce byte-identical
+  initials for such seeds.
 
 ## [10.1.0] - 2026-06-06
 
