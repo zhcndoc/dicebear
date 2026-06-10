@@ -6,6 +6,8 @@ namespace DiceBear\Utils;
 
 /**
  * Color helpers used by the renderer and option resolver.
+ *
+ * @internal
  */
 class Color
 {

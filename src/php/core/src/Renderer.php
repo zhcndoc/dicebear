@@ -17,6 +17,8 @@ use DiceBear\Utils\Xml;
  *
  * The renderer is single-use: it accumulates `<defs>` entries and per-render
  * caches across method calls, so a fresh instance is required per avatar.
+ *
+ * @internal
  */
 class Renderer
 {

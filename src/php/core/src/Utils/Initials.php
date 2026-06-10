@@ -8,6 +8,8 @@ namespace DiceBear\Utils;
  * Derives display initials from a seed string.
  *
  * @see https://www.regular-expressions.info/unicode.html
+ *
+ * @internal
  */
 class Initials
 {

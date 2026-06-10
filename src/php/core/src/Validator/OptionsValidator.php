@@ -8,6 +8,8 @@ use DiceBear\Error\OptionsValidationError;
 
 /**
  * Validates avatar options against the shared `options.json` schema.
+ *
+ * @internal
  */
 class OptionsValidator extends AbstractValidator
 {

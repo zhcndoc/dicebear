@@ -14,6 +14,8 @@ use DiceBear\Utils\Number;
  * Each method takes a key that, combined with the seed, produces a
  * deterministic value. The same seed + key always yields the same result,
  * regardless of call order.
+ *
+ * @internal
  */
 class Prng
 {

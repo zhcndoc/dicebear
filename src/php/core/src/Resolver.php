@@ -14,6 +14,8 @@ use DiceBear\Utils\Color as ColorUtil;
  * its result so that repeated calls cannot drift. The memo also serves as
  * the informational snapshot returned by {@see resolved} — every value the
  * resolver picks during one resolution lands there, except for the raw seed.
+ *
+ * @internal
  */
 class Resolver
 {

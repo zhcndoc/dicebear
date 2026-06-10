@@ -8,6 +8,8 @@ use DiceBear\Error\StyleValidationError;
 
 /**
  * Validates style definitions against the shared `definition.json` schema.
+ *
+ * @internal
  */
 class StyleValidator extends AbstractValidator
 {

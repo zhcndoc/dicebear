@@ -15,6 +15,8 @@ use DiceBear\Validator\OptionsValidator;
  *
  * Resolution against the style definition and the PRNG happens in
  * {@see Resolver}; this class is purely about reading user input.
+ *
+ * @internal
  */
 class Options
 {
