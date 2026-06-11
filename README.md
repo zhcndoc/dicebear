@@ -1,13 +1,4 @@
-<h1><img src="https://www.dicebear.com/logo-readme.svg" width="28" /> DiceBear</h1>
-
-<p>
-  <img src="https://api.dicebear.com/10.x/adventurer/svg?seed=Mimi&backgroundColor=0077b6&radius=10" width="64" />
-  <img src="https://api.dicebear.com/10.x/open-peeps/svg?seed=Kitty&backgroundColor=0096c7&radius=10" width="64" />
-  <img src="https://api.dicebear.com/10.x/pixel-art/svg?seed=Lilly&backgroundColor=00b4d8&radius=10" width="64" />
-  <img src="https://api.dicebear.com/10.x/lorelei/svg?seed=Tigger&backgroundColor=48cae4&radius=10" width="64" />
-  <img src="https://api.dicebear.com/10.x/bottts/svg?seed=Zoe&backgroundColor=90e0ef&radius=10" width="64" />
-  <img src="https://api.dicebear.com/10.x/thumbs/svg?seed=Emma&backgroundColor=ade8f4&radius=10" width="64" />
-</p>
+<h1><img src="https://www.dicebear.com/logo-readme.svg" width="28" /> DiceBear Avatar Library</h1>
 
 DiceBear is an open source avatar library. It turns any seed string (a username
 or an email address, for example) into an SVG avatar in one of 35+ styles
