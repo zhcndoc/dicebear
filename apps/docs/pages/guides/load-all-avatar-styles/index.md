@@ -1,21 +1,20 @@
 ---
 title: Load All Avatar Styles from @dicebear/styles | DiceBear
 description: >
-  Learn how to load every avatar style shipped with @dicebear/styles at once —
-  in Node.js, PHP, Python, Rust and Go.
+  Learn how to load every avatar style shipped with @dicebear/styles at once in
+  Node.js, PHP, Python, Rust and Go.
 ---
 
 # How to load all avatar styles from `@dicebear/styles`?
 
 The [DiceBear styles repository](https://github.com/dicebear/styles) ships every
-official avatar style as a separate JSON file — distributed as
+official avatar style as a separate JSON file. It is distributed as
 [`@dicebear/styles`](https://www.npmjs.com/package/@dicebear/styles) on npm,
 [`dicebear/styles`](https://packagist.org/packages/dicebear/styles) on
-Packagist,
-[`dicebear-styles`](https://pypi.org/project/dicebear-styles/) on PyPI and
-[`dicebear-styles`](https://crates.io/crates/dicebear-styles) on crates.io. Most
-projects only need one or two styles, but sometimes — for a style picker, a
-gallery page, or a batch job — you want to load all of them at once.
+Packagist, [`dicebear-styles`](https://pypi.org/project/dicebear-styles/) on
+PyPI and [`dicebear-styles`](https://crates.io/crates/dicebear-styles) on
+crates.io. Most projects only need one or two styles, but sometimes (for a style
+picker, a gallery page, or a batch job) you want to load all of them at once.
 
 This guide shows how to do that in Node.js, PHP, Python, Rust and Go.
 
@@ -134,7 +133,7 @@ let avatar = Avatar::new(&styles["lorelei"], json!({ "seed": "Alice" }))?;
 
 ## Go
 
-The `github.com/dicebear/styles/v10` module embeds every style — unlike the Rust
+The `github.com/dicebear/styles/v10` module embeds every style. Unlike the Rust
 crate, there is no per-style opt-in, so the whole set is available once the
 module is added.
 

@@ -17,7 +17,8 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 # Adventurer Neutral
 
 Adventurer Neutral is a reduced variant of the Adventurer style, showing only
-the eyes, eyebrows, and mouth on a solid background — no head outline or hair.
+the eyes, eyebrows, and mouth on a solid background, with no head outline or
+hair.
 
 <StylePreview styleName="adventurer-neutral" />
 

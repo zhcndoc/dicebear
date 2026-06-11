@@ -110,10 +110,7 @@ const isVisible = useVisibility('.app-hero', { once: false, threshold: 0.1 });
 
   /* Accent underline — solid brand colour, matching the headline accent word. */
   &-underline {
-    background-image: linear-gradient(
-      var(--vp-c-brand-2),
-      var(--vp-c-brand-2)
-    );
+    background-image: linear-gradient(var(--vp-c-brand-2), var(--vp-c-brand-2));
     background-repeat: no-repeat;
     background-position: 0 100%;
     background-size: 100% 2px;

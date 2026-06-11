@@ -16,7 +16,7 @@ const highlights = [
     icon: Globe,
     title: 'HTTP API',
     description:
-      'Use a simple URL to embed avatars in any language or platform — no installation needed.',
+      'Use a simple URL to embed avatars in any language or platform without installing anything.',
     color: '#22c55e',
     link: '/how-to-use/http-api/',
   },
@@ -32,7 +32,7 @@ const highlights = [
     icon: Server,
     title: 'PHP Library',
     description:
-      'Generate avatars on the server with PHP 8.2+. Identical API to the JS library — same seed, same result.',
+      'Generate avatars on the server with PHP 8.2+. Identical API to the JS library: same seed, same result.',
     color: '#8b5cf6',
     link: '/how-to-use/php-library/',
   },
@@ -40,7 +40,7 @@ const highlights = [
     icon: Library,
     title: 'Python Library',
     description:
-      'Generate avatars on the server with Python 3.10+. Identical API to the JS library — same seed, same result.',
+      'Generate avatars on the server with Python 3.10+. Identical API to the JS library: same seed, same result.',
     color: '#3b82f6',
     link: '/how-to-use/python-library/',
   },
@@ -48,7 +48,7 @@ const highlights = [
     icon: Boxes,
     title: 'Rust Library',
     description:
-      'Generate avatars on the server with Rust 1.80+. Identical API to the JS library — same seed, same result.',
+      'Generate avatars on the server with Rust 1.80+. Identical API to the JS library: same seed, same result.',
     color: '#14b8a6',
     link: '/how-to-use/rust-library/',
   },
@@ -56,7 +56,7 @@ const highlights = [
     icon: Hexagon,
     title: 'Go Library',
     description:
-      'Generate avatars on the server with Go 1.23+. Identical API to the JS library — same seed, same result.',
+      'Generate avatars on the server with Go 1.23+. Identical API to the JS library: same seed, same result.',
     color: '#00add8',
     link: '/how-to-use/go-library/',
   },
@@ -72,14 +72,14 @@ const highlights = [
     icon: Palette,
     title: 'Editor',
     description:
-      'Use the interactive Editor to browse all avatar styles, customize options, and export avatars — no code required.',
+      'Use the interactive Editor to browse all avatar styles, customize options, and export avatars without writing any code.',
     color: '#ec4899',
     link: 'https://editor.dicebear.com',
   },
 ];
 </script>
 
-# DiceBear – Open Source Avatar Library & API
+# DiceBear: open source avatar library & API
 
 ## What is DiceBear?
 
@@ -122,19 +122,19 @@ set and combined to create a character / avatar.
 combined with
 [Mulberry32](https://gist.github.com/tommyettinger/46a874533244883189143505d203312c)
 is used as the algorithm for the
-[PRNG](https://en.wikipedia.org/wiki/Pseudorandom_number_generator). It is
-important to note that the PRNG **does not** attempt to be
+[PRNG](https://en.wikipedia.org/wiki/Pseudorandom_number_generator). The PRNG
+**does not** attempt to be
 [cryptographically secure](https://en.wikipedia.org/wiki/Cryptographically-secure_pseudorandom_number_generator).
 
-## Privacy-by-Design
+## Privacy by design
 
 DiceBear is built with privacy in mind. When using the
 [JavaScript library](/how-to-use/js-library/),
 [PHP library](/how-to-use/php-library/),
 [Python library](/how-to-use/python-library/),
 [Rust library](/how-to-use/rust-library/) or
-[Go library](/how-to-use/go-library/), avatars are generated entirely on
-your infrastructure — no personal data ever leaves your systems. For teams that
+[Go library](/how-to-use/go-library/), avatars are generated entirely on your
+infrastructure. No personal data ever leaves your systems. For teams that
 require full control over data retention and infrastructure, DiceBear can be
-[self-hosted](/guides/host-the-http-api-yourself/) — making it a privacy-focused
-avatar solution with no dependency on external services.
+[self-hosted](/guides/host-the-http-api-yourself/), so there is no dependency on
+external services.

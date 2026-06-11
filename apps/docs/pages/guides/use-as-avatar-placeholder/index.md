@@ -2,8 +2,8 @@
 title: Using DiceBear as an Avatar Placeholder API
 description: >
   Use DiceBear as a deterministic avatar placeholder API for user profiles.
-  Generate consistent SVG profile pictures from user IDs or emails — no image
-  upload required.
+  Generate consistent SVG profile pictures from user IDs or emails, with no
+  image upload required.
 ---
 
 <script setup>
@@ -22,23 +22,23 @@ const highlights = [
   },
   {
     icon: Zap,
-    title: 'Zero Upload Required',
+    title: 'Zero upload required',
     description:
-      'No images to store, no moderation needed. The avatar is generated on the fly — perfect for new users without a profile picture yet.',
+      'No images to store, no moderation needed. The avatar is generated on the fly, which works well for new users without a profile picture yet.',
     color: '#f59e0b',
   },
   {
     icon: Server,
-    title: 'Self-Hostable',
+    title: 'Self-hostable',
     description:
       'Run your own instance of the HTTP API for full control over availability and data retention.',
     color: '#22c55e',
   },
   {
     icon: Palette,
-    title: '35+ Styles',
+    title: '35+ styles',
     description:
-      'Pick the visual style that fits your product — from abstract geometric shapes to illustrated characters.',
+      'Pick the visual style that fits your product, from abstract geometric shapes to illustrated characters.',
     color: '#a855f7',
   },
 ];
@@ -77,21 +77,21 @@ const styles = [
 ];
 </script>
 
-# Using DiceBear as an Avatar Placeholder API
+# Using DiceBear as an avatar placeholder API
 
 An avatar placeholder replaces the generic default shown when a user hasn't
 uploaded a profile picture yet. Instead of a gray silhouette, DiceBear generates
-a unique, deterministic SVG avatar from any seed — making every user feel
-represented from the moment they sign up.
+a unique, deterministic SVG avatar from any seed, so every user gets a distinct
+picture from the moment they sign up.
 
-## Why DiceBear as a Placeholder?
+## Why DiceBear as a placeholder?
 
 <DocsHighlights :highlights="highlights" />
 
 ## With the HTTP API
 
 The simplest approach: use a DiceBear API URL as the `src` of an `<img>` tag.
-Use a stable identifier as the seed — a numeric user ID works well. For full
+Use a stable identifier as the seed. A numeric user ID works well. For full
 options and rate limit details, see the
 [HTTP API documentation](/how-to-use/http-api/).
 
@@ -107,7 +107,7 @@ options and rate limit details, see the
 />
 ```
 
-### Fallback on Image Error
+### Fallback on image error
 
 Combine DiceBear with an `onerror` handler to fall back gracefully when a user's
 uploaded photo fails to load:
@@ -120,7 +120,7 @@ uploaded photo fails to load:
 />
 ```
 
-### Using a User ID as Seed
+### Using a user ID as seed
 
 Pass a stable, unique identifier as the seed to ensure each user always gets the
 same placeholder:
@@ -132,7 +132,7 @@ const avatarUrl = `https://api.dicebear.com/10.x/thumbs/svg?seed=${encodeURIComp
 
 <BrowserPreview url="https://api.dicebear.com/10.x/thumbs/svg?seed=user-8f3a2c" />
 
-## With the JavaScript Library
+## With the JavaScript library
 
 Use the JS library for server-side rendering or to embed the SVG directly in
 your markup without an additional HTTP request. For full installation and API
@@ -151,7 +151,7 @@ function getPlaceholderAvatar(userId) {
 }
 ```
 
-## With the PHP Library
+## With the PHP library
 
 Use the PHP library for server-side rendering without an additional HTTP
 request. For full installation and API details, see the
@@ -178,7 +178,7 @@ function getPlaceholderAvatar(Style $style, string $userId): string {
 }
 ```
 
-## With the Python Library
+## With the Python library
 
 Use the Python library for server-side rendering without an additional HTTP
 request. For full installation and API details, see the
@@ -204,7 +204,7 @@ def get_placeholder_avatar(user_id: str) -> str:
     }).to_string()
 ```
 
-## With the Rust Library
+## With the Rust library
 
 Use the Rust library for server-side rendering without an additional HTTP
 request. For full installation and API details, see the
@@ -227,7 +227,7 @@ fn placeholder_avatar(style: &Style, user_id: &str) -> Result<String, Error> {
 }
 ```
 
-## With the Go Library
+## With the Go library
 
 Use the Go library for server-side rendering without an additional HTTP request.
 For full installation and API details, see the
@@ -255,14 +255,14 @@ func placeholderAvatar(style *dicebear.Style, userID string) (string, error) {
 }
 ```
 
-## Choosing a Style
+## Choosing a style
 
 Different styles suit different use cases. Click a style to see all available
 options.
 
 <DocsStyleGrid :styles="styles" />
 
-## Tip: Always Define a Size
+## Tip: always define a size
 
 Specify a `size` or CSS dimensions to avoid layout shift while the avatar loads:
 

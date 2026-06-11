@@ -17,8 +17,8 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 Pixel Art is a low-resolution vector avatar style that renders half-body
 characters as crisp pixel sprites with retro hairstyles, eyes, and colored tops.
-Generate nostalgic, 8-bit-style SVG profile icons popular in gaming communities
-and developer tools.
+Generate 8-bit-style SVG profile icons popular in gaming communities and
+developer tools.
 
 <StylePreview styleName="pixel-art" />
 

@@ -17,7 +17,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 # Avataaars Neutral
 
 Avataaars Neutral is a reduced variant of the Avataaars style, showing only the
-eyes, eyebrows, and mouth on a solid colored square — no head, hair, or
+eyes, eyebrows, and mouth on a solid colored square, with no head, hair, or
 clothing.
 
 <StylePreview styleName="avataaars-neutral" />

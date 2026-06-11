@@ -12,7 +12,7 @@ import UniqueAvatarsTable from '@theme/components/guides/UniqueAvatarsTable.vue'
 # How many unique avatars are possible per avatar style?
 
 The number below is the size of the seed-driven output space for each style at
-its default configuration — how many distinct avatars the seed can produce while
+its default configuration: how many distinct avatars the seed can produce while
 every other option is left untouched. The count mirrors what the renderer
 actually does:
 

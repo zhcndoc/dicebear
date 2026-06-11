@@ -152,7 +152,7 @@ or `neutral` variant.
 
 ## Multiple components
 
-You can add as many components as you like. Each component is independent — the
+You can add as many components as you like. Each component is independent: the
 PRNG selects a variant for each one separately.
 
 ```json
@@ -215,7 +215,7 @@ other weights are also `0`. Default weight is `1`.
 
 Components can have default rotation, translation, and scale ranges that the
 PRNG samples per render. All four fields use the same `{ min, max, step? }`
-range object — see [Ranges](/specification/definition-schema/#ranges) for the
+range object. See [Ranges](/specification/definition-schema/#ranges) for the
 full reference.
 
 ```json

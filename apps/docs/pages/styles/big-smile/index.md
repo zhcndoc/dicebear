@@ -15,9 +15,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Big Smile
 
-Big Smile is a warm illustrated vector avatar style with rounded cartoon faces,
-full hairstyles, and oversized toothy smiles. Generate cheerful, friendly SVG
-profile icons that stand out in user feeds and comment sections.
+Big Smile is an illustrated vector avatar style with rounded cartoon faces, full
+hairstyles, and oversized toothy smiles. Generate cheerful SVG profile icons
+that stand out in user feeds and comment sections.
 
 <StylePreview styleName="big-smile" />
 

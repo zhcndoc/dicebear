@@ -22,7 +22,7 @@ and this project adheres to
   precomputed lookup table (one entry per 8-bit channel value) instead of
   calling `pow` at runtime. `pow` is not required to be correctly rounded and
   produced last-ULP differences between JS engines (V8 vs. others), the C math
-  library (PHP, Python, Rust), and Go's pure-Go implementation — so luminance
+  library (PHP, Python, Rust), and Go's pure-Go implementation, so luminance
   values, and in contrived cases contrast-based color ordering, could diverge
   across languages and even across browsers. The table holds the values the
   JavaScript reference produces today, so JavaScript output is unchanged; the
@@ -31,13 +31,13 @@ and this project adheres to
   fuse into FMA instructions on arm64. Rendered SVGs are unaffected.
 - **Core (PHP):** `Avatar::toDataUri()` now percent-encodes exactly like
   JavaScript's `encodeURIComponent`. Previously the PHP library used plain
-  `rawurlencode`, which additionally escapes `!*'()` — characters that occur in
-  every rendered SVG (e.g. `url(#…)` references and `translate(…)` transforms) —
+  `rawurlencode`, which additionally escapes `!*'()`, characters that occur in
+  every rendered SVG (e.g. `url(#…)` references and `translate(…)` transforms),
   so the data URI diverged byte-wise from the JavaScript, Python, Rust, and Go
   libraries. The decoded SVG was unaffected.
 - **Core (JS):** The `initial` style variable now resolves to the full first
   code point of the initials. Previously the JavaScript library emitted a lone
-  UTF-16 surrogate — ill-formed XML — when the initials started with a character
+  UTF-16 surrogate (ill-formed XML) when the initials started with a character
   outside the Basic Multilingual Plane (e.g. an emoji). The PHP, Python, Rust,
   and Go libraries already returned the full character; all libraries are now
   byte-identical for such seeds.
@@ -50,7 +50,7 @@ and this project adheres to
   JavaScript, Rust, and PHP libraries. Previously snapshot values such as
   `scale`, `rotate`, `translateX`/`translateY`, `borderRadius`, color angles,
   and per-component transforms were emitted as `1.0`/`0.0`, so the serialized
-  JSON diverged from the other ports — the rendered SVG was unaffected. The
+  JSON diverged from the other ports. The rendered SVG was unaffected. The
   values were already numerically equal, so only consumers comparing or hashing
   the serialized options JSON across languages were affected.
 
@@ -66,8 +66,8 @@ and this project adheres to
 
 - **Core:** Initials now discard everything from the first `@` to the end of the
   seed (e.g. an email domain). Previously the strip stopped at the first line
-  terminator — at a line feed in PHP and Python, and additionally at a carriage
-  return or `U+2028`/`U+2029` in JavaScript — so a seed with a line break after
+  terminator (at a line feed in PHP and Python, and additionally at a carriage
+  return or `U+2028`/`U+2029` in JavaScript), so a seed with a line break after
   the `@` kept the trailing text as a second word, and the libraries could even
   diverge from each other. All language libraries now produce byte-identical
   initials for such seeds.
@@ -100,8 +100,8 @@ and this project adheres to
 - **Core:** Numeric values in rendered SVGs are now consistently rounded to at
   most 5 decimal places, so the JavaScript and PHP libraries produce
   byte-identical output for every input. Previously, fractional or very
-  small/large values — e.g. a fractional `borderRadius` or `translateX`,
-  component transforms, or gradient stop offsets — could be stringified
+  small/large values (e.g. a fractional `borderRadius` or `translateX`,
+  component transforms, or gradient stop offsets) could be stringified
   differently between languages (scientific notation, differing precision).
   Avatars built from whole-number options are unaffected.
 - **Core (PHP):** `Prng::float` now rounds halves toward +Infinity (matching the
@@ -112,13 +112,13 @@ and this project adheres to
   certain seeds. Output is now byte-identical across languages.
 - **Core (PHP):** Initials are now derived correctly from seeds containing
   multibyte letters such as `ü` or `ô`. The quote-stripping step was missing the
-  `/u` (Unicode) flag, so it removed raw UTF-8 bytes and corrupted those letters
-  — e.g. `über` and `côté` produced wrong or empty initials instead of `ÜB` /
-  `CÔ`. The PHP output now matches the JavaScript reference.
+  `/u` (Unicode) flag, so it removed raw UTF-8 bytes and corrupted those
+  letters: e.g. `über` and `côté` produced wrong or empty initials instead of
+  `ÜB` / `CÔ`. The PHP output now matches the JavaScript reference.
 - **Core:** Range options (`scale`, `borderRadius`, `rotate`,
   `translateX`/`translateY`, and per-color angle/fill-stops) given as a
-  single-element array `[n]` are now treated as the fixed value `n` — identical
-  to the scalar `n` — and an empty array `[]` falls back to the option's
+  single-element array `[n]` are now treated as the fixed value `n` (identical
+  to the scalar `n`), and an empty array `[]` falls back to the option's
   default. Both forms are permitted by the schema. Previously the behaviour
   diverged: the JavaScript library emitted `NaN` (e.g. `scale(NaN)`), while PHP
   dropped `[n]` to the default. All three now agree.
@@ -130,7 +130,7 @@ and this project adheres to
 - **CLI:** `dicebear --version` and `dicebear --help` no longer fail by trying
   to read a file named `--version`/`--help`. The definition path is now resolved
   via the argument parser, so flags (and the values they consume) before the
-  path are handled correctly — e.g. `dicebear --json my-style.json` and
+  path are handled correctly, e.g. `dicebear --json my-style.json` and
   `dicebear --count 2 my-style.json`.
 
 ## [10.0.0] - 2026-05-27

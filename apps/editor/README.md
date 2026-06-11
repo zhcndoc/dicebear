@@ -1,18 +1,18 @@
-# DiceBear Editor (Beta)
+# DiceBear editor (beta)
 
 [![Preview](https://raw.githubusercontent.com/dicebear/dicebear/10.x/apps/editor/preview.png)](https://editor.dicebear.com)
 
 Read more about the project here:
 [https://github.com/dicebear/dicebear/discussions/286](https://github.com/dicebear/dicebear/discussions/286)
 
-## Recommended IDE Setup
+## Recommended IDE setup
 
 [VSCode](https://code.visualstudio.com/) +
 [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and
 disable Vetur) +
 [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
 
-## Type Support for `.vue` Imports in TS
+## Type support for `.vue` imports in TS
 
 TypeScript cannot handle type information for `.vue` imports by default, so we
 replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need
@@ -35,20 +35,20 @@ that is more performant. You can enable it by the following steps:
 
 See [Vite Configuration Reference](https://vitejs.dev/config/).
 
-## Project Setup
+## Project setup
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Compile and hot-reload for development
 
 ```sh
 npm run build
 npm run dev --workspace @dicebear/editor
 ```
 
-### Type-Check, Compile and Minify for Production
+### Type-check, compile and minify for production
 
 ```sh
 npm run build

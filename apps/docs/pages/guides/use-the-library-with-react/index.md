@@ -5,7 +5,7 @@ description: >
   deterministic profile pictures and user placeholder images in React apps.
 ---
 
-# React Avatar Library – Using DiceBear with React
+# React avatar library: using DiceBear with React
 
 DiceBear integrates naturally into React via the JS library or the HTTP API. Use
 `useMemo` to efficiently generate deterministic SVG profile pictures from a

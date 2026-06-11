@@ -15,10 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Notionists
 
-Notionists is a hand-drawn black-line vector avatar style featuring half-body
+Notionists is a hand-drawn black-line vector avatar style of half-body
 characters posing with small props like phones or coffee cups. Generate
-polished, casual-professional SVG profile icons for productivity tools, docs
-apps, and team workspaces.
+casual-professional SVG profile icons for productivity tools, docs apps, and
+team workspaces.
 
 <StylePreview styleName="notionists" />
 

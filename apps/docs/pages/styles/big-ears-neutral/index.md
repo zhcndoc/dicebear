@@ -17,7 +17,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 # Big Ears Neutral
 
 Big Ears Neutral is a reduced variant of the Big Ears style, showing only the
-eyes and mouth on a solid colored square — no head outline, hair, or ears.
+eyes and mouth on a solid colored square, with no head outline, hair, or ears.
 
 <StylePreview styleName="big-ears-neutral" />
 

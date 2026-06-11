@@ -16,9 +16,8 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 # Bottts
 
 Bottts is a robot-themed vector avatar style with modular bot heads built from
-swappable faces, mouths, antennas, side units, and textures. A classic, vibrant
-choice for generating fun, technical profile icons in developer tools, AI apps,
-and API services.
+swappable faces, mouths, antennas, side units, and textures. Generate fun,
+technical profile icons for developer tools, AI apps, and API services.
 
 <StylePreview styleName="bottts" />
 

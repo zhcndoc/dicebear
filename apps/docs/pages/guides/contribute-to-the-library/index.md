@@ -26,8 +26,8 @@ workflow there is not the usual "edit a JSON file" loop.
 
 The JavaScript, PHP, Python, Rust and Go cores, the CLI, the VitePress
 documentation (including the Playground), and the standalone editor all live in
-the main
-[`dicebear/dicebear`](https://github.com/dicebear/dicebear) monorepo. See:
+the main [`dicebear/dicebear`](https://github.com/dicebear/dicebear) monorepo.
+See:
 
 - [`CONTRIBUTING.md`](https://github.com/dicebear/dicebear/blob/10.x/CONTRIBUTING.md)
   in `dicebear/dicebear`

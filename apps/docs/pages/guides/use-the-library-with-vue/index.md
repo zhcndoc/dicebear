@@ -5,12 +5,11 @@ description: >
   or avatar API. Includes TypeScript support.
 ---
 
-# Vue Avatar Library – Using DiceBear with Vue
+# Vue avatar library: using DiceBear with Vue
 
 DiceBear pairs well with Vue's reactivity model. Wrap avatar generation in a
-`computed` property to keep profile pictures in sync with reactive data — via
-the JS library for full control, or the HTTP API for a lightweight,
-dependency-free approach.
+`computed` property to keep profile pictures in sync with reactive data, via the
+JS library for full control or the HTTP API for a dependency-free approach.
 
 You can use DiceBear with Vue either via the
 [JS-Library](/how-to-use/js-library/) or the [HTTP-API](/how-to-use/http-api/).

@@ -17,8 +17,8 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 # Notionists Neutral
 
 Notionists Neutral is a reduced variant of the Notionists style, drawing only
-the eyes, nose, and mouth in loose black ink lines on a plain background — no
-head, hair, or body.
+the eyes, nose, and mouth in loose black ink lines on a plain background, with
+no head, hair, or body.
 
 <StylePreview styleName="notionists-neutral" />
 

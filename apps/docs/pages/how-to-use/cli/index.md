@@ -33,7 +33,7 @@ npm install dicebear --global
 ### Create an avatar
 
 Replace `<style>` with an avatar style name (lowercase, kebab-case for
-multi-word styles — e.g. `lorelei`, `pixel-art`, `adventurer-neutral`) and
+multi-word styles, e.g. `lorelei`, `pixel-art`, `adventurer-neutral`) and
 `[outputPath]` with a target directory. If `[outputPath]` is omitted, the
 current directory is used as target directory.
 
@@ -87,8 +87,8 @@ make the avatars differ from each other.
 
 :::tip Performance
 
-The CLI uses parallel processing based on your CPU cores. Generating large
-batches of avatars is optimized for performance.
+The CLI uses parallel processing based on your CPU cores, so large batches of
+avatars generate quickly.
 
 :::
 
@@ -271,7 +271,7 @@ Options:
 ## Custom styles
 
 You can use any JSON [definition file](/specification/definition-schema/) as a
-style — including your own custom styles or styles exported from the
+style, including your own custom styles or styles exported from the
 [Figma plugin](/guides/create-an-avatar-style-with-figma/).
 
 Just pass the path to the JSON file instead of a style name:

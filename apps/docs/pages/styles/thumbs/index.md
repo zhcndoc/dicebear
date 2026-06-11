@@ -15,10 +15,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Thumbs
 
-Thumbs is a playful vector avatar style featuring rounded thumb-shaped
-characters in a single solid color, with simple eyes and mouth on a tinted
-background. Generate charming, friendly SVG profile icons with a fun,
-approachable aesthetic.
+Thumbs is a playful vector avatar style of rounded thumb-shaped characters in a
+single solid color, with simple eyes and mouth on a tinted background. Generate
+friendly SVG profile icons that work well as default user avatars.
 
 <StylePreview styleName="thumbs" />
 

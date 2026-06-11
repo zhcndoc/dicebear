@@ -13,8 +13,8 @@ A correct implementation produces **byte-identical SVGs** to the
 [PHP](https://github.com/dicebear/dicebear/tree/10.x/src/php/core),
 [Python](https://github.com/dicebear/dicebear/tree/10.x/src/python/core),
 [Rust](https://github.com/dicebear/dicebear/tree/10.x/src/rust/core) and
-[Go](https://github.com/dicebear/dicebear/tree/10.x/src/go/core)
-reference implementations for the same seed and style definition.
+[Go](https://github.com/dicebear/dicebear/tree/10.x/src/go/core) reference
+implementations for the same seed and style definition.
 
 ## Architecture overview
 
@@ -61,7 +61,7 @@ function fnv1a_hash(input: string) -> uint32:
 ```
 
 In JavaScript, `input.charCodeAt(i)` returns UTF-16 code units directly.
-Languages without native UTF-16 strings must convert first — outside the Basic
+Languages without native UTF-16 strings must convert first. Outside the Basic
 Multilingual Plane (e.g. emoji), code units and code points diverge, and using
 code points instead produces wrong hashes for those inputs. The PHP reference
 does the conversion explicitly:
@@ -126,7 +126,7 @@ Key details:
 - `>>> 0` converts back to unsigned 32-bit
 - `Math.imul` performs 32-bit integer multiplication
 - `nextFloat()` returns a value in `[0, 1)` by dividing by `2^32`
-- The state is **stateful** — it advances with each call to `next()`
+- The state is **stateful**: it advances with each call to `next()`
 - Languages with 64-bit integers but no native `uint32_t` (e.g. PHP, Lua) must
   implement the 32-bit multiply manually: a naïve `uint32 * uint32` exceeds
   `2^63 - 1` and silently overflows. The PHP reference splits one operand into
@@ -155,7 +155,7 @@ after.
 For inputs with more than one entry, every selection method first normalizes:
 
 1. **Deduplicate** by the item's string representation, keeping the first
-   occurrence (`pick` and `shuffle` only — `weightedPick` operates on a map and
+   occurrence (`pick` and `shuffle` only; `weightedPick` operates on a map and
    has unique keys by construction).
 2. **Sort** by the item's string representation using UTF-16 code unit
    comparison (JavaScript's default `.sort()` order).
@@ -164,7 +164,7 @@ Empty inputs return `undefined` (or an empty array for `shuffle`); single-entry
 inputs are returned verbatim without deduplication or sorting. Both
 normalization steps make multi-entry output independent of caller ordering and
 duplicates. In practice the only values ever sorted are component variant names
-and hex color strings — both guaranteed to be ASCII — so an implementation may
+and hex color strings (both guaranteed to be ASCII), so an implementation may
 compare with `strcmp` and stay parity-correct, even though the JavaScript
 reference compares full UTF-16 code units. The PHP reference does exactly this.
 
@@ -220,7 +220,7 @@ function bool(seed, key, likelihood = 50):
 Returns a float in the closed range, rounded to four decimal places. `range` is
 the schema's `{ min, max, step? }` object. If `min > max`, swap them internally.
 With `step > 0`, sample uniformly from
-`{ min + i × step | 0 ≤ i ≤ ⌊(max − min) / step⌋ }` — so when `(max − min)` is
+`{ min + i × step | 0 ≤ i ≤ ⌊(max − min) / step⌋ }`, so when `(max − min)` is
 not a multiple of `step`, the last bucket is `≤ max` and `max` itself is only
 hit when the division is exact. Without `step`, the range is continuous.
 
@@ -250,7 +250,7 @@ boundary (e.g. `round(-0.40625 × 10000) / 10000` is `-0.4062`, not `-0.4063`).
 
 Returns an integer in the closed range, inclusive on both ends. Accepts the same
 `{ min, max, step? }` object as `float`; `step` is accepted for symmetry but
-ignored — integers already step by 1.
+ignored, since integers already step by 1.
 
 ```
 function integer(seed, key, range):
@@ -317,7 +317,7 @@ accept a number or an array, normalized to a `{ min, max }` range before
 - a bare number `n` → `{ min: n, max: n }` (a fixed value);
 - a single-element array `[n]` → `{ min: n, max: n }` (same as the bare number);
 - a two-element array → `{ min, max }` taken as the smaller/larger of the two
-  (order does not matter — sampling swaps them anyway);
+  (order does not matter, sampling swaps them anyway);
 - an empty array `[]`, or the option unset, → fall back to the listed default.
 
 Note the edge cases: `[n]` is a fixed value (**not** the default), and `[]`
@@ -345,8 +345,8 @@ the variants' own `weight` values (defaulting to `1`).
 
 For **component aliases** (declared via `extends` in the definition), the user
 side is shared and only the PRNG side is independent. An alias does not expose
-its own `${aliasName}Probability` or `${aliasName}Variant` user option — both
-are read from the source component's `${sourceName}Probability` and
+its own `${aliasName}Probability` or `${aliasName}Variant` user option. Both are
+read from the source component's `${sourceName}Probability` and
 `${sourceName}Variant`. The PRNG, however, uses the alias's own name as the key
 (`${aliasName}Probability`, `${aliasName}Variant`), so each alias rolls its
 visibility and variant independently while still being constrained by the same
@@ -355,7 +355,7 @@ user-set weights.
 ### Per-component transforms (render-time)
 
 Each component reference also has a rotation, two translations, and a scale
-applied at render time. These are **not user options** — they are sampled per
+applied at render time. These are **not user options**: they are sampled per
 render from the component definition's `rotate`/`translate`/`scale` ranges. They
 land in the introspective `resolvedOptions` snapshot under `${name}Rotate` /
 `${name}TranslateX` / `${name}TranslateY` / `${name}Scale`, but they are not
@@ -373,7 +373,7 @@ The translate values are percentages of the **component's own** `width` and
 `height` (not the avatar canvas); multiply by the component dimension to get the
 offset. Like every emitted number it is then run through
 [`formatNumber`](#number-formatting) (which caps it at 5 decimal places). The
-transform center `(cx, cy)` for rotate and scale is the component's own center —
+transform center `(cx, cy)` for rotate and scale is the component's own center:
 `(width / 2, height / 2)`.
 
 In the emitted SVG, the non-identity values are concatenated (space-separated)
@@ -386,10 +386,10 @@ transform="translate(tx, ty) rotate(angle, cx, cy) translate(cx, cy) scale(s) tr
 
 Rules:
 
-- Translate is one segment — emitted if either `tx ≠ 0` or `ty ≠ 0`.
-- Rotate is one segment — emitted if `angle ≠ 0`.
+- Translate is one segment, emitted if either `tx ≠ 0` or `ty ≠ 0`.
+- Rotate is one segment, emitted if `angle ≠ 0`.
 - Scale is the three-part `translate cx,cy / scale s / translate -cx,-cy`
-  fragment — emitted as a single unit if `s ≠ 1`.
+  fragment, emitted as a single unit if `s ≠ 1`.
 - If all of `(tx, ty, angle, s)` are identity, the `transform` attribute is
   omitted entirely.
 - If the style author wrote a `transform` on the component reference, it is
@@ -398,8 +398,8 @@ Rules:
 
 ### Color options
 
-For each color group declared in the definition — **plus** an implicit
-`background` group — the user can supply four options:
+For each color group declared in the definition (**plus** an implicit
+`background` group) the user can supply four options:
 
 | Option                  | Type                                     | PRNG key                | Notes                                                                             |
 | ----------------------- | ---------------------------------------- | ----------------------- | --------------------------------------------------------------------------------- |
@@ -423,20 +423,21 @@ Resolution for each group:
      rejected.
    - **`notEqualTo`**: Strip the alpha channel from every candidate and every
      already-picked color in the referenced groups, then drop the matches. If
-     filtering would empty the candidate list, fall back to the unfiltered list
-     — color constraints are best-effort, not hard.
+     filtering would empty the candidate list, fall back to the unfiltered list:
+     color constraints are best-effort, not hard.
 5. If there is no `contrastTo` constraint, shuffle the candidates.
 6. Slice to the number of stops.
 
-A group declared without a color entry in the style definition — the implicit
-`background` group is the most common case — skips constraint handling entirely
+A group declared without a color entry in the style definition (the implicit
+`background` group is the most common case) skips constraint handling entirely
 and just shuffles the user-supplied candidates.
 
 #### WCAG 2.1 contrast ratio
 
-The contrast sort is the most likely source of subtle parity drift between ports
-— small differences in the linearization cutoff or the luminance coefficients
-change the ordering on certain palettes. These are the defining formulas:
+The contrast sort is the most likely source of subtle parity drift between
+ports. Small differences in the linearization cutoff or the luminance
+coefficients change the ordering on certain palettes. These are the defining
+formulas:
 
 ```
 function linearize(channel: uint8) -> float:
@@ -462,17 +463,17 @@ The cutoff is `0.04045`, the exponent is `2.4`, and the coefficients are
 `contrastRatio(candidate, refColor)` and must be **stable** (equal ratios keep
 their input order).
 
-::: warning Do not compute the linearization at runtime
-IEEE 754 does not require `pow` to be correctly rounded, and real
-implementations disagree in the last bit: V8's `Math.pow`, the C math library
-(used by PHP, Python, and Rust), and Go's pure-Go `math.Pow` each produce a
-different result for some channel values. A port that evaluates
-`((s + 0.055) / 1.055) ^ 2.4` at runtime will fail the parity fixtures on some
-inputs — and a JavaScript build would even differ between browser engines.
+::: warning Do not compute the linearization at runtime IEEE 754 does not
+require `pow` to be correctly rounded, and real implementations disagree in the
+last bit: V8's `Math.pow`, the C math library (used by PHP, Python, and Rust),
+and Go's pure-Go `math.Pow` each produce a different result for some channel
+values. A port that evaluates `((s + 0.055) / 1.055) ^ 2.4` at runtime will fail
+the parity fixtures on some inputs, and a JavaScript build would even differ
+between browser engines.
 
 `linearize` has only 256 possible inputs, so every reference implementation
-embeds a precomputed lookup table with the 256 results instead — copy it from
-any reference port (e.g.
+embeds a precomputed lookup table with the 256 results instead. Copy it from any
+reference port (e.g.
 [`Color.ts`](https://github.com/dicebear/dicebear/blob/10.x/src/js/core/src/Utils/Color.ts)).
 Decimal-literal parsing is correctly rounded in every mainstream language, so
 the table yields bit-identical doubles everywhere, and the remaining arithmetic
@@ -480,21 +481,20 @@ the table yields bit-identical doubles everywhere, and the remaining arithmetic
 
 One more trap: compilers that fuse `a × b + c` into a single FMA instruction
 (e.g. Go on arm64) round once instead of twice and drift in the last ULP. The
-weighted sum in `luminance` must round after every product — in Go that takes
-explicit `float64(...)` conversions around each product.
-:::
+weighted sum in `luminance` must round after every product. In Go that takes
+explicit `float64(...)` conversions around each product. :::
 
 ## SVG rendering pipeline
 
 The renderer walks the element tree and generates an SVG string. The
-transformations are applied in a specific order — getting this wrong will
-produce different output.
+transformations are applied in a specific order. Getting this wrong will produce
+different output.
 
 ### Number formatting
 
-Every number emitted into the SVG — `viewBox` dimensions, `width`/`height`, the
+Every number emitted into the SVG (`viewBox` dimensions, `width`/`height`, the
 translate/rotate/scale offsets and their centers, `rx`/`ry`, gradient stop
-offsets, the `fontWeight` variable, and so on — is stringified through a single
+offsets, the `fontWeight` variable, and so on) is stringified through a single
 helper so that all implementations produce byte-identical output:
 
 ```
@@ -512,23 +512,23 @@ function formatNumber(value):
 ```
 
 This rounds to at most **5 decimal places** and always uses plain decimal
-notation — never scientific/exponential — with no trailing zeros and no trailing
+notation (never scientific/exponential), with no trailing zeros and no trailing
 `.0` (e.g. `1`, `-50`, `2.5`, `0.00001`). Build the string from the integer
 `scaled` rather than the language's native float-to-string: PHP's
 precision-based cast and Python's `repr` both diverge from JavaScript for small,
 large, or fractional values. The `round` step rounds halves toward +Infinity
-(JavaScript's `Math.round`); emulate it precisely — `floor(x + 0.5)` is **not**
+(JavaScript's `Math.round`); emulate it precisely: `floor(x + 0.5)` is **not**
 equivalent (it is wrong for the largest double below `0.5`, where it yields `1`
 instead of `0`).
 
 ### 1. Background
 
-The renderer unconditionally asks the resolver for the `background` color group
-— every style has it implicitly, even when the style definition declares no
+The renderer unconditionally asks the resolver for the `background` color group:
+every style has it implicitly, even when the style definition declares no
 `background` group. If the resolved list is non-empty, emit a
 `<rect width="{w}" height="{h}" fill="{fill}"/>` as the first body element.
 `{fill}` is either a literal hex string (solid fill, or a single candidate
-color) or a `url(#…)` reference to a gradient registered in `<defs>` — see
+color) or a `url(#…)` reference to a gradient registered in `<defs>`. See
 [Gradient rendering](#gradient-rendering).
 
 ### 2. Element tree
@@ -544,13 +544,13 @@ Walk the `canvas.elements` array recursively:
   result as the parent's text content.
 - **`component`**: Look up the selected variant (from options resolution). If
   the component is visible, emit a `<use>` element pointing at a `<defs>` entry
-  that holds the variant body — see below.
+  that holds the variant body (see below).
 
 When an `element` has the name `defs`, the renderer **does not** emit a `<defs>`
 tag inline. Instead, each child is rendered and pushed into the shared `<defs>`
 block that the renderer accumulates over the whole walk (alongside generated
 gradients, clip paths, and component variant bodies). The map key is the child's
-`id` attribute when present, otherwise a synthetic `_{n}` slot — so two children
+`id` attribute when present, otherwise a synthetic `_{n}` slot, so two children
 with the same `id` collapse to one entry, last writer wins. This lets style
 definitions ship reusable fragments without breaking the
 single-`<defs>`-per-document invariant.
@@ -562,8 +562,8 @@ A component reference is never inlined. The first time the renderer encounters a
 
 1. Renders the variant's element tree.
 2. Wraps it in `<g id="{sourceName}-{variantName}-{seedHash}">…</g>` and appends
-   it to the shared `<defs>` block. `sourceName` is the _source_ component name
-   — for an alias declared via `extends`, this is the name of the component the
+   it to the shared `<defs>` block. `sourceName` is the _source_ component name.
+   For an alias declared via `extends`, this is the name of the component the
    alias points to, so every alias referencing the same source shares a single
    `<defs>` entry.
 3. At the call site, emits `<use {attributes} href="#{id}"/>` where
@@ -583,26 +583,26 @@ characters.
 ### 3. Transform order
 
 The body (background plus rendered elements) is wrapped in nested `<g>`
-elements. The list below is **outermost → innermost** — the border-radius clip
-is always emitted, the others only when their value is non-identity.
+elements. The list below is **outermost → innermost**: the border-radius clip is
+always emitted, the others only when their value is non-identity.
 
-1. **Border radius (always)** — register a `<clipPath id="clip-{seedHash}">` in
+1. **Border radius (always):** register a `<clipPath id="clip-{seedHash}">` in
    `<defs>` containing a `<rect width="{w}" height="{h}" rx="{rx}" ry="{ry}"/>`
    where `rx = (borderRadius / 100) * canvas.width` and
    `ry = (borderRadius / 100) * canvas.height`. Wrap the body in
    `<g clip-path="url(#clip-{seedHash})">`. **This wrap is emitted even when
    `borderRadius` is `0`** (with `rx="0" ry="0"`) so that transformed content
    cannot bleed past the canvas bounds.
-2. **Translate** (skip if both are `0`) — `<g transform="translate(dx, dy)">`
+2. **Translate** (skip if both are `0`): `<g transform="translate(dx, dy)">`
    where `dx = (translateX / 100) * canvas.width` and
    `dy = (translateY / 100) * canvas.height`.
-3. **Rotate** (skip if `0`) — `<g transform="rotate(angle, cx, cy)">` around
+3. **Rotate** (skip if `0`): `<g transform="rotate(angle, cx, cy)">` around
    canvas center, `cx = width / 2`, `cy = height / 2`.
-4. **Flip** (skip if `none`) — depends on mode:
+4. **Flip** (skip if `none`) depends on mode:
    - `horizontal`: `translate(width, 0) scale(-1, 1)`
    - `vertical`: `translate(0, height) scale(1, -1)`
    - `both`: `translate(width, height) scale(-1, -1)`
-5. **Scale** (skip if `1`) —
+5. **Scale** (skip if `1`):
    `<g transform="translate(cx, cy) scale(s) translate(-cx, -cy)">` where
    `cx = width / 2`, `cy = height / 2`.
 
@@ -615,7 +615,7 @@ The root `<svg>` element's attributes, in this order:
 
 1. `xmlns="http://www.w3.org/2000/svg"`
 2. `viewBox="0 0 {width} {height}"`
-3. Global `attributes` from the style definition — keys verbatim from the
+3. Global `attributes` from the style definition: keys verbatim from the
    allowlist, values XML-escaped
 4. Either `role="img" aria-label="{title}"` (when `title` is set, escaped) or
    `aria-hidden="true"`
@@ -623,18 +623,18 @@ The root `<svg>` element's attributes, in this order:
 
 Its children, in this exact order:
 
-1. `<metadata>` — the Dublin Core / RDF block from `meta` (see below); omitted
+1. `<metadata>`: the Dublin Core / RDF block from `meta` (see below); omitted
    entirely if `meta` is empty.
-2. `<defs>` — the accumulated definitions (clip path, gradients, component
+2. `<defs>`: the accumulated definitions (clip path, gradients, component
    variant bodies). Always present in practice because the border-radius clip is
    always registered.
-3. `<title>` — only when the `title` option is set. Contents are escaped.
+3. `<title>`: only when the `title` option is set. Contents are escaped.
 4. The transformed body from the previous step.
 
 #### `<metadata>` block
 
 The license/attribution metadata is emitted as a real `<metadata>` element with
-RDF / Dublin Core terms — **not** as an HTML comment:
+RDF / Dublin Core terms, **not** as an HTML comment:
 
 ```xml
 <metadata xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -664,7 +664,7 @@ DiceBear itself, or has no `source.name`).
 
 When `idRandomization` is `true`, append a random suffix to every existing `id`
 attribute and update every matching reference. The replacement patterns are
-`id="…"`, `url(#…)`, and `href="#…"` — each occurrence is rewritten to
+`id="…"`, `url(#…)`, and `href="#…"`; each occurrence is rewritten to
 `{original}-{suffix}`.
 
 The suffix format is **6 lowercase hex characters**, left-padded with zeros: in
@@ -673,10 +673,11 @@ JavaScript,
 
 The suffix **must be non-deterministic**: derive it from the host language's
 non-seeded RNG (`Math.random()` in JavaScript, `random_int()` in PHP,
-`random.randint()` in Python), not from the DiceBear PRNG. Two avatars rendered with the same seed would otherwise still
-collide on their IDs, defeating the purpose of the feature. Because the
-randomized output is non-deterministic, it is excluded from parity testing — the
-avatar fixtures use the default of `idRandomization: false`.
+`random.randint()` in Python), not from the DiceBear PRNG. Two avatars rendered
+with the same seed would otherwise still collide on their IDs, defeating the
+purpose of the feature. Because the randomized output is non-deterministic, it
+is excluded from parity testing: the avatar fixtures use the default of
+`idRandomization: false`.
 
 ## Gradient rendering
 
@@ -689,7 +690,7 @@ When a gradient is needed:
 1. Create a `<linearGradient>` (for `linear`) or `<radialGradient>` (for
    `radial`) in `<defs>`.
 2. Calculate per-stop offsets: `formatNumber(i / (colors.length - 1) * 100)`
-   followed by `%` (offsets are formatted like every other number — see
+   followed by `%` (offsets are formatted like every other number, see
    [Number formatting](#number-formatting)).
 3. Emit each color as `<stop offset="{offset}%" stop-color="{hex}"/>`.
 4. Add `gradientTransform="rotate(angle, 0.5, 0.5)"` only when the resolved
@@ -708,7 +709,7 @@ The `initial` and `initials` variables are derived from the seed via the
    `alice`, not `[alice, x]`).
 2. Remove apostrophe-like characters (`` ` ´ ' ʼ ``) so that `O'Neill` is
    treated as one word.
-3. Match Unicode letter sequences with `\p{L}[\p{L}\p{M}]*` — each match is one
+3. Match Unicode letter sequences with `\p{L}[\p{L}\p{M}]*`: each match is one
    "word".
 4. **No words found?** Retry once without step 1 (so a seed of just `@bob` still
    yields `B`). If that still returns nothing, the variable resolves to the
@@ -718,7 +719,7 @@ The `initial` and `initials` variables are derived from the seed via the
 6. **Multiple words?** Take the first grapheme of the first word and the first
    grapheme of the last word, uppercased.
 
-`initial` is `initials.charAt(0)` — the first code unit of the result, which
+`initial` is `initials.charAt(0)`, the first code unit of the result, which
 matches the first letter for every input the regex produces.
 
 ## Testing your implementation
@@ -732,32 +733,32 @@ the same coverage for free.
 
 The fixture tree contains:
 
-- **`fnv1a.json`** — input strings with their expected 32-bit hash and 8-char
-  hex representation. Includes ASCII, the `seed:key` patterns produced by
+- **`fnv1a.json`**: input strings with their expected 32-bit hash and 8-char hex
+  representation. Includes ASCII, the `seed:key` patterns produced by
   `Prng.getValue()`, and Unicode (`„é"`, `„日本語"`, emoji, long strings).
-- **`mulberry32.json`** — seeds with the first 5 chained `{nextFloat, state}`
+- **`mulberry32.json`**: seeds with the first 5 chained `{nextFloat, state}`
   pairs each. Catches state-progression bugs, not just first-step bugs.
-- **`prng.json`** — every `Prng` method (`getValue`, `pick`, `weightedPick`,
+- **`prng.json`**: every `Prng` method (`getValue`, `pick`, `weightedPick`,
   `bool`, `float`, `integer`, `shuffle`) with `{seed, key, args, result}` test
   cases, including order-independence checks for `pick` / `weightedPick` /
   `shuffle`.
-- **`numbers.json`** — the number-to-string formatting contract (at most 5
+- **`numbers.json`**: the number-to-string formatting contract (at most 5
   decimal places, halves toward +Infinity), including negative half-way
   boundaries and tiny values that collapse to `0`.
-- **`initials.json`** — seed-to-initials extraction, covering accents, quotes,
+- **`initials.json`**: seed-to-initials extraction, covering accents, quotes,
   email `@`-stripping, CJK, and emoji.
-- **`colors.json`** — the `Color` helpers (`toHex`, `toRgbHex`, `parseHex`,
+- **`colors.json`**: the `Color` helpers (`toHex`, `toRgbHex`, `parseHex`,
   `luminance`, `sortByContrast`, `filterNotEqualTo`). The luminance entries pin
-  exact doubles (including values around the linearization threshold — see the
+  exact doubles (including values around the linearization threshold, see the
   warning above), and the sort cases include a stability check.
-- **`validation.json`** — style definitions and options with their expected
-  accept/reject outcome (error *messages* are language-specific and not part of
+- **`validation.json`**: style definitions and options with their expected
+  accept/reject outcome (error _messages_ are language-specific and not part of
   the contract), plus circular `contrastTo` chains with the expected resolution
   path.
-- **`styles/{initials,thumbs,glass,notionists,shape-grid}.json`** — vendored
+- **`styles/{initials,thumbs,glass,notionists,shape-grid}.json`**: vendored
   copies of five style definitions chosen to cover most rendering features
   (text, components, color overrides, gradient fills, root SVG attributes).
-- **`avatars/{initials,thumbs,glass,notionists,shape-grid}.json`** —
+- **`avatars/{initials,thumbs,glass,notionists,shape-grid}.json`**:
   `{id, options, svg, resolvedOptions}` cases per style, exercising seed, size,
   scale, rotate, translate, border radius, flip, background gradients
   (solid/linear/radial), `title` escaping, component variant overrides, and
@@ -765,7 +766,7 @@ The fixture tree contains:
   also carry a `dataUri` field that pins the percent-encoding contract
   (JavaScript's `encodeURIComponent`: every byte except `A-Za-z0-9-_.!~*'()` is
   escaped).
-- **`descriptors/{initials,thumbs,glass,notionists,shape-grid}.json`** — the
+- **`descriptors/{initials,thumbs,glass,notionists,shape-grid}.json`**: the
   `OptionsDescriptor` field map per style (types, ranges, sorted variant lists,
   per-color fields).
 
@@ -791,19 +792,19 @@ avatar:     Avatar(style, options).toString() == svg    (byte-for-byte)
             Avatar(style, options).toDataUri() == dataUri (when present)
 ```
 
-Start with `fnv1a.json` and `mulberry32.json` — these are pure functions and the
+Start with `fnv1a.json` and `mulberry32.json`. These are pure functions and the
 easiest to debug. Once those are green, the `prng.json` cases will tell you
-whether your sort order, weighted-pick threshold, and Fisher–Yates loop match.
+whether your sort order, weighted-pick threshold, and Fisher-Yates loop match.
 Only then move on to the avatar fixtures, which compose everything.
 
 The `resolvedOptions` field on each avatar fixture contains only the options
-that were actually touched during resolution — unset options (`title`, `size`
+that were actually touched during resolution: unset options (`title`, `size`
 when not provided, etc.) do not appear. The JavaScript reference relies on
 `JSON.stringify()` dropping `undefined` values at the serialization boundary;
 the PHP reference filters `null` values explicitly in `Options::resolved()`, and
 the Python reference does the same in `Resolver.resolved()`. All produce the
-same shape. A port that returns the full memo map verbatim will
-fail the comparison — strip unset entries before serializing.
+same shape. A port that returns the full memo map verbatim will fail the
+comparison. Strip unset entries before serializing.
 
 ### Regenerating the fixtures
 
@@ -833,10 +834,10 @@ with multiple components and color constraints.
 
 ## Reference implementations
 
-| Language   | Package                              | Source                                                                                      |
-| ---------- | ------------------------------------ | ------------------------------------------------------------------------------------------- |
-| JavaScript | `@dicebear/core`                     | [src/js/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/js/core/src)         |
-| PHP        | `dicebear/core`                      | [src/php/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/php/core/src)       |
-| Python     | `dicebear-core`                      | [src/python/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/python/core/src) |
-| Rust       | `dicebear-core`                      | [src/rust/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/rust/core/src)     |
+| Language   | Package                               | Source                                                                                     |
+| ---------- | ------------------------------------- | ------------------------------------------------------------------------------------------ |
+| JavaScript | `@dicebear/core`                      | [src/js/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/js/core/src)         |
+| PHP        | `dicebear/core`                       | [src/php/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/php/core/src)       |
+| Python     | `dicebear-core`                       | [src/python/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/python/core/src) |
+| Rust       | `dicebear-core`                       | [src/rust/core/src/](https://github.com/dicebear/dicebear/tree/10.x/src/rust/core/src)     |
 | Go         | `github.com/dicebear/dicebear-go/v10` | [src/go/core/](https://github.com/dicebear/dicebear/tree/10.x/src/go/core)                 |

@@ -16,9 +16,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 # Shapes
 
 Shapes is an abstract vector avatar style composed of two or three large
-geometric forms — squares, circles, and triangles — layered and rotated on a
-colored background. Generate minimal, design-forward SVG profile icons that work
-as avatar placeholders or abstract user identifiers.
+geometric forms (squares, circles, and triangles) layered and rotated on a
+colored background. Generate minimal SVG profile icons that work as avatar
+placeholders or abstract user identifiers.
 
 <StylePreview styleName="shapes" />
 

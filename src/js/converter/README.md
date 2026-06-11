@@ -1,6 +1,6 @@
 <h1><img src="https://www.dicebear.com/logo-readme.svg" width="28" /> DiceBear Converter</h1>
 
-Converts DiceBear avatars — or any SVG — to raster formats: PNG, JPEG, WebP and
+Converts DiceBear avatars (or any SVG) to raster formats: PNG, JPEG, WebP and
 AVIF. Works in Node.js and modern browsers.
 
 [Playground](https://www.dicebear.com/playground) |
@@ -27,7 +27,7 @@ const avatar = new Avatar(definition, { seed: 'John Doe' });
 
 const png = toPng(avatar, { size: 256 });
 
-await png.toDataUri();     // data:image/png;base64,...
+await png.toDataUri(); // data:image/png;base64,...
 await png.toArrayBuffer(); // ArrayBuffer
 ```
 

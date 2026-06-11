@@ -2,12 +2,7 @@
 import { ref, useSlots, computed } from 'vue';
 import { PawPrint, ArrowRight } from '@lucide/vue';
 import Button from 'primevue/button';
-import {
-  UiHeadline,
-  UiDescription,
-  UiContainer,
-  UiSection,
-} from '../ui';
+import { UiHeadline, UiDescription, UiContainer, UiSection } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
 withDefaults(

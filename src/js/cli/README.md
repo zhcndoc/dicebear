@@ -24,8 +24,8 @@ dicebear lorelei .
 dicebear lorelei ./avatars --count 10 --format png
 ```
 
-Pass style options as flags (e.g. `--seed "John Doe"`). Run `dicebear --help`
-to list every style and its options.
+Pass style options as flags (e.g. `--seed "John Doe"`). Run `dicebear --help` to
+list every style and its options.
 
 ## Sponsors
 

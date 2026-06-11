@@ -6,7 +6,7 @@ description: >
   Go libraries.
 ---
 
-# Python Avatar Library
+# Python avatar library
 
 The Python library provides an API identical to the
 [JavaScript library](/how-to-use/js-library/). It requires Python 3.10 or

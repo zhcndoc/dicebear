@@ -17,8 +17,8 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 Triangles is an abstract vector avatar style that tiles a grid of two-tone
 triangles into a tangram-like pattern across a colored background. Generate
-graphic, distinctive SVG profile icons that work as avatar placeholders or
-decorative user identifiers.
+graphic SVG profile icons that work as avatar placeholders or decorative user
+identifiers.
 
 <StylePreview styleName="triangles" />
 

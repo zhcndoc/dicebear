@@ -5,7 +5,7 @@ description: >
   URL-based integration with no authentication required.
 ---
 
-# DiceBear as Gravatar Default Avatar
+# DiceBear as Gravatar default avatar
 
 You can use the HTTP API of DiceBear as Gravatar default image. But before that,
 let's take a look at the conditions for Gravatar default images:

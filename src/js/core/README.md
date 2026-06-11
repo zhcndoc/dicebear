@@ -1,11 +1,11 @@
 <h1><img src="https://www.dicebear.com/logo-readme.svg" width="28" /> DiceBear Core (JavaScript)</h1>
 
-JavaScript implementation of the DiceBear avatar library. Generates deterministic
-SVG avatars from style definitions and a seed string.
+JavaScript implementation of the DiceBear avatar library. Generates
+deterministic SVG avatars from style definitions and a seed string.
 
 DiceBear is available for multiple languages. All implementations share the same
 PRNG and rendering pipeline, producing identical SVG output for the same seed,
-style, and options — regardless of the language used.
+style, and options, regardless of the language used.
 
 [Playground](https://www.dicebear.com/playground) |
 [Documentation](https://www.dicebear.com/how-to-use/js-library/)
@@ -31,7 +31,7 @@ const avatar = new Avatar(definition, {
   size: 128,
 });
 
-avatar.toString();  // SVG string
+avatar.toString(); // SVG string
 avatar.toDataUri(); // data:image/svg+xml;charset=utf-8,...
 ```
 

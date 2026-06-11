@@ -17,7 +17,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 # Lorelei Neutral
 
 Lorelei Neutral is a reduced variant of the Lorelei style, drawing only the
-eyes, nose, and mouth in delicate ink lines on a plain background — no head
+eyes, nose, and mouth in delicate ink lines on a plain background, with no head
 outline or hair.
 
 <StylePreview styleName="lorelei-neutral" />

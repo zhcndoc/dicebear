@@ -5,7 +5,7 @@ description: >
   PHP 8.2+ with an API identical to the JavaScript library.
 ---
 
-# PHP Avatar Library
+# PHP avatar library
 
 The PHP library provides an API identical to the
 [JavaScript library](/how-to-use/js-library/). It requires PHP 8.2 or higher.

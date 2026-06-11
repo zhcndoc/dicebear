@@ -53,7 +53,7 @@ const dataUri = await png.toDataUri();
 | WebP   | `toWebp` | Yes\*   | Yes     | Unsupported browsers fall back to PNG |
 | AVIF   | `toAvif` | Yes\*   | Yes     | Unsupported browsers fall back to PNG |
 
-\* WebP is supported in all modern browsers. AVIF support varies - check
+\* WebP is supported in all modern browsers. AVIF support varies; check
 [caniuse.com](https://caniuse.com/avif) for current browser compatibility.
 
 ## Methods
@@ -254,13 +254,8 @@ If set to `true`, the converter will try to read the metadata from the SVG and
 add it to the output image as Exif metadata. This is useful for preserving
 license and attribution information.
 
-The following metadata is extracted and embedded:
-
-- **Title** - Avatar style title
-- **Source** - Source URL
-- **Creator** - Artist/creator name
-- **License** - License information
-- **Copyright** - Copyright notice
+The converter extracts the avatar style title, source URL, creator name,
+license, and copyright notice from the SVG and embeds them as Exif fields.
 
 ```js
 import { toPng } from '@dicebear/converter';

@@ -5,7 +5,7 @@ description: >
   Rust 1.80+ with an API identical to the JavaScript library.
 ---
 
-# Rust Avatar Library
+# Rust avatar library
 
 The Rust library provides an API identical to the
 [JavaScript library](/how-to-use/js-library/). It requires Rust 1.80 or higher.

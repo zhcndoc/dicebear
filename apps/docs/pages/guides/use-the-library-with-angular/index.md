@@ -5,7 +5,7 @@ description: >
   JavaScript avatar library or avatar API.
 ---
 
-# Angular Avatar Library – Using DiceBear with Angular
+# Angular avatar library: using DiceBear with Angular
 
 DiceBear can be integrated into Angular components using Signals (Angular 17+)
 or the `OnChanges` lifecycle hook. Use the JavaScript library for client-side

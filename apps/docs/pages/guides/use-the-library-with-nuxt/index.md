@@ -5,11 +5,11 @@ description: >
   rendering, and Nitro endpoint patterns for deterministic profile pictures.
 ---
 
-# Nuxt Avatar Library – Using DiceBear with Nuxt
+# Nuxt avatar library: using DiceBear with Nuxt
 
 DiceBear fits naturally into Nuxt's universal rendering model. The avatar can be
 generated on the server during SSR, in a Nitro endpoint, or in a plain client
-component — pick whichever matches the page's
+component. Pick whichever matches the page's
 [rendering mode](https://nuxt.com/docs/guide/concepts/rendering).
 
 You can use DiceBear with [Nuxt](https://nuxt.com/) via the
@@ -49,9 +49,9 @@ const avatar = computed(() =>
 ::: warning Hydration & `idRandomization`
 
 `idRandomization` is backed by the host's non-seeded RNG, so the IDs produced
-during SSR will not match the client re-render — Vue logs a hydration mismatch.
-Keep `idRandomization: false` for SSR'd avatars, or wrap the component in
-`<ClientOnly>` and accept the visual flash.
+during SSR will not match the client re-render, and Vue logs a hydration
+mismatch. Keep `idRandomization: false` for SSR'd avatars, or wrap the component
+in `<ClientOnly>` and accept the visual flash.
 
 If you need unique IDs across multiple avatars on the same page, render the
 entire page server-side and skip client hydration of the avatar subtree.

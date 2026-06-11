@@ -6,7 +6,7 @@ description: >
   support included.
 ---
 
-# JavaScript Avatar Library
+# JavaScript avatar library
 
 The library is written in [TypeScript](https://www.typescriptlang.org/) /
 [JavaScript](https://developer.mozilla.org/en-US/Web/JavaScript) and can be used
@@ -15,8 +15,8 @@ higher). In other environments you may be interested in the
 [PHP Library](/how-to-use/php-library/), the
 [Python Library](/how-to-use/python-library/), the
 [Rust Library](/how-to-use/rust-library/), the
-[Go Library](/how-to-use/go-library/), the [HTTP API](/how-to-use/http-api/)
-or the [CLI](/how-to-use/cli/).
+[Go Library](/how-to-use/go-library/), the [HTTP API](/how-to-use/http-api/) or
+the [CLI](/how-to-use/cli/).
 
 The library is a pure
 [ESM package](https://developer.mozilla.org/en-US/Web/JavaScript/Guide/Modules).
@@ -76,7 +76,7 @@ themselves. For a quick overview we have created an
 ## Deterministic avatars
 
 The `seed` option is the key to generating deterministic avatars. The same seed
-will always produce the same avatar, making it perfect for user profiles:
+will always produce the same avatar, which is useful for user profiles:
 
 ```js
 import { Avatar } from '@dicebear/core';
@@ -199,8 +199,8 @@ const dataUri = avatar.toDataUri(); // [!code focus]
 ## Core options
 
 These options are available for all avatar styles. Where the type lists
-`[min, max]`, you may pass either a fixed value or a two-element tuple — the
-PRNG samples a value from the tuple's range.
+`[min, max]`, you may pass either a fixed value or a two-element tuple. The PRNG
+samples a value from the tuple's range.
 
 | Option            | Type                                             | Default       | Description                                                                   |
 | ----------------- | ------------------------------------------------ | ------------- | ----------------------------------------------------------------------------- |
@@ -213,18 +213,18 @@ PRNG samples a value from the tuple's range.
 | `translateX`      | `number \| [min, max]`                           | `0`           | Horizontal translation in percent of the canvas width (−1000 to 1000)         |
 | `translateY`      | `number \| [min, max]`                           | `0`           | Vertical translation in percent of the canvas height (−1000 to 1000)          |
 | `idRandomization` | `boolean`                                        | `false`       | Suffix every SVG `id` with a random non-deterministic value (see below)       |
-| `title`           | `string`                                         | _unset_       | Accessible title — when set, the SVG becomes `role="img"` with `<title>`      |
+| `title`           | `string`                                         | _unset_       | Accessible title; when set, the SVG becomes `role="img"` with `<title>`       |
 | `fontFamily`      | `string \| string[]`                             | `'system-ui'` | Font family for text-based styles (CSS-style font stack, no quotes)           |
 | `fontWeight`      | `integer \| integer[]`                           | `400`         | Font weight for text-based styles (1 to 1000)                                 |
 
 ### Background options
 
-These options are available for every style — even ones that don't declare a
+These options are available for every style, even ones that don't declare a
 `background` color group in their definition.
 
 | Option                     | Type                              | Default   | Description                                                        |
 | -------------------------- | --------------------------------- | --------- | ------------------------------------------------------------------ |
-| `backgroundColor`          | `string \| string[]`              | _unset_   | Background colors as hex (`#` optional, `#RGB`–`#RRGGBBAA`)        |
+| `backgroundColor`          | `string \| string[]`              | _unset_   | Background colors as hex (`#` optional, `#RGB` to `#RRGGBBAA`)     |
 | `backgroundColorFill`      | `'solid' \| 'linear' \| 'radial'` | `'solid'` | Background fill type (accepts an array of values to randomize)     |
 | `backgroundColorFillStops` | `integer \| [min, max]`           | `2`       | Number of gradient stops (minimum 2); ignored when fill is `solid` |
 | `backgroundColorAngle`     | `number \| [min, max]`            | `0`       | Gradient angle in degrees (−360 to 360)                            |
@@ -240,12 +240,12 @@ options are available:
 | `{component}Probability` | `number`                                       | Visibility probability in percent (0 to 100)           |
 
 A component's rotation, translation, and scale are sampled at render time from
-the component definition and are **not** user options — there are no
+the component definition and are **not** user options: there are no
 `{component}Rotate`, `{component}TranslateX`, `{component}TranslateY`, or
 `{component}Scale` options.
 
 Component aliases (declared via `extends` in the style definition) do not expose
-their own option keys — they share `{source}Variant` and `{source}Probability`
+their own option keys. They share `{source}Variant` and `{source}Probability`
 with the component they extend.
 
 ### Dynamic color options
@@ -255,7 +255,7 @@ following options are available:
 
 | Pattern                 | Type                              | Description                                                        |
 | ----------------------- | --------------------------------- | ------------------------------------------------------------------ |
-| `{color}Color`          | `string \| string[]`              | Override the palette — hex values (`#` optional)                   |
+| `{color}Color`          | `string \| string[]`              | Override the palette with hex values (`#` optional)                |
 | `{color}ColorFill`      | `'solid' \| 'linear' \| 'radial'` | Fill type (accepts an array of values to randomize)                |
 | `{color}ColorFillStops` | `integer \| [min, max]`           | Number of gradient stops (minimum 2); ignored when fill is `solid` |
 | `{color}ColorAngle`     | `number \| [min, max]`            | Gradient angle in degrees (−360 to 360)                            |
@@ -327,7 +327,7 @@ const avatars = users.map((user) =>
 );
 ```
 
-The suffix is drawn from `Math.random()` — **not** from the DiceBear PRNG — so
+The suffix is drawn from `Math.random()` (**not** from the DiceBear PRNG), so
 two avatars rendered with the same seed get different IDs. This also means the
 rendered SVG is no longer deterministic; only the visual output is. Skip
 `idRandomization` for snapshot tests, SSR/hydration, or anywhere you depend on
@@ -354,7 +354,7 @@ const avatar = new Avatar(avataaars, {
 
 ## Accessibility
 
-By default the generated `<svg>` element is `aria-hidden="true"` — assistive
+By default the generated `<svg>` element is `aria-hidden="true"`, so assistive
 technology skips it. This is the right default for purely decorative avatars
 next to a username.
 
@@ -371,7 +371,7 @@ const avatar = new Avatar(lorelei, {
 ```
 
 If you embed the SVG inside an `<img>` (via `toDataUri()`), use the `<img>`
-element's `alt` attribute instead — the SVG's internal `title` is not read by
+element's `alt` attribute instead. The SVG's internal `title` is not read by
 assistive technology when the SVG is loaded as an image.
 
 ## TypeScript

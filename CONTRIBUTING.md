@@ -3,9 +3,9 @@
 Thanks for your interest in contributing to DiceBear.
 
 This is the main monorepo: the JavaScript, PHP, Python, Rust, and Go core
-libraries, the CLI, the docs site, and the editor all live here. Repositories covering the
-JSON Schema, the avatar style definitions, the HTTP API, and the Figma exporter
-are separate and each have their own `CONTRIBUTING.md`:
+libraries, the CLI, the docs site, and the editor all live here. Repositories
+covering the JSON Schema, the avatar style definitions, the HTTP API, and the
+Figma exporter are separate and each have their own `CONTRIBUTING.md`:
 
 - [`dicebear/schema`](https://github.com/dicebear/schema/blob/main/CONTRIBUTING.md):
   JSON Schema for definitions and options
@@ -44,12 +44,12 @@ instructions below only cover this monorepo.
   [Corepack](https://nodejs.org/api/corepack.html) if you don't already)
 - For PHP work: PHP 8.2+ and Composer, plus `vendor/bin/phpunit` via
   `composer install` inside `src/php/core/`
-- For Python work: Python 3.10+ (CI runs on 3.10–3.14); install the package in a
-  virtualenv with `pip install -e ".[dev]"` inside `src/python/core/`
+- For Python work: Python 3.10+ (CI runs on 3.10 to 3.14); install the package
+  in a virtualenv with `pip install -e ".[dev]"` inside `src/python/core/`
 - For Rust work: Rust 1.80+ with the `clippy` and `rustfmt` components; build
   and test with `cargo test`, `cargo clippy`, and `cargo fmt` inside
   `src/rust/core/`
-- For Go work: Go 1.23+ (CI runs on 1.23–1.25); test with `go test ./...` and
+- For Go work: Go 1.23+ (CI runs on 1.23 to 1.25); test with `go test ./...` and
   check with `gofmt -l .` and `go vet ./...` inside `src/go/core/`
 
 ## Local setup
@@ -142,7 +142,7 @@ pytest
 
 The Python core reads the two draft-07 schemas from the `dicebear-schema`
 package (the Python counterpart of `@dicebear/schema` / `dicebear/schema`),
-which `pip install -e ".[dev]"` pulls in as a runtime dependency — nothing is
+which `pip install -e ".[dev]"` pulls in as a runtime dependency. Nothing is
 vendored.
 
 ### Rust core (`src/rust/core/`)
@@ -156,7 +156,7 @@ cargo fmt --check
 
 The Rust core reads the two draft-07 schemas from the `dicebear-schema` crate
 (the Rust counterpart of `@dicebear/schema` / `dicebear/schema`) as a runtime
-dependency — nothing is vendored.
+dependency. Nothing is vendored.
 
 ### Go core (`src/go/core/`)
 
@@ -169,7 +169,7 @@ gofmt -l .   # prints nothing when formatting is correct
 
 The Go core reads the two draft-07 schemas from the `github.com/dicebear/schema`
 module (the Go counterpart of `@dicebear/schema` / `dicebear/schema`) as a
-dependency — nothing is vendored. Style definitions come from
+dependency. Nothing is vendored. Style definitions come from
 `github.com/dicebear/styles/v10`. The module path carries the major version
 (`/v10`), so a major bump changes the path by hand; `scripts/version.mjs` only
 creates the Git tag the module proxy reads.
@@ -178,7 +178,7 @@ creates the Git tag the module proxy reads.
 
 Every port must produce output **byte-identical** to the reference JavaScript
 core (`@dicebear/core`) for the same inputs. A shared fixture suite in
-`tests/fixtures/parity/` — generated from the JS reference — enforces this, and
+`tests/fixtures/parity/` (generated from the JS reference) enforces this, and
 each side consumes it:
 
 - JS side: `src/js/core/tests/Parity.test.js`, run via
@@ -192,7 +192,7 @@ each side consumes it:
   `go test ./...` in `src/go/core/`.
 
 The fixtures cover `Fnv1a` (hash + hex), `Mulberry32` (chained sequences), every
-`Prng` method, number-to-string formatting (`numbers.json` — the `formatNumber`
+`Prng` method, number-to-string formatting (`numbers.json`, the `formatNumber`
 contract: every emitted number rounded to at most 5 decimal places, which every
 port must reproduce identically), initials extraction, the `Color` helpers
 (including bit-exact luminance doubles), accept/reject validation outcomes plus
@@ -202,11 +202,11 @@ circular color-reference chains, the `OptionsDescriptor` field map, and full
 covers seed, size, transforms, gradients, `title` escaping, and
 component-variant overrides.
 
-Float determinism is part of the parity contract: `pow` is not correctly
-rounded (JS engines, libm, and Go all differ in the last bit), so the sRGB
-linearization ships as a precomputed 256-entry table in every port, and
-languages that fuse multiply-add into FMA instructions (e.g. Go on arm64) must
-force intermediate rounding. The details live in the
+Float determinism is part of the parity contract: `pow` is not correctly rounded
+(JS engines, libm, and Go all differ in the last bit), so the sRGB linearization
+ships as a precomputed 256-entry table in every port, and languages that fuse
+multiply-add into FMA instructions (e.g. Go on arm64) must force intermediate
+rounding. The details live in the
 [Implement DiceBear Core](https://www.dicebear.com/specification/implement-dicebear-core/)
 spec.
 
@@ -308,10 +308,10 @@ workflow, which:
      `latest`)
 4. Publishes all changed packages to npm via `scripts/publish.mjs`
 5. Builds `src/python/core` and publishes `dicebear-core` to PyPI via trusted
-   publishing (the `publish-python` job) — no token and no separate repository,
+   publishing (the `publish-python` job): no token and no separate repository,
    the same way the npm packages go out
 6. Publishes the Rust core `dicebear-core` to crates.io via trusted publishing
-   (the `publish-rust` job) — likewise no token; `cargo publish` builds and
+   (the `publish-rust` job): likewise no token; `cargo publish` builds and
    uploads `src/rust/core` in one step
 
 The PHP port is the exception: Composer/Packagist consumes one Git repository

@@ -5,7 +5,7 @@ description: >
   Docker and Node.js deployment options available.
 ---
 
-# Self-Hosted Avatar API – Host DiceBear Yourself
+# Self-hosted avatar API: host DiceBear yourself
 
 In this guide, we will show you how to host the HTTP API yourself. This is not
 necessary for most users, but it can be useful in some cases.
@@ -14,7 +14,7 @@ You can find the source code for the HTTP API on
 [GitHub](https://github.com/dicebear/api). The code is written in TypeScript and
 uses the [Fastify](https://www.fastify.io/) framework.
 
-## With docker
+## With Docker
 
 The easiest way to host the HTTP API yourself is to use the docker image. You
 can find the image on [Docker Hub](https://hub.docker.com/r/dicebear/api).
@@ -38,7 +38,7 @@ services:
       - '/tmp'
 ```
 
-## Without docker
+## Without Docker
 
 If you don't want to use docker, you can also run the HTTP API directly on your
 machine. You need to have [Node.js](https://nodejs.org/) installed.
@@ -66,7 +66,7 @@ http://localhost:3000/10.x/<styleName>/options.json
 - `definition.json` returns the raw
   [style definition](/guides/create-an-avatar-style-from-scratch/), the same
   JSON that is shipped with the style package. Enable it with `DEFINITION=1`.
-- `options.json` returns a descriptor of all options the style accepts — field
+- `options.json` returns a descriptor of all options the style accepts: field
   types, allowed enum values, and value ranges. Options listed in
   `EXCLUDED_OPTIONS` are omitted, so the response always matches what your
   instance actually accepts. Enable it with `OPTIONS=1`.

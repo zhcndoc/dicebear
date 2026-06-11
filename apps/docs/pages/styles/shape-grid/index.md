@@ -15,10 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Shape Grid
 
-Shape Grid is an abstract vector avatar style that arranges four simple shapes —
-squares, circles, triangles, and hexagons — in a 2×2 grid on a tinted
-background. Generate playful, distinctive SVG profile icons that work as avatar
-placeholders or decorative user identifiers.
+Shape Grid is an abstract vector avatar style that arranges four simple shapes
+(squares, circles, triangles, and hexagons) in a 2×2 grid on a tinted
+background. Generate playful SVG profile icons that work as avatar placeholders
+or decorative user identifiers.
 
 <StylePreview styleName="shape-grid" />
 

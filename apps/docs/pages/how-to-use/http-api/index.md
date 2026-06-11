@@ -34,20 +34,20 @@ const fileFormats = [
   },
   {
     title: 'JSON',
-    description: 'Returns avatar metadata as JSON — no image output.',
+    description: 'Returns avatar metadata as JSON instead of an image.',
   },
 ];
 </script>
 
-# HTTP API – Generate SVG Avatars via URL
+# HTTP API: generate SVG avatars via URL
 
 Our HTTP API is the simplest way to use DiceBear as a profile picture API or
-avatar placeholder API — no authentication required.
+avatar placeholder API. No authentication is required.
 
 ## Usage
 
 Use the following address and replace `<styleName>` with your preferred avatar
-style. Style names are lowercase, with hyphens for multi-word styles — e.g.
+style. Style names are lowercase, with hyphens for multi-word styles, e.g.
 `lorelei`, `pixel-art`, `adventurer-neutral`. Every official
 [avatar style](/styles/) is supported.
 
@@ -102,7 +102,7 @@ https://api.dicebear.com/10.x/<styleName>/definition.json
 https://api.dicebear.com/10.x/<styleName>/options.json
 ```
 
-`definition.json` returns the raw style definition — the same JSON that is
+`definition.json` returns the raw style definition, the same JSON that is
 shipped with the style's npm package.
 
 `options.json` describes every option the style accepts as query parameter,
@@ -131,16 +131,16 @@ including field types, allowed enum values, and value ranges. An excerpt for
 ::: info
 
 These endpoints are available from version `10.x` onwards. On self-hosted
-instances they are disabled by default — see the
+instances they are disabled by default. See the
 [self-hosting guide](/guides/host-the-http-api-yourself/#optional-style-metadata-endpoints).
 
 :::
 
 ## Options
 
-All [core options](/how-to-use/js-library/#core-options) — such as `seed`,
-`flip`, `rotate`, `scale`, `borderRadius`, `backgroundColor`, and more — are
-available as [query parameters](https://en.wikipedia.org/wiki/Query_string).
+All [core options](/how-to-use/js-library/#core-options) (such as `seed`,
+`flip`, `rotate`, `scale`, `borderRadius`, and `backgroundColor`) are available
+as [query parameters](https://en.wikipedia.org/wiki/Query_string).
 Style-specific options are listed on each [avatar style page](/styles/). For
 example:
 
@@ -203,8 +203,8 @@ examples with the one you want.
 
 | Version | Status     | End of Life    |
 | ------- | ---------- | -------------- |
-| `10.x`  | **Active** | —              |
-| `9.x`   | **Active** | —              |
+| `10.x`  | **Active** | None           |
+| `9.x`   | **Active** | None           |
 | `8.x`   | Deprecated | April 30, 2028 |
 | `7.x`   | Deprecated | April 30, 2028 |
 | `6.x`   | Deprecated | April 30, 2028 |
@@ -212,9 +212,9 @@ examples with the one you want.
 
 ::: warning
 
-Versions 5.x–8.x will reach End of Life on April 30, 2028. After that date, the
-HTTP API for these versions will be shut down and no longer available. Please
-upgrade to the latest version. See the
+Versions 5.x to 8.x will reach End of Life on April 30, 2028. After that date,
+the HTTP API for these versions will be shut down and no longer available.
+Please upgrade to the latest version. See the
 [announcement](https://github.com/orgs/dicebear/discussions/491) for details.
 
 :::
@@ -226,13 +226,13 @@ using discontinued versions after their End of Life.
 
 :::
 
-## Self-Hosted Avatar API
+## Self-hosted avatar API
 
 Need a private or commercial setup? You can
 [host the Avatar API yourself](/guides/host-the-http-api-yourself/) for full
 control over availability, rate limits, and data privacy.
 
-## Fair Use & Rate Limits
+## Fair use & rate limits
 
 Our API is free to use for non-commercial purposes, but please use it
 responsibly. We reserve the right to block abusive users.
@@ -243,10 +243,10 @@ reserve the right to change these limits at any time without notice.
 
 For commercial use or higher limits, please
 [set up your own instance](/guides/host-the-http-api-yourself/). We're happy to
-answer questions — open a
+answer questions: open a
 [discussion](https://github.com/orgs/dicebear/discussions) on GitHub.
 
-## Changes and Availability
+## Changes and availability
 
 Please be aware that we reserve the right to update the API at any time. While
 we will do our best to maintain backwards compatibility, we cannot guarantee

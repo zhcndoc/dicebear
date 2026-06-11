@@ -3,7 +3,7 @@ layout: page
 title: Tools – Utilities for working with DiceBear avatars | DiceBear
 description: >
   Interactive utilities that help you understand how DiceBear handles colors,
-  contrast, and avatar generation — built with the same algorithms used by the
+  contrast, and avatar generation, built with the same algorithms used by the
   library itself.
 aside: false
 sidebar: false

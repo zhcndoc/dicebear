@@ -1,8 +1,8 @@
 ---
 title: Initials – Avatar Placeholder API | DiceBear
 description: >
-  Generate SVG initials avatars with DiceBear — a free avatar placeholder API
-  and JavaScript library for user profile pictures.
+  Generate SVG initials avatars with DiceBear, a free avatar placeholder API and
+  JavaScript library for user profile pictures.
 ---
 
 <script setup lang="ts">
@@ -16,8 +16,8 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 # Initials
 
 Initials is a text-based vector avatar style that renders one or two large
-letters centered on a solid colored square — the classic monogram placeholder.
-Deterministic and readable, it's an ideal fallback for systems where users
+letters centered on a solid colored square: the classic monogram placeholder. It
+is deterministic and readable, which makes it a practical fallback for users who
 haven't uploaded a profile picture yet.
 
 <StylePreview styleName="initials" />

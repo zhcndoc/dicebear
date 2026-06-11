@@ -6,7 +6,7 @@ description: >
   metadata.
 ---
 
-# Definition Schema Reference
+# Definition schema reference
 
 Every DiceBear avatar style is a JSON file that follows the
 [DiceBear Definition Schema](https://github.com/dicebear/schema). This page
@@ -16,7 +16,7 @@ documents the complete structure of a style definition.
 
 A style definition describes everything needed to generate an avatar: the canvas
 size, the SVG elements to render, the components that can be randomized, and the
-color palettes available. The definition is purely declarative — no code, no
+color palettes available. The definition is purely declarative: no code, no
 functions. The rendering logic lives in the DiceBear Core implementation.
 
 ## Top-level structure
@@ -47,7 +47,7 @@ functions. The rendering logic lives in the DiceBear Core implementation.
 
 ## `meta`
 
-Metadata about the style — used in license comments, the CLI banner, and the
+Metadata about the style, used in license comments, the CLI banner, and the
 documentation.
 
 ```json
@@ -98,7 +98,7 @@ determine the `viewBox` of the generated SVG.
 
 Elements are the building blocks of the SVG. Three types are supported:
 
-### `element` — SVG tag
+### `element`: SVG tag
 
 Renders an SVG element like `<circle>`, `<path>`, `<g>`, etc.
 
@@ -123,10 +123,10 @@ are allowed (e.g. `circle`, `path`, `g`, `rect`, `text`, `defs`, `filter`,
 `foreignObject`, and `a` are blocked for security.
 
 A node may have at most 1024 children. The element with `name: "defs"` has
-special semantics — see [Reusable `<defs>` entries](#reusable-defs-entries)
-below.
+special semantics (see [Reusable `<defs>` entries](#reusable-defs-entries)
+below).
 
-### `text` — Text content
+### `text`: text content
 
 Renders raw text inside an SVG element. Supports variable references.
 
@@ -147,10 +147,10 @@ Or with a variable:
 ```
 
 Only `initial` and `initials` are accepted in a text `value`. Other variables
-(`fontFamily`, `fontWeight`) are only valid in their dedicated attributes — see
-[Variable references](#variable-references).
+(`fontFamily`, `fontWeight`) are only valid in their dedicated attributes (see
+[Variable references](#variable-references)).
 
-### `component` — Component reference
+### `component`: component reference
 
 References a named component defined in the `components` section. The DiceBear
 Core will select a variant based on the seed and options.
@@ -183,7 +183,7 @@ rotate/translate/scale picked by the renderer, so it acts as the outer
 ### The `<style>` element
 
 `<style>` is supported but is a special case. Its CSS body must be supplied as
-one or more `text` children — not as a single string and not via `children`
+one or more `text` children, not as a single string and not via `children`
 holding generic elements:
 
 ```json
@@ -202,7 +202,7 @@ holding generic elements:
 A `<style>` element may hold at most 64 text children. The CSS body is sanitized
 more strictly than ordinary attribute values:
 
-- Known-dangerous `@`-rules — `@import`, `@font-face`, `@document`, `@charset` —
+- Known-dangerous `@`-rules (`@import`, `@font-face`, `@document`, `@charset`)
   are rejected. Other at-rules (`@media`, `@keyframes`, `@supports`, `@layer`,
   …) are permitted, but their contents are still passed through the common
   filter described below.
@@ -215,14 +215,14 @@ shared `filteredString` injection filter):
 - `javascript:` and `vbscript:` URI schemes
 - Backslash escape sequences
 
-This is a defense-in-depth filter, not a CSS validator — substring matches
-reject otherwise-harmless strings that happen to contain a blocked token (e.g.
-the literal word `javascript:` in plain text).
+This is a defense-in-depth filter, not a CSS validator: substring matches reject
+otherwise-harmless strings that happen to contain a blocked token (e.g. the
+literal word `javascript:` in plain text).
 
 ### Reusable `<defs>` entries
 
 `<defs>` is whitelisted as an ordinary element, but the renderer treats it
-specially: every child of an element named `defs` — anywhere in the tree — is
+specially: every child of an element named `defs`, anywhere in the tree, is
 hoisted into the document-wide `<defs>` block alongside generated gradients,
 clip paths, and component bodies. This keeps the rendered SVG to a single
 `<defs>` element while letting style authors ship reusable fragments (filters,
@@ -265,7 +265,7 @@ variants that the PRNG can choose from.
 | ------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------- |
 | `width`       | number | **Required.** Component canvas width in pixels (>= 1)                                                                         |
 | `height`      | number | **Required.** Component canvas height in pixels (>= 1)                                                                        |
-| `probability` | number | Optional. Chance the component appears, 0–100 (default `100`)                                                                 |
+| `probability` | number | Optional. Chance the component appears, 0 to 100 (default `100`)                                                              |
 | `rotate`      | object | Optional. Rotation range, see [Ranges](#ranges)                                                                               |
 | `scale`       | object | Optional. Scale range around the component's center, see [Ranges](#ranges)                                                    |
 | `translate`   | object | Optional. `{ x?: Range, y?: Range }` offsets as a percentage of the component's own `width` / `height`, see [Ranges](#ranges) |
@@ -293,7 +293,7 @@ object:
 | `step`   | number | Optional. Positive value that quantizes the range to `min + i × step` |
 
 For a fixed value, set `min === max`. With `step`, the PRNG samples from
-`{ min + i × step | 0 ≤ i ≤ ⌊(max − min) / step⌋ }` — so when `(max − min)` is
+`{ min + i × step | 0 ≤ i ≤ ⌊(max − min) / step⌋ }`, so when `(max − min)` is
 not a multiple of `step`, `max` itself is unreachable. Without `step`, the range
 is continuous.
 
@@ -304,7 +304,7 @@ in degrees (-360 to 360, step ≤ 720), `scale` is 0 to 10 (step ≤ 10), and
 ### Component aliases
 
 A component can be aliased to another component using `extends`. An alias has no
-dimensions or variants of its own — it inherits everything from the referenced
+dimensions or variants of its own: it inherits everything from the referenced
 component, but renders as an independent, separately-randomized instance. This
 is useful when you want the same visual component to appear twice (e.g. left and
 right earrings) and have each occurrence pick its own variant.
@@ -330,11 +330,10 @@ An alias is a strict reference: `extends` is its **only** allowed property. It
 must point to a base component (not another alias) defined in the same
 `components` map. Width, height, probability, rotate, scale, translate, and
 variants are inherited from the source. Aliases do not expose their own
-`${aliasName}Variant` or `${aliasName}Probability` user options — both are
-shared with the source via `${sourceName}Variant` and
-`${sourceName}Probability`. The renderer still rolls the PRNG independently per
-alias, so each occurrence picks its own variant within the shared constraints —
-see
+`${aliasName}Variant` or `${aliasName}Probability` user options. Both are shared
+with the source via `${sourceName}Variant` and `${sourceName}Probability`. The
+renderer still rolls the PRNG independently per alias, so each occurrence picks
+its own variant within the shared constraints. See
 [the implementation guide](/specification/implement-dicebear-core/#component-options)
 for details.
 
@@ -348,7 +347,7 @@ Each variant contains an element tree and an optional weight:
 | `weight`   | number | `1`     | Selection weight for the PRNG (0 to 1,000,000)               |
 
 Higher weights make a variant more likely to be selected. A weight of `0`
-excludes the variant entirely — unless every variant has weight `0`, in which
+excludes the variant entirely, unless every variant has weight `0`, in which
 case the PRNG falls back to an unweighted pick across all of them.
 
 ## `colors`
@@ -373,11 +372,11 @@ Named color palettes. The PRNG picks a color from the palette based on the seed.
 }
 ```
 
-| Property     | Type     | Description                                                                                 |
-| ------------ | -------- | ------------------------------------------------------------------------------------------- |
-| `values`     | string[] | **Required.** Hex colors in `#RGB`, `#RGBA`, `#RRGGBB`, or `#RRGGBBAA` form (1–128 entries) |
-| `contrastTo` | string   | Optional. Pick the color with highest contrast to this group's selection                    |
-| `notEqualTo` | string[] | Optional. Filter out colors already picked by these groups (up to 64 refs)                  |
+| Property     | Type     | Description                                                                                    |
+| ------------ | -------- | ---------------------------------------------------------------------------------------------- |
+| `values`     | string[] | **Required.** Hex colors in `#RGB`, `#RGBA`, `#RRGGBB`, or `#RRGGBBAA` form (1 to 128 entries) |
+| `contrastTo` | string   | Optional. Pick the color with highest contrast to this group's selection                       |
+| `notEqualTo` | string[] | Optional. Filter out colors already picked by these groups (up to 64 refs)                     |
 
 A definition may declare up to 512 color groups.
 
@@ -400,9 +399,9 @@ palettes in definition order and throw at render time when a cycle is detected.
 ## Color references in attributes
 
 Color-bearing attributes (`fill`, `stroke`, `stop-color`, `color`,
-`flood-color`, `lighting-color`) accept either a literal CSS color string —
-named color, hex, `rgb()`, `oklch()`, `color-mix()`, a local paint server
-reference like `url(#id)`, … — or a reference to a named palette:
+`flood-color`, `lighting-color`) accept either a literal CSS color string (named
+color, hex, `rgb()`, `oklch()`, `color-mix()`, a local paint server reference
+like `url(#id)`, …) or a reference to a named palette:
 
 ```json
 {
@@ -411,20 +410,20 @@ reference like `url(#id)`, … — or a reference to a named palette:
 ```
 
 A palette reference is resolved at render time to the color the PRNG picked for
-the `skin` group. Literal strings are not validated as CSS — invalid syntax is
-the browser's problem — but the shared injection filter still applies (no
+the `skin` group. Literal strings are not validated as CSS (invalid syntax is
+the browser's problem), but the shared injection filter still applies (no
 `javascript:`, no external `url(...)`, …).
 
 ## Variable references
 
 A handful of properties accept a `{ "type": "variable", "name": "…" }` object in
-place of a literal string. Each variable is only valid in a specific spot — the
+place of a literal string. Each variable is only valid in a specific spot. The
 schema rejects mismatched placements.
 
 | Variable     | Allowed in              | Resolves to                                                 |
 | ------------ | ----------------------- | ----------------------------------------------------------- |
 | `initial`    | `text` element `value`  | First character of the initials derived from the seed       |
-| `initials`   | `text` element `value`  | Full initials (1–2 characters) derived from the seed        |
+| `initials`   | `text` element `value`  | Full initials (1 to 2 characters) derived from the seed     |
 | `fontFamily` | `font-family` attribute | Resolved `fontFamily` user option (defaults to `system-ui`) |
 | `fontWeight` | `font-weight` attribute | Resolved `fontWeight` user option (defaults to `400`)       |
 
@@ -467,10 +466,10 @@ Two attributes have notable extra rules:
 - **`href`** accepts only local fragment refs (`#id`) and embedded raster images
   encoded as `data:image/{png|gif|jpeg|webp|avif};base64,…`. Remote URLs
   (`http(s)://…`) and `<script>`/`xlink:href` patterns are rejected.
-- **`style`** is sanitized as a CSS string — the stricter `<style>`-element
+- **`style`** is sanitized as a CSS string: the stricter `<style>`-element
   ruleset applies (see [The `<style>` element](#the-style-element)).
 
-## Example: Minimal style definition
+## Example: minimal style definition
 
 A complete but minimal definition that renders a colored circle:
 
@@ -548,20 +547,20 @@ A complete but minimal definition that renders a colored circle:
 The schemas live in [`@dicebear/schema`](https://github.com/dicebear/schema) and
 ship two files (both JSON Schema **draft-07**):
 
-- **`definition.json`** — validates style definitions
-- **`options.json`** — validates the user options passed to `Avatar`
+- **`definition.json`**: validates style definitions
+- **`options.json`**: validates the user options passed to `Avatar`
 
 Install via your package manager:
 
-| Ecosystem | Install                              |
-| --------- | ------------------------------------ |
-| npm       | `npm install @dicebear/schema`       |
-| Composer  | `composer require dicebear/schema`   |
-| PyPI      | `pip install dicebear-schema`        |
-| Cargo     | `cargo add dicebear-schema`          |
-| Go        | `go get github.com/dicebear/schema`  |
+| Ecosystem | Install                             |
+| --------- | ----------------------------------- |
+| npm       | `npm install @dicebear/schema`      |
+| Composer  | `composer require dicebear/schema`  |
+| PyPI      | `pip install dicebear-schema`       |
+| Cargo     | `cargo add dicebear-schema`         |
+| Go        | `go get github.com/dicebear/schema` |
 
-Or reference the schema directly from a CDN — handy for the `$schema` field of
+Or reference the schema directly from a CDN, handy for the `$schema` field of
 your style definition so editors like VS Code provide autocomplete and inline
 validation:
 

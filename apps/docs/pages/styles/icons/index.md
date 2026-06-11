@@ -16,9 +16,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 # Icons
 
 Icons is a clean vector avatar style that drops a single Bootstrap Icons
-pictogram onto a colored tinted background. Generate crisp, scalable profile
-icons ideal for dashboards, admin panels, and enterprise tools where character
-faces would feel out of place.
+pictogram onto a tinted background. Generate scalable profile icons ideal for
+dashboards, admin panels, and enterprise tools where character faces would feel
+out of place.
 
 <StylePreview styleName="icons" />
 

@@ -17,7 +17,8 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 # Pixel Art Neutral
 
 Pixel Art Neutral is a reduced variant of the Pixel Art style, showing only
-pixel eyes and a mouth on a solid background — no head outline, hair, or body.
+pixel eyes and a mouth on a solid background, with no head outline, hair, or
+body.
 
 <StylePreview styleName="pixel-art-neutral" />
 

@@ -6,9 +6,9 @@ description: >
   patterns for deterministic profile pictures.
 ---
 
-# Next.js Avatar Library – Using DiceBear with Next.js
+# Next.js avatar library: using DiceBear with Next.js
 
-DiceBear works in every Next.js rendering mode — server components, client
+DiceBear works in every Next.js rendering mode: server components, client
 components, and the Pages Router. Server-side generation is the default
 recommendation because it produces zero JavaScript on the client and avoids
 hydration pitfalls.
@@ -22,8 +22,8 @@ You can use DiceBear with [Next.js](https://nextjs.org/) via the
 
 In App Router, components are server components by default. Generate the SVG on
 the server and inline it as a
-[data URI](https://en.wikipedia.org/wiki/Data_URI_scheme) — no client-side
-JavaScript is shipped for the avatar.
+[data URI](https://en.wikipedia.org/wiki/Data_URI_scheme), so the avatar needs
+no client-side JavaScript.
 
 ```tsx
 // app/components/UserAvatar.tsx
@@ -86,8 +86,8 @@ avatar entirely on the server.
 
 ### Route handler (avatar endpoint)
 
-Expose DiceBear behind your own URL — useful for caching with custom
-`Cache-Control` headers or restricting which seeds are accepted.
+Expose DiceBear behind your own URL. This is useful for caching with custom
+`Cache-Control` headers or for restricting which seeds are accepted.
 
 ```ts
 // app/api/avatar/[seed]/route.ts
@@ -114,10 +114,10 @@ export async function GET(
 ## Pages Router
 
 Pages Router treats every component as client-side by default. Use `useMemo`
-exactly like in a plain React app — see the
+exactly like in a plain React app. See the
 [React guide](/guides/use-the-library-with-react/) for the canonical pattern.
 Server-side generation through `getServerSideProps` or `getStaticProps` returns
-the SVG as a prop, avoiding a client bundle hit.
+the SVG as a prop, which avoids a client bundle hit.
 
 ```tsx
 // pages/profile.tsx
@@ -141,7 +141,7 @@ export default function Profile({ avatar }: Props) {
 ## With the HTTP API
 
 The HTTP API needs no installation and works in both routers. Use a plain
-`<img>` tag — Next.js does not pre-process external SVGs by default.
+`<img>` tag. Next.js does not pre-process external SVGs by default.
 
 ```tsx
 export function UserAvatar({ seed = 'Alice' }: { seed?: string }) {
@@ -152,7 +152,7 @@ export function UserAvatar({ seed = 'Alice' }: { seed?: string }) {
 ```
 
 If you want to use `next/image` with the HTTP API, request a raster format (PNG,
-WebP, AVIF) — `next/image` does not optimize SVG sources — and add
+WebP, AVIF), since `next/image` does not optimize SVG sources, and add
 `api.dicebear.com` to `images.remotePatterns` in `next.config.js`.
 
 ```js

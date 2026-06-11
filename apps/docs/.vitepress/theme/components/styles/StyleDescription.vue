@@ -57,7 +57,8 @@ const licenseUrl = computed(() => safeHttpUrl(style.value.meta?.license?.url));
       >
       <template v-else>{{
         formatLicenseName(style.meta?.license?.name)
-      }}</template>.
+      }}</template
+      >.
       <template v-if="style.meta?.license?.name !== 'MIT'">
         See <a href="#details">details</a> for more information.
       </template>

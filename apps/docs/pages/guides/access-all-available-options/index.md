@@ -96,5 +96,5 @@ descriptor has a `type` and additional properties depending on the type:
   declares a `contrastTo` constraint on the group.
 
 Component aliases (declared via `extends` in the definition) do not contribute
-their own `${alias}Variant` / `${alias}Probability` entries to the descriptor —
-they share their source component's user options.
+their own `${alias}Variant` / `${alias}Probability` entries to the descriptor.
+They share their source component's user options.

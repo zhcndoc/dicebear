@@ -15,10 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Personas
 
-Personas is a flat-design vector avatar style featuring half-body characters
-with subtle skin shading, varied hair, facial hair, and glasses on solid colored
-tops. Generate representative SVG profile icons that reflect a broad range of
-ages, identities, and appearances.
+Personas is a flat-design vector avatar style of half-body characters with
+subtle skin shading, varied hair, facial hair, and glasses on solid colored
+tops. Generate SVG profile icons that cover a broad range of ages and
+appearances.
 
 <StylePreview styleName="personas" />
 

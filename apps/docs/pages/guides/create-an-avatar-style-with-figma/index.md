@@ -93,9 +93,9 @@ version 10.x.
 
 ## Step 7
 
-The plugin exports a JSON file — your
+The plugin exports a JSON file: your
 [style definition](/specification/definition-schema/). This file is ready to use
-immediately. No build step required.
+immediately, without a build step.
 
 You can test your style right away with the [CLI](/how-to-use/cli/):
 

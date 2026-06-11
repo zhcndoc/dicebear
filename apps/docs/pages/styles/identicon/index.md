@@ -1,7 +1,7 @@
 ---
 title: Identicon – SVG Identicon API | DiceBear
 description: >
-  Generate deterministic Identicon avatars with DiceBear — a free, open source
+  Generate deterministic Identicon avatars with DiceBear, a free, open source
   SVG identicon API and avatar library for user profile pictures.
 ---
 
@@ -16,10 +16,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 # Identicon
 
 Identicon renders symmetrical pixel-grid patterns in a single color on a tinted
-background — the classic identicon look popularised by developer tools and
+background, the classic identicon look popularised by developer tools and
 version control hosts. Each pattern is deterministically derived from its seed,
-making it a dependable choice for technical profile icons and identicon API use
-cases.
+so it works well for technical profile icons and identicon API use cases.
 
 <StylePreview styleName="identicon" />
 
