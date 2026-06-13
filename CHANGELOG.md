@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [10.3.0] - 2026-06-13
+
 ### Added
 
 - **Core:** Every rendered SVG now starts with the generator comment
@@ -207,7 +209,8 @@ See the
 - **BREAKING:** Individual style packages (e.g. `@dicebear/initials`) have been
   removed in favor of `@dicebear/styles`.
 
-[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.2.0...HEAD
+[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.3.0...HEAD
+[10.3.0]: https://github.com/dicebear/dicebear/compare/v10.2.0...v10.3.0
 [10.2.0]: https://github.com/dicebear/dicebear/compare/v10.2.0-rc.1...v10.2.0
 [10.2.0-rc.1]:
   https://github.com/dicebear/dicebear/compare/v10.1.0...v10.2.0-rc.1
