@@ -28,16 +28,15 @@ We use the avatar style [lorelei](/styles/lorelei/) in our example. You can find
 more avatar styles [here](/styles/).
 
 ```python
-import json
 from importlib.resources import files
 
-from dicebear import Avatar
+from dicebear import Avatar, Style
 
-definition = json.loads(
+style = Style.from_json(
     files("dicebear_styles").joinpath("lorelei.json").read_text("utf-8")
 )
 
-avatar = Avatar(definition, {
+avatar = Avatar(style, {
     "seed": "John",
     # ... other options
 })
@@ -199,16 +198,15 @@ avatar = Avatar(definition, {
 ### Fixed size avatar
 
 ```python
-import json
 from importlib.resources import files
 
 from dicebear import Avatar, Style
 
-definition = json.loads(
+style = Style.from_json(
     files("dicebear_styles").joinpath("bottts.json").read_text("utf-8")
 )
 
-avatar = Avatar(Style(definition), {
+avatar = Avatar(style, {
     "seed": "robot-42",
     "size": 128,
     "borderRadius": 50,  # circular avatar
@@ -218,16 +216,15 @@ avatar = Avatar(Style(definition), {
 ### Avatar with transformations
 
 ```python
-import json
 from importlib.resources import files
 
 from dicebear import Avatar, Style
 
-definition = json.loads(
+style = Style.from_json(
     files("dicebear_styles").joinpath("avataaars.json").read_text("utf-8")
 )
 
-avatar = Avatar(Style(definition), {
+avatar = Avatar(style, {
     "seed": "Jane",
     "flip": "horizontal",
     "rotate": 10,

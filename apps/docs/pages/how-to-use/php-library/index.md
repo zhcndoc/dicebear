@@ -31,9 +31,8 @@ use DiceBear\Style;
 use DiceBear\Avatar;
 
 $basePath = InstalledVersions::getInstallPath('dicebear/styles');
-$definition = json_decode(file_get_contents($basePath . '/src/lorelei.json'), true);
+$style = Style::fromJson(file_get_contents($basePath . '/src/lorelei.json'));
 
-$style = new Style($definition);
 $avatar = new Avatar($style, [
   'seed' => 'Alice',
   // ... other options
@@ -199,9 +198,8 @@ $avatar = new Avatar($style, [
 
 ```php
 $basePath = InstalledVersions::getInstallPath('dicebear/styles');
-$definition = json_decode(file_get_contents($basePath . '/src/bottts.json'), true);
+$style = Style::fromJson(file_get_contents($basePath . '/src/bottts.json'));
 
-$style = new Style($definition);
 $avatar = new Avatar($style, [
   'seed' => 'robot-42',
   'size' => 128,
@@ -213,9 +211,8 @@ $avatar = new Avatar($style, [
 
 ```php
 $basePath = InstalledVersions::getInstallPath('dicebear/styles');
-$definition = json_decode(file_get_contents($basePath . '/src/avataaars.json'), true);
+$style = Style::fromJson(file_get_contents($basePath . '/src/avataaars.json'));
 
-$style = new Style($definition);
 $avatar = new Avatar($style, [
   'seed' => 'Jane',
   'flip' => 'horizontal',

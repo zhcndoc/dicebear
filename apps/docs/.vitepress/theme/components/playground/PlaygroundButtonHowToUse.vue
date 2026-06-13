@@ -101,10 +101,8 @@ const examplePhp = computed(() => {
 use DiceBear\\Style;
 use DiceBear\\Avatar;
 
-// Your custom style definition
-$definition = json_decode(file_get_contents('./my-style.json'), true);
-
-$style = new Style($definition);
+// Your custom style definition (raw JSON)
+$style = Style::fromJson(file_get_contents('./my-style.json'));
 $avatar = new Avatar($style, ${phpOptions});
 
 $svg = (string) $avatar;`;
@@ -117,9 +115,8 @@ use DiceBear\\Style;
 use DiceBear\\Avatar;
 
 $basePath = InstalledVersions::getInstallPath('dicebear/styles');
-$definition = json_decode(file_get_contents($basePath . '/src/${store.avatarStyleName}.json'), true);
+$style = Style::fromJson(file_get_contents($basePath . '/src/${store.avatarStyleName}.json'));
 
-$style = new Style($definition);
 $avatar = new Avatar($style, ${phpOptions});
 
 $svg = (string) $avatar;`;
@@ -128,30 +125,25 @@ const examplePython = computed(() => {
   const pythonOptions = formatPythonValue(options.value, 1);
 
   if (store.isCustomStyle) {
-    return `import json
+    return `from pathlib import Path
 
 from dicebear import Avatar, Style
 
-# Your custom style definition
-with open("./my-style.json", encoding="utf-8") as file:
-    definition = json.load(file)
-
-style = Style(definition)
+# Your custom style definition (raw JSON)
+style = Style.from_json(Path("./my-style.json").read_text("utf-8"))
 avatar = Avatar(style, ${pythonOptions})
 
 svg = avatar.to_string()`;
   }
 
-  return `import json
-from importlib.resources import files
+  return `from importlib.resources import files
 
 from dicebear import Avatar, Style
 
-definition = json.loads(
+style = Style.from_json(
     files("dicebear_styles").joinpath("${store.avatarStyleName}.json").read_text("utf-8")
 )
 
-style = Style(definition)
 avatar = Avatar(style, ${pythonOptions})
 
 svg = avatar.to_string()`;

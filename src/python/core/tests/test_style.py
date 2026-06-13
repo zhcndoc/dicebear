@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from typing import Any
 
 import pytest
@@ -94,6 +95,21 @@ def test_accepts_minimal_definition() -> None:
 
 def test_accepts_full_definition() -> None:
     assert Style(_full()) is not None
+
+
+def test_from_json_parses_raw_definition() -> None:
+    style = Style.from_json(json.dumps(_full()))
+    assert style.schema() == "https://example.com/schema.json"
+
+
+def test_from_json_raises_json_decode_error_for_malformed_json() -> None:
+    with pytest.raises(json.JSONDecodeError):
+        Style.from_json("not json")
+
+
+def test_from_json_raises_style_validation_error_for_invalid_definition() -> None:
+    with pytest.raises(StyleValidationError):
+        Style.from_json("{}")
 
 
 def test_throws_style_validation_error_for_invalid_data() -> None:

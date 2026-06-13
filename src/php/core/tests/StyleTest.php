@@ -99,6 +99,24 @@ class StyleTest extends TestCase
         $this->assertNotNull($style);
     }
 
+    public function testFromJsonParsesRawDefinition(): void
+    {
+        $style = Style::fromJson(json_encode(self::full()));
+        $this->assertSame('https://example.com/schema.json', $style->schema());
+    }
+
+    public function testFromJsonThrowsJsonExceptionForMalformedJson(): void
+    {
+        $this->expectException(\JsonException::class);
+        Style::fromJson('not json');
+    }
+
+    public function testFromJsonThrowsStyleValidationErrorForInvalidDefinition(): void
+    {
+        $this->expectException(StyleValidationError::class);
+        Style::fromJson('{}');
+    }
+
     public function testThrowsStyleValidationErrorForInvalidData(): void
     {
         $this->expectException(StyleValidationError::class);

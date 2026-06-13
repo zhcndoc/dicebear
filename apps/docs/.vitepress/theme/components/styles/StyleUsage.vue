@@ -119,9 +119,8 @@ use DiceBear\\Style;
 use DiceBear\\Avatar;
 
 $basePath = InstalledVersions::getInstallPath('dicebear/styles');
-$definition = json_decode(file_get_contents($basePath . '/src/${kebabCase(props.styleName)}.json'), true);
+$style = Style::fromJson(file_get_contents($basePath . '/src/${kebabCase(props.styleName)}.json'));
 
-$style = new Style($definition);
 $avatar = new Avatar($style, [
   // ... options
 ]);
@@ -135,16 +134,14 @@ const examplePythonInstall = computed(() => {
 });
 
 const examplePythonUsage = computed(() => {
-  return `import json
-from importlib.resources import files
+  return `from importlib.resources import files
 
 from dicebear import Avatar, Style
 
-definition = json.loads(
+style = Style.from_json(
     files("dicebear_styles").joinpath("${kebabCase(props.styleName)}.json").read_text("utf-8")
 )
 
-style = Style(definition)
 avatar = Avatar(style, {
     # ... options
 })

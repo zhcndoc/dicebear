@@ -60,9 +60,8 @@ use DiceBear\\Style;
 use DiceBear\\Avatar;
 
 $basePath = InstalledVersions::getInstallPath('dicebear/styles');
-$definition = json_decode(file_get_contents($basePath . '/src/${props.style}.json'), true);
+$style = Style::fromJson(file_get_contents($basePath . '/src/${props.style}.json'));
 
-$style = new Style($definition);
 $avatar = new Avatar($style, [
   'seed' => '${escapeJsString(props.seed)}'
 ]);`,
@@ -70,16 +69,14 @@ $avatar = new Avatar($style, [
 
 const pythonExample = computed(
   () =>
-    `import json
-from importlib.resources import files
+    `from importlib.resources import files
 
 from dicebear import Avatar, Style
 
-definition = json.loads(
+style = Style.from_json(
     files("dicebear_styles").joinpath("${props.style}.json").read_text("utf-8")
 )
 
-style = Style(definition)
 avatar = Avatar(style, {
     "seed": "${escapeJsString(props.seed)}"
 })`,

@@ -37,6 +37,20 @@ class Style
     }
 
     /**
+     * Parses and validates a style definition from its raw JSON string.
+     *
+     * The string counterpart to the constructor, for the common case where the
+     * definition is raw JSON, such as a file shipped by the `dicebear/styles`
+     * package. Throws a {@see \JsonException} when $json is not valid JSON, and
+     * a {@see StyleValidationError} when the decoded value is not a valid style
+     * definition. Pass an already-decoded array to the constructor instead.
+     */
+    public static function fromJson(string $json): self
+    {
+        return new self(json_decode($json, true, flags: JSON_THROW_ON_ERROR));
+    }
+
+    /**
      * Returns the definition's `$id`, or `null` when not set.
      */
     public function id(): ?string

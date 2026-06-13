@@ -131,10 +131,11 @@ const avatar = new Avatar(definition, {
 
 ```php
 use DiceBear\Avatar;
+use DiceBear\Style;
 
-$definition = json_decode(file_get_contents('./your-style.json'), true);
+$style = Style::fromJson(file_get_contents('./your-style.json'));
 
-$avatar = new Avatar($definition, [
+$avatar = new Avatar($style, [
   'seed' => 'dicebear',
   // ... other options
 ]);
@@ -143,14 +144,13 @@ $avatar = new Avatar($definition, [
 ### With the Python Library
 
 ```python
-import json
+from pathlib import Path
 
-from dicebear import Avatar
+from dicebear import Avatar, Style
 
-with open("./your-style.json", encoding="utf-8") as file:
-    definition = json.load(file)
+style = Style.from_json(Path("./your-style.json").read_text("utf-8"))
 
-avatar = Avatar(definition, {
+avatar = Avatar(style, {
     "seed": "dicebear",
     # ... other options
 })

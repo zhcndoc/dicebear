@@ -31,9 +31,8 @@ use DiceBear\Style;
 use DiceBear\OptionsDescriptor;
 
 $basePath = InstalledVersions::getInstallPath('dicebear/styles');
-$definition = json_decode(file_get_contents($basePath . '/src/micah.json'), true);
+$style = Style::fromJson(file_get_contents($basePath . '/src/micah.json'));
 
-$style = new Style($definition);
 $descriptor = new OptionsDescriptor($style);
 
 print_r($descriptor->toJSON());
@@ -42,16 +41,14 @@ print_r($descriptor->toJSON());
 ## Python
 
 ```python
-import json
 from importlib.resources import files
 
 from dicebear import OptionsDescriptor, Style
 
-definition = json.loads(
+style = Style.from_json(
     files("dicebear_styles").joinpath("micah.json").read_text("utf-8")
 )
 
-style = Style(definition)
 descriptor = OptionsDescriptor(style)
 
 print(descriptor.to_json())

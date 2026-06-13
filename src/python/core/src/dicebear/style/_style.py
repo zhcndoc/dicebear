@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import json
 from typing import Any, cast
 
 from ..errors import ErrorDetail, StyleValidationError
@@ -31,6 +32,19 @@ class Style:
         self._colors: dict[str, Color] | None = None
 
         self._validate_aliases()
+
+    @classmethod
+    def from_json(cls, raw: str) -> Style:
+        """Parse and validate a style definition from its raw JSON string.
+
+        The string counterpart to the constructor, for the common case where
+        the definition is raw JSON, such as a file shipped by the
+        ``dicebear-styles`` package. Raises :class:`json.JSONDecodeError` when
+        ``raw`` is not valid JSON, and :class:`StyleValidationError` when the
+        decoded value is not a valid style definition. Pass an already-decoded
+        ``dict`` to the constructor instead.
+        """
+        return cls(json.loads(raw))
 
     def id(self) -> str | None:
         """Return the definition's ``$id``, or ``None`` when not set."""

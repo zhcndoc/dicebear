@@ -165,9 +165,7 @@ use DiceBear\Style;
 use DiceBear\Avatar;
 
 $basePath = InstalledVersions::getInstallPath('dicebear/styles');
-$definition = json_decode(file_get_contents($basePath . '/src/thumbs.json'), true);
-
-$style = new Style($definition);
+$style = Style::fromJson(file_get_contents($basePath . '/src/thumbs.json'));
 
 function getPlaceholderAvatar(Style $style, string $userId): string {
   return (string) new Avatar($style, [
@@ -185,16 +183,13 @@ request. For full installation and API details, see the
 [Python library documentation](/how-to-use/python-library/).
 
 ```python
-import json
 from importlib.resources import files
 
 from dicebear import Avatar, Style
 
-definition = json.loads(
+style = Style.from_json(
     files("dicebear_styles").joinpath("thumbs.json").read_text("utf-8")
 )
-
-style = Style(definition)
 
 def get_placeholder_avatar(user_id: str) -> str:
     return Avatar(style, {

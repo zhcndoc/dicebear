@@ -351,23 +351,22 @@ console.log(avatar.toString());
 
 ```php
 use DiceBear\Avatar;
+use DiceBear\Style;
 
-$definition = json_decode(file_get_contents('./my-style.json'), true);
-$avatar = new Avatar($definition, ['seed' => 'test']);
+$style = Style::fromJson(file_get_contents('./my-style.json'));
+$avatar = new Avatar($style, ['seed' => 'test']);
 echo (string) $avatar;
 ```
 
 ### With the Python Library
 
 ```python
-import json
+from pathlib import Path
 
-from dicebear import Avatar
+from dicebear import Avatar, Style
 
-with open("./my-style.json", encoding="utf-8") as file:
-    definition = json.load(file)
-
-avatar = Avatar(definition, {"seed": "test"})
+style = Style.from_json(Path("./my-style.json").read_text("utf-8"))
+avatar = Avatar(style, {"seed": "test"})
 print(avatar.to_string())
 ```
 

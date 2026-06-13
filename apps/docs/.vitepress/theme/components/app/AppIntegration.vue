@@ -36,24 +36,21 @@ use DiceBear\\Style;
 use DiceBear\\Avatar;
 
 $basePath = InstalledVersions::getInstallPath('dicebear/styles');
-$definition = json_decode(
-  file_get_contents($basePath . '/src/lorelei.json'), true
+$style = Style::fromJson(
+  file_get_contents($basePath . '/src/lorelei.json')
 );
 
-$style = new Style($definition);
 $svg = (string) new Avatar($style, [
   'seed' => 'Mia',
 ]);`,
-  python: `import json
-from importlib.resources import files
+  python: `from importlib.resources import files
 
 from dicebear import Avatar, Style
 
-definition = json.loads(
+style = Style.from_json(
     files("dicebear_styles").joinpath("lorelei.json").read_text("utf-8")
 )
 
-style = Style(definition)
 svg = Avatar(style, {"seed": "Mia"}).to_string()`,
   rust: `use dicebear_core::{Avatar, Style};
 use serde_json::json;

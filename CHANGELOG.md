@@ -23,6 +23,13 @@ and this project adheres to
   produces identical output to the JavaScript library when given the same styles
   and options. It validates style definitions and options against the shared
   schemas (via `dicebear_schema`) and pairs with the `dicebear_styles` package.
+- **Core (PHP, Python):** Added `Style::fromJson()` (PHP) and
+  `Style.from_json()` (Python) to build a style from a raw JSON string without a
+  separate `json_decode(..., true)` / `json.loads(...)` call. Malformed JSON
+  raises the language's native parse error (`JsonException` /
+  `json.JSONDecodeError`); an invalid definition raises the usual
+  `StyleValidationError`. Mirrors `Style::from_str` (Rust) and `Style.parse`
+  (Dart); the existing array/dict constructor is unchanged.
 
 ## [10.2.0] - 2026-06-10
 

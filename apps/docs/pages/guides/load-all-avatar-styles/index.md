@@ -75,10 +75,9 @@ $files    = glob($basePath . '/src/*.json');
 
 $styles = [];
 foreach ($files as $file) {
-    $name       = basename($file, '.json');
-    $definition = json_decode(file_get_contents($file), true);
+    $name = basename($file, '.json');
 
-    $styles[$name] = new Style($definition);
+    $styles[$name] = Style::fromJson(file_get_contents($file));
 }
 
 $avatar = new Avatar($styles['lorelei'], ['seed' => 'Alice']);
@@ -90,14 +89,13 @@ The `dicebear-styles` package ships the definitions as JSON resources under the
 `dicebear_styles` import name. Iterate over them with `importlib.resources`.
 
 ```python
-import json
 from importlib.resources import files
 
 from dicebear import Avatar, Style
 
 styles = {
-    resource.name.removesuffix(".json"): Style(
-        json.loads(resource.read_text("utf-8"))
+    resource.name.removesuffix(".json"): Style.from_json(
+        resource.read_text("utf-8")
     )
     for resource in files("dicebear_styles").iterdir()
     if resource.name.endswith(".json")
