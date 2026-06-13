@@ -14,6 +14,8 @@ use DiceBear\Utils\Number;
  * Each method takes a key that, combined with the seed, produces a
  * deterministic value. The same seed + key always yields the same result,
  * regardless of call order.
+ *
+ * @internal
  */
 class Prng
 {
@@ -201,13 +203,17 @@ class Prng
     }
 
     /**
-     * Cross-language deterministic sort. Uses strcmp (UTF-8 byte order)
-     * which matches JS UTF-16 code-unit order for ASCII values — the only
-     * values sorted in practice (variant names, hex colors).
+     * Cross-language deterministic sort, matching JS `String(a) < String(b)`,
+     * which compares by UTF-16 code unit. Converting to big-endian UTF-16
+     * before `strcmp` reproduces that order; it diverges from UTF-8 byte
+     * (code-point) order only for supplementary-plane characters.
      */
     private static function compareByCodePoint(mixed $a, mixed $b): int
     {
-        return strcmp((string) $a, (string) $b);
+        $au = (string) mb_convert_encoding((string) $a, 'UTF-16BE', 'UTF-8');
+        $bu = (string) mb_convert_encoding((string) $b, 'UTF-16BE', 'UTF-8');
+
+        return strcmp($au, $bu);
     }
 
     /**

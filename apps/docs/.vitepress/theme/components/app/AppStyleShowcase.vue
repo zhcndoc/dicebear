@@ -162,8 +162,7 @@ onUnmounted(() => {
     </template>
     <UiContainer class="app-style-showcase-header">
       <UiSectionHeader
-        badge="探索风格合集"
-        description="从可爱角色到抽象图案，从像素艺术到专业插画，我们的头像库汇集了众多设计师与艺术家的作品。"
+        description="From cute characters to abstract patterns, pixel art to professional illustrations. Our avatar library features styles crafted by talented artists and designers."
       >
         <template #headline><strong>35+</strong> 种独特头像风格</template>
       </UiSectionHeader>
@@ -232,7 +231,7 @@ onUnmounted(() => {
     background:
       radial-gradient(
         ellipse 60% 80% at 0% 50%,
-        color-mix(in srgb, var(--vp-c-purple-1) 6%, transparent),
+        color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent),
         transparent
       ),
       radial-gradient(
@@ -387,7 +386,7 @@ onUnmounted(() => {
       background: linear-gradient(
         135deg,
         transparent 40%,
-        rgba(22, 137, 204, 0.2)
+        rgba(2, 132, 199, 0.2)
       );
       opacity: 0;
       transition: opacity var(--duration-mid) ease;

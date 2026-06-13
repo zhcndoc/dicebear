@@ -2,9 +2,7 @@
 layout: page
 title: 头像风格 – 浏览 35+ 种头像设计 | DiceBear
 description: >
-  浏览 35+ 种风格，并使用 DiceBear 头像库生成头像。从
-  抽象图案到角色设计——为个人资料图片和用户头像提供
-  完美的头像生成器。
+  浏览 DiceBear 头像库中的 35+ 种风格并生成头像。从抽象图案到角色设计：适用于个人资料图片和用户头像的完美头像生成器。
 aside: false
 sidebar: false
 ---
@@ -25,7 +23,7 @@ const styleCount = computed(() => Object.keys(theme.value.avatarStyles).length);
       <strong>风格</strong> 概览
     </UiHeadline>
     <UiDescription>
-      浏览我们的头像库——从抽象图案到精心设计的角色。每种风格都由才华横溢的艺术家精心打造，可直接用作您项目中的个人资料图片。
+      浏览我们的头像库，从抽象图案到精心设计的角色应有尽有。每一种风格都由才华横溢的艺术家精心打造，可直接用于你的项目中的个人资料图片。
     </UiDescription>
   </div>
 

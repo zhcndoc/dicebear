@@ -6,7 +6,7 @@ description: >
   metadata 进行结构化。
 ---
 
-# 定义 Schema 参考
+# Definition schema reference
 
 每个 DiceBear 头像样式都是一个遵循
 [DiceBear Definition Schema](https://github.com/dicebear/schema) 的 JSON 文件。此页面
@@ -14,9 +14,9 @@ description: >
 
 ## 概览
 
-样式定义描述了生成头像所需的一切：canvas
+一个样式定义描述了生成头像所需的一切：canvas
 尺寸、要渲染的 SVG 元素、可随机化的组件，以及可用的
-颜色调色板。该定义完全是声明式的——没有代码，没有
+颜色调色板。该定义完全是声明式的：没有代码，没有
 函数。渲染逻辑位于 DiceBear Core 的实现中。
 
 ## 顶层结构
@@ -47,7 +47,7 @@ description: >
 
 ## `meta`
 
-关于样式的元数据——用于许可证注释、CLI 横幅以及
+关于样式的元数据，用于许可证注释、CLI 横幅和
 文档。
 
 ```json
@@ -94,11 +94,11 @@ description: >
 | `height`   | number | **Yes**  | Canvas 高度（像素，>= 1）                       |
 | `elements` | array  | **Yes**  | 根元素树（最多 1024 个顶层条目）                 |
 
-## Elements
+## 元素
 
 Elements 是 SVG 的构建块。支持三种类型：
 
-### `element` — SVG 标签
+### `element`: SVG 标签
 
 渲染一个 SVG 元素，例如 `<circle>`、`<path>`、`<g>` 等。
 
@@ -116,17 +116,16 @@ Elements 是 SVG 的构建块。支持三种类型：
 }
 ```
 
-Only
-[whitelisted SVG elements](https://github.com/dicebear/schema/blob/main/src/definition.json)
-are allowed (e.g. `circle`, `path`, `g`, `rect`, `text`, `defs`, `filter`,
-`linearGradient`, `radialGradient`, etc.). Elements like `script`,
-`foreignObject`, and `a` are blocked for security.
+只允许
+[白名单中的 SVG 元素](https://github.com/dicebear/schema/blob/main/src/definition.json)
+（例如 `circle`、`path`、`g`、`rect`、`text`、`defs`、`filter`、
+`linearGradient`、`radialGradient` 等）。像 `script`、
+`foreignObject` 和 `a` 这样的元素会因安全原因被阻止。
 
-A node may have at most 1024 children. The element with `name: "defs"` has
-special semantics — see [Reusable `<defs>` entries](#reusable-defs-entries)
-below.
+一个节点最多可以有 1024 个子节点。`name: "defs"` 的元素具有
+特殊语义（见下文的[可重用 `<defs>` 条目](#reusable-defs-entries)）。
 
-### `text` — 文本内容
+### `text`: 文本内容
 
 在 SVG 元素内渲染原始文本。支持变量引用。
 
@@ -146,11 +145,11 @@ below.
 }
 ```
 
-Only `initial` and `initials` are accepted in a text `value`. Other variables
-(`fontFamily`, `fontWeight`) are only valid in their dedicated attributes — see
-[Variable references](#variable-references).
+在文本 `value` 中只接受 `initial` 和 `initials`。其他变量
+（`fontFamily`、`fontWeight`）只在其专用属性中有效（见
+[变量引用](#variable-references)）。
 
-### `component` — Component reference
+### `component`: 组件引用
 
 引用在 `components` 部分定义的命名组件。DiceBear
 Core 会根据种子和选项选择一个变体。
@@ -162,9 +161,8 @@ Core 会根据种子和选项选择一个变体。
 }
 ```
 
-A component reference can carry its own `attributes` map. They are written
-verbatim onto the emitted `<use>` element, which is how you place an instance of
-a component on the canvas:
+组件引用可以携带自己的 `attributes` 映射。它们会原样写入
+生成的 `<use>` 元素，这就是你将组件实例放置到画布上的方式：
 
 ```json
 {
@@ -176,14 +174,14 @@ a component on the canvas:
 }
 ```
 
-A user-supplied `transform` is prepended to the per-component
-rotate/translate/scale picked by the renderer, so it acts as the outer
-(placement) transform.
+用户提供的 `transform` 会被追加在渲染器为每个组件选择的
+rotate/translate/scale 之前，因此它充当外层
+（放置）变换。
 
-### The `<style>` element
+### `<style>` 元素
 
-支持 `<style>`，但它是一个特殊情况。其 CSS 内容必须作为
-一个或多个 `text` 子元素提供——不能作为单个字符串，也不能通过
+支持 `<style>`，但它是一个特殊情况。其 CSS 内容必须通过
+一个或多个 `text` 子节点提供，而不是作为单个字符串，也不能通过
 包含通用元素的 `children` 提供：
 
 ```json
@@ -199,34 +197,33 @@ rotate/translate/scale picked by the renderer, so it acts as the outer
 }
 ```
 
-A `<style>` element may hold at most 64 text children. The CSS body is sanitized
-more strictly than ordinary attribute values:
+一个 `<style>` 元素最多可以包含 64 个文本子节点。CSS 内容的清理
+比普通属性值更严格：
 
-- Known-dangerous `@`-rules — `@import`, `@font-face`, `@document`, `@charset` —
-  are rejected. Other at-rules (`@media`, `@keyframes`, `@supports`, `@layer`,
-  …) are permitted, but their contents are still passed through the common
-  filter described below.
+- 已知危险的 `@` 规则（`@import`、`@font-face`、`@document`、`@charset`）
+  会被拒绝。其他 `@` 规则（`@media`、`@keyframes`、`@supports`、`@layer`、
+  …）是允许的，但其内容仍会通过下面描述的通用
+  过滤器。
 
-The following are rejected in every CSS body **and every attribute value** (the
-shared `filteredString` injection filter):
+以下内容会在每个 CSS 内容和每个属性值中被拒绝（
+共享的 `filteredString` 注入过滤器）：
 
-- External `url(...)` references (local `url(#id)` is fine)
-- `expression(...)`, `behavior:`, `-moz-binding`
-- `javascript:` and `vbscript:` URI schemes
-- Backslash escape sequences
+- 外部 `url(...)` 引用（本地 `url(#id)` 没问题）
+- `expression(...)`、`behavior:`、`-moz-binding`
+- `javascript:` 和 `vbscript:` URI scheme
+- 反斜杠转义序列
 
-This is a defense-in-depth filter, not a CSS validator — substring matches
-reject otherwise-harmless strings that happen to contain a blocked token (e.g.
-the literal word `javascript:` in plain text).
+这是一个纵深防御过滤器，不是 CSS 验证器：子字符串匹配会拒绝
+那些恰好包含被阻止标记的、原本无害的字符串（例如在纯文本中出现的
+字面量单词 `javascript:`）。
 
-### Reusable `<defs>` entries
+### 可重用的 `<defs>` 条目
 
-`<defs>` is whitelisted as an ordinary element, but the renderer treats it
-specially: every child of an element named `defs` — anywhere in the tree — is
-hoisted into the document-wide `<defs>` block alongside generated gradients,
-clip paths, and component bodies. This keeps the rendered SVG to a single
-`<defs>` element while letting style authors ship reusable fragments (filters,
-gradients, masks, …) and reference them from elsewhere in the tree.
+`<defs>` 被列入白名单，作为普通元素可以使用，但渲染器会特殊处理它：
+树中任何名为 `defs` 的元素的每个子元素，都会被提升到整个文档范围的 `<defs>`
+块中，与生成的渐变、裁剪路径和组件主体一起。这样既能让渲染后的 SVG 只保留一个
+`<defs>` 元素，又允许样式作者提供可重用片段（过滤器、
+渐变、蒙版等）并在树中的其他位置引用它们。
 
 ## `components`
 
@@ -263,19 +260,19 @@ PRNG 可以选择的变体。
 
 | Property      | Type   | Description                                                                                                                   |
 | ------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------- |
-| `width`       | number | **必需。** 组件画布宽度（像素，>= 1）                                                                                          |
-| `height`      | number | **必需。** 组件画布高度（像素，>= 1）                                                                                         |
-| `probability` | number | 可选。组件出现的概率，0–100（默认 `100`）                                                                                      |
-| `rotate`      | object | 可选。旋转范围，见 [Ranges](#ranges)                                                                                           |
-| `scale`       | object | 可选。围绕组件中心的缩放范围，见 [Ranges](#ranges)                                                                             |
-| `translate`   | object | 可选。作为组件自身 `width` / `height` 百分比的 `{ x?: Range, y?: Range }` 偏移，见 [Ranges](#ranges)                          |
-| `variants`    | object | **必需。** 命名的变体定义（最多 512 个）                                                                                       |
+| `width`       | number | **Required.** 组件画布宽度（像素，>= 1）                                                                         |
+| `height`      | number | **Required.** 组件画布高度（像素，>= 1）                                                                        |
+| `probability` | number | 可选。组件出现的概率，0 到 100（默认 `100`）                                                              |
+| `rotate`      | object | 可选。旋转范围，见[范围](#ranges)                                                                               |
+| `scale`       | object | 可选。围绕组件中心的缩放范围，见[范围](#ranges)                                                    |
+| `translate`   | object | 可选。以组件自身 `width` / `height` 的百分比表示的 `{ x?: Range, y?: Range }` 偏移，见[范围](#ranges) |
+| `variants`    | object | **Required.** 命名的变体定义（最多 512 个）                                                                           |
 
 `translate.x` 和 `translate.y` 以组件自身 `width` 和 `height` 的百分比表示。值为 `100`
 表示将组件按其完整宽度或高度平移；`0` 表示保持原位。上面的示例
 （`y: { min: -5, max: 5 }`）因此表示“将组件在垂直方向上最多平移其高度的 5%，且可向任一方向”。
 
-### Ranges
+### 范围
 
 `rotate`、`scale`、`translate.x` 和 `translate.y` 都使用相同的范围
 对象：
@@ -290,21 +287,22 @@ PRNG 可以选择的变体。
 | `max`    | number | **Required.** 范围上限                                                   |
 | `step`   | number | 可选。将范围量化为 `min + i × step` 的正值                                                |
 
-对于固定值，设置 `min === max`。带 `step` 时，PRNG 从
-`{ min + i × step | 0 ≤ i ≤ ⌊(max − min) / step⌋ }` 中采样——因此当 `(max − min)`
-不是 `step` 的倍数时，`max` 本身不可达。不带 `step` 时，范围是
-连续的。
+对于固定值，将 `min === max`。使用 `step` 时，PRNG 会从
+`{ min + i × step | 0 ≤ i ≤ ⌊(max − min) / step⌋ }` 中采样，因此当 `(max − min)` 不是
+`step` 的整数倍时，`max` 本身不可达。没有 `step` 时，范围
+是连续的。
 
 数值域因字段而异：`rotate` 和内部 `step` 值
 以度为单位（-360 到 360，step ≤ 720），`scale` 为 0 到 10（step ≤ 10），而
 `translate.x` / `translate.y` 为 -1000 到 1000 的百分比（step ≤ 2000）。
 
-### Component aliases
+### 组件别名
 
-组件可以使用 `extends` 别名到另一个组件。别名没有
-自己的尺寸或变体——它会继承被引用组件的所有内容，但会作为独立的、单独随机化的实例进行渲染。
-当你希望同一个视觉组件出现两次（例如左右耳环），并让每次出现
-都选择各自的变体时，这很有用。
+可以使用 `extends` 将一个组件设置为另一个组件的别名。别名没有自己的
+尺寸或变体：它继承被引用
+组件的一切，但会作为一个独立的、单独随机化的实例进行渲染。这
+在你希望同一个视觉组件出现两次时很有用（例如左右
+耳环），并且希望每次出现都选择自己的变体。
 
 ```json
 {
@@ -323,30 +321,25 @@ PRNG 可以选择的变体。
 }
 ```
 
-An alias is a strict reference: `extends` is its **only** allowed property. It
-must point to a base component (not another alias) defined in the same
-`components` map. Width, height, probability, rotate, scale, translate, and
-variants are inherited from the source. Aliases do not expose their own
-`${aliasName}Variant` or `${aliasName}Probability` user options — both are
-shared with the source via `${sourceName}Variant` and
-`${sourceName}Probability`. The renderer still rolls the PRNG independently per
-alias, so each occurrence picks its own variant within the shared constraints —
-see
-[the implementation guide](/specification/implement-dicebear-core/#component-options)
-for details.
+别名是严格引用：`extends` 是它**唯一**允许的属性。它
+必须指向同一个 `components` 映射中定义的基础组件（不能是另一个别名）。宽度、高度、概率、rotate、scale、translate 和
+variants 都从源组件继承。别名不会暴露自己的
+`${aliasName}Variant` 或 `${aliasName}Probability` 用户选项。两者都通过 `${sourceName}Variant` 和 `${sourceName}Probability` 与源组件共享。渲染器仍会对每个别名单独运行 PRNG，因此每次出现都会在共享约束内选择自己的变体。详见
+[实现指南](/specification/implement-dicebear-core/#component-options)
+了解详情。
 
-### Variants
+### 变体
 
 每个变体包含一个元素树和一个可选的权重：
 
 | Property   | Type   | Default | Description                                                  |
 | ---------- | ------ | ------- | ------------------------------------------------------------ |
 | `elements` | array  | —       | **Required.** 此变体的 SVG 元素树（最多 1024 个）            |
-| `weight`   | number | `1`     | PRNG 的选择权重（0 到 1,000,000）                             |
+| `weight`    | number | `1`     | PRNG 的选择权重（0 到 1,000,000）                             |
 
-更高的权重会使变体更有可能被选中。权重为 `0`
-会完全排除该变体——除非每个变体的权重都为 `0`，在这种情况下
-PRNG 会回退为在所有变体中进行无权重选择。
+更高的权重会使某个变体更有可能被选中。权重为 `0`
+会完全排除该变体，除非每个变体的权重都为 `0`，在这种情况下
+PRNG 会退回到在所有变体中进行不加权选择。
 
 ## `colors`
 
@@ -370,11 +363,11 @@ PRNG 会回退为在所有变体中进行无权重选择。
 }
 ```
 
-| 属性          | 类型      | 描述                                                                                   |
-| ------------- | --------- | -------------------------------------------------------------------------------------- |
-| `values`      | string[]  | **必需。** `#RGB`、`#RGBA`、`#RRGGBB` 或 `#RRGGBBAA` 形式的十六进制颜色（1–128 项） |
-| `contrastTo`  | string    | 可选。选择与该组所选颜色对比度最高的颜色                                               |
-| `notEqualTo`  | string[]  | 可选。过滤掉这些组已经选中的颜色（最多 64 个引用）                                     |
+| 属性         | 类型     | 描述                                                                                     |
+| ------------ | -------- | ---------------------------------------------------------------------------------------- |
+| `values`     | string[] | **必需。** 形如 `#RGB`、`#RGBA`、`#RRGGBB` 或 `#RRGGBBAA` 的十六进制颜色（1 到 128 项） |
+| `contrastTo` | string   | 可选。选择与该组所选颜色对比度最高的颜色                                                   |
+| `notEqualTo` | string[] | 可选。过滤掉这些组已经选中的颜色（最多 64 个引用）                                         |
 
 一个定义最多可以声明 512 个颜色组。
 
@@ -394,10 +387,10 @@ PRNG 会回退为在所有变体中进行无权重选择。
 
 ## 属性中的颜色引用
 
-带颜色的属性（`fill`、`stroke`、`stop-color`、`color`、
-`flood-color`、`lighting-color`）既可以接受字面的 CSS 颜色字符串——
-命名颜色、hex、`rgb()`、`oklch()`、`color-mix()`、本地绘制服务器
-引用如 `url(#id)`，等等——也可以接受对命名调色板的引用：
+颜色属性（`fill`、`stroke`、`stop-color`、`color`、
+`flood-color`、`lighting-color`）既可以接受字面量 CSS 颜色字符串（命名
+颜色、十六进制、`rgb()`、`oklch()`、`color-mix()`、本地 paint server 引用，
+如 `url(#id)` 等），也可以接受命名调色板的引用：
 
 ```json
 {
@@ -405,22 +398,19 @@ PRNG 会回退为在所有变体中进行无权重选择。
 }
 ```
 
-调色板引用会在渲染时解析为 PRNG 为 `skin` 组选中的颜色。
-字面字符串不会被验证为 CSS——无效语法是浏览器的问题——
-但共享的注入过滤器仍然适用（不允许 `javascript:`，不允许外部 `url(...)`，等等）。
+调色板引用会在渲染时解析为 PRNG 为 `skin` 组选中的颜色。字面量字符串不会按 CSS 语法进行验证（语法无效是浏览器的问题），但共享注入过滤器仍然适用（不允许 `javascript:`，不允许外部 `url(...)`，等等）。
 
 ## 变量引用
 
-少数属性接受一个 `{ "type": "variable", "name": "…" }` 对象来
-代替字面字符串。每个变量只在特定位置有效——
-schema 会拒绝不匹配的放置方式。
+少数属性支持用 `{ "type": "variable", "name": "…" }` 对象替代字面量字符串。
+每个变量只在特定位置有效。schema 会拒绝不匹配的放置方式。
 
-| 变量         | 允许用于                | 解析为                                                  |
-| ------------ | ----------------------- | ------------------------------------------------------- |
-| `initial`    | `text` 元素的 `value`   | 从种子派生出的首字母                                      |
-| `initials`   | `text` 元素的 `value`   | 从种子派生出的完整首字母缩写（1–2 个字符）               |
-| `fontFamily` | `font-family` 属性      | 解析后的 `fontFamily` 用户选项（默认值为 `system-ui`）   |
-| `fontWeight` | `font-weight` 属性      | 解析后的 `fontWeight` 用户选项（默认值为 `400`）         |
+| 变量         | 允许使用于             | 解析为                                                    |
+| ------------ | ---------------------- | --------------------------------------------------------- |
+| `initial`    | `text` 元素的 `value`  | 基于种子生成的首字母                                         |
+| `initials`   | `text` 元素的 `value`  | 基于种子生成的完整首字母缩写（1 到 2 个字符）                  |
+| `fontFamily` | `font-family` 属性     | 解析后的 `fontFamily` 用户选项（默认值为 `system-ui`）         |
+| `fontWeight` | `font-weight` 属性     | 解析后的 `fontWeight` 用户选项（默认值为 `400`）               |
 
 ```json
 {
@@ -457,9 +447,10 @@ schema 会拒绝不匹配的放置方式。
 
 有两个属性有特别的额外规则：
 
-- **`href`** 只接受本地片段引用（`#id`）以及以 `data:image/{png|gif|jpeg|webp|avif};base64,…` 编码的嵌入式栅格图像。
-  远程 URL（`http(s)://…`）和 `<script>`/`xlink:href` 模式会被拒绝。
-- **`style`** 会作为 CSS 字符串进行清理——适用更严格的 `<style>` 元素
+- **`href`** 仅接受本地片段引用（`#id`）和编码为
+  `data:image/{png|gif|jpeg|webp|avif};base64,…` 的嵌入式栅格图像。远程 URL
+  （`http(s)://…`）以及 `<script>`/`xlink:href` 模式都会被拒绝。
+- **`style`** 会作为 CSS 字符串进行净化：适用更严格的 `<style>` 元素
   规则集（参见 [The `<style>` element](#the-style-element)）。
 
 ## 示例：最小样式定义
@@ -540,18 +531,21 @@ schema 会拒绝不匹配的放置方式。
 这些 schema 位于 [`@dicebear/schema`](https://github.com/dicebear/schema) 中，
 并提供两个文件（均为 JSON Schema **draft-07**）：
 
-- **`definition.json`** — 验证样式定义
-- **`options.json`** — 验证传递给 `Avatar` 的用户选项
+- **`definition.json`**：验证样式定义
+- **`options.json`**：验证传递给 `Avatar` 的用户选项
 
 可通过你的包管理器安装：
 
-| 生态系统 | 安装                                 |
-| -------- | ------------------------------------ |
-| npm      | `npm install @dicebear/schema`      |
-| Composer | `composer require dicebear/schema`   |
+| 生态系统   | 安装                                |
+| ---------- | ----------------------------------- |
+| npm        | `npm install @dicebear/schema`      |
+| Composer   | `composer require dicebear/schema`   |
+| PyPI       | `pip install dicebear-schema`        |
+| Cargo      | `cargo add dicebear-schema`          |
+| Go         | `go get github.com/dicebear/schema`  |
 
-也可以直接从 CDN 引用 schema——这对于样式定义的 `$schema` 字段很方便，
-这样 VS Code 等编辑器就能提供自动补全和内联验证：
+或者直接从 CDN 引用 schema，这对样式定义的 `$schema` 字段很方便，
+这样像 VS Code 这样的编辑器就能提供自动补全和内联验证：
 
 ```
 https://cdn.hopjs.net/npm/@dicebear/schema@1.0.0/dist/definition.min.json

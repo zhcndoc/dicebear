@@ -2,7 +2,8 @@
 import { computed, nextTick, provide, ref, toRef } from 'vue';
 import { getScrollOffset, inBrowser } from 'vitepress';
 import { styleUsesVariable } from '@theme/utils/avatar/style';
-import { watchOnce } from '@vueuse/core';
+import { watchOnce, watchDebounced } from '@vueuse/core';
+import { track } from '@theme/utils/track';
 import { capitalCase } from 'change-case';
 import { Search } from '@lucide/vue';
 import InputText from 'primevue/inputtext';
@@ -40,6 +41,29 @@ const props = defineProps<{
 }>();
 
 const searchQuery = ref('');
+
+// Track that a user used the option filter — once per non-empty session, so a
+// multi-character query counts as a single "searched" interaction, not one per
+// keystroke.
+let searchTracked = false;
+
+watchDebounced(
+  searchQuery,
+  (query) => {
+    const trimmed = query.trim();
+
+    if (!trimmed) {
+      searchTracked = false;
+      return;
+    }
+
+    if (!searchTracked) {
+      searchTracked = true;
+      track('Docs Options: Search', { style: props.styleName });
+    }
+  },
+  { debounce: 700 },
+);
 
 const {
   loadedStyle,

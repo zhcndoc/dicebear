@@ -4,7 +4,7 @@ description: >
   通过 JavaScript avatar 库或 avatar API，将 DiceBear 的 SVG 头像集成到 Angular 应用中。
 ---
 
-# Angular 头像库 – 在 Angular 中使用 DiceBear
+# Angular 头像库：在 Angular 中使用 DiceBear
 
 DiceBear 可以通过 Signals（Angular 17+）或 `OnChanges` 生命周期钩子集成到 Angular 组件中。使用 JavaScript 库可在客户端生成 SVG 头像，或者使用 HTTP API 作为一个简单的 `<img>` 来源，无需额外依赖。
 

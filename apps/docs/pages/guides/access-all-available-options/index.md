@@ -38,6 +38,40 @@ $descriptor = new OptionsDescriptor($style);
 print_r($descriptor->toJSON());
 ```
 
+## Python
+
+```python
+import json
+from importlib.resources import files
+
+from dicebear import OptionsDescriptor, Style
+
+definition = json.loads(
+    files("dicebear_styles").joinpath("micah.json").read_text("utf-8")
+)
+
+style = Style(definition)
+descriptor = OptionsDescriptor(style)
+
+print(descriptor.to_json())
+```
+
+## Go
+
+```go
+import (
+	"fmt"
+
+	dicebear "github.com/dicebear/dicebear-go/v10"
+	"github.com/dicebear/styles/v10"
+)
+
+style, _ := dicebear.NewStyle([]byte(styles.Micah))
+descriptor := dicebear.NewOptionsDescriptor(style).ToJSON()
+
+fmt.Println(descriptor)
+```
+
 ## 字段描述符类型
 
 `toJSON()` 方法返回一个从选项名称到字段描述符的映射。每个
@@ -54,6 +88,7 @@ print_r($descriptor->toJSON());
 
 - `list` 表示该选项也接受值数组。
 - `weighted`（在枚举字段上）表示该选项还接受一个用于 PRNG 选择的 `Record<string, number>` 权重映射。
-- `contrastTo`（在颜色字段上）指定渲染器要与之形成对比的颜色组，因此 UI 可以标记该组的选择是由对比驱动而非随机驱动。仅当样式定义在该组上声明了 `contrastTo` 约束时才会设置。
+- `contrastTo`（在颜色字段上）指定渲染器要与之形成对比的颜色组，因此 UI 可以标记该组的选择是由对比驱动而非随机驱动。仅当样式定义在该组上声明了 `contrastTo` 约束时才会设置会设置。
 
-通过 `extends` 在定义中声明的组件别名，不会向描述符中贡献它们自己的 `${alias}Variant` / `${alias}Probability` 条目——它们共享其源组件的用户选项。
+组件别名（在定义中通过 `extends` 声明）不会将它们自己的 `${alias}Variant` / `${alias}Probability` 条目贡献到描述符中。
+它们共享其源组件的用户选项。

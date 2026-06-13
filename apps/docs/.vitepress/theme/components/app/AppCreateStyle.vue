@@ -37,9 +37,7 @@ const steps = [
 
     <UiContainer class="app-create-style-container">
       <UiSectionHeader
-        badge="适合创作者"
-        badge-variant="green"
-        description="在 Figma 中可视化设计头像风格，导出细节由插件处理，无需编写代码。"
+        description="Design your avatar style visually in Figma. Our plugin handles the technical export – no coding required."
       >
         <template #headline
           >用 Figma 创建<br /><strong>属于你的风格</strong></template
@@ -207,7 +205,7 @@ const steps = [
   &-gradient {
     background: radial-gradient(
       ellipse 80% 50% at 50% 0%,
-      color-mix(in srgb, var(--vp-c-green-1) 8%, transparent),
+      color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent),
       transparent
     );
   }

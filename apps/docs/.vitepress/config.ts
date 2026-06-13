@@ -1,5 +1,5 @@
 import * as path from 'node:path';
-import { defineConfig, HeadConfig } from 'vitepress';
+import { defineConfig, type DefaultTheme, type HeadConfig } from 'vitepress';
 import { ThemeOptions } from '@theme/types';
 
 import sidebarDocs from './config/sidebarDocs';
@@ -70,6 +70,11 @@ export default defineConfig<ThemeOptions>({
   description:
     'DiceBear 是一个免费、开源的头像库和头像 API，提供 35 多种 avatar 风格。可为任何项目生成个人资料图片和用户占位图像。',
   head: [
+    // Most pages load avatars from the HTTP API (seed demo, style showcase,
+    // playground). Warming up the connection hides the DNS/TLS latency on
+    // mobile. The avatars are plain <img> requests (no CORS), so the hint
+    // must not carry a crossorigin attribute to match the connection.
+    ['link', { rel: 'preconnect', href: 'https://api.dicebear.com' }],
     ['script', { async: '', src: 'https://www.zhcndoc.com/js/common.js' }],
     [
       'link',
@@ -118,7 +123,7 @@ export default defineConfig<ThemeOptions>({
         operatingSystem: 'Any',
         url: 'https://dicebear.zhcndoc.com',
         description:
-          '注重隐私的开源 SVG 头像库，提供 35 多种样式。可用于生成确定性的个人资料图片和用户占位图像的免费 Avatar API、JavaScript 库和 CLI。',
+          '注重隐私的开源 SVG 头像库，拥有 35+ 种样式。提供免费 Avatar API、JavaScript 库、PHP 库、Python 库、Rust 库、Go 库和 CLI，用于生成确定性的个人资料图片和用户占位图片。',
         offers: {
           '@type': 'Offer',
           price: '0',
@@ -131,6 +136,28 @@ export default defineConfig<ThemeOptions>({
   srcDir: path.join(__dirname, '..', 'pages'),
   transformHead: (ctx) => {
     const result: HeadConfig[] = [];
+
+    // The theme renders text with the self-hosted variable Inter (see
+    // theme/index.ts); VitePress's built-in Inter is disabled via
+    // theme-without-fonts. Preload the latin subset so the first paint
+    // doesn't wait a full round trip after the CSS arrives. Font preloads
+    // always need `crossorigin`, even for same-origin requests.
+    const interFont = ctx.assets.find((asset) =>
+      /inter-latin-wght-normal\.[\w-]+\.woff2$/.test(asset),
+    );
+
+    if (interFont) {
+      result.push([
+        'link',
+        {
+          rel: 'preload',
+          href: interFont,
+          as: 'font',
+          type: 'font/woff2',
+          crossorigin: '',
+        },
+      ]);
+    }
 
     if (ctx.pageData.relativePath) {
       const canonicalPath = ctx.pageData.relativePath
@@ -184,10 +211,15 @@ export default defineConfig<ThemeOptions>({
     avatarStyleSizes,
     githubStars,
     siteTitle: '',
+    // Intrinsic SVG dimensions as explicit attributes so the browser can
+    // reserve the aspect ratio before the file loads (the displayed size
+    // comes from the theme's CSS height). VPImage spreads nested src
+    // objects onto the <img> at runtime, but ThemeableImage only types the
+    // light/dark form with plain strings, hence the double cast.
     logo: {
-      dark: '/logo-dark.svg',
-      light: '/logo.svg',
-    },
+      dark: { src: '/logo-dark.svg', width: 183, height: 32 },
+      light: { src: '/logo.svg', width: 183, height: 32 },
+    } as unknown as DefaultTheme.ThemeableImage,
     externalLinkIcon: true,
     search: {
       provider: 'local',

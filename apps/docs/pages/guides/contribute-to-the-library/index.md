@@ -12,19 +12,21 @@ DiceBear 由 GitHub 上的多个仓库共同维护。每个仓库都有自己的
 
 新的头像风格以及对现有风格的修复都位于
 [`dicebear/styles`](https://github.com/dicebear/styles)。大多数风格都是在 Figma 中制作，并通过
-[DiceBear Exporter](/guides/create-an-avatar-style-with-figma/) 插件导出，因此那里的工作流程并不是通常的“编辑一个 JSON 文件”循环。
+[DiceBear 导出器](/guides/create-an-avatar-style-with-figma/) 插件导出，因此那里的工作流程并不是通常的“编辑一个 JSON 文件”循环。
 
 - [`CONTRIBUTING.md`](https://github.com/dicebear/styles/blob/main/CONTRIBUTING.md)
   位于 `dicebear/styles`
 
 ## 核心库、CLI、文档、编辑器
 
-JavaScript 和 PHP 核心、CLI、VitePress 文档（包括 Playground），以及独立编辑器都位于主
-[`dicebear/dicebear`](https://github.com/dicebear/dicebear) monorepo 中。请参见：
+JavaScript、PHP、Python、Rust 和 Go 核心库、CLI、VitePress
+文档（包括 Playground），以及独立编辑器都位于
+主 [`dicebear/dicebear`](https://github.com/dicebear/dicebear) 单体仓库中。
+参见：
 
 - `dicebear/dicebear` 中的 [`CONTRIBUTING.md`](https://github.com/dicebear/dicebear/blob/10.x/CONTRIBUTING.md)
 
-其中涵盖了 monorepo 布局、各包的工作流程、`@dicebear/core` / `dicebear/core` 的跨语言一致性测试，以及发布流程。
+它涵盖了单体仓库布局、各包的工作流程、JavaScript、PHP、Python、Rust 和 Go 核心库之间的跨语言一致性测试，以及发布流程。
 
 ## JSON Schema
 

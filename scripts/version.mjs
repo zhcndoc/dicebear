@@ -51,6 +51,27 @@ if (existsSync(pyprojectPath)) {
   }
 }
 
+// The Rust core is not an npm workspace either; bump its Cargo.toml so it ships
+// on the same version as the other ports. Only the [package] version line (at
+// column 0) matches `^version = "…"`, not the indented dependency versions.
+const cargoPath = join(ROOT, "src/rust/core/Cargo.toml");
+if (existsSync(cargoPath)) {
+  const raw = readFileSync(cargoPath, "utf-8");
+  const updated = raw.replace(/^version = "[^"]*"$/m, `version = "${version}"`);
+
+  if (updated !== raw) {
+    writeFileSync(cargoPath, updated);
+    console.log(`  dicebear-core (rust): → ${version}`);
+  }
+}
+
+// The Go core (src/go/core) needs no file bump: a Go module's version lives
+// entirely in the Git tag, which the module proxy reads directly. The tag
+// created below (e.g. v10.2.0) is mirrored to the standalone dicebear-go repo by
+// split-go-core.yml, and `github.com/dicebear/dicebear-go/v10` resolves it from
+// there. The major version is encoded in the module path (/v10), so it only
+// changes by hand on a major bump — not here.
+
 // Promote the changelog's Unreleased section to the new version
 const changelogPath = join(ROOT, "CHANGELOG.md");
 if (existsSync(changelogPath)) {

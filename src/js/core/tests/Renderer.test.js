@@ -201,6 +201,30 @@ describe('Renderer', () => {
       assert.ok(svg.includes('<text>A</text>'));
     });
 
+    it('should resolve variable reference: initial for supplementary-plane seeds', () => {
+      const style = new Style({
+        canvas: {
+          width: 100,
+          height: 100,
+          elements: [
+            {
+              type: 'element',
+              name: 'text',
+              children: [
+                { type: 'text', value: { type: 'variable', name: 'initial' } },
+              ],
+            },
+          ],
+        },
+      });
+
+      // U+10400 is outside the BMP; charAt(0) would emit a lone surrogate
+      // (ill-formed XML) instead of the full code point.
+      const svg = new Avatar(style, { seed: '𐐀a' }).toString();
+
+      assert.ok(svg.includes('<text>𐐀</text>'));
+    });
+
     it('should resolve initials from multi-word seed', () => {
       const style = new Style({
         canvas: {

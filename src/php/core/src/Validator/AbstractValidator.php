@@ -13,6 +13,8 @@ use Opis\JsonSchema\Validator;
  *
  * Subclasses bind a schema file and convert input data into the shape Opis
  * expects, then translate validation failures into a domain-specific error.
+ *
+ * @internal
  */
 abstract class AbstractValidator
 {

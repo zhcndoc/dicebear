@@ -15,10 +15,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Adventurer
 
-Adventurer 是一种插画风格的矢量头像，具有富有表现力的卡通
-面孔、粗黑轮廓、多样的发型，以及可自定义的细节，如
-眼镜、耳环和眉毛。为游戏、社区和社交应用生成友好、富有角色感的个人资料
-图标。
+Adventurer 是一种插画风格的矢量头像，具有富有表现力的卡通面孔、
+粗线条、多样的发型，以及可自定义的细节，如眼镜、
+耳环和眉毛。可为游戏、社区和社交应用生成友好的个人资料图标。
 
 <StylePreview styleName="adventurer" />
 

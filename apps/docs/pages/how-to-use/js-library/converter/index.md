@@ -50,7 +50,7 @@ const dataUri = await png.toDataUri();
 | WebP   | `toWebp`  | 是\*   | 是      | 不支持的浏览器会回退到 PNG           |
 | AVIF   | `toAvif`  | 是\*   | 是      | 不支持的浏览器会回退到 PNG           |
 
-\* WebP 在所有现代浏览器中都受支持。AVIF 支持因浏览器而异 - 请查看
+\* WebP 在所有现代浏览器中都受支持。AVIF 支持因浏览器而异；请查看
 [caniuse.com](https://caniuse.com/avif) 了解当前浏览器兼容性。
 
 ## 方法
@@ -243,13 +243,7 @@ const png = toPng(svg, {
 如果设置为 `true`，转换器会尝试从 SVG 中读取元数据，并将其作为 Exif 元数据添加到输出图像中。这对于保留
 许可和署名信息很有用。
 
-会提取并嵌入以下元数据：
-
-- **标题** - 头像样式标题
-- **来源** - 源 URL
-- **创建者** - 艺术家/创建者名称
-- **许可证** - 许可证信息
-- **版权** - 版权声明
+转换器会从 SVG 中提取头像样式标题、源 URL、创建者名称、许可证和版权声明，并将它们嵌入为 Exif 字段。
 
 ```js
 import { toPng } from '@dicebear/converter';

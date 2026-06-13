@@ -5,7 +5,7 @@ description: >
   确定性的个人资料图片和用户占位图像。
 ---
 
-# React 头像库 – 在 React 中使用 DiceBear
+# React 头像库：在 React 中使用 DiceBear
 
 DiceBear 可通过 JS 库或 HTTP API 自然集成到 React 中。使用
 `useMemo` 可以根据种子高效生成确定性的 SVG 个人资料图片，或者将 HTTP API 作为普通的 `<img src>` 使用，而无需额外

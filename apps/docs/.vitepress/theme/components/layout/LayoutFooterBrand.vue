@@ -11,11 +11,15 @@ import { UiIcon } from '../ui';
         class="layout-footer-logo-light"
         :src="withBase('/logo.svg')"
         alt="DiceBear"
+        width="183"
+        height="32"
       />
       <img
         class="layout-footer-logo-dark"
         :src="withBase('/logo-dark.svg')"
         alt="DiceBear"
+        width="183"
+        height="32"
       />
     </a>
     <p class="layout-footer-tagline">

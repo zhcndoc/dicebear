@@ -9,7 +9,12 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 
-import { Avatar } from '../../../src/js/core/lib/index.js';
+import {
+  Avatar,
+  Color,
+  OptionsDescriptor,
+  Style,
+} from '../../../src/js/core/lib/index.js';
 import { Prng } from '../../../src/js/core/lib/Prng.js';
 import { Fnv1a } from '../../../src/js/core/lib/Prng/Fnv1a.js';
 import { Mulberry32 } from '../../../src/js/core/lib/Prng/Mulberry32.js';
@@ -28,10 +33,28 @@ const definitionsDir = join(
 
 const STYLE_NAMES = ['initials', 'thumbs', 'glass', 'notionists', 'shape-grid'];
 
+// JSON.stringify leaves U+2028/U+2029 (line/paragraph separators) and BMP
+// private-use code points literal; editors flag those as unusual line
+// terminators or invisible glyphs. Rewrite them as \uXXXX so the committed
+// fixtures hold no such characters. Built from char codes so this source file
+// stays clean too.
+function escapeInvisible(json) {
+  let out = '';
+  for (const ch of json) {
+    const cp = ch.codePointAt(0);
+    if (cp === 0x2028 || cp === 0x2029 || (cp >= 0xe000 && cp <= 0xf8ff)) {
+      out += String.fromCharCode(0x5c) + 'u' + cp.toString(16).padStart(4, '0');
+    } else {
+      out += ch;
+    }
+  }
+  return out;
+}
+
 function writeJson(relPath, data) {
   const filePath = join(import.meta.dirname, relPath);
   mkdirSync(dirname(filePath), { recursive: true });
-  writeFileSync(filePath, JSON.stringify(data, null, 2) + '\n');
+  writeFileSync(filePath, escapeInvisible(JSON.stringify(data, null, 2)) + '\n');
   console.log('  wrote', relPath);
 }
 
@@ -138,6 +161,13 @@ for (const c of getValueCases) {
   });
 }
 
+// Supplementary-plane test characters, built via code point / code unit so the
+// source holds no literal control characters. U+1F600's UTF-16 lead surrogate
+// (D83D) sorts BEFORE U+E000 by code unit but AFTER it by code point — so these
+// pin that every port sorts by UTF-16 code units, not scalar values.
+const EMOJI = String.fromCodePoint(0x1f600);
+const PUA = String.fromCharCode(0xe000);
+
 const pickCases = [
   { seed: 'test', key: 'a', items: ['a', 'b', 'c', 'd', 'e'] },
   { seed: 'test', key: 'b', items: ['a', 'b', 'c', 'd', 'e'] },
@@ -150,6 +180,9 @@ const pickCases = [
   // duplicates must be collapsed — same result as the unique set
   { seed: 'test', key: 'a', items: ['a', 'a', 'b', 'b', 'c', 'c', 'd', 'd', 'e', 'e'] },
   { seed: 'test', key: 'single', items: ['only', 'only', 'only'] },
+  // A two-element astral/BMP pair distinguishes the sort whichever index hits.
+  { seed: 'test', key: 'a', items: [EMOJI, PUA] },
+  { seed: 'hello', key: 'k', items: ['z', PUA, EMOJI, 'a'] },
 ];
 for (const c of pickCases) {
   prngFixtures.pick.push({
@@ -170,6 +203,8 @@ const weightedPickCases = [
   // fractional weights in non-sorted insertion order — locks in that JS and
   // PHP sum in the same order (sorted), since float addition is non-associative
   { seed: 'test', key: 'k', weights: { c: 0.1, a: 0.2, b: 0.3 } },
+  // Astral-plane keys: UTF-16 vs code-point sort order (see EMOJI/PUA above).
+  { seed: 'test', key: 'k', weights: { [EMOJI]: 1, [PUA]: 2, a: 3 } },
 ];
 for (const c of weightedPickCases) {
   prngFixtures.weightedPick.push({
@@ -243,6 +278,8 @@ const shuffleCases = [
   { seed: 'test', key: 'k', items: ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'] },
   // duplicates collapse — output length matches unique-set length
   { seed: 'test', key: 'k', items: ['a', 'a', 'b', 'b', 'c', 'c'] },
+  // Astral-plane items: UTF-16 vs code-point sort order (see EMOJI/PUA above).
+  { seed: 'test', key: 'k', items: ['z', PUA, EMOJI, 'a'] },
 ];
 for (const c of shuffleCases) {
   prngFixtures.shuffle.push({
@@ -309,6 +346,11 @@ const initialsSeeds = [
   '🎲 spiel',
   'Œuvre',
   'rock-paper',
+  // The whole @ suffix is stripped, including line terminators (dotall): these
+  // seeds verify a CR / U+2028 / U+2029 right after `@` is removed, not kept.
+  'a@b' + String.fromCharCode(0x0d) + 'cd',
+  'a@b' + String.fromCharCode(0x2028) + 'cd',
+  'a@b' + String.fromCharCode(0x2029) + 'cd',
 ];
 
 writeJson(
@@ -317,10 +359,254 @@ writeJson(
 );
 
 // ---------------------------------------------------------------------------
+// Color fixtures
+// ---------------------------------------------------------------------------
+//
+// The color helpers feed both the resolver (contrast sorting picks colors, so
+// any drift changes rendered avatars) and public API consumers. `luminance`
+// involves float math (sRGB linearization with `** 2.4`), where rounding could
+// silently diverge between languages; the fixtures pin exact doubles.
+
+console.log('Generating colors.json…');
+
+// Covers 3-, 4-, 6- and 8-digit forms, with/without `#`, and mixed case.
+const hexInputs = [
+  '000',
+  '#000',
+  'abc',
+  '#AbC',
+  'f0f0',
+  '#F0f0',
+  'ff0000',
+  '#FF0000',
+  'ff000080',
+  '#ff000080',
+  '#1a2b3c',
+];
+
+const luminanceInputs = [
+  '#000000',
+  '#ffffff',
+  '#ff0000',
+  '#00ff00',
+  '#0000ff',
+  '#808080',
+  '#0a5b83',
+  '#69d2e7',
+  '#f88c49',
+  '#abc',
+  '#1a2b3c',
+  // Around the sRGB linearization threshold (s <= 0.04045 → channel <= ~10.3):
+  // 0x0a takes the linear branch, 0x0b the power branch.
+  '#0a0a0a',
+  '#0b0b0b',
+];
+
+const sortByContrastCases = [
+  {
+    candidates: ['#000000', '#ffffff', '#ff0000', '#0000ff'],
+    refColor: '#ffffff',
+  },
+  {
+    candidates: ['#69d2e7', '#0a5b83', '#f88c49', '#e0e4cc'],
+    refColor: '#000000',
+  },
+  // Equal ratios (same color in different notations) must keep input order —
+  // pins that every port sorts stably.
+  { candidates: ['#ff0000', 'ff0000', '#FF0000', '#f00'], refColor: '#00ff00' },
+  { candidates: [], refColor: '#000000' },
+  { candidates: ['#123456'], refColor: '#123456' },
+];
+
+const filterNotEqualToCases = [
+  { candidates: ['#ff0000', '#00ff00', '#0000ff'], excluded: ['ff0000'] },
+  // The alpha channel is stripped for comparison.
+  { candidates: ['#ff000080', '#00ff00'], excluded: ['#ff0000'] },
+  // Short forms normalize before comparison.
+  { candidates: ['#abc', '#def'], excluded: ['#aabbcc'] },
+  // Filtering would empty the list → falls back to the original candidates.
+  { candidates: ['#ff0000', 'ff0000'], excluded: ['#f00'] },
+  { candidates: ['#ff0000'], excluded: [] },
+];
+
+writeJson('colors.json', {
+  toHex: hexInputs.map((input) => ({ input, result: Color.toHex(input) })),
+  toRgbHex: hexInputs.map((input) => ({
+    input,
+    result: Color.toRgbHex(input),
+  })),
+  parseHex: hexInputs.map((input) => ({ input, result: Color.parseHex(input) })),
+  luminance: luminanceInputs.map((input) => ({
+    input,
+    result: Color.luminance(input),
+  })),
+  sortByContrast: sortByContrastCases.map((c) => ({
+    ...c,
+    result: Color.sortByContrast(c.candidates, c.refColor),
+  })),
+  filterNotEqualTo: filterNotEqualToCases.map((c) => ({
+    ...c,
+    result: Color.filterNotEqualTo(c.candidates, c.excluded),
+  })),
+});
+
+// ---------------------------------------------------------------------------
+// Validation fixtures
+// ---------------------------------------------------------------------------
+//
+// Pins which inputs every port must accept or reject. Only the accept/reject
+// outcome is shared — error messages are language-specific. The circular
+// color reference cases additionally pin the reported resolution chain.
+
+console.log('Generating validation.json…');
+
+const minimalStyle = { canvas: { width: 100, height: 100, elements: [] } };
+
+const styleValidationCases = [
+  { id: 'minimal', definition: minimalStyle },
+  {
+    id: 'with-component-and-color',
+    definition: {
+      canvas: { width: 100, height: 100, elements: [] },
+      components: {
+        shape: {
+          width: 100,
+          height: 100,
+          variants: { a: { elements: [] }, b: { elements: [] } },
+        },
+      },
+      colors: { fill: { values: ['#000000'] } },
+    },
+  },
+  { id: 'empty', definition: {} },
+  { id: 'missing-canvas', definition: { components: {} } },
+  { id: 'canvas-not-object', definition: { canvas: 'nope' } },
+  { id: 'canvas-missing-size', definition: { canvas: { elements: [] } } },
+  {
+    id: 'alias-to-unknown-component',
+    definition: {
+      canvas: { width: 100, height: 100, elements: [] },
+      components: { a: { extends: 'missing' } },
+    },
+  },
+  {
+    id: 'unknown-root-key',
+    definition: { canvas: { width: 100, height: 100, elements: [] }, unexpected: true },
+  },
+];
+
+const optionsValidationCases = [
+  { id: 'empty', options: {} },
+  { id: 'seed-string', options: { seed: 'x' } },
+  { id: 'seed-number', options: { seed: 123 } },
+  { id: 'size-min', options: { size: 1 } },
+  { id: 'size-zero', options: { size: 0 } },
+  { id: 'size-negative', options: { size: -5 } },
+  { id: 'size-float', options: { size: 12.5 } },
+  { id: 'size-huge', options: { size: 2000000 } },
+  { id: 'flip-valid', options: { flip: 'horizontal' } },
+  { id: 'flip-invalid', options: { flip: 'diagonal' } },
+  { id: 'rotate-in-range', options: { rotate: 360 } },
+  { id: 'rotate-out-of-range', options: { rotate: 361 } },
+  { id: 'scale-negative', options: { scale: -1 } },
+  { id: 'title-number', options: { title: 123 } },
+  { id: 'id-randomization-string', options: { idRandomization: 'yes' } },
+  { id: 'background-color-string', options: { backgroundColor: 'ff0000' } },
+  { id: 'background-color-list', options: { backgroundColor: ['ff0000'] } },
+  { id: 'background-color-invalid-hex', options: { backgroundColor: ['zzz'] } },
+  { id: 'unknown-option', options: { unknownOption: 1 } },
+];
+
+// A style whose canvas uses color `a`, so resolving it walks the (circular)
+// `contrastTo` chain.
+function circularStyle(colors) {
+  return {
+    canvas: {
+      width: 100,
+      height: 100,
+      elements: [
+        {
+          type: 'element',
+          name: 'rect',
+          attributes: { fill: { type: 'color', name: 'a' } },
+        },
+      ],
+    },
+    colors,
+  };
+}
+
+const circularColorCases = [
+  {
+    id: 'self-reference',
+    style: circularStyle({ a: { values: ['#000000'], contrastTo: 'a' } }),
+  },
+  {
+    id: 'two-color-cycle',
+    style: circularStyle({
+      a: { values: ['#000000'], contrastTo: 'b' },
+      b: { values: ['#ffffff'], contrastTo: 'a' },
+    }),
+  },
+  {
+    id: 'three-color-cycle',
+    style: circularStyle({
+      a: { values: ['#000000'], contrastTo: 'b' },
+      b: { values: ['#ffffff'], contrastTo: 'c' },
+      c: { values: ['#ff0000'], contrastTo: 'a' },
+    }),
+  },
+];
+
+const validationFixtures = {
+  styles: styleValidationCases.map((c) => {
+    let valid = true;
+    try {
+      new Style(c.definition);
+    } catch {
+      valid = false;
+    }
+
+    return { ...c, valid };
+  }),
+  // Validated against the `minimal` style above.
+  options: optionsValidationCases.map((c) => {
+    let valid = true;
+    try {
+      new Avatar(minimalStyle, c.options);
+    } catch {
+      valid = false;
+    }
+
+    return { ...c, valid };
+  }),
+  circularColors: circularColorCases.map((c) => {
+    try {
+      new Avatar(c.style, { seed: 'x' });
+    } catch (e) {
+      if (e.name !== 'CircularColorReferenceError') {
+        throw new Error(
+          `${c.id}: expected CircularColorReferenceError, got ${e.name}`,
+          { cause: e },
+        );
+      }
+
+      return { ...c, options: { seed: 'x' }, chain: e.chain };
+    }
+
+    throw new Error(`${c.id}: expected a circular color reference error`);
+  }),
+};
+
+writeJson('validation.json', validationFixtures);
+
+// ---------------------------------------------------------------------------
 // Avatar fixtures
 // ---------------------------------------------------------------------------
 
 console.log('Generating avatar fixtures…');
+
+const DATA_URI_CASE_IDS = new Set(['plain-seed', 'title-escaping']);
 
 function avatarCases(extra) {
   return [
@@ -369,6 +655,21 @@ function avatarCases(extra) {
         seed: 'parity-1',
         backgroundColor: ['ff0000', '00ff00'],
         backgroundColorFill: ['radial'],
+      },
+    },
+    // `size` and `title` together pin the resolution order of the resolved
+    // options snapshot (size is recorded before title).
+    {
+      id: 'title-size',
+      options: { seed: 'parity-1', size: 128, title: 'Parity Avatar' },
+    },
+    // XML-escaping of the <title> element: ampersand, angle brackets, both
+    // quote styles and a non-BMP code point.
+    {
+      id: 'title-escaping',
+      options: {
+        seed: 'parity-2',
+        title: 'Tom & Jerry\'s <"Avatar"> ' + EMOJI,
       },
     },
     ...extra,
@@ -463,15 +764,41 @@ const avatarFixtures = {
 for (const [styleName, cases] of Object.entries(avatarFixtures)) {
   const styleData = styles[styleName];
   const out = cases.map((c) => {
-    const json = new Avatar(styleData, c.options).toJSON();
+    const avatar = new Avatar(styleData, c.options);
+    const json = avatar.toJSON();
     // JSON-round-trip the resolved options so the fixture matches what
     // any consumer would see after JSON.stringify — this drops undefined
     // values like `size` and `title` when they were not provided.
     const resolvedOptions = JSON.parse(JSON.stringify(json.options));
 
-    return { id: c.id, options: c.options, svg: json.svg, resolvedOptions };
+    const result = { id: c.id, options: c.options, svg: json.svg, resolvedOptions };
+
+    // Pins the percent-encoding contract (JS `encodeURIComponent`: everything
+    // except `A-Za-z0-9-_.!~*'()` is escaped). Two cases per style suffice —
+    // the encoder is byte-level, so `plain-seed` (typical SVG markup) plus
+    // `title-escaping` (escaped XML + multi-byte UTF-8) cover the alphabet
+    // without doubling every fixture entry.
+    if (DATA_URI_CASE_IDS.has(c.id)) {
+      result.dataUri = avatar.toDataUri();
+    }
+
+    return result;
   });
   writeJson(join('avatars', `${styleName}.json`), out);
+}
+
+// ---------------------------------------------------------------------------
+// OptionsDescriptor fixtures
+// ---------------------------------------------------------------------------
+//
+// One descriptor per parity style. Pins the field map (types, ranges, sorted
+// variant lists, per-color fields) that tooling builds form controls from.
+
+console.log('Generating descriptor fixtures…');
+
+for (const [styleName, styleData] of Object.entries(styles)) {
+  const descriptor = new OptionsDescriptor(new Style(styleData)).toJSON();
+  writeJson(join('descriptors', `${styleName}.json`), descriptor);
 }
 
 console.log('Done.');

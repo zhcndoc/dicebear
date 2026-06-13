@@ -5,9 +5,9 @@ description: >
   JavaScript 头像库或头像 API 集成到你的移动应用中。
 ---
 
-# React Native 头像库 – 在 React Native 中使用 DiceBear
+# React Native 头像库：在 React Native 中使用 DiceBear
 
-DiceBear 可通过带有 SVG 渲染器的 JavaScript 库在 React Native 中使用，也可以通过 HTTP API 的 PNG 格式，使用内置的 `Image` 组件来使用——采用 API 方式时不需要 SVG 库。
+DiceBear 可以通过带有 SVG 渲染器的 JavaScript 库在 React Native 中使用，也可以通过内置的 `Image` 组件使用 HTTP API 的 PNG 格式。API 方案不需要 SVG 库。
 
 你可以通过 [React Native](https://reactnative.dev/) 使用 DiceBear，方式可以是
 [JS-Library](/how-to-use/js-library/) 或

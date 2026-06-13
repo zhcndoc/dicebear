@@ -18,9 +18,11 @@ from typing import Any
 
 import pytest
 
-from dicebear import Avatar
+from dicebear import Avatar, OptionsDescriptor, Style
+from dicebear.errors import CircularColorReferenceError, ValidationError
 from dicebear.prng import Fnv1a, Mulberry32, Prng
 from dicebear.utils import Initials, Number
+from dicebear.utils.color import Color
 
 FIXTURES_DIR = Path(__file__).parents[4] / "tests" / "fixtures" / "parity"
 
@@ -166,9 +168,135 @@ _STYLE_CACHE: dict[str, Any] = {}
 def test_avatar(style_name: str, entry: dict[str, Any]) -> None:
     style_data = _STYLE_CACHE.setdefault(style_name, _load(f"styles/{style_name}.json"))
 
-    result = Avatar(style_data, entry["options"]).to_json()
+    avatar = Avatar(style_data, entry["options"])
+    result = avatar.to_json()
 
     assert result["svg"] == entry["svg"]
-    # Round-trip the resolved options through JSON so int-vs-float typing matches
-    # the JS-generated fixture (Python 1.0 and JS 1 both become JSON 1).
-    assert json.loads(json.dumps(result["options"])) == entry["resolvedOptions"]
+    # Compare the serialized options, not just structural equality: Python treats
+    # ``1.0 == 1`` as True, so a plain ``==`` would hide int-vs-float drift in
+    # to_json(). The resolver normalizes whole-number floats to ints (matching
+    # JS/Rust), so the JSON is byte-identical to the JS-generated fixture.
+    assert json.dumps(result["options"]) == json.dumps(entry["resolvedOptions"])
+
+    # Only select cases carry a dataUri — it pins the percent-encoding contract
+    # (encodeURIComponent) without bloating every fixture.
+    if "dataUri" in entry:
+        assert avatar.to_data_uri() == entry["dataUri"]
+
+
+# ---------------------------------------------------------------------------
+# Color
+# ---------------------------------------------------------------------------
+
+_COLORS = _load("colors.json")
+
+
+@pytest.mark.parametrize(
+    "entry", _COLORS["toHex"], ids=[e["input"] for e in _COLORS["toHex"]]
+)
+def test_color_to_hex(entry: dict[str, Any]) -> None:
+    assert Color.to_hex(entry["input"]) == entry["result"]
+
+
+@pytest.mark.parametrize(
+    "entry", _COLORS["toRgbHex"], ids=[e["input"] for e in _COLORS["toRgbHex"]]
+)
+def test_color_to_rgb_hex(entry: dict[str, Any]) -> None:
+    assert Color.to_rgb_hex(entry["input"]) == entry["result"]
+
+
+@pytest.mark.parametrize(
+    "entry", _COLORS["parseHex"], ids=[e["input"] for e in _COLORS["parseHex"]]
+)
+def test_color_parse_hex(entry: dict[str, Any]) -> None:
+    assert list(Color.parse_hex(entry["input"])) == entry["result"]
+
+
+@pytest.mark.parametrize(
+    "entry", _COLORS["luminance"], ids=[e["input"] for e in _COLORS["luminance"]]
+)
+def test_color_luminance(entry: dict[str, Any]) -> None:
+    assert Color.luminance(entry["input"]) == entry["result"]
+
+
+@pytest.mark.parametrize("entry", _COLORS["sortByContrast"])
+def test_color_sort_by_contrast(entry: dict[str, Any]) -> None:
+    result = Color.sort_by_contrast(entry["candidates"], entry["refColor"])
+
+    assert result == entry["result"]
+
+
+@pytest.mark.parametrize("entry", _COLORS["filterNotEqualTo"])
+def test_color_filter_not_equal_to(entry: dict[str, Any]) -> None:
+    result = Color.filter_not_equal_to(entry["candidates"], entry["excluded"])
+
+    assert result == entry["result"]
+
+
+# ---------------------------------------------------------------------------
+# Validation
+# ---------------------------------------------------------------------------
+#
+# Only the accept/reject outcome is shared across languages — error messages
+# are language-specific. The circular color reference cases additionally pin
+# the reported resolution chain.
+
+_VALIDATION = _load("validation.json")
+_MINIMAL_STYLE = next(
+    e["definition"] for e in _VALIDATION["styles"] if e["id"] == "minimal"
+)
+
+
+@pytest.mark.parametrize(
+    "entry", _VALIDATION["styles"], ids=[e["id"] for e in _VALIDATION["styles"]]
+)
+def test_validation_style(entry: dict[str, Any]) -> None:
+    if entry["valid"]:
+        Style(entry["definition"])
+    else:
+        with pytest.raises(ValidationError):
+            Style(entry["definition"])
+
+
+@pytest.mark.parametrize(
+    "entry", _VALIDATION["options"], ids=[e["id"] for e in _VALIDATION["options"]]
+)
+def test_validation_options(entry: dict[str, Any]) -> None:
+    if entry["valid"]:
+        Avatar(_MINIMAL_STYLE, entry["options"])
+    else:
+        with pytest.raises(ValidationError):
+            Avatar(_MINIMAL_STYLE, entry["options"])
+
+
+@pytest.mark.parametrize(
+    "entry",
+    _VALIDATION["circularColors"],
+    ids=[e["id"] for e in _VALIDATION["circularColors"]],
+)
+def test_validation_circular_colors(entry: dict[str, Any]) -> None:
+    with pytest.raises(CircularColorReferenceError) as exc_info:
+        Avatar(entry["style"], entry["options"])
+
+    assert exc_info.value.chain == entry["chain"]
+
+
+# ---------------------------------------------------------------------------
+# OptionsDescriptor
+# ---------------------------------------------------------------------------
+
+_DESCRIPTOR_STYLES = sorted(
+    path.stem for path in (FIXTURES_DIR / "descriptors").glob("*.json")
+)
+
+
+@pytest.mark.parametrize("style_name", _DESCRIPTOR_STYLES)
+def test_options_descriptor(style_name: str) -> None:
+    style_data = _load(f"styles/{style_name}.json")
+    expected = _load(f"descriptors/{style_name}.json")
+
+    result = OptionsDescriptor(Style(style_data)).to_json()
+
+    # Serialized compare: pins key order and int-vs-float typing, like the
+    # avatar resolved-options assertion above.
+    assert json.dumps(result) == json.dumps(expected)

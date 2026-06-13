@@ -7,7 +7,10 @@ description: >
 
 # PHP 头像库
 
-PHP 库提供了与 [JavaScript library](/how-to-use/js-library/) 完全一致的 API。它需要 PHP 8.2 或更高版本。相同的 seed 和样式定义在两种实现中都会生成字节级一致的 SVG。
+PHP 库提供了与
+[JavaScript 库](/how-to-use/js-library/) 完全相同的 API。它需要 PHP 8.2 或更高版本。
+相同的 seed 和样式定义会生成与 JavaScript
+参考实现字节级完全一致的 SVG。
 
 ## 安装
 

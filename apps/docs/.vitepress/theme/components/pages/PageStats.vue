@@ -252,7 +252,7 @@ const monthlyStats = computed(() => {
 </script>
 
 <template>
-  <AppSmallHero badge="Statistics">
+  <AppSmallHero>
     <template #headline
       >数十亿头像。<br /><strong>一个 API。</strong></template
     >
@@ -302,7 +302,6 @@ const monthlyStats = computed(() => {
   <UiSection divider>
     <UiContainer>
       <UiSectionHeader
-        badge="Weekly Trends"
         description="Weekly request and download volumes — toggle between the HTTP API and npm packages."
       >
         <template #headline>随<strong>时间</strong>变化的使用情况</template>
@@ -333,7 +332,7 @@ const monthlyStats = computed(() => {
           <AppStatsChart
             :labels="requestsData.labels"
             :values="requestsData.values"
-            color="#1689cc"
+            color="#0284c7"
             :format-value="formatNumber"
           />
         </UiCard>
@@ -358,8 +357,7 @@ const monthlyStats = computed(() => {
   <UiSection divider>
     <UiContainer>
       <UiSectionHeader
-        badge="细分数据"
-        description="基于 API 请求数据，展示最常用的风格、版本和输出格式。"
+        description="Based on API request data — which styles, versions, and output formats are used most."
       >
         <template #headline>使用<strong>明细</strong></template>
       </UiSectionHeader>

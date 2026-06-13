@@ -45,7 +45,6 @@ const downloads = computed(() =>
     <UiContainer>
       <UiSectionHeader
         class="app-stats-banner-header"
-        badge="Trusted at Scale"
         description="Usage data from our HTTP-API and npm packages — updated weekly."
       >
         <template #headline
@@ -109,7 +108,7 @@ const downloads = computed(() =>
       ),
       radial-gradient(
         ellipse 50% 50% at 50% 100%,
-        color-mix(in srgb, var(--vp-c-pink-2) 5%, transparent),
+        color-mix(in srgb, var(--vp-c-brand-1) 5%, transparent),
         transparent
       );
   }

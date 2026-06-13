@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from ..style_def.meta import Meta
+from ..style.meta import Meta
 from .xml import Xml
 
 

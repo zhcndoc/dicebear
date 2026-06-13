@@ -15,8 +15,8 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # 像素艺术
 
-像素艺术是一种低分辨率的矢量头像风格，会将半身人物渲染为清晰的像素风角色，带有复古发型、眼睛和有色上衣。
-生成怀旧的 8 位风格 SVG 个人资料图标，深受游戏社区和开发者工具欢迎。
+像素艺术是一种低分辨率的矢量头像风格，它会将半身人物渲染为清晰的像素角色，并配以复古发型、眼睛和有色上衣。
+生成 8 位风格的 SVG 个人资料图标，在游戏社区和开发者工具中广受欢迎。
 
 <StylePreview styleName="pixel-art" />
 

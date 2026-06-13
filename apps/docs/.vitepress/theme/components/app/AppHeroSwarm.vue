@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getAvatarApiUrl } from '@theme/utils/avatar/api';
+import { withBase } from 'vitepress';
 import { PALETTE, type Pastel } from '@theme/utils/palette';
 
 interface Tile {
@@ -47,20 +47,22 @@ const tiles: Tile[] = [
     delay: -3.0,
   },
   {
-    styleName: 'fun-emoji',
+    styleName: 'thumbs',
     seed: 'Sage',
-    background: PALETTE.fuchsia,
+    background: PALETTE.lime,
     size: 128,
     delay: -1.6,
   },
 ];
 
+// The swarm sits in the LCP area, so its avatars are pre-generated as
+// same-origin static files (scripts/generate-hero-avatars.mjs) instead of
+// being fetched from api.dicebear.com — an external origin costs extra
+// DNS/TLS round trips before the largest above-the-fold images can paint.
 function url(tile: Tile): string {
-  return getAvatarApiUrl(tile.styleName, {
-    seed: tile.seed,
-    backgroundColor: tile.background,
-    size: tile.size,
-  });
+  return withBase(
+    `/avatars/hero/${tile.styleName}-${tile.seed.toLowerCase()}.svg`,
+  );
 }
 </script>
 
@@ -183,7 +185,7 @@ function url(tile: Tile): string {
     translate: 0 0;
   }
   50% {
-    translate: 0 -8px;
+    translate: 0 -5px;
   }
 }
 

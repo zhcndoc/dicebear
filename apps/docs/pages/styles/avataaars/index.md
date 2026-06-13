@@ -15,8 +15,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Avataaars
 
-Avataaars 是一种流行的卡通矢量头像风格，具有半身角色，以及丰富多样的发型、服装、配饰和
-面部表情。为用户账户、仪表盘和社交应用生成高度可定制的 SVG 个人资料图标。
+Avataaars 是一种流行的卡通矢量头像风格，具有半身角色以及
+丰富多样的发型、服装、配饰和面部表情。
+可为用户账户、仪表盘和
+社交应用生成可自定义的 SVG 个人资料图标。
 
 <StylePreview styleName="avataaars" />
 

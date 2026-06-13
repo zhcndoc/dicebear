@@ -155,6 +155,26 @@
         "only"
       ],
       "result": "only"
+    },
+    {
+      "seed": "test",
+      "key": "a",
+      "items": [
+        "😀",
+        "\ue000"
+      ],
+      "result": "😀"
+    },
+    {
+      "seed": "hello",
+      "key": "k",
+      "items": [
+        "z",
+        "\ue000",
+        "😀",
+        "a"
+      ],
+      "result": "😀"
     }
   ],
   "weightedPick": [
@@ -231,6 +251,16 @@
         "c": 0.1,
         "a": 0.2,
         "b": 0.3
+      },
+      "result": "a"
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "weights": {
+        "😀": 1,
+        "\ue000": 2,
+        "a": 3
       },
       "result": "a"
     }
@@ -567,6 +597,22 @@
       "result": [
         "b",
         "c",
+        "a"
+      ]
+    },
+    {
+      "seed": "test",
+      "key": "k",
+      "items": [
+        "z",
+        "\ue000",
+        "😀",
+        "a"
+      ],
+      "result": [
+        "z",
+        "😀",
+        "\ue000",
         "a"
       ]
     }

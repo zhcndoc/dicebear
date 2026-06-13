@@ -171,9 +171,7 @@ export class Options<D = unknown> {
    * (rather than yielding `NaN` from a missing bound). Matches the PHP and
    * Python ports.
    */
-  #toRange(
-    value: number | readonly number[] | undefined,
-  ): Range | undefined {
+  #toRange(value: number | readonly number[] | undefined): Range | undefined {
     if (value === undefined) {
       return undefined;
     }

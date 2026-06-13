@@ -148,7 +148,7 @@ PRNG 会为每个种子选择不同的背景颜色。
 
 ## 多个组件
 
-你可以添加任意多个组件。每个组件彼此独立——PRNG 会分别为每个组件选择一个变体。
+你可以添加任意多个组件。每个组件都是独立的：PRNG 会分别为每个组件选择一个变体。
 
 ```json
 {
@@ -205,7 +205,7 @@ PRNG 会为每个种子选择不同的背景颜色。
 
 ### 组件变换
 
-组件可以具有默认的旋转、平移和缩放范围，PRNG 会在每次渲染时对其进行采样。这四个字段都使用相同的 `{ min, max, step? }` 范围对象——完整参考请参见 [范围](/specification/definition-schema/#ranges)。
+组件可以有默认的旋转、平移和缩放范围，PRNG 会在每次渲染时采样。所有四个字段都使用相同的 `{ min, max, step? }` 范围对象。完整参考请参见 [范围](/specification/definition-schema/#ranges)。
 
 ```json
 {
@@ -340,7 +340,52 @@ $avatar = new Avatar($definition, ['seed' => 'test']);
 echo (string) $avatar;
 ```
 
-## 下一步
+### 使用 Python 库
+
+```python
+import json
+
+from dicebear import Avatar
+
+with open("./my-style.json", encoding="utf-8") as file:
+    definition = json.load(file)
+
+avatar = Avatar(definition, {"seed": "test"})
+print(avatar.to_string())
+```
+
+### 使用 Rust 库
+
+```rust
+use dicebear_core::{Avatar, Style};
+use serde_json::json;
+use std::fs;
+
+let definition = fs::read_to_string("./my-style.json")?;
+let style = Style::from_str(&definition)?;
+
+let avatar = Avatar::new(&style, json!({ "seed": "test" }))?;
+println!("{}", avatar.to_svg());
+```
+
+### 使用 Go 库
+
+```go
+import (
+	"fmt"
+	"os"
+
+	dicebear "github.com/dicebear/dicebear-go/v10"
+)
+
+definition, _ := os.ReadFile("./my-style.json")
+style, _ := dicebear.NewStyle(definition)
+
+avatar, _ := dicebear.NewAvatar(style, map[string]any{"seed": "test"})
+fmt.Println(avatar.SVG())
+```
+
+## 后续步骤
 
 - 查看 [定义模式参考](/specification/definition-schema/) 以获取完整规范
 - 浏览 [官方定义](https://github.com/dicebear/styles) 以查看真实示例

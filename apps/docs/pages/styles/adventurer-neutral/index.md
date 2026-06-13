@@ -16,7 +16,8 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 # Adventurer Neutral
 
 Adventurer Neutral 是 Adventurer 风格的简化变体，仅在纯色背景上显示
-眼睛、眉毛和嘴巴——没有头部轮廓或头发。
+眼睛、眉毛和嘴巴，没有头部轮廓或
+头发。
 
 <StylePreview styleName="adventurer-neutral" />
 

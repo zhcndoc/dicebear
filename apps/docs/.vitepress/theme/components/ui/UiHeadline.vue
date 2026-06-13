@@ -31,24 +31,20 @@ defineProps<{
     margin-right: auto;
     text-align: left;
   }
-  line-height: 1.15;
+  line-height: 1.1;
   letter-spacing: -0.035em;
   text-wrap: balance;
-  --hl-from: var(--vp-c-brand-1);
-  --hl-to: var(--vp-c-pink-2);
   --hl-display: inline;
 
   @media (max-width: 640px) {
     font-size: 34px;
   }
 
+  /* Highlighted words use the solid brand colour (not a gradient). */
   :deep(strong) {
     display: var(--hl-display, inline);
-    background: linear-gradient(120deg, var(--hl-from) 0%, var(--hl-to) 100%);
+    color: var(--vp-c-brand-2);
     font-weight: 800;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
   }
 }
 </style>

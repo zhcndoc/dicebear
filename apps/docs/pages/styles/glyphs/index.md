@@ -15,7 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Glyphs
 
-Glyphs 是一种极简的抽象矢量头像风格，它将扁平的肩部轮廓与软色调圆形中的独特字形帽子或头饰相结合。生成干净、身份感较弱的 SVG 个人资料图标，非常适合作为用户列表和聊天侧边栏中的占位符。
+Glyphs 是一种极简的抽象矢量头像风格，将平坦的肩部剪影与一个独特的、类似字形的帽子或头饰组合在柔和着色的圆形内。生成轻量身份特征的 SVG 头像图标，非常适合作为用户列表和聊天侧边栏中的占位符。
 
 <StylePreview styleName="glyphs" />
 

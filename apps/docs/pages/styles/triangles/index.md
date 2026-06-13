@@ -15,8 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Triangles
 
-Triangles 是一种抽象的矢量头像风格，它将双色三角形拼接成类似七巧板的图案，铺满彩色背景。生成
-具有图形感、独特的 SVG 个人资料图标，可用作头像占位符或装饰性用户标识。
+Triangles 是一种抽象的矢量头像风格，它将双色三角形拼接成类似七巧板的图案，铺满在彩色背景上。生成可用作头像占位符或装饰性用户标识的图形化 SVG 个人资料图标。
 
 <StylePreview styleName="triangles" />
 

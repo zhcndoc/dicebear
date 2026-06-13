@@ -6,11 +6,11 @@ description: >
   模式。
 ---
 
-# Next.js 头像库 – 在 Next.js 中使用 DiceBear
+# Next.js 头像库：在 Next.js 中使用 DiceBear
 
-DiceBear 可在所有 Next.js 渲染模式中使用——服务端组件、客户端
-组件以及 Pages Router。默认推荐服务端生成，因为它不会在客户端生成任何
-JavaScript，并且可以避免 hydration 陷阱。
+DiceBear 可在所有 Next.js 渲染模式下工作：服务端组件、客户端
+组件以及 Pages Router。默认推荐使用服务端生成，因为它不会在客户端生成任何 JavaScript，并且可以避免
+hydration 陷阱。
 
 你可以通过 [JS-Library](/how-to-use/js-library/) 或 [HTTP-API](/how-to-use/http-api/) 在 [Next.js](https://nextjs.org/) 中使用 DiceBear。
 
@@ -18,9 +18,8 @@ JavaScript，并且可以避免 hydration 陷阱。
 
 ### 服务端组件（推荐）
 
-在 App Router 中，组件默认是服务端组件。在服务器端生成 SVG，并将其以内联
-[data URI](https://en.wikipedia.org/wiki/Data_URI_scheme) 的形式输出——头像不会
-向客户端发送任何 JavaScript。
+在 App Router 中，组件默认就是服务端组件。在服务端生成 SVG，并将其内联为
+[data URI](https://en.wikipedia.org/wiki/Data_URI_scheme)，这样头像就不需要任何客户端 JavaScript。
 
 ```tsx
 // app/components/UserAvatar.tsx
@@ -80,8 +79,8 @@ export function UserAvatarClient({ seed = 'Alice' }: { seed?: string }) {
 
 ### 路由处理程序（头像端点）
 
-将 DiceBear 暴露在你自己的 URL 之后——这对通过自定义
-`Cache-Control` 头进行缓存，或限制允许接受哪些 seed 很有用。
+将 DiceBear 暴露在你自己的 URL 之后。这对于使用自定义
+`Cache-Control` 标头进行缓存，或限制可接受的 seed 很有用。
 
 ```ts
 // app/api/avatar/[seed]/route.ts
@@ -107,10 +106,11 @@ export async function GET(
 
 ## Pages Router
 
-Pages Router 默认将每个组件都视为客户端组件。像在普通 React 应用中一样使用 `useMemo`
-即可——请参阅 [React 指南](/guides/use-the-library-with-react/) 了解标准模式。
-通过 `getServerSideProps` 或 `getStaticProps` 进行服务端生成时，会将 SVG 作为 prop 返回，
-从而避免客户端 bundle 开销。
+Pages Router 默认将每个组件视为客户端组件。像在普通 React 应用中一样使用 `useMemo`
+即可。请参阅
+[React 指南](/guides/use-the-library-with-react/) 了解标准模式。
+通过 `getServerSideProps` 或 `getStaticProps` 进行服务端生成时，会将
+SVG 作为 prop 返回，从而避免加载客户端 bundle。
 
 ```tsx
 // pages/profile.tsx
@@ -133,8 +133,8 @@ export default function Profile({ avatar }: Props) {
 
 ## 使用 HTTP API
 
-HTTP API 无需安装，并且在两个路由器中都可使用。使用普通的
-`<img>` 标签即可——Next.js 默认不会预处理外部 SVG。
+HTTP API 无需安装，并且在两个路由器中都可用。使用普通的
+`<img>` 标签即可。Next.js 默认不会预处理外部 SVG。
 
 ```tsx
 export function UserAvatar({ seed = 'Alice' }: { seed?: string }) {
@@ -144,9 +144,9 @@ export function UserAvatar({ seed = 'Alice' }: { seed?: string }) {
 }
 ```
 
-如果你想在使用 HTTP API 时配合 `next/image`，请请求栅格格式（PNG、
-WebP、AVIF）——`next/image` 不会优化 SVG 源——并在 `next.config.js` 中将
-`api.dicebear.com` 添加到 `images.remotePatterns`。
+如果你想将 `next/image` 与 HTTP API 一起使用，请请求光栅格式（PNG、
+WebP、AVIF），因为 `next/image` 不会优化 SVG 源，并且需要在
+`next.config.js` 中将 `api.dicebear.com` 添加到 `images.remotePatterns`。
 
 ```js
 // next.config.js

@@ -2,8 +2,6 @@
 import { ref, computed } from 'vue';
 import { Star, Heart } from '@lucide/vue';
 import { siGithub } from 'simple-icons';
-import { ThemeOptions } from '@theme/types';
-import { useData } from 'vitepress';
 import { kebabCase } from 'change-case';
 import Prando from 'prando';
 import Button from 'primevue/button';
@@ -18,7 +16,6 @@ import {
 import { useVisibility } from '../../composables/useVisibility';
 import { useAvatarStyleList } from '../../composables/avatar';
 
-const { theme } = useData<ThemeOptions>();
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef);
 
@@ -103,22 +100,6 @@ const scatteredAvatars = computed(() => {
       <UiDescription class="app-open-source-description">
         DiceBear 是在开放环境中构建的。我们的核心库采用 MIT 许可证，我们倡导透明开发。加入成千上万已经喜爱 DiceBear 的开发者行列。
       </UiDescription>
-
-      <!-- Star counter with social proof -->
-      <div class="app-open-source-social-proof">
-        <a
-          href="https://github.com/dicebear/dicebear"
-          target="_blank"
-          rel="noopener"
-          class="app-open-source-star-count"
-        >
-          <Star :size="24" class="app-open-source-star-filled" />
-          <span class="app-open-source-star-number">{{
-            theme.githubStars?.['dicebear/dicebear'] || '8k+'
-          }}</span>
-          <span class="app-open-source-star-text">GitHub 星标</span>
-        </a>
-      </div>
 
       <div class="app-open-source-actions">
         <Button
@@ -258,50 +239,6 @@ const scatteredAvatars = computed(() => {
     max-width: 600px;
   }
 
-  /* Social proof */
-  &-social-proof {
-    margin-bottom: 40px;
-  }
-
-  &-star-count {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 24px;
-    background: var(--vp-c-bg-elv);
-    border: 1px solid var(--vp-c-border);
-    border-radius: 100px;
-    box-shadow: var(--vp-shadow-2);
-    text-decoration: none;
-    transition:
-      border-color var(--duration-fast) ease,
-      box-shadow var(--duration-fast) ease;
-
-    &:hover {
-      border-color: var(--app-open-source-star-color);
-      box-shadow: 0 0 16px
-        color-mix(in srgb, var(--app-open-source-star-color) 20%, transparent);
-    }
-  }
-
-  &-star-filled {
-    color: var(--app-open-source-star-color);
-    fill: var(--app-open-source-star-color);
-  }
-
-  &-star-number {
-    font-size: 24px;
-    font-weight: 800;
-    color: var(--vp-c-text-1);
-    letter-spacing: -0.02em;
-  }
-
-  &-star-text {
-    font-size: 15px;
-    color: var(--vp-c-text-2);
-    font-weight: 500;
-  }
-
   &-actions {
     display: flex;
     justify-content: center;
@@ -357,11 +294,6 @@ const scatteredAvatars = computed(() => {
 
     &-actions {
       flex-direction: column;
-    }
-
-    &-star-count {
-      flex-wrap: wrap;
-      justify-content: center;
     }
   }
 }

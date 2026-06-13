@@ -8,6 +8,7 @@ import {
 import { useStyleOptions } from '@theme/composables/useStyleOptions';
 import { capitalCase } from 'change-case';
 import useStore from '@theme/stores/playground';
+import { track, styleLabel } from '@theme/utils/track';
 import { storeToRefs } from 'pinia';
 import Accordion from 'primevue/accordion';
 import AccordionPanel from 'primevue/accordionpanel';
@@ -198,6 +199,10 @@ function colorCount(color: ColorInfo): number {
 
 function randomizeSeed() {
   seed.value = Math.random().toString(36).substring(2, 10);
+
+  track('Playground: Seed Randomized', {
+    style: styleLabel(avatarStyleName.value),
+  });
 }
 
 const sizeKey = 'size';

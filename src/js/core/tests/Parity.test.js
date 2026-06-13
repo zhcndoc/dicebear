@@ -12,12 +12,14 @@ import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { Avatar } from '../lib/index.js';
+import { Avatar, Color, OptionsDescriptor, Style } from '../lib/index.js';
 import { Prng } from '../lib/Prng.js';
 import { Fnv1a } from '../lib/Prng/Fnv1a.js';
 import { Mulberry32 } from '../lib/Prng/Mulberry32.js';
 import { Number } from '../lib/Utils/Number.js';
 import { Initials } from '../lib/Utils/Initials.js';
+import { ValidationError } from '../lib/Error/ValidationError.js';
+import { CircularColorReferenceError } from '../lib/Error/CircularColorReferenceError.js';
 
 const fixturesDir = join(import.meta.dirname, '..', '..', '..', '..', 'tests', 'fixtures', 'parity');
 
@@ -129,6 +131,114 @@ describe('Parity / Initials', () => {
   }
 });
 
+describe('Parity / Color', () => {
+  const colors = loadFixture('colors.json');
+
+  for (const entry of colors.toHex) {
+    it(`toHex ${entry.input}`, () => {
+      assert.equal(Color.toHex(entry.input), entry.result);
+    });
+  }
+
+  for (const entry of colors.toRgbHex) {
+    it(`toRgbHex ${entry.input}`, () => {
+      assert.equal(Color.toRgbHex(entry.input), entry.result);
+    });
+  }
+
+  for (const entry of colors.parseHex) {
+    it(`parseHex ${entry.input}`, () => {
+      assert.deepEqual(Color.parseHex(entry.input), entry.result);
+    });
+  }
+
+  for (const entry of colors.luminance) {
+    it(`luminance ${entry.input}`, () => {
+      assert.equal(Color.luminance(entry.input), entry.result);
+    });
+  }
+
+  for (const [i, entry] of colors.sortByContrast.entries()) {
+    it(`sortByContrast #${i}`, () => {
+      assert.deepEqual(
+        Color.sortByContrast(entry.candidates, entry.refColor),
+        entry.result,
+      );
+    });
+  }
+
+  for (const [i, entry] of colors.filterNotEqualTo.entries()) {
+    it(`filterNotEqualTo #${i}`, () => {
+      assert.deepEqual(
+        Color.filterNotEqualTo(entry.candidates, entry.excluded),
+        entry.result,
+      );
+    });
+  }
+});
+
+describe('Parity / Validation', () => {
+  const validation = loadFixture('validation.json');
+  const minimalStyle = validation.styles.find(
+    (e) => e.id === 'minimal',
+  ).definition;
+
+  for (const entry of validation.styles) {
+    it(`style ${entry.id}`, () => {
+      if (entry.valid) {
+        new Style(entry.definition);
+      } else {
+        assert.throws(() => new Style(entry.definition), ValidationError);
+      }
+    });
+  }
+
+  for (const entry of validation.options) {
+    it(`options ${entry.id}`, () => {
+      if (entry.valid) {
+        new Avatar(minimalStyle, entry.options);
+      } else {
+        assert.throws(
+          () => new Avatar(minimalStyle, entry.options),
+          ValidationError,
+        );
+      }
+    });
+  }
+
+  for (const entry of validation.circularColors) {
+    it(`circular colors ${entry.id}`, () => {
+      assert.throws(
+        () => new Avatar(entry.style, entry.options),
+        (e) => {
+          assert.ok(e instanceof CircularColorReferenceError);
+          assert.deepEqual(e.chain, entry.chain);
+
+          return true;
+        },
+      );
+    });
+  }
+});
+
+describe('Parity / OptionsDescriptor', () => {
+  const styleNames = readdirSync(join(fixturesDir, 'descriptors'))
+    .filter((f) => f.endsWith('.json'))
+    .map((f) => f.replace(/\.json$/, ''));
+
+  for (const styleName of styleNames) {
+    it(styleName, () => {
+      const styleData = loadFixture(`styles/${styleName}.json`);
+      const expected = loadFixture(`descriptors/${styleName}.json`);
+
+      assert.deepEqual(
+        new OptionsDescriptor(new Style(styleData)).toJSON(),
+        expected,
+      );
+    });
+  }
+});
+
 describe('Parity / Avatar', () => {
   const styleNames = readdirSync(join(fixturesDir, 'avatars'))
     .filter((f) => f.endsWith('.json'))
@@ -141,7 +251,8 @@ describe('Parity / Avatar', () => {
 
       for (const entry of cases) {
         it(entry.id, () => {
-          const json = new Avatar(styleData, entry.options).toJSON();
+          const avatar = new Avatar(styleData, entry.options);
+          const json = avatar.toJSON();
           assert.equal(json.svg, entry.svg);
           // Round-trip via JSON to drop `undefined` values (size/title),
           // mirroring what real consumers see after JSON.stringify.
@@ -149,6 +260,12 @@ describe('Parity / Avatar', () => {
             JSON.parse(JSON.stringify(json.options)),
             entry.resolvedOptions,
           );
+
+          // Only select cases carry a dataUri — it pins the percent-encoding
+          // contract (encodeURIComponent) without bloating every fixture.
+          if (entry.dataUri !== undefined) {
+            assert.equal(avatar.toDataUri(), entry.dataUri);
+          }
         });
       }
     });

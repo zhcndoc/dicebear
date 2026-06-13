@@ -6,6 +6,8 @@ namespace DiceBear\Utils;
 
 /**
  * Minimal XML escaping helper for SVG/XML text and attribute content.
+ *
+ * @internal
  */
 class Xml
 {

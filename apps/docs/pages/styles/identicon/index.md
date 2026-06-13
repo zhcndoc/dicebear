@@ -1,8 +1,8 @@
 ---
 title: Identicon – SVG Identicon API | DiceBear
 description: >
-  使用 DiceBear 生成确定性的 Identicon 头像——一个免费的开源
-  SVG identicon API 和用于用户头像的头像库。
+  使用 DiceBear 生成确定性的 Identicon 头像，DiceBear 是一个免费的开源
+  SVG identicon API 和头像库，可用于用户个人资料图片。
 ---
 
 <script setup lang="ts">
@@ -15,7 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Identicon
 
-Identicon 会在带有色调的背景上，以单一颜色渲染对称的像素网格图案——这是开发者工具和版本控制平台中流行的经典 identicon 风格。每个图案都由其种子确定性地生成，因此非常适合作为技术类个人资料图标以及 identicon API 的使用场景。
+Identicon 以单色在带色调的背景上渲染对称的像素网格图案，这是一种经典的 identicon 风格，由开发者工具和版本控制托管平台所推广。每种图案都由其种子确定性生成，因此非常适合技术类个人资料图标和 identicon API 使用场景。
 
 <StylePreview styleName="identicon" />
 

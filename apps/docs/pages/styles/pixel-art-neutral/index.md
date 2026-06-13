@@ -15,7 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # 像素艺术中性
 
-像素艺术中性是像素艺术风格的一个精简变体，仅在纯色背景上显示像素化的眼睛和嘴巴——没有头部轮廓、头发或身体。
+像素艺术中性是像素艺术风格的简化变体，仅在纯色背景上显示像素化的眼睛和嘴巴，没有头部轮廓、头发或身体。
 
 <StylePreview styleName="pixel-art-neutral" />
 

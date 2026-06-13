@@ -5,10 +5,16 @@ import { RotateCcw } from '@lucide/vue';
 import PlaygroundOptions from './PlaygroundOptions.vue';
 import PlaygroundPreviewPanel from './PlaygroundPreviewPanel.vue';
 import useStore from '@theme/stores/playground';
+import { track, styleLabel } from '@theme/utils/track';
 import Button from 'primevue/button';
 
 const store = useStore();
 const { seed } = storeToRefs(store);
+
+function onReset() {
+  track('Playground: Reset', { style: styleLabel(store.avatarStyleName) });
+  store.resetOptions();
+}
 
 // ?style= query param overrides persisted style (used by "Open in Playground" links)
 const styleParam = new URL(window.location.href).searchParams.get('style');
@@ -39,7 +45,7 @@ if (styleParam) {
             variant="link"
             size="small"
             class="pg-field-reset"
-            @click="store.resetOptions"
+            @click="onReset"
           >
             <template #icon>
               <RotateCcw :size="14" />

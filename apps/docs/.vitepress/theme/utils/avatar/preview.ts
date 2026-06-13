@@ -16,7 +16,7 @@ export function getAvatarPropertyPreviewOptions(
 
   if (propertyName === 'backgroundType') {
     return {
-      backgroundColor: ['6d28d9', 'c026d3'],
+      backgroundColor: ['0ea5e9', 'ec4899'],
       [propertyName]: [propertyValue],
     };
   }

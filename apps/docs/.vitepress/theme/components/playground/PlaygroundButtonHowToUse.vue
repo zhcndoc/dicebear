@@ -7,10 +7,15 @@ import {
   getAvatarApiCommand,
   unsupportedHttpApiOptions,
 } from '@theme/utils/avatar/api';
-import { formatPhpValue } from '@theme/utils/code-examples';
+import {
+  formatPhpValue,
+  formatPythonValue,
+  formatGoValue,
+} from '@theme/utils/code-examples';
 import Button from 'primevue/button';
 import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
 import { usePlaygroundDialog } from '@theme/composables/usePlaygroundDialog';
+import { track, styleLabel } from '@theme/utils/track';
 import Message from 'primevue/message';
 import Tabs from 'primevue/tabs';
 import TabList from 'primevue/tablist';
@@ -34,6 +39,22 @@ watch(
     }
   },
 );
+
+watch(open, (isOpen) => {
+  if (isOpen) {
+    track('Playground: How To Use', {
+      style: styleLabel(store.avatarStyleName),
+    });
+  }
+});
+
+// Only count tabs the user actively picks while the dialog is open, not the
+// automatic http-api → js-library switch for custom styles.
+watch(tab, (value) => {
+  if (open.value) {
+    track('Playground: How To Use Tab', { tab: value });
+  }
+});
 
 const exampleHttpApi = computed(() =>
   getAvatarApiUrl(store.avatarStyleName, options.value),
@@ -102,6 +123,103 @@ $avatar = new Avatar($style, ${phpOptions});
 
 $svg = (string) $avatar;`;
 });
+const examplePython = computed(() => {
+  const pythonOptions = formatPythonValue(options.value, 1);
+
+  if (store.isCustomStyle) {
+    return `import json
+
+from dicebear import Avatar, Style
+
+# Your custom style definition
+with open("./my-style.json", encoding="utf-8") as file:
+    definition = json.load(file)
+
+style = Style(definition)
+avatar = Avatar(style, ${pythonOptions})
+
+svg = avatar.to_string()`;
+  }
+
+  return `import json
+from importlib.resources import files
+
+from dicebear import Avatar, Style
+
+definition = json.loads(
+    files("dicebear_styles").joinpath("${store.avatarStyleName}.json").read_text("utf-8")
+)
+
+style = Style(definition)
+avatar = Avatar(style, ${pythonOptions})
+
+svg = avatar.to_string()`;
+});
+const installRust = computed(() =>
+  store.isCustomStyle
+    ? 'cargo add dicebear-core serde_json'
+    : `cargo add dicebear-core serde_json\ncargo add dicebear-styles --features ${store.avatarStyleName}`,
+);
+const exampleRust = computed(() => {
+  const rustOptions = JSON.stringify(options.value, null, 2);
+
+  if (store.isCustomStyle) {
+    return `use dicebear_core::{Avatar, Style};
+use serde_json::json;
+
+// Your custom style definition
+let definition = std::fs::read_to_string("./my-style.json")?;
+
+let style = Style::from_str(&definition)?;
+let avatar = Avatar::new(&style, json!(${rustOptions}))?;
+
+let svg = avatar.to_svg();`;
+  }
+
+  return `use dicebear_core::{Avatar, Style};
+use serde_json::json;
+
+let style = Style::from_str(dicebear_styles::${store.avatarStyleName.toUpperCase().replace(/-/g, '_')})?;
+let avatar = Avatar::new(&style, json!(${rustOptions}))?;
+
+let svg = avatar.to_svg();`;
+});
+const exampleGo = computed(() => {
+  const goOptions = formatGoValue(options.value, 1);
+
+  if (store.isCustomStyle) {
+    return `import (
+	"os"
+
+	dicebear "github.com/dicebear/dicebear-go/v10"
+)
+
+// Your custom style definition
+definition, _ := os.ReadFile("./my-style.json")
+
+style, _ := dicebear.NewStyle(definition)
+avatar, _ := dicebear.NewAvatar(style, ${goOptions})
+
+svg := avatar.SVG()`;
+  }
+
+  // The Go styles module exports each style as a PascalCase variable
+  // (e.g. "big-ears" → BigEars).
+  const styleConst = store.avatarStyleName
+    .split('-')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join('');
+
+  return `import (
+	dicebear "github.com/dicebear/dicebear-go/v10"
+	"github.com/dicebear/styles/v10"
+)
+
+style, _ := dicebear.NewStyle([]byte(styles.${styleConst}))
+avatar, _ := dicebear.NewAvatar(style, ${goOptions})
+
+svg := avatar.SVG()`;
+});
 
 const exampleCli = computed(() =>
   getAvatarApiCommand(
@@ -126,6 +244,9 @@ const exampleCli = computed(() =>
             <Tab v-if="!store.isCustomStyle" value="http-api">HTTP-API</Tab>
             <Tab value="js-library">JS</Tab>
             <Tab value="php-library">PHP</Tab>
+            <Tab value="python-library">Python</Tab>
+            <Tab value="rust-library">Rust</Tab>
+            <Tab value="go-library">Go</Tab>
             <Tab value="cli">CLI</Tab>
           </TabList>
           <TabPanels>
@@ -189,6 +310,66 @@ const exampleCli = computed(() =>
                 <p v-if="store.isCustomStyle">
                   Replace <code>./my-style.json</code> with the path to your
                   style definition.
+                </p>
+              </div>
+            </TabPanel>
+            <TabPanel value="python-library">
+              <div class="playground-button-how-to-use-tab-content">
+                <p>First install the required packages via pip:</p>
+                <UiCode
+                  :code="
+                    store.isCustomStyle
+                      ? 'pip install dicebear-core'
+                      : 'pip install dicebear-core dicebear-styles'
+                  "
+                />
+                <p>Then you can create this avatar as follows:</p>
+                <UiCode :code="examplePython" lang="python" />
+                <p v-if="store.isCustomStyle">
+                  Replace <code>./my-style.json</code> with the path to your
+                  style definition.
+                </p>
+                <p>
+                  See <a href="/how-to-use/python-library">Python</a> docs for
+                  more information.
+                </p>
+              </div>
+            </TabPanel>
+            <TabPanel value="rust-library">
+              <div class="playground-button-how-to-use-tab-content">
+                <p>First add the required crates with Cargo:</p>
+                <UiCode :code="installRust" />
+                <p>Then you can create this avatar as follows:</p>
+                <UiCode :code="exampleRust" lang="rust" />
+                <p v-if="store.isCustomStyle">
+                  Replace <code>./my-style.json</code> with the path to your
+                  style definition.
+                </p>
+                <p>
+                  See <a href="/how-to-use/rust-library">Rust</a> docs for more
+                  information.
+                </p>
+              </div>
+            </TabPanel>
+            <TabPanel value="go-library">
+              <div class="playground-button-how-to-use-tab-content">
+                <p>First add the required modules with go get:</p>
+                <UiCode
+                  :code="
+                    store.isCustomStyle
+                      ? 'go get github.com/dicebear/dicebear-go/v10'
+                      : 'go get github.com/dicebear/dicebear-go/v10\ngo get github.com/dicebear/styles/v10'
+                  "
+                />
+                <p>Then you can create this avatar as follows:</p>
+                <UiCode :code="exampleGo" lang="go" />
+                <p v-if="store.isCustomStyle">
+                  Replace <code>./my-style.json</code> with the path to your
+                  style definition.
+                </p>
+                <p>
+                  See <a href="/how-to-use/go-library">Go</a> docs for more
+                  information.
                 </p>
               </div>
             </TabPanel>

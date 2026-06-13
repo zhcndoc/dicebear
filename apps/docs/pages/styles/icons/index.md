@@ -15,10 +15,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # 图标
 
-Icons 是一种简洁的矢量头像风格，它会将单个 Bootstrap Icons
-图形置于带有色调的背景之上。生成清晰、可缩放的个人资料
-图标，非常适合仪表板、管理面板和企业工具，在这些场景中，人物
-面孔会显得格格不入。
+Icons 是一种简洁的矢量头像风格，会在带有色调的背景上放置一个 Bootstrap Icons
+图形。生成可缩放的个人资料图标，非常适合
+仪表盘、管理面板和企业工具，在这些场景中，人物面孔会显得不太合适。
 
 <StylePreview styleName="icons" />
 

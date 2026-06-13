@@ -15,8 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Croodles Neutral
 
-Croodles Neutral 是 Croodles 风格的简化变体，仅用宽松的黑色墨线在纯色背景上绘制
-眼睛、鼻子和嘴巴——没有头部轮廓或头发。
+Croodles Neutral 是 Croodles 风格的简化变体，仅在纯色背景上用松散的黑色墨线描绘眼睛、鼻子和嘴巴，没有头部轮廓或头发。
 
 <StylePreview styleName="croodles-neutral" />
 

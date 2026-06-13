@@ -31,7 +31,9 @@ const frameworks = [
     name: 'Angular',
     icon: siAngular.path,
     href: '/guides/use-the-library-with-angular/',
-    color: '#dd0031',
+    // Angular forbids its former (red) logo; black/white are its default
+    // variations. simple-icons already ships the current shield shape.
+    color: 'var(--logo-monochrome)',
   },
   {
     name: 'Svelte',
@@ -50,8 +52,7 @@ const frameworks = [
     </template>
     <UiContainer class="app-frameworks-container">
       <UiSectionHeader
-        badge="框架支持"
-        description="在 React、Vue、Svelte、Angular 等框架中使用 DiceBear。你可以把 HTTP 接口作为图片来源，也可以直接安装 JS 库。"
+        description="Use DiceBear with React, Vue, Svelte, Angular and more. Simply use our HTTP-API as image source or install the JS-library."
       >
         <template #headline
           >适配你<strong>最喜欢</strong>的框架</template

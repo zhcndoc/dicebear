@@ -15,8 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Lorelei Neutral
 
-Lorelei Neutral 是 Lorelei 风格的简化变体，仅用细腻的墨线在纯色背景上绘制
-眼睛、鼻子和嘴巴——没有头部轮廓或头发。
+Lorelei Neutral 是 Lorelei 风格的精简变体，仅用细腻的墨线绘制眼睛、鼻子和嘴巴，背景纯净，没有头部轮廓或头发。
 
 <StylePreview styleName="lorelei-neutral" />
 

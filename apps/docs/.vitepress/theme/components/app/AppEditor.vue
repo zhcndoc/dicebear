@@ -12,7 +12,6 @@ import {
   UiAvatar,
   UiHeadline,
   UiDescription,
-  UiBadge,
   UiContainer,
   UiSection,
   UiWindow,
@@ -40,14 +39,14 @@ const currentOptions = ref({
 const bgColors = [
   'ffd5dc',
   'f8bbd9',
-  'e1bee7',
-  'd1c4e9',
-  'c5cae9',
-  'bbdefb',
-  'b2ebf2',
-  'b2dfdb',
+  'ffccbc',
+  'ffe0b2',
+  'fff9c4',
   'c8e6c9',
   'dcedc8',
+  'b2dfdb',
+  'b2ebf2',
+  'bbdefb',
 ];
 
 // Variants for each category
@@ -252,7 +251,6 @@ const features = [
       </div>
 
       <div class="app-editor-content">
-        <UiBadge variant="brand">可视化编辑器</UiBadge>
         <UiHeadline class="app-editor-title-text"
           >无需代码的<strong>头像制作器</strong></UiHeadline
         >
@@ -303,7 +301,7 @@ const features = [
   &-gradient {
     background: radial-gradient(
       ellipse 60% 60% at 100% 50%,
-      color-mix(in srgb, var(--vp-c-green-1) 6%, transparent),
+      color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent),
       transparent
     );
   }

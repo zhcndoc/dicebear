@@ -20,6 +20,8 @@ namespace DiceBear\Prng;
  * uint32 * uint32 can exceed PHP_INT_MAX.
  *
  * @see https://gist.github.com/tommyettinger/46a874533244883189143505d203312c
+ *
+ * @internal
  */
 class Mulberry32
 {

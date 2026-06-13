@@ -28,8 +28,7 @@ const rows = buildComparisonRows({
     <UiContainer>
       <UiSectionHeader
         class="app-comparison-header"
-        badge="对比"
-        description="每个工具都有自己的优势，选择最适合你项目的方案。"
+        description="Every tool has its strengths. Choose what works best for your project."
       >
         <template #headline>DiceBear 的<strong>对比</strong>表现</template>
       </UiSectionHeader>
@@ -115,7 +114,7 @@ const rows = buildComparisonRows({
       ),
       radial-gradient(
         ellipse 50% 50% at 50% 100%,
-        color-mix(in srgb, var(--vp-c-purple-1) 6%, transparent),
+        color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent),
         transparent
       );
   }

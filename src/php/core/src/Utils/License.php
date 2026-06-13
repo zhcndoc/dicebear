@@ -9,6 +9,8 @@ use DiceBear\Style\Meta;
 /**
  * Builds attribution strings and embedded RDF/Dublin Core metadata from a
  * style's {@see Meta} block.
+ *
+ * @internal
  */
 class License
 {

@@ -5,10 +5,10 @@ avatars from style definitions and a seed string.
 
 DiceBear is available for multiple languages. All implementations share the same
 PRNG and rendering pipeline, producing identical SVG output for the same seed,
-style, and options — regardless of the language used.
+style, and options, regardless of the language used.
 
 [Playground](https://www.dicebear.com/playground) |
-[Documentation](https://www.dicebear.com/introduction)
+[Documentation](https://www.dicebear.com/how-to-use/php-library/)
 
 ## Installation
 
@@ -35,41 +35,18 @@ echo $avatar;              // SVG string
 echo $avatar->toDataUri(); // data:image/svg+xml;charset=utf-8,...
 ```
 
-### With options
-
-```php
-$avatar = new Avatar($definition, [
-    'seed' => 'Jane',
-    'size' => 64,
-    'flip' => 'horizontal',
-    'backgroundColor' => ['#0077b6', '#00b4d8'],
-    'backgroundColorFill' => 'linear',
-    'scale' => [0.8, 1.0],
-    'borderRadius' => 10,
-]);
-```
-
 ### Using the Style class
 
 ```php
 use DiceBear\Style;
 use DiceBear\Avatar;
-use DiceBear\OptionsDescriptor;
 
 $style = new Style($definition);
-
-// Inspect available options for a style
-$descriptor = new OptionsDescriptor($style);
-$fields = $descriptor->toJSON();
 
 // Create multiple avatars from the same style
 $avatar1 = new Avatar($style, ['seed' => 'Alice']);
 $avatar2 = new Avatar($style, ['seed' => 'Bob']);
 ```
-
-## License
-
-The source code of DiceBear is released under the **MIT License**.
 
 ## Sponsors
 

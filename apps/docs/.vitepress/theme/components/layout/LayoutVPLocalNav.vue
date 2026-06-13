@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useData } from 'vitepress';
-import { useLayout } from 'vitepress/theme';
+import { useLayout } from 'vitepress/theme-without-fonts';
 import VPIconAlignLeft from 'vitepress/dist/client/theme-default/components/icons/VPIconAlignLeft.vue';
 
 defineProps<{

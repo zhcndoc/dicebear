@@ -65,6 +65,9 @@
  * Border Radius Tokens
  * ---------------------------------------------------------------- */
 :root {
+  /* Chrome radius — tighter than the card radii below, for UI chrome
+     (sidebar pills, status badges, copy buttons). */
+  --vp-radius-chrome: 6px;
   --vp-radius-xs: 8px;
   --vp-radius-sm: 12px;
   --vp-radius-md: 16px;
@@ -106,6 +109,29 @@
 
 .custom-block {
   border-radius: var(--vp-radius-sm) !important;
+  /* Neutral hairline (matches UiWindow / cards / accordion) — used by `info`
+     and the LICENSE/attribution box, which have no coloured background. */
+  border: 1px solid var(--ui-window-border-color) !important;
+}
+
+/* Coloured callouts: tint the border from their own background hue (the same
+   colour at a higher opacity) rather than the neutral hairline. Hues are the
+   measured custom-block backgrounds; warning/amber + danger/rose are identical
+   in both themes, only `tip` (sky) differs. */
+.custom-block.tip {
+  border-color: rgba(2, 132, 199, 0.3) !important; /* sky 600 */
+}
+
+.custom-block.warning {
+  border-color: rgba(234, 179, 8, 0.4) !important; /* amber 500 */
+}
+
+.custom-block.danger {
+  border-color: rgba(244, 63, 94, 0.32) !important; /* rose 500 */
+}
+
+.dark .custom-block.tip {
+  border-color: rgba(56, 189, 248, 0.3) !important; /* sky 400 */
 }
 
 h1,
@@ -122,11 +148,66 @@ h6,
   font-family: var(--vp-font-family-heading);
 }
 
+/* ----------------------------------------------------------------
+ * Display typography — bigger, tighter, balanced headings (keeps Inter).
+ * Targets rendered markdown (.vp-doc); display components (UiHeadline) tune
+ * themselves. Inter optical features add refinement without a font swap.
+ * ---------------------------------------------------------------- */
+:root {
+  font-optical-sizing: auto;
+  font-feature-settings: 'cv11', 'ss01';
+}
+
+.vp-doc h1 {
+  font-size: clamp(1.7rem, 1.4rem + 1.2vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.vp-doc h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.vp-doc h3 {
+  font-size: 1.15rem;
+  font-weight: 650;
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+}
+
+.vp-doc h4 {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.vp-doc p,
+.vp-doc li {
+  line-height: 1.7;
+}
+
+.vp-doc p {
+  text-wrap: pretty;
+}
+
 /* Hide default VitePress navbar extras (replaced by LayoutNavActions) */
 .VPNavBarAppearance,
 .VPNavBarSearch,
 .VPNavBarExtra {
   display: none !important;
+}
+
+/* The logo config carries the intrinsic width/height (183x32) so the
+ * browser can reserve the aspect ratio before the SVG loads. VitePress
+ * only constrains the height, so the width attribute would otherwise act
+ * as a presentational hint and fix the width at 183px. */
+.VPNavBarTitle .logo {
+  width: auto;
 }
 
 .VPLink:not(.no-icon),
@@ -272,4 +353,104 @@ img[src^='https://api.dicebear.com/']:not(.next, .prev) {
   --p-tag-font-size: 13px;
   --p-tag-gap: 6px;
   line-height: 1;
+}
+
+/* ----------------------------------------------------------------
+ * Sidebar — grouped, collapsible category labels with a
+ * clear active state: brand left-bar + soft tinted pill. VitePress's default
+ * active styling is faint (transparent indicator, muted text), so set the
+ * indicator colour + tint + active text explicitly. Group collapsing is
+ * enabled via `collapsed` in config/sidebarDocs.ts.
+ * ---------------------------------------------------------------- */
+.VPSidebarItem.is-active > .item > .indicator {
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background-color: var(--vp-c-brand-1);
+}
+
+.VPSidebarItem.is-link.is-active > .item {
+  background: var(--vp-c-brand-soft);
+  border-radius: var(--vp-radius-chrome);
+  /* widen the tint without shifting the label (net-zero inline box) */
+  margin-inline: -8px;
+  padding-inline: 8px;
+}
+
+.VPSidebarItem.is-link.is-active > .item .text {
+  color: var(--vp-c-brand-1);
+  font-weight: 600;
+}
+
+.VPSidebarItem.is-link:not(.is-active) > .item .link:hover .text {
+  color: var(--vp-c-text-1);
+}
+
+/* Status badges embedded in sidebar item text (rendered via v-html) */
+.vp-sidebar-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: var(--vp-radius-chrome);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  vertical-align: middle;
+}
+
+.vp-sidebar-badge.is-new {
+  color: var(--vp-c-brand-1);
+  background: var(--vp-c-brand-soft);
+}
+
+.vp-sidebar-badge.is-updated {
+  color: #92750a;
+  background: rgba(234, 179, 8, 0.16);
+}
+
+.dark .vp-sidebar-badge.is-updated {
+  color: #facc15;
+}
+
+.vp-sidebar-badge.is-deprecated {
+  color: var(--ui-c-text-subtle);
+  background: var(--vp-c-bg-soft);
+}
+
+/* In-content badges (markdown `<Badge>`): tighten to the chrome radius */
+.VPBadge {
+  border-radius: var(--vp-radius-chrome);
+  font-weight: 600;
+}
+
+/* Right-hand outline ("On this page") — quieter title, tighter rhythm */
+.VPDocAsideOutline .outline-title {
+  color: var(--ui-c-text-subtle);
+}
+
+.VPDocAsideOutline .outline-link {
+  line-height: 28px;
+}
+
+/* ----------------------------------------------------------------
+ * Subtle dotted-grid backdrop, theme-aware, with a soft
+ * radial fade so it never competes with content. Place as an absolutely
+ * positioned layer behind a section's content.
+ * ---------------------------------------------------------------- */
+.ui-bg-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(var(--vp-c-divider) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 35%,
+    #000 35%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 35%,
+    #000 35%,
+    transparent 100%
+  );
 }

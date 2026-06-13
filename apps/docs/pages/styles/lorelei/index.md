@@ -15,7 +15,9 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Lorelei
 
-Lorelei 是一种优雅的手绘矢量头像风格，以精细的黑色墨线呈现，具有细致的发型、富有表情的眼睛和轻描的衣领。为社交应用、编辑类网站和用户账户生成精致、以插画为主导的 SVG 个人资料图标。
+Lorelei 是一种手绘矢量头像风格，以细致的黑色墨线呈现，
+具有精细的发型、富有表现力的眼睛和素描感衣领。为社交应用、编辑类网站和用户
+账户生成插画风格的 SVG 个人资料图标。
 
 <StylePreview styleName="lorelei" />
 

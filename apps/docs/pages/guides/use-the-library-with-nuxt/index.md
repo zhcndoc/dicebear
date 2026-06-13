@@ -5,10 +5,11 @@ description: >
   客户端渲染以及 Nitro 端点模式。
 ---
 
-# Nuxt 头像库 – 在 Nuxt 中使用 DiceBear
+# Nuxt 头像库：在 Nuxt 中使用 DiceBear
 
-DiceBear 自然地适配 Nuxt 的通用渲染模型。头像可以在 SSR 期间于服务端生成，也可以在 Nitro 端点中生成，或者在普通的客户端组件中生成——选择最符合页面
-[渲染模式](https://nuxt.com/docs/guide/concepts/rendering) 的方式即可。
+DiceBear 非常适合 Nuxt 的通用渲染模型。头像可以在 SSR 期间于服务端生成，
+也可以在 Nitro 端点中生成，或者在普通的客户端组件中生成。请选择最符合页面
+[渲染模式](https://nuxt.com/docs/guide/concepts/rendering) 的方式。
 
 你可以通过 [JS-Library](/how-to-use/js-library/) 或 [HTTP-API](/how-to-use/http-api/) 在 [Nuxt](https://nuxt.com/) 中使用 DiceBear。
 
@@ -43,7 +44,7 @@ const avatar = computed(() =>
 
 ::: warning Hydration & `idRandomization`
 
-`idRandomization` 依赖宿主环境未设种子的随机数生成器，因此 SSR 期间生成的 ID 与客户端重新渲染时不会匹配——Vue 会记录 hydration 不匹配警告。对于 SSR 的头像，请保持 `idRandomization: false`；或者将组件包裹在 `<ClientOnly>` 中，并接受可见的闪烁。
+`idRandomization` 依赖于宿主未使用种子的 RNG，因此 SSR 期间生成的 ID 与客户端重新渲染时不会匹配，Vue 会记录 hydration 不一致。对于 SSR 的头像，请保持 `idRandomization: false`；或者将组件包装在 `<ClientOnly>` 中，并接受视觉闪烁。
 
 如果你需要在同一页面上的多个头像之间保持唯一 ID，请在服务端渲染整个页面，并跳过头像子树的客户端 hydration。
 

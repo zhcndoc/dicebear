@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import {
-  Globe,
-  MonitorSmartphone,
-  Server,
-  Terminal,
-  ArrowRight,
-} from '@lucide/vue';
+import { Globe, Library, Terminal, ArrowRight } from '@lucide/vue';
 import Button from 'primevue/button';
+import Tabs from 'primevue/tabs';
+import TabList from 'primevue/tablist';
+import Tab from 'primevue/tab';
+import TabPanels from 'primevue/tabpanels';
+import TabPanel from 'primevue/tabpanel';
 import {
   UiContainer,
   UiSection,
@@ -20,6 +19,8 @@ import { useVisibility } from '../../composables/useVisibility';
 
 const sectionRef = ref();
 const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
+
+const libraryTab = ref('js');
 
 const plainCode = {
   js: `import { Style, Avatar } from '@dicebear/core';
@@ -43,6 +44,30 @@ $style = new Style($definition);
 $svg = (string) new Avatar($style, [
   'seed' => 'Mia',
 ]);`,
+  python: `import json
+from importlib.resources import files
+
+from dicebear import Avatar, Style
+
+definition = json.loads(
+    files("dicebear_styles").joinpath("lorelei.json").read_text("utf-8")
+)
+
+style = Style(definition)
+svg = Avatar(style, {"seed": "Mia"}).to_string()`,
+  rust: `use dicebear_core::{Avatar, Style};
+use serde_json::json;
+
+let style = Style::from_str(dicebear_styles::LORELEI)?;
+let svg = Avatar::new(&style, json!({ "seed": "Mia" }))?.to_svg();`,
+  go: `import (
+	dicebear "github.com/dicebear/dicebear-go/v10"
+	"github.com/dicebear/styles/v10"
+)
+
+style, _ := dicebear.NewStyle([]byte(styles.Lorelei))
+avatar, _ := dicebear.NewAvatar(style, map[string]any{"seed": "Mia"})
+svg := avatar.SVG()`,
   api: `https://api.dicebear.com/10.x/lorelei/svg?seed=Mia`,
   cli: `npx dicebear lorelei --seed "Mia" --format svg`,
 };
@@ -57,75 +82,128 @@ $svg = (string) new Avatar($style, [
     <UiContainer>
       <UiSectionHeader
         class="app-integration-header"
-        badge="易于使用"
-        description="选择最适合你项目的集成方式。"
+        description="Choose the integration that works best for your project."
       >
         <template #headline>几分钟内完成<strong>集成</strong></template>
       </UiSectionHeader>
 
-      <!-- JS & PHP Libraries - Side by Side -->
-      <div class="app-integration-grid app-integration-grid-libraries">
+      <!-- Language libraries - combined into one tabbed card -->
+      <div class="app-integration-libraries">
         <div class="app-integration-item" :style="{ animationDelay: '0s' }">
           <UiCard padding="xl" class="app-integration-card">
             <div class="app-integration-card-header">
-              <UiIconBox size="lg" color="#1689cc">
-                <MonitorSmartphone />
+              <UiIconBox size="lg" color="var(--vp-c-brand-1)">
+                <Library />
               </UiIconBox>
-              <h3 class="app-integration-title">JS 库</h3>
+              <h3 class="app-integration-title">Libraries</h3>
               <p class="app-integration-description">
-                无数据发送到外部。通过简单的 API，完全掌控您的头像创建。
+                Run DiceBear entirely in your own code — no data leaves your
+                servers. JavaScript, PHP, Python, Rust, and Go share one
+                identical API.
               </p>
             </div>
 
-            <UiCode
-              :code="plainCode.js"
-              lang="js"
-              scroll-to-bottom
-              class="app-integration-code-block"
-            />
-
-            <Button
-              as="a"
-              href="/how-to-use/js-library/"
-              severity="secondary"
-              variant="outlined"
-              class="app-integration-link"
-            >
-              JS 文档
-              <ArrowRight :size="18" />
-            </Button>
-          </UiCard>
-        </div>
-
-        <div class="app-integration-item" :style="{ animationDelay: '0.15s' }">
-          <UiCard padding="xl" class="app-integration-card">
-            <div class="app-integration-card-header">
-              <UiIconBox size="lg" color="#7b83eb">
-                <Server />
-              </UiIconBox>
-              <h3 class="app-integration-title">PHP 库</h3>
-              <p class="app-integration-description">
-                用于 PHP 8.2+ 的服务端头像生成。与 JS 库相同的 API。
-              </p>
-            </div>
-
-            <UiCode
-              :code="plainCode.php"
-              lang="php"
-              scroll-to-bottom
-              class="app-integration-code-block"
-            />
-
-            <Button
-              as="a"
-              href="/how-to-use/php-library/"
-              severity="secondary"
-              variant="outlined"
-              class="app-integration-link"
-            >
-              PHP 文档
-              <ArrowRight :size="18" />
-            </Button>
+            <Tabs v-model:value="libraryTab" class="app-integration-tabs">
+              <TabList>
+                <Tab value="js">JavaScript</Tab>
+                <Tab value="php">PHP</Tab>
+                <Tab value="python">Python</Tab>
+                <Tab value="rust">Rust</Tab>
+                <Tab value="go">Go</Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel value="js" class="app-integration-tabpanel">
+                  <UiCode
+                    :code="plainCode.js"
+                    lang="js"
+                    scroll-to-bottom
+                    class="app-integration-code-block"
+                  />
+                  <Button
+                    as="a"
+                    href="/how-to-use/js-library/"
+                    severity="secondary"
+                    variant="outlined"
+                    class="app-integration-link"
+                  >
+                    JS Documentation
+                    <ArrowRight :size="18" />
+                  </Button>
+                </TabPanel>
+                <TabPanel value="php" class="app-integration-tabpanel">
+                  <UiCode
+                    :code="plainCode.php"
+                    lang="php"
+                    scroll-to-bottom
+                    class="app-integration-code-block"
+                  />
+                  <Button
+                    as="a"
+                    href="/how-to-use/php-library/"
+                    severity="secondary"
+                    variant="outlined"
+                    class="app-integration-link"
+                  >
+                    PHP Documentation
+                    <ArrowRight :size="18" />
+                  </Button>
+                </TabPanel>
+                <TabPanel value="python" class="app-integration-tabpanel">
+                  <UiCode
+                    :code="plainCode.python"
+                    lang="python"
+                    scroll-to-bottom
+                    class="app-integration-code-block"
+                  />
+                  <Button
+                    as="a"
+                    href="/how-to-use/python-library/"
+                    severity="secondary"
+                    variant="outlined"
+                    class="app-integration-link"
+                  >
+                    Python Documentation
+                    <ArrowRight :size="18" />
+                  </Button>
+                </TabPanel>
+                <TabPanel value="rust" class="app-integration-tabpanel">
+                  <UiCode
+                    :code="plainCode.rust"
+                    lang="rust"
+                    scroll-to-bottom
+                    class="app-integration-code-block"
+                  />
+                  <Button
+                    as="a"
+                    href="/how-to-use/rust-library/"
+                    severity="secondary"
+                    variant="outlined"
+                    class="app-integration-link"
+                  >
+                    Rust Documentation
+                    <ArrowRight :size="18" />
+                  </Button>
+                </TabPanel>
+                <TabPanel value="go" class="app-integration-tabpanel">
+                  <UiCode
+                    :code="plainCode.go"
+                    lang="go"
+                    scroll-to-bottom
+                    class="app-integration-code-block"
+                  />
+                  <Button
+                    as="a"
+                    href="/how-to-use/go-library/"
+                    severity="secondary"
+                    variant="outlined"
+                    class="app-integration-link"
+                  >
+                    Go Documentation
+                    <ArrowRight :size="18" />
+                  </Button>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
           </UiCard>
         </div>
       </div>
@@ -135,7 +213,7 @@ $svg = (string) new Avatar($style, [
         <div class="app-integration-item" :style="{ animationDelay: '0.3s' }">
           <UiCard padding="xl" class="app-integration-card">
             <div class="app-integration-card-header">
-              <UiIconBox size="lg" color="#22c55e">
+              <UiIconBox size="lg" color="var(--vp-c-pink-2)">
                 <Globe />
               </UiIconBox>
               <h3 class="app-integration-title">头像 API</h3>
@@ -162,7 +240,7 @@ $svg = (string) new Avatar($style, [
         <div class="app-integration-item" :style="{ animationDelay: '0.45s' }">
           <UiCard padding="xl" class="app-integration-card">
             <div class="app-integration-card-header">
-              <UiIconBox size="lg" color="#a855f7">
+              <UiIconBox size="lg" color="var(--vp-c-brand-1)">
                 <Terminal />
               </UiIconBox>
               <h3 class="app-integration-title">CLI</h3>
@@ -237,9 +315,21 @@ $svg = (string) new Avatar($style, [
     }
   }
 
-  /* Grid for JS & PHP Libraries */
-  &-grid-libraries {
+  /* Combined libraries card (language libraries via tabs) */
+  &-libraries {
     margin-bottom: 24px;
+  }
+
+  &-tabs {
+    // The card already supplies xl padding; drop the panel's own padding so
+    // the code block and doc link sit flush with the card edges, with a little
+    // breathing room under the tab bar.
+    --p-tabs-tabpanel-padding: 16px 0 0;
+  }
+
+  &-tabpanel {
+    display: flex;
+    flex-direction: column;
   }
 
   /* Grid for HTTP API & CLI */

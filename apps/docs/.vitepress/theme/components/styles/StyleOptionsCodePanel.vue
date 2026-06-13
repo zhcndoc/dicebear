@@ -34,6 +34,19 @@ const tabs = computed<Tab[]>(() => {
     lang: 'php',
     code: examples.value.php,
   });
+  list.push({
+    key: 'python',
+    label: 'Python',
+    lang: 'python',
+    code: examples.value.python,
+  });
+  list.push({
+    key: 'rust',
+    label: 'Rust',
+    lang: 'rust',
+    code: examples.value.rust,
+  });
+  list.push({ key: 'go', label: 'Go', lang: 'go', code: examples.value.go });
   list.push({ key: 'cli', label: 'CLI', code: examples.value.cli });
   return list;
 });

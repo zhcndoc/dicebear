@@ -1,6 +1,6 @@
 import '@fontsource-variable/inter';
 import { App, onMounted, watchEffect } from 'vue';
-import DefaultTheme from 'vitepress/theme';
+import DefaultTheme from 'vitepress/theme-without-fonts';
 import Layout from './Layout.vue';
 import { createPinia } from 'pinia';
 import { useData } from 'vitepress';
@@ -9,6 +9,7 @@ import PrimeVue from 'primevue/config';
 import Aura from '@primeuix/themes/aura';
 import { definePreset } from '@primeuix/themes';
 import Tooltip from 'primevue/tooltip';
+import { track } from '@theme/utils/track';
 
 const DiceBearPreset = definePreset(Aura, {
   semantic: {
@@ -24,18 +25,21 @@ const DiceBearPreset = definePreset(Aura, {
       mutedColor: 'var(--vp-c-text-2)',
       hoverMutedColor: 'var(--vp-c-text-1)',
     },
+    // Brand blue is the official DiceBear #0284C7 (Tailwind `sky-600`), so map
+    // PrimeVue's primary ramp to `sky` (not `blue`) — keeps filled buttons,
+    // sliders and active states in sync with the CSS `--vp-c-brand-*` tokens.
     primary: {
-      50: '{blue.50}',
-      100: '{blue.100}',
-      200: '{blue.200}',
-      300: '{blue.300}',
-      400: '{blue.400}',
-      500: '{blue.500}',
-      600: '{blue.600}',
-      700: '{blue.700}',
-      800: '{blue.800}',
-      900: '{blue.900}',
-      950: '{blue.950}',
+      50: '{sky.50}',
+      100: '{sky.100}',
+      200: '{sky.200}',
+      300: '{sky.300}',
+      400: '{sky.400}',
+      500: '{sky.500}',
+      600: '{sky.600}',
+      700: '{sky.700}',
+      800: '{sky.800}',
+      900: '{sky.900}',
+      950: '{sky.950}',
     },
     colorScheme: {
       light: {
@@ -59,6 +63,20 @@ const DiceBearPreset = definePreset(Aura, {
           borderColor: 'var(--pg-border)',
           color: 'var(--vp-c-text-1)',
           hoverColor: 'var(--vp-c-text-1)',
+        },
+        formField: {
+          // Same fix as the dark block below: Aura's light form-field border
+          // defaults to {surface.300} (#d6d3d1, a warm stone). Pin it to the
+          // shared --pg-border token (#e2e2e3) so inputs/selects match the
+          // slider tracks and content borders instead of reading warm.
+          borderColor: 'var(--pg-border)',
+          // Placeholders + form-field icons (select chevron, input icons,
+          // number +/- buttons) all default to {surface.400} (#78716c, a warm
+          // stone) — browner and darker than the app's neutral greys. These
+          // are muted *foreground* colours, so pin them to the shared
+          // subtle-text token instead of a surface step.
+          placeholderColor: 'var(--ui-c-text-subtle)',
+          iconColor: 'var(--ui-c-text-subtle)',
         },
       },
       dark: {
@@ -85,7 +103,17 @@ const DiceBearPreset = definePreset(Aura, {
         },
         formField: {
           background: 'var(--vp-c-bg-soft)',
+          // Aura's resting form-field border defaults to {surface.600}
+          // (#3f3f46, a cool zinc step) — the one control token not on a
+          // VitePress grey. Inputs/selects therefore read colder than the
+          // cards, slider tracks and dividers around them (all #3c3f44).
+          // Pull it onto the shared --pg-border token so every border matches.
+          borderColor: 'var(--pg-border)',
           hoverBorderColor: 'var(--vp-c-gray-1)',
+          // Match the light block: pull placeholder + icon colours off the
+          // warm {surface.400} stone onto the app's subtle-text token.
+          placeholderColor: 'var(--ui-c-text-subtle)',
+          iconColor: 'var(--ui-c-text-subtle)',
         },
         text: {
           mutedColor: 'rgba(235, 235, 245, 0.78)',
@@ -246,6 +274,23 @@ const DiceBearPreset = definePreset(Aura, {
         },
       },
     },
+    inputnumber: {
+      colorScheme: {
+        // The +/- button colour is independent of formField.iconColor and
+        // still resolves to {surface.400} (#78716c, warm stone). Pull it onto
+        // the same subtle-text token as the other form-field affordances.
+        light: {
+          button: {
+            color: 'var(--ui-c-text-subtle)',
+          },
+        },
+        dark: {
+          button: {
+            color: 'var(--ui-c-text-subtle)',
+          },
+        },
+      },
+    },
   },
 });
 
@@ -289,9 +334,7 @@ export default {
 
           if (link && link.hostname) {
             if (link.hostname !== window.location.hostname) {
-              if (typeof umami !== 'undefined') {
-                umami.track('Outbound Link', { url: link.hostname });
-              }
+              track('Outbound Link', { url: link.hostname });
             }
           }
         });

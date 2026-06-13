@@ -1,11 +1,11 @@
 export { default as UiAlert } from './UiAlert.vue';
 export { default as UiAvatar } from './UiAvatar.vue';
-export { default as UiBadge } from './UiBadge.vue';
 export { default as UiBrowserPreview } from './UiBrowserPreview.vue';
 export { default as UiCard } from './UiCard.vue';
 export { default as UiCode } from './UiCode.vue';
 export { default as UiConfetti } from './UiConfetti.vue';
 export { default as UiContainer } from './UiContainer.vue';
+export { default as UiDemoFrame } from './UiDemoFrame.vue';
 export { default as UiDescription } from './UiDescription.vue';
 export { default as UiDialog } from './UiDialog.vue';
 export { default as UiHeadline } from './UiHeadline.vue';

@@ -58,9 +58,21 @@ class Avatar
 
     /**
      * Returns the SVG encoded as a `data:image/svg+xml` URI.
+     *
+     * Encodes exactly like JavaScript's `encodeURIComponent`: `rawurlencode`
+     * additionally escapes `!*'()`, so those are reverted to stay byte-identical
+     * with the other ports.
      */
     public function toDataUri(): string
     {
-        return 'data:image/svg+xml;charset=utf-8,' . rawurlencode($this->svg);
+        $encoded = strtr(rawurlencode($this->svg), [
+            '%21' => '!',
+            '%2A' => '*',
+            '%27' => "'",
+            '%28' => '(',
+            '%29' => ')',
+        ]);
+
+        return 'data:image/svg+xml;charset=utf-8,' . $encoded;
     }
 }

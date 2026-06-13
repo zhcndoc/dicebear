@@ -33,18 +33,18 @@ const fileFormats = [
   },
   {
     title: 'JSON',
-    description: '以 JSON 形式返回头像元数据 — 不输出图像。',
+    description: '以 JSON 形式返回头像元数据，而不是图像。',
   },
 ];
 </script>
 
 # 通过 URL 生成 SVG 头像的 HTTP API
 
-我们的 HTTP API 是将 DiceBear 作为个人资料图片 API 或头像占位图 API 的最简单方式 — 无需身份验证。
+我们的 HTTP API 是将 DiceBear 作为个人资料图片 API 或头像占位图像 API 使用的最简单方式。无需身份验证。
 
 ## 用法
 
-使用以下地址，并将 `<styleName>` 替换为你偏好的头像样式。样式名称使用小写，多个单词之间用连字符连接——例如：`lorelei`、`pixel-art`、`adventurer-neutral`。所有官方[头像样式](/styles/)都受支持。
+使用以下地址，并将 `<styleName>` 替换为你偏好的头像样式。样式名称使用小写形式，多个单词之间用连字符连接，例如 `lorelei`、`pixel-art`、`adventurer-neutral`。支持所有官方的 [头像样式](/styles/)。
 
 ```
 https://api.dicebear.com/10.x/<styleName>/svg
@@ -61,11 +61,68 @@ https://api.dicebear.com/10.x/<styleName>/svg
 
 :::
 
+## 列出可用样式
+
+要查看某个实例支持哪些头像样式，请向版本根地址发送请求。它会以 JSON 形式返回可用样式名称，并按字母顺序排序：
+
+```
+https://api.dicebear.com/10.x
+```
+
+```json
+{
+  "styles": ["adventurer", "adventurer-neutral", "avataaars", "..."]
+}
+```
+
+::: info
+
+此端点自 `10.x` 版本起可用。更早的版本不支持列出样式。
+
+:::
+
+## 样式定义和选项
+
+每种样式还会公开两个元数据端点。它们非常适合在 API 之上构建工具，例如头像编辑器：
+
+```
+https://api.dicebear.com/10.x/<styleName>/definition.json
+https://api.dicebear.com/10.x/<styleName>/options.json
+```
+
+`definition.json` 返回原始样式定义，也就是随该样式的 npm 包一起发布的同一份 JSON。
+
+`options.json` 描述样式接受的每个查询参数选项，包括字段类型、允许的枚举值和取值范围。以下是 [Pixel Art](/styles/pixel-art/) 的节选：
+
+```json
+{
+  "seed": { "type": "string" },
+  "flip": {
+    "type": "enum",
+    "values": ["none", "horizontal", "vertical", "both"],
+    "list": true
+  },
+  "backgroundColor": { "type": "color", "list": true },
+  "hairVariant": {
+    "type": "enum",
+    "values": ["long01", "long02", "...", "short24"],
+    "list": true,
+    "weighted": true
+  },
+  "hairProbability": { "type": "number", "min": 0, "max": 100 }
+}
+```
+
+::: info
+
+这些端点自 `10.x` 版本起可用。在自托管实例上，它们默认是禁用的。请参阅
+[自托管指南](/guides/host-the-http-api-yourself/#optional-style-metadata-endpoints)。
+
+:::
+
 ## 选项
 
-所有[核心选项](/how-to-use/js-library/#core-options)——例如 `seed`、
-`flip`、`rotate`、`scale`、`borderRadius`、`backgroundColor` 等——都可作为[查询参数](https://en.wikipedia.org/wiki/Query_string)使用。
-特定样式的选项列在各个[头像样式页面](/styles/)中。例如：
+所有 [核心选项](/how-to-use/js-library/#core-options)（例如 `seed`、`flip`、`rotate`、`scale`、`borderRadius` 和 `backgroundColor`）都可作为 [查询参数](https://en.wikipedia.org/wiki/Query_string) 使用。样式特定的选项列在各个 [头像样式页面](/styles/) 中。例如：
 
 <BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=John" />
 <BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=Jane" />
@@ -119,16 +176,17 @@ PNG、JPG、WebP 和 AVIF 使用
 
 | 版本 | 状态 | 终止支持时间 |
 | ------- | ---------- | -------------- |
-| `10.x`  | **活跃** | —              |
-| `9.x`   | **活跃** | —              |
-| `8.x`   | 已弃用 | 2028 年 4 月 30 日 |
-| `7.x`   | 已弃用 | 2028 年 4 月 30 日 |
-| `6.x`   | 已弃用 | 2028 年 4 月 30 日 |
-| `5.x`   | 已弃用 | 2028 年 4 月 30 日 |
+| `10.x`  | **Active** | None           |
+| `9.x`   | **Active** | None           |
+| `8.x`   | Deprecated | April 30, 2028 |
+| `7.x`   | Deprecated | April 30, 2028 |
+| `6.x`   | Deprecated | April 30, 2028 |
+| `5.x`   | Deprecated | April 30, 2028 |
 
 ::: warning
 
-5.x–8.x 版本将在 2028 年 4 月 30 日到达生命周期终点。届时，这些版本的 HTTP API 将关闭并不再可用。请升级到最新版本。详情请参阅
+5.x 到 8.x 版本将于 2028 年 4 月 30 日达到生命周期终点。到那时，这些版本的 HTTP API 将被关闭并不再可用。
+请升级到最新版本。详情请参见
 [公告](https://github.com/orgs/dicebear/discussions/491)。
 
 :::
@@ -145,7 +203,7 @@ PNG、JPG、WebP 和 AVIF 使用
 [自行托管头像 API](/guides/host-the-http-api-yourself/)，以完全掌控
 可用性、速率限制和数据隐私。
 
-## 合理使用与速率限制
+## 公平使用与速率限制
 
 我们的 API 可免费用于非商业用途，但请负责任地使用。我们保留封禁滥用用户的权利。
 
@@ -153,9 +211,8 @@ PNG、JPG、WebP 和 AVIF 使用
 WebP 和 AVIF**。超过限制将返回 HTTP `429 Too Many Requests`。我们保留
 随时更改这些限制的权利，恕不另行通知。
 
-如需商业用途或更高限制，请
-[搭建你自己的实例](/guides/host-the-http-api-yourself/)。我们很乐意
-回答问题——欢迎在 GitHub 上发起
+对于商业用途或更高限制，请
+[搭建你自己的实例](/guides/host-the-http-api-yourself/)。如有疑问，欢迎在 GitHub 上发起
 [讨论](https://github.com/orgs/dicebear/discussions)。
 
 ## 变更与可用性

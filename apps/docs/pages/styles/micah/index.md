@@ -14,10 +14,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Micah
 
-Micah 是一种平面设计风格的矢量头像，采用半身肖像，具有
-简洁的轮廓、简单的面部特征，以及在头发、
-服装和背景上大胆的色彩组合。可为现代 Web 和
-移动应用生成醒目的 SVG 个人资料图标。
+Micah 是一种平面设计风格的矢量头像，呈现半身肖像，具有简洁
+的轮廓、简单的面部特征，以及在头发、
+服装和背景中使用大胆的色彩组合。为现代网页和移动
+应用生成 SVG 个人资料图标。
 
 <StylePreview styleName="micah" />
 

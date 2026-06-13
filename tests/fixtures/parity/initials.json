@@ -58,5 +58,17 @@
   {
     "seed": "rock-paper",
     "result": "RP"
+  },
+  {
+    "seed": "a@b\rcd",
+    "result": "A"
+  },
+  {
+    "seed": "a@b\u2028cd",
+    "result": "A"
+  },
+  {
+    "seed": "a@b\u2029cd",
+    "result": "A"
   }
 ]

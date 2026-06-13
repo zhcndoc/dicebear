@@ -11,23 +11,22 @@ import {
 import {
   Target,
   Palette,
-  Server,
+  Shapes,
+  Globe,
+  Library,
   Terminal,
   SlidersHorizontal,
-  Globe,
 } from '@lucide/vue';
-import { siGithub, siFigma, siJavascript } from 'simple-icons';
+import { siGithub, siFigma } from 'simple-icons';
 import { useVisibility } from '../../composables/useVisibility';
 
 withDefaults(
   defineProps<{
-    badge?: string;
     headline?: string;
     description?: string;
   }>(),
   {
-    badge: '为什么选择 DiceBear？',
-    headline: '为开发者而生，受用户喜爱',
+    headline: 'Built for Developers, Loved by Users',
     description:
       '你需要的一切，都能用来为应用创建美观且独特的头像。',
   },
@@ -37,6 +36,7 @@ const sectionRef = ref();
 const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
 
 const highlights = [
+  // Row 1 — the avatars themselves
   {
     icon: Target,
     title: '确定性头像',
@@ -52,6 +52,14 @@ const highlights = [
     color: '#a855f7',
   },
   {
+    icon: Shapes,
+    title: 'Scalable SVG',
+    description:
+      'Pure SVG output stays razor-sharp at any size — from tiny favicons to full-screen — and weighs just a few kilobytes.',
+    color: '#06b6d4',
+  },
+  // Row 2 — how you generate them
+  {
     icon: Globe,
     title: '免费头像 API',
     description:
@@ -59,18 +67,14 @@ const highlights = [
     color: '#22c55e',
   },
   {
-    iconPath: siJavascript.path,
-    title: 'JS 库',
+    // One box for the language libraries (JS / PHP / Python / Rust / Go).
+    // Generic Library icon — no language logos — so the named languages stay
+    // pure nominative use with no trademark/logo-modification questions.
+    icon: Library,
+    title: 'Official Libraries',
     description:
-      '无数据发送到外部服务器。完全掌控你应用中的头像生成。',
-    color: '#f7df1e',
-  },
-  {
-    icon: Server,
-    title: 'PHP 库',
-    description:
-      '用于 PHP 8.2+ 的服务端头像生成。相同的种子，相同的结果——与 JS 库完全相同的 API。',
-    color: '#777BB4',
+      'JavaScript, PHP, Python, Rust, and Go — one identical API across every language, same seed, same result, and no data leaves your servers.',
+    color: '#f59e0b',
   },
   {
     icon: Terminal,
@@ -79,12 +83,13 @@ const highlights = [
       '直接从命令行生成头像。非常适合批量处理和构建管道。',
     color: '#64748b',
   },
+  // Row 3 — design & trust
   {
     iconPath: siFigma.path,
     title: 'Figma 插件',
     description:
-      '在 Figma 中设计自定义头像样式，并将它们导出为即用型 DiceBear 定义 —— 无需编写代码。',
-    color: 'var(--vp-c-text-1)',
+      'Design custom avatar styles in Figma and export them as ready-to-use DiceBear definitions — no code required.',
+    color: 'var(--logo-monochrome)',
   },
   {
     icon: SlidersHorizontal,
@@ -97,8 +102,8 @@ const highlights = [
     iconPath: siGithub.path,
     title: '100% 开源',
     description:
-      '核心代码采用 MIT 许可，开发过程透明。你可以放心贡献、分叉或自托管。',
-    color: 'var(--vp-c-text-1)',
+      'MIT licensed core, transparent development. Contribute, fork, or self-host with confidence.',
+    color: 'var(--logo-monochrome)',
   },
 ];
 </script>
@@ -109,11 +114,7 @@ const highlights = [
       <div class="app-highlights-gradient"></div>
     </template>
     <UiContainer>
-      <UiSectionHeader
-        class="app-highlights-header"
-        :badge="badge"
-        :description="description"
-      >
+      <UiSectionHeader class="app-highlights-header" :description="description">
         <template #headline>
           <slot name="headline">{{ headline }}</slot>
         </template>
@@ -157,7 +158,7 @@ const highlights = [
       ),
       radial-gradient(
         ellipse 50% 50% at 50% 100%,
-        color-mix(in srgb, var(--vp-c-purple-1) 6%, transparent),
+        color-mix(in srgb, var(--vp-c-brand-1) 6%, transparent),
         transparent
       );
   }

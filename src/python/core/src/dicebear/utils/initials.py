@@ -8,7 +8,10 @@ import unicodedata
 # Backtick, acute accent, apostrophe, and modifier letter apostrophe — stripped
 # so names like "O'Brien" yield "OB" rather than "OB" split on the quote.
 _QUOTES = re.compile(r"[`´'ʼ]")
-_AT_TAIL = re.compile(r"@.*")
+# The whole @ suffix (e.g. an email domain) is stripped, including any line
+# terminators — re.DOTALL makes `.` match newlines too, matching the dotall
+# `@.*` strip in every port.
+_AT_TAIL = re.compile(r"@.*", re.DOTALL)
 
 
 class Initials:

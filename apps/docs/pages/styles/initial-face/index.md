@@ -15,7 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Initial Face
 
-Initial Face 是一种友好的矢量头像风格，将一双富有表情的眼睛与一个彩色方块上的醒目首字母相结合——半是表情符号，半是字母组合。生成亲切的 SVG 个人资料图标，即使在很小的尺寸下也能显得很有个性，非常适合用户列表和个人资料占位符。
+Initial Face 是一种友好的矢量头像风格，将富有表现力的眼睛与彩色方块上的单个醒目的首字母结合在一起：一半表情符号，一半字母组合。生成在小尺寸下也显得个性鲜明的 SVG 个人资料图标，非常适合用户列表和个人资料占位符。
 
 <StylePreview styleName="initial-face" />
 

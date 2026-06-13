@@ -116,6 +116,10 @@ const styleOptions = computed(() => ({
 .pg-preview-meta {
   width: 100%;
   margin-top: 16px;
+  /* Match the left config accordion's surface (PrimeVue content background =
+     --vp-c-bg-soft) instead of the elevated card surface, so the details panel
+     reads as the same surface as the options accordion on the left. */
+  --ui-card-bg: var(--p-content-background);
 }
 
 .pg-preview-meta-title {

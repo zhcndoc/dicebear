@@ -13,6 +13,8 @@ namespace DiceBear\Utils;
  * from integer arithmetic — sidestepping PHP's `precision`-based float cast,
  * which would otherwise diverge from the JS reference for small/large values.
  * Five decimals is far below sub-pixel precision for any realistic canvas.
+ *
+ * @internal
  */
 class Number
 {

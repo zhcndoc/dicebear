@@ -1,13 +1,41 @@
 <h1><img src="https://www.dicebear.com/logo-readme.svg" width="28" /> DiceBear CLI</h1>
 
-<p>
-  <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Mimi&backgroundColor=0077b6&radius=10" width="64" />
-  <img src="https://api.dicebear.com/9.x/open-peeps/svg?seed=Kitty&backgroundColor=0096c7&radius=10" width="64" />
-  <img src="https://api.dicebear.com/9.x/pixel-art/svg?seed=Lilly&backgroundColor=00b4d8&radius=10" width="64" />
-  <img src="https://api.dicebear.com/9.x/lorelei/svg?seed=Tigger&backgroundColor=48cae4&radius=10" width="64" />
-  <img src="https://api.dicebear.com/9.x/bottts/svg?seed=Zoe&backgroundColor=90e0ef&radius=10" width="64" />
-  <img src="https://api.dicebear.com/9.x/initials/svg?seed=..&backgroundColor=ade8f4&radius=10" width="64" />
-</p>
+Command-line interface for the DiceBear avatar library. Generates avatars from
+any built-in or custom style and saves them as SVG, PNG, JPEG, WebP or AVIF.
 
 [Playground](https://www.dicebear.com/playground) |
 [Documentation](https://www.dicebear.com/how-to-use/cli/)
+
+## Installation
+
+```sh
+npm install --global dicebear
+```
+
+Requires Node.js 22+.
+
+## Usage
+
+```sh
+# Generate one SVG avatar in the current directory
+dicebear lorelei .
+
+# Generate 10 PNG avatars in ./avatars
+dicebear lorelei ./avatars --count 10 --format png
+```
+
+Pass style options as flags (e.g. `--seed "John Doe"`). Run `dicebear --help` to
+list every style and its options.
+
+## Sponsors
+
+Advertisement: Many thanks to our sponsors who provide us with free or
+discounted products.
+
+<a href="https://bunny.net/" target="_blank" rel="noopener noreferrer">
+    <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="https://www.dicebear.com/sponsors/bunny-light.svg">
+        <source media="(prefers-color-scheme: light)" srcset="https://www.dicebear.com/sponsors/bunny-dark.svg">
+        <img alt="bunny.net" src="https://www.dicebear.com/sponsors/bunny-dark.svg" height="64">
+    </picture>
+</a>

@@ -15,7 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Notionists
 
-Notionists 是一种手绘黑线矢量头像风格，特点是半身人物，摆出拿着手机或咖啡杯等小道具的姿势。为生产力工具、文档应用和团队工作区生成精致、轻松且专业的 SVG 个人资料图标。
+Notionists 是一种手绘黑线矢量头像风格，呈现半身人物形象，搭配手机或咖啡杯等小道具摆姿势。为效率工具、文档应用和团队工作区生成休闲又专业的 SVG 个人资料图标。
 
 <StylePreview styleName="notionists" />
 

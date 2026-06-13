@@ -76,9 +76,9 @@ description: >
 
 ## 第 7 步
 
-该插件会导出一个 JSON 文件——你的
-[样式定义](/specification/definition-schema/)。这个文件可以立即使用。
-无需构建步骤。
+The plugin exports a JSON file: your
+[style definition](/specification/definition-schema/). This file is ready to use
+immediately, without a build step.
 
 你可以立即使用 [CLI](/how-to-use/cli/) 测试你的样式：
 
@@ -90,8 +90,12 @@ dicebear ./your-style.json ./test-output --count 10
 
 ## 第 8 步
 
-恭喜！你现在可以在
-[JS Library](/how-to-use/js-library/)、[PHP Library](/how-to-use/php-library/) 或 [CLI](/how-to-use/cli/) 中使用你的头像样式了。
+Congratulations! You can now use your avatar style with the
+[JS Library](/how-to-use/js-library/), the
+[PHP Library](/how-to-use/php-library/), the
+[Python Library](/how-to-use/python-library/), the
+[Rust Library](/how-to-use/rust-library/), the
+[Go Library](/how-to-use/go-library/), or the [CLI](/how-to-use/cli/).
 
 ### 使用 JS Library
 
@@ -116,6 +120,56 @@ $avatar = new Avatar($definition, [
   'seed' => 'dicebear',
   // ... 其他选项
 ]);
+```
+
+### 使用 Python Library
+
+```python
+import json
+
+from dicebear import Avatar
+
+with open("./your-style.json", encoding="utf-8") as file:
+    definition = json.load(file)
+
+avatar = Avatar(definition, {
+    "seed": "dicebear",
+    # ... other options
+})
+```
+
+### 使用 Rust Library
+
+```rust
+use dicebear_core::{Avatar, Style};
+use serde_json::json;
+use std::fs;
+
+let definition = fs::read_to_string("./your-style.json")?;
+let style = Style::from_str(&definition)?;
+
+let avatar = Avatar::new(&style, json!({
+    "seed": "dicebear",
+    // ... other options
+}))?;
+```
+
+### 使用 Go Library
+
+```go
+import (
+	"os"
+
+	dicebear "github.com/dicebear/dicebear-go/v10"
+)
+
+definition, _ := os.ReadFile("./your-style.json")
+style, _ := dicebear.NewStyle(definition)
+
+avatar, _ := dicebear.NewAvatar(style, map[string]any{
+	"seed": "dicebear",
+	// ... other options
+})
 ```
 
 ### 使用 CLI

@@ -5,9 +5,14 @@ declare(strict_types=1);
 namespace DiceBear\Tests;
 
 use DiceBear\Avatar;
+use DiceBear\Error\CircularColorReferenceError;
+use DiceBear\Error\ValidationError;
+use DiceBear\OptionsDescriptor;
 use DiceBear\Prng;
 use DiceBear\Prng\Fnv1a;
 use DiceBear\Prng\Mulberry32;
+use DiceBear\Style;
+use DiceBear\Utils\Color;
 use DiceBear\Utils\Initials;
 use DiceBear\Utils\Number;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -231,7 +236,8 @@ class ParityTest extends TestCase
         static $styleCache = [];
         $styleData = $styleCache[$styleName] ??= self::loadFixture("styles/$styleName.json");
 
-        $json = (new Avatar($styleData, $entry['options']))->toJSON();
+        $avatar = new Avatar($styleData, $entry['options']);
+        $json = $avatar->toJSON();
         $this->assertSame($entry['svg'], $json['svg']);
         // Round-trip the resolved options through json_encode/json_decode
         // so int-vs-float typing matches the JS-generated fixture
@@ -239,6 +245,162 @@ class ParityTest extends TestCase
         $this->assertSame(
             $entry['resolvedOptions'],
             json_decode(json_encode($json['options'], JSON_THROW_ON_ERROR), true, flags: JSON_THROW_ON_ERROR),
+        );
+
+        // Only select cases carry a dataUri — it pins the percent-encoding
+        // contract (JS encodeURIComponent) without bloating every fixture.
+        if (isset($entry['dataUri'])) {
+            $this->assertSame($entry['dataUri'], $avatar->toDataUri());
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // Color
+    // -----------------------------------------------------------------------
+
+    public static function colorProvider(): array
+    {
+        $fixtures = self::loadFixture('colors.json');
+        $cases = [];
+
+        foreach (['toHex', 'toRgbHex', 'parseHex', 'luminance'] as $method) {
+            foreach ($fixtures[$method] as $entry) {
+                $cases["$method {$entry['input']}"] = [$method, [$entry['input']], $entry['result']];
+            }
+        }
+
+        foreach ($fixtures['sortByContrast'] as $i => $entry) {
+            $cases["sortByContrast #$i"] = [
+                'sortByContrast',
+                [$entry['candidates'], $entry['refColor']],
+                $entry['result'],
+            ];
+        }
+
+        foreach ($fixtures['filterNotEqualTo'] as $i => $entry) {
+            $cases["filterNotEqualTo #$i"] = [
+                'filterNotEqualTo',
+                [$entry['candidates'], $entry['excluded']],
+                $entry['result'],
+            ];
+        }
+
+        return $cases;
+    }
+
+    /**
+     * @param list<mixed> $args
+     */
+    #[DataProvider('colorProvider')]
+    public function testColor(string $method, array $args, mixed $expected): void
+    {
+        if ($method === 'luminance') {
+            // JSON serializes whole-number luminance (0, 1) as int.
+            $expected = (float) $expected;
+        }
+
+        $this->assertSame($expected, Color::$method(...$args));
+    }
+
+    // -----------------------------------------------------------------------
+    // Validation
+    // -----------------------------------------------------------------------
+    //
+    // Only the accept/reject outcome is shared across languages — error
+    // messages are language-specific. The circular color reference cases
+    // additionally pin the reported resolution chain.
+
+    public static function styleValidationProvider(): array
+    {
+        $cases = [];
+        foreach (self::loadFixture('validation.json')['styles'] as $entry) {
+            $cases[$entry['id']] = [$entry];
+        }
+        return $cases;
+    }
+
+    #[DataProvider('styleValidationProvider')]
+    public function testStyleValidation(array $entry): void
+    {
+        if ($entry['valid']) {
+            $this->assertInstanceOf(Style::class, new Style($entry['definition']));
+        } else {
+            $this->expectException(ValidationError::class);
+            new Style($entry['definition']);
+        }
+    }
+
+    public static function optionsValidationProvider(): array
+    {
+        $cases = [];
+        foreach (self::loadFixture('validation.json')['options'] as $entry) {
+            $cases[$entry['id']] = [$entry];
+        }
+        return $cases;
+    }
+
+    #[DataProvider('optionsValidationProvider')]
+    public function testOptionsValidation(array $entry): void
+    {
+        static $minimalStyle = null;
+        $minimalStyle ??= array_values(array_filter(
+            self::loadFixture('validation.json')['styles'],
+            static fn (array $e) => $e['id'] === 'minimal',
+        ))[0]['definition'];
+
+        if ($entry['valid']) {
+            $this->assertInstanceOf(Avatar::class, new Avatar($minimalStyle, $entry['options']));
+        } else {
+            $this->expectException(ValidationError::class);
+            new Avatar($minimalStyle, $entry['options']);
+        }
+    }
+
+    public static function circularColorProvider(): array
+    {
+        $cases = [];
+        foreach (self::loadFixture('validation.json')['circularColors'] as $entry) {
+            $cases[$entry['id']] = [$entry];
+        }
+        return $cases;
+    }
+
+    #[DataProvider('circularColorProvider')]
+    public function testCircularColorReference(array $entry): void
+    {
+        try {
+            new Avatar($entry['style'], $entry['options']);
+            $this->fail('expected a circular color reference error');
+        } catch (CircularColorReferenceError $e) {
+            $this->assertSame($entry['chain'], $e->chain);
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // OptionsDescriptor
+    // -----------------------------------------------------------------------
+
+    public static function descriptorProvider(): array
+    {
+        $cases = [];
+        foreach (glob(self::FIXTURES_DIR . '/descriptors/*.json') as $path) {
+            $styleName = basename($path, '.json');
+            $cases[$styleName] = [$styleName];
+        }
+        return $cases;
+    }
+
+    #[DataProvider('descriptorProvider')]
+    public function testOptionsDescriptor(string $styleName): void
+    {
+        $style = new Style(self::loadFixture("styles/$styleName.json"));
+        $descriptor = (new OptionsDescriptor($style))->toJSON();
+
+        // Same round-trip as the avatar test: pins key order and int-vs-float
+        // typing against the JS-generated fixture.
+        $this->assertSame(
+            self::loadFixture("descriptors/$styleName.json"),
+            json_decode(json_encode($descriptor, JSON_THROW_ON_ERROR), true, flags: JSON_THROW_ON_ERROR),
         );
     }
 }

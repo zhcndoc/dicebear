@@ -15,7 +15,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Glass
 
-Glass 是一种极简的抽象矢量头像风格，以柔和、顺滑的色彩渐变呈现，带有微妙的玻璃光泽且没有可见形状。生成现代、平静的 SVG 个人资料图标，可作为低调的占位符或高端界面的背景。
+Glass 是一种极简抽象矢量头像风格，以平滑的色彩渐变呈现，带有细微的玻璃光泽且没有可见形状。生成宁静的 SVG 个人资料图标，可作为低调的占位符或高级界面的背景。
 
 <StylePreview styleName="glass" />
 

@@ -29,9 +29,7 @@ npm install dicebear --global
 
 ### 创建一个头像
 
-将 `<style>` 替换为头像样式名称（小写，多个单词时使用 kebab-case —
-例如 `lorelei`、`pixel-art`、`adventurer-neutral`），并将 `[outputPath]`
-替换为目标目录。如果省略 `[outputPath]`，则使用当前目录作为目标目录。
+将 `<style>` 替换为头像样式名称（小写，多词样式使用连字符命名，例如 `lorelei`、`pixel-art`、`adventurer-neutral`），并将 `[outputPath]` 替换为目标目录。如果省略 `[outputPath]`，则默认使用当前目录作为目标目录。
 
 ```
 dicebear <style> [outputPath]
@@ -81,7 +79,7 @@ dicebear lorelei ./avatars --count 100
 
 :::tip 性能
 
-CLI 会基于你的 CPU 核心数使用并行处理。生成大批量头像时已针对性能进行了优化。
+CLI 会基于你的 CPU 核心使用并行处理，因此大批量头像生成速度很快。
 
 :::
 
@@ -259,8 +257,9 @@ Options:
 
 ## 自定义样式
 
-你可以将任何 JSON [定义文件](/specification/definition-schema/) 作为
-样式使用——包括你自己的自定义样式，或从 [Figma 插件](/guides/create-an-avatar-style-with-figma/) 导出的样式。
+你可以将任何 JSON [定义文件](/specification/definition-schema/) 作为一种
+样式使用，包括你自己的自定义样式或从
+[Figma 插件](/guides/create-an-avatar-style-with-figma/) 导出的样式。
 
 只需传入 JSON 文件路径，而不是样式名称：
 

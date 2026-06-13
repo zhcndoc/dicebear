@@ -4,12 +4,12 @@ description: >
   在 Svelte 中通过 JavaScript 头像库或头像 API 使用 DiceBear 生成 SVG 个人资料图片。
 ---
 
-# Svelte 头像库 – 在 Svelte 中使用 DiceBear
+# Svelte 头像库：在 Svelte 中使用 DiceBear
 
-DiceBear 可同时用于 Svelte 4 和 Svelte 5。使用 `$derived`（Svelte 5）或
-响应式语句（Svelte 4）让 SVG 个人资料图片与属性
-变化保持同步——可通过 JS 库在客户端生成，或使用 HTTP API 采用
-零依赖方案。
+DiceBear 同时适用于 Svelte 4 和 Svelte 5。使用 `$derived`（Svelte 5）或
+响应式语句（Svelte 4）可以让 SVG 个人资料图片与属性
+变化保持同步，既可以通过 JS 库进行客户端生成，也可以通过 HTTP API
+采用零依赖方式实现。
 
 你可以通过
 [JS 库](/how-to-use/js-library/) 或 [HTTP API](/how-to-use/http-api/) 在 Svelte 中使用 DiceBear。

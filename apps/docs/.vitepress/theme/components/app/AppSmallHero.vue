@@ -2,24 +2,16 @@
 import { ref, useSlots, computed } from 'vue';
 import { PawPrint, ArrowRight } from '@lucide/vue';
 import Button from 'primevue/button';
-import {
-  UiHeadline,
-  UiDescription,
-  UiBadge,
-  UiContainer,
-  UiSection,
-} from '../ui';
+import { UiHeadline, UiDescription, UiContainer, UiSection } from '../ui';
 import { useVisibility } from '../../composables/useVisibility';
 
 withDefaults(
   defineProps<{
-    badge?: string;
     headline?: string;
     description?: string;
   }>(),
   {
-    badge: '为什么选择 DiceBear？',
-    headline: '脱颖而出的头像',
+    headline: 'Avatars That Stand Out',
     description:
       'DiceBear 是一个开源头像库，可让你在极短时间内生成独特、可确定的个人资料图片。无论你需要几何图形、可爱角色，还是像素艺术——我们注重隐私的 SVG 头像库拥有 35+ 种风格，能为你的项目注入活力。',
   },
@@ -44,7 +36,6 @@ const hasActions = computed(() => !!slots.actions);
     >
       <div :class="{ 'app-small-hero-layout': hasAside }">
         <div>
-          <UiBadge>{{ badge }}</UiBadge>
           <UiHeadline tag="h1">
             <slot name="headline">{{ headline }}</slot>
           </UiHeadline>
@@ -138,7 +129,7 @@ const hasActions = computed(() => !!slots.actions);
       left: -3%;
       background: radial-gradient(
         circle,
-        color-mix(in srgb, var(--vp-c-purple-1) 8%, transparent) 0%,
+        color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent) 0%,
         transparent 70%
       );
       animation: shape-float 22s ease-in-out infinite reverse;

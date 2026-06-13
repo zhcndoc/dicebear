@@ -2,7 +2,7 @@
 title: 将 DiceBear 用作头像占位符 API
 description: >
   将 DiceBear 用作用户个人资料的确定性头像占位符 API。
-  根据用户 ID 或邮箱生成一致的 SVG 头像——无需上传图片。
+  根据用户 ID 或邮箱生成一致的 SVG 头像，无需上传图片。
 ---
 
 <script setup>
@@ -23,7 +23,7 @@ const highlights = [
     icon: Zap,
     title: '无需上传',
     description:
-      '无需存储图片，也无需审核。头像会即时生成——非常适合尚未设置头像的新用户。',
+      '无需存储图片，也无需审核。头像会即时生成，这对尚未拥有头像的新用户非常适用。',
     color: '#f59e0b',
   },
   {
@@ -35,9 +35,9 @@ const highlights = [
   },
   {
     icon: Palette,
-    title: '35+ 样式',
+    title: '35+ 种样式',
     description:
-      '选择适合你产品的视觉风格——从抽象几何图形到插画角色。',
+      '从抽象几何图形到插画角色，选择适合你产品的视觉风格。',
     color: '#a855f7',
   },
 ];
@@ -78,15 +78,15 @@ const styles = [
 
 # 将 DiceBear 用作头像占位符 API
 
-头像占位符是在用户尚未上传头像时显示的通用默认图像的替代方案。DiceBear 不会显示灰色轮廓，而是根据任意种子生成独特且确定性的 SVG 头像——让每位用户从注册之初就感到被代表。
+头像占位符用于替代用户尚未上传头像时显示的通用默认图标。DiceBear 不会显示灰色剪影，而是根据任意种子生成独特且确定性的 SVG 头像，因此每位用户从注册开始就能拥有一张专属图片。
 
-## 为什么将 DiceBear 作为占位符？
+## 为什么选择 DiceBear 作为占位符？
 
 <DocsHighlights :highlights="highlights" />
 
 ## 使用 HTTP API
 
-最简单的方法是：将 DiceBear API URL 作为 `<img>` 标签的 `src`。使用稳定的标识符作为种子——数字用户 ID 就很合适。关于完整选项和速率限制详情，请参阅 [HTTP API 文档](/how-to-use/http-api/)。
+最简单的方法：将 DiceBear API URL 作为 `<img>` 标签的 `src`。使用稳定的标识符作为种子。数字用户 ID 就很合适。关于完整选项和速率限制详情，请参阅 [HTTP API 文档](/how-to-use/http-api/)。
 
 <BrowserPreview url="https://api.dicebear.com/10.x/initials/svg?seed=JD" />
 <BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=user-42" />
@@ -100,7 +100,7 @@ const styles = [
 />
 ```
 
-### 图片错误时的回退
+### 图片错误时回退
 
 将 DiceBear 与 `onerror` 处理器结合使用，以便在用户上传的照片加载失败时优雅回退：
 
@@ -166,13 +166,88 @@ function getPlaceholderAvatar(Style $style, string $userId): string {
 }
 ```
 
+## 使用 Python 库
+
+使用 Python 库进行服务端渲染，而无需额外的 HTTP 请求。关于完整的安装和 API 详情，请参阅
+[Python 库文档](/how-to-use/python-library/)。
+
+```python
+import json
+from importlib.resources import files
+
+from dicebear import Avatar, Style
+
+definition = json.loads(
+    files("dicebear_styles").joinpath("thumbs.json").read_text("utf-8")
+)
+
+style = Style(definition)
+
+def get_placeholder_avatar(user_id: str) -> str:
+    return Avatar(style, {
+        "seed": user_id,
+        "size": 48,
+        "borderRadius": 50,
+    }).to_string()
+```
+
+## 使用 Rust 库
+
+使用 Rust 库进行服务端渲染，而无需额外的 HTTP 请求。关于完整的安装和 API 详情，请参阅
+[Rust 库文档](/how-to-use/rust-library/)。
+
+```rust
+use dicebear_core::{Avatar, Error, Style};
+use serde_json::json;
+
+let style = Style::from_str(dicebear_styles::THUMBS)?;
+
+fn placeholder_avatar(style: &Style, user_id: &str) -> Result<String, Error> {
+    let avatar = Avatar::new(style, json!({
+        "seed": user_id,
+        "size": 48,
+        "borderRadius": 50,
+    }))?;
+
+    Ok(avatar.to_string())
+}
+```
+
+## 使用 Go 库
+
+使用 Go 库进行服务端渲染，而无需额外的 HTTP 请求。
+关于完整的安装和 API 详情，请参阅
+[Go 库文档](/how-to-use/go-library/)。
+
+```go
+import (
+	dicebear "github.com/dicebear/dicebear-go/v10"
+	"github.com/dicebear/styles/v10"
+)
+
+style, _ := dicebear.NewStyle([]byte(styles.Thumbs))
+
+func placeholderAvatar(style *dicebear.Style, userID string) (string, error) {
+	avatar, err := dicebear.NewAvatar(style, map[string]any{
+		"seed":         userID,
+		"size":         48,
+		"borderRadius": 50,
+	})
+	if err != nil {
+		return "", err
+	}
+
+	return avatar.SVG(), nil
+}
+```
+
 ## 选择样式
 
 不同样式适用于不同的使用场景。点击某个样式即可查看所有可用选项。
 
 <DocsStyleGrid :styles="styles" />
 
-## 提示：始终定义尺寸
+## 提示：始终指定尺寸
 
 指定 `size` 或 CSS 尺寸，以避免头像加载时发生布局偏移：
 
@@ -184,6 +259,21 @@ new Avatar(thumbs, { seed: userId, size: 48, borderRadius: 50 });
 ```php
 // PHP 库
 new Avatar($style, ['seed' => $userId, 'size' => 48, 'borderRadius' => 50]);
+```
+
+```python
+# Python 库
+Avatar(style, {"seed": user_id, "size": 48, "borderRadius": 50})
+```
+
+```rust
+// Rust 库
+Avatar::new(&style, json!({ "seed": user_id, "size": 48, "borderRadius": 50 }))?;
+```
+
+```go
+// Go 库
+dicebear.NewAvatar(style, map[string]any{"seed": userID, "size": 48, "borderRadius": 50})
 ```
 
 ```

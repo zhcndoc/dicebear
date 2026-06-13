@@ -38,8 +38,7 @@ const stats = computed(() => [
     <UiContainer>
       <UiSectionHeader
         class="app-cdn-header"
-        badge="内容分发网络"
-        description="我们的 HTTP 接口由全球 CDN 驱动，低延迟、高可靠，而且完全免费。"
+        description="Our HTTP-API is powered by a global CDN — delivering avatars with low latency, high reliability, and completely free of charge."
       >
         <template #headline
           >极速传输，<strong>全球交付</strong></template

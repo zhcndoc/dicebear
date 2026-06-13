@@ -1,8 +1,16 @@
 :root {
-  --vp-c-indigo-1: #2563eb;
-  --vp-c-indigo-2: #3b82f6;
-  --vp-c-indigo-3: #60a5fa;
-  --vp-c-indigo-soft: rgba(59, 130, 246, 0.14);
+  /**
+   * Brand accent ramp. NOTE: the `--vp-c-indigo-*` names are legacy — they now
+   * hold the official DiceBear brand blue (Tailwind `sky`; #0284C7 = sky-600).
+   * Split into three steps so the visible brand hue stays #0284C7 while text
+   * keeps AA contrast: brand-1 = a darker/brighter step for legible links/text,
+   * brand-2 = the literal brand blue used for fills, brand-3 = decorative.
+   * Pink (below) stays the secondary accent.
+   */
+  --vp-c-indigo-1: #0369a1; /* sky-700 — text/link accent, AA 5.68:1 on #fafaf9 */
+  --vp-c-indigo-2: #0284c7; /* sky-600 — official brand blue (fills/hover) */
+  --vp-c-indigo-3: #38bdf8; /* sky-400 — decorative (glows/gradients) */
+  --vp-c-indigo-soft: rgba(2, 132, 199, 0.14);
 
   --vp-c-pink-1: #db2777;
   --vp-c-pink-2: #ec4899;
@@ -11,10 +19,10 @@
 }
 
 .dark {
-  --vp-c-indigo-1: #60a5fa;
-  --vp-c-indigo-2: #3b82f6;
-  --vp-c-indigo-3: #2563eb;
-  --vp-c-indigo-soft: rgba(96, 165, 250, 0.16);
+  --vp-c-indigo-1: #38bdf8; /* sky-400 — AAA 8.10:1 on #1a1a1e */
+  --vp-c-indigo-2: #0ea5e9; /* sky-500 */
+  --vp-c-indigo-3: #0284c7; /* sky-600 */
+  --vp-c-indigo-soft: rgba(56, 189, 248, 0.16);
 
   --vp-c-pink-1: #f472b6;
   --vp-c-pink-2: #ec4899;
@@ -62,14 +70,51 @@
  * Intentionally detached from VitePress's --vp-c-text-2/3 so that stock theme
  * surfaces (TOC, footer, tip boxes) keep their default contrast ramp, while
  * opt-in elements (nav icons, Playground labels, code-block copy) can use a
- * pair of per-mode-matched greys that stay equally legible in both themes.
+ * pair of per-mode-matched greys at a chosen brightness.
+ *
+ * Hue follows VitePress's warm-neutral text tone (R=G with B ~4% lower, as in
+ * --vp-c-text-1 #dfdfd6) — luminance is preserved (Rec.601), only the former
+ * cold cyan cast (R<G<B) is removed.
  */
 :root {
-  --ui-c-text-muted: #5f6370;
-  --ui-c-text-subtle: #8b8e98;
+  --ui-c-text-muted: #646460;
+  --ui-c-text-subtle: #8f8f89;
 }
 
 .dark {
-  --ui-c-text-muted: #c4c7d1;
-  --ui-c-text-subtle: #9ea2ac;
+  --ui-c-text-muted: #c8c8c0;
+  --ui-c-text-subtle: #a3a39c;
+}
+
+/**
+ * Monochrome brand-logo color.
+ *
+ * Some third-party logos may, per their brand guidelines, only appear in solid
+ * black or white — not a tinted grey (GitHub: "white, black, or in few cases
+ * grey"; Figma ships a black/white logo; Angular's black/white are its default
+ * variations). Render them pure black in light mode, pure white in dark mode.
+ */
+:root {
+  --logo-monochrome: #000;
+}
+
+.dark {
+  --logo-monochrome: #fff;
+}
+
+/**
+ * Shared framed-box surface + border — used by every framed box (UiWindow
+ * demo/preview frames, UiCard, and the styled LICENSE/attribution block) so
+ * they render an identical fill and hairline in both themes.
+ *  • bg     → PrimeVue's content surface `--p-content-background` (light #fff,
+ *             dark #242429 = --vp-c-bg-soft) so every box matches the tab &
+ *             accordion panels. (Darker than the old elevated #2c2c32 in dark.)
+ *  • border → PrimeVue's content/accordion border (`--p-content-border-color`,
+ *             light #e2e2e3, dark #3c3f44) so every box matches the Playground
+ *             accordions exactly. (VitePress's own `--vp-c-border` reads too
+ *             heavy in light mode; the accordion border is the lighter target.)
+ */
+:root {
+  --ui-window-bg: var(--p-content-background);
+  --ui-window-border-color: var(--p-content-border-color);
 }
