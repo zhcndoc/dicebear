@@ -166,7 +166,9 @@ _STYLE_CACHE: dict[str, Any] = {}
     ids=[f"{name}/{entry['id']}" for name, entry in _AVATARS],
 )
 def test_avatar(style_name: str, entry: dict[str, Any]) -> None:
-    style = _STYLE_CACHE.setdefault(style_name, Style(_load(f"styles/{style_name}.json")))
+    style = _STYLE_CACHE.setdefault(
+        style_name, Style(_load(f"styles/{style_name}.json"))
+    )
 
     avatar = Avatar(style, entry["options"])
     result = avatar.to_json()
