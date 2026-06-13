@@ -17,8 +17,8 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 Glyphs is a minimal abstract vector avatar style that pairs a flat shoulder
 silhouette with a unique glyph-like hat or headpiece inside a soft tinted
-circle. Generate identity-light SVG profile icons that work well as placeholders
-in user lists and chat sidebars.
+circle. Generate simple SVG profile icons that work well as placeholders in user
+lists and chat sidebars.
 
 <StylePreview styleName="glyphs" />
 

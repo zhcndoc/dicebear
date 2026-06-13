@@ -575,7 +575,7 @@ html.dark {
   }
 
   // Hide the secondary "always required" / "PNG, JPEG, …" hint to save
-  // vertical space — the package name + size carry the meaning.
+  // vertical space; the package name + size carry the meaning.
   .bundle-size-summary-hint {
     display: none;
   }

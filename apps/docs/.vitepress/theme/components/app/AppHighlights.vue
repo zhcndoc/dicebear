@@ -36,7 +36,7 @@ const sectionRef = ref();
 const isVisible = useVisibility(sectionRef, { threshold: 0.15 });
 
 const highlights = [
-  // Row 1 — the avatars themselves
+  // Row 1: the avatars themselves
   {
     icon: Target,
     title: 'Deterministic Avatars',
@@ -55,10 +55,10 @@ const highlights = [
     icon: Shapes,
     title: 'Scalable SVG',
     description:
-      'Pure SVG output stays razor-sharp at any size — from tiny favicons to full-screen — and weighs just a few kilobytes.',
+      'Pure SVG output stays razor-sharp at any size, from tiny favicons to full-screen, and weighs just a few kilobytes.',
     color: '#06b6d4',
   },
-  // Row 2 — how you generate them
+  // Row 2: how you generate them
   {
     icon: Globe,
     title: 'Free Avatar API',
@@ -68,12 +68,12 @@ const highlights = [
   },
   {
     // One box for the language libraries (JS / PHP / Python / Rust / Go / Dart).
-    // Generic Library icon — no language logos — so the named languages stay
+    // Generic Library icon with no language logos, so the named languages stay
     // pure nominative use with no trademark/logo-modification questions.
     icon: Library,
     title: 'Official Libraries',
     description:
-      'JavaScript, PHP, Python, Rust, Go, and Dart — one identical API across every language, same seed, same result, and no data leaves your servers.',
+      'JavaScript, PHP, Python, Rust, Go, and Dart share one identical API across every language. The same seed gives the same result, and no data leaves your servers.',
     color: '#f59e0b',
   },
   {
@@ -83,12 +83,12 @@ const highlights = [
       'Generate avatars directly from the command line. Perfect for batch processing and build pipelines.',
     color: '#64748b',
   },
-  // Row 3 — design & trust
+  // Row 3: design & trust
   {
     iconPath: siFigma.path,
     title: 'Figma Plugin',
     description:
-      'Design custom avatar styles in Figma and export them as ready-to-use DiceBear definitions — no code required.',
+      'Design custom avatar styles in Figma and export them as ready-to-use DiceBear definitions, with no code required.',
     color: 'var(--logo-monochrome)',
   },
   {

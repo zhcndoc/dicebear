@@ -363,8 +363,7 @@ function onExamplesToggle(event: MouseEvent) {
           class="style-options-card-contrast-banner-link"
         >
           {{ contrastTargetLabel }}
-        </a>
-        — the renderer picks the value with the strongest contrast against the
+        </a>. The renderer picks the value with the strongest contrast against the
         selected {{ contrastTargetLabel.toLowerCase() }} color, so additional
         values mainly serve as fallbacks.
       </p>

@@ -124,8 +124,7 @@ const fillStopsRange = rangeComputed(fillStopsKey, 2);
           @click="onContrastLinkClick"
         >
           {{ capitalCase(contrastTo) }}
-        </button>
-        — the value with the strongest contrast against the chosen
+        </button>. The value with the strongest contrast against the chosen
         {{ capitalCase(contrastTo).toLowerCase() }} is preferred. Adding more
         options here introduces variation, but the highest-contrast value still
         dominates.

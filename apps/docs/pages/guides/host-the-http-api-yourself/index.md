@@ -7,8 +7,8 @@ description: >
 
 # Self-hosted avatar API: host DiceBear yourself
 
-In this guide, we will show you how to host the HTTP API yourself. This is not
-necessary for most users, but it can be useful in some cases.
+You can host the HTTP API yourself. This is not necessary for most users, but it
+can be useful in some cases.
 
 You can find the source code for the HTTP API on
 [GitHub](https://github.com/dicebear/api). The code is written in TypeScript and

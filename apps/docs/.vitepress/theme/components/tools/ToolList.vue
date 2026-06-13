@@ -36,7 +36,7 @@ const tools: Tool[] = [
     href: '/tools/bundle-size/',
     name: 'Bundle Size Estimator',
     description:
-      'See how much each style adds to your bundle — raw and gzipped numbers, straight from the installed <code>@dicebear/styles</code> package.',
+      'See how much each style adds to your bundle. Raw and gzipped numbers, straight from the installed <code>@dicebear/styles</code> package.',
     icon: Package,
     iconBg: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
   },
@@ -45,7 +45,7 @@ const tools: Tool[] = [
     href: '/playground/',
     name: 'Playground',
     description:
-      'Pick a style, tune every option, preview the result live, and batch-download SVGs with your configuration. The full DiceBear configurator with copy-paste-ready code.',
+      'Pick a style, tune every option, preview the result live, and batch-download SVGs with your configuration. Generated code is ready to copy and paste.',
     icon: Sparkles,
     iconBg: 'linear-gradient(135deg, #10b981, #06b6d4)',
   },
@@ -65,7 +65,7 @@ const tools: Tool[] = [
     external: true,
     name: 'Figma Plugin',
     description:
-      'Export DiceBear avatar styles directly from Figma — keeps your design source of truth in sync with what ships in production.',
+      'Export DiceBear avatar styles directly from Figma, keeping your design source in sync with what ships in production.',
     icon: Paintbrush,
     iconBg: 'linear-gradient(135deg, #0ea5e9, #6366f1)',
   },

@@ -16,7 +16,7 @@ const props = withDefaults(
 
 const slots = useSlots();
 
-// Treat only non-empty hrefs as actual links — an empty string from a
+// Treat only non-empty hrefs as actual links; an empty string from a
 // loading-state computed should not silently degrade to a non-interactive div.
 const hasHref = computed(
   () => typeof props.href === 'string' && props.href.length > 0,
@@ -116,14 +116,14 @@ const hasHeader = computed(() => Boolean(props.title) || Boolean(slots.header));
     padding: 0;
   }
 
-  /* Padding scale — overrides the default --ui-card-padding token.
+  /* Padding scale: overrides the default --ui-card-padding token.
      Consumers can still override --ui-card-padding via scoped CSS
      (e.g. responsive media queries). */
   &--padding-sm {
     --ui-card-padding: 1rem; /* 16px */
   }
   &--padding-md {
-    --ui-card-padding: 1.125rem; /* 18px — matches Aura accordion */
+    --ui-card-padding: 1.125rem; /* 18px, matches Aura accordion */
   }
   &--padding-lg {
     --ui-card-padding: 1.5rem; /* 24px */

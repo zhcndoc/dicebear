@@ -162,7 +162,7 @@ const isoContrastPath = computed<string | null>(() => {
       class="contrast-canvas-surface"
       :style="{ background: hueOnlyBackground }"
       role="slider"
-      aria-label="Color picker — drag or use arrow keys"
+      aria-label="Color picker: drag or use arrow keys"
       :aria-valuetext="ariaValueText"
       tabindex="0"
       @pointerdown="onPointerDown"

@@ -50,7 +50,7 @@ const avatarStyleMeta = useAvatarStyleMeta(activeStyleName);
 
 const seed = ref<string>(RANDOM_SEEDS[0]);
 
-// Never send the seed text itself — only that the user edited it. Debounced so
+// Never send the seed text itself, only that the user edited it. Debounced so
 // typing counts as one interaction.
 const trackSeedEdited = useDebounceFn(() => {
   track('Home Demo: Seed Edited', { style: currentStyle.value });
@@ -95,8 +95,9 @@ const licenseUrl = computed(() =>
           <strong>Every Time.</strong>
         </UiHeadline>
         <UiDescription class="app-seed-demo-subtitle">
-          Use any string as a seed — usernames, emails, IDs — and DiceBear
-          generates the identical avatar consistently across all platforms.
+          Use any string as a seed, such as usernames, emails, or IDs, and
+          DiceBear generates the identical avatar consistently across all
+          platforms.
         </UiDescription>
       </div>
 

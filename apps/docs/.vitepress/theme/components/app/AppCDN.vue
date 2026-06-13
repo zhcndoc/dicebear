@@ -38,7 +38,7 @@ const stats = computed(() => [
     <UiContainer>
       <UiSectionHeader
         class="app-cdn-header"
-        description="Our HTTP-API is powered by a global CDN — delivering avatars with low latency, high reliability, and completely free of charge."
+        description="Our HTTP-API is powered by a global CDN that delivers avatars with low latency and high reliability, completely free of charge."
       >
         <template #headline
           >Lightning fast, <strong>globally delivered</strong></template
@@ -69,8 +69,8 @@ const stats = computed(() => [
                 </a>
                 <p class="app-cdn-description">
                   bunny.net sponsors the CDN infrastructure for our HTTP-API.
-                  This allows us to serve avatars globally with low latency
-                  &mdash; completely free of charge for you.
+                  This lets us serve avatars globally with low latency,
+                  completely free of charge for you.
                 </p>
                 <a
                   href="https://bunny.net/"

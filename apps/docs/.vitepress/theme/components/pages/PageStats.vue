@@ -258,8 +258,8 @@ const monthlyStats = computed(() => {
     >
     <template #description
       >Every avatar generated through our HTTP-API is tracked anonymously. This
-      page gives you a transparent look at real usage data — updated weekly,
-      broken down by requests, traffic, styles, and more.</template
+      page gives you a transparent look at real usage data. It is updated weekly
+      and broken down by requests, traffic, styles, and more.</template
     >
     <template #actions><!-- no actions --></template>
     <template #below-actions>
@@ -304,7 +304,7 @@ const monthlyStats = computed(() => {
   <UiSection divider>
     <UiContainer>
       <UiSectionHeader
-        description="Weekly request and download volumes — toggle between the HTTP API and npm packages."
+        description="Weekly request and download volumes. Toggle between the HTTP API and npm packages."
       >
         <template #headline>Usage Over <strong>Time</strong></template>
       </UiSectionHeader>
@@ -359,7 +359,7 @@ const monthlyStats = computed(() => {
   <UiSection divider>
     <UiContainer>
       <UiSectionHeader
-        description="Based on API request data — which styles, versions, and output formats are used most."
+        description="Based on API request data. Shows which styles, versions, and output formats are used most."
       >
         <template #headline>Usage <strong>Details</strong></template>
       </UiSectionHeader>

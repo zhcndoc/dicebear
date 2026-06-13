@@ -99,7 +99,7 @@ final svg = Avatar(style, {'seed': 'Mia'}).svg;`,
               </UiIconBox>
               <h3 class="app-integration-title">Libraries</h3>
               <p class="app-integration-description">
-                Run DiceBear entirely in your own code — no data leaves your
+                Run DiceBear entirely in your own code, so no data leaves your
                 servers. JavaScript, PHP, Python, Rust, Go, and Dart share one
                 identical API.
               </p>

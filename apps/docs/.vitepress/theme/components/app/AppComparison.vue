@@ -98,8 +98,8 @@ const rows = buildComparisonRows({
 
       <p class="app-comparison-note">
         This comparison is based on publicly available information and may not
-        reflect the latest updates. Each tool has its own strengths &mdash;
-        choose what works best for your project.
+        reflect the latest updates. Each tool has its own strengths, so choose
+        what works best for your project.
       </p>
     </UiContainer>
   </UiSection>

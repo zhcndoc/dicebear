@@ -72,7 +72,7 @@ const chart = computed<Chart>(() => {
   };
 });
 
-// Positive-only by design — pill hides on missing data or non-positive change.
+// Positive-only by design: the pill hides on missing data or non-positive change.
 const trend = computed<Trend | null>(() => {
   const h = history.value;
 

@@ -8,7 +8,7 @@ description: >
 
 # CLI
 
-With the CLI you can create thousands of avatars in no time!
+With the CLI you can generate large numbers of avatars in a single run.
 
 ## Installation
 
@@ -61,7 +61,7 @@ themselves. For a quick overview we have created an
 
 ### Create multiple avatars
 
-You can also create multiple avatars at once! Just use the `--count` option.
+You can also create multiple avatars at once with the `--count` option.
 Replace `<count>` with the number of avatars to create.
 
 ```

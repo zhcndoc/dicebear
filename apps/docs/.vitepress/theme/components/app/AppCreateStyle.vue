@@ -37,7 +37,7 @@ const steps = [
 
     <UiContainer class="app-create-style-container">
       <UiSectionHeader
-        description="Design your avatar style visually in Figma. Our plugin handles the technical export – no coding required."
+        description="Design your avatar style visually in Figma. Our plugin handles the technical export, with no coding required."
       >
         <template #headline
           >Create Your Own Style<br /><strong>with Figma</strong></template

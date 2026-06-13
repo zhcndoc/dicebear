@@ -91,19 +91,18 @@ const highlights = [
 
 ## What is DiceBear?
 
-With DiceBear you can create awesome avatars for your project in no time.
-Whether you are looking for abstract shapes or lovingly designed characters, you
-will find something suitable among our avatar styles. And no matter how and for
-what you want to use the avatars, DiceBear offers the right solution!
+DiceBear generates avatars for your project. The avatar styles cover a range of
+looks, from abstract shapes to designed characters, and the avatars can be used
+in many kinds of applications.
 
 In addition to purely random avatars, you can also create
 [deterministic](https://en.wikipedia.org/wiki/Deterministic_algorithm) avatars
 for user identities. With the built-in
 [PRNG](https://en.wikipedia.org/wiki/Pseudorandom_number_generator) you create
-the same avatar over and over again based on a seed. But also individual avatars
-are possible! Just use the countless options that each avatar style provides.
+the same avatar over and over again based on a seed. Individual avatars are also
+possible: each avatar style provides many options to adjust the result.
 
-And thanks to the [JavaScript library](/how-to-use/js-library/),
+DiceBear is available through the [JavaScript library](/how-to-use/js-library/),
 [PHP library](/how-to-use/php-library/),
 [Python library](/how-to-use/python-library/),
 [Rust library](/how-to-use/rust-library/),
@@ -111,9 +110,10 @@ And thanks to the [JavaScript library](/how-to-use/js-library/),
 [Dart library](/how-to-use/dart-library/), [HTTP API](/how-to-use/http-api/),
 [CLI](/how-to-use/cli/),
 [Figma plugin](https://www.figma.com/community/plugin/1005765655729342787/DiceBear-Exporter),
-[Editor](https://editor.dicebear.com) and [Playground](/playground/), your next
-avatar is always just a stone's throw away! Explore our
-[Avatar API](/how-to-use/http-api/) for simple URL-based integration.
+[Editor](https://editor.dicebear.com) and [Playground](/playground/), so you can
+integrate it into most projects. The
+[Avatar API](/how-to-use/http-api/) provides URL-based integration without
+installing anything.
 
 ## How to use?
 
