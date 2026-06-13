@@ -40,10 +40,11 @@ We use the avatar style [lorelei](/styles/lorelei/) in our example. You can find
 more avatar styles [here](/styles/).
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
-const avatar = new Avatar(lorelei, {
+const style = new Style(lorelei);
+const avatar = new Avatar(style, {
   seed: 'John',
   // ... other options
 });
@@ -80,12 +81,14 @@ The `seed` option is the key to generating deterministic avatars. The same seed
 will always produce the same avatar, which is useful for user profiles:
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
+const style = new Style(lorelei);
+
 // These will always produce the same avatar
-const avatar1 = new Avatar(lorelei, { seed: 'user-123' });
-const avatar2 = new Avatar(lorelei, { seed: 'user-123' });
+const avatar1 = new Avatar(style, { seed: 'user-123' });
+const avatar2 = new Avatar(style, { seed: 'user-123' });
 
 avatar1.toString() === avatar2.toString(); // true
 ```
@@ -94,14 +97,15 @@ avatar1.toString() === avatar2.toString(); // true
 
 ### `Avatar`
 
-The main class for generating avatars. Accepts a style definition (or a `Style`
-instance) and optional options.
+The main class for generating avatars. Accepts a `Style` instance (or a style
+definition) and optional options.
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
-const avatar = new Avatar(lorelei, {
+const style = new Style(lorelei);
+const avatar = new Avatar(style, {
   // [!code focus:3]
   // ... options
 });
@@ -109,8 +113,7 @@ const avatar = new Avatar(lorelei, {
 
 ### `Style`
 
-An immutable wrapper around a style definition. Use it when you want to reuse
-the same parsed style across multiple avatars without re-parsing each time.
+An immutable wrapper around a style definition.
 
 ```js
 import { Style, Avatar } from '@dicebear/core';
@@ -137,10 +140,11 @@ validating user input. See
 Returns the avatar as SVG in XML format.
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
-const avatar = new Avatar(lorelei, {
+const style = new Style(lorelei);
+const avatar = new Avatar(style, {
   // ... options
 });
 
@@ -155,10 +159,11 @@ Returns an object with the SVG and the resolved options that were used to
 generate the avatar.
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
-const avatar = new Avatar(lorelei, {
+const style = new Style(lorelei);
+const avatar = new Avatar(style, {
   seed: 'John',
   // ... other options
 });
@@ -183,10 +188,11 @@ Returns the avatar as [data uri](https://en.wikipedia.org/wiki/Data_URI_scheme).
 This is useful for embedding the avatar directly in HTML or CSS.
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
-const avatar = new Avatar(lorelei, {
+const style = new Style(lorelei);
+const avatar = new Avatar(style, {
   seed: 'John',
   // ... other options
 });
@@ -266,10 +272,11 @@ following options are available:
 ### Avatar with custom background
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
-const avatar = new Avatar(lorelei, {
+const style = new Style(lorelei);
+const avatar = new Avatar(style, {
   seed: 'John',
   backgroundColor: ['#b6e3f4', '#c0aede', '#d1d4f9'],
   // ... other options
@@ -279,10 +286,11 @@ const avatar = new Avatar(lorelei, {
 ### Fixed size avatar
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import bottts from '@dicebear/styles/bottts.json' with { type: 'json' };
 
-const avatar = new Avatar(bottts, {
+const style = new Style(bottts);
+const avatar = new Avatar(style, {
   seed: 'robot-42',
   size: 128,
   borderRadius: 50, // circular avatar
@@ -293,10 +301,11 @@ const avatar = new Avatar(bottts, {
 ### Avatar with transformations
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import avataaars from '@dicebear/styles/avataaars.json' with { type: 'json' };
 
-const avatar = new Avatar(avataaars, {
+const style = new Style(avataaars);
+const avatar = new Avatar(style, {
   seed: 'Jane',
   flip: 'horizontal',
   rotate: 10,
@@ -314,13 +323,14 @@ markup into the page rather than using `<img src={dataUri}>`), use
 `url(#…)` collisions:
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
+const style = new Style(lorelei);
 const users = ['alice', 'bob', 'charlie'];
 
 const avatars = users.map((user) =>
-  new Avatar(lorelei, {
+  new Avatar(style, {
     seed: user,
     idRandomization: true,
     // ... other options
@@ -343,10 +353,11 @@ unless **every** mapped variant has weight `0`, in which case the PRNG falls
 back to an unweighted pick across them:
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import avataaars from '@dicebear/styles/avataaars.json' with { type: 'json' };
 
-const avatar = new Avatar(avataaars, {
+const style = new Style(avataaars);
+const avatar = new Avatar(style, {
   seed: 'John',
   topVariant: { short01: 2, short02: 2, long01: 1 },
   // ... other options
@@ -365,7 +376,7 @@ link, or has no visible label), set the `title` option. The renderer emits
 screen readers announce the value:
 
 ```js
-const avatar = new Avatar(lorelei, {
+const avatar = new Avatar(style, {
   seed: 'Alice',
   title: 'Avatar for Alice',
 });
@@ -384,7 +395,8 @@ import { Avatar, Style } from '@dicebear/core';
 import type { StyleOptions, StyleDefinition } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
-const avatar = new Avatar(lorelei, {
+const style = new Style(lorelei);
+const avatar = new Avatar(style, {
   seed: 'John',
   backgroundColor: ['#b6e3f4'],
   // ... other options

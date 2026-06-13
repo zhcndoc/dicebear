@@ -27,11 +27,13 @@ no client-side JavaScript.
 
 ```tsx
 // app/components/UserAvatar.tsx
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
+const style = new Style(lorelei);
+
 export function UserAvatar({ seed = 'Alice' }: { seed?: string }) {
-  const dataUri = new Avatar(lorelei, {
+  const dataUri = new Avatar(style, {
     seed,
     size: 128,
     // ... other options
@@ -51,13 +53,15 @@ is only re-derived when the seed changes.
 'use client';
 
 import { useMemo } from 'react';
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+const style = new Style(lorelei);
 
 export function UserAvatarClient({ seed = 'Alice' }: { seed?: string }) {
   const dataUri = useMemo(
     () =>
-      new Avatar(lorelei, {
+      new Avatar(style, {
         seed,
         size: 128,
         // ... other options
@@ -91,8 +95,10 @@ Expose DiceBear behind your own URL. This is useful for caching with custom
 
 ```ts
 // app/api/avatar/[seed]/route.ts
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+const style = new Style(lorelei);
 
 export async function GET(
   _request: Request,
@@ -100,7 +106,7 @@ export async function GET(
 ) {
   const { seed } = await params;
 
-  const svg = new Avatar(lorelei, { seed, size: 128 }).toString();
+  const svg = new Avatar(style, { seed, size: 128 }).toString();
 
   return new Response(svg, {
     headers: {
@@ -122,13 +128,15 @@ the SVG as a prop, which avoids a client bundle hit.
 ```tsx
 // pages/profile.tsx
 import type { GetServerSideProps } from 'next';
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+const style = new Style(lorelei);
 
 type Props = { avatar: string };
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  const avatar = new Avatar(lorelei, { seed: 'Alice', size: 128 }).toDataUri();
+  const avatar = new Avatar(style, { seed: 'Alice', size: 128 }).toDataUri();
 
   return { props: { avatar } };
 };

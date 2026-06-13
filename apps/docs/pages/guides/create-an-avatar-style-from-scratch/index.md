@@ -340,10 +340,11 @@ dicebear ./my-style.json ./output --seed "Alice" --format png
 ### With the JS Library
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import definition from './my-style.json' with { type: 'json' };
 
-const avatar = new Avatar(definition, { seed: 'test' });
+const style = new Style(definition);
+const avatar = new Avatar(style, { seed: 'test' });
 console.log(avatar.toString());
 ```
 

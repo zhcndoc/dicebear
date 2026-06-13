@@ -118,10 +118,11 @@ Congratulations! You can now use your avatar style with the
 ### With the JS Library
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import definition from './your-style.json' with { type: 'json' };
 
-const avatar = new Avatar(definition, {
+const style = new Style(definition);
+const avatar = new Avatar(style, {
   seed: 'dicebear',
   // ... other options
 });

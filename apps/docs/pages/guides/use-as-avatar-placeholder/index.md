@@ -139,11 +139,13 @@ your markup without an additional HTTP request. For full installation and API
 details, see the [JavaScript library documentation](/how-to-use/js-library/).
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import thumbs from '@dicebear/styles/thumbs.json' with { type: 'json' };
 
+const style = new Style(thumbs);
+
 function getPlaceholderAvatar(userId) {
-  return new Avatar(thumbs, {
+  return new Avatar(style, {
     seed: userId,
     size: 48,
     borderRadius: 50,
@@ -284,7 +286,7 @@ Specify a `size` or CSS dimensions to avoid layout shift while the avatar loads:
 
 ```js
 // JS library
-new Avatar(thumbs, { seed: userId, size: 48, borderRadius: 50 });
+new Avatar(style, { seed: userId, size: 48, borderRadius: 50 });
 ```
 
 ```php

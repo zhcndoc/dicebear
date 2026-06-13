@@ -21,8 +21,10 @@ You can use DiceBear with Angular either via the
 
 ```typescript [Angular 17+]
 import { Component, input, computed } from '@angular/core';
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+const style = new Style(lorelei);
 
 @Component({
   selector: 'app-avatar',
@@ -32,7 +34,7 @@ export class AvatarComponent {
   seed = input('Alice');
 
   avatarUrl = computed(() =>
-    new Avatar(lorelei, {
+    new Avatar(style, {
       seed: this.seed(),
       size: 128,
       // ... other options
@@ -43,8 +45,10 @@ export class AvatarComponent {
 
 ```typescript [Angular 16 and earlier]
 import { Component, Input, OnChanges } from '@angular/core';
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+const style = new Style(lorelei);
 
 @Component({
   selector: 'app-avatar',
@@ -56,7 +60,7 @@ export class AvatarComponent implements OnChanges {
   avatarUrl: string = '';
 
   ngOnChanges() {
-    this.avatarUrl = new Avatar(lorelei, {
+    this.avatarUrl = new Avatar(style, {
       seed: this.seed,
       size: 128,
       // ... other options

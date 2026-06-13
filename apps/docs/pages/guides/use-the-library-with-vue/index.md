@@ -19,15 +19,17 @@ You can use DiceBear with Vue either via the
 ```vue
 <script setup>
 import { computed } from 'vue';
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+const style = new Style(lorelei);
 
 const props = defineProps({
   seed: { type: String, default: 'Alice' },
 });
 
 const avatar = computed(() =>
-  new Avatar(lorelei, {
+  new Avatar(style, {
     seed: props.seed,
     size: 128,
     // ... other options

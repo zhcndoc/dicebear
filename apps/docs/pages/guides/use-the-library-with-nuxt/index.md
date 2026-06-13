@@ -27,13 +27,15 @@ without re-running the renderer on the client.
 <!-- components/UserAvatar.vue -->
 <script setup lang="ts">
 import { computed } from 'vue';
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+const style = new Style(lorelei);
 
 const props = defineProps<{ seed?: string }>();
 
 const avatar = computed(() =>
-  new Avatar(lorelei, {
+  new Avatar(style, {
     seed: props.seed ?? 'Alice',
     size: 128,
     // ... other options
@@ -65,8 +67,10 @@ validation:
 
 ```ts
 // server/api/avatar/[seed].get.ts
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+const style = new Style(lorelei);
 
 export default defineEventHandler((event) => {
   const seed = getRouterParam(event, 'seed') ?? '';
@@ -74,7 +78,7 @@ export default defineEventHandler((event) => {
   setHeader(event, 'Content-Type', 'image/svg+xml');
   setHeader(event, 'Cache-Control', 'public, max-age=31536000, immutable');
 
-  return new Avatar(lorelei, { seed, size: 128 }).toString();
+  return new Avatar(style, { seed, size: 128 }).toString();
 });
 ```
 
@@ -87,14 +91,16 @@ components ask for it), wrap generation in `useAsyncData`:
 
 ```vue
 <script setup lang="ts">
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+const style = new Style(lorelei);
 
 const props = defineProps<{ seed: string }>();
 
 const { data: avatar } = await useAsyncData(`avatar:${props.seed}`, () =>
   Promise.resolve(
-    new Avatar(lorelei, { seed: props.seed, size: 128 }).toDataUri(),
+    new Avatar(style, { seed: props.seed, size: 128 }).toDataUri(),
   ),
 );
 </script>

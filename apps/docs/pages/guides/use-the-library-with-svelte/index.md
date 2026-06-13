@@ -21,13 +21,15 @@ You can use DiceBear with Svelte either via the
 
 ```svelte [Svelte 5]
 <script>
-  import { Avatar } from '@dicebear/core';
+  import { Style, Avatar } from '@dicebear/core';
   import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+  const style = new Style(lorelei);
 
   let { seed = 'Alice' } = $props();
 
   const avatar = $derived(
-    new Avatar(lorelei, {
+    new Avatar(style, {
       seed,
       size: 128,
       // ... other options
@@ -40,12 +42,14 @@ You can use DiceBear with Svelte either via the
 
 ```svelte [Svelte 4]
 <script>
-  import { Avatar } from '@dicebear/core';
+  import { Style, Avatar } from '@dicebear/core';
   import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+  const style = new Style(lorelei);
 
   export let seed = 'Alice';
 
-  $: avatar = new Avatar(lorelei, {
+  $: avatar = new Avatar(style, {
     seed,
     size: 128,
     // ... other options

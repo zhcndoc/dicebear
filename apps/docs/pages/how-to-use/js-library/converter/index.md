@@ -32,10 +32,12 @@ example to create the avatar.
 
 ```js
 import { toPng } from '@dicebear/converter';
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
-const avatar = new Avatar(lorelei, {
+const style = new Style(lorelei);
+
+const avatar = new Avatar(style, {
   seed: 'Alice',
   // ... other options
 });
@@ -286,11 +288,13 @@ await exiftool.end();
 ### Convert DiceBear avatar to PNG
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 
-const avatar = new Avatar(lorelei, {
+const style = new Style(lorelei);
+
+const avatar = new Avatar(style, {
   seed: 'Alice',
   backgroundColor: ['#b6e3f4'],
 });
@@ -305,12 +309,14 @@ document.querySelector('img').src = dataUri;
 ### Save avatar to file (Node.js)
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import bottts from '@dicebear/styles/bottts.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 import { writeFile } from 'node:fs/promises';
 
-const avatar = new Avatar(bottts, {
+const style = new Style(bottts);
+
+const avatar = new Avatar(style, {
   seed: 'robot-42',
 });
 
@@ -323,13 +329,15 @@ await writeFile('avatar.png', Buffer.from(buffer));
 ### Convert with Exif metadata (Node.js)
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 import { exiftool } from 'exiftool-vendored';
 import { writeFile } from 'node:fs/promises';
 
-const avatar = new Avatar(lorelei, {
+const style = new Style(lorelei);
+
+const avatar = new Avatar(style, {
   seed: 'Alice',
 });
 
@@ -347,11 +355,13 @@ await exiftool.end();
 ### Use with custom fonts (Node.js)
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import initials from '@dicebear/styles/initials.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 
-const avatar = new Avatar(initials, {
+const style = new Style(initials);
+
+const avatar = new Avatar(style, {
   seed: 'Alice',
 });
 
@@ -365,11 +375,13 @@ const dataUri = await png.toDataUri();
 ### Convert with a custom size
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 
-const avatar = new Avatar(lorelei, { seed: 'Alice' });
+const style = new Style(lorelei);
+
+const avatar = new Avatar(style, { seed: 'Alice' });
 
 const png = toPng(avatar, { size: 128 });
 const dataUri = await png.toDataUri();
