@@ -2,7 +2,7 @@
 
 Thanks for your interest in contributing to DiceBear.
 
-This is the main monorepo: the JavaScript, PHP, Python, Rust, and Go core
+This is the main monorepo: the JavaScript, PHP, Python, Rust, Go, and Dart core
 libraries, the CLI, the docs site, and the editor all live here. Repositories
 covering the JSON Schema, the avatar style definitions, the HTTP API, and the
 Figma exporter are separate and each have their own `CONTRIBUTING.md`:
@@ -51,6 +51,9 @@ instructions below only cover this monorepo.
   `src/rust/core/`
 - For Go work: Go 1.23+ (CI runs on 1.23 to 1.25); test with `go test ./...` and
   check with `gofmt -l .` and `go vet ./...` inside `src/go/core/`
+- For Dart work: Dart SDK 3.4+ (CI runs on 3.4 and stable); test with
+  `dart test` and check with `dart format --output=none --set-exit-if-changed .`
+  and `dart analyze --fatal-infos` inside `src/dart/core/`
 
 ## Local setup
 
@@ -95,7 +98,8 @@ src/
 ├── php/             # PHP port (Composer package `dicebear/core`)
 ├── python/          # Python port (PyPI package `dicebear-core`)
 ├── rust/            # Rust port (crates.io crate `dicebear-core`)
-└── go/              # Go port (module `github.com/dicebear/dicebear-go/v10`)
+├── go/              # Go port (module `github.com/dicebear/dicebear-go/v10`)
+└── dart/            # Dart port (pub.dev package `dicebear_core`)
 apps/
 ├── docs/            # VitePress documentation site (dicebear.com), including the Playground
 └── editor/          # The in-browser editor (editor.dicebear.com)
@@ -174,6 +178,26 @@ dependency. Nothing is vendored. Style definitions come from
 (`/v10`), so a major bump changes the path by hand; `scripts/version.mjs` only
 creates the Git tag the module proxy reads.
 
+### Dart core (`src/dart/core/`)
+
+```sh
+cd src/dart/core
+dart pub get
+dart test
+dart analyze --fatal-infos
+dart format --output=none --set-exit-if-changed .
+```
+
+The Dart core reads the two draft-07 schemas from the `dicebear_schema` package
+(the Dart counterpart of `@dicebear/schema` / `dicebear/schema`) as a runtime
+dependency, validated with `package:json_schema`. Nothing is vendored.
+
+`src/dart/core/CHANGELOG.md` is a git-ignored build artifact: pub.dev expects a
+changelog inside the package directory, so the CI workflows copy the repository
+root `CHANGELOG.md` there before `dart pub publish [--dry-run]`. This follows
+the same pattern as the generated `LICENSE` copies in the styles and schema
+repositories. Maintain the root changelog only.
+
 ### Cross-language parity
 
 Every port must produce output **byte-identical** to the reference JavaScript
@@ -190,6 +214,8 @@ each side consumes it:
   in `src/rust/core/`.
 - Go side: the in-package tests (`parity_test.go`, `avatars_test.go`), run via
   `go test ./...` in `src/go/core/`.
+- Dart side: the tests under `test/parity/`, run via `dart test` in
+  `src/dart/core/`.
 
 The fixtures cover `Fnv1a` (hash + hex), `Mulberry32` (chained sequences), every
 `Prng` method, number-to-string formatting (`numbers.json`, the `formatNumber`
@@ -217,9 +243,9 @@ fixtures from the JS reference and commit the diff:
 npm run fixtures:parity
 ```
 
-The PHP, Python, Rust, and Go suites will then fail loudly until those sides are
-brought back in sync. That is the intended signal. If you only intend to touch
-one language, expect to update both before your PR can be merged.
+The PHP, Python, Rust, Go, and Dart suites will then fail loudly until those
+sides are brought back in sync. That is the intended signal. If you only intend
+to touch one language, expect to update both before your PR can be merged.
 
 When porting DiceBear to another language, run these fixtures against your
 implementation to prove it conforms. See
@@ -264,6 +290,9 @@ npm run build --workspace @dicebear/editor
   before you open a PR.
 - Go code is formatted with `gofmt` and vetted with `go vet`; run `gofmt -w .`
   and `go vet ./...` in `src/go/core/` before you open a PR.
+- Dart code is formatted with `dart format` and analyzed with
+  `dart analyze --fatal-infos` (lints from `analysis_options.yaml`); run both in
+  `src/dart/core/` before you open a PR.
 
 ## Releasing (maintainers only)
 
@@ -282,9 +311,10 @@ or `10.2.0-alpha.1`). The script will:
 
 1. Update `version` in every `package.json` across the workspace
 2. Update internal workspace dependency references
-3. Update `version` in `src/python/core/pyproject.toml` and
-   `src/rust/core/Cargo.toml` (the Python and Rust cores are not npm workspaces,
-   so they are bumped explicitly to stay in lockstep)
+3. Update `version` in `src/python/core/pyproject.toml`,
+   `src/rust/core/Cargo.toml`, and `src/dart/core/pubspec.yaml` (the Python,
+   Rust, and Dart cores are not npm workspaces, so they are bumped explicitly to
+   stay in lockstep)
 4. Sync `package-lock.json`
 5. Create a Git commit and tag (e.g. `v10.1.0`)
 
@@ -313,12 +343,16 @@ workflow, which:
 6. Publishes the Rust core `dicebear-core` to crates.io via trusted publishing
    (the `publish-rust` job): likewise no token; `cargo publish` builds and
    uploads `src/rust/core` in one step
+7. Publishes the Dart core `dicebear_core` to pub.dev via automated publishing
+   (the `publish-pub` job): likewise no token; pub.dev verifies the `v<version>`
+   tag against the pubspec version and publishes `src/dart/core` straight from
+   the monorepo
 
 The PHP port is the exception: Composer/Packagist consumes one Git repository
 per package rather than a monorepo subdirectory, so `split-php-core.yml` mirrors
 `src/php/core` (tags included) to the standalone
 [`dicebear/dicebear-php`](https://github.com/dicebear/dicebear-php) repository,
-and Packagist publishes `dicebear/core` from that mirror. All four ports ride
+and Packagist publishes `dicebear/core` from that mirror. All five ports ride
 the same version the monorepo tagged.
 
 ## Licensing

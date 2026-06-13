@@ -11,6 +11,7 @@ import {
   formatPhpValue,
   formatPythonValue,
   formatGoValue,
+  formatDartValue,
 } from '@theme/utils/code-examples';
 import Button from 'primevue/button';
 import PlaygroundLicenseAlert from './PlaygroundLicenseAlert.vue';
@@ -221,6 +222,40 @@ avatar, _ := dicebear.NewAvatar(style, ${goOptions})
 svg := avatar.SVG()`;
 });
 
+const exampleDart = computed(() => {
+  const dartOptions = formatDartValue(options.value, 1);
+
+  if (store.isCustomStyle) {
+    return `import 'dart:io';
+
+import 'package:dicebear_core/dicebear_core.dart';
+
+// Your custom style definition (raw JSON)
+final style = Style.parse(File('./my-style.json').readAsStringSync());
+final avatar = Avatar(style, ${dartOptions});
+
+final svg = avatar.svg;`;
+  }
+
+  // The Dart styles package exposes each style as its own library with a
+  // camelCase string constant (e.g. "big-ears" → big_ears.dart / bigEars).
+  const styleLibrary = store.avatarStyleName.replace(/-/g, '_');
+  const styleConst = store.avatarStyleName
+    .split('-')
+    .map((part, i) =>
+      i === 0 ? part : part.charAt(0).toUpperCase() + part.slice(1),
+    )
+    .join('');
+
+  return `import 'package:dicebear_core/dicebear_core.dart';
+import 'package:dicebear_styles/${styleLibrary}.dart';
+
+final style = Style.parse(${styleConst});
+final avatar = Avatar(style, ${dartOptions});
+
+final svg = avatar.svg;`;
+});
+
 const exampleCli = computed(() =>
   getAvatarApiCommand(
     store.isCustomStyle ? './my-style.json' : store.avatarStyleName,
@@ -247,6 +282,7 @@ const exampleCli = computed(() =>
             <Tab value="python-library">Python</Tab>
             <Tab value="rust-library">Rust</Tab>
             <Tab value="go-library">Go</Tab>
+            <Tab value="dart-library">Dart</Tab>
             <Tab value="cli">CLI</Tab>
           </TabList>
           <TabPanels>
@@ -369,6 +405,28 @@ const exampleCli = computed(() =>
                 </p>
                 <p>
                   See <a href="/how-to-use/go-library">Go</a> docs for more
+                  information.
+                </p>
+              </div>
+            </TabPanel>
+            <TabPanel value="dart-library">
+              <div class="playground-button-how-to-use-tab-content">
+                <p>First add the required packages with dart pub:</p>
+                <UiCode
+                  :code="
+                    store.isCustomStyle
+                      ? 'dart pub add dicebear_core'
+                      : 'dart pub add dicebear_core dicebear_styles'
+                  "
+                />
+                <p>Then you can create this avatar as follows:</p>
+                <UiCode :code="exampleDart" lang="dart" />
+                <p v-if="store.isCustomStyle">
+                  Replace <code>./my-style.json</code> with the path to your
+                  style definition.
+                </p>
+                <p>
+                  See <a href="/how-to-use/dart-library">Dart</a> docs for more
                   information.
                 </p>
               </div>

@@ -559,6 +559,7 @@ Install via your package manager:
 | PyPI      | `pip install dicebear-schema`       |
 | Cargo     | `cargo add dicebear-schema`         |
 | Go        | `go get github.com/dicebear/schema` |
+| pub.dev   | `dart pub add dicebear_schema`      |
 
 Or reference the schema directly from a CDN, handy for the `$schema` field of
 your style definition so editors like VS Code provide autocomplete and inline
@@ -570,6 +571,11 @@ https://cdn.hopjs.net/npm/@dicebear/schema@1.0.0/dist/options.min.json
 ```
 
 The vendored style definitions shipped by DiceBear live in a separate package:
-[`@dicebear/styles`](https://www.npmjs.com/package/@dicebear/styles) on npm and
+[`@dicebear/styles`](https://www.npmjs.com/package/@dicebear/styles) on npm,
 [`dicebear/styles`](https://packagist.org/packages/dicebear/styles) on
-Packagist.
+Packagist, [`dicebear-styles`](https://pypi.org/project/dicebear-styles/) on
+PyPI, [`dicebear-styles`](https://crates.io/crates/dicebear-styles) on
+crates.io,
+[`github.com/dicebear/styles/v10`](https://pkg.go.dev/github.com/dicebear/styles/v10)
+as a Go module and [`dicebear_styles`](https://pub.dev/packages/dicebear_styles)
+on pub.dev.

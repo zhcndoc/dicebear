@@ -121,3 +121,54 @@ jobs:
       - name: Run tests
         working-directory: src/go/core
         run: go test ./...
+
+  test-dart:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        # Lower bound = the pubspec `environment.sdk` floor; keep in sync.
+        sdk: ['3.4', 'stable']
+
+    steps:
+      - uses: actions/checkout@v6
+      - name: Use Dart ${{ matrix.sdk }}
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ matrix.sdk }}
+      - name: Install dependencies
+        working-directory: src/dart/core
+        run: dart pub get
+      - name: Check the embedded web fixtures are up to date
+        # The web parity suite embeds a copy of the fixtures (dart2js cannot
+        # read files); regenerate it and fail if it drifted from the canonical
+        # tests/fixtures/parity.
+        working-directory: src/dart/core
+        run: |
+          dart run tool/generate_web_fixtures.dart
+          dart format test/parity/embedded_fixtures.dart
+          git diff --exit-code test/parity/embedded_fixtures.dart
+      - name: Check formatting
+        working-directory: src/dart/core
+        run: dart format --output=none --set-exit-if-changed .
+      - name: Analyze
+        working-directory: src/dart/core
+        run: dart analyze --fatal-infos
+      - name: Run tests
+        working-directory: src/dart/core
+        run: dart test
+      - name: Run web-eligible tests on dart2js
+        # The fixture suites are VM-only (they read disk via dart:io), so the
+        # dart2js build's number formatting and 32-bit PRNG arithmetic is
+        # asserted by the embedded web_parity_test under Chrome.
+        # ubuntu-latest ships google-chrome-stable.
+        working-directory: src/dart/core
+        run: dart test -p chrome
+      - name: Copy the project changelog into the package
+        # CHANGELOG.md inside the package is a git-ignored build artifact:
+        # pub.dev expects it in the package directory, while the repository
+        # maintains a single changelog at the root.
+        run: cp CHANGELOG.md src/dart/core/CHANGELOG.md
+      - name: Validate the publishable archive
+        working-directory: src/dart/core
+        run: dart pub publish --dry-run

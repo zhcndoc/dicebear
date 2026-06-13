@@ -255,6 +255,27 @@ func placeholderAvatar(style *dicebear.Style, userID string) (string, error) {
 }
 ```
 
+## With the Dart library
+
+Use the Dart library for server-side rendering without an additional HTTP
+request. For full installation and API details, see the
+[Dart library documentation](/how-to-use/dart-library/).
+
+```dart
+import 'package:dicebear_core/dicebear_core.dart';
+import 'package:dicebear_styles/thumbs.dart';
+
+final style = Style.parse(thumbs);
+
+String getPlaceholderAvatar(String userId) {
+  return Avatar(style, {
+    'seed': userId,
+    'size': 48,
+    'borderRadius': 50,
+  }).svg;
+}
+```
+
 ## Choosing a style
 
 Different styles suit different use cases. Click a style to see all available
@@ -289,6 +310,11 @@ Avatar::new(&style, json!({ "seed": user_id, "size": 48, "borderRadius": 50 }))?
 ```go
 // Go library
 dicebear.NewAvatar(style, map[string]any{"seed": userID, "size": 48, "borderRadius": 50})
+```
+
+```dart
+// Dart library
+Avatar(style, {'seed': userId, 'size': 48, 'borderRadius': 50});
 ```
 
 ```

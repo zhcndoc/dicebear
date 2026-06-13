@@ -112,7 +112,8 @@ Congratulations! You can now use your avatar style with the
 [PHP Library](/how-to-use/php-library/), the
 [Python Library](/how-to-use/python-library/), the
 [Rust Library](/how-to-use/rust-library/), the
-[Go Library](/how-to-use/go-library/), or the [CLI](/how-to-use/cli/).
+[Go Library](/how-to-use/go-library/), the
+[Dart Library](/how-to-use/dart-library/), or the [CLI](/how-to-use/cli/).
 
 ### With the JS Library
 
@@ -187,6 +188,21 @@ avatar, _ := dicebear.NewAvatar(style, map[string]any{
 	"seed": "dicebear",
 	// ... other options
 })
+```
+
+### With the Dart Library
+
+```dart
+import 'dart:io';
+
+import 'package:dicebear_core/dicebear_core.dart';
+
+final style = Style.parse(File('./your-style.json').readAsStringSync());
+
+final avatar = Avatar(style, {
+  'seed': 'dicebear',
+  // ... other options
+});
 ```
 
 ### With the CLI

@@ -73,6 +73,20 @@ descriptor := dicebear.NewOptionsDescriptor(style).ToJSON()
 fmt.Println(descriptor)
 ```
 
+## Dart
+
+```dart
+import 'dart:convert';
+
+import 'package:dicebear_core/dicebear_core.dart';
+import 'package:dicebear_styles/micah.dart';
+
+final style = Style.parse(micah);
+final descriptor = OptionsDescriptor(style);
+
+print(jsonEncode(descriptor.toJson()));
+```
+
 ## Field descriptor types
 
 The `toJSON()` method returns a map of option names to field descriptors. Each

@@ -402,6 +402,19 @@ avatar, _ := dicebear.NewAvatar(style, map[string]any{"seed": "test"})
 fmt.Println(avatar.SVG())
 ```
 
+### With the Dart Library
+
+```dart
+import 'dart:io';
+
+import 'package:dicebear_core/dicebear_core.dart';
+
+final style = Style.parse(File('./my-style.json').readAsStringSync());
+
+final avatar = Avatar(style, {'seed': 'test'});
+print(avatar.svg);
+```
+
 ## Next steps
 
 - See the [Definition Schema Reference](/specification/definition-schema/) for

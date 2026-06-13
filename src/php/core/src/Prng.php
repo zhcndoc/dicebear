@@ -219,7 +219,7 @@ class Prng
     /**
      * Deduplicates by string representation, keeping the first occurrence.
      * Mirrors the cross-language sort key used by
-     * {@see compareByCodePoint()} so that JS and PHP collapse the same
+     * {@see compareByCodePoint()} so that every port collapses the same
      * set of inputs. `$keyFn` lets callers (e.g. {@see weightedPick()})
      * extract the sort key from a compound element.
      *

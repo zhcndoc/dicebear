@@ -5,8 +5,17 @@ import Button from 'primevue/button';
 import Select from 'primevue/select';
 import { UiCode } from '../ui';
 import { escapeJsString, escapeShellArg } from '../../utils/escape';
+import { formatDartValue } from '@theme/utils/code-examples';
 
-type CodeExample = 'api' | 'js' | 'php' | 'python' | 'rust' | 'go' | 'cli';
+type CodeExample =
+  | 'api'
+  | 'js'
+  | 'php'
+  | 'python'
+  | 'rust'
+  | 'go'
+  | 'dart'
+  | 'cli';
 
 const props = defineProps<{
   seed: string;
@@ -22,6 +31,7 @@ const exampleOptions: { label: string; value: CodeExample }[] = [
   { label: 'Python Library', value: 'python' },
   { label: 'Rust Library', value: 'rust' },
   { label: 'Go Library', value: 'go' },
+  { label: 'Dart Library', value: 'dart' },
   { label: 'CLI', value: 'cli' },
 ];
 
@@ -105,6 +115,19 @@ avatar, _ := dicebear.NewAvatar(style, map[string]any{
 })`;
 });
 
+const dartExample = computed(
+  () =>
+    // formatDartValue quotes the seed and escapes $, which escapeJsString
+    // leaves alone but Dart would treat as string interpolation.
+    `import 'package:dicebear_core/dicebear_core.dart';
+import 'package:dicebear_styles/${props.style.replace(/-/g, '_')}.dart';
+
+final style = Style.parse(${props.styleCamel});
+final avatar = Avatar(style, {
+  'seed': ${formatDartValue(props.seed)},
+});`,
+);
+
 const cliExample = computed(
   () => `npx dicebear ${props.style} --seed '${escapeShellArg(props.seed)}'`,
 );
@@ -167,6 +190,13 @@ const playgroundLink = '/playground/';
           scroll-to-bottom
           class="app-seed-demo-code-block"
           :class="{ active: activeExample === 'go' }"
+        />
+        <UiCode
+          :code="dartExample"
+          lang="dart"
+          scroll-to-bottom
+          class="app-seed-demo-code-block"
+          :class="{ active: activeExample === 'dart' }"
         />
         <UiCode
           :code="cliExample"

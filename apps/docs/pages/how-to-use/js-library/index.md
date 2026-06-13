@@ -15,8 +15,9 @@ higher). In other environments you may be interested in the
 [PHP Library](/how-to-use/php-library/), the
 [Python Library](/how-to-use/python-library/), the
 [Rust Library](/how-to-use/rust-library/), the
-[Go Library](/how-to-use/go-library/), the [HTTP API](/how-to-use/http-api/) or
-the [CLI](/how-to-use/cli/).
+[Go Library](/how-to-use/go-library/), the
+[Dart Library](/how-to-use/dart-library/), the [HTTP API](/how-to-use/http-api/)
+or the [CLI](/how-to-use/cli/).
 
 The library is a pure
 [ESM package](https://developer.mozilla.org/en-US/Web/JavaScript/Guide/Modules).

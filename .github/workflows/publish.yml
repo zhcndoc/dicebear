@@ -99,3 +99,43 @@ jobs:
         run: cargo publish
         env:
           CARGO_REGISTRY_TOKEN: ${{ steps.auth.outputs.token }}
+
+  publish-pub:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: dart-lang/setup-dart@v1
+
+      # Automated publishing (OIDC via setup-dart, no stored token). Configure
+      # on pub.dev: package dicebear_core, repository dicebear/dicebear, tag
+      # pattern v{{version}}. Unlike the Go and PHP ports, pub.dev publishes
+      # straight from the monorepo subdirectory — no split repository.
+      - name: Copy the project changelog into the package
+        # CHANGELOG.md inside the package is a git-ignored build artifact:
+        # pub.dev expects it in the package directory, while the repository
+        # maintains a single changelog at the root.
+        run: cp CHANGELOG.md src/dart/core/CHANGELOG.md
+      # The first release is published manually (pub.dev's automated-publishing
+      # settings only exist once the package does), so skip cleanly when the
+      # pubspec version is already live. This also makes re-runs of the
+      # workflow safe.
+      - name: Check whether this version is already on pub.dev
+        id: pub-version
+        working-directory: src/dart/core
+        run: |
+          VERSION=$(sed -n 's/^version: //p' pubspec.yaml)
+          if curl -fsSL https://pub.dev/api/packages/dicebear_core \
+            | jq -e --arg v "$VERSION" '.versions[] | select(.version == $v)' \
+            > /dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish to pub.dev
+        if: steps.pub-version.outputs.exists == 'false'
+        working-directory: src/dart/core
+        run: dart pub publish --force

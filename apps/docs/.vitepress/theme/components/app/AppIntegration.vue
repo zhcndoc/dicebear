@@ -68,6 +68,11 @@ let svg = Avatar::new(&style, json!({ "seed": "Mia" }))?.to_svg();`,
 style, _ := dicebear.NewStyle([]byte(styles.Lorelei))
 avatar, _ := dicebear.NewAvatar(style, map[string]any{"seed": "Mia"})
 svg := avatar.SVG()`,
+  dart: `import 'package:dicebear_core/dicebear_core.dart';
+import 'package:dicebear_styles/lorelei.dart';
+
+final style = Style.parse(lorelei);
+final svg = Avatar(style, {'seed': 'Mia'}).svg;`,
   api: `https://api.dicebear.com/10.x/lorelei/svg?seed=Mia`,
   cli: `npx dicebear lorelei --seed "Mia" --format svg`,
 };
@@ -98,7 +103,7 @@ svg := avatar.SVG()`,
               <h3 class="app-integration-title">Libraries</h3>
               <p class="app-integration-description">
                 Run DiceBear entirely in your own code — no data leaves your
-                servers. JavaScript, PHP, Python, Rust, and Go share one
+                servers. JavaScript, PHP, Python, Rust, Go, and Dart share one
                 identical API.
               </p>
             </div>
@@ -110,6 +115,7 @@ svg := avatar.SVG()`,
                 <Tab value="python">Python</Tab>
                 <Tab value="rust">Rust</Tab>
                 <Tab value="go">Go</Tab>
+                <Tab value="dart">Dart</Tab>
               </TabList>
               <TabPanels>
                 <TabPanel value="js" class="app-integration-tabpanel">
@@ -199,6 +205,24 @@ svg := avatar.SVG()`,
                     class="app-integration-link"
                   >
                     Go Documentation
+                    <ArrowRight :size="18" />
+                  </Button>
+                </TabPanel>
+                <TabPanel value="dart" class="app-integration-tabpanel">
+                  <UiCode
+                    :code="plainCode.dart"
+                    lang="dart"
+                    scroll-to-bottom
+                    class="app-integration-code-block"
+                  />
+                  <Button
+                    as="a"
+                    href="/how-to-use/dart-library/"
+                    severity="secondary"
+                    variant="outlined"
+                    class="app-integration-link"
+                  >
+                    Dart Documentation
                     <ArrowRight :size="18" />
                   </Button>
                 </TabPanel>

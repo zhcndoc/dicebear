@@ -2,7 +2,7 @@
 title: Load All Avatar Styles from @dicebear/styles | DiceBear
 description: >
   Learn how to load every avatar style shipped with @dicebear/styles at once in
-  Node.js, PHP, Python, Rust and Go.
+  Node.js, PHP, Python, Rust, Go and Dart.
 ---
 
 # How to load all avatar styles from `@dicebear/styles`?
@@ -12,11 +12,15 @@ official avatar style as a separate JSON file. It is distributed as
 [`@dicebear/styles`](https://www.npmjs.com/package/@dicebear/styles) on npm,
 [`dicebear/styles`](https://packagist.org/packages/dicebear/styles) on
 Packagist, [`dicebear-styles`](https://pypi.org/project/dicebear-styles/) on
-PyPI and [`dicebear-styles`](https://crates.io/crates/dicebear-styles) on
-crates.io. Most projects only need one or two styles, but sometimes (for a style
-picker, a gallery page, or a batch job) you want to load all of them at once.
+PyPI, [`dicebear-styles`](https://crates.io/crates/dicebear-styles) on
+crates.io,
+[`github.com/dicebear/styles/v10`](https://pkg.go.dev/github.com/dicebear/styles/v10)
+as a Go module and [`dicebear_styles`](https://pub.dev/packages/dicebear_styles)
+on pub.dev. Most projects only need one or two styles, but sometimes (for a
+style picker, a gallery page, or a batch job) you want to load all of them at
+once.
 
-This guide shows how to do that in Node.js, PHP, Python, Rust and Go.
+This guide shows how to do that in Node.js, PHP, Python, Rust, Go and Dart.
 
 ## Node.js
 
@@ -162,4 +166,29 @@ for _, name := range styles.All() {
 }
 
 avatar, _ := dicebear.NewAvatar(parsed["lorelei"], map[string]any{"seed": "Alice"})
+```
+
+## Dart
+
+The `dicebear_styles` package ships each style in its own library, so a compiled
+app only embeds the styles it imports. To load _all_ of them, import the
+umbrella library `package:dicebear_styles/dicebear_styles.dart`, which
+re-exports every style:
+
+```sh
+dart pub add dicebear_core dicebear_styles
+```
+
+`styles.all` lists every embedded style and `styles.get(name)` returns its raw
+JSON definition.
+
+```dart
+import 'package:dicebear_core/dicebear_core.dart';
+import 'package:dicebear_styles/dicebear_styles.dart' as styles;
+
+final parsed = {
+  for (final name in styles.all) name: Style.parse(styles.get(name)!),
+};
+
+final avatar = Avatar(parsed['lorelei']!, {'seed': 'Alice'});
 ```

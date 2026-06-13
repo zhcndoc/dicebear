@@ -1,7 +1,7 @@
 //! Derives every deterministic value for an avatar from the style, the user
 //! options, and a seeded PRNG, exposing them as memoized named accessors.
 //!
-//! Like the JS/PHP/Python ports, every value the resolver picks is recorded in
+//! Like the other ports, every value the resolver picks is recorded in
 //! a snapshot (`resolved`), which `Avatar::to_json` returns. The raw seed is
 //! deliberately excluded. The PRNG is key-based and order-independent, so the
 //! snapshot doubles as the only mutable state besides the `color_resolving`

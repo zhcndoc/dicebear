@@ -1,8 +1,8 @@
 //! Derives display initials from a seed string.
 //!
 //! Words are split by Unicode letter/mark classes (`\p{L}`, `\p{M}`) so the
-//! result matches the JS, PHP and Python ports for accented and non-Latin
-//! input. See <https://www.regular-expressions.info/unicode.html>.
+//! result matches the JS, PHP, Python, Go and Dart ports for accented and
+//! non-Latin input. See <https://www.regular-expressions.info/unicode.html>.
 
 use std::sync::LazyLock;
 
