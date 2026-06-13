@@ -16,14 +16,41 @@ describe('Avatar', () => {
       assert.ok(avatar instanceof Avatar);
     });
 
-    it('should accept raw style data', () => {
-      const avatar = new Avatar(minimalStyleData);
+    it('should still render a raw style definition (deprecated) identically to a Style and warn', () => {
+      // Back-compat: passing a raw definition is deprecated (it now emits a
+      // one-time console.warn) but must keep rendering identically to wrapping
+      // it in a Style ourselves. The warn is a module-level "warned once" flag,
+      // so we can only best-effort observe it here; suite success must not
+      // depend on whether this test happens to be the first to trigger it.
+      const originalWarn = console.warn;
+      let warning;
+      console.warn = (message) => {
+        warning = message;
+      };
 
-      assert.ok(avatar instanceof Avatar);
+      let fromDefinition;
+      let fromStyle;
+      try {
+        fromDefinition = new Avatar(minimalStyleData, { seed: 'test' });
+        fromStyle = new Avatar(new Style(minimalStyleData), { seed: 'test' });
+      } finally {
+        console.warn = originalWarn;
+      }
+
+      // The definition path must produce the exact same SVG as the Style path.
+      assert.equal(fromDefinition.toString(), fromStyle.toString());
+
+      // Best-effort: if this test was the first to pass a raw definition in the
+      // process, the deprecation warning should have fired. If an earlier test
+      // already tripped the once-only flag, `warning` stays undefined and we
+      // skip the assertion rather than fail spuriously.
+      if (warning !== undefined) {
+        assert.match(warning, /\[DiceBear\].*deprecated/);
+      }
     });
 
     it('should accept raw style data and raw options', () => {
-      const avatar = new Avatar(minimalStyleData, { seed: 'test' });
+      const avatar = new Avatar(new Style(minimalStyleData), { seed: 'test' });
 
       assert.ok(avatar instanceof Avatar);
     });

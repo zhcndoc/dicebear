@@ -62,8 +62,8 @@ The `seed` option is the key to generating deterministic avatars. The same seed
 will always produce the same avatar:
 
 ```python
-avatar1 = Avatar(definition, {"seed": "user-123"})
-avatar2 = Avatar(definition, {"seed": "user-123"})
+avatar1 = Avatar(style, {"seed": "user-123"})
+avatar2 = Avatar(style, {"seed": "user-123"})
 
 avatar1.to_string() == avatar2.to_string()  # True
 ```
@@ -72,13 +72,13 @@ avatar1.to_string() == avatar2.to_string()  # True
 
 ### `Avatar`
 
-The main class for generating avatars. Accepts a `Style` instance (or raw
-definition dict) and optional options.
+The main class for generating avatars. Pass a `Style` instance and optional
+options.
 
 ```python
 from dicebear import Avatar
 
-avatar = Avatar(definition, {
+avatar = Avatar(style, {
     # ... options
 })
 ```
@@ -119,7 +119,7 @@ Returns the avatar as SVG in XML format. The `__str__` method allows using the
 avatar directly in string contexts.
 
 ```python
-avatar = Avatar(definition, {"seed": "Alice"})
+avatar = Avatar(style, {"seed": "Alice"})
 
 svg = avatar.to_string()
 # or
@@ -133,7 +133,7 @@ svg = str(avatar)
 Returns a dict with the SVG and the resolved options.
 
 ```python
-avatar = Avatar(definition, {"seed": "Alice"})
+avatar = Avatar(style, {"seed": "Alice"})
 
 result = avatar.to_json()
 
@@ -148,7 +148,7 @@ result = avatar.to_json()
 Returns the avatar as [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
 
 ```python
-avatar = Avatar(definition, {"seed": "Alice"})
+avatar = Avatar(style, {"seed": "Alice"})
 
 data_uri = avatar.to_data_uri()
 
@@ -162,7 +162,7 @@ The core options are identical to the JavaScript library. See the
 reference. Here are the options in Python syntax:
 
 ```python
-avatar = Avatar(definition, {
+avatar = Avatar(style, {
     "seed": "Alice",
     "flip": "horizontal",            # "none", "horizontal", "vertical", "both"
     "rotate": 10,                    # -360 to 360, or [min, max] range
@@ -189,7 +189,7 @@ for all available patterns.
 ### Avatar with custom background
 
 ```python
-avatar = Avatar(definition, {
+avatar = Avatar(style, {
     "seed": "Alice",
     "backgroundColor": ["#b6e3f4", "#c0aede", "#d1d4f9"],
 })
@@ -253,7 +253,7 @@ avatars = [
 ### Weighted variant selection
 
 ```python
-avatar = Avatar(definition, {
+avatar = Avatar(style, {
     "seed": "Alice",
     "topVariant": {"short01": 2, "short02": 2, "long01": 1},
 })

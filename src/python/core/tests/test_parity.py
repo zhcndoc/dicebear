@@ -166,9 +166,9 @@ _STYLE_CACHE: dict[str, Any] = {}
     ids=[f"{name}/{entry['id']}" for name, entry in _AVATARS],
 )
 def test_avatar(style_name: str, entry: dict[str, Any]) -> None:
-    style_data = _STYLE_CACHE.setdefault(style_name, _load(f"styles/{style_name}.json"))
+    style = _STYLE_CACHE.setdefault(style_name, Style(_load(f"styles/{style_name}.json")))
 
-    avatar = Avatar(style_data, entry["options"])
+    avatar = Avatar(style, entry["options"])
     result = avatar.to_json()
 
     assert result["svg"] == entry["svg"]
@@ -263,10 +263,10 @@ def test_validation_style(entry: dict[str, Any]) -> None:
 )
 def test_validation_options(entry: dict[str, Any]) -> None:
     if entry["valid"]:
-        Avatar(_MINIMAL_STYLE, entry["options"])
+        Avatar(Style(_MINIMAL_STYLE), entry["options"])
     else:
         with pytest.raises(ValidationError):
-            Avatar(_MINIMAL_STYLE, entry["options"])
+            Avatar(Style(_MINIMAL_STYLE), entry["options"])
 
 
 @pytest.mark.parametrize(
@@ -276,7 +276,7 @@ def test_validation_options(entry: dict[str, Any]) -> None:
 )
 def test_validation_circular_colors(entry: dict[str, Any]) -> None:
     with pytest.raises(CircularColorReferenceError) as exc_info:
-        Avatar(entry["style"], entry["options"])
+        Avatar(Style(entry["style"]), entry["options"])
 
     assert exc_info.value.chain == entry["chain"]
 

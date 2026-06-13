@@ -69,8 +69,8 @@ $avatar2 = new Avatar($style, ['seed' => 'user-123']);
 
 ### `Avatar`
 
-The main class for generating avatars. Accepts a `Style` instance (or raw
-definition array) and optional options.
+The main class for generating avatars. Pass a `Style` instance and optional
+options.
 
 ```php
 use DiceBear\Avatar;

@@ -31,6 +31,18 @@ and this project adheres to
   `StyleValidationError`. Mirrors `Style::from_str` (Rust) and `Style.parse`
   (Dart); the existing array/dict constructor is unchanged.
 
+### Deprecated
+
+- **Core (JS, PHP, Python):** Passing a raw style definition to `Avatar` is
+  deprecated; pass a `Style` instead
+  (`new Avatar(new Style(definition), options)`), which also lets you reuse one
+  parsed style across many avatars. The definition still works for now and
+  renders identically, but emits a deprecation warning (a one-time
+  `console.warn` in JS, `E_USER_DEPRECATED` in PHP, `DeprecationWarning` in
+  Python) and will be removed in v11. The Dart, Rust and Go libraries already
+  require a `Style`, so this brings every port to the same `Avatar(style, …)`
+  call.
+
 ## [10.2.0] - 2026-06-10
 
 ### Added

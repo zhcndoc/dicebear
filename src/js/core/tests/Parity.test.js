@@ -179,9 +179,9 @@ describe('Parity / Color', () => {
 
 describe('Parity / Validation', () => {
   const validation = loadFixture('validation.json');
-  const minimalStyle = validation.styles.find(
-    (e) => e.id === 'minimal',
-  ).definition;
+  const minimalStyle = new Style(
+    validation.styles.find((e) => e.id === 'minimal').definition,
+  );
 
   for (const entry of validation.styles) {
     it(`style ${entry.id}`, () => {
@@ -209,7 +209,7 @@ describe('Parity / Validation', () => {
   for (const entry of validation.circularColors) {
     it(`circular colors ${entry.id}`, () => {
       assert.throws(
-        () => new Avatar(entry.style, entry.options),
+        () => new Avatar(new Style(entry.style), entry.options),
         (e) => {
           assert.ok(e instanceof CircularColorReferenceError);
           assert.deepEqual(e.chain, entry.chain);
@@ -251,7 +251,7 @@ describe('Parity / Avatar', () => {
 
       for (const entry of cases) {
         it(entry.id, () => {
-          const avatar = new Avatar(styleData, entry.options);
+          const avatar = new Avatar(new Style(styleData), entry.options);
           const json = avatar.toJSON();
           assert.equal(json.svg, entry.svg);
           // Round-trip via JSON to drop `undefined` values (size/title),

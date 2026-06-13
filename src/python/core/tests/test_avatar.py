@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import Any
 
+import pytest
+
 from dicebear import Avatar, Style
 
 
@@ -21,12 +23,22 @@ def test_accepts_style_instance_and_raw_options() -> None:
     assert isinstance(Avatar(style, {"seed": "test"}), Avatar)
 
 
-def test_accepts_raw_style_data() -> None:
-    assert isinstance(Avatar(_minimal_style_data()), Avatar)
+def test_raw_style_data_is_deprecated_but_still_renders() -> None:
+    definition = _minimal_style_data()
+    options = {"seed": "test"}
+
+    # Passing a raw definition still works for back-compat, but now emits a
+    # DeprecationWarning. The deprecated path must render identically to the
+    # supported path (Avatar wraps the definition in a Style internally).
+    with pytest.warns(DeprecationWarning):
+        deprecated = Avatar(definition, options)
+
+    assert isinstance(deprecated, Avatar)
+    assert deprecated.to_string() == Avatar(Style(definition), options).to_string()
 
 
 def test_accepts_raw_style_data_and_raw_options() -> None:
-    assert isinstance(Avatar(_minimal_style_data(), {"seed": "test"}), Avatar)
+    assert isinstance(Avatar(Style(_minimal_style_data()), {"seed": "test"}), Avatar)
 
 
 def test_works_without_options() -> None:

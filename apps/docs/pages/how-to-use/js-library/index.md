@@ -97,8 +97,8 @@ avatar1.toString() === avatar2.toString(); // true
 
 ### `Avatar`
 
-The main class for generating avatars. Accepts a `Style` instance (or a style
-definition) and optional options.
+The main class for generating avatars. Pass a `Style` instance and optional
+options.
 
 ```js
 import { Style, Avatar } from '@dicebear/core';
