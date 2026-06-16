@@ -1,5 +1,5 @@
 ---
-title: ToonHead – Avatar Style | DiceBear
+title: ToonHead – Avatar Style
 description: >
   Create ToonHead avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.

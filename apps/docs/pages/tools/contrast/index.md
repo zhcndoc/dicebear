@@ -1,6 +1,6 @@
 ---
 layout: doc
-title: WCAG Contrast Picker – Tools | DiceBear
+title: WCAG Contrast Picker – Tools
 description: >
   Interactive WCAG 2.1 contrast picker built on the @dicebear/core algorithm.
   Pick a color and see which of two contrast colors DiceBear would choose,

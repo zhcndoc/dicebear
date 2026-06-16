@@ -1,5 +1,5 @@
 ---
-title: PHP Avatar Library | DiceBear
+title: PHP Avatar Library
 description: >
   Use the DiceBear PHP library to generate SVG profile pictures on the server.
   PHP 8.2+ with an API identical to the JavaScript library.

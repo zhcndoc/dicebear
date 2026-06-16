@@ -1,5 +1,5 @@
 ---
-title: Fun Emoji – Avatar Style | DiceBear
+title: Fun Emoji – Avatar Style
 description: >
   Create Fun Emoji avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.

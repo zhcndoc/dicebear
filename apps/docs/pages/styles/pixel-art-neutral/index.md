@@ -1,5 +1,5 @@
 ---
-title: Pixel Art Neutral – Avatar Style | DiceBear
+title: Pixel Art Neutral – Avatar Style
 description: >
   Create Pixel Art Neutral avatars with the DiceBear avatar library. Generate
   unique profile pictures using our free avatar API or JavaScript avatar

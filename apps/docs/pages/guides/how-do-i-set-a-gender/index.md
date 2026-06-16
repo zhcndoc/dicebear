@@ -1,5 +1,5 @@
 ---
-title: How Do I Set a Gender? | DiceBear
+title: How Do I Set a Gender?
 description: >
   DiceBear has no single gender switch, but you can shape avatars to look more
   masculine or feminine using each style's options. Here is how, plus where to

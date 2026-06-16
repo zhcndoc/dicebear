@@ -1,5 +1,5 @@
 ---
-title: Personas – Avatar Style | DiceBear
+title: Personas – Avatar Style
 description: >
   Create Personas avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.

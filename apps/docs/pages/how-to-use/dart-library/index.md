@@ -1,5 +1,5 @@
 ---
-title: Dart Avatar Library | DiceBear
+title: Dart Avatar Library
 description: >
   Use the DiceBear Dart library to generate SVG profile pictures in Dart and
   Flutter. Dart 3.4+ with an API identical to the JavaScript library.

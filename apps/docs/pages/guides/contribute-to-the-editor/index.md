@@ -1,5 +1,5 @@
 ---
-title: Contribute to the Editor | DiceBear
+title: Contribute to the Editor
 description: >
   Pointer to the contribution guide for the DiceBear editor at
   editor.dicebear.com.

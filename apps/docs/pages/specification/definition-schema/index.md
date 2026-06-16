@@ -1,5 +1,5 @@
 ---
-title: Definition Schema Reference | DiceBear
+title: Definition Schema Reference
 description: >
   Complete reference for the DiceBear avatar style definition schema. Learn how
   style definitions are structured with canvas, components, colors, and

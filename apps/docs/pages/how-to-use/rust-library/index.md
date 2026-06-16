@@ -1,5 +1,5 @@
 ---
-title: Rust Avatar Library | DiceBear
+title: Rust Avatar Library
 description: >
   Use the DiceBear Rust library to generate SVG profile pictures on the server.
   Rust 1.80+ with an API identical to the JavaScript library.

@@ -1,5 +1,5 @@
 ---
-title: Initial Face – Avatar Style | DiceBear
+title: Initial Face – Avatar Style
 description: >
   Create Initial Face avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.

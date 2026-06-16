@@ -1,5 +1,5 @@
 ---
-title: Bottts – Avatar Style | DiceBear
+title: Bottts – Avatar Style
 description: >
   Create Bottts avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.

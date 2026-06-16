@@ -1,5 +1,5 @@
 ---
-title: Contribute to the HTTP API | DiceBear
+title: Contribute to the HTTP API
 description: >
   Pointer to the contribution guide for the DiceBear HTTP API at
   api.dicebear.com.

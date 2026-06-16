@@ -1,5 +1,5 @@
 ---
-title: Load All Avatar Styles from @dicebear/styles | DiceBear
+title: Load All Avatar Styles from @dicebear/styles
 description: >
   Learn how to load every avatar style shipped with @dicebear/styles at once in
   Node.js, PHP, Python, Rust, Go and Dart.

@@ -1,5 +1,5 @@
 ---
-title: Converter – Convert SVG Avatars to PNG, JPEG & More | DiceBear
+title: Converter – Convert SVG Avatars to PNG, JPEG & More
 description: >
   Learn how to use the DiceBear Converter library in your project to convert SVG
   to PNG or JPEG. Works in the browser and in Node.js!

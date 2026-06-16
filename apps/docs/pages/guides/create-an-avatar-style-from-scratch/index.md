@@ -1,5 +1,5 @@
 ---
-title: Create an Avatar Style from Scratch | DiceBear
+title: Create an Avatar Style from Scratch
 description: >
   Learn how to create a DiceBear avatar style from scratch by writing a JSON
   definition file. No Figma or design tools required.

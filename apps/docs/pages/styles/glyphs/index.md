@@ -1,5 +1,5 @@
 ---
-title: Glyphs – Avatar Style | DiceBear
+title: Glyphs – Avatar Style
 description: >
   Create Glyphs avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.

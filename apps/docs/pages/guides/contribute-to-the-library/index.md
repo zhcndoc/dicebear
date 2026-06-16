@@ -1,5 +1,5 @@
 ---
-title: Contribute to the Library | DiceBear
+title: Contribute to the Library
 description: >
   Learn how to contribute an avatar style, improve an existing one, or work on
   the DiceBear core packages.

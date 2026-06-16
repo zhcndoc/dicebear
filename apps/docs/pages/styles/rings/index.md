@@ -1,5 +1,5 @@
 ---
-title: Rings – Avatar Style | DiceBear
+title: Rings – Avatar Style
 description: >
   Create Rings avatars with the DiceBear avatar library. Generate unique profile
   pictures using our free avatar API or JavaScript avatar library.

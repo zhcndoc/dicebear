@@ -1,5 +1,5 @@
 ---
-title: Access All Available Style Options Programmatically | DiceBear
+title: Access All Available Style Options Programmatically
 description: >
   Learn how to programmatically access all available options of a DiceBear
   avatar style using the OptionsDescriptor class.

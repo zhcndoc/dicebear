@@ -1,5 +1,5 @@
 ---
-title: Identicon – SVG Identicon API | DiceBear
+title: Identicon – SVG Identicon API
 description: >
   Generate deterministic Identicon avatars with DiceBear, a free, open source
   SVG identicon API and avatar library for user profile pictures.
@@ -23,6 +23,16 @@ so it works well for technical profile icons and identicon API use cases.
 <StylePreview styleName="identicon" />
 
 <StyleDescription styleName="identicon" />
+
+## What is an identicon?
+
+An identicon is a small image built from a value like a username, email, or user
+ID. The same input always produces the same picture, so people can recognise an
+account at a glance and nobody has to upload a photo. GitHub popularised them as
+default profile pictures, and many developer tools do the same. DiceBear's
+Identicon style works this way too: it hashes the seed and draws a symmetrical
+grid, so you can use it as an identicon generator for profile icons and
+placeholder avatars.
 
 ## Usage
 

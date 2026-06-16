@@ -1,5 +1,5 @@
 ---
-title: Croodles – Avatar Style | DiceBear
+title: Croodles – Avatar Style
 description: >
   Create Croodles avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.

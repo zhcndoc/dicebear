@@ -1,5 +1,5 @@
 ---
-title: Go Avatar Library | DiceBear
+title: Go Avatar Library
 description: >
   Use the DiceBear Go library to generate SVG profile pictures on the server. Go
   1.23+ with an API identical to the JavaScript library.

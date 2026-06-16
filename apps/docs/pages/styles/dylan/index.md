@@ -1,5 +1,5 @@
 ---
-title: Dylan – Avatar Style | DiceBear
+title: Dylan – Avatar Style
 description: >
   Create Dylan avatars with the DiceBear avatar library. Generate unique profile
   pictures using our free avatar API or JavaScript avatar library.

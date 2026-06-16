@@ -1,5 +1,5 @@
 ---
-title: Flutter Avatar Library | DiceBear
+title: Flutter Avatar Library
 description: >
   Generate SVG profile pictures in Flutter with DiceBear. Render avatars on the
   device with the Dart library, or load PNGs from the HTTP API with no extra

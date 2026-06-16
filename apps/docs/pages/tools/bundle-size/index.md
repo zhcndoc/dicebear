@@ -1,6 +1,6 @@
 ---
 layout: doc
-title: Bundle Size Estimator – Tools | DiceBear
+title: Bundle Size Estimator – Tools
 description: >
   Pick the DiceBear styles you plan to use and see how many gzipped kilobytes
   they'll add to your JavaScript bundle.

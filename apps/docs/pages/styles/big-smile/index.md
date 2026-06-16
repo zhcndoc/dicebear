@@ -1,5 +1,5 @@
 ---
-title: Big Smile – Avatar Style | DiceBear
+title: Big Smile – Avatar Style
 description: >
   Create Big Smile avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.

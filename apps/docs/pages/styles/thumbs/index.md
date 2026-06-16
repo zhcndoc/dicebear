@@ -1,5 +1,5 @@
 ---
-title: Thumbs – Avatar Style | DiceBear
+title: Thumbs – Avatar Style
 description: >
   Create Thumbs avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.

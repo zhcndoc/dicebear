@@ -1,5 +1,5 @@
 ---
-title: Croodles Neutral – Avatar Style | DiceBear
+title: Croodles Neutral – Avatar Style
 description: >
   Create Croodles Neutral avatars with the DiceBear avatar library. Generate
   unique profile pictures using our free avatar API or JavaScript avatar

@@ -134,7 +134,7 @@ export function buildComparisonRows({
         boringAvatars: 'JS',
         avvvatars: 'JS/TS',
         multiavatar: 'JS, PHP, Python',
-        jdenticon: 'JS, .NET, PHP',
+        jdenticon: 'JS, C#, PHP',
       },
     },
     {

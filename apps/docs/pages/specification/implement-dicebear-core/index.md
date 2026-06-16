@@ -1,5 +1,5 @@
 ---
-title: Implement DiceBear Core | DiceBear
+title: Implement DiceBear Core
 description: >
   Step-by-step guide for implementing DiceBear Core in any programming language.
   Covers the PRNG contract, options resolution, and SVG rendering pipeline.

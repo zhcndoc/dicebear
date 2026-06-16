@@ -1,5 +1,5 @@
 ---
-title: Adventurer – Avatar Style | DiceBear
+title: Adventurer – Avatar Style
 description: >
   Create Adventurer avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.

@@ -1,5 +1,5 @@
 ---
-title: Contribute to the Documentation | DiceBear
+title: Contribute to the Documentation
 description: >
   Pointer to the contribution guide for the DiceBear documentation site at
   dicebear.com.

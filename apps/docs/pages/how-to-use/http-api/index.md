@@ -60,6 +60,21 @@ https://api.dicebear.com/10.x/<styleName>/svg
 <BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg" />
 <BrowserPreview url="https://api.dicebear.com/10.x/lorelei/svg" />
 
+### Generate a consistent avatar from a user ID
+
+Use a stable identifier as the `seed` and every user gets the same avatar on
+every visit. A user ID works well, and the same seed always returns the same
+image. That makes it a good default avatar for people who haven't uploaded a
+photo yet, since the picture stays the same across pages and sessions.
+
+```
+https://api.dicebear.com/10.x/lorelei/svg?seed=user-8f3a2c
+```
+
+<BrowserPreview url="https://api.dicebear.com/10.x/lorelei/svg?seed=user-8f3a2c" />
+
+If the seed contains spaces or other special characters, URL-encode it first.
+
 :::info
 
 We provide a large number of avatar styles from different artists. The avatar

@@ -1,5 +1,5 @@
 ---
-title: Lorelei Neutral – Avatar Style | DiceBear
+title: Lorelei Neutral – Avatar Style
 description: >
   Create Lorelei Neutral avatars with the DiceBear avatar library. Generate
   unique profile pictures using our free avatar API or JavaScript avatar

@@ -1,5 +1,5 @@
 ---
-title: Shape Grid – Avatar Style | DiceBear
+title: Shape Grid – Avatar Style
 description: >
   Create Shape Grid avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.

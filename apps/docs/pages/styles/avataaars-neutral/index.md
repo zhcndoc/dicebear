@@ -1,5 +1,5 @@
 ---
-title: Avataaars Neutral – Avatar Style | DiceBear
+title: Avataaars Neutral – Avatar Style
 description: >
   Create Avataaars Neutral avatars with the DiceBear avatar library. Generate
   unique profile pictures using our free avatar API or JavaScript avatar

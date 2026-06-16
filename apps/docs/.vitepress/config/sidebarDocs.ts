@@ -7,7 +7,13 @@ import { DefaultTheme } from 'vitepress';
 const sidebar: DefaultTheme.SidebarItem[] = [
   {
     text: 'Introduction',
-    items: [{ text: 'What is DiceBear?', link: '/introduction/' }],
+    items: [
+      { text: 'What is DiceBear?', link: '/introduction/' },
+      {
+        text: 'DiceBear vs. Alternatives',
+        link: '/guides/avatar-library-comparison/',
+      },
+    ],
   },
   {
     text: 'How to use',

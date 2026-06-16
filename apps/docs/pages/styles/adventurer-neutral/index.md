@@ -1,5 +1,5 @@
 ---
-title: Adventurer Neutral – Avatar Style | DiceBear
+title: Adventurer Neutral – Avatar Style
 description: >
   Create Adventurer Neutral avatars with the DiceBear avatar library. Generate
   unique profile pictures using our free avatar API or JavaScript avatar

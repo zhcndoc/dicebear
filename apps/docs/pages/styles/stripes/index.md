@@ -1,5 +1,5 @@
 ---
-title: Stripes – Avatar Style | DiceBear
+title: Stripes – Avatar Style
 description: >
   Create Stripes avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.

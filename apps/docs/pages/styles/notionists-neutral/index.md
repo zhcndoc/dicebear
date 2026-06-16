@@ -1,5 +1,5 @@
 ---
-title: Notionists Neutral – Avatar Style | DiceBear
+title: Notionists Neutral – Avatar Style
 description: >
   Create Notionists Neutral avatars with the DiceBear avatar library. Generate
   unique profile pictures using our free avatar API or JavaScript avatar

@@ -1,5 +1,5 @@
 ---
-title: Triangles – Avatar Style | DiceBear
+title: Triangles – Avatar Style
 description: >
   Create Triangles avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.

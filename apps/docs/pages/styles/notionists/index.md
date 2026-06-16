@@ -1,5 +1,5 @@
 ---
-title: Notionists – Avatar Style | DiceBear
+title: Notionists – Avatar Style
 description: >
   Create Notionists avatars with the DiceBear avatar library. Generate unique
   profile pictures using our free avatar API or JavaScript avatar library.

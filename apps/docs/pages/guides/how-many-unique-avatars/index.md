@@ -1,5 +1,5 @@
 ---
-title: How Many Unique Avatars Are Possible? | DiceBear
+title: How Many Unique Avatars Are Possible?
 description: >
   Find out how many unique seed-driven avatar combinations are possible for each
   DiceBear avatar style at default configuration.
