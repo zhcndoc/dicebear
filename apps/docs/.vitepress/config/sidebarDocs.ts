@@ -107,8 +107,8 @@ const sidebar: DefaultTheme.SidebarItem[] = [
     text: 'Concepts',
     items: [
       {
-        text: 'No Gender Option',
-        link: '/guides/why-is-there-no-gender-option/',
+        text: 'Gender',
+        link: '/guides/how-do-i-set-a-gender/',
       },
     ],
   },
