@@ -52,6 +52,10 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         link: '/guides/use-the-library-with-angular/',
       },
       {
+        text: 'Flutter',
+        link: '/guides/use-the-library-with-flutter/',
+      },
+      {
         text: 'Next.js',
         link: '/guides/use-the-library-with-next-js/',
       },
