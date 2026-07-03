@@ -143,11 +143,6 @@ export default function getSchemaOptions(style: Style): ConfigStyleOptions {
       }
     }
 
-    if (isBackgroundColor) {
-      values.add('ffffff');
-      values.add('transparent');
-    }
-
     result[key] = {
       values: Array.from(values.values()),
       isColor,
