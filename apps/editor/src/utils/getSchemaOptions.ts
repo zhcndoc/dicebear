@@ -148,7 +148,7 @@ export default function getSchemaOptions(style: Style): ConfigStyleOptions {
       isColor,
       isArray,
       hasProbability,
-      probability: 100,
+      probability: componentProbability,
     };
   }
 
