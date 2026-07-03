@@ -464,13 +464,14 @@ The cutoff is `0.04045`, the exponent is `2.4`, and the coefficients are
 `contrastRatio(candidate, refColor)` and must be **stable** (equal ratios keep
 their input order).
 
-::: warning Do not compute the linearization at runtime IEEE 754 does not
-require `pow` to be correctly rounded, and real implementations disagree in the
-last bit: V8's `Math.pow`, the C math library (used by PHP, Python, and Rust),
-and Go's pure-Go `math.Pow` each produce a different result for some channel
-values. A port that evaluates `((s + 0.055) / 1.055) ^ 2.4` at runtime will fail
-the parity fixtures on some inputs, and a JavaScript build would even differ
-between browser engines.
+::: warning Do not compute the linearization at runtime
+
+IEEE 754 does not require `pow` to be correctly rounded, and real
+implementations disagree in the last bit: V8's `Math.pow`, the C math library
+(used by PHP, Python, and Rust), and Go's pure-Go `math.Pow` each produce a
+different result for some channel values. A port that evaluates
+`((s + 0.055) / 1.055) ^ 2.4` at runtime will fail the parity fixtures on some
+inputs, and a JavaScript build would even differ between browser engines.
 
 `linearize` has only 256 possible inputs, so every reference implementation
 embeds a precomputed lookup table with the 256 results instead. Copy it from any
@@ -483,7 +484,9 @@ the table yields bit-identical doubles everywhere, and the remaining arithmetic
 One more trap: compilers that fuse `a × b + c` into a single FMA instruction
 (e.g. Go on arm64) round once instead of twice and drift in the last ULP. The
 weighted sum in `luminance` must round after every product. In Go that takes
-explicit `float64(...)` conversions around each product. :::
+explicit `float64(...)` conversions around each product.
+
+:::
 
 ## SVG rendering pipeline
 
