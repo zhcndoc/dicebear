@@ -105,7 +105,13 @@ export default function getSchemaOptions(style: Style): ConfigStyleOptions {
 
     const isArray = 'list' in field && field.list === true;
     const componentName = key.replace(/Variant$/, '');
-    const hasProbability = `${componentName}Probability` in descriptor;
+
+    // A component is only optional when the style gives it a default
+    // probability below 100. Components that are always rendered (the
+    // implicit default of 100) must not offer an empty "none" option.
+    const componentProbability =
+      style.components().get(componentName)?.probability() ?? 100;
+    const hasProbability = componentProbability < 100;
 
     const values = new Set<string>();
 
