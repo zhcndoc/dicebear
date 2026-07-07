@@ -1,5 +1,5 @@
 ---
-title: Go Avatar Library | DiceBear
+title: Go 头像库
 description: >
   使用 DiceBear Go 库在服务器上生成 SVG 个人头像。Go
   1.23+，并且 API 与 JavaScript 库完全一致。
@@ -14,16 +14,16 @@ Go 库提供与
 
 ## 安装
 
-你需要两个模块：核心库 `github.com/dicebear/dicebear-go/v10` 和
-头像样式定义 `github.com/dicebear/styles/v10`。模块路径
-包含主版本号，因此请使用 `/v10` 后缀导入。
+You need two modules: the core library `github.com/dicebear/dicebear-go/v10` and
+the avatar style definitions `github.com/dicebear/styles/v10`. The module paths
+include the major version number, so please import them with the `/v10` suffix.
 
 ```sh
 go get github.com/dicebear/dicebear-go/v10
 go get github.com/dicebear/styles/v10
 ```
 
-## 使用
+## 用法
 
 我们在示例中使用头像样式 [lorelei](/styles/lorelei/)。你可以在
 [这里](/styles/)找到更多头像样式。每种样式都会以原始 JSON 字符串形式导出
@@ -118,28 +118,27 @@ avatar, err := dicebear.NewAvatar(style, map[string]any{
 descriptor := dicebear.NewOptionsDescriptor(style).ToJSON()
 ```
 
-## 方法
+## Methods
 
 ### `SVG()` / `String()`
 
-**返回类型：** `string`
+**Return type:** `string`
 
-以 XML 格式返回 SVG 头像。`Avatar` 还实现了 `fmt.Stringer`，
-因此可以直接用于字符串上下文中（`fmt.Println`、`fmt.Sprintf`）。
+Returns the SVG avatar in XML format. `Avatar` also implements `fmt.Stringer`, so it can be used directly in string contexts (`fmt.Println`, `fmt.Sprintf`).
 
 ```go
 avatar, _ := dicebear.NewAvatar(style, map[string]any{"seed": "Alice"})
 
 svg := avatar.SVG()
-// 或者
+// Or
 svg = avatar.String()
 ```
 
 ### `JSON()`
 
-**返回类型：** `[]byte`（包含键 `svg` 和 `options` 的 JSON），`error`
+**Return type:** `[]byte` (JSON containing the keys `svg` and `options`), `error`
 
-以 JSON 形式返回 SVG 和已解析的选项。
+Returns the SVG and the resolved options as JSON.
 
 ```go
 avatar, _ := dicebear.NewAvatar(style, map[string]any{"seed": "Alice"})
@@ -149,21 +148,21 @@ result, _ := avatar.JSON()
 // result → {"svg":"<svg>...</svg>","options":{"flip":"none",...}}
 ```
 
-已解析的选项也可以通过
-`avatar.ResolvedOptions()` 直接作为 map 获取。
+The resolved options can also be accessed directly as a map via
+`avatar.ResolvedOptions()`.
 
 ### `DataURI()`
 
-**返回类型：** `string`
+**Return type:** `string`
 
-以 [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme) 形式返回头像。
+Returns the avatar as a [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
 
 ```go
 avatar, _ := dicebear.NewAvatar(style, map[string]any{"seed": "Alice"})
 
 dataURI := avatar.DataURI()
 
-// <img src="{dataURI}" alt="头像" />
+// <img src="{dataURI}" alt="Avatar" />
 ```
 
 ## 核心选项
@@ -183,7 +182,7 @@ avatar, _ := dicebear.NewAvatar(style, map[string]any{
 	"translateY":          0,                        // -1000 to 1000 (percent of canvas height)
 	"idRandomization":     true,
 	"title":               "User Avatar",
-	"fontFamily":          "Arial",                  // or []string{"Arial", "Helvetica"}
+	"fontFamily":          "Arial",                  // 或 []string{"Arial", "Helvetica"}
 	"fontWeight":          700,                      // 1-1000
 	"backgroundColor":     []string{"#b6e3f4", "#c0aede"},
 	"backgroundColorFill": "solid",                  // "solid", "linear", "radial"
@@ -213,7 +212,7 @@ style, _ := dicebear.NewStyle([]byte(styles.Bottts))
 avatar, _ := dicebear.NewAvatar(style, map[string]any{
 	"seed":         "robot-42",
 	"size":         128,
-	"borderRadius": 50, // circular avatar
+	"borderRadius": 50, // 圆形头像
 })
 ```
 

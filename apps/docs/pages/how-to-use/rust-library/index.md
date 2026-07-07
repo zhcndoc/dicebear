@@ -1,5 +1,5 @@
 ---
-title: Rust Avatar Library | DiceBear
+title: Rust 头像库
 description: >
   在服务器端使用 DiceBear Rust 库生成 SVG 头像。
   Rust 1.80+，API 与 JavaScript 库完全一致。

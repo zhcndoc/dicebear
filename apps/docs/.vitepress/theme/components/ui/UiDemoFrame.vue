@@ -35,7 +35,7 @@ defineProps<{
 
 .ui-demo-frame-body {
   padding: 20px;
-  /* Faint dotted backdrop (theme-aware) — avatars sit centered on top. */
+  /* Faint dotted backdrop (theme-aware); avatars sit centered on top. */
   background-image: radial-gradient(var(--vp-c-divider) 1px, transparent 1px);
   background-size: 16px 16px;
   background-position: center;

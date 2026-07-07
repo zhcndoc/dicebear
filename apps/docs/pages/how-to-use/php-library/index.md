@@ -1,5 +1,5 @@
 ---
-title: PHP Avatar Library | DiceBear
+title: PHP 头像库
 description: >
   使用 DiceBear PHP 库在服务器端生成 SVG 头像。
   支持 PHP 8.2+，API 与 JavaScript 库完全一致。
@@ -31,9 +31,8 @@ use DiceBear\Style;
 use DiceBear\Avatar;
 
 $basePath = InstalledVersions::getInstallPath('dicebear/styles');
-$definition = json_decode(file_get_contents($basePath . '/src/lorelei.json'), true);
+$style = Style::fromJson(file_get_contents($basePath . '/src/lorelei.json'));
 
-$style = new Style($definition);
 $avatar = new Avatar($style, [
   'seed' => 'Alice',
   // ... 其他选项
@@ -65,7 +64,8 @@ $avatar2 = new Avatar($style, ['seed' => 'user-123']);
 
 ### `Avatar`
 
-用于生成头像的主要类。接受一个 `Style` 实例（或原始定义数组）以及可选选项。
+用于生成头像的主类。传入一个 `Style` 实例和可选
+选项。
 
 ```php
 use DiceBear\Avatar;
@@ -101,27 +101,27 @@ $descriptor = new OptionsDescriptor(new Style($definition));
 $fields = $descriptor->toJSON();
 ```
 
-## 方法
+## Methods
 
 ### `__toString()` / `toString()`
 
-**返回类型：** `string`
+**Return type:** `string`
 
-以 XML 格式返回 SVG 头像。`__toString()` 魔术方法允许在字符串上下文中直接使用头像对象。
+Returns the SVG avatar in XML format. The `__toString()` magic method allows the avatar object to be used directly in a string context.
 
 ```php
 $avatar = new Avatar($style, ['seed' => 'Alice']);
 
 $svg = (string) $avatar;
-// 或
+// or
 $svg = $avatar->toString();
 ```
 
 ### `toJSON()`
 
-**返回类型：** `array{svg: string, options: array}`
+**Return type:** `array{svg: string, options: array}`
 
-返回一个包含 SVG 和已解析选项的关联数组。
+Returns an associative array containing the SVG and the parsed options.
 
 ```php
 $avatar = new Avatar($style, ['seed' => 'Alice']);
@@ -134,16 +134,16 @@ $json = $avatar->toJSON();
 
 ### `toDataUri()`
 
-**返回类型：** `string`
+**Return type:** `string`
 
-以 [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme) 形式返回头像。
+Returns the avatar in [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme) form.
 
 ```php
 $avatar = new Avatar($style, ['seed' => 'Alice']);
 
 $dataUri = $avatar->toDataUri();
 
-// <img src="<?= $dataUri ?>" alt="头像" />
+// <img src="<?= $dataUri ?>" alt="Avatar" />
 ```
 
 ## 核心选项
@@ -186,9 +186,8 @@ $avatar = new Avatar($style, [
 
 ```php
 $basePath = InstalledVersions::getInstallPath('dicebear/styles');
-$definition = json_decode(file_get_contents($basePath . '/src/bottts.json'), true);
+$style = Style::fromJson(file_get_contents($basePath . '/src/bottts.json'));
 
-$style = new Style($definition);
 $avatar = new Avatar($style, [
   'seed' => 'robot-42',
   'size' => 128,
@@ -200,9 +199,8 @@ $avatar = new Avatar($style, [
 
 ```php
 $basePath = InstalledVersions::getInstallPath('dicebear/styles');
-$definition = json_decode(file_get_contents($basePath . '/src/avataaars.json'), true);
+$style = Style::fromJson(file_get_contents($basePath . '/src/avataaars.json'));
 
-$style = new Style($definition);
 $avatar = new Avatar($style, [
   'seed' => 'Jane',
   'flip' => 'horizontal',

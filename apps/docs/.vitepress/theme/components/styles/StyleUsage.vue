@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { kebabCase, constantCase, pascalCase } from 'change-case';
+import {
+  kebabCase,
+  constantCase,
+  pascalCase,
+  snakeCase,
+  camelCase,
+} from 'change-case';
 import { UiCard, UiCode as Code } from '../ui';
 import { computed, ref } from 'vue';
 import Tabs from 'primevue/tabs';
@@ -80,6 +86,23 @@ svg := avatar.SVG()
 `;
 });
 
+const exampleDartInstall = computed(() => {
+  return `dart pub add dicebear_core dicebear_styles`;
+});
+
+const exampleDartUsage = computed(() => {
+  return `import 'package:dicebear_core/dicebear_core.dart';
+import 'package:dicebear_styles/${snakeCase(props.styleName)}.dart';
+
+final style = Style.parse(${camelCase(props.styleName)});
+final avatar = Avatar(style, {
+  // ... options
+});
+
+final svg = avatar.svg;
+`;
+});
+
 const exampleCliInstall = computed(() => {
   return `npm install --global dicebear`;
 });
@@ -96,9 +119,8 @@ use DiceBear\\Style;
 use DiceBear\\Avatar;
 
 $basePath = InstalledVersions::getInstallPath('dicebear/styles');
-$definition = json_decode(file_get_contents($basePath . '/src/${kebabCase(props.styleName)}.json'), true);
+$style = Style::fromJson(file_get_contents($basePath . '/src/${kebabCase(props.styleName)}.json'));
 
-$style = new Style($definition);
 $avatar = new Avatar($style, [
   // ... options
 ]);
@@ -112,16 +134,14 @@ const examplePythonInstall = computed(() => {
 });
 
 const examplePythonUsage = computed(() => {
-  return `import json
-from importlib.resources import files
+  return `from importlib.resources import files
 
 from dicebear import Avatar, Style
 
-definition = json.loads(
+style = Style.from_json(
     files("dicebear_styles").joinpath("${kebabCase(props.styleName)}.json").read_text("utf-8")
 )
 
-style = Style(definition)
 avatar = Avatar(style, {
     # ... options
 })
@@ -145,6 +165,7 @@ const exampleCliUsage = computed(() => {
         <Tab value="python-library">Python</Tab>
         <Tab value="rust-library">Rust</Tab>
         <Tab value="go-library">Go</Tab>
+        <Tab value="dart-library">Dart</Tab>
         <Tab value="cli">CLI</Tab>
       </TabList>
       <TabPanels>
@@ -211,6 +232,17 @@ const exampleCliUsage = computed(() => {
           <Code lang="go" :code="exampleGoUsage" />
           <p>
             See <a href="/how-to-use/go-library">Go</a> docs for more
+            information.
+          </p>
+        </TabPanel>
+        <TabPanel value="dart-library" class="style-usage-body">
+          <p>First add the required packages with dart pub:</p>
+          <Code :code="exampleDartInstall" />
+
+          <p>Then you can create this avatar as follows:</p>
+          <Code lang="dart" :code="exampleDartUsage" />
+          <p>
+            See <a href="/how-to-use/dart-library">Dart</a> docs for more
             information.
           </p>
         </TabPanel>

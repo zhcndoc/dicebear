@@ -16,76 +16,81 @@ hydration 陷阱。
 
 ## App Router
 
-### 服务端组件（推荐）
+### Server Components (Recommended)
 
-在 App Router 中，组件默认就是服务端组件。在服务端生成 SVG，并将其内联为
-[data URI](https://en.wikipedia.org/wiki/Data_URI_scheme)，这样头像就不需要任何客户端 JavaScript。
+In the App Router, components are server components by default. Generate the SVG on the server and inline it as a
+[data URI](https://en.wikipedia.org/wiki/Data_URI_scheme), so the avatar doesn't need any client-side JavaScript.
 
 ```tsx
 // app/components/UserAvatar.tsx
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
+const style = new Style(lorelei);
+
 export function UserAvatar({ seed = 'Alice' }: { seed?: string }) {
-  const dataUri = new Avatar(lorelei, {
+  const dataUri = new Avatar(style, {
     seed,
     size: 128,
-    // ... 其他选项
+    // ... other options
   }).toDataUri();
 
-  return <img src={dataUri} alt="头像" width={128} height={128} />;
+  return <img src={dataUri} alt="Avatar" width={128} height={128} />;
 }
 ```
 
-### 客户端组件
+### Client Components
 
-将文件标记为 `'use client'`，并使用 `useMemo` 包装生成逻辑，这样头像只有在 seed
-变化时才会重新生成。
+Mark the file with `'use client'`, and wrap the generation logic with `useMemo` so the avatar is only regenerated when the seed changes.
 
 ```tsx
 // app/components/UserAvatarClient.tsx
 'use client';
 
 import { useMemo } from 'react';
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+const style = new Style(lorelei);
 
 export function UserAvatarClient({ seed = 'Alice' }: { seed?: string }) {
   const dataUri = useMemo(
     () =>
-      new Avatar(lorelei, {
+      new Avatar(style, {
         seed,
         size: 128,
-        // ... 其他选项
+        // ... other options
       }).toDataUri(),
     [seed],
   );
 
-  return <img src={dataUri} alt="头像" width={128} height={128} />;
+  return <img src={dataUri} alt="Avatar" width={128} height={128} />;
 }
 ```
 
-::: warning Hydration 与 `idRandomization`
+::: warning Hydration and `idRandomization`
 
-`idRandomization` 使用宿主环境中未设种子的 RNG，因此服务器和客户端
-会生成不同的 ID，React 会抛出 hydration 不匹配警告。你可以：
+`idRandomization` uses an unseded RNG in the host environment, so the server and client
+will generate different IDs, and React will throw a hydration mismatch warning. You can either:
 
-- 在服务端组件中生成头像（无需 hydration），并且不要把 SVG 传给客户端组件，**或者**
-- 保持 `idRandomization: false`，并依赖确定性的 ID。
+- Generate the avatar in a server component (no hydration required), and do not pass the SVG to a client component, **or**
+- Keep `idRandomization: false` and rely on deterministic IDs.
 
-如果你需要在同一页面上让多个头像的 ID 保持唯一，请将每个头像完全在服务器端渲染。
+If you need multiple avatars on the same page to keep their IDs unique, render each avatar entirely on the server.
 
 :::
 
-### 路由处理程序（头像端点）
+### Route Handlers (Avatar Endpoint)
 
-将 DiceBear 暴露在你自己的 URL 之后。这对于使用自定义
-`Cache-Control` 标头进行缓存，或限制可接受的 seed 很有用。
+Expose DiceBear behind your own URL. This is useful for caching with custom
+`Cache-Control` headers, or for restricting the acceptable seeds.
 
 ```ts
 // app/api/avatar/[seed]/route.ts
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+const style = new Style(lorelei);
 
 export async function GET(
   _request: Request,
@@ -93,7 +98,7 @@ export async function GET(
 ) {
   const { seed } = await params;
 
-  const svg = new Avatar(lorelei, { seed, size: 128 }).toString();
+  const svg = new Avatar(style, { seed, size: 128 }).toString();
 
   return new Response(svg, {
     headers: {
@@ -106,22 +111,24 @@ export async function GET(
 
 ## Pages Router
 
-Pages Router 默认将每个组件视为客户端组件。像在普通 React 应用中一样使用 `useMemo`
-即可。请参阅
-[React 指南](/guides/use-the-library-with-react/) 了解标准模式。
-通过 `getServerSideProps` 或 `getStaticProps` 进行服务端生成时，会将
-SVG 作为 prop 返回，从而避免加载客户端 bundle。
+Pages Router defaults to treating every component as a client component. Use `useMemo`
+as you would in a normal React app.
+See the [React Guide](/guides/use-the-library-with-react/) for standard patterns.
+When generating on the server via `getServerSideProps` or `getStaticProps`, the
+SVG is returned as a prop, avoiding loading the client bundle.
 
 ```tsx
 // pages/profile.tsx
 import type { GetServerSideProps } from 'next';
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+const style = new Style(lorelei);
 
 type Props = { avatar: string };
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  const avatar = new Avatar(lorelei, { seed: 'Alice', size: 128 }).toDataUri();
+  const avatar = new Avatar(style, { seed: 'Alice', size: 128 }).toDataUri();
 
   return { props: { avatar } };
 };
@@ -131,22 +138,22 @@ export default function Profile({ avatar }: Props) {
 }
 ```
 
-## 使用 HTTP API
+## Using the HTTP API
 
-HTTP API 无需安装，并且在两个路由器中都可用。使用普通的
-`<img>` 标签即可。Next.js 默认不会预处理外部 SVG。
+The HTTP API requires no installation and is available in both routers. Just use a standard
+`<img>` tag. Next.js does not preprocess external SVGs by default.
 
 ```tsx
 export function UserAvatar({ seed = 'Alice' }: { seed?: string }) {
   const src = `https://api.dicebear.com/10.x/lorelei/svg?seed=${encodeURIComponent(seed)}&size=128`;
 
-  return <img src={src} alt="头像" width={128} height={128} />;
+  return <img src={src} alt="Avatar" width={128} height={128} />;
 }
 ```
 
-如果你想将 `next/image` 与 HTTP API 一起使用，请请求光栅格式（PNG、
-WebP、AVIF），因为 `next/image` 不会优化 SVG 源，并且需要在
-`next.config.js` 中将 `api.dicebear.com` 添加到 `images.remotePatterns`。
+If you want to use `next/image` with the HTTP API, request a raster format (PNG,
+WebP, AVIF), because `next/image` does not optimize SVG sources and you need to add
+`api.dicebear.com` to `images.remotePatterns` in `next.config.js`.
 
 ```js
 // next.config.js
@@ -163,6 +170,6 @@ import Image from 'next/image';
 export function UserAvatar({ seed = 'Alice' }: { seed?: string }) {
   const src = `https://api.dicebear.com/10.x/lorelei/png?seed=${encodeURIComponent(seed)}&size=128`;
 
-  return <Image src={src} alt="头像" width={128} height={128} />;
+  return <Image src={src} alt="Avatar" width={128} height={128} />;
 }
 ```

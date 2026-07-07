@@ -80,6 +80,18 @@ gravatarImage := fmt.Sprintf("https://www.gravatar.com/avatar/%s?d=%s", emailHas
 // https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng
 ```
 
+<!-- prettier-ignore -->
+```dart [Dart]
+final emailHash = Uri.encodeComponent('00000000000000000000000000000000');
+final defaultImage = Uri.encodeComponent(
+  'https://api.dicebear.com/10.x/lorelei/svg' // [!code --]
+  'https://api.dicebear.com/10.x/lorelei/png' // [!code ++]
+);
+
+final gravatarImage = 'https://www.gravatar.com/avatar/$emailHash?d=$defaultImage';
+// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng
+```
+
 :::
 
 通常我们会在查询字符串中设置选项，例如 seed。由于 Gravatar 不允许查询
@@ -147,6 +159,19 @@ defaultImage := url.QueryEscape(
 )
 
 gravatarImage := fmt.Sprintf("https://www.gravatar.com/avatar/%s?d=%s", emailHash, defaultImage)
+// https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
+```
+
+<!-- prettier-ignore -->
+```dart [Dart]
+final emailHash = Uri.encodeComponent('00000000000000000000000000000000');
+final options = 'seed=$emailHash';
+final defaultImage = Uri.encodeComponent(
+  'https://api.dicebear.com/10.x/lorelei/png?$options' // [!code --]
+  'https://api.dicebear.com/10.x/lorelei/png/${Uri.encodeComponent(options)}' // [!code ++]
+);
+
+final gravatarImage = 'https://www.gravatar.com/avatar/$emailHash?d=$defaultImage';
 // https://www.gravatar.com/avatar/00000000000000000000000000000000?d=https%3A%2F%2Fapi.dicebear.com%2F10.x%2Florelei%2Fpng%2Fseed%253D00000000000000000000000000000000
 ```
 

@@ -1,12 +1,12 @@
 ---
-title: CLI – 从命令行生成头像 | DiceBear
+title: CLI – 从命令行生成头像
 description: >
   使用 DiceBear CLI 批量生成头像。免费的命令行头像生成器，用于创建个人资料图片和用户占位图像。支持所有样式。
 ---
 
 # CLI
 
-使用 CLI，你可以在极短时间内创建成千上万个头像！
+借助 CLI，您可以在一次运行中生成大量头像。
 
 ## 安装
 
@@ -53,7 +53,7 @@ dicebear lorelei ./avatars
 
 ### 创建多个头像
 
-你也可以一次创建多个头像！只需使用 `--count` 选项。
+你也可以使用 `--count` 选项一次创建多个头像。
 将 `<count>` 替换为要创建的头像数量。
 
 ```
@@ -308,7 +308,7 @@ dicebear initials ./avatars --seed "Alice"
 
 ## 故障排除
 
-### “File already exists” 错误
+### “文件已存在” 错误
 
 CLI 不会覆盖现有文件。你可以：
 

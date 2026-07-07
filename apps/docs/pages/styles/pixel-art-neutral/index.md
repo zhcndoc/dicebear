@@ -1,5 +1,5 @@
 ---
-title: 像素艺术中性 – 头像风格 | DiceBear
+title: 像素艺术中性 – 头像风格
 description: >
   使用 DiceBear 头像库创建像素艺术中性头像。通过我们的免费头像 API 或 JavaScript 头像
   库生成独特的个人资料图片。

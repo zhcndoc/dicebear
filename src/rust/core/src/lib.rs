@@ -1,10 +1,10 @@
 //! Core library for generating DiceBear avatars.
 //!
-//! A Rust port of the JavaScript, Python and PHP cores. The full pipeline is
-//! implemented — [`Style`] parses a style definition, [`Avatar`] resolves
-//! options against it with a deterministic, key-based PRNG and renders the SVG.
-//! Output is verified byte-for-byte against the cross-language parity fixtures
-//! under `<repo>/tests/fixtures/parity/`.
+//! A Rust port of the JavaScript, PHP, Python, Go and Dart cores. The full
+//! pipeline is implemented — [`Style`] parses a style definition, [`Avatar`]
+//! resolves options against it with a deterministic, key-based PRNG and renders
+//! the SVG. Output is verified byte-for-byte against the cross-language parity
+//! fixtures under `<repo>/tests/fixtures/parity/`.
 //!
 //! The public API mirrors the JS/Python cores: [`Avatar`], [`Style`],
 //! [`OptionsDescriptor`], the [`color`] utilities and [`Error`]. Everything else

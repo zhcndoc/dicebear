@@ -1,5 +1,5 @@
 ---
-title: 为库做贡献 | DiceBear
+title: 为库做贡献
 description: >
   了解如何贡献一个头像风格、改进现有风格，或参与 DiceBear 核心包的开发。
 ---
@@ -19,14 +19,14 @@ DiceBear 由 GitHub 上的多个仓库共同维护。每个仓库都有自己的
 
 ## 核心库、CLI、文档、编辑器
 
-JavaScript、PHP、Python、Rust 和 Go 核心库、CLI、VitePress
-文档（包括 Playground），以及独立编辑器都位于
-主 [`dicebear/dicebear`](https://github.com/dicebear/dicebear) 单体仓库中。
-参见：
+JavaScript、PHP、Python、Rust、Go 和 Dart 核心库，CLI，VitePress
+文档（包括 Playground），以及独立编辑器都位于主
+[`dicebear/dicebear`](https://github.com/dicebear/dicebear) 单仓库中。
+请参阅：
 
 - `dicebear/dicebear` 中的 [`CONTRIBUTING.md`](https://github.com/dicebear/dicebear/blob/10.x/CONTRIBUTING.md)
 
-它涵盖了单体仓库布局、各包的工作流程、JavaScript、PHP、Python、Rust 和 Go 核心库之间的跨语言一致性测试，以及发布流程。
+其中涵盖了单仓库布局、各包的工作流程、JavaScript、PHP、Python、Rust、Go 和 Dart 核心库之间的跨语言一致性测试，以及发布流程。
 
 ## JSON Schema
 

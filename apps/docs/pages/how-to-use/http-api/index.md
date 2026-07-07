@@ -55,6 +55,18 @@ https://api.dicebear.com/10.x/<styleName>/svg
 <BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg" />
 <BrowserPreview url="https://api.dicebear.com/10.x/lorelei/svg" />
 
+### 从用户 ID 生成一致的头像
+
+使用一个稳定的标识符作为 `seed`，每次访问时每个用户都会获得相同的头像。用户 ID 就很适合，而且相同的 seed 始终会返回相同的图像。这使它成为尚未上传照片的用户的理想默认头像，因为图片在不同页面和会话中都保持不变。
+
+```
+https://api.dicebear.com/10.x/lorelei/svg?seed=user-8f3a2c
+```
+
+<BrowserPreview url="https://api.dicebear.com/10.x/lorelei/svg?seed=user-8f3a2c" />
+
+如果 seed 包含空格或其他特殊字符，请先对其进行 URL 编码。
+
 :::info
 
 我们提供了来自不同艺术家的大量头像样式。这些头像样式采用不同的许可协议，且由艺术家自行选择。为了便于快速了解，我们为你整理了一个[许可概览](/licenses/)。
@@ -154,15 +166,15 @@ https://api.dicebear.com/10.x/<styleName>/options.json
 <BrowserPreview url="https://api.dicebear.com/10.x/lorelei/svg?flip=horizontal" />
 <BrowserPreview url="https://api.dicebear.com/10.x/lorelei/svg?flip=none" />
 
-## 文件格式
+## File Formats
 
 <DocsGrid :items="fileFormats" />
 
-PNG、JPG、WebP 和 AVIF 使用
-[Noto Sans](https://fonts.google.com/noto/specimen/Noto+Sans) 字体，并且目前
-支持以下子集：`cyrillic`、`cyrillic-ext`、`devanagari`、
-`greek`、`greek-ext`、`japanese`、`korean`、`latin`、`latin-ext`、
-`simplified-chinese`、`thai` 和 `vietnamese`。
+PNG, JPG, WebP, and AVIF use the
+[Noto Sans](https://fonts.google.com/noto/specimen/Noto+Sans) font and currently
+support the following subsets: `cyrillic`, `cyrillic-ext`, `devanagari`,
+`greek`, `greek-ext`, `japanese`, `korean`, `latin`, `latin-ext`,
+`simplified-chinese`, `thai`, and `vietnamese`.
 
 <BrowserPreview url="https://api.dicebear.com/10.x/bottts/svg" />
 <BrowserPreview url="https://api.dicebear.com/10.x/bottts/png" />
@@ -176,12 +188,12 @@ PNG、JPG、WebP 和 AVIF 使用
 
 | 版本 | 状态 | 终止支持时间 |
 | ------- | ---------- | -------------- |
-| `10.x`  | **Active** | None           |
-| `9.x`   | **Active** | None           |
-| `8.x`   | Deprecated | April 30, 2028 |
-| `7.x`   | Deprecated | April 30, 2028 |
-| `6.x`   | Deprecated | April 30, 2028 |
-| `5.x`   | Deprecated | April 30, 2028 |
+| `10.x`  | **Active** | 无           |
+| `9.x`   | **Active** | 无           |
+| `8.x`   | 已弃用 | 2028 年 4 月 30 日 |
+| `7.x`   | 已弃用 | 2028 年 4 月 30 日 |
+| `6.x`   | 已弃用 | 2028 年 4 月 30 日 |
+| `5.x`   | 已弃用 | 2028 年 4 月 30 日 |
 
 ::: warning
 
@@ -199,9 +211,9 @@ PNG、JPG、WebP 和 AVIF 使用
 
 ## 自托管头像 API
 
-需要私有或商业部署？你可以
-[自行托管头像 API](/guides/host-the-http-api-yourself/)，以完全掌控
-可用性、速率限制和数据隐私。
+Need private or commercial deployment? You can
+[host the Avatar API yourself](/guides/host-the-http-api-yourself/) to take full control over
+availability, rate limits, and data privacy.
 
 ## 公平使用与速率限制
 

@@ -1,6 +1,6 @@
 ---
 layout: doc
-title: Bundle Size Estimator – 工具 | DiceBear
+title: 包体积估算器 – 工具
 description: >
   选择你计划使用的 DiceBear 样式，并查看它们会为你的 JavaScript 包
   增加多少千字节的 gzip 压缩体积。

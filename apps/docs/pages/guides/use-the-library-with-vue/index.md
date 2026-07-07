@@ -7,9 +7,8 @@ description: >
 
 # Vue 头像库：在 Vue 中使用 DiceBear
 
-DiceBear 与 Vue 的响应式模型配合得很好。将头像生成封装在
-`computed` 属性中，以通过 JS 库实现完全控制，或通过 HTTP API 采用无依赖方式，
-让个人资料图片与响应式数据保持同步。
+将头像生成包装在 `computed` 属性中，以便让个人资料图片与响应式数据保持同步。
+如需完全控制，请使用 JS 库；如需无依赖方案，请使用 HTTP API。
 
 你可以通过 [JS-Library](/how-to-use/js-library/) 或 [HTTP-API](/how-to-use/http-api/) 在 Vue 中使用 DiceBear。
 
@@ -18,15 +17,17 @@ DiceBear 与 Vue 的响应式模型配合得很好。将头像生成封装在
 ```vue
 <script setup>
 import { computed } from 'vue';
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+const style = new Style(lorelei);
 
 const props = defineProps({
   seed: { type: String, default: 'Alice' },
 });
 
 const avatar = computed(() =>
-  new Avatar(lorelei, {
+  new Avatar(style, {
     seed: props.seed,
     size: 128,
     // ... 其他选项

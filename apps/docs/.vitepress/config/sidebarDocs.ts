@@ -7,7 +7,13 @@ import { DefaultTheme } from 'vitepress';
 const sidebar: DefaultTheme.SidebarItem[] = [
   {
     text: '介绍',
-    items: [{ text: '什么是 DiceBear？', link: '/introduction/' }],
+    items: [
+      { text: '什么是 DiceBear？', link: '/introduction/' },
+      {
+        text: 'DiceBear 与替代品比较',
+        link: '/guides/avatar-library-comparison/',
+      },
+    ],
   },
   {
     text: '使用方式',
@@ -36,6 +42,10 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         text: 'Go Library <span class="vp-sidebar-badge is-new">New</span>',
         link: '/how-to-use/go-library/',
       },
+      {
+        text: 'Dart Library <span class="vp-sidebar-badge is-new">New</span>',
+        link: '/how-to-use/dart-library/',
+      },
       { text: 'HTTP API', link: '/how-to-use/http-api/' },
       { text: 'CLI', link: '/how-to-use/cli/' },
     ],
@@ -46,6 +56,10 @@ const sidebar: DefaultTheme.SidebarItem[] = [
       {
         text: 'Angular',
         link: '/guides/use-the-library-with-angular/',
+      },
+      {
+        text: 'Flutter',
+        link: '/guides/use-the-library-with-flutter/',
       },
       {
         text: 'Next.js',
@@ -96,6 +110,15 @@ const sidebar: DefaultTheme.SidebarItem[] = [
       {
         text: '实现 DiceBear Core',
         link: '/specification/implement-dicebear-core/',
+      },
+    ],
+  },
+  {
+    text: '概念',
+    items: [
+      {
+        text: '性别',
+        link: '/guides/how-do-i-set-a-gender/',
       },
     ],
   },

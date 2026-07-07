@@ -38,7 +38,7 @@ const styles = computed(() => {
     <div class="layout-footer-container">
       <div class="layout-footer-bottom-inner">
         <p class="layout-footer-attributions">
-          <template v-for="(style, index) in styles" :key="style.source">
+          <template v-for="style in styles" :key="style.source">
             <a
               v-if="safeHttpUrl(style.source)"
               class="layout-footer-attribution-link"
@@ -58,7 +58,7 @@ const styles = computed(() => {
               >{{ style.license?.name }}</a
             >
             <template v-else>{{ style.license?.name }}</template
-            ><template v-if="index < styles.length - 1">. </template>
+            >.
           </template>
           - 所有头像都是对原始作品的再创作。
         </p>

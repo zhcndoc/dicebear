@@ -7,12 +7,16 @@ description: >
 # JavaScript 头像库
 
 该库使用 [TypeScript](https://www.typescriptlang.org/) /
-[JavaScript](https://developer.mozilla.org/en-US/Web/JavaScript) 编写，可在浏览器中以及 [Node.js](https://nodejs.org/en/)（22 版或更高）中使用。在其他环境中，你可能会对 [PHP Library](/how-to-use/php-library/)、
-[Python Library](/how-to-use/python-library/)、
-[Rust Library](/how-to-use/rust-library/)、
-[Go Library](/how-to-use/go-library/)、
-[HTTP API](/how-to-use/http-api/) 或
-[CLI](/how-to-use/cli/) 感兴趣。
+[JavaScript](https://developer.mozilla.org/en-US/Web/JavaScript) 编写，可用于
+浏览器以及 [Node.js](https://nodejs.org/en/)（22 版
+或更高版本）。在其他环境中，你可能会对以下内容感兴趣：
+[PHP Library](/how-to-use/php-library/),
+[Python Library](/how-to-use/python-library/),
+[Rust Library](/how-to-use/rust-library/),
+[Go Library](/how-to-use/go-library/),
+[Dart Library](/how-to-use/dart-library/),
+[HTTP API](/how-to-use/http-api/)
+或 [CLI](/how-to-use/cli/)。
 
 该库是一个纯 [ESM package](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)。
 如果你是 ESM package 新手， [Sindre Sorhus](https://github.com/sindresorhus) 写了一份很棒的 [帮助页面](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)。
@@ -30,10 +34,11 @@ npm install @dicebear/core @dicebear/styles
 我们在示例中使用头像样式 [lorelei](/styles/lorelei/)。你可以在 [这里](/styles/) 找到更多头像样式。
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
-const avatar = new Avatar(lorelei, {
+const style = new Style(lorelei);
+const avatar = new Avatar(style, {
   seed: 'John',
   // ... 其他选项
 });
@@ -65,12 +70,14 @@ const svg = avatar.toString();
 将始终生成相同的头像，这对用户资料很有用：
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
+const style = new Style(lorelei);
+
 // 这些将始终生成相同的头像
-const avatar1 = new Avatar(lorelei, { seed: 'user-123' });
-const avatar2 = new Avatar(lorelei, { seed: 'user-123' });
+const avatar1 = new Avatar(style, { seed: 'user-123' });
+const avatar2 = new Avatar(style, { seed: 'user-123' });
 
 avatar1.toString() === avatar2.toString(); // true
 ```
@@ -79,21 +86,23 @@ avatar1.toString() === avatar2.toString(); // true
 
 ### `Avatar`
 
-用于生成头像的主类。接受样式定义（或 `Style` 实例）以及可选选项。
+生成头像的主类。传入一个 `Style` 实例和可选的
+选项。
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
-const avatar = new Avatar(lorelei, {
+const style = new Style(lorelei);
+const avatar = new Avatar(style, {
   // [!code focus:3]
-  // ... 选项
+  // ... options
 });
 ```
 
 ### `Style`
 
-样式定义的不可变封装。当前你想在多个头像之间复用同一个已解析的样式，而无需每次重新解析时使用它。
+围绕样式定义的不可变包装器。
 
 ```js
 import { Style, Avatar } from '@dicebear/core';
@@ -107,23 +116,24 @@ const avatar2 = new Avatar(style, { seed: 'Bob' });
 
 ### `OptionsDescriptor`
 
-描述给定样式的所有有效选项。适用于构建 UI 或验证用户输入。详情请参见
+Describes all valid options for a given style. Useful for building UIs or validating user input. For details, see
 [访问样式选项](/guides/access-all-available-options/)。
 
-## 方法
+## Methods
 
 ### `.toString()`
 
-**返回类型：** `string`
+**Return type:** `string`
 
-以 XML 格式返回 SVG 头像。
+Returns the SVG avatar in XML format.
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
-const avatar = new Avatar(lorelei, {
-  // ... 选项
+const style = new Style(lorelei);
+const avatar = new Avatar(style, {
+  // ... options
 });
 
 const svg = avatar.toString(); // [!code focus]
@@ -131,58 +141,60 @@ const svg = avatar.toString(); // [!code focus]
 
 ### `.toJSON()`
 
-**返回类型：** `{ svg: string, options: StyleOptions }`
+**Return type:** `{ svg: string, options: StyleOptions }`
 
-返回一个对象，包含用于生成头像的 SVG 和已解析选项。
+Returns an object containing the SVG used to generate the avatar and the resolved options.
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
-const avatar = new Avatar(lorelei, {
+const style = new Style(lorelei);
+const avatar = new Avatar(style, {
   seed: 'John',
-  // ... 其他选项
+  // ... other options
 });
 
 const json = avatar.toJSON(); // [!code focus]
 
-// 示例输出：
+// Example output:
 // {
 //   svg: '<svg>...</svg>',
 //   options: {
 //     seed: 'John',
-//     // ... 已解析选项
+//     // ... resolved options
 //   }
 // }
 ```
 
 ### `.toDataUri()`
 
-**返回类型：** `string`
+**Return type:** `string`
 
-返回 [data uri](https://en.wikipedia.org/wiki/Data_URI_scheme) 形式的头像。
-这对于直接将头像嵌入 HTML 或 CSS 非常有用。
+Returns the avatar in [data uri](https://en.wikipedia.org/wiki/Data_URI_scheme) format.
+This is very useful for embedding avatars directly into HTML or CSS.
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
-const avatar = new Avatar(lorelei, {
+const style = new Style(lorelei);
+const avatar = new Avatar(style, {
   seed: 'John',
-  // ... 其他选项
+  // ... other options
 });
 
 const dataUri = avatar.toDataUri(); // [!code focus]
 
-// 在 HTML 中使用
-// <img src={dataUri} alt="头像" />
+// Use in HTML
+// <img src={dataUri} alt="Avatar" />
 ```
 
 ## 核心选项
 
 这些选项适用于所有头像样式。凡是类型中写为 `[min, max]` 的字段，你可以传入固定值或由两个元素组成的元组。PRNG 会从该元组的范围中采样一个值。
 
-| Option            | Type                                             | Default       | Description                                                                   |
+| 选项            | 类型                                             | 默认值       | 描述                                                                   |
 | ----------------- | ------------------------------------------------ | ------------- | ----------------------------------------------------------------------------- |
 | `seed`            | `string`                                         | `''`          | 确定性生成的种子                                                                   |
 | `flip`            | `'none' \| 'horizontal' \| 'vertical' \| 'both'` | `'none'`      | 翻转头像（接受一个值数组以随机化）                     |
@@ -201,18 +213,18 @@ const dataUri = avatar.toDataUri(); // [!code focus]
 
 这些选项适用于所有样式，即使那些定义中没有声明 `background` 颜色组的样式也适用。
 
-| Option                     | Type                              | Default   | Description                                                        |
+| 选项                     | 类型                              | 默认值   | 描述                                                        |
 | -------------------------- | --------------------------------- | --------- | ------------------------------------------------------------------ |
 | `backgroundColor`          | `string \| string[]`              | _unset_   | 背景颜色，十六进制格式（`#` 可选，`#RGB` 到 `#RRGGBBAA`）     |
 | `backgroundColorFill`      | `'solid' \| 'linear' \| 'radial'` | `'solid'` | 背景填充类型（接受一个值数组以随机化）     |
-| `backgroundColorFillStops` | `integer \| [min, max]`           | `2`       | 渐变色标数量（最少 2 个）；当填充为 `solid` 时忽略 |
+| `backgroundColorFillStops` | `integer \| [min, max]`            | `2`       | 渐变色标数量（最少 2 个）；当填充为 `solid` 时忽略 |
 | `backgroundColorAngle`     | `number \| [min, max]`            | `0`       | 渐变角度，单位为度（−360 到 360）                            |
 
 ### 动态组件选项
 
 对于样式中的每个组件（例如 `eyes`、`mouth`、`hair`），都可使用以下选项：
 
-| Pattern                  | Type                                           | Description                                            |
+| 模式                  | 类型                                           | 描述                                            |
 | ------------------------ | ---------------------------------------------- | ------------------------------------------------------ |
 | `{component}Variant`     | `string \| string[] \| Record<string, number>` | 限制为特定变体，可选地带权重                                |
 | `{component}Probability` | `number`                                       | 可见性概率，百分比（0 到 100）                           |
@@ -227,7 +239,7 @@ const dataUri = avatar.toDataUri(); // [!code focus]
 
 对于样式中的每个颜色组（例如 `skin`、`hair`）以及 `background`，都可使用以下选项：
 
-| Pattern                 | Type                              | Description                                                        |
+| 模式                 | 类型                              | 描述                                                        |
 | ----------------------- | --------------------------------- | ------------------------------------------------------------------ |
 | `{color}Color`          | `string \| string[]`              | 使用十六进制值覆盖调色板（`#` 可选）                |
 | `{color}ColorFill`      | `'solid' \| 'linear' \| 'radial'` | 填充类型（接受一个值数组以随机化）                |
@@ -239,10 +251,11 @@ const dataUri = avatar.toDataUri(); // [!code focus]
 ### 带自定义背景的头像
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
-const avatar = new Avatar(lorelei, {
+const style = new Style(lorelei);
+const avatar = new Avatar(style, {
   seed: 'John',
   backgroundColor: ['#b6e3f4', '#c0aede', '#d1d4f9'],
   // ... 其他选项
@@ -252,10 +265,11 @@ const avatar = new Avatar(lorelei, {
 ### 固定尺寸头像
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import bottts from '@dicebear/styles/bottts.json' with { type: 'json' };
 
-const avatar = new Avatar(bottts, {
+const style = new Style(bottts);
+const avatar = new Avatar(style, {
   seed: 'robot-42',
   size: 128,
   borderRadius: 50, // 圆形头像
@@ -266,10 +280,11 @@ const avatar = new Avatar(bottts, {
 ### 带变换的头像
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import avataaars from '@dicebear/styles/avataaars.json' with { type: 'json' };
 
-const avatar = new Avatar(avataaars, {
+const style = new Style(avataaars);
+const avatar = new Avatar(style, {
   seed: 'Jane',
   flip: 'horizontal',
   rotate: 10,
@@ -286,13 +301,14 @@ const avatar = new Avatar(avataaars, {
 `url(#…)` 冲突：
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
+const style = new Style(lorelei);
 const users = ['alice', 'bob', 'charlie'];
 
 const avatars = users.map((user) =>
-  new Avatar(lorelei, {
+  new Avatar(style, {
     seed: user,
     idRandomization: true,
     // ... 其他选项
@@ -308,10 +324,11 @@ const avatars = users.map((user) =>
 映射中未列出的变体会被排除；权重为 `0` 的变体也会被排除，除非**所有**映射的变体权重都为 `0`，在这种情况下，PRNG 会回退为在这些变体上进行无权重选择：
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import avataaars from '@dicebear/styles/avataaars.json' with { type: 'json' };
 
-const avatar = new Avatar(avataaars, {
+const style = new Style(avataaars);
+const avatar = new Avatar(style, {
   seed: 'John',
   topVariant: { short01: 2, short02: 2, long01: 1 },
   // ... 其他选项
@@ -327,7 +344,7 @@ const avatar = new Avatar(avataaars, {
 屏幕阅读器会朗读该值：
 
 ```js
-const avatar = new Avatar(lorelei, {
+const avatar = new Avatar(style, {
   seed: 'Alice',
   title: 'Alice 的头像',
 });
@@ -346,7 +363,8 @@ import { Avatar, Style } from '@dicebear/core';
 import type { StyleOptions, StyleDefinition } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
-const avatar = new Avatar(lorelei, {
+const style = new Style(lorelei);
+const avatar = new Avatar(style, {
   seed: 'John',
   backgroundColor: ['#b6e3f4'],
   // ... 其他选项

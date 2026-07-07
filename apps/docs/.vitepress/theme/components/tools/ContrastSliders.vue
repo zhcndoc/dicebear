@@ -64,7 +64,7 @@ function updateRgbChannel(channel: 'r' | 'g' | 'b', value: number) {
 function updateHslChannel(channel: 'h' | 's' | 'l', value: number) {
   const next = { ...hsl.value, [channel]: value };
   const asRgb = hslToRgb(next);
-  // HSL lets the user move hue directly — treat it as the authoritative hue.
+  // HSL lets the user move hue directly; treat it as the authoritative hue.
   const max = Math.max(asRgb.r, asRgb.g, asRgb.b) / 255;
   const min = Math.min(asRgb.r, asRgb.g, asRgb.b) / 255;
   const v = max * 100;
@@ -80,7 +80,7 @@ function onNativePick(event: Event) {
   const value = (event.target as HTMLInputElement).value.toLowerCase();
   const { r, g, b } = hexToRgb(value);
   // Native pickers emit hex from integer-% S/V (keyboard arrows = ±1%), but
-  // 24-bit hex decodes back with sub-% drift on the other axis — a Down arrow
+  // 24-bit hex decodes back with sub-% drift on the other axis, so a Down arrow
   // shows up as a diagonal cursor step. Try the rounded HSV first: if it
   // re-encodes to the same hex, the input came from an integer-% native state
   // and we can adopt it cleanly. Otherwise (e.g. mouse click landing on

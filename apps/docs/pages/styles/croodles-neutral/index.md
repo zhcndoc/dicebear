@@ -1,5 +1,5 @@
 ---
-title: Croodles Neutral – 头像样式 | DiceBear
+title: Croodles Neutral – Avatar Style
 description: >
   使用 DiceBear 头像库创建 Croodles Neutral 头像。通过我们的免费头像 API 或 JavaScript 头像
   库生成独一无二的个人资料图片。

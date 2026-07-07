@@ -1,5 +1,5 @@
 ---
-title: 以编程方式访问所有可用样式选项 | DiceBear
+title: 以编程方式访问所有可用的样式选项
 description: >
   了解如何使用 OptionsDescriptor 类以编程方式访问 DiceBear
   头像样式的所有可用选项。
@@ -30,9 +30,8 @@ use DiceBear\Style;
 use DiceBear\OptionsDescriptor;
 
 $basePath = InstalledVersions::getInstallPath('dicebear/styles');
-$definition = json_decode(file_get_contents($basePath . '/src/micah.json'), true);
+$style = Style::fromJson(file_get_contents($basePath . '/src/micah.json'));
 
-$style = new Style($definition);
 $descriptor = new OptionsDescriptor($style);
 
 print_r($descriptor->toJSON());
@@ -41,16 +40,14 @@ print_r($descriptor->toJSON());
 ## Python
 
 ```python
-import json
 from importlib.resources import files
 
 from dicebear import OptionsDescriptor, Style
 
-definition = json.loads(
+style = Style.from_json(
     files("dicebear_styles").joinpath("micah.json").read_text("utf-8")
 )
 
-style = Style(definition)
 descriptor = OptionsDescriptor(style)
 
 print(descriptor.to_json())
@@ -70,6 +67,20 @@ style, _ := dicebear.NewStyle([]byte(styles.Micah))
 descriptor := dicebear.NewOptionsDescriptor(style).ToJSON()
 
 fmt.Println(descriptor)
+```
+
+## Dart
+
+```dart
+import 'dart:convert';
+
+import 'package:dicebear_core/dicebear_core.dart';
+import 'package:dicebear_styles/micah.dart';
+
+final style = Style.parse(micah);
+final descriptor = OptionsDescriptor(style);
+
+print(jsonEncode(descriptor.toJson()));
 ```
 
 ## 字段描述符类型

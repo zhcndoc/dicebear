@@ -1,5 +1,5 @@
 ---
-title: 有多少种唯一头像是可能的？ | DiceBear
+title: 多少种唯一头像是可能的？
 description: >
   了解在默认配置下，每种 DiceBear 头像样式可以生成多少种唯一的、由 seed 驱动的头像组合。
 ---

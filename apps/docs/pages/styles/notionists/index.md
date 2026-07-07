@@ -1,5 +1,5 @@
 ---
-title: Notionists – 头像风格 | DiceBear
+title: Notionists – Avatar Style
 description: >
   使用 DiceBear 头像库创建 Notionists 头像。使用我们的免费头像 API 或 JavaScript 头像库生成独特的
   个人资料图片。

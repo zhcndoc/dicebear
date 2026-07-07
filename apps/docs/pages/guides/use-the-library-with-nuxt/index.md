@@ -7,57 +7,60 @@ description: >
 
 # Nuxt 头像库：在 Nuxt 中使用 DiceBear
 
-DiceBear 非常适合 Nuxt 的通用渲染模型。头像可以在 SSR 期间于服务端生成，
-也可以在 Nitro 端点中生成，或者在普通的客户端组件中生成。请选择最符合页面
-[渲染模式](https://nuxt.com/docs/guide/concepts/rendering) 的方式。
+DiceBear 可与 Nuxt 的通用渲染模型协同工作。头像可以在 SSR 期间于服务器上生成，也可以在 Nitro 端点中生成，或者在普通客户端组件中生成。请选择与页面的
+[渲染模式](https://nuxt.com/docs/guide/concepts/rendering)相匹配的方式。
 
 你可以通过 [JS-Library](/how-to-use/js-library/) 或 [HTTP-API](/how-to-use/http-api/) 在 [Nuxt](https://nuxt.com/) 中使用 DiceBear。
 
-## 使用 JS 库
+## Using JS Libraries
 
-### 通用组件
+### Common Components
 
-将生成逻辑包装在 `computed` 中，头像就会在组件渲染的任一端生成。由于结果是 data URI，标记在客户端重新挂载时不会再次运行渲染器。
+Wrap the generation logic in `computed`, and the avatar will be generated at either end of the component render. Since the result is a data URI, the renderer will not run again when the markup is remounted on the client.
 
 ```vue
 <!-- components/UserAvatar.vue -->
 <script setup lang="ts">
 import { computed } from 'vue';
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+const style = new Style(lorelei);
 
 const props = defineProps<{ seed?: string }>();
 
 const avatar = computed(() =>
-  new Avatar(lorelei, {
+  new Avatar(style, {
     seed: props.seed ?? 'Alice',
     size: 128,
-    // ... 其他选项
+    // ... other options
   }).toDataUri(),
 );
 </script>
 
 <template>
-  <img :src="avatar" alt="头像" width="128" height="128" />
+  <img :src="avatar" alt="Avatar" width="128" height="128" />
 </template>
 ```
 
 ::: warning Hydration & `idRandomization`
 
-`idRandomization` 依赖于宿主未使用种子的 RNG，因此 SSR 期间生成的 ID 与客户端重新渲染时不会匹配，Vue 会记录 hydration 不一致。对于 SSR 的头像，请保持 `idRandomization: false`；或者将组件包装在 `<ClientOnly>` 中，并接受视觉闪烁。
+`idRandomization` relies on the host's seedless RNG, so IDs generated during SSR will not match when the client re-renders, and Vue will report hydration mismatches. For SSR avatars, keep `idRandomization: false`; or wrap the component in `<ClientOnly>` and accept the visual flicker.
 
-如果你需要在同一页面上的多个头像之间保持唯一 ID，请在服务端渲染整个页面，并跳过头像子树的客户端 hydration。
+If you need unique IDs across multiple avatars on the same page, render the entire page on the server and skip client hydration for the avatar subtree.
 
 :::
 
-### Nitro 端点
+### Nitro Endpoint
 
-当你需要自定义缓存或 seed 校验时，可以通过自己的 URL 暴露 DiceBear：
+When you need custom caching or seed validation, you can expose DiceBear through your own URL:
 
 ```ts
 // server/api/avatar/[seed].get.ts
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+const style = new Style(lorelei);
 
 export default defineEventHandler((event) => {
   const seed = getRouterParam(event, 'seed') ?? '';
@@ -65,26 +68,28 @@ export default defineEventHandler((event) => {
   setHeader(event, 'Content-Type', 'image/svg+xml');
   setHeader(event, 'Cache-Control', 'public, max-age=31536000, immutable');
 
-  return new Avatar(lorelei, { seed, size: 128 }).toString();
+  return new Avatar(style, { seed, size: 128 }).toString();
 });
 ```
 
-在任何组件中都可以通过 `<img :src="`/api/avatar/${seed}`">` 来使用它。
+You can use it in any component via `<img :src="`/api/avatar/${seed}`">`.
 
-### 使用 `useAsyncData` 缓存
+### Using `useAsyncData` Cache
 
-如果你需要按请求进行 SSR 缓存（这样当多个组件请求同一个 seed 时，就不会重复渲染），请将生成逻辑包装在 `useAsyncData` 中：
+If you need per-request SSR caching (so that when multiple components request the same seed, rendering is not repeated), wrap the generation logic in `useAsyncData`:
 
 ```vue
 <script setup lang="ts">
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+const style = new Style(lorelei);
 
 const props = defineProps<{ seed: string }>();
 
 const { data: avatar } = await useAsyncData(`avatar:${props.seed}`, () =>
   Promise.resolve(
-    new Avatar(lorelei, { seed: props.seed, size: 128 }).toDataUri(),
+    new Avatar(style, { seed: props.seed, size: 128 }).toDataUri(),
   ),
 );
 </script>

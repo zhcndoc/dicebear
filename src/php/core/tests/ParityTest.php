@@ -236,7 +236,7 @@ class ParityTest extends TestCase
         static $styleCache = [];
         $styleData = $styleCache[$styleName] ??= self::loadFixture("styles/$styleName.json");
 
-        $avatar = new Avatar($styleData, $entry['options']);
+        $avatar = new Avatar(new Style($styleData), $entry['options']);
         $json = $avatar->toJSON();
         $this->assertSame($entry['svg'], $json['svg']);
         // Round-trip the resolved options through json_encode/json_decode
@@ -349,10 +349,10 @@ class ParityTest extends TestCase
         ))[0]['definition'];
 
         if ($entry['valid']) {
-            $this->assertInstanceOf(Avatar::class, new Avatar($minimalStyle, $entry['options']));
+            $this->assertInstanceOf(Avatar::class, new Avatar(new Style($minimalStyle), $entry['options']));
         } else {
             $this->expectException(ValidationError::class);
-            new Avatar($minimalStyle, $entry['options']);
+            new Avatar(new Style($minimalStyle), $entry['options']);
         }
     }
 
@@ -369,7 +369,7 @@ class ParityTest extends TestCase
     public function testCircularColorReference(array $entry): void
     {
         try {
-            new Avatar($entry['style'], $entry['options']);
+            new Avatar(new Style($entry['style']), $entry['options']);
             $this->fail('expected a circular color reference error');
         } catch (CircularColorReferenceError $e) {
             $this->assertSame($entry['chain'], $e->chain);

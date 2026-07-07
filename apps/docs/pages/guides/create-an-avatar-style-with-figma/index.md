@@ -1,5 +1,5 @@
 ---
-title: 使用 Figma 创建头像样式 | DiceBear
+title: 使用 Figma 创建头像样式
 description: >
   使用 DiceBear Figma Exporter 插件创建自定义 DiceBear 头像样式的分步指南。
 ---
@@ -57,7 +57,7 @@ description: >
 ## 第 6 步
 
 现在搜索
-[DiceBear Exporter](https://www.figma.com/community/plugin/1005765655729342787)
+[DiceBear 导出器](https://www.figma.com/community/plugin/1005765655729342787)
 插件。确保你已选中画板并启动插件。
 
 将会打开一个对话框，你可以在其中进行各种设置。例如头像样式的名称、许可证，或者组件在头像中后续出现的概率。
@@ -76,9 +76,9 @@ description: >
 
 ## 第 7 步
 
-The plugin exports a JSON file: your
-[style definition](/specification/definition-schema/). This file is ready to use
-immediately, without a build step.
+插件会导出一个 JSON 文件：你的
+[样式定义](/specification/definition-schema/)。此文件可立即使用，
+无需构建步骤。
 
 你可以立即使用 [CLI](/how-to-use/cli/) 测试你的样式：
 
@@ -90,20 +90,17 @@ dicebear ./your-style.json ./test-output --count 10
 
 ## 第 8 步
 
-Congratulations! You can now use your avatar style with the
-[JS Library](/how-to-use/js-library/), the
-[PHP Library](/how-to-use/php-library/), the
-[Python Library](/how-to-use/python-library/), the
-[Rust Library](/how-to-use/rust-library/), the
-[Go Library](/how-to-use/go-library/), or the [CLI](/how-to-use/cli/).
+恭喜！你现在可以在
+[JS Library](/how-to-use/js-library/)、[PHP Library](/how-to-use/php-library/)、[Python Library](/how-to-use/python-library/)、[Rust Library](/how-to-use/rust-library/)、[Go Library](/how-to-use/go-library/)、[Dart Library](/how-to-use/dart-library/) 或 [CLI](/how-to-use/cli/) 中使用你的头像样式了。
 
 ### 使用 JS Library
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import definition from './your-style.json' with { type: 'json' };
 
-const avatar = new Avatar(definition, {
+const style = new Style(definition);
+const avatar = new Avatar(style, {
   seed: 'dicebear',
   // ... 其他选项
 });
@@ -113,10 +110,11 @@ const avatar = new Avatar(definition, {
 
 ```php
 use DiceBear\Avatar;
+use DiceBear\Style;
 
-$definition = json_decode(file_get_contents('./your-style.json'), true);
+$style = Style::fromJson(file_get_contents('./your-style.json'));
 
-$avatar = new Avatar($definition, [
+$avatar = new Avatar($style, [
   'seed' => 'dicebear',
   // ... 其他选项
 ]);
@@ -125,16 +123,15 @@ $avatar = new Avatar($definition, [
 ### 使用 Python Library
 
 ```python
-import json
+from pathlib import Path
 
-from dicebear import Avatar
+from dicebear import Avatar, Style
 
-with open("./your-style.json", encoding="utf-8") as file:
-    definition = json.load(file)
+style = Style.from_json(Path("./your-style.json").read_text("utf-8"))
 
-avatar = Avatar(definition, {
+avatar = Avatar(style, {
     "seed": "dicebear",
-    # ... other options
+    # ... 其他选项
 })
 ```
 
@@ -150,7 +147,7 @@ let style = Style::from_str(&definition)?;
 
 let avatar = Avatar::new(&style, json!({
     "seed": "dicebear",
-    // ... other options
+    // ... 其他选项
 }))?;
 ```
 
@@ -168,8 +165,23 @@ style, _ := dicebear.NewStyle(definition)
 
 avatar, _ := dicebear.NewAvatar(style, map[string]any{
 	"seed": "dicebear",
-	// ... other options
+	// ... 其他选项
 })
+```
+
+### 使用 Dart Library
+
+```dart
+import 'dart:io';
+
+import 'package:dicebear_core/dicebear_core.dart';
+
+final style = Style.parse(File('./your-style.json').readAsStringSync());
+
+final avatar = Avatar(style, {
+  'seed': 'dicebear',
+  // ... 其他选项
+});
 ```
 
 ### 使用 CLI

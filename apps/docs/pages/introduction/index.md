@@ -1,13 +1,13 @@
 ---
 title: DiceBear – 开源头像库与 API
 description: >
-  DiceBear 是一个免费、开源的头像库和头像 API。通过 JavaScript
-  库、PHP 库、Python 库、Rust 库、Go 库、HTTP API 或 CLI，
-  生成确定性的 SVG 个人头像和用户占位图像。
+  DiceBear 是一个免费的开源头像库和头像 API。通过 JavaScript
+  库、PHP 库、Python 库、Rust 库、Go 库、Dart 库、HTTP API 或 CLI，
+  生成确定性的 SVG 个人资料图片和用户占位图片。
 ---
 
 <script setup>
-import { Palette, Code2, Globe, Terminal, Server, Library, Boxes, Hexagon } from '@lucide/vue';
+import { Palette, Code2, Globe, Terminal, Server, Library, Boxes, Hexagon, Target } from '@lucide/vue';
 import DocsHighlights from '@theme/components/docs/DocsHighlights.vue';
 
 const highlights = [
@@ -60,6 +60,14 @@ const highlights = [
     link: '/how-to-use/go-library/',
   },
   {
+    icon: Target,
+    title: 'Dart 库',
+    description:
+      '使用 Dart 3.4+ 在 Dart 和 Flutter 应用中生成头像。与 JS 库的 API 完全一致：相同的 seed，相同的结果。',
+    color: '#0175c2',
+    link: '/how-to-use/dart-library/',
+  },
+  {
     icon: Terminal,
     title: 'CLI',
     description:
@@ -82,26 +90,11 @@ const highlights = [
 
 ## 什么是 DiceBear？
 
-使用 DiceBear，你可以在很短时间内为你的项目创建很棒的头像。
-无论你是在寻找抽象图形，还是精心设计的角色，你
-都能在我们的头像风格中找到合适的选择。无论你想如何以及
-用于何处，DiceBear 都能提供合适的解决方案！
+DiceBear 为你的项目生成头像。头像风格涵盖了多种外观，从抽象图形到设计角色，这些头像可用于多种类型的应用程序。
 
-除了纯随机头像之外，你还可以为用户身份创建
-[确定性](https://en.wikipedia.org/wiki/Deterministic_algorithm) 头像。
-借助内置的 [PRNG](https://en.wikipedia.org/wiki/Pseudorandom_number_generator)，你可以根据 seed 一次又一次地生成相同的头像。
-当然也可以创建个性化头像！只需使用每种头像风格提供的无数选项即可。
+除了纯随机头像之外，你还可以为用户身份创建[确定性](https://en.wikipedia.org/wiki/Deterministic_algorithm)头像。借助内置的[PRNG](https://en.wikipedia.org/wiki/Pseudorandom_number_generator)，你可以基于一个种子一次又一次生成相同的头像。你也可以进行个性化调整：每种头像风格都提供了许多选项来微调结果。
 
-并且多亏了 [JavaScript 库](/how-to-use/js-library/),
-[PHP 库](/how-to-use/php-library/),
-[Python 库](/how-to-use/python-library/),
-[Rust 库](/how-to-use/rust-library/),
-[Go 库](/how-to-use/go-library/), [HTTP API](/how-to-use/http-api/),
-[CLI](/how-to-use/cli/),
-[Figma 插件](https://www.figma.com/community/plugin/1005765655729342787/DiceBear-Exporter),
-[编辑器](https://editor.dicebear.com) 和 [Playground](/playground/)，你的下一个
-头像总是近在咫尺！探索我们的
-[头像 API](/how-to-use/http-api/)，即可通过简单的基于 URL 的集成来使用。
+DiceBear 可通过 [JavaScript 库](/how-to-use/js-library/)、[PHP 库](/how-to-use/php-library/)、[Python 库](/how-to-use/python-library/)、[Rust 库](/how-to-use/rust-library/)、[Go 库](/how-to-use/go-library/)、[Dart 库](/how-to-use/dart-library/)、[HTTP API](/how-to-use/http-api/)、[CLI](/how-to-use/cli/)、[Figma 插件](https://www.figma.com/community/plugin/1005765655729342787/DiceBear-Exporter)、[编辑器](https://editor.dicebear.com) 和 [Playground](/playground/) 使用，因此你可以将其集成到大多数项目中。[头像 API](/how-to-use/http-api/) 提供基于 URL 的集成方式，无需安装任何东西。
 
 ## 如何使用？
 
@@ -123,13 +116,10 @@ const highlights = [
 
 ## 设计即隐私
 
-DiceBear 在构建时就考虑到了隐私。当使用
+DiceBear 在构建时就将隐私放在首位。使用
 [JavaScript 库](/how-to-use/js-library/),
 [PHP 库](/how-to-use/php-library/),
 [Python 库](/how-to-use/python-library/),
-[Rust 库](/how-to-use/rust-library/) 或
-[Go 库](/how-to-use/go-library/) 时，头像会完全在你的
-基础设施上生成。任何个人数据都不会离开你的系统。对于需要
-完全控制数据保留和基础设施的团队，DiceBear 可以
-[self-hosted](/guides/host-the-http-api-yourself/)，因此不依赖
-外部服务。
+[Rust 库](/how-to-use/rust-library/), [Go 库](/how-to-use/go-library/)
+或 [Dart 库](/how-to-use/dart-library/) 时，头像完全在您的基础设施上生成。任何个人数据都不会离开您的系统。对于需要对数据保留和基础设施进行完全控制的团队，DiceBear 可以进行
+[自托管](/guides/host-the-http-api-yourself/)，因此无需依赖外部服务。

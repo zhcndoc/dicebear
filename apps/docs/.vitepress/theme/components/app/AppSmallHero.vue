@@ -13,7 +13,7 @@ withDefaults(
   {
     headline: 'Avatars That Stand Out',
     description:
-      'DiceBear 是一个开源头像库，可让你在极短时间内生成独特、可确定的个人资料图片。无论你需要几何图形、可爱角色，还是像素艺术——我们注重隐私的 SVG 头像库拥有 35+ 种风格，能为你的项目注入活力。',
+      'DiceBear is an open source avatar library that lets you generate unique, deterministic profile pictures in no time. Whether you need geometric shapes, cute characters, or pixel art, our privacy-focused SVG avatar library gives you 35+ styles to choose from.',
   },
 );
 

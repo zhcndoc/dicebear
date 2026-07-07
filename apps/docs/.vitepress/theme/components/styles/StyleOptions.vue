@@ -42,7 +42,7 @@ const props = defineProps<{
 
 const searchQuery = ref('');
 
-// Track that a user used the option filter — once per non-empty session, so a
+// Track that a user used the option filter, once per non-empty session, so a
 // multi-character query counts as a single "searched" interaction, not one per
 // keystroke.
 let searchTracked = false;

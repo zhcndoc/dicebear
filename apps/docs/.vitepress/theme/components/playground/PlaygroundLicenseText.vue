@@ -79,7 +79,7 @@ const customStyleDisplayName = computed(
         >
         <template v-else>{{ customStyleMeta?.license?.name }}</template>
       </template>
-      (as stated by the creator — not verified by DiceBear).
+      (as stated by the creator; DiceBear has not verified this).
     </template>
     <template v-else>
       This avatar style was provided by a user. License and copyright have not

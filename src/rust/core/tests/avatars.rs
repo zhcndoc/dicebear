@@ -1,7 +1,7 @@
 //! Cross-language avatar parity. Renders each shared fixture case and asserts
 //! the SVG matches byte-for-byte the output committed under
-//! `<repo>/tests/fixtures/parity/avatars/`, the same fixtures the JS, PHP and
-//! Python suites render against.
+//! `<repo>/tests/fixtures/parity/avatars/`, the same fixtures the JS, PHP,
+//! Python, Go and Dart suites render against.
 
 use std::fs;
 use std::path::PathBuf;
@@ -42,9 +42,10 @@ fn avatar_parity() {
                 "{name} / {id}"
             );
 
-            // Deep-equal (order-independent) like the JS/PHP/Python suites. Unlike
-            // Python's `1.0 == 1`, serde_json distinguishes integer and float
-            // numbers, so this also pins whole-number options as JSON integers.
+            // Deep-equal (order-independent) like the JS/PHP/Python/Go/Dart
+            // suites. Unlike Python's `1.0 == 1`, serde_json distinguishes
+            // integer and float numbers, so this also pins whole-number
+            // options as JSON integers.
             assert_eq!(
                 avatar.to_json()["options"],
                 case["resolvedOptions"],

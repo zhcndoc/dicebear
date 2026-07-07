@@ -8,7 +8,7 @@ const props = defineProps<{
 }>();
 
 // Seeds chosen to maximise visual variety in the preview row. Picked by
-// fingerprinting candidate seeds against the dylan style (the hardest case — its
+// fingerprinting candidate seeds against the dylan style (the hardest case: its
 // default palette has only 3 backgrounds + 2 skin tones) and balancing
 // background, hair colour and skin tone; ordered so no two neighbours repeat a
 // background or hair colour and skin alternates. Verified distinct across other

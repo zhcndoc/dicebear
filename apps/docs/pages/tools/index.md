@@ -1,6 +1,6 @@
 ---
 layout: page
-title: 工具 – 用于处理 DiceBear 头像的实用工具 | DiceBear
+title: 工具 – 用于处理 DiceBear 头像的实用工具
 description: >
   帮助你理解 DiceBear 如何处理颜色、对比度和头像生成的交互式工具，基于与库本身相同的算法构建。
 aside: false

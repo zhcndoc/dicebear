@@ -16,8 +16,10 @@ DiceBear 可以通过 Signals（Angular 17+）或 `OnChanges` 生命周期钩子
 
 ```typescript [Angular 17+]
 import { Component, input, computed } from '@angular/core';
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+const style = new Style(lorelei);
 
 @Component({
   selector: 'app-avatar',
@@ -27,7 +29,7 @@ export class AvatarComponent {
   seed = input('Alice');
 
   avatarUrl = computed(() =>
-    new Avatar(lorelei, {
+    new Avatar(style, {
       seed: this.seed(),
       size: 128,
       // ... 其他选项
@@ -38,8 +40,10 @@ export class AvatarComponent {
 
 ```typescript [Angular 16 and earlier]
 import { Component, Input, OnChanges } from '@angular/core';
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+const style = new Style(lorelei);
 
 @Component({
   selector: 'app-avatar',
@@ -51,7 +55,7 @@ export class AvatarComponent implements OnChanges {
   avatarUrl: string = '';
 
   ngOnChanges() {
-    this.avatarUrl = new Avatar(lorelei, {
+    this.avatarUrl = new Avatar(style, {
       seed: this.seed,
       size: 128,
       // ... 其他选项
@@ -62,7 +66,7 @@ export class AvatarComponent implements OnChanges {
 
 :::
 
-## 使用 HTTP API
+## Use HTTP API
 
 ::: code-group
 
@@ -71,7 +75,7 @@ import { Component, input, computed } from '@angular/core';
 
 @Component({
   selector: 'app-avatar',
-  template: `<img [src]="avatarUrl()" alt="头像" />`,
+  template: `<img [src]="avatarUrl()" alt="Avatar" />`,
 })
 export class AvatarComponent {
   seed = input('Alice');
@@ -80,7 +84,7 @@ export class AvatarComponent {
     const url = new URL('https://api.dicebear.com/10.x/lorelei/svg');
     url.searchParams.set('seed', this.seed());
     url.searchParams.set('size', '128');
-    // ... 其他选项
+    // ... other options
     return url.href;
   });
 }
@@ -92,7 +96,7 @@ import { Component, Input, OnChanges } from '@angular/core';
 @Component({
   selector: 'app-avatar',
   standalone: true,
-  template: `<img [src]="avatarUrl" alt="头像" />`,
+  template: `<img [src]="avatarUrl" alt="Avatar" />`,
 })
 export class AvatarComponent implements OnChanges {
   @Input() seed: string = 'Alice';
@@ -102,7 +106,7 @@ export class AvatarComponent implements OnChanges {
     const url = new URL('https://api.dicebear.com/10.x/lorelei/svg');
     url.searchParams.set('seed', this.seed);
     url.searchParams.set('size', '128');
-    // ... 其他选项
+    // ... other options
     this.avatarUrl = url.href;
   }
 }

@@ -147,7 +147,7 @@ fn as_number_array(value: Option<&Value>) -> Vec<f64> {
 
 /// Normalizes a range option (bare number, `[n]`, `[min, max]`, or absent) into
 /// a [`Range`]. A bare number becomes a fixed `min == max`; an empty array is
-/// treated as unset. Matches the JS, PHP and Python ports.
+/// treated as unset. Matches the JS, PHP, Python, Go and Dart ports.
 fn to_range(value: Option<&Value>) -> Option<Range> {
     match value {
         Some(Value::Number(n)) => {

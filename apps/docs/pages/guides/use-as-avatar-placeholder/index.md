@@ -84,9 +84,9 @@ const styles = [
 
 <DocsHighlights :highlights="highlights" />
 
-## 使用 HTTP API
+## Using HTTP API
 
-最简单的方法：将 DiceBear API URL 作为 `<img>` 标签的 `src`。使用稳定的标识符作为种子。数字用户 ID 就很合适。关于完整选项和速率限制详情，请参阅 [HTTP API 文档](/how-to-use/http-api/)。
+The easiest method: use the DiceBear API URL as the `src` of an `<img>` tag. Use a stable identifier as the seed. A numeric user ID works well. For full options and rate limit details, see the [HTTP API documentation](/how-to-use/http-api/).
 
 <BrowserPreview url="https://api.dicebear.com/10.x/initials/svg?seed=JD" />
 <BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=user-42" />
@@ -94,27 +94,27 @@ const styles = [
 ```html
 <img
   src="https://api.dicebear.com/10.x/initials/svg?seed=JD"
-  alt="用户头像"
+  alt="User avatar"
   width="48"
   height="48"
 />
 ```
 
-### 图片错误时回退
+### Fallback when the image errors
 
-将 DiceBear 与 `onerror` 处理器结合使用，以便在用户上传的照片加载失败时优雅回退：
+Combine DiceBear with an `onerror` handler so it gracefully falls back when a user-uploaded photo fails to load:
 
 ```html
 <img
   src="/uploads/user-123.jpg"
   onerror="this.src='https://api.dicebear.com/10.x/pixel-art/svg?seed=123'; this.onerror=null;"
-  alt="用户头像"
+  alt="User avatar"
 />
 ```
 
-### 使用用户 ID 作为种子
+### Using the user ID as the seed
 
-传入一个稳定且唯一的标识符作为种子，确保每位用户始终获得相同的占位符：
+Pass a stable and unique identifier as the seed to ensure each user always receives the same placeholder:
 
 ```js
 const userId = 'user-8f3a2c';
@@ -123,16 +123,18 @@ const avatarUrl = `https://api.dicebear.com/10.x/thumbs/svg?seed=${encodeURIComp
 
 <BrowserPreview url="https://api.dicebear.com/10.x/thumbs/svg?seed=user-8f3a2c" />
 
-## 使用 JavaScript 库
+## Using JavaScript Libraries
 
-使用 JS 库进行服务端渲染，或者将 SVG 直接嵌入到你的标记中，而无需额外的 HTTP 请求。关于完整的安装和 API 详情，请参阅 [JavaScript 库文档](/how-to-use/js-library/)。
+Use a JS library to render on the server, or embed SVGs directly into your markup without making an additional HTTP request. For complete installation and API details, please refer to the [JavaScript Library Documentation](/how-to-use/js-library/).
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import thumbs from '@dicebear/styles/thumbs.json' with { type: 'json' };
 
+const style = new Style(thumbs);
+
 function getPlaceholderAvatar(userId) {
-  return new Avatar(thumbs, {
+  return new Avatar(style, {
     seed: userId,
     size: 48,
     borderRadius: 50,
@@ -140,10 +142,10 @@ function getPlaceholderAvatar(userId) {
 }
 ```
 
-## 使用 PHP 库
+## Using PHP Library
 
-使用 PHP 库进行服务端渲染，而无需额外的 HTTP 请求。关于完整的安装和 API 详情，请参阅
-[PHP 库文档](/how-to-use/php-library/)。
+Use the PHP library for server-side rendering without additional HTTP requests. For complete installation and API details, please refer to
+[PHP Library Documentation](/how-to-use/php-library/).
 
 ```php
 <?php
@@ -153,9 +155,7 @@ use DiceBear\Style;
 use DiceBear\Avatar;
 
 $basePath = InstalledVersions::getInstallPath('dicebear/styles');
-$definition = json_decode(file_get_contents($basePath . '/src/thumbs.json'), true);
-
-$style = new Style($definition);
+$style = Style::fromJson(file_get_contents($basePath . '/src/thumbs.json'));
 
 function getPlaceholderAvatar(Style $style, string $userId): string {
   return (string) new Avatar($style, [
@@ -172,16 +172,13 @@ function getPlaceholderAvatar(Style $style, string $userId): string {
 [Python 库文档](/how-to-use/python-library/)。
 
 ```python
-import json
 from importlib.resources import files
 
 from dicebear import Avatar, Style
 
-definition = json.loads(
+style = Style.from_json(
     files("dicebear_styles").joinpath("thumbs.json").read_text("utf-8")
 )
-
-style = Style(definition)
 
 def get_placeholder_avatar(user_id: str) -> str:
     return Avatar(style, {
@@ -241,7 +238,28 @@ func placeholderAvatar(style *dicebear.Style, userID string) (string, error) {
 }
 ```
 
-## 选择样式
+## 使用 Dart 库
+
+使用 Dart 库进行服务端渲染，而无需额外的 HTTP
+请求。有关完整的安装和 API 详情，请参阅
+[Dart 库文档](/how-to-use/dart-library/)。
+
+```dart
+import 'package:dicebear_core/dicebear_core.dart';
+import 'package:dicebear_styles/thumbs.dart';
+
+final style = Style.parse(thumbs);
+
+String getPlaceholderAvatar(String userId) {
+  return Avatar(style, {
+    'seed': userId,
+    'size': 48,
+    'borderRadius': 50,
+  }).svg;
+}
+```
+
+## 选择一种样式
 
 不同样式适用于不同的使用场景。点击某个样式即可查看所有可用选项。
 
@@ -253,7 +271,7 @@ func placeholderAvatar(style *dicebear.Style, userID string) (string, error) {
 
 ```js
 // JS 库
-new Avatar(thumbs, { seed: userId, size: 48, borderRadius: 50 });
+new Avatar(style, { seed: userId, size: 48, borderRadius: 50 });
 ```
 
 ```php
@@ -274,6 +292,11 @@ Avatar::new(&style, json!({ "seed": user_id, "size": 48, "borderRadius": 50 }))?
 ```go
 // Go 库
 dicebear.NewAvatar(style, map[string]any{"seed": userID, "size": 48, "borderRadius": 50})
+```
+
+```dart
+// Dart 库
+Avatar(style, {'seed': userId, 'size': 48, 'borderRadius': 50});
 ```
 
 ```

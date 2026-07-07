@@ -97,7 +97,9 @@ const rows = buildComparisonRows({
       </UiCard>
 
       <p class="app-comparison-note">
-        此比较基于公开可用的信息，可能不反映最新更新。每种工具都有其自身的优势——请选择最适合您项目的工具。
+        This comparison is based on publicly available information and may not
+        reflect the latest updates. Each tool has its own strengths, so choose
+        what works best for your project.
       </p>
     </UiContainer>
   </UiSection>

@@ -70,5 +70,17 @@
   {
     "seed": "a@b\u2029cd",
     "result": "A"
+  },
+  {
+    "seed": "ß test",
+    "result": "SST"
+  },
+  {
+    "seed": "ﬁsh bar",
+    "result": "FIB"
+  },
+  {
+    "seed": "ᾀeolic text",
+    "result": "ἈΙT"
   }
 ]

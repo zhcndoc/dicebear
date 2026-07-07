@@ -20,13 +20,15 @@ DiceBear 同时适用于 Svelte 4 和 Svelte 5。使用 `$derived`（Svelte 5）
 
 ```svelte [Svelte 5]
 <script>
-  import { Avatar } from '@dicebear/core';
+  import { Style, Avatar } from '@dicebear/core';
   import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+  const style = new Style(lorelei);
 
   let { seed = 'Alice' } = $props();
 
   const avatar = $derived(
-    new Avatar(lorelei, {
+    new Avatar(style, {
       seed,
       size: 128,
       // ... 其他选项
@@ -39,12 +41,14 @@ DiceBear 同时适用于 Svelte 4 和 Svelte 5。使用 `$derived`（Svelte 5）
 
 ```svelte [Svelte 4]
 <script>
-  import { Avatar } from '@dicebear/core';
+  import { Style, Avatar } from '@dicebear/core';
   import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
+
+  const style = new Style(lorelei);
 
   export let seed = 'Alice';
 
-  $: avatar = new Avatar(lorelei, {
+  $: avatar = new Avatar(style, {
     seed,
     size: 128,
     // ... 其他选项

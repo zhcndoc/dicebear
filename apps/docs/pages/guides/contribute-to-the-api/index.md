@@ -1,5 +1,5 @@
 ---
-title: 为 HTTP API 做贡献 | DiceBear
+title: 为 HTTP API 做贡献
 description: >
   指向 DiceBear HTTP API 的贡献指南，位于
   api.dicebear.com。

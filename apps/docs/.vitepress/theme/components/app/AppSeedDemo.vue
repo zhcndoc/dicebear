@@ -50,7 +50,7 @@ const avatarStyleMeta = useAvatarStyleMeta(activeStyleName);
 
 const seed = ref<string>(RANDOM_SEEDS[0]);
 
-// Never send the seed text itself — only that the user edited it. Debounced so
+// Never send the seed text itself, only that the user edited it. Debounced so
 // typing counts as one interaction.
 const trackSeedEdited = useDebounceFn(() => {
   track('Home Demo: Seed Edited', { style: currentStyle.value });
@@ -95,8 +95,9 @@ const licenseUrl = computed(() =>
           <strong>每一次都一致。</strong>
         </UiHeadline>
         <UiDescription class="app-seed-demo-subtitle">
-          任何字符串都可以作为种子，例如用户名、邮箱或 ID，DiceBear
-          都能在所有平台上稳定生成完全一致的头像。
+          Use any string as a seed, such as usernames, emails, or IDs, and
+          DiceBear generates the identical avatar consistently across all
+          platforms.
         </UiDescription>
       </div>
 

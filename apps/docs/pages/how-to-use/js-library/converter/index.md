@@ -1,5 +1,5 @@
 ---
-title: Converter – 将 SVG 头像转换为 PNG、JPEG 等格式 | DiceBear
+title: Converter – 将 SVG 头像转换为 PNG、JPEG 等格式
 description: >
   了解如何在你的项目中使用 DiceBear Converter 库，将 SVG
   转换为 PNG 或 JPEG。可在浏览器和 Node.js 中使用！
@@ -18,7 +18,7 @@ npm install @dicebear/converter
 
 ::: tip
 
-使用转换器包时，你不需要安装核心库 `@dicebear/core`。虽然它是为 DiceBear 优化的，但也可以与来自
+使用转换器包时，你不需要安装核心库 `@dicebear/core`。虽然它是为 DiceBear 优化的，但它也可以与来自
 其他来源的 SVG 一起使用。
 
 :::
@@ -29,10 +29,12 @@ npm install @dicebear/converter
 
 ```js
 import { toPng } from '@dicebear/converter';
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 
-const avatar = new Avatar(lorelei, {
+const style = new Style(lorelei);
+
+const avatar = new Avatar(style, {
   seed: 'Alice',
   // ... 其他选项
 });
@@ -168,7 +170,7 @@ const png = toPng(svg, {
 });
 const dataUri = await png.toDataUri(); // [!code focus]
 
-// 在 HTML 中使用：<img src={dataUri} alt="Avatar" />
+// 在 HTML 中使用：<img src={dataUri} alt="头像" />
 ```
 
 ### `.toArrayBuffer()`
@@ -272,11 +274,13 @@ await exiftool.end();
 ### 将 DiceBear 头像转换为 PNG
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 
-const avatar = new Avatar(lorelei, {
+const style = new Style(lorelei);
+
+const avatar = new Avatar(style, {
   seed: 'Alice',
   backgroundColor: ['#b6e3f4'],
 });
@@ -291,12 +295,14 @@ document.querySelector('img').src = dataUri;
 ### 将头像保存到文件（Node.js）
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import bottts from '@dicebear/styles/bottts.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 import { writeFile } from 'node:fs/promises';
 
-const avatar = new Avatar(bottts, {
+const style = new Style(bottts);
+
+const avatar = new Avatar(style, {
   seed: 'robot-42',
 });
 
@@ -309,13 +315,15 @@ await writeFile('avatar.png', Buffer.from(buffer));
 ### 使用 Exif 元数据进行转换（Node.js）
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 import { exiftool } from 'exiftool-vendored';
 import { writeFile } from 'node:fs/promises';
 
-const avatar = new Avatar(lorelei, {
+const style = new Style(lorelei);
+
+const avatar = new Avatar(style, {
   seed: 'Alice',
 });
 
@@ -333,11 +341,13 @@ await exiftool.end();
 ### 使用自定义字体（Node.js）
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import initials from '@dicebear/styles/initials.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 
-const avatar = new Avatar(initials, {
+const style = new Style(initials);
+
+const avatar = new Avatar(style, {
   seed: 'Alice',
 });
 
@@ -351,11 +361,13 @@ const dataUri = await png.toDataUri();
 ### 使用自定义尺寸进行转换
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import lorelei from '@dicebear/styles/lorelei.json' with { type: 'json' };
 import { toPng } from '@dicebear/converter';
 
-const avatar = new Avatar(lorelei, { seed: 'Alice' });
+const style = new Style(lorelei);
+
+const avatar = new Avatar(style, { seed: 'Alice' });
 
 const png = toPng(avatar, { size: 128 });
 const dataUri = await png.toDataUri();

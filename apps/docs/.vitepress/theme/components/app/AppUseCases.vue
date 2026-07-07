@@ -123,7 +123,7 @@ function avatar(
 
         <AppUseCasesCard
           title="Gaming"
-          description="Generate millions of unique player identities, NPCs and bots — same seed, same character, every session."
+          description="Generate millions of unique player identities, NPCs and bots. The same seed gives the same character every session."
         >
           <div class="uc-roster">
             <div class="uc-player">
@@ -192,7 +192,7 @@ function avatar(
               />
               <div>
                 <strong>ren</strong>
-                <em>Yep — runs 2× faster.</em>
+                <em>Yep, runs 2× faster.</em>
               </div>
             </div>
             <div class="uc-post">
@@ -214,7 +214,7 @@ function avatar(
 
         <AppUseCasesCard
           title="Team Tools"
-          description="Visual distinction for team members in collaborative apps. Cursors, mentions, sidebars — every face stays consistent."
+          description="Visual distinction for team members in collaborative apps. In cursors, mentions, and sidebars, every face stays consistent."
         >
           <div class="uc-team">
             <div class="uc-pill">
@@ -270,7 +270,7 @@ function avatar(
 
         <AppUseCasesCard
           title="Placeholder Images"
-          description="Beautiful default profile pictures while users set up their account — and a graceful fallback when uploads fail."
+          description="Beautiful default profile pictures while users set up their account, and a graceful fallback when uploads fail."
         >
           <div class="uc-grid-mini">
             <img

@@ -1,5 +1,5 @@
 ---
-title: 从零创建头像风格 | DiceBear
+title: 从零创建头像风格
 description: >
   了解如何通过编写 JSON 定义文件，从零创建一个 DiceBear 头像风格。无需 Figma 或设计工具。
 ---
@@ -146,9 +146,9 @@ PRNG 会为每个种子选择不同的背景颜色。
 
 `canvas.elements` 数组通过 `{ "type": "component", "name": "face" }` 引用了 `face` 组件。PRNG 会选择 `smile` 或 `neutral` 变体之一。
 
-## 多个组件
+## Multiple Components
 
-你可以添加任意多个组件。每个组件都是独立的：PRNG 会分别为每个组件选择一个变体。
+You can add any number of components. Each component is independent: the PRNG selects a variant separately for each component.
 
 ```json
 {
@@ -183,13 +183,13 @@ PRNG 会为每个种子选择不同的背景颜色。
 }
 ```
 
-### 概率
+### Probability
 
-`probability` 属性（0-100）控制组件出现的频率。在上面的示例中，`accessories` 只会出现在大约 30% 的生成头像中。默认值为 `100`（始终可见）。
+The `probability` property (0-100) controls how often a component appears. In the example above, `accessories` will only appear in about 30% of generated avatars. The default is `100` (always visible).
 
-### 变体权重
+### Variant Weighting
 
-控制特定变体被选中的频率：
+Control how often specific variants are selected:
 
 ```json
 {
@@ -201,11 +201,11 @@ PRNG 会为每个种子选择不同的背景颜色。
 }
 ```
 
-权重越高 = 被选中的可能性越大。只有当其他所有权重也都是 `0` 时，权重为 `0` 的项才会被选中。默认权重为 `1`。
+Higher weight = more likely to be selected. A weight of `0` is only selected if all other weights are also `0`. The default weight is `1`.
 
-### 组件变换
+### Component Transformations
 
-组件可以有默认的旋转、平移和缩放范围，PRNG 会在每次渲染时采样。所有四个字段都使用相同的 `{ min, max, step? }` 范围对象。完整参考请参见 [范围](/specification/definition-schema/#ranges)。
+Components can have default rotation, translation, and scaling ranges, sampled by the PRNG on each render. All four fields use the same `{ min, max, step? }` range object. See [Ranges](/specification/definition-schema/#ranges) for the full reference.
 
 ```json
 {
@@ -223,7 +223,7 @@ PRNG 会为每个种子选择不同的背景颜色。
 }
 ```
 
-如果要固定值，请将 `min === max`；或者添加 `"step": <n>`，将范围量化为离散区间。
+If you want a fixed value, set `min === max`; or add `"step": <n>` to quantize the range into discrete intervals.
 
 ## 颜色调色板
 
@@ -323,10 +323,11 @@ dicebear ./my-style.json ./output --seed "Alice" --format png
 ### 使用 JS 库
 
 ```js
-import { Avatar } from '@dicebear/core';
+import { Style, Avatar } from '@dicebear/core';
 import definition from './my-style.json' with { type: 'json' };
 
-const avatar = new Avatar(definition, { seed: 'test' });
+const style = new Style(definition);
+const avatar = new Avatar(style, { seed: 'test' });
 console.log(avatar.toString());
 ```
 
@@ -334,23 +335,22 @@ console.log(avatar.toString());
 
 ```php
 use DiceBear\Avatar;
+use DiceBear\Style;
 
-$definition = json_decode(file_get_contents('./my-style.json'), true);
-$avatar = new Avatar($definition, ['seed' => 'test']);
+$style = Style::fromJson(file_get_contents('./my-style.json'));
+$avatar = new Avatar($style, ['seed' => 'test']);
 echo (string) $avatar;
 ```
 
 ### 使用 Python 库
 
 ```python
-import json
+from pathlib import Path
 
-from dicebear import Avatar
+from dicebear import Avatar, Style
 
-with open("./my-style.json", encoding="utf-8") as file:
-    definition = json.load(file)
-
-avatar = Avatar(definition, {"seed": "test"})
+style = Style.from_json(Path("./my-style.json").read_text("utf-8"))
+avatar = Avatar(style, {"seed": "test"})
 print(avatar.to_string())
 ```
 
@@ -385,7 +385,20 @@ avatar, _ := dicebear.NewAvatar(style, map[string]any{"seed": "test"})
 fmt.Println(avatar.SVG())
 ```
 
-## 后续步骤
+### 使用 Dart 库
+
+```dart
+import 'dart:io';
+
+import 'package:dicebear_core/dicebear_core.dart';
+
+final style = Style.parse(File('./my-style.json').readAsStringSync());
+
+final avatar = Avatar(style, {'seed': 'test'});
+print(avatar.svg);
+```
+
+## 下一步
 
 - 查看 [定义模式参考](/specification/definition-schema/) 以获取完整规范
 - 浏览 [官方定义](https://github.com/dicebear/styles) 以查看真实示例

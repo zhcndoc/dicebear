@@ -30,7 +30,7 @@ function updateHsv(next: Hsv) {
     <header class="contrast-tool-hero">
       <UiHeadline tag="h1"> <strong>WCAG</strong> Contrast Picker </UiHeadline>
       <UiDescription>
-        See which of two contrast colors DiceBear picks for any color — using
+        See which of two contrast colors DiceBear picks for any color, using
         the exact WCAG 2.1 algorithm from <code>@dicebear/core</code>.
       </UiDescription>
     </header>

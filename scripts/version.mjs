@@ -65,6 +65,22 @@ if (existsSync(cargoPath)) {
   }
 }
 
+// The Dart core is not an npm workspace either; bump its pubspec.yaml so it
+// ships on the same version as the other ports. pub.dev's automated publishing
+// requires the pubspec version to match the v{{version}} tag exactly. Only the
+// top-level `version:` line (at column 0) matches; indented dependency
+// constraints do not.
+const pubspecPath = join(ROOT, "src/dart/core/pubspec.yaml");
+if (existsSync(pubspecPath)) {
+  const raw = readFileSync(pubspecPath, "utf-8");
+  const updated = raw.replace(/^version: .*$/m, `version: ${version}`);
+
+  if (updated !== raw) {
+    writeFileSync(pubspecPath, updated);
+    console.log(`  dicebear_core (dart): → ${version}`);
+  }
+}
+
 // The Go core (src/go/core) needs no file bump: a Go module's version lives
 // entirely in the Git tag, which the module proxy reads directly. The tag
 // created below (e.g. v10.2.0) is mirrored to the standalone dicebear-go repo by

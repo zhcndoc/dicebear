@@ -130,11 +130,11 @@ export function buildComparisonRows({
     {
       feature: '语言支持',
       values: {
-        dicebear: 'JavaScript/TypeScript, PHP, Python, Rust, Go',
-        boringAvatars: 'JavaScript',
-        avvvatars: 'JavaScript/TypeScript',
-        multiavatar: 'JavaScript、PHP、Python',
-        jdenticon: 'JavaScript、.NET、PHP',
+        dicebear: 'JS/TS, PHP, Python, Rust, Go, Dart',
+        boringAvatars: 'JS',
+        avvvatars: 'JS/TS',
+        multiavatar: 'JS, PHP, Python',
+        jdenticon: 'JS, C#, PHP',
       },
     },
     {

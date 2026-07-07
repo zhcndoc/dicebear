@@ -45,7 +45,7 @@ const downloads = computed(() =>
     <UiContainer>
       <UiSectionHeader
         class="app-stats-banner-header"
-        description="Usage data from our HTTP-API and npm packages — updated weekly."
+        description="Usage data from our HTTP-API and npm packages, updated weekly."
       >
         <template #headline
           >数十亿头像。<strong>一个 API。</strong></template

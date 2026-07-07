@@ -1,6 +1,6 @@
 ---
 layout: doc
-title: WCAG 对比度拾色器 – 工具 | DiceBear
+title: WCAG 对比度拾色器 – 工具
 description: >
   基于 @dicebear/core 算法构建的交互式 WCAG 2.1 对比度拾色器。
   选择一种颜色，查看 DiceBear 会在两种对比度颜色中选择哪一种，

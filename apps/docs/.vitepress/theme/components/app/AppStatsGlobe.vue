@@ -272,7 +272,7 @@ function applyTheme() {
     dark ? 'rgba(56, 189, 248, 0.2)' : 'rgba(2, 132, 199, 0.1)',
   );
 
-  // Update hex polygon colors — pass string directly, no per-polygon closure needed
+  // Update hex polygon colors: pass string directly, no per-polygon closure needed
   globe.hexPolygonColor(
     dark ? 'rgba(56, 189, 248, 0.65)' : 'rgba(2, 132, 199, 0.28)',
   );
@@ -312,7 +312,7 @@ function startEvents() {
   if (eventInterval) return;
   if (landPoints.length === 0) {
     console.warn(
-      '[AppStatsGlobe] No land points available — skipping avatar events.',
+      '[AppStatsGlobe] No land points available, skipping avatar events.',
     );
     return;
   }
@@ -410,7 +410,7 @@ const formattedRate = (r: number) => {
       <div class="app-stats-globe-ring" />
     </div>
     <p class="app-stats-globe-caption">
-      {{ formattedRate(props.rate) }} avatars generated every second — worldwide
+      {{ formattedRate(props.rate) }} avatars generated every second, worldwide
     </p>
   </div>
 </template>

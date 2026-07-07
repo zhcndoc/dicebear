@@ -1,5 +1,5 @@
 ---
-title: 为编辑器做贡献 | DiceBear
+title: 贡献编辑器
 description: >
   指向 DiceBear 编辑器在
   editor.dicebear.com 的贡献指南。

@@ -1,5 +1,5 @@
 ---
-title: Disco – 头像风格 | DiceBear
+title: Disco – 头像风格
 description: >
   使用 DiceBear 头像库创建 Disco 头像。通过我们的免费头像 API 或 JavaScript 头像库生成独特的个人资料图片。
 ---
@@ -14,7 +14,7 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 
 # Disco
 
-Disco 是一种抽象的矢量头像风格，由类似半色调网格的小形状构成，这些形状会在彩色背景上不断变大和缩小。可生成引人注目的 SVG 个人资料图标，非常适合作为头像占位符或装饰性用户标识。
+Disco 是一种抽象的矢量头像风格，由类似半色调网格的小形状构成，这些形状会在有颜色的背景上不断变大和缩小。可生成图形化的 SVG 个人资料图标，适合作为头像占位符或装饰性用户标识。
 
 <StylePreview styleName="disco" />
 

@@ -13,12 +13,12 @@ individual features like hair or glasses.
 [Documentation](https://www.dicebear.com/introduction) |
 [Editor](https://editor.dicebear.com)
 
-## One library, five languages
+## One library, six languages
 
-DiceBear 10 ships as native libraries for JavaScript, PHP, Python, Rust, and Go.
-Every port passes a shared test suite that requires byte-identical SVG output to
-the JavaScript reference. Generate an avatar in the browser, regenerate it later
-in a Go or PHP backend, and you get the same bytes.
+DiceBear 10 ships as native libraries for JavaScript, PHP, Python, Rust, Go, and
+Dart. Every port passes a shared test suite that requires byte-identical SVG
+output to the JavaScript reference. Generate an avatar in the browser,
+regenerate it later in a Go or PHP backend, and you get the same bytes.
 
 | Language                | Package                                                                 | Install                                      |
 | ----------------------- | ----------------------------------------------------------------------- | -------------------------------------------- |
@@ -27,6 +27,7 @@ in a Go or PHP backend, and you get the same bytes.
 | Python                  | [`dicebear-core`](https://pypi.org/project/dicebear-core/)              | `pip install dicebear-core`                  |
 | Rust                    | [`dicebear-core`](https://crates.io/crates/dicebear-core)               | `cargo add dicebear-core`                    |
 | Go                      | [`dicebear-go`](https://pkg.go.dev/github.com/dicebear/dicebear-go/v10) | `go get github.com/dicebear/dicebear-go/v10` |
+| Dart                    | [`dicebear_core`](https://pub.dev/packages/dicebear_core)               | `dart pub add dicebear_core`                 |
 
 In JavaScript it looks like this; the
 [documentation](https://www.dicebear.com/introduction) has the equivalent for
@@ -66,7 +67,7 @@ with Figma or from scratch.
 
 ## This repository
 
-This monorepo contains the five core libraries, the CLI, the SVG-to-raster
+This monorepo contains the six core libraries, the CLI, the SVG-to-raster
 converter, the documentation site ([dicebear.com](https://www.dicebear.com)),
 and the editor. Related projects live in their own repositories:
 

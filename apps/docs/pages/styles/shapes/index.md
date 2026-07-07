@@ -1,5 +1,5 @@
 ---
-title: Shapes – 头像样式 | DiceBear
+title: Shapes – 头像风格
 description: >
   使用 DiceBear 头像库创建 Shapes 头像。使用我们的免费头像 API 或 JavaScript 头像库生成独特的
   个人资料图片。

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import warnings
 from typing import Any
 from urllib.parse import quote
 
@@ -27,6 +28,21 @@ class Avatar:
     def __init__(
         self, style_input: Any, options_input: dict[str, Any] | None = None
     ) -> None:
+        """Render an avatar from a style and options.
+
+        Pass a :class:`Style` instance. Passing a raw definition dict is
+        deprecated and will be removed in v11; wrap it with ``Style(...)`` and
+        reuse the instance across avatars.
+        """
+        if not isinstance(style_input, Style):
+            warnings.warn(
+                "Passing a style definition to Avatar is deprecated and will be "
+                "removed in v11. Wrap it in a Style first: "
+                "Avatar(Style(definition), options).",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+
         style = style_input if isinstance(style_input, Style) else Style(style_input)
         options = Options(options_input)
         resolver = Resolver(style, options)

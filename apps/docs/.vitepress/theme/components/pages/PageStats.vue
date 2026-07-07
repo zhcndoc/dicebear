@@ -257,7 +257,9 @@ const monthlyStats = computed(() => {
       >数十亿头像。<br /><strong>一个 API。</strong></template
     >
     <template #description
-      >通过我们的 HTTP API 生成的每个头像都会被匿名追踪。此页面为您透明呈现真实使用数据——每日更新，并按请求量、流量、样式等维度进行细分。</template
+      >Every avatar generated through our HTTP-API is tracked anonymously. This
+      page gives you a transparent look at real usage data. It is updated weekly
+      and broken down by requests, traffic, styles, and more.</template
     >
     <template #actions><!-- no actions --></template>
     <template #below-actions>
@@ -302,7 +304,7 @@ const monthlyStats = computed(() => {
   <UiSection divider>
     <UiContainer>
       <UiSectionHeader
-        description="Weekly request and download volumes — toggle between the HTTP API and npm packages."
+        description="Weekly request and download volumes. Toggle between the HTTP API and npm packages."
       >
         <template #headline>随<strong>时间</strong>变化的使用情况</template>
       </UiSectionHeader>
@@ -357,7 +359,7 @@ const monthlyStats = computed(() => {
   <UiSection divider>
     <UiContainer>
       <UiSectionHeader
-        description="Based on API request data — which styles, versions, and output formats are used most."
+        description="Based on API request data. Shows which styles, versions, and output formats are used most."
       >
         <template #headline>使用<strong>明细</strong></template>
       </UiSectionHeader>

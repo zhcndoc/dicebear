@@ -1,10 +1,10 @@
-// Generates the cross-language parity fixtures consumed by both the JS and
-// PHP test suites. Re-run via `npm run fixtures:parity` whenever the JS
-// implementation legitimately changes; commit the diff and bring the PHP
-// side back in sync.
+// Generates the cross-language parity fixtures consumed by every port's test
+// suite. Re-run via `npm run fixtures:parity` whenever the JS implementation
+// legitimately changes; commit the diff and bring the other ports back in
+// sync.
 //
 // The generator deliberately uses the JS implementation as the reference.
-// PHP is then expected to match these byte-for-byte.
+// The other ports are then expected to match these byte-for-byte.
 
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -200,8 +200,8 @@ const weightedPickCases = [
   // insertion-order independence: same expected result as the first entry above
   { seed: 'test', key: 'k', weights: { c: 2, a: 1, b: 4 } },
   { seed: 'test', key: 'k', weights: { only: 1 } },
-  // fractional weights in non-sorted insertion order — locks in that JS and
-  // PHP sum in the same order (sorted), since float addition is non-associative
+  // fractional weights in non-sorted insertion order — locks in that every port
+  // sums in the same order (sorted), since float addition is non-associative
   { seed: 'test', key: 'k', weights: { c: 0.1, a: 0.2, b: 0.3 } },
   // Astral-plane keys: UTF-16 vs code-point sort order (see EMOJI/PUA above).
   { seed: 'test', key: 'k', weights: { [EMOJI]: 1, [PUA]: 2, a: 3 } },
@@ -351,6 +351,13 @@ const initialsSeeds = [
   'a@b' + String.fromCharCode(0x0d) + 'cd',
   'a@b' + String.fromCharCode(0x2028) + 'cd',
   'a@b' + String.fromCharCode(0x2029) + 'cd',
+  // Full Unicode case mapping (not simple 1:1): ß→SS, the ﬁ ligature→FI, and
+  // Greek iota-subscript forms expand to two letters. Languages whose default
+  // uppercasing is simple-mapping only (Go strings.ToUpper, Dart VM
+  // toUpperCase) need a full-mapping implementation to pass these.
+  'ß test',
+  'ﬁsh bar',
+  'ᾀeolic text',
 ];
 
 writeJson(

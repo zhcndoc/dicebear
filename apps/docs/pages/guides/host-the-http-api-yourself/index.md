@@ -7,7 +7,7 @@ description: >
 
 # 自托管头像 API：自己托管 DiceBear
 
-在本指南中，我们将向你展示如何自行托管 HTTP API。对于大多数用户来说，这并不是必需的，但在某些情况下会很有用。
+你可以自行托管 HTTP API。这对大多数用户来说并非必需，但在某些情况下会很有用。
 
 你可以在 [GitHub](https://github.com/dicebear/api) 上找到 HTTP API 的源代码。该代码使用 TypeScript 编写，并使用 [Fastify](https://www.fastify.io/) 框架。
 
@@ -69,7 +69,7 @@ http://localhost:3000/10.x/<styleName>/options.json
 
 HTTP API 支持以下环境变量：
 
-| Variable                           | Default                                       | Description                                                          |
+| 变量                               | 默认值                                        | 描述                                                                 |
 | ---------------------------------- | --------------------------------------------- | -------------------------------------------------------------------- |
 | `PORT`                             | `3000`                                        | 监听端口。                                                           |
 | `HOST`                             | `0.0.0.0`                                     | 绑定的主机（默认绑定所有 IPv4 地址）。                               |

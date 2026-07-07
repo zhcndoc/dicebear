@@ -1,5 +1,5 @@
 ---
-title: Python Avatar Library | DiceBear
+title: Python 头像库
 description: >
   使用 DiceBear Python 库在服务器端生成 SVG 头像。Python 3.10+，并且 API 与 JavaScript、PHP、Rust 和
   Go 库完全一致。
@@ -11,7 +11,7 @@ Python 库提供与 [JavaScript 库](/how-to-use/js-library/) 完全一致的 AP
 
 ## 安装
 
-你需要两个包：核心库 `dicebear-core` 和头像样式定义 `dicebear-styles`。
+您需要两个包：核心库 `dicebear-core` 和头像样式定义 `dicebear-styles`。
 
 ```bash
 pip install dicebear-core dicebear-styles
@@ -22,16 +22,15 @@ pip install dicebear-core dicebear-styles
 我们在示例中使用头像样式 [lorelei](/styles/lorelei/)。你可以在[这里](/styles/)找到更多头像样式。
 
 ```python
-import json
 from importlib.resources import files
 
-from dicebear import Avatar
+from dicebear import Avatar, Style
 
-definition = json.loads(
+style = Style.from_json(
     files("dicebear_styles").joinpath("lorelei.json").read_text("utf-8")
 )
 
-avatar = Avatar(definition, {
+avatar = Avatar(style, {
     "seed": "John",
     # ... 其他选项
 })
@@ -52,8 +51,8 @@ svg = avatar.to_string()
 `seed` 选项是生成确定性头像的关键。相同的 seed 总是会生成相同的头像：
 
 ```python
-avatar1 = Avatar(definition, {"seed": "user-123"})
-avatar2 = Avatar(definition, {"seed": "user-123"})
+avatar1 = Avatar(style, {"seed": "user-123"})
+avatar2 = Avatar(style, {"seed": "user-123"})
 
 avatar1.to_string() == avatar2.to_string()  # True
 ```
@@ -62,12 +61,13 @@ avatar1.to_string() == avatar2.to_string()  # True
 
 ### `Avatar`
 
-用于生成头像的主类。接受一个 `Style` 实例（或原始定义字典）以及可选项。
+用于生成头像的主类。传入一个 `Style` 实例和可选
+选项。
 
 ```python
 from dicebear import Avatar
 
-avatar = Avatar(definition, {
+avatar = Avatar(style, {
     # ... 选项
 })
 ```
@@ -105,7 +105,7 @@ fields = descriptor.to_json()
 以 XML 格式返回 SVG 形式的头像。`__str__` 方法允许直接在字符串上下文中使用头像。
 
 ```python
-avatar = Avatar(definition, {"seed": "Alice"})
+avatar = Avatar(style, {"seed": "Alice"})
 
 svg = avatar.to_string()
 # 或
@@ -119,7 +119,7 @@ svg = str(avatar)
 返回一个包含 SVG 和已解析选项的字典。
 
 ```python
-avatar = Avatar(definition, {"seed": "Alice"})
+avatar = Avatar(style, {"seed": "Alice"})
 
 result = avatar.to_json()
 
@@ -134,7 +134,7 @@ result = avatar.to_json()
 以 [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme) 形式返回头像。
 
 ```python
-avatar = Avatar(definition, {"seed": "Alice"})
+avatar = Avatar(style, {"seed": "Alice"})
 
 data_uri = avatar.to_data_uri()
 
@@ -146,7 +146,7 @@ data_uri = avatar.to_data_uri()
 核心选项与 JavaScript 库完全一致。完整参考请查看 [JS Library core options](/how-to-use/js-library/#core-options)。以下是 Python 语法中的选项：
 
 ```python
-avatar = Avatar(definition, {
+avatar = Avatar(style, {
     "seed": "Alice",
     "flip": "horizontal",            # "none", "horizontal", "vertical", "both"
     "rotate": 10,                    # -360 到 360，或 [min, max] 范围
@@ -171,7 +171,7 @@ avatar = Avatar(definition, {
 ### 自定义背景头像
 
 ```python
-avatar = Avatar(definition, {
+avatar = Avatar(style, {
     "seed": "Alice",
     "backgroundColor": ["#b6e3f4", "#c0aede", "#d1d4f9"],
 })
@@ -180,16 +180,15 @@ avatar = Avatar(definition, {
 ### 固定尺寸头像
 
 ```python
-import json
 from importlib.resources import files
 
 from dicebear import Avatar, Style
 
-definition = json.loads(
+style = Style.from_json(
     files("dicebear_styles").joinpath("bottts.json").read_text("utf-8")
 )
 
-avatar = Avatar(Style(definition), {
+avatar = Avatar(style, {
     "seed": "robot-42",
     "size": 128,
     "borderRadius": 50,  # 圆形头像
@@ -199,16 +198,15 @@ avatar = Avatar(Style(definition), {
 ### 带变换的头像
 
 ```python
-import json
 from importlib.resources import files
 
 from dicebear import Avatar, Style
 
-definition = json.loads(
+style = Style.from_json(
     files("dicebear_styles").joinpath("avataaars.json").read_text("utf-8")
 )
 
-avatar = Avatar(Style(definition), {
+avatar = Avatar(style, {
     "seed": "Jane",
     "flip": "horizontal",
     "rotate": 10,
@@ -236,7 +234,7 @@ avatars = [
 ### 权重变体选择
 
 ```python
-avatar = Avatar(definition, {
+avatar = Avatar(style, {
     "seed": "Alice",
     "topVariant": {"short01": 2, "short02": 2, "long01": 1},
 })
