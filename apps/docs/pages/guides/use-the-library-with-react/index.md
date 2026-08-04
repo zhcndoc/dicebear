@@ -7,8 +7,8 @@ description: >
 
 # React 头像库：在 React 中使用 DiceBear
 
-DiceBear 可通过 JS 库或 HTTP API 在 React 中使用。使用 `useMemo` 可根据种子
-生成确定性的 SVG 个人资料图片，或者使用 HTTP API 作为普通的 `<img src>`，无需任何额外依赖。
+DiceBear 可通过 JS 库或 HTTP API 在 React 中使用。使用 `useMemo` 根据种子
+生成确定性的 SVG 个人资料图片，或者将 HTTP API 作为无需额外依赖的普通 `<img src>` 使用。
 
 你可以通过 [JS 库](/how-to-use/js-library/) 或 [HTTP API](/how-to-use/http-api/) 在 React 中使用 DiceBear。
 

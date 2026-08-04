@@ -45,7 +45,7 @@ $svg = (string) $avatar;
 
 :::info
 
-我们提供了来自不同艺术家的大量头像样式。这些头像样式使用不同的许可证，艺术家可以自行选择。为了让你快速了解，我们为你创建了一个 [许可证概览](/licenses/)。
+我们提供了大量来自不同创作者的头像样式。这些头像样式采用不同的许可证，创作者可以自行选择许可证类型。为了方便快速了解，我们为你创建了一个[许可证概览](/licenses/)。
 
 :::
 
@@ -101,27 +101,27 @@ $descriptor = new OptionsDescriptor(new Style($definition));
 $fields = $descriptor->toJSON();
 ```
 
-## Methods
+## 方法
 
 ### `__toString()` / `toString()`
 
-**Return type:** `string`
+**返回类型：** `string`
 
-Returns the SVG avatar in XML format. The `__toString()` magic method allows the avatar object to be used directly in a string context.
+以 XML 格式返回 SVG 头像。`__toString()` 魔术方法允许在字符串上下文中直接使用头像对象。
 
 ```php
 $avatar = new Avatar($style, ['seed' => 'Alice']);
 
 $svg = (string) $avatar;
-// or
+// 或
 $svg = $avatar->toString();
 ```
 
 ### `toJSON()`
 
-**Return type:** `array{svg: string, options: array}`
+**返回类型：** `array{svg: string, options: array}`
 
-Returns an associative array containing the SVG and the parsed options.
+返回一个包含 SVG 和解析后选项的关联数组。
 
 ```php
 $avatar = new Avatar($style, ['seed' => 'Alice']);
@@ -134,42 +134,43 @@ $json = $avatar->toJSON();
 
 ### `toDataUri()`
 
-**Return type:** `string`
+**返回类型：** `string`
 
-Returns the avatar in [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme) form.
+以 [数据 URI](https://en.wikipedia.org/wiki/Data_URI_scheme) 形式返回头像。
 
 ```php
 $avatar = new Avatar($style, ['seed' => 'Alice']);
 
-$dataUri = $avatar->toDataUri();
-
-// <img src="<?= $dataUri ?>" alt="Avatar" />
+// <img src="<?= $dataUri ?>" alt="头像" />
 ```
 
 ## 核心选项
 
-核心选项与 JavaScript 库完全一致。完整参考请参见 [JS Library core options](/how-to-use/js-library/#core-options)。以下是 PHP 语法中的选项：
+这些选项适用于每个 DiceBear 核心。请参阅
+[核心选项](/guides/core-options/) 获取完整参考。以下是 PHP 语法中的选项：
 
 ```php
 $avatar = new Avatar($style, [
   'seed' => 'Alice',
-  'flip' => 'horizontal',          // 'none', 'horizontal', 'vertical', 'both'
-  'rotate' => 10,                  // -360 to 360, or [min, max] range
-  'scale' => 0.9,                  // 0 to 10 (1 = original), or [min, max] range
-  'borderRadius' => 50,            // 0-50 (50 = circle)
+  'flip' => 'horizontal',          // 'none'（无）、'horizontal'（水平）、'vertical'（垂直）、'both'（两者）
+  'rotate' => 10,                  // -360 到 360，或 [最小值, 最大值] 范围
+  'scale' => 0.9,                  // 0 到 10（1 = 原始大小），或 [最小值, 最大值] 范围
+  'borderRadius' => 50,            // 0-50（50 = 圆形）
   'size' => 128,
-  'translateX' => 0,               // -1000 to 1000 (percent of canvas width)
-  'translateY' => 0,               // -1000 to 1000 (percent of canvas height)
+  'translateX' => 0,               // -1000 到 1000（画布宽度的百分比）
+  'translateY' => 0,               // -1000 到 1000（画布高度的百分比）
   'idRandomization' => true,
   'title' => '用户头像',
   'fontFamily' => 'Arial',         // 或 ['Arial', 'Helvetica']
   'fontWeight' => 700,             // 1-1000
   'backgroundColor' => ['#b6e3f4', '#c0aede'],
-  'backgroundColorFill' => 'solid', // 'solid', 'linear', 'radial'
+  'backgroundColorFill' => 'solid', // 'solid'（纯色）、'linear'（线性）、'radial'（径向）
 ]);
 ```
 
-动态组件和颜色选项的工作方式也相同。请参见 [JS Library documentation](/how-to-use/js-library/#dynamic-component-options) 了解所有可用模式。
+动态组件和颜色选项的工作方式也相同。请参阅
+[动态组件选项](/guides/core-options/#dynamic-component-options) 了解
+所有可用的模式。
 
 ## 示例
 

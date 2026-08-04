@@ -5,11 +5,24 @@ import { Color } from './Utils/Color.js';
 import { CircularColorReferenceError } from './Error/CircularColorReferenceError.js';
 import type { Style } from './Style.js';
 import type { Component } from './Style/Component.js';
+import type { ComponentVariant } from './Style/ComponentVariant.js';
 import type {
   StyleOptionsFlipValue,
   StyleOptionsColorFillValue,
   StyleOptions,
 } from './StyleOptions.js';
+
+/**
+ * The `tags` filter tokens grouped by role, as {@link Resolver} composes them.
+ * `bareDisallows` is the subset of `disallows` carrying no value, cached so the
+ * per-component narrowing can cancel the matching bare requirements.
+ */
+type TagFilter = {
+  allowGroups: [string, string[]][];
+  bares: ReadonlySet<string>;
+  disallows: { category: string; value?: string }[];
+  bareDisallows: ReadonlySet<string>;
+};
 
 /**
  * Bundles the three inputs needed to derive any deterministic value for an
@@ -26,6 +39,7 @@ export class Resolver<D = unknown> {
   #prng: Prng;
   #colorResolving: string[] = [];
   #result: Record<string, unknown> = {};
+  #tagFilterCache?: TagFilter;
 
   constructor(style: Style<D>, options: Options<D>) {
     this.#style = style;
@@ -98,15 +112,10 @@ export class Resolver<D = unknown> {
   }
 
   /**
-   * Selects a variant for the given component. Depending on what was passed
-   * as `${name}Variant` in the input data:
-   *
-   * - `undefined`: PRNG picks from all style variants using their weights.
-   * - otherwise: PRNG picks using the user-supplied weighted map (a bare
-   *   string or string list is normalized to weight `1` each in
-   *   {@link Options.componentVariant}).
-   *
-   * Only variants that exist in the style definition are considered.
+   * Selects a variant for the given component. The pool the PRNG draws from is
+   * built from the per-component `${name}Variant` option and the global `tags`
+   * filter (see {@link #variantWeights}). Only variants that exist in the style
+   * definition are considered.
    */
   variant(name: string): string | undefined {
     return this.#memo(`${name}Variant`, () => {
@@ -116,23 +125,10 @@ export class Resolver<D = unknown> {
         return undefined;
       }
 
-      const raw = this.#options.componentVariant(component.sourceName());
-      const variants = component.variants();
-      const weights: Record<string, number> = {};
-
-      if (raw === undefined) {
-        for (const [v, variant] of variants) {
-          weights[v] = variant.weight();
-        }
-      } else {
-        for (const [v, w] of Object.entries(raw)) {
-          if (variants.has(v)) {
-            weights[v] = w;
-          }
-        }
-      }
-
-      return this.#prng.weightedPick(`${name}Variant`, weights);
+      return this.#prng.weightedPick(
+        `${name}Variant`,
+        this.#variantWeights(component),
+      );
     });
   }
 
@@ -219,6 +215,146 @@ export class Resolver<D = unknown> {
 
   #isVisible(name: string, component: Component): boolean {
     return this.#prng.bool(`${name}Probability`, this.#probability(component));
+  }
+
+  /**
+   * Builds the name → weight map the PRNG draws a variant from. The
+   * per-component `${name}Variant` option is more specific than the global
+   * `tags` filter, so it takes precedence: when set, it fully governs the
+   * component's pool (its named variants, weighted by the option) and the tags
+   * filter is ignored for that component. The tags filter applies only where
+   * the user gave no explicit `${name}Variant` (see {@link #tagFilteredNames}),
+   * and falls back to every variant when neither is set.
+   *
+   * Names the style does not define are dropped, and an empty `${name}Variant`
+   * (or an empty tag result) yields no variant. The weight read only ever
+   * touches the option's own keys, never Object.prototype.
+   */
+  #variantWeights(component: Component): Record<string, number> {
+    const variants = component.variants();
+    const named = this.#options.componentVariant(component.sourceName());
+    const weights: Record<string, number> = {};
+
+    const names = named
+      ? Object.keys(named)
+      : this.#options.tags().length > 0
+        ? this.#tagFilteredNames(variants)
+        : variants.keys();
+
+    for (const name of names) {
+      const variant = variants.get(name);
+
+      if (variant !== undefined) {
+        weights[name] = named ? named[name] : variant.weight();
+      }
+    }
+
+    return weights;
+  }
+
+  /**
+   * Classifies the parsed {@link Options.tags} tokens into the allow groups,
+   * bare requirements and disallows the filter is composed from. The result
+   * depends only on the options, never on a component, so it is computed once
+   * per avatar rather than rebuilt for each of a style's components.
+   */
+  #tagFilter(): TagFilter {
+    if (this.#tagFilterCache) {
+      return this.#tagFilterCache;
+    }
+
+    const allows = new Map<string, string[]>();
+    const bares = new Set<string>();
+    const disallows: { category: string; value?: string }[] = [];
+    const bareDisallows = new Set<string>();
+
+    for (const { category, value, negated } of this.#options.tags()) {
+      if (negated) {
+        disallows.push({ category, value });
+
+        if (value === undefined) {
+          bareDisallows.add(category);
+        }
+      } else if (value !== undefined) {
+        const values = allows.get(category) ?? [];
+
+        values.push(value);
+        allows.set(category, values);
+      } else {
+        bares.add(category);
+      }
+    }
+
+    this.#tagFilterCache = {
+      // Materialize the allow groups once, not on every variant.
+      allowGroups: [...allows],
+      bares,
+      disallows,
+      bareDisallows,
+    };
+
+    return this.#tagFilterCache;
+  }
+
+  /**
+   * Narrows a component's variants to the names satisfying the global `tags`
+   * filter, applying the parsed {@link Options.tags} tokens in one pass over
+   * the pool:
+   *
+   * - A positive `cat:value` token is an axis-scoped allow. Within each
+   *   category some allow mentions, a variant is kept only if it carries no
+   *   tag in that category (untouched) or matches one of the allowed values
+   *   (OR within the category). Distinct allowed categories combine with AND,
+   *   and a category no allow mentions is left unconstrained.
+   * - A bare positive `cat` token requires the category: it drops variants
+   *   that carry no tag in `cat`. It only binds where the category is in use —
+   *   a component with no `cat` tag on any variant is left untouched, so
+   *   `animation` turns on a style's opt-in animation without erasing the
+   *   components that know nothing about it.
+   * - A negative `!cat`/`!cat:value` token disallows, dropping every variant
+   *   carrying any tag in `cat` (bare) or the exact `cat:value` tag. Disallows
+   *   are checked alongside allows but always win.
+   *
+   * Returns the surviving variant names in definition order.
+   */
+  #tagFilteredNames(variants: ReadonlyMap<string, ComponentVariant>): string[] {
+    const { allowGroups, bares, disallows, bareDisallows } = this.#tagFilter();
+
+    // A bare token only binds where its category is in use, so this narrowing
+    // — unlike the classification above — is genuinely per-component.
+    const required = [...bares].filter((category) => {
+      if (bareDisallows.has(category)) {
+        return false;
+      }
+
+      for (const variant of variants.values()) {
+        if (variant.hasTag(category)) {
+          return true;
+        }
+      }
+
+      return false;
+    });
+
+    const names: string[] = [];
+
+    for (const [name, variant] of variants) {
+      const allowed =
+        allowGroups.every(
+          ([category, values]) =>
+            !variant.hasTag(category) ||
+            values.some((value) => variant.hasTag(category, value)),
+        ) && required.every((category) => variant.hasTag(category));
+      const disallowed = disallows.some(({ category, value }) =>
+        variant.hasTag(category, value),
+      );
+
+      if (allowed && !disallowed) {
+        names.push(name);
+      }
+    }
+
+    return names;
   }
 
   /**

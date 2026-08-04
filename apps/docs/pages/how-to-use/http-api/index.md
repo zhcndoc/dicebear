@@ -69,7 +69,7 @@ https://api.dicebear.com/10.x/lorelei/svg?seed=user-8f3a2c
 
 :::info
 
-我们提供了来自不同艺术家的大量头像样式。这些头像样式采用不同的许可协议，且由艺术家自行选择。为了便于快速了解，我们为你整理了一个[许可概览](/licenses/)。
+我们提供了大量来自不同创作者的头像样式。这些头像样式采用不同的许可证，创作者可以自行选择许可证。为了方便快速了解，我们创建了[许可证概览](/licenses/)。
 
 :::
 
@@ -134,7 +134,8 @@ https://api.dicebear.com/10.x/<styleName>/options.json
 
 ## 选项
 
-所有 [核心选项](/how-to-use/js-library/#core-options)（例如 `seed`、`flip`、`rotate`、`scale`、`borderRadius` 和 `backgroundColor`）都可作为 [查询参数](https://en.wikipedia.org/wiki/Query_string) 使用。样式特定的选项列在各个 [头像样式页面](/styles/) 中。例如：
+所有[核心选项](/guides/core-options/)（例如 `seed`、`flip`、`rotate`、
+`scale`、`borderRadius`、`backgroundColor` 和 `tags`）都可作为[查询参数](https://en.wikipedia.org/wiki/Query_string)使用。特定样式的选项列在各个[头像样式页面](/styles/)上。例如：
 
 <BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=John" />
 <BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=Jane" />
@@ -158,6 +159,13 @@ https://api.dicebear.com/10.x/<styleName>/options.json
 <BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=John&hairVariant=short01,short02,short03,short04,short05" />
 <BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=Jane&hairVariant=long01,long02,long03,long04,long05" />
 
+[`tags`](/guides/filter-variants-with-tags/) 筛选器也是一个数组。
+使用逗号分隔标签，并在要排除的标签前加上 `!`：
+
+```
+https://api.dicebear.com/10.x/planets/svg?seed=John&tags=animation
+```
+
 ### 枚举选项
 
 枚举值以字符串形式传递。例如，`flip` 选项接受
@@ -166,15 +174,14 @@ https://api.dicebear.com/10.x/<styleName>/options.json
 <BrowserPreview url="https://api.dicebear.com/10.x/lorelei/svg?flip=horizontal" />
 <BrowserPreview url="https://api.dicebear.com/10.x/lorelei/svg?flip=none" />
 
-## File Formats
+## 文件格式
 
 <DocsGrid :items="fileFormats" />
 
-PNG, JPG, WebP, and AVIF use the
-[Noto Sans](https://fonts.google.com/noto/specimen/Noto+Sans) font and currently
-support the following subsets: `cyrillic`, `cyrillic-ext`, `devanagari`,
-`greek`, `greek-ext`, `japanese`, `korean`, `latin`, `latin-ext`,
-`simplified-chinese`, `thai`, and `vietnamese`.
+PNG、JPG、WebP 和 AVIF 使用
+[Noto Sans](https://fonts.google.com/noto/specimen/Noto+Sans) 字体，目前支持以下子集：`cyrillic`、`cyrillic-ext`、`devanagari`、
+`greek`、`greek-ext`、`japanese`、`korean`、`latin`、`latin-ext`、
+`simplified-chinese`、`thai` 和 `vietnamese`。
 
 <BrowserPreview url="https://api.dicebear.com/10.x/bottts/svg" />
 <BrowserPreview url="https://api.dicebear.com/10.x/bottts/png" />
@@ -188,8 +195,8 @@ support the following subsets: `cyrillic`, `cyrillic-ext`, `devanagari`,
 
 | 版本 | 状态 | 终止支持时间 |
 | ------- | ---------- | -------------- |
-| `10.x`  | **Active** | 无           |
-| `9.x`   | **Active** | 无           |
+| `10.x`  | **活跃** | 无           |
+| `9.x`   | **活跃** | 无           |
 | `8.x`   | 已弃用 | 2028 年 4 月 30 日 |
 | `7.x`   | 已弃用 | 2028 年 4 月 30 日 |
 | `6.x`   | 已弃用 | 2028 年 4 月 30 日 |
@@ -211,9 +218,9 @@ support the following subsets: `cyrillic`, `cyrillic-ext`, `devanagari`,
 
 ## 自托管头像 API
 
-Need private or commercial deployment? You can
-[host the Avatar API yourself](/guides/host-the-http-api-yourself/) to take full control over
-availability, rate limits, and data privacy.
+需要私有部署或商业部署？您可以
+[自行托管头像 API](/guides/host-the-http-api-yourself/)，从而完全掌控
+可用性、速率限制和数据隐私。
 
 ## 公平使用与速率限制
 

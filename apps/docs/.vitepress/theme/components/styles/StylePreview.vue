@@ -1,28 +1,17 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { kebabCase } from 'change-case';
+import { getPreviewRowSeeds } from '@theme/config/previewRowSeeds';
 import { UiAvatar, UiDemoFrame } from '../ui';
 
 const props = defineProps<{
   styleName: string;
 }>();
 
-// Seeds chosen to maximise visual variety in the preview row. Picked by
-// fingerprinting candidate seeds against the dylan style (the hardest case: its
-// default palette has only 3 backgrounds + 2 skin tones) and balancing
-// background, hair colour and skin tone; ordered so no two neighbours repeat a
-// background or hair colour and skin alternates. Verified distinct across other
-// styles too (lorelei, avataaars, bottts, …).
-const seeds = [
-  'Jasper',
-  'Aiden',
-  'Nadia',
-  'Isla',
-  'Kai',
-  'Bianca',
-  'Riley',
-  'Dante',
-];
+// Every style has its own row, searched against its own palette. Order matters:
+// the initials spell DICEBEAR, which `initial-face` prints outright. Generated
+// by scripts/generate-preview-seeds.mjs, which documents the scoring.
+const seeds = computed(() => getPreviewRowSeeds(props.styleName));
 
 const playgroundUrl = computed(
   () => `/playground?style=${kebabCase(props.styleName)}`,

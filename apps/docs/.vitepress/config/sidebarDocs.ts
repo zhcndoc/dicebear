@@ -1,4 +1,4 @@
-import { DefaultTheme } from 'vitepress';
+import type { DefaultTheme } from 'vitepress';
 
 // NOTE: VitePress renders sidebar item `text` with `v-html`, so inline markup is
 // allowed — we use it to attach small status badges (styled via
@@ -48,6 +48,27 @@ const sidebar: DefaultTheme.SidebarItem[] = [
       },
       { text: 'HTTP API', link: '/how-to-use/http-api/' },
       { text: 'CLI', link: '/how-to-use/cli/' },
+    ],
+  },
+  {
+    text: '自定义',
+    items: [
+      {
+        text: '选项',
+        link: '/guides/core-options/',
+      },
+      {
+        text: '标签 <span class="vp-sidebar-badge is-new">New</span>',
+        link: '/guides/filter-variants-with-tags/',
+      },
+      {
+        text: '标签参考',
+        link: '/guides/how-dicebear-tags-variants/',
+      },
+      {
+        text: '性别',
+        link: '/guides/how-do-i-set-a-gender/',
+      },
     ],
   },
   {
@@ -110,15 +131,6 @@ const sidebar: DefaultTheme.SidebarItem[] = [
       {
         text: '实现 DiceBear Core',
         link: '/specification/implement-dicebear-core/',
-      },
-    ],
-  },
-  {
-    text: '概念',
-    items: [
-      {
-        text: '性别',
-        link: '/guides/how-do-i-set-a-gender/',
       },
     ],
   },

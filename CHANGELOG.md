@@ -8,6 +8,147 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [10.4.0] - 2026-08-01
+
+### Changed
+
+- **Styles:** Bumped `@dicebear/styles` to `10.3.0`. The release adds thirteen
+  styles: `blobs`, `clay`, `constellation`, `critters`, `landscape`, `loops`,
+  `moods`, `pixelbot`, `planets`, `sprouts`, `squircles`, `waves`, and `weave`.
+  It also gives `shapes`, `glass`, `thumbs`, `initial-face`, and every new style
+  except `weave` an opt-in `animation` component, which stays off until the
+  `animationVariant` or `tags` render option turns it on.
+
+## [10.4.0-rc.2] - 2026-07-31
+
+### Fixed
+
+- **Converter:** Raster conversion no longer drops parts of rotated avatars with
+  translucent layers. The resvg build that `resvg-js` bundles places the
+  isolation layer of an `opacity` group in the wrong coordinate space when the
+  group sits under both a `clip-path` and a large rotation, and cuts the group's
+  content. The `waves` style lost about half of its image in every raster
+  format, including through the HTTP API. Since the viewport crops to the canvas
+  anyway, the converter now removes clip paths that cover exactly the canvas
+  before it hands the SVG to resvg. A clip with rounded corners is removed as
+  well and re-applied to the rendered image, so the `radius` option keeps
+  working. Its corners are drawn by sharp instead of resvg as a result, which
+  changes their antialiasing slightly.
+
+## [10.4.0-rc.1] - 2026-07-31
+
+### Added
+
+- **Core (all languages):** A new `tags` render option narrows the pool of
+  variants an avatar is drawn from. Styles may label their variants with tags
+  such as `animation` or `hairLength:long`, and the option keeps or drops
+  variants by those labels, so one trait is pinned down while the rest of the
+  avatar stays varied. A token is `category` or `category:value`, with a leading
+  `!` to exclude. An include keeps the variants carrying a matching tag together
+  with those that carry no tag in the category. Several values of one category
+  act as "or", different categories act as "and", and an exclude wins over an
+  include. A bare `category` token requires the category and drops the variants
+  without a tag in it, but only in the components where the category is in use.
+  An unknown category is ignored, an unknown value is not: since nothing matches
+  it, every variant tagged in that category drops out. A per-component
+  `{component}Variant` option is more specific and switches the filter off for
+  that component. If a filter leaves a component without a variant, the
+  component is not drawn. The option takes a string or an array of strings, and
+  in the HTTP API it is the comma-separated `tags` query parameter. Styles that
+  carry no tags are unaffected. In the DiceBear styles, tags currently describe
+  one thing, the opt-in animation of the animated styles, so `tags=animation`
+  turns that animation on at a random speed per seed and `!animation` keeps it
+  off. The character categories follow in a later release.
+- **Docs:** Two guides cover the new option, "Filter Avatar Variants with Tags"
+  for the filter itself and "How DiceBear Tags Variants" for the vocabulary the
+  DiceBear styles use. The playground has a tag panel per category, where every
+  token is an allow/disallow switch, and its count of unique avatars accounts
+  for the filter. Style pages list the tags a style provides and mark every
+  variant preview with its own. The core option reference moved out of the
+  JavaScript page onto a shared "Core options" page that all six library pages
+  link to.
+- **CLI:** Definition files can now be compressed in place with
+  `dicebear ./my-style.json --optimize`. The flag runs the same svgo pass over
+  every element tree that the current Figma exporter applies on export.
+  Hand-authored definitions and files from older exporter versions shrink, by up
+  to 42% (`pixel-art`), while recent exports come back unchanged.
+  `--optimize-check` reports without writing and exits non-zero when the file
+  would change, which makes it usable as a CI gate. `--optimize-precision` sets
+  the float precision for path and transform data (default 3). Color and
+  component references, variables, element ids, CSS classes and `<style>`
+  contents are verified after the pass, and the CLI refuses to write the file
+  when any of them changed.
+
+### Fixed
+
+- **Core (all languages):** The id suffix for `<defs>` entries now hashes the
+  style source name together with the seed. It previously hashed only the seed,
+  so two avatars of different styles with the same seed produced identical ids
+  for shared component names (`body`, `eyes`, `animation`, `clip`, ...) and
+  stole each other's `<defs>` when inlined on one page. Rendered ids change for
+  every avatar as a result.
+- **Core (all languages):** The generator comment now points at
+  `https://www.dicebear.com`. It carried the bare `dicebear.com` host since
+  10.3.0, which only redirects to the canonical `www` host that the `<metadata>`
+  block already used. The byte output of every avatar changes as a result,
+  including data URIs and content hashes, so consumers that compare rendered
+  SVGs against stored snapshots need to update them.
+- **Docs:** In the playground, clicking "None" in a component's variant picker
+  while weights were shown stored an empty weights object, which the core
+  rejects — the preview then rendered no avatar at all. An empty selection is
+  now stored as an empty list, which renders the avatar without that component.
+  Styles that ship non-default weights were affected immediately, because their
+  pickers open in weights mode.
+
+## [10.3.2] - 2026-07-29
+
+### Fixed
+
+- **Converter:** Raster conversion no longer alters text content. The XML round
+  trip that sets the output size trimmed whitespace and converted
+  numeric-looking text, so `<text>0123</text>` rendered as `123` and `1e3` as
+  `1000` in every raster format, including through the HTTP API. Text nodes and
+  CDATA sections now survive the round trip unchanged. Previously the converter
+  unwrapped a CDATA section into raw text, which could turn a valid SVG into
+  ill-formed XML.
+- **Converter:** Raster conversion now accepts SVGs nested deeper than 100
+  elements. The XML parser's default nesting cap made `toPng()` and friends
+  throw on valid documents that resvg renders fine. The cap is now 1024 levels.
+- **Converter:** The converter now reads `mask-type` declarations the way a
+  browser does. It strips a trailing `!important` instead of copying it into the
+  presentation attribute, where resvg would reject the value and silently fall
+  back to `luminance`. It ignores invalid values, and when a `style` attribute
+  repeats the declaration, the last valid one wins.
+
+### Changed
+
+- **Converter:** `normalizeMaskType()` now works on the parsed XML tree instead
+  of rewriting the markup with regular expressions, and the raster entry points
+  apply it in the same parser pass that sets the output size. Input that needs
+  no fix comes back byte-identical. So does input the XML parser cannot read,
+  where the old version attempted a partial rewrite. When a mask does need
+  fixing, the function re-emits the SVG from the parsed tree, which can
+  normalize formatting details such as quote style or self-closing tags and
+  drops a `<!DOCTYPE>` declaration. The rendered image stays the same.
+- **Converter:** The XML serializer moved from the deprecated `XMLBuilder`
+  export of `fast-xml-parser` to its successor package `fast-xml-builder`. The
+  output is byte-identical. The only visible change for consumers is the new
+  package in the dependency tree.
+
+## [10.3.1] - 2026-07-27
+
+### Fixed
+
+- **Converter:** Masks that declare `mask-type: alpha` in a `style` attribute
+  now rasterize correctly. resvg reads `mask-type` only as a presentation
+  attribute, and without one it falls back to the `luminance` default, which
+  turns a mask drawn in black into a mask that hides its subject. Seven styles
+  ship such masks: `bottts-neutral`, `disco`, `glyphs`, `lorelei`, `micah`,
+  `personas` and `toon-head`. On `lorelei` a bearded avatar lost its mouth in
+  the PNG while the SVG rendered fine. The HTTP API converts through this
+  package and was affected the same way. The normalization is also exported as
+  `normalizeMaskType()` for callers that drive resvg directly.
+
 ## [10.3.0] - 2026-06-13
 
 ### Added
@@ -156,7 +297,7 @@ and this project adheres to
   `translateX`/`translateY`, and per-color angle/fill-stops) given as a
   single-element array `[n]` are now treated as the fixed value `n` (identical
   to the scalar `n`), and an empty array `[]` falls back to the option's
-  default. Both forms are permitted by the schema. Previously the behaviour
+  default. Both forms are permitted by the schema. Previously the behavior
   diverged: the JavaScript library emitted `NaN` (e.g. `scale(NaN)`), while PHP
   dropped `[n]` to the default. All three now agree.
 
@@ -209,7 +350,14 @@ See the
 - **BREAKING:** Individual style packages (e.g. `@dicebear/initials`) have been
   removed in favor of `@dicebear/styles`.
 
-[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.3.0...HEAD
+[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.4.0...HEAD
+[10.4.0]: https://github.com/dicebear/dicebear/compare/v10.4.0-rc.2...v10.4.0
+[10.4.0-rc.2]:
+  https://github.com/dicebear/dicebear/compare/v10.4.0-rc.1...v10.4.0-rc.2
+[10.4.0-rc.1]:
+  https://github.com/dicebear/dicebear/compare/v10.3.2...v10.4.0-rc.1
+[10.3.2]: https://github.com/dicebear/dicebear/compare/v10.3.1...v10.3.2
+[10.3.1]: https://github.com/dicebear/dicebear/compare/v10.3.0...v10.3.1
 [10.3.0]: https://github.com/dicebear/dicebear/compare/v10.2.0...v10.3.0
 [10.2.0]: https://github.com/dicebear/dicebear/compare/v10.2.0-rc.1...v10.2.0
 [10.2.0-rc.1]:

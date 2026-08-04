@@ -26,13 +26,7 @@ void main() {
     return;
   }
 
-  for (final name in const [
-    'glass',
-    'initials',
-    'notionists',
-    'shape-grid',
-    'thumbs',
-  ]) {
+  for (final name in parityStyleNames()) {
     test(name, () {
       final style = Style(
         jsonDecode(parityFixture('styles/$name.json')!) as Map<String, Object?>,

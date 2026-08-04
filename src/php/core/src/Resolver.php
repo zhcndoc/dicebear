@@ -26,6 +26,15 @@ class Resolver
     private array $colorResolving = [];
     /** @var array<string, mixed> */
     private array $result = [];
+    /**
+     * @var ?array{
+     *     allows: array<string, list<string>>,
+     *     bares: list<string>,
+     *     disallows: list<array{category: string, value: ?string}>,
+     *     bareDisallows: array<string, true>,
+     * }
+     */
+    private ?array $tagFilter = null;
 
     public function __construct(Style $style, Options $options)
     {
@@ -106,15 +115,10 @@ class Resolver
     }
 
     /**
-     * Selects a variant for the given component. Depending on what was passed
-     * as `${name}Variant` in the input data:
-     *
-     * - `null`: PRNG picks from all style variants using their weights.
-     * - otherwise: PRNG picks using the user-supplied weighted map (a bare
-     *   string or string list is normalized to weight `1` each in
-     *   {@see Options::componentVariant()}).
-     *
-     * Only variants that exist in the style definition are considered.
+     * Selects a variant for the given component. The pool the PRNG draws from
+     * is built from the per-component `${name}Variant` option and the global
+     * `tags` filter (see {@see variantWeights()}). Only variants that exist in
+     * the style definition are considered.
      */
     public function variant(string $name): ?string
     {
@@ -126,23 +130,10 @@ class Resolver
                 return null;
             }
 
-            $raw = $this->options->componentVariant($component->sourceName());
-            $variants = $component->variants();
-            $weights = [];
-
-            if ($raw === null) {
-                foreach ($variants as $v => $variant) {
-                    $weights[$v] = $variant->weight();
-                }
-            } else {
-                foreach ($raw as $v => $weight) {
-                    if (isset($variants[$v])) {
-                        $weights[$v] = $weight;
-                    }
-                }
-            }
-
-            return $this->prng->weightedPick("{$name}Variant", $weights);
+            return $this->prng->weightedPick(
+                "{$name}Variant",
+                $this->variantWeights($component),
+            );
         });
     }
 
@@ -231,6 +222,194 @@ class Resolver
     private function isVisible(string $name, Style\Component $component): bool
     {
         return $this->prng->bool("{$name}Probability", $this->probability($component));
+    }
+
+    /**
+     * Builds the name → weight map the PRNG draws a variant from. The
+     * per-component `${name}Variant` option is more specific than the global
+     * `tags` filter, so it takes precedence: when set, it fully governs the
+     * component's pool (its named variants, weighted by the option) and the
+     * tags filter is ignored for that component. The tags filter applies only
+     * where the user gave no explicit `${name}Variant` (see
+     * {@see tagFilteredNames()}), and falls back to every variant when neither
+     * is set.
+     *
+     * Names the style does not define are dropped, and an empty `${name}Variant`
+     * (or an empty tag result) yields no variant.
+     *
+     * @return array<string, int|float>
+     */
+    private function variantWeights(Style\Component $component): array
+    {
+        $variants = $component->variants();
+        $named = $this->options->componentVariant($component->sourceName());
+        $weights = [];
+
+        if ($named !== null) {
+            $names = array_keys($named);
+        } elseif (count($this->options->tags()) > 0) {
+            $names = $this->tagFilteredNames($variants);
+        } else {
+            $names = array_keys($variants);
+        }
+
+        foreach ($names as $name) {
+            if (isset($variants[$name])) {
+                $weights[$name] = $named !== null ? $named[$name] : $variants[$name]->weight();
+            }
+        }
+
+        return $weights;
+    }
+
+    /**
+     * Classifies the parsed {@see Options::tags()} tokens into the allow
+     * groups, bare requirements and disallows the filter is composed from. The
+     * result depends only on the options, never on a component, so it is
+     * computed once per avatar rather than rebuilt for each of a style's
+     * components. `bareDisallows` is the subset of `disallows` carrying no
+     * value, kept as a lookup set for the per-component narrowing.
+     *
+     * @return array{
+     *     allows: array<string, list<string>>,
+     *     bares: list<string>,
+     *     disallows: list<array{category: string, value: ?string}>,
+     *     bareDisallows: array<string, true>,
+     * }
+     */
+    private function tagFilter(): array
+    {
+        if ($this->tagFilter !== null) {
+            return $this->tagFilter;
+        }
+
+        $allows = [];
+        $bares = [];
+        $disallows = [];
+        $bareDisallows = [];
+
+        foreach ($this->options->tags() as $token) {
+            if ($token['negated']) {
+                $value = $token['value'] ?? null;
+                $disallows[] = ['category' => $token['category'], 'value' => $value];
+
+                if ($value === null) {
+                    $bareDisallows[$token['category']] = true;
+                }
+            } elseif (isset($token['value'])) {
+                $allows[$token['category']][] = $token['value'];
+            } else {
+                $bares[] = $token['category'];
+            }
+        }
+
+        $this->tagFilter = [
+            'allows' => $allows,
+            'bares' => array_values(array_unique($bares)),
+            'disallows' => $disallows,
+            'bareDisallows' => $bareDisallows,
+        ];
+
+        return $this->tagFilter;
+    }
+
+    /**
+     * Narrows a component's variants to the names satisfying the global `tags`
+     * filter, applying the parsed {@see Options::tags()} tokens in one pass over
+     * the pool:
+     *
+     * - A positive `cat:value` token is an axis-scoped allow. Within each
+     *   category some allow mentions, a variant is kept only if it carries no
+     *   tag in that category (untouched) or matches one of the allowed values
+     *   (OR within the category). Distinct allowed categories combine with AND,
+     *   and a category no allow mentions is left unconstrained.
+     * - A bare positive `cat` token requires the category: it drops variants
+     *   that carry no tag in `cat`. It only binds where the category is in
+     *   use — a component with no `cat` tag on any variant is left untouched,
+     *   so `animation` turns on a style's opt-in animation without erasing
+     *   the components that know nothing about it.
+     * - A negative `!cat`/`!cat:value` token disallows, dropping every variant
+     *   carrying any tag in `cat` (bare) or the exact `cat:value` tag. Disallows
+     *   are checked alongside allows but always win.
+     *
+     * Returns the surviving variant names in definition order.
+     *
+     * @param array<string, Style\ComponentVariant> $variants
+     *
+     * @return list<string>
+     */
+    private function tagFilteredNames(array $variants): array
+    {
+        ['allows' => $allows, 'bares' => $bares, 'disallows' => $disallows, 'bareDisallows' => $bareDisallows] = $this->tagFilter();
+
+        // A bare token only binds where its category is in use, so this
+        // narrowing — unlike the classification — is genuinely per-component.
+        $required = [];
+
+        foreach ($bares as $category) {
+            if (isset($bareDisallows[$category])) {
+                continue;
+            }
+
+            foreach ($variants as $variant) {
+                if ($variant->hasTag($category)) {
+                    $required[] = $category;
+                    break;
+                }
+            }
+        }
+
+        $names = [];
+
+        foreach ($variants as $name => $variant) {
+            $allowed = true;
+
+            foreach ($required as $category) {
+                if (!$variant->hasTag($category)) {
+                    $allowed = false;
+                    break;
+                }
+            }
+
+            if (!$allowed) {
+                continue;
+            }
+
+            foreach ($allows as $category => $values) {
+                if (!$variant->hasTag($category)) {
+                    continue;
+                }
+
+                $matches = false;
+
+                foreach ($values as $value) {
+                    if ($variant->hasTag($category, $value)) {
+                        $matches = true;
+                        break;
+                    }
+                }
+
+                if (!$matches) {
+                    $allowed = false;
+                    break;
+                }
+            }
+
+            $disallowed = false;
+
+            foreach ($disallows as $disallow) {
+                if ($variant->hasTag($disallow['category'], $disallow['value'])) {
+                    $disallowed = true;
+                    break;
+                }
+            }
+
+            if ($allowed && !$disallowed) {
+                $names[] = (string) $name;
+            }
+        }
+
+        return $names;
     }
 
     /**

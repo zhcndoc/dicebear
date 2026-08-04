@@ -2,6 +2,7 @@
 import { computed, inject } from 'vue';
 import { getAvatarPropertyPreviewOptions } from '@theme/utils/avatar/preview';
 import { padColors, resolveColors } from '@theme/utils/avatar/colors';
+import { exampleSeeds } from '@theme/config/styleCategories';
 import { UiAvatar } from '../ui';
 import {
   componentNamesKey,
@@ -10,6 +11,10 @@ import {
   styleColorsDefault,
   componentPreviewKey,
   componentPreviewDefault,
+  variantTagsKey,
+  variantTagsDefault,
+  showVariantTagsKey,
+  showVariantTagsDefault,
 } from './styleOptionsKeys';
 
 const props = defineProps<{
@@ -21,6 +26,8 @@ const props = defineProps<{
 const allComponentNames = inject(componentNamesKey, componentNamesDefault);
 const styleColors = inject(styleColorsKey, styleColorsDefault);
 const preview = inject(componentPreviewKey, componentPreviewDefault);
+const variantTags = inject(variantTagsKey, variantTagsDefault);
+const showVariantTags = inject(showVariantTagsKey, showVariantTagsDefault);
 
 const previewTarget = computed(() => {
   const n = props.name;
@@ -65,6 +72,12 @@ const previewTarget = computed(() => {
   return { type: 'general' as const };
 });
 
+// The `animation` component has no artwork of its own. Its variants are a
+// marker class plus a <style> block that animates the other components, so an
+// isolated preview would render an empty canvas. Those options go through the
+// full-avatar path instead.
+const animationComponent = 'animation';
+
 const isComponentPreview = computed(() => {
   if (!preview.value) return false;
 
@@ -75,7 +88,10 @@ const isComponentPreview = computed(() => {
   // HTTP-API path, so e.g. Identicon's rowColor preview shows every row
   // instead of a single isolated row from one component.
   if (t.type === 'variant' || t.type === 'probability') {
-    return allComponentNames.value.includes(t.component);
+    return (
+      t.component !== animationComponent &&
+      allComponentNames.value.includes(t.component)
+    );
   }
 
   return false;
@@ -119,7 +135,7 @@ const generalOptions = computed(() => {
   } else {
     const colorKey = `${t.color}Color`;
     const fillKey = `${t.color}ColorFill`;
-    opts = { seed: 'JD' };
+    opts = { seed: exampleSeeds[0] };
 
     if (t.type === 'color') {
       opts[colorKey] = [props.value];
@@ -138,11 +154,26 @@ const generalOptions = computed(() => {
     }
   }
 
-  if (t.type === 'variant') {
+  // Isolated component previews drop the background so the shape reads on the
+  // checkerboard. The animation previews are complete avatars, so they keep
+  // the style's own background like every other full-avatar preview.
+  if (t.type === 'variant' && t.component !== animationComponent) {
     opts.backgroundColor = [];
   }
 
   return opts;
+});
+
+const tags = computed(() => {
+  if (!showVariantTags.value) {
+    return [];
+  }
+
+  const t = previewTarget.value;
+
+  return t.type === 'variant'
+    ? variantTags(t.component, String(props.value))
+    : [];
 });
 
 function selectLabel(event: MouseEvent) {
@@ -172,6 +203,11 @@ function selectLabel(event: MouseEvent) {
     <code class="style-options-preview-label" @click="selectLabel">{{
       value
     }}</code>
+    <div v-if="tags.length > 0" class="style-options-preview-tags">
+      <code v-for="tag in tags" :key="tag" class="style-options-preview-tag">{{
+        tag
+      }}</code>
+    </div>
   </div>
 </template>
 
@@ -224,13 +260,37 @@ function selectLabel(event: MouseEvent) {
   &-label {
     display: block;
     text-align: center;
-    padding: 6px 4px 10px;
+    padding: 6px 4px;
     font-size: 11px;
     font-weight: 500;
     line-height: 1;
     color: var(--vp-c-text-2);
     cursor: pointer;
     background: none;
+  }
+
+  &-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3px;
+    padding: 0 6px;
+  }
+
+  &-tag {
+    font-size: 10px;
+    line-height: 1.4;
+    padding: 1px 6px;
+    border-radius: 99px;
+    background: var(--vp-code-bg);
+    color: var(--vp-c-text-2);
+  }
+
+  // Bottom breathing room lives on the last element so it adapts to whether
+  // tags are present.
+  &-label:last-child,
+  &-tags {
+    padding-bottom: 10px;
   }
 }
 </style>

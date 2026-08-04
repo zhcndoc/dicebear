@@ -2,12 +2,14 @@
 import {
   productLinks,
   resourceLinks,
+  versionLinks,
   legalLinks,
 } from '../../config/footer-links';
 
 const columns = [
   { title: '精选', links: productLinks },
   { title: '资源', links: resourceLinks },
+  { title: '版本', links: versionLinks },
   { title: '法律', links: legalLinks },
 ] as const;
 </script>

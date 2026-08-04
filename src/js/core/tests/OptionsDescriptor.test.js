@@ -56,6 +56,27 @@ const fullStyle = new Style({
   },
 });
 
+const taggedStyle = new Style({
+  canvas: { width: 100, height: 100, elements: [] },
+  components: {
+    hair: {
+      width: 100,
+      height: 100,
+      variants: {
+        long: { elements: [], tags: ['hairLength:long', 'tone:cool'] },
+        short: { elements: [], tags: ['hairLength:short', 'tone:warm'] },
+      },
+    },
+    nose: {
+      width: 100,
+      height: 100,
+      variants: {
+        small: { elements: [] },
+      },
+    },
+  },
+});
+
 describe('OptionsDescriptor', () => {
   describe('base options', () => {
     it('should include all base options', () => {
@@ -147,6 +168,24 @@ describe('OptionsDescriptor', () => {
         contrastTo: 'background',
       });
       assert.ok(!('contrastTo' in schema.skinColor));
+    });
+  });
+
+  describe('tags', () => {
+    it('should expose the sorted union of variant tags', () => {
+      const schema = new OptionsDescriptor(taggedStyle).toJSON();
+
+      assert.deepEqual(schema.tags, {
+        type: 'enum',
+        values: ['hairLength:long', 'hairLength:short', 'tone:cool', 'tone:warm'],
+        list: true,
+        open: true,
+      });
+    });
+
+    it('should omit tags when no variant carries one', () => {
+      assert.ok(!('tags' in new OptionsDescriptor(fullStyle).toJSON()));
+      assert.ok(!('tags' in new OptionsDescriptor(minimalStyle).toJSON()));
     });
   });
 

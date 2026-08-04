@@ -4,12 +4,14 @@ import type { CustomStyleEntry } from '@theme/types';
 import {
   CUSTOM_CATEGORY,
   categoryOrder,
-  previewSeeds,
+  exampleSeeds,
   getStyleCategory,
   normalizeLicense,
 } from '@theme/config/styleCategories';
+import { getStyleCardSeeds } from '@theme/config/previewRowSeeds';
 
 interface StyleMeta {
+  animated?: boolean;
   meta: {
     license?: { name?: string };
     creator?: string;
@@ -23,6 +25,7 @@ export function useStyleFiltering(
   const searchQuery = ref('');
   const selectedLicenses = ref<string[]>([]);
   const selectedCategories = ref<string[]>([]);
+  const animatedOnly = ref(false);
 
   const allStyles = computed(() => {
     const builtIn = Object.entries(styles)
@@ -37,8 +40,11 @@ export function useStyleFiltering(
           license: rawLicense,
           licenseNormalized: normalizeLicense(rawLicense),
           category: getStyleCategory(kebabCase(styleName)),
+          animated: style.animated ?? false,
           isCustom: false,
-          avatars: previewSeeds.map((seed) => ({
+          // Four seeds picked for this style, so no two avatars on a card look
+          // alike and none of them repeats what the style page opens with.
+          avatars: getStyleCardSeeds(kebabCase(styleName)).map((seed) => ({
             seed,
           })),
         };
@@ -57,8 +63,11 @@ export function useStyleFiltering(
       license: 'Unknown',
       licenseNormalized: 'Unknown',
       category: CUSTOM_CATEGORY,
+      animated: false,
       isCustom: true,
-      avatars: previewSeeds.map((seed) => ({
+      // A style someone uploaded has no generated row, so these cards fall back
+      // to the shared example seeds.
+      avatars: exampleSeeds.map((seed) => ({
         seed,
       })),
     }));
@@ -106,6 +115,10 @@ export function useStyleFiltering(
         return false;
       }
 
+      if (animatedOnly.value && !style.animated) {
+        return false;
+      }
+
       return true;
     });
   });
@@ -136,6 +149,7 @@ export function useStyleFiltering(
     searchQuery,
     selectedLicenses,
     selectedCategories,
+    animatedOnly,
     allStyles,
     availableLicenses,
     availableCategories,

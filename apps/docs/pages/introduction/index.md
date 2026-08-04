@@ -94,7 +94,17 @@ DiceBear 为你的项目生成头像。头像风格涵盖了多种外观，从�
 
 除了纯随机头像之外，你还可以为用户身份创建[确定性](https://en.wikipedia.org/wiki/Deterministic_algorithm)头像。借助内置的[PRNG](https://en.wikipedia.org/wiki/Pseudorandom_number_generator)，你可以基于一个种子一次又一次生成相同的头像。你也可以进行个性化调整：每种头像风格都提供了许多选项来微调结果。
 
-DiceBear 可通过 [JavaScript 库](/how-to-use/js-library/)、[PHP 库](/how-to-use/php-library/)、[Python 库](/how-to-use/python-library/)、[Rust 库](/how-to-use/rust-library/)、[Go 库](/how-to-use/go-library/)、[Dart 库](/how-to-use/dart-library/)、[HTTP API](/how-to-use/http-api/)、[CLI](/how-to-use/cli/)、[Figma 插件](https://www.figma.com/community/plugin/1005765655729342787/DiceBear-Exporter)、[编辑器](https://editor.dicebear.com) 和 [Playground](/playground/) 使用，因此你可以将其集成到大多数项目中。[头像 API](/how-to-use/http-api/) 提供基于 URL 的集成方式，无需安装任何东西。
+DiceBear 可通过 [JavaScript 库](/how-to-use/js-library/)、
+[PHP 库](/how-to-use/php-library/)、
+[Python 库](/how-to-use/python-library/)、
+[Rust 库](/how-to-use/rust-library/)、
+[Go 库](/how-to-use/go-library/)、
+[Dart 库](/how-to-use/dart-library/)、[HTTP API](/how-to-use/http-api/)、
+[CLI](/how-to-use/cli/)、
+[Figma 插件](https://www.figma.com/community/plugin/1005765655729342787/DiceBear-Exporter)、
+[编辑器](https://editor.dicebear.com) 和 [Playground](/playground/) 使用，因此你可以
+将其集成到大多数项目中。[头像 API](/how-to-use/http-api/)
+提供基于 URL 的集成方式，无需安装任何内容。
 
 ## 如何使用？
 

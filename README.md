@@ -1,10 +1,10 @@
 <h1><img src="https://www.dicebear.com/logo-readme.svg" width="28" /> DiceBear Avatar Library</h1>
 
 DiceBear is an open source avatar library. It turns any seed string (a username
-or an email address, for example) into an SVG avatar in one of 35+ styles
-designed by various artists. The same seed always produces the same avatar, so
-you store a string instead of an image and never ask users to upload a profile
-picture.
+or an email address, for example) into an SVG avatar in one of 50 styles, from
+hand-drawn characters to abstract patterns. The same seed always produces the
+same avatar, so you store a string instead of an image and never ask users to
+upload a profile picture.
 
 Avatars are customizable through style options: colors, backgrounds, rotation,
 individual features like hair or glasses.
@@ -46,7 +46,7 @@ avatar.toString(); // SVG string
 avatar.toDataUri(); // data:image/svg+xml;charset=utf-8,...
 ```
 
-The 35+ avatar styles are plain JSON definitions from the
+The 50 avatar styles are plain JSON definitions from the
 [`dicebear/styles`](https://github.com/dicebear/styles) repository, available as
 a package for each language. You can also
 [create your own style](https://www.dicebear.com/guides/create-an-avatar-style-with-figma/),
@@ -85,7 +85,7 @@ setup and where each kind of change belongs.
 ## License
 
 The code is [MIT licensed](./LICENSE), including commercial use. The avatar
-styles are the work of their respective artists and carry their own licenses;
+styles are the work of their respective creators and carry their own licenses;
 the [license overview](https://www.dicebear.com/licenses/) lists them all, and
 many only ask for attribution.
 

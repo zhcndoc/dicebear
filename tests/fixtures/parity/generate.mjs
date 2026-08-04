@@ -72,6 +72,123 @@ for (const name of STYLE_NAMES) {
   writeJson(join('styles', `${name}.json`), raw);
 }
 
+// A synthetic style with tagged variants. The vendored styles carry no tags
+// yet, so this pins the `tags` filter contract for every port: axis-scoped
+// includes, excludes, `${name}Variant` precedence, and unknown-tag no-ops. Each
+// variant renders a distinct rect, so the filtered pick shows up in both the
+// SVG and the resolved options. `hair` is mandatory and tagged on three axes,
+// `facialHair` is optional (probability 50), and `nose` carries no tags so the
+// filter must leave it whole.
+const tagRect = (fill) => ({
+  type: 'element',
+  name: 'rect',
+  attributes: { width: '100', height: '100', fill },
+});
+
+styles.tagged = {
+  canvas: {
+    width: 100,
+    height: 100,
+    elements: [
+      { type: 'component', name: 'hair' },
+      { type: 'component', name: 'facialHair' },
+      { type: 'component', name: 'nose' },
+    ],
+  },
+  components: {
+    hair: {
+      width: 100,
+      height: 100,
+      variants: {
+        longLight: {
+          elements: [tagRect('#111111')],
+          tags: ['hairLength:long', 'hairShade:light', 'tone:cool'],
+        },
+        longDark: {
+          elements: [tagRect('#222222')],
+          tags: ['hairLength:long', 'hairShade:dark', 'tone:cool'],
+        },
+        shortLight: {
+          elements: [tagRect('#333333')],
+          tags: ['hairLength:short', 'hairShade:light', 'tone:warm'],
+        },
+        shortDark: {
+          elements: [tagRect('#444444')],
+          tags: ['hairLength:short', 'hairShade:dark', 'tone:warm'],
+        },
+      },
+    },
+    facialHair: {
+      width: 100,
+      height: 100,
+      probability: 50,
+      variants: {
+        beard: {
+          elements: [tagRect('#555555')],
+          tags: ['facialHair:beard', 'tone:warm'],
+        },
+        mustache: {
+          elements: [tagRect('#666666')],
+          tags: ['facialHair:mustache', 'tone:warm'],
+        },
+      },
+    },
+    nose: {
+      width: 100,
+      height: 100,
+      variants: {
+        small: { elements: [tagRect('#777777')] },
+        big: { elements: [tagRect('#888888')] },
+      },
+    },
+  },
+};
+writeJson(join('styles', 'tagged.json'), styles.tagged);
+
+// A synthetic style with an opt-in animation component, mirroring the pattern
+// the vendored animated styles use: an untagged static `none` variant with the
+// default weight, and zero-weight speed variants tagged on the `animation`
+// axis. This pins the bare-include contract: a bare positive token requires
+// the category where it is in use, drops the untagged default, and leaves the
+// all-zero pool to the unweighted fallback pick.
+//
+// `plain` carries the bare `animation` tag rather than a `category:value` one.
+// That is the form every vendored animated style actually authors, and it is
+// the only way to exercise `hasTag`'s whole-category branch (`tag == category`)
+// — a port that matched a bare query by `category:` prefix alone would
+// otherwise pass the entire suite while rendering `?tags=animation` static.
+styles.animated = {
+  canvas: {
+    width: 100,
+    height: 100,
+    elements: [
+      { type: 'component', name: 'face' },
+      { type: 'component', name: 'animation' },
+    ],
+  },
+  components: {
+    face: {
+      width: 100,
+      height: 100,
+      variants: {
+        round: { elements: [tagRect('#111111')] },
+        square: { elements: [tagRect('#222222')] },
+      },
+    },
+    animation: {
+      width: 100,
+      height: 100,
+      variants: {
+        none: { elements: [] },
+        fast: { elements: [tagRect('#aa0000')], weight: 0, tags: ['animation:fast'] },
+        slow: { elements: [tagRect('#0000aa')], weight: 0, tags: ['animation:slow'] },
+        plain: { elements: [tagRect('#00aa00')], weight: 0, tags: ['animation'] },
+      },
+    },
+  },
+};
+writeJson(join('styles', 'animated.json'), styles.animated);
+
 // ---------------------------------------------------------------------------
 // Fnv1a fixtures
 // ---------------------------------------------------------------------------
@@ -500,6 +617,34 @@ const styleValidationCases = [
     id: 'unknown-root-key',
     definition: { canvas: { width: 100, height: 100, elements: [] }, unexpected: true },
   },
+  {
+    id: 'tagged-variant',
+    definition: {
+      canvas: { width: 100, height: 100, elements: [] },
+      components: {
+        hair: {
+          width: 100,
+          height: 100,
+          variants: {
+            long: { elements: [], tags: ['hairLength:long', 'tone:cool'] },
+          },
+        },
+      },
+    },
+  },
+  {
+    id: 'invalid-tag-uppercase',
+    definition: {
+      canvas: { width: 100, height: 100, elements: [] },
+      components: {
+        hair: {
+          width: 100,
+          height: 100,
+          variants: { long: { elements: [], tags: ['HairLength:Long'] } },
+        },
+      },
+    },
+  },
 ];
 
 const optionsValidationCases = [
@@ -522,6 +667,12 @@ const optionsValidationCases = [
   { id: 'background-color-list', options: { backgroundColor: ['ff0000'] } },
   { id: 'background-color-invalid-hex', options: { backgroundColor: ['zzz'] } },
   { id: 'unknown-option', options: { unknownOption: 1 } },
+  { id: 'tags-string', options: { tags: 'tone:warm' } },
+  { id: 'tags-array', options: { tags: ['hairLength:long', '!facialHair:beard'] } },
+  { id: 'tags-bare-exclude', options: { tags: ['!facialHair'] } },
+  { id: 'tags-invalid-uppercase', options: { tags: ['Bad:X'] } },
+  { id: 'tags-invalid-three-segment', options: { tags: ['a:b:c'] } },
+  { id: 'tags-invalid-double-negation', options: { tags: ['!!a'] } },
 ];
 
 // A style whose canvas uses color `a`, so resolving it walks the (circular)
@@ -765,6 +916,48 @@ const avatarFixtures = {
       id: 'shape-probability-zero',
       options: { seed: 'parity-1', shapeProbability: 0 },
     },
+  ]),
+  tagged: avatarCases([
+    // tone:warm cuts both hair and facialHair, and leaves the untagged nose whole.
+    { id: 'tags-include-cross-axis', options: { seed: 'parity-1', tags: 'tone:warm' } },
+    // hairLength:long touches only hair; facialHair has no hairLength tag.
+    { id: 'tags-include-axis', options: { seed: 'parity-1', tags: 'hairLength:long' } },
+    // exclude one value, and a bare exclude that empties the optional facialHair.
+    { id: 'tags-exclude-value', options: { seed: 'parity-1', tags: '!hairShade:dark' } },
+    { id: 'tags-exclude-bare', options: { seed: 'parity-1', tags: '!facialHair' } },
+    // AND across axes, OR within an axis.
+    { id: 'tags-and-across-axes', options: { seed: 'parity-1', tags: ['hairLength:long', 'hairShade:dark'] } },
+    { id: 'tags-or-within-axis', options: { seed: 'parity-1', tags: ['hairLength:long', 'hairLength:short'] } },
+    // An unknown category touches nothing, because no variant carries it and
+    // the allow group leaves untagged variants alone.
+    { id: 'tags-unknown-category-noop', options: { seed: 'parity-1', tags: 'eyes:big' } },
+    // An unknown value inside a category the style DOES use is not a no-op: it
+    // matches no variant, and every hair variant carries hairLength, so the
+    // whole component drops out. Only the category is forgiving, not the value.
+    { id: 'tags-unknown-value-empties-axis', options: { seed: 'parity-1', tags: 'hairLength:lng' } },
+    // ${name}Variant is more specific: hair ignores the filter, facialHair obeys it.
+    { id: 'tags-variant-precedence', options: { seed: 'parity-1', tags: 'tone:warm', hairVariant: 'longLight' } },
+    // empty ${name}Variant yields no hair even though the filter would allow some.
+    { id: 'tags-empty-variant', options: { seed: 'parity-1', tags: 'tone:cool', hairVariant: [] } },
+  ]),
+  animated: avatarCases([
+    // The untagged static default outweighs the zero-weight speeds.
+    { id: 'animation-default', options: { seed: 'parity-1' } },
+    // The bare include drops the untagged default; the all-zero pool falls
+    // back to an unweighted pick among the speeds. `face` is untouched.
+    { id: 'animation-bare-on', options: { seed: 'parity-1', tags: 'animation' } },
+    // A speed value narrows the required pool to a single variant.
+    { id: 'animation-bare-with-speed', options: { seed: 'parity-1', tags: ['animation', 'animation:slow'] } },
+    // A bare-tagged variant answers a whole-category query but not a valued
+    // one, so `animation:slow` drops `plain` and leaves the static default.
+    { id: 'animation-value-skips-bare-tag', options: { seed: 'parity-1', tags: 'animation:slow' } },
+    // The bare exclude drops every tagged variant and keeps the static default.
+    { id: 'animation-bare-off', options: { seed: 'parity-1', tags: '!animation' } },
+    // A disallow wins over a bare include for the same category, so the pair
+    // behaves like the bare exclude alone rather than emptying the pool.
+    { id: 'animation-bare-on-and-off', options: { seed: 'parity-1', tags: ['animation', '!animation'] } },
+    // A bare include for a category no variant uses binds nothing.
+    { id: 'animation-bare-unused', options: { seed: 'parity-1', tags: 'headwear' } },
   ]),
 };
 

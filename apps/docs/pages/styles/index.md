@@ -1,20 +1,15 @@
 ---
 layout: page
-title: 头像风格 – 浏览 35+ 种头像设计
+title: 头像风格 – 浏览 %STYLE_COUNT% 种头像设计
 description: >
-  浏览 DiceBear 头像库中的 35+ 种风格并生成头像。从抽象图案到角色设计：适用于个人资料图片和用户头像的完美头像生成器。
+  浏览 %STYLE_COUNT% 种风格，并使用 DiceBear 头像库生成头像。从抽象图案到角色设计：为个人资料图片和用户头像打造的完美头像生成器。
 aside: false
 sidebar: false
 ---
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useData } from 'vitepress';
 import StyleList from "@theme/components/styles/StyleList.vue";
 import { UiContainer, UiHeadline, UiDescription } from "@theme/components/ui";
-
-const { theme } = useData();
-const styleCount = computed(() => Object.keys(theme.value.avatarStyles).length);
 </script>
 
 <UiContainer class="styles-page">
@@ -23,7 +18,7 @@ const styleCount = computed(() => Object.keys(theme.value.avatarStyles).length);
       <strong>风格</strong> 概览
     </UiHeadline>
     <UiDescription>
-      浏览我们的头像库，从抽象图案到手工打造的角色插画。每种风格都由艺术家制作，可直接用于您的项目中的个人资料图片。
+      浏览我们的头像库，从抽象图案到手绘角色插画，应有尽有。有些风格来自独立艺术家，有些则是我们自行设计的。所有风格都可以直接用作项目中的个人资料图片。
     </UiDescription>
   </div>
 

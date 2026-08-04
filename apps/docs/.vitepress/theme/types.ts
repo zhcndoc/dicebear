@@ -14,6 +14,7 @@ export type AvatarStyleMeta = {
 
 export type AvatarStyle = {
   definitionUrl?: string;
+  animated?: boolean;
   meta: AvatarStyleMeta;
 };
 
@@ -37,6 +38,8 @@ export type AvatarStyleSizeBundle = {
 
 export type ThemeOptions = {
   avatarStyles: AvatarStyles;
+  styleCount: number;
+  animatedStyleCount: number;
   avatarUniqueCounts: Record<string, AvatarUniqueCount>;
   avatarStyleSizes: AvatarStyleSizeBundle;
   githubStars: Record<string, string>;

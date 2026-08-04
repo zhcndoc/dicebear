@@ -18,9 +18,9 @@ import UniqueAvatarsTable from '@theme/components/guides/UniqueAvatarsTable.vue'
 - **颜色调色板。** 颜色组会联合评估：`notEqualTo` 会剔除引用组中被选中的 hex 值（并遵循渲染器“在过滤后为空时回退到完整调色板”的规则），而 `contrastTo` 会简化为单个、确定性的选择。
 - **由 seed 派生的首字母。** 当某种样式渲染 `initial` 或 `initials` 变量时，每个输出字母的取值范围为 Unicode 的 `\p{L}` 类别（约 140,000 个不同的大写字符），并且 `initials` 每个 seed 最多输出两个字母。
 
-用户提供的选项（自定义颜色调色板、变体白名单、额外背景、`flip`、`rotate`、`scale`、`translate`、`borderRadius`、ID 随机化等）会在此处报告的基础上进一步提高数量。
+用户提供的选项（自定义颜色调色板、变体允许列表、额外背景、`flip`、`rotate`、`scale`、`translate`、`borderRadius`、ID 随机化等）会使数量进一步增加，超出此处报告的结果。
 
 <UniqueAvatarsTable />
 
 如果某个数字看起来不对，请在 GitHub 上打开一个
-[discussion](https://github.com/orgs/dicebear/discussions)。
+[讨论](https://github.com/orgs/dicebear/discussions)。

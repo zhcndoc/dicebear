@@ -14,9 +14,7 @@ Go 库提供与
 
 ## 安装
 
-You need two modules: the core library `github.com/dicebear/dicebear-go/v10` and
-the avatar style definitions `github.com/dicebear/styles/v10`. The module paths
-include the major version number, so please import them with the `/v10` suffix.
+您需要两个模块：核心库 `github.com/dicebear/dicebear-go/v10` 和头像样式定义 `github.com/dicebear/styles/v10`。模块路径包含主版本号，因此请使用带有 `/v10` 后缀的路径导入它们。
 
 ```sh
 go get github.com/dicebear/dicebear-go/v10
@@ -62,8 +60,8 @@ func main() {
 
 :::info
 
-我们提供了来自不同艺术家的大量头像样式。这些头像样式采用不同的许可证，
-由艺术家自行选择。为了便于快速了解，我们为你创建了一个
+我们提供了大量来自不同创作者的头像样式。这些头像样式遵循不同的许可证，
+创作者可以自行选择许可证。为了便于快速了解，我们为你准备了
 [许可证概览](/licenses/)。
 
 :::
@@ -118,27 +116,27 @@ avatar, err := dicebear.NewAvatar(style, map[string]any{
 descriptor := dicebear.NewOptionsDescriptor(style).ToJSON()
 ```
 
-## Methods
+## 方法
 
 ### `SVG()` / `String()`
 
-**Return type:** `string`
+**返回类型：** `string`
 
-Returns the SVG avatar in XML format. `Avatar` also implements `fmt.Stringer`, so it can be used directly in string contexts (`fmt.Println`, `fmt.Sprintf`).
+以 XML 格式返回 SVG 头像。`Avatar` 还实现了 `fmt.Stringer`，因此可以直接用于字符串上下文（`fmt.Println`、`fmt.Sprintf`）。
 
 ```go
 avatar, _ := dicebear.NewAvatar(style, map[string]any{"seed": "Alice"})
 
 svg := avatar.SVG()
-// Or
+// 或
 svg = avatar.String()
 ```
 
 ### `JSON()`
 
-**Return type:** `[]byte` (JSON containing the keys `svg` and `options`), `error`
+**返回类型：** `[]byte`（包含 `svg` 和 `options` 键的 JSON）、`error`
 
-Returns the SVG and the resolved options as JSON.
+以 JSON 格式返回 SVG 和解析后的选项。
 
 ```go
 avatar, _ := dicebear.NewAvatar(style, map[string]any{"seed": "Alice"})
@@ -148,40 +146,39 @@ result, _ := avatar.JSON()
 // result → {"svg":"<svg>...</svg>","options":{"flip":"none",...}}
 ```
 
-The resolved options can also be accessed directly as a map via
-`avatar.ResolvedOptions()`.
+解析后的选项也可以通过 `avatar.ResolvedOptions()` 直接以映射的形式访问。
 
 ### `DataURI()`
 
-**Return type:** `string`
+**返回类型：** `string`
 
-Returns the avatar as a [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
+以 [数据 URI](https://en.wikipedia.org/wiki/Data_URI_scheme) 的形式返回头像。
 
 ```go
 avatar, _ := dicebear.NewAvatar(style, map[string]any{"seed": "Alice"})
 
 dataURI := avatar.DataURI()
 
-// <img src="{dataURI}" alt="Avatar" />
+// <img src="{dataURI}" alt="头像" />
 ```
 
 ## 核心选项
 
-核心选项与 JavaScript 库完全一致。完整参考请参见
-[JS 库核心选项](/how-to-use/js-library/#core-options)。以下是 Go 语法中的选项：
+这些选项适用于每个 DiceBear 核心。完整参考请参阅
+[核心选项](/guides/core-options/)。以下是 Go 语法中的选项：
 
 ```go
 avatar, _ := dicebear.NewAvatar(style, map[string]any{
 	"seed":                "Alice",
 	"flip":                "horizontal",            // "none", "horizontal", "vertical", "both"
-	"rotate":              10,                       // -360 to 360, or [min, max] range
-	"scale":               0.9,                      // 0 to 10 (1 = original), or [min, max] range
-	"borderRadius":        50,                       // 0-50 (50 = circle)
+	"rotate":              10,                       // -360 到 360，或 [min, max] 范围
+	"scale":               0.9,                      // 0 到 10（1 = 原始大小），或 [min, max] 范围
+	"borderRadius":        50,                       // 0-50（50 = 圆形）
 	"size":                128,
-	"translateX":          0,                        // -1000 to 1000 (percent of canvas width)
-	"translateY":          0,                        // -1000 to 1000 (percent of canvas height)
+	"translateX":          0,                        // -1000 到 1000（画布宽度的百分比）
+	"translateY":          0,                        // -1000 到 1000（画布高度的百分比）
 	"idRandomization":     true,
-	"title":               "User Avatar",
+	"title":               "用户头像",
 	"fontFamily":          "Arial",                  // 或 []string{"Arial", "Helvetica"}
 	"fontWeight":          700,                      // 1-1000
 	"backgroundColor":     []string{"#b6e3f4", "#c0aede"},
@@ -189,9 +186,8 @@ avatar, _ := dicebear.NewAvatar(style, map[string]any{
 })
 ```
 
-动态组件和颜色选项也以相同方式工作。请参阅
-[JS 库文档](/how-to-use/js-library/#dynamic-component-options)
-了解所有可用模式。
+动态组件和颜色选项的工作方式也相同。有关所有可用模式，请参阅
+[动态组件选项](/guides/core-options/#dynamic-component-options)。
 
 ## 示例
 

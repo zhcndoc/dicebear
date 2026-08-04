@@ -26,7 +26,9 @@ import { unsupportedHttpApiOptions } from '@theme/utils/avatar/api';
 import {
   getOptionDescription,
   getOptionExamples,
+  getOptionValueOrder,
 } from '@theme/utils/styleOptionMeta';
+import { groupTagsByCategory } from '@theme/utils/avatar/tags';
 import {
   styleColorsKey,
   styleColorsDefault,
@@ -141,8 +143,39 @@ const possibleValues = computed(() => {
     return [];
   }
 
-  return fieldValues.value.slice().sort(naturalSort);
+  const order = getOptionValueOrder(props.name);
+
+  if (!order) {
+    return fieldValues.value.slice().sort(naturalSort);
+  }
+
+  return fieldValues.value.slice().sort((a, b) => {
+    const ia = order.indexOf(a);
+    const ib = order.indexOf(b);
+
+    if (ia === -1 && ib === -1) return naturalSort(a, b);
+    if (ia === -1) return 1;
+    if (ib === -1) return -1;
+
+    return ia - ib;
+  });
 });
+
+// Values the code snippets pick from. A `none` variant is real but makes a
+// weak sample, because the snippet would mostly show the component switched
+// off. The other values win whenever the option has any.
+const sampleValues = computed(() => {
+  const withoutNone = possibleValues.value.filter((v) => v !== 'none');
+
+  return withoutNone.length > 0 ? withoutNone : possibleValues.value;
+});
+
+// The `tags` option lists the style's tag vocabulary grouped by category
+// instead of an avatar preview per value.
+const isTags = computed(() => props.name === 'tags');
+const tagCategories = computed(() =>
+  isTags.value ? groupTagsByCategory(fieldValues.value) : [],
+);
 
 const examples = computed<(string | number | boolean)[] | undefined>(() => {
   if (skipPreview.value) {
@@ -169,14 +202,21 @@ const previewItems = computed(() => {
 });
 
 const codeExampleValue = computed(() => {
+  // A single tag keeps the example meaningful: two tokens from the flat list
+  // often span different categories, which combine with AND and would demo a
+  // near-empty, misleading filter.
+  if (isTags.value) {
+    return possibleValues.value.slice(0, 1);
+  }
+
   if (examples.value) {
     return isList.value ? examples.value.slice(0, 2) : examples.value[0];
   }
 
-  if (possibleValues.value.length > 0) {
+  if (sampleValues.value.length > 0) {
     return isList.value
-      ? possibleValues.value.slice(0, 2)
-      : possibleValues.value[0];
+      ? sampleValues.value.slice(0, 2)
+      : sampleValues.value[0];
   }
 
   if (fieldType.value === 'boolean') {
@@ -285,7 +325,7 @@ const descriptionWithHints = computed(() => {
 const weightedExampleValue = computed(() => {
   if (!isWeighted.value) return undefined;
 
-  const vals = fieldValues.value;
+  const vals = sampleValues.value;
 
   if (vals.length >= 2) {
     return { [vals[0]]: 2, [vals[1]]: 1 };
@@ -362,8 +402,8 @@ function onExamplesToggle(event: MouseEvent) {
           :href="contrastTargetHref ?? undefined"
           class="style-options-card-contrast-banner-link"
         >
-          {{ contrastTargetLabel }}
-        </a>. The renderer picks the value with the strongest contrast against the
+          {{ contrastTargetLabel }} </a
+        >. The renderer picks the value with the strongest contrast against the
         selected {{ contrastTargetLabel.toLowerCase() }} color, so additional
         values mainly serve as fallbacks.
       </p>
@@ -391,8 +431,31 @@ function onExamplesToggle(event: MouseEvent) {
         <AccordionContent>
           <div class="style-options-card-details-body">
             <div
+              class="style-options-card-tags"
+              v-if="isTags && tagCategories.length > 0"
+            >
+              <div
+                v-for="group in tagCategories"
+                :key="group.category"
+                class="style-options-card-tags-group"
+              >
+                <span class="style-options-card-tags-group-title">{{
+                  group.label
+                }}</span>
+                <div class="style-options-card-tags-chips">
+                  <code
+                    v-for="token in group.tokens"
+                    :key="token"
+                    class="style-options-card-tags-chip"
+                    >{{ token }}</code
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div
               class="style-options-card-preview"
-              v-if="previewItems.length > 0"
+              v-else-if="previewItems.length > 0"
             >
               <div class="style-options-card-preview-grid">
                 <StyleOptionsPreview
@@ -583,6 +646,40 @@ function onExamplesToggle(event: MouseEvent) {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
       gap: 8px;
+    }
+  }
+
+  &-tags {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 16px;
+
+    &-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    &-group-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--vp-c-text-2);
+    }
+
+    &-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    &-chip {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 99px;
+      background: var(--vp-code-bg);
+      color: var(--vp-c-text-2);
     }
   }
 

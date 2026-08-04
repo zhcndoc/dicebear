@@ -8,9 +8,10 @@ export interface FooterLink {
 
 export const productLinks: FooterLink[] = [
   { label: '为什么选择 DiceBear？', href: '/why-dicebear/' },
-  { label: 'Playground', href: '/playground/' },
+  { label: '动态头像', href: '/animated-avatars/' },
+  { label: '游乐场', href: '/playground/' },
   { label: '全部风格', href: '/styles/' },
-  { label: 'Tools', href: '/tools/' },
+  { label: '工具', href: '/tools/' },
   { label: '编辑器', href: 'https://editor.dicebear.com', external: true },
 ];
 
@@ -19,7 +20,14 @@ export const resourceLinks: FooterLink[] = [
   { label: 'JS 库', href: '/how-to-use/js-library/' },
   { label: 'HTTP API', href: '/how-to-use/http-api/' },
   { label: 'CLI', href: '/how-to-use/cli/' },
-  { label: '统计', href: '/stats/' },
+  { label: '统计数据', href: '/stats/' },
+];
+
+// Older major versions keep their docs on a subdomain of their own. This list
+// replaces the version dropdown that used to sit in the top nav.
+export const versionLinks: FooterLink[] = [
+  { label: '10.x (current)', href: '/' },
+  { label: '9.x', href: 'https://v9.dicebear.com', external: true },
 ];
 
 function buildLegalLink(

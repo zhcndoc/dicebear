@@ -7,8 +7,8 @@
 //! snapshot doubles as the only mutable state besides the `color_resolving`
 //! stack that detects circular color references.
 
-use std::cell::RefCell;
-use std::collections::HashMap;
+use std::cell::{OnceCell, RefCell};
+use std::collections::{HashMap, HashSet};
 
 use serde_json::Value;
 
@@ -18,12 +18,25 @@ use crate::prng::{Prng, Range};
 use crate::style::{Color, Component, Style};
 use crate::utils::color;
 
+/// The `tags` filter tokens grouped by role, as [`Resolver`] composes them.
+/// Every field borrows from the memoized [`Options::tags`]. `bare_disallows` is
+/// the subset of `disallows` carrying no value, kept as a lookup set for the
+/// per-component narrowing.
+struct TagFilter<'a> {
+    allow_categories: Vec<&'a str>,
+    allows: HashMap<&'a str, Vec<&'a str>>,
+    bares: Vec<&'a str>,
+    disallows: Vec<(&'a str, Option<&'a str>)>,
+    bare_disallows: HashSet<&'a str>,
+}
+
 pub struct Resolver<'a> {
     style: &'a Style,
     options: &'a Options,
     prng: Prng,
     color_resolving: RefCell<Vec<String>>,
     result: RefCell<serde_json::Map<String, Value>>,
+    tags: OnceCell<TagFilter<'a>>,
 }
 
 impl<'a> Resolver<'a> {
@@ -36,6 +49,7 @@ impl<'a> Resolver<'a> {
             prng,
             color_resolving: RefCell::new(Vec::new()),
             result: RefCell::new(serde_json::Map::new()),
+            tags: OnceCell::new(),
         }
     }
 
@@ -131,24 +145,161 @@ impl<'a> Resolver<'a> {
             return None;
         }
 
+        let weights = self.variant_weights(component);
+
+        self.prng.weighted_pick(&format!("{name}Variant"), &weights)
+    }
+
+    /// Builds the name -> weight map the PRNG draws a variant from. The
+    /// per-component `${name}Variant` option is more specific than the global
+    /// `tags` filter, so it takes precedence: when set, it fully governs the
+    /// component's pool (its named variants, weighted by the option) and the
+    /// tags filter is ignored for that component. The tags filter applies only
+    /// where the user gave no explicit `${name}Variant` (see
+    /// [`Self::tag_filtered_names`]), and falls back to every variant when
+    /// neither is set. Names the style does not define are dropped, and an empty
+    /// `${name}Variant` (or an empty tag result) yields no variant.
+    fn variant_weights(&self, component: &Component) -> HashMap<String, f64> {
+        let variants = component.variants();
+        let named = self.options.component_variant(component.source_name());
         let mut weights: HashMap<String, f64> = HashMap::new();
 
-        match self.options.component_variant(component.source_name()) {
-            None => {
-                for (v, variant) in component.variants() {
-                    weights.insert(v.clone(), variant.weight());
-                }
-            }
-            Some(raw) => {
-                for (v, w) in raw {
-                    if component.variants().contains_key(&v) {
+        match named {
+            Some(named) => {
+                for (v, w) in named {
+                    if variants.contains_key(&v) {
                         weights.insert(v, w);
                     }
                 }
             }
+            None if !self.options.tags().is_empty() => {
+                for name in self.tag_filtered_names(component) {
+                    if let Some(variant) = variants.get(&name) {
+                        weights.insert(name, variant.weight());
+                    }
+                }
+            }
+            None => {
+                for (v, variant) in variants {
+                    weights.insert(v.clone(), variant.weight());
+                }
+            }
         }
 
-        self.prng.weighted_pick(&format!("{name}Variant"), &weights)
+        weights
+    }
+
+    /// Classifies the parsed [`Options::tags`] tokens into the allow groups,
+    /// bare requirements and disallows the filter is composed from. The result
+    /// depends only on the options, never on a component, so it is computed
+    /// once per avatar rather than rebuilt for each of a style's components.
+    /// The tokens are borrowed from the memoized [`Options::tags`], so the
+    /// classification itself allocates no strings.
+    fn tag_filter(&self) -> &TagFilter<'a> {
+        self.tags.get_or_init(|| {
+            // Insertion-ordered allow groups: category -> allowed values.
+            let mut allow_categories: Vec<&'a str> = Vec::new();
+            let mut allows: HashMap<&'a str, Vec<&'a str>> = HashMap::new();
+            let mut bares: Vec<&'a str> = Vec::new();
+            let mut disallows: Vec<(&'a str, Option<&'a str>)> = Vec::new();
+            let mut bare_disallows: HashSet<&'a str> = HashSet::new();
+
+            for token in self.options.tags() {
+                let category = token.category.as_str();
+
+                if token.negated {
+                    disallows.push((category, token.value.as_deref()));
+
+                    if token.value.is_none() {
+                        bare_disallows.insert(category);
+                    }
+                } else if let Some(value) = token.value.as_deref() {
+                    allows
+                        .entry(category)
+                        .or_insert_with(|| {
+                            allow_categories.push(category);
+                            Vec::new()
+                        })
+                        .push(value);
+                } else if !bares.contains(&category) {
+                    bares.push(category);
+                }
+            }
+
+            TagFilter {
+                allow_categories,
+                allows,
+                bares,
+                disallows,
+                bare_disallows,
+            }
+        })
+    }
+
+    /// Narrows a component's variants to the names satisfying the global `tags`
+    /// filter, applying the parsed [`Options::tags`] tokens in one pass over the
+    /// pool:
+    ///
+    /// - A positive `cat:value` token is an axis-scoped allow. Within each
+    ///   category some allow mentions, a variant is kept only if it carries no
+    ///   tag in that category (untouched) or matches one of the allowed values
+    ///   (OR within the category). Distinct allowed categories combine with
+    ///   AND, and a category no allow mentions is left unconstrained.
+    /// - A bare positive `cat` token requires the category: it drops variants
+    ///   that carry no tag in `cat`. It only binds where the category is in
+    ///   use — a component with no `cat` tag on any variant is left untouched,
+    ///   so `animation` turns on a style's opt-in animation without erasing
+    ///   the components that know nothing about it.
+    /// - A negative `!cat`/`!cat:value` token disallows, dropping every variant
+    ///   carrying any tag in `cat` (bare) or the exact `cat:value` tag. Disallows
+    ///   are checked alongside allows but always win.
+    ///
+    /// Returns the surviving variant names in definition order.
+    fn tag_filtered_names(&self, component: &Component) -> Vec<String> {
+        let TagFilter {
+            allow_categories,
+            allows,
+            bares,
+            disallows,
+            bare_disallows,
+        } = self.tag_filter();
+
+        // A bare token only binds where its category is in use, so this
+        // narrowing — unlike the classification — is genuinely per-component.
+        let required: Vec<&str> = bares
+            .iter()
+            .copied()
+            .filter(|category| {
+                !bare_disallows.contains(category)
+                    && component
+                        .variants()
+                        .values()
+                        .any(|variant| variant.has_tag(category, None))
+            })
+            .collect();
+
+        let mut names: Vec<String> = Vec::new();
+
+        for (name, variant) in component.variants() {
+            let allowed = allow_categories.iter().all(|category| {
+                let values = &allows[category];
+                !variant.has_tag(category, None)
+                    || values
+                        .iter()
+                        .any(|value| variant.has_tag(category, Some(value)))
+            }) && required
+                .iter()
+                .all(|category| variant.has_tag(category, None));
+            let disallowed = disallows
+                .iter()
+                .any(|(category, value)| variant.has_tag(category, *value));
+
+            if allowed && !disallowed {
+                names.push(name.clone());
+            }
+        }
+
+        names
     }
 
     pub fn color(&self, name: &str) -> Result<Vec<String>, Error> {

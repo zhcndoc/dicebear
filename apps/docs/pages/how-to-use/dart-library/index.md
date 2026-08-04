@@ -50,7 +50,7 @@ void main() {
 
 :::info
 
-我们提供了来自不同艺术家的大量头像样式。头像样式采用不同的许可证授权，这些许可证由艺术家自行选择。为了便于快速了解，我们为你创建了一个[许可证概览](/licenses/)。
+我们提供了大量来自不同创作者的头像样式。这些头像样式分别采用不同的许可证，创作者可以自行选择许可证。为了便于快速了解，我们为你创建了一个[许可证概览](/licenses/)。
 
 :::
 
@@ -149,30 +149,31 @@ final dataUri = avatar.toDataUri();
 
 ## 核心选项
 
-核心选项与 JavaScript 库完全相同。完整参考请参见
-[JS Library 核心选项](/how-to-use/js-library/#core-options)。以下是 Dart 语法中的选项：
+这些选项在每个 DiceBear 核心中都是相同的。请参阅
+[核心选项](/guides/core-options/)获取完整参考。以下是 Dart 语法中的选项：
 
 ```dart
 final avatar = Avatar(style, {
   'seed': 'Alice',
   'flip': 'horizontal', // 'none', 'horizontal', 'vertical', 'both'
-  'rotate': 10, // -360 to 360, or [min, max] range
-  'scale': 0.9, // 0 to 10 (1 = original), or [min, max] range
-  'borderRadius': 50, // 0-50 (50 = circle)
+  'rotate': 10, // -360 到 360，或 [最小值, 最大值] 范围
+  'scale': 0.9, // 0 到 10（1 = 原始大小），或 [最小值, 最大值] 范围
+  'borderRadius': 50, // 0-50（50 = 圆形）
   'size': 128,
-  'translateX': 0, // -1000 to 1000 (canvas 宽度的百分比)
-  'translateY': 0, // -1000 to 1000 (canvas 高度的百分比)
+  'translateX': 0, // -1000 到 1000（画布宽度的百分比）
+  'translateY': 0, // -1000 到 1000（画布高度的百分比）
   'idRandomization': true,
-  'title': 'User Avatar',
-  'fontFamily': 'Arial', // or ['Arial', 'Helvetica']
+  'title': '用户头像',
+  'fontFamily': 'Arial', // 或 ['Arial', 'Helvetica']
   'fontWeight': 700, // 1-1000
   'backgroundColor': ['#b6e3f4', '#c0aede'],
   'backgroundColorFill': 'solid', // 'solid', 'linear', 'radial'
 });
 ```
 
-动态组件和颜色选项的工作方式也相同。有关所有可用模式，请参见
-[JS Library 文档](/how-to-use/js-library/#dynamic-component-options)。
+动态组件和颜色选项的工作方式也相同。请参阅
+[动态组件选项](/guides/core-options/#dynamic-component-options)了解
+所有可用的模式。
 
 ## 示例
 

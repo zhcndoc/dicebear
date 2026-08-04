@@ -18,7 +18,11 @@ import {
   SlidersHorizontal,
 } from '@lucide/vue';
 import { siGithub, siFigma } from 'simple-icons';
+import { useData } from 'vitepress';
+import type { ThemeOptions } from '@theme/types';
 import { useVisibility } from '../../composables/useVisibility';
+
+const { theme } = useData<ThemeOptions>();
 
 withDefaults(
   defineProps<{
@@ -46,9 +50,9 @@ const highlights = [
   },
   {
     icon: Palette,
-    title: '35+ 种头像风格',
+    title: `${theme.value.styleCount} 种头像风格`,
     description:
-      '来自优秀创作者的精心设计风格，涵盖人物、抽象、像素艺术等。',
+      '独立艺术家手绘的角色，以及抽象、像素艺术和几何设计。',
     color: '#a855f7',
   },
   {

@@ -49,6 +49,19 @@
   border-color: transparent !important;
 }
 
+/* Muted help/description text under a field. Spaced from the control above,
+   except when it leads its container (then the container's own spacing wins). */
+.pg-help {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ui-c-text-muted);
+}
+
+.pg-help:first-child {
+  margin-top: 0;
+}
+
 /* ----------------------------------------------------------------
  * Global Motion & Interaction Tokens
  * ---------------------------------------------------------------- */
@@ -221,8 +234,12 @@ h6,
     'avataaars-neutral',
     'big-ears',
     'big-smile',
+    'blobs',
     'bottts',
     'bottts-neutral',
+    'clay',
+    'constellation',
+    'critters',
     'croodles',
     'croodles-neutral',
     'disco',
@@ -234,23 +251,32 @@ h6,
     'identicon',
     'initial-face',
     'initials',
+    'landscape',
+    'loops',
     'lorelei',
     'lorelei-neutral',
     'micah',
     'miniavs',
+    'moods',
     'notionists',
     'notionists-neutral',
     'open-peeps',
     'personas',
     'pixel-art',
     'pixel-art-neutral',
+    'pixelbot',
+    'planets',
     'rings',
     'shape-grid',
     'shapes',
+    'sprouts',
+    'squircles',
     'stripes',
     'thumbs',
     'toon-head',
-    'triangles'
+    'triangles',
+    'waves',
+    'weave'
   );
 
   @each $style in $styles {

@@ -6,10 +6,13 @@ description: >
 ---
 
 <script setup>
+import { useData } from 'vitepress';
 import { Fingerprint, Zap, Server, Palette } from '@lucide/vue';
 import BrowserPreview from '@theme/components/ui/UiBrowserPreview.vue';
 import DocsHighlights from '@theme/components/docs/DocsHighlights.vue';
 import DocsStyleGrid from '@theme/components/docs/DocsStyleGrid.vue';
+
+const { theme } = useData();
 
 const highlights = [
   {
@@ -35,7 +38,7 @@ const highlights = [
   },
   {
     icon: Palette,
-    title: '35+ 种样式',
+    title: `${theme.value.styleCount} 个样式`,
     description:
       '从抽象几何图形到插画角色，选择适合你产品的视觉风格。',
     color: '#a855f7',
@@ -84,9 +87,9 @@ const styles = [
 
 <DocsHighlights :highlights="highlights" />
 
-## Using HTTP API
+## 使用 HTTP API
 
-The easiest method: use the DiceBear API URL as the `src` of an `<img>` tag. Use a stable identifier as the seed. A numeric user ID works well. For full options and rate limit details, see the [HTTP API documentation](/how-to-use/http-api/).
+最简单的方法：将 DiceBear API URL 作为 `<img>` 标签的 `src`。使用稳定的标识符作为种子值。数字用户 ID 效果很好。有关完整选项和速率限制详情，请参阅 [HTTP API 文档](/how-to-use/http-api/)。
 
 <BrowserPreview url="https://api.dicebear.com/10.x/initials/svg?seed=JD" />
 <BrowserPreview url="https://api.dicebear.com/10.x/pixel-art/svg?seed=user-42" />
@@ -94,27 +97,27 @@ The easiest method: use the DiceBear API URL as the `src` of an `<img>` tag. Use
 ```html
 <img
   src="https://api.dicebear.com/10.x/initials/svg?seed=JD"
-  alt="User avatar"
+  alt="用户头像"
   width="48"
   height="48"
 />
 ```
 
-### Fallback when the image errors
+### 图像加载出错时的回退方案
 
-Combine DiceBear with an `onerror` handler so it gracefully falls back when a user-uploaded photo fails to load:
+将 DiceBear 与 `onerror` 处理程序结合使用，以便用户上传的照片加载失败时能够平稳地回退：
 
 ```html
 <img
   src="/uploads/user-123.jpg"
   onerror="this.src='https://api.dicebear.com/10.x/pixel-art/svg?seed=123'; this.onerror=null;"
-  alt="User avatar"
+  alt="用户头像"
 />
 ```
 
-### Using the user ID as the seed
+### 使用用户 ID 作为种子值
 
-Pass a stable and unique identifier as the seed to ensure each user always receives the same placeholder:
+将稳定且唯一的标识符作为种子值传入，以确保每位用户始终获得相同的占位头像：
 
 ```js
 const userId = 'user-8f3a2c';
@@ -123,9 +126,9 @@ const avatarUrl = `https://api.dicebear.com/10.x/thumbs/svg?seed=${encodeURIComp
 
 <BrowserPreview url="https://api.dicebear.com/10.x/thumbs/svg?seed=user-8f3a2c" />
 
-## Using JavaScript Libraries
+## 使用 JavaScript 库
 
-Use a JS library to render on the server, or embed SVGs directly into your markup without making an additional HTTP request. For complete installation and API details, please refer to the [JavaScript Library Documentation](/how-to-use/js-library/).
+使用 JS 库在服务器上渲染，或将 SVG 直接嵌入标记中，而无需发起额外的 HTTP 请求。如需完整的安装和 API 详细信息，请参阅 [JavaScript 库文档](/how-to-use/js-library/)。
 
 ```js
 import { Style, Avatar } from '@dicebear/core';
@@ -142,10 +145,10 @@ function getPlaceholderAvatar(userId) {
 }
 ```
 
-## Using PHP Library
+## 使用 PHP 库
 
-Use the PHP library for server-side rendering without additional HTTP requests. For complete installation and API details, please refer to
-[PHP Library Documentation](/how-to-use/php-library/).
+使用 PHP 库进行服务器端渲染，无需额外的 HTTP 请求。有关完整的安装和 API 详情，请参阅
+[PHP 库文档](/how-to-use/php-library/)。
 
 ```php
 <?php

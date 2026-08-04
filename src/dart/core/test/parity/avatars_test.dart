@@ -25,13 +25,7 @@ void main() {
     return;
   }
 
-  for (final name in const [
-    'glass',
-    'initials',
-    'notionists',
-    'shape-grid',
-    'thumbs',
-  ]) {
+  for (final name in parityStyleNames()) {
     group(name, () {
       // The vendored fixture style, never a styles package — every language
       // renders from identical input bytes.

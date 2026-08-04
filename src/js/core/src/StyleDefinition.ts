@@ -31,11 +31,9 @@ export interface StyleDefinitionColorReference {
 }
 
 export type StyleDefinitionColorAttributeValue =
-  | string
-  | StyleDefinitionColorReference;
+  string | StyleDefinitionColorReference;
 export type StyleDefinitionElementValue =
-  | string
-  | StyleDefinitionVariableReference;
+  string | StyleDefinitionVariableReference;
 export type StyleDefinitionElementType = 'element' | 'text' | 'component';
 
 export interface StyleDefinitionAttributes {
@@ -94,6 +92,7 @@ export interface StyleDefinitionComponentTranslate {
 export interface StyleDefinitionComponentVariant {
   readonly elements: readonly StyleDefinitionElement[];
   readonly weight?: number;
+  readonly tags?: readonly string[];
 }
 
 export interface StyleDefinitionComponentBase {
@@ -111,8 +110,7 @@ export interface StyleDefinitionComponentAlias {
 }
 
 export type StyleDefinitionComponent =
-  | StyleDefinitionComponentBase
-  | StyleDefinitionComponentAlias;
+  StyleDefinitionComponentBase | StyleDefinitionComponentAlias;
 
 export interface StyleDefinition {
   readonly $id?: string;

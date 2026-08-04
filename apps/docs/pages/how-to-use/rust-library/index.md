@@ -40,7 +40,8 @@ let svg = avatar.to_svg();
 
 :::info
 
-我们提供了来自不同艺术家的大量头像样式。这些头像样式采用的许可证各不相同，由艺术家自行选择。为了便于快速查看，我们为你创建了一个 [许可证概览](/licenses/)。
+我们提供了大量来自不同创作者的头像样式。这些头像样式采用不同的许可证，创作者可以自行选择许可证。为了让你快速了解，我们为你创建了一个
+[许可证概览](/licenses/)。
 
 :::
 
@@ -141,7 +142,8 @@ let data_uri = avatar.to_data_uri();
 
 ## 核心选项
 
-核心选项与 JavaScript 库完全一致。完整参考请见 [JS Library core options](/how-to-use/js-library/#core-options)。以下是 Rust 语法中的选项：
+这些选项适用于每个 DiceBear 核心。请参阅
+[核心选项](/guides/core-options/) 以获取完整参考。以下是 Rust 语法中的选项：
 
 ```rust
 let avatar = Avatar::new(&style, json!({
@@ -162,7 +164,8 @@ let avatar = Avatar::new(&style, json!({
 }))?;
 ```
 
-动态组件和颜色选项也同样适用。有关所有可用模式，请参阅 [JS Library documentation](/how-to-use/js-library/#dynamic-component-options)。
+动态组件和颜色选项的工作方式也相同。请参阅
+[动态组件选项](/guides/core-options/#dynamic-component-options) 以获取所有可用模式。
 
 ## 示例
 

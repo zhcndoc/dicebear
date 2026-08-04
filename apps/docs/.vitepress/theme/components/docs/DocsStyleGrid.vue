@@ -1,8 +1,12 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+import { useData } from 'vitepress';
+import type { ThemeOptions } from '@theme/types';
+import { exampleSeeds } from '@theme/config/styleCategories';
 import { UiAvatar } from '../ui';
 import { ArrowRight } from '@lucide/vue';
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     styles: Array<{
       name: string;
@@ -16,11 +20,21 @@ withDefaults(
     allStylesLabel?: string;
   }>(),
   {
-    seeds: () => ['Felix', 'Emma', 'Leo', 'Mia'],
+    seeds: () => [...exampleSeeds],
     avatarSize: 48,
     allStylesLink: '/styles/',
-    allStylesLabel: 'Browse all 35+ avatar styles',
+    allStylesLabel: undefined,
   },
+);
+
+const { theme } = useData<ThemeOptions>();
+
+// Prop defaults are evaluated outside the setup scope, so the fallback label
+// lives here where it can read the style count.
+const resolvedAllStylesLabel = computed(
+  () =>
+    props.allStylesLabel ??
+    `Browse all ${theme.value.styleCount} avatar styles`,
 );
 </script>
 
@@ -53,7 +67,7 @@ withDefaults(
   </div>
 
   <a :href="allStylesLink" class="docs-style-grid-all">
-    <span>{{ allStylesLabel }}</span>
+    <span>{{ resolvedAllStylesLabel }}</span>
     <ArrowRight :size="16" />
   </a>
 </template>

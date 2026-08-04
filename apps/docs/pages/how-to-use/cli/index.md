@@ -45,16 +45,14 @@ dicebear lorelei ./avatars
 
 :::info
 
-我们提供了来自不同艺术家的大量头像样式。这些头像样式采用不同的许可证，
-由艺术家自行选择。为了便于快速了解，我们为你创建了一个
-[许可证概览](/licenses/)。
+我们提供了大量由不同创作者制作的头像样式。这些头像样式采用不同的许可证，创作者可以自行选择。为了方便快速了解，我们为你创建了[许可证概览](/licenses/)。
 
 :::
 
 ### 创建多个头像
 
-你也可以使用 `--count` 选项一次创建多个头像。
-将 `<count>` 替换为要创建的头像数量。
+你还可以使用 `--count` 选项一次创建多个头像。将
+`<count>` 替换为要创建的头像数量。
 
 ```
 dicebear <style> [outputPath] --count <count>
@@ -197,10 +195,10 @@ CLI **不会** 覆盖现有文件。如果目标路径下已存在文件，将�
 
 ```
 ----------------------------------------------------------------
-Lorelei by Lisa Wischofsky
-Homepage: https://www.instagram.com/lischi_art/
-Source: https://www.figma.com/community/file/1198749693280469639
-License: CC0 1.0 - https://creativecommons.org/publicdomain/zero/1.0/
+Lorelei 作者：Lisa Wischofsky
+主页：https://www.instagram.com/lischi_art/
+来源：https://www.figma.com/community/file/1198749693280469639
+许可证：CC0 1.0 - https://creativecommons.org/publicdomain/zero/1.0/
 ----------------------------------------------------------------
 ```
 
@@ -215,7 +213,7 @@ dicebear --help
 ```
 dicebear <command>
 
-Commands:
+命令：
   dicebear adventurer [outputPath]          生成 "adventurer" 头像
   dicebear adventurer-neutral [outputPath]  生成 "adventurer-neutral" 头像
   dicebear avataaars [outputPath]           生成 "avataaars" 头像
@@ -250,7 +248,7 @@ Commands:
   dicebear thumbs [outputPath]              生成 "thumbs" 头像
   dicebear toon-head [outputPath]           生成 "toon-head" 头像
 
-Options:
+选项：
   --version  显示版本号                                            [boolean]
   --help     显示帮助                                               [boolean]
 ```
@@ -280,6 +278,43 @@ dicebear ./my-style.json --help
 dicebear ./my-style.json ./avatars --count 20 --format png
 ```
 
+### 压缩定义文件
+
+从
+[Figma 插件](/guides/create-an-avatar-style-with-figma/) 导出的定义文件在导出时已经
+完成压缩。手动编写或编辑的定义文件则不会压缩，其路径数据通常还有很大的优化空间。`--optimize` 会对文件中的每个元素树执行相同的
+[svgo](https://github.com/svg/svgo) 处理，并将结果直接重写到原文件中：
+
+```
+dicebear ./my-style.json --optimize
+```
+
+```
+  my-style.json   25.5 KB -> 22.1 KB (-12.8%)
+```
+
+使用 `--optimize-precision` 控制路径和变换数据保留的小数位数。默认值为
+`3`。值越低，压缩程度越高，但精度也会相应降低：
+
+```
+dicebear ./my-style.json --optimize --optimize-precision 1
+```
+
+`--optimize-check` 会报告文件是否已优化，不会写入任何内容；如果文件未优化，则以非零状态退出。这正适合在持续集成中使用：
+
+```
+dicebear ./my-style.json --optimize-check
+```
+
+颜色、组件引用、动态值、元素 id、CSS 类以及 `<style>` 元素的内容都会保持不变，组件的
+`width` 和 `height` 也绝不会被修改。CLI 每次运行时都会验证这些内容，如果发现任何元素发生移动，就会拒绝写入文件，因此优化后的定义所生成的头像与之前完全相同。
+
+:::info
+
+优化始终会直接重写原文件，因此会忽略 `[outputPath]`。如果希望保留原文件，请先复制一份。内置样式没有自己的定义文件，因此无法进行优化。
+
+:::
+
 ## 示例
 
 ### 使用特定 seed 生成单个头像
@@ -300,7 +335,7 @@ dicebear bottts ./avatars --count 50 --format png --backgroundColor b6e3f4
 dicebear pixel-art ./avatars --count 10 --format webp --json
 ```
 
-### 生成 initials 头像
+### 生成首字母头像
 
 ```
 dicebear initials ./avatars --seed "Alice"

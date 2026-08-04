@@ -1,14 +1,24 @@
 import * as path from 'node:path';
 import { defineConfig, type DefaultTheme, type HeadConfig } from 'vitepress';
-import { ThemeOptions } from '@theme/types';
+import type { ThemeOptions } from '@theme/types';
 
-import sidebarDocs from './config/sidebarDocs';
-import sidebarStyles from './config/sidebarStyles';
-import sidebarTools from './config/sidebarTools';
-import avatarStyles from './config/avatarStyles';
-import avatarUniqueCounts from './config/avatarUniqueCounts';
-import avatarStyleSizes from './config/avatarStyleSizes';
-import { formatStars } from './theme/utils/format';
+import {
+  generateOgImages,
+  ogImagePathFor,
+  OG_IMAGE_SIZE,
+} from './og-images.ts';
+import { SITE_ORIGIN, siteUrl } from './config/site.ts';
+import sidebarDocs from './config/sidebarDocs.ts';
+import sidebarStyles from './config/sidebarStyles.ts';
+import sidebarTools from './config/sidebarTools.ts';
+import avatarStyles, {
+  styleCount,
+  animatedStyleCount,
+  STYLE_COUNT_TOKEN,
+} from './config/avatarStyles.ts';
+import avatarUniqueCounts from './config/avatarUniqueCounts.ts';
+import avatarStyleSizes from './config/avatarStyleSizes.ts';
+import { formatStars } from './theme/utils/format.ts';
 
 async function fetchGitHubStars(
   repos: string[],
@@ -67,8 +77,7 @@ const thirdPartyScripts: HeadConfig[] = isProduction
 
 export default defineConfig<ThemeOptions>({
   title: 'DiceBear 中文文档',
-  description:
-    'DiceBear 是一个免费、开源的头像库和头像 API，提供 35 多种 avatar 风格。可为任何项目生成个人资料图片和用户占位图像。',
+  description: `DiceBear 是一个免费、开源的头像库和头像 API，提供 ${styleCount} 多种 avatar 风格。可为任何项目生成个人资料图片和用户占位图像。`,
   head: [
     // Most pages load avatars from the HTTP API (seed demo, style showcase,
     // playground). Warming up the connection hides the DNS/TLS latency on
@@ -99,7 +108,9 @@ export default defineConfig<ThemeOptions>({
     ['link', { rel: 'manifest', href: '/site.webmanifest' }],
     ['meta', { property: 'og:site_name', content: 'DiceBear' }],
     ['meta', { property: 'og:type', content: 'website' }],
-    ['meta', { name: 'twitter:card', content: 'summary' }],
+    // The cards generated in buildEnd are 1200x630, so the large variant is
+    // the one that matches; `summary` would crop them into a small square.
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     [
       'script',
       { type: 'application/ld+json' },
@@ -107,9 +118,8 @@ export default defineConfig<ThemeOptions>({
         '@context': 'https://schema.org',
         '@type': 'WebSite',
         name: 'DiceBear',
-        url: 'https://dicebear.zhcndoc.com',
-        description:
-          'DiceBear 是一个免费的开源头像库和头像 API。可生成独特、可预测的 SVG 头像和个人资料图片，拥有 35 多种风格——注重隐私且可自托管。',
+        url: siteUrl('/'),
+        description: `DiceBear 是一个免费、开源的头像库和头像 API。使用 ${styleCount} 种风格生成独特且确定性的 SVG 头像和个人资料图片，注重隐私并支持自行托管。`,
       }),
     ],
     [
@@ -121,9 +131,8 @@ export default defineConfig<ThemeOptions>({
         name: 'DiceBear',
         applicationCategory: 'DeveloperApplication',
         operatingSystem: 'Any',
-        url: 'https://dicebear.zhcndoc.com',
-        description:
-          '注重隐私的开源 SVG 头像库，拥有 35+ 种样式。提供免费 Avatar API、JavaScript 库、PHP 库、Python 库、Rust 库、Go 库和 CLI，用于生成确定性的个人资料图片和用户占位图片。',
+        url: siteUrl('/'),
+        description: `注重隐私的开源 SVG 头像库，包含 ${styleCount} 种样式。提供免费的头像 API，以及用于生成确定性个人资料图片和用户占位图像的 JavaScript 库、PHP 库、Python 库、Rust 库、Go 库、Dart 库和 CLI。`,
         offers: {
           '@type': 'Offer',
           price: '0',
@@ -133,7 +142,31 @@ export default defineConfig<ThemeOptions>({
     ],
     ...thirdPartyScripts,
   ],
-  srcDir: path.join(__dirname, '..', 'pages'),
+  srcDir: path.join(import.meta.dirname, '..', 'pages'),
+  // Frontmatter is static YAML and cannot import the style count, so pages
+  // write the token where the number belongs and the build substitutes it.
+  // Runs before transformHead, which reads these two fields for the canonical
+  // title and the og:description.
+  transformPageData: (pageData) => {
+    const fill = (value: string) =>
+      value.replaceAll(STYLE_COUNT_TOKEN, String(styleCount));
+
+    if (typeof pageData.frontmatter.title === 'string') {
+      pageData.frontmatter.title = fill(pageData.frontmatter.title);
+    }
+
+    if (typeof pageData.frontmatter.description === 'string') {
+      pageData.frontmatter.description = fill(pageData.frontmatter.description);
+    }
+
+    if (typeof pageData.title === 'string') {
+      pageData.title = fill(pageData.title);
+    }
+
+    if (typeof pageData.description === 'string') {
+      pageData.description = fill(pageData.description);
+    }
+  },
   transformHead: (ctx) => {
     const result: HeadConfig[] = [];
 
@@ -164,7 +197,7 @@ export default defineConfig<ThemeOptions>({
         .replace('index.md', '')
         .replace(/\.md$/, '');
 
-      const canonicalUrl = `https://dicebear.zhcndoc.com/${canonicalPath}`;
+      const canonicalUrl = siteUrl(`/${canonicalPath}`);
 
       result.push(['link', { rel: 'canonical', href: canonicalUrl }]);
 
@@ -177,29 +210,92 @@ export default defineConfig<ThemeOptions>({
       const pageDescription =
         ctx.pageData.frontmatter.description ||
         ctx.pageData.description ||
-        'DiceBear 是一个免费的开源头像库和头像 API，拥有 35 多种 avatar 风格。';
+        `DiceBear 是一个免费、开源的头像库和头像 API，包含 ${styleCount} 种样式。`;
+
+      // og-images.ts owns which page maps to which card, so the mapping and
+      // the generator cannot drift into pointing at a card that was never
+      // written.
+      const ogImageUrl = siteUrl(ogImagePathFor(ctx.pageData.relativePath));
 
       result.push(
         ['meta', { property: 'og:title', content: pageTitle }],
         ['meta', { property: 'og:description', content: pageDescription }],
         ['meta', { property: 'og:url', content: canonicalUrl }],
+        ['meta', { property: 'og:image', content: ogImageUrl }],
+        [
+          'meta',
+          { property: 'og:image:width', content: String(OG_IMAGE_SIZE.width) },
+        ],
+        [
+          'meta',
+          {
+            property: 'og:image:height',
+            content: String(OG_IMAGE_SIZE.height),
+          },
+        ],
+        ['meta', { property: 'og:image:alt', content: pageTitle }],
         ['meta', { name: 'twitter:title', content: pageTitle }],
         ['meta', { name: 'twitter:description', content: pageDescription }],
+        ['meta', { name: 'twitter:image', content: ogImageUrl }],
       );
     }
 
     return result;
   },
+  buildEnd: (siteConfig) =>
+    generateOgImages(siteConfig.outDir, siteConfig.cacheDir, siteConfig.srcDir),
   vite: {
+    plugins: [
+      {
+        // VitePress puts everything the theme entry reaches into one `theme`
+        // chunk, and rolldown then folds the modules that many pages share
+        // into it as well. @dicebear/core rides along that way: its two
+        // compiled JSON Schema validators alone are ~160 kB, and they were
+        // downloaded on text-only pages that never render an avatar.
+        //
+        // The grouping has to be injected here rather than through
+        // `build.rolldownOptions`, because VitePress writes its own
+        // `output.codeSplitting` after the user config has been merged.
+        name: 'dicebear:chunks',
+        apply: 'build',
+        outputOptions(options) {
+          const { codeSplitting } = options as {
+            codeSplitting?: { groups?: unknown[] };
+          };
+
+          // Only extend a grouping that is actually there. If VitePress ever
+          // stops setting one, leaving the defaults alone beats replacing
+          // them with just this group.
+          if (!codeSplitting?.groups) return null;
+
+          return {
+            ...options,
+            codeSplitting: {
+              ...codeSplitting,
+              groups: [
+                {
+                  name: 'dicebear-core',
+                  test: /[/\\](@dicebear[/\\]core|js[/\\]core)[/\\]lib[/\\]/,
+                },
+                ...codeSplitting.groups,
+              ],
+            },
+          } as typeof options;
+        },
+      },
+    ],
     ssr: {
-      noExternal: ['vue-countup-v3', 'vue-chartjs', 'globe.gl', 'three'],
+      noExternal: ['vue-countup-v3', 'vue-chartjs'],
     },
     resolve: {
       alias: {
-        '@playground': path.resolve(__dirname, 'theme/components/playground'),
-        '@theme': path.resolve(__dirname, 'theme'),
+        '@playground': path.resolve(
+          import.meta.dirname,
+          'theme/components/playground',
+        ),
+        '@theme': path.resolve(import.meta.dirname, 'theme'),
         './components/VPLocalNav.vue': path.resolve(
-          __dirname,
+          import.meta.dirname,
           'theme/components/layout/LayoutVPLocalNav.vue',
         ),
       },
@@ -207,6 +303,8 @@ export default defineConfig<ThemeOptions>({
   },
   themeConfig: {
     avatarStyles,
+    styleCount,
+    animatedStyleCount,
     avatarUniqueCounts,
     avatarStyleSizes,
     githubStars,
@@ -224,22 +322,31 @@ export default defineConfig<ThemeOptions>({
     search: {
       provider: 'local',
     },
+    // The nav serves the developer audience of this site. The Editor targets
+    // end users looking for a single avatar, so it lives on the home page and
+    // in the footer instead of taking a slot on every docs page. The version
+    // switcher moved to the footer as well (see theme/config/footer-links.ts).
     nav: [
       { text: '演示', link: '/playground/', activeMatch: '^/playground' },
+      {
+        text: '样式',
+        link: '/styles/',
+        activeMatch: '^/styles',
+      },
+      {
+        text: '动画',
+        link: '/animated-avatars/',
+        activeMatch: '^/animated-avatars',
+      },
       {
         text: '文档',
         link: '/introduction/',
         activeMatch: '^/(introduction|how-to-use|guides|specification)',
       },
       {
-        text: '风格',
-        link: '/styles/',
-        activeMatch: '^/styles',
-      },
-      { text: 'Editor', link: 'https://editor.dicebear.com' },
-      {
-        text: '10.x',
-        items: [{ text: '9.x', link: 'https://v9.dicebear.com' }],
+        text: '关于',
+        link: '/why-dicebear/',
+        activeMatch: '^/why-dicebear',
       },
       { text: '简中文档', link: 'https://www.zhcndoc.com', target: '_blank' },
     ],
@@ -259,7 +366,7 @@ export default defineConfig<ThemeOptions>({
     },
   },
   sitemap: {
-    hostname: 'https://dicebear.zhcndoc.com',
+    hostname: SITE_ORIGIN,
   },
   markdown: {},
 });

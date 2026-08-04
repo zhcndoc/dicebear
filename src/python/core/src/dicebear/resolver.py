@@ -10,6 +10,7 @@ from .options import Options, Range
 from .prng import Prng
 from .style import Style
 from .style.component import Component
+from .style.component_variant import ComponentVariant
 from .utils.color import Color as ColorUtil
 
 T = TypeVar("T")
@@ -30,6 +31,15 @@ class Resolver:
         self._prng = Prng(self.seed())
         self._color_resolving: list[str] = []
         self._result: dict[str, Any] = {}
+        self._tag_filter_cache: (
+            tuple[
+                list[tuple[str, list[str]]],
+                dict[str, None],
+                list[tuple[str, str | None]],
+                set[str],
+            ]
+            | None
+        ) = None
 
     def seed(self) -> str:
         # Deliberately not memoized — the seed is the only input kept out of the
@@ -85,9 +95,10 @@ class Resolver:
     def variant(self, name: str) -> str | None:
         """Select a variant for the given component.
 
-        With ``{name}Variant`` unset the PRNG picks from all style variants by
-        weight; otherwise it picks using the user-supplied weighted map. Only
-        variants that exist in the style definition are considered.
+        The pool the PRNG draws from is built from the per-component
+        ``{name}Variant`` option and the global ``tags`` filter (see
+        :meth:`_variant_weights`). Only variants that exist in the style
+        definition are considered.
         """
         return self._memo(f"{name}Variant", lambda: self._resolve_variant(name))
 
@@ -97,19 +108,136 @@ class Resolver:
         if component is None or not self._is_visible(name, component):
             return None
 
-        raw = self._options.component_variant(component.source_name())
+        return self._prng.weighted_pick(
+            f"{name}Variant", self._variant_weights(component)
+        )
+
+    def _variant_weights(self, component: Component) -> dict[str, int | float]:
+        """Build the name → weight map the PRNG draws a variant from.
+
+        The per-component ``{name}Variant`` option is more specific than the
+        global ``tags`` filter, so it takes precedence: when set, it fully
+        governs the component's pool (its named variants, weighted by the option)
+        and the tags filter is ignored for that component. The tags filter
+        applies only where the user gave no explicit ``{name}Variant`` (see
+        :meth:`_tag_filtered_names`), and falls back to every variant when
+        neither is set.
+
+        Names the style does not define are dropped, and an empty
+        ``{name}Variant`` (or an empty tag result) yields no variant.
+        """
         variants = component.variants()
+        named = self._options.component_variant(component.source_name())
         weights: dict[str, int | float] = {}
 
-        if raw is None:
-            for v, variant in variants.items():
-                weights[v] = variant.weight()
+        if named is not None:
+            names: list[str] = list(named.keys())
+        elif len(self._options.tags()) > 0:
+            names = self._tag_filtered_names(variants)
         else:
-            for v, weight in raw.items():
-                if v in variants:
-                    weights[v] = weight
+            names = list(variants.keys())
 
-        return self._prng.weighted_pick(f"{name}Variant", weights)
+        for v in names:
+            variant = variants.get(v)
+
+            if variant is not None:
+                weights[v] = named[v] if named is not None else variant.weight()
+
+        return weights
+
+    def _tag_filter(
+        self,
+    ) -> tuple[
+        list[tuple[str, list[str]]],
+        dict[str, None],
+        list[tuple[str, str | None]],
+        set[str],
+    ]:
+        """Classify the parsed :meth:`Options.tags` tokens into the allow
+        groups, bare requirements and disallows the filter is composed from.
+
+        The result depends only on the options, never on a component, so it is
+        computed once per avatar rather than rebuilt for each of a style's
+        components. The fourth element is the subset of the disallows carrying
+        no value, kept as a lookup set for the per-component narrowing.
+        """
+        if self._tag_filter_cache is not None:
+            return self._tag_filter_cache
+
+        allows: dict[str, list[str]] = {}
+        bares: dict[str, None] = {}
+        disallows: list[tuple[str, str | None]] = []
+        bare_disallows: set[str] = set()
+
+        for token in self._options.tags():
+            if token.negated:
+                disallows.append((token.category, token.value))
+
+                if token.value is None:
+                    bare_disallows.add(token.category)
+            elif token.value is not None:
+                allows.setdefault(token.category, []).append(token.value)
+            else:
+                bares[token.category] = None
+
+        # Materialize the allow groups once, not on every variant.
+        self._tag_filter_cache = (
+            list(allows.items()),
+            bares,
+            disallows,
+            bare_disallows,
+        )
+
+        return self._tag_filter_cache
+
+    def _tag_filtered_names(self, variants: dict[str, ComponentVariant]) -> list[str]:
+        """Narrow a component's variants to the names satisfying the global
+        ``tags`` filter, applying the parsed :meth:`Options.tags` tokens in one
+        pass over the pool:
+
+        - A positive ``cat:value`` token is an axis-scoped allow. Within each
+          category some allow mentions, a variant is kept only if it carries no
+          tag in that category (untouched) or matches one of the allowed values
+          (OR within the category). Distinct allowed categories combine with
+          AND, and a category no allow mentions is left unconstrained.
+        - A bare positive ``cat`` token requires the category: it drops
+          variants that carry no tag in ``cat``. It only binds where the
+          category is in use -- a component with no ``cat`` tag on any variant
+          is left untouched, so ``animation`` turns on a style's opt-in
+          animation without erasing the components that know nothing about it.
+        - A negative ``!cat``/``!cat:value`` token disallows, dropping every
+          variant carrying any tag in ``cat`` (bare) or the exact ``cat:value``
+          tag. Disallows are checked alongside allows but always win.
+
+        Returns the surviving variant names in definition order.
+        """
+        allow_groups, bares, disallows, bare_disallows = self._tag_filter()
+
+        # A bare token only binds where its category is in use, so this
+        # narrowing -- unlike the classification -- is genuinely per-component.
+        required = [
+            category
+            for category in bares
+            if category not in bare_disallows
+            and any(variant.has_tag(category) for variant in variants.values())
+        ]
+
+        names: list[str] = []
+
+        for name, variant in variants.items():
+            allowed = all(
+                not variant.has_tag(category)
+                or any(variant.has_tag(category, value) for value in values)
+                for category, values in allow_groups
+            ) and all(variant.has_tag(category) for category in required)
+            disallowed = any(
+                variant.has_tag(category, value) for category, value in disallows
+            )
+
+            if allowed and not disallowed:
+                names.append(name)
+
+        return names
 
     def color(self, name: str) -> list[str]:
         return self._memo(f"{name}Color", lambda: self._resolve_color(name))

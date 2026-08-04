@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { computed, nextTick, provide, ref, toRef } from 'vue';
-import { getScrollOffset, inBrowser } from 'vitepress';
+import { inBrowser } from 'vitepress';
 import { styleUsesVariable } from '@theme/utils/avatar/style';
 import { watchOnce, watchDebounced } from '@vueuse/core';
 import { track } from '@theme/utils/track';
 import { capitalCase } from 'change-case';
 import { Search } from '@lucide/vue';
 import InputText from 'primevue/inputtext';
+import ToggleSwitch from 'primevue/toggleswitch';
 import StyleOptionsGroup from './StyleOptionsGroup.vue';
 import { useStyleOptions } from '@theme/composables/useStyleOptions';
 import {
@@ -14,6 +15,8 @@ import {
   styleColorsKey,
   componentPreviewKey,
   styleDefaultsKey,
+  variantTagsKey,
+  showVariantTagsKey,
 } from './styleOptionsKeys';
 
 type RangeLike = { min: number; max: number } | undefined;
@@ -77,6 +80,23 @@ const {
 provide(componentNamesKey, componentNames);
 provide(componentPreviewKey, preview);
 provide(styleColorsKey, styleColors);
+
+// Per-variant tags, read live from the loaded style for the variant previews.
+provide(variantTagsKey, (component: string, variant: string): string[] => {
+  const found = loadedStyle.value
+    ?.components()
+    .get(component)
+    ?.variants()
+    .get(variant);
+
+  return found ? [...found.tags()] : [];
+});
+
+// Opt-in reveal of the per-variant tags under each preview (off by default to
+// keep the reference view quiet). Only offered for styles that carry tags.
+const hasTags = computed(() => 'tags' in descriptor.value);
+const showVariantTags = ref(false);
+provide(showVariantTagsKey, showVariantTags);
 
 const styleDefaults = computed<Record<string, unknown>>(() => {
   if (!loadedStyle.value) {
@@ -275,24 +295,33 @@ watchOnce(loadedStyle, async (style) => {
     return;
   }
 
-  const top =
-    window.scrollY + target.getBoundingClientRect().top - getScrollOffset();
-
-  window.scrollTo({ left: 0, top, behavior: 'instant' });
+  // VitePress 2 removed `getScrollOffset()` and now clears the sticky header
+  // in CSS instead. The option titles are `<h3>`s inside `.vp-doc`, so its own
+  // `.vp-doc h1…h6` rule already gives them the right `scroll-margin-top`.
+  // Instant, because this is a correction after the options finished loading,
+  // not a navigation.
+  target.scrollIntoView({ block: 'start', behavior: 'instant' });
 });
 </script>
 
 <template>
   <div class="style-options" v-if="loadedStyle">
-    <div class="style-options-search" v-if="showSearch">
-      <div class="style-options-search-wrapper">
-        <Search :size="16" class="style-options-search-icon" />
-        <InputText
-          v-model="searchQuery"
-          placeholder="Filter options..."
-          class="style-options-search-input"
-        />
+    <div class="style-options-controls" v-if="showSearch || hasTags">
+      <div class="style-options-search" v-if="showSearch">
+        <div class="style-options-search-wrapper">
+          <Search :size="16" class="style-options-search-icon" />
+          <InputText
+            v-model="searchQuery"
+            placeholder="Filter options..."
+            class="style-options-search-input"
+          />
+        </div>
       </div>
+
+      <label class="style-options-toggle" v-if="hasTags">
+        <ToggleSwitch v-model="showVariantTags" />
+        <span>Show variant tags</span>
+      </label>
     </div>
 
     <div class="style-options-groups">
@@ -317,8 +346,27 @@ watchOnce(loadedStyle, async (style) => {
 
 <style scoped lang="scss">
 .style-options {
-  &-search {
+  &-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
     margin-bottom: 20px;
+  }
+
+  &-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--vp-c-text-2);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  &-search {
+    flex: 1 1 240px;
+    min-width: 0;
 
     &-wrapper {
       position: relative;

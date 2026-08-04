@@ -1,6 +1,17 @@
 export type StyleOptionsFlipValue = 'none' | 'horizontal' | 'vertical' | 'both';
 export type StyleOptionsColorFillValue = 'solid' | 'linear' | 'radial';
 
+/**
+ * A parsed `tags` filter token. {@link Options.tags} decodes each raw
+ * `category` / `category:value` / `!…` string into this shape so the resolver
+ * composes the filter without parsing the grammar itself.
+ */
+export interface TagFilterToken {
+  readonly category: string;
+  readonly value?: string;
+  readonly negated: boolean;
+}
+
 // ---------------------------------------------------------------------------
 // StyleOptions
 //
@@ -79,6 +90,7 @@ export interface StyleOptionsBase {
   readonly rotate?: number | readonly [number, number];
   readonly translateX?: number | readonly [number, number];
   readonly translateY?: number | readonly [number, number];
+  readonly tags?: string | readonly string[];
 }
 
 // Variant option accepts a single name, an array, or a name-to-weight record
@@ -105,13 +117,13 @@ type IsAlias<D, C extends string> = D extends {
 type ComponentOptions<D, C extends string> = [C] extends [never]
   ? unknown
   : {
-      readonly [K in C as IsAlias<D, K> extends true
-        ? never
-        : `${K}Variant`]?: ComponentVariantOption<D, K>;
+      readonly [
+        K in C as IsAlias<D, K> extends true ? never : `${K}Variant`
+      ]?: ComponentVariantOption<D, K>;
     } & {
-      readonly [K in C as IsAlias<D, K> extends true
-        ? never
-        : `${K}Probability`]?: number;
+      readonly [
+        K in C as IsAlias<D, K> extends true ? never : `${K}Probability`
+      ]?: number;
     };
 
 // For each color C generates: Color, ColorFill, ColorFillStops, ColorAngle.
@@ -119,16 +131,13 @@ type ColorOptions<C extends string> = [C] extends [never]
   ? unknown
   : { readonly [K in C as `${K}Color`]?: string | readonly string[] } & {
       readonly [K in C as `${K}ColorFill`]?:
-        | StyleOptionsColorFillValue
-        | readonly StyleOptionsColorFillValue[];
+        StyleOptionsColorFillValue | readonly StyleOptionsColorFillValue[];
     } & {
       readonly [K in C as `${K}ColorFillStops`]?:
-        | number
-        | readonly [number, number];
+        number | readonly [number, number];
     } & {
       readonly [K in C as `${K}ColorAngle`]?:
-        | number
-        | readonly [number, number];
+        number | readonly [number, number];
     };
 
 export type StyleOptions<D = unknown> = StyleOptionsBase &

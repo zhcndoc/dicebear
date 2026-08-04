@@ -1,3 +1,5 @@
+import { exampleSeeds } from '@theme/config/styleCategories';
+
 /**
  * Returns a curated description for a style option, or undefined if none exists.
  * Used by StyleOptionsCard to render help text under each option.
@@ -11,6 +13,8 @@ export function getOptionDescription(name: string): string | undefined {
     return 'Randomizes all SVG element IDs to avoid conflicts when embedding multiple avatars in the same page.';
   if (name === 'title')
     return 'Accessible title for the SVG element. Useful for screen readers.';
+  if (name === 'tags')
+    return 'Keep only variants that carry the given tags. Within a category the values combine with or, different categories combine with and, and a leading ! disallows a tag.';
   if (name.match(/Probability$/))
     return 'Probability that this component appears in the avatar.';
   if (name.match(/Variant$/))
@@ -46,6 +50,24 @@ export function getOptionDescription(name: string): string | undefined {
 }
 
 /**
+ * Returns a curated display order for an option's values, or undefined when
+ * the generic sort applies.
+ *
+ * `OptionsDescriptor` sorts variant names alphabetically, which scrambles the
+ * animation speeds into `fast, fastest, medium, none, slow, slowest`. The docs
+ * list them as a ramp instead, so motion increases from left to right and
+ * `none` sits next to the slowest speed rather than the fastest. Values
+ * outside the list keep their natural order at the end.
+ */
+export function getOptionValueOrder(name: string): string[] | undefined {
+  if (name === 'animationVariant') {
+    return ['none', 'slowest', 'slow', 'medium', 'fast', 'fastest'];
+  }
+
+  return undefined;
+}
+
+/**
  * Returns curated example values for a style option, or undefined if none.
  * `colorExamples` is a callback that returns colors for a given color name
  * (so we don't pull `padColors`/`styleColors` into this util).
@@ -62,7 +84,7 @@ export function getOptionExamples(
   if (name.match(/ColorFill$/)) return ['solid', 'linear', 'radial'];
   if (name.match(/ColorFillStops$/)) return [2, 3, 4, 5];
   if (name.match(/ColorAngle$/)) return [0, 90, 180, 270];
-  if (name === 'seed') return ['Felix', 'Aneka', 'Mia', 'James'];
+  if (name === 'seed') return [...exampleSeeds];
   if (name === 'flip') return ['none', 'horizontal', 'vertical', 'both'];
   if (name === 'rotate') return [0, 90, 180, 270];
   if (name === 'scale') return [0.5, 0.75, 1, 1.5];

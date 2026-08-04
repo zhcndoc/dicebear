@@ -7,31 +7,34 @@ aside: false
 ---
 
 <script setup>
+import { useData } from 'vitepress';
 import DocsComparisonTable from '@theme/components/docs/DocsComparisonTable.vue';
+
+const { theme } = useData();
 </script>
 
 # 头像库比较
 
-DiceBear 是一个开源头像库，提供 [35+ 种样式](/styles/)、一个
-[免费的 HTTP API](/how-to-use/http-api/)，以及适用于六种语言的库。每种
-样式都有一套[丰富的选项](/guides/access-all-available-options/)：你可以重新为头像着色、替换单个特征、控制背景，以及
-调整每种变体出现的概率，因此同一风格的两个头像看起来可能
-完全不同。本页面将它与开发者最常拿来比较的头像库进行对比，
-帮助你为项目选择合适的方案。
-它们各有擅长之处，最佳选择取决于你的技术栈
-以及你想要的风格。
+DiceBear 是一个开源头像库，提供
+[{{ theme.styleCount }} 种样式](/styles/)、一个
+[免费的 HTTP API](/how-to-use/http-api/) 以及支持六种语言的库。每种
+样式都有[丰富的选项](/guides/access-all-available-options/)：你可以重新
+为头像配色、替换单独的特征、控制背景，并调整每种变体出现的可能性，因此
+即使来自同一种样式，两个头像也可能看起来完全不同。本页面将 DiceBear
+与开发者最常拿来比较的头像库进行对比，帮助你为项目选择合适的方案。
+它们各有所长，最佳选择取决于你的技术栈以及你想要的外观。
 
 <DocsComparisonTable />
 
 _本比较基于公开可用的信息，可能未反映最新更新。每种工具都有其自身优势，因此请选择最适合你项目的方案。_
 
-## DiceBear vs. Boring Avatars
+## DiceBear 与 Boring Avatars 对比
 
 Boring Avatars 是一个打磨精良的 React 组件，提供少量简洁、基于渐变的样式。它可以在几秒内完成安装，而且渐变效果非常出色，这使它成为需要这种特定风格的 React 应用的有力选择。其托管 API 是一个独立的付费产品。
 
 DiceBear 的思路则不同：它提供来自不同艺术家的更多样式，不依赖任何框架，并提供免费的 HTTP API。作为 Boring Avatars 的替代方案，当你想要更广泛的外观选择，或者是在 React 之外进行开发时，DiceBear 会更合适。
 
-## DiceBear vs. Avvvatars
+## DiceBear 与 Avvvatars
 
 Avvvatars 是一个小巧、整洁的 React 组件，有两种外观：首字母头像
 和几何形状。它轻量且易于添加，当你只需要这两种样式时，
@@ -50,7 +53,7 @@ DiceBear 覆盖了相同的语言，并额外支持 Rust、Go 和 Dart，还提�
 的风格集合和更多输出格式。它更适合追求多样性，而当你喜欢那种特定的角色外观时，
 Multiavatar 才是更值得选择的那个。
 
-## DiceBear vs. Jdenticon
+## DiceBear 与 Jdenticon 的对比
 
 Jdenticon 是一个专注、无依赖的库，能够非常出色地生成几何风格的头像标识（identicon）。它可运行于 JavaScript、C# 和 PHP，支持导出 SVG 和 PNG，非常适合只需要 identicon 的 .NET 项目。
 

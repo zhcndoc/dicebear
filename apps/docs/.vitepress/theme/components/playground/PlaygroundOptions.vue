@@ -6,6 +6,11 @@ import {
   navigateToColorKey,
 } from '@theme/components/styles/styleOptionsKeys';
 import { useStyleOptions } from '@theme/composables/useStyleOptions';
+import {
+  groupTagsByCategory,
+  tokenCategory,
+  toTagTokens,
+} from '@theme/utils/avatar/tags';
 import { capitalCase } from 'change-case';
 import useStore from '@theme/stores/playground';
 import { track, styleLabel } from '@theme/utils/track';
@@ -21,6 +26,7 @@ import Button from 'primevue/button';
 import ToggleSwitch from 'primevue/toggleswitch';
 import { Shuffle } from '@lucide/vue';
 import PlaygroundComponentSection from './PlaygroundComponentSection.vue';
+import PlaygroundTagsSection from './PlaygroundTagsSection.vue';
 import PlaygroundColorSection from './PlaygroundColorSection.vue';
 import PlaygroundTransformSection from './PlaygroundTransformSection.vue';
 import PlaygroundFontSection from './PlaygroundFontSection.vue';
@@ -67,6 +73,33 @@ const hasFontWeight = computed(() =>
     ? styleUsesVariable(avatarStyleName.value, 'fontWeight')
     : false,
 );
+
+// The `tags` filter only does something for styles whose variants carry tags;
+// OptionsDescriptor advertises the `tags` field (with the style's own tag
+// vocabulary) exactly in that case.
+const styleTags = computed<string[]>(() => {
+  const field = descriptor.value.tags;
+
+  return field && 'values' in field ? [...field.values] : [];
+});
+const hasTags = computed(() => styleTags.value.length > 0);
+
+const tagCategories = computed(() => groupTagsByCategory(styleTags.value));
+
+// Number of set filter tokens per category, counting bare and per-value
+// tokens in either polarity.
+const tagCounts = computed(() => {
+  const tokens = toTagTokens(store.avatarStyleOptions.tags);
+  const counts = new Map<string, number>();
+
+  for (const token of tokens) {
+    const category = tokenCategory(token);
+
+    counts.set(category, (counts.get(category) ?? 0) + 1);
+  }
+
+  return counts;
+});
 
 const components = computed(() => {
   const result: ComponentInfo[] = [];
@@ -294,7 +327,7 @@ const onSeedFocus = (e: FocusEvent) => {
                 <Shuffle :size="16" />
               </Button>
             </div>
-            <p class="pg-options-seed-help">
+            <p class="pg-help">
               The seed is the starting value used to generate the avatar.
               <strong>The same seed always produces the same avatar</strong>, so
               you can reuse it whenever you need the exact same result. For
@@ -409,6 +442,38 @@ const onSeedFocus = (e: FocusEvent) => {
       </Accordion>
     </div>
 
+    <div class="pg-options-group" v-if="hasTags">
+      <h3 class="pg-options-group-title">Tags</h3>
+      <p class="pg-help">
+        Allow keeps only matching variants, disallow drops them. Allowing a
+        whole category requires it, which turns an opt-in feature like the
+        animation on. Components with a variant chosen manually ignore the
+        filter.
+      </p>
+      <Accordion :multiple="true" class="pg-options-accordion">
+        <AccordionPanel
+          v-for="group in tagCategories"
+          :key="`${avatarStyleName}-${group.category}`"
+          :value="group.category"
+        >
+          <AccordionHeader>
+            <span class="pg-options-label">{{ group.label }}</span>
+            <Tag
+              :value="`${tagCounts.get(group.category) ?? 0}`"
+              severity="secondary"
+              class="pg-options-tag"
+            />
+          </AccordionHeader>
+          <AccordionContent>
+            <PlaygroundTagsSection
+              :key="`${avatarStyleName}-${group.category}`"
+              :category="group"
+            />
+          </AccordionContent>
+        </AccordionPanel>
+      </Accordion>
+    </div>
+
     <div class="pg-options-group" v-if="components.length > 0">
       <h3 class="pg-options-group-title">Components</h3>
       <Accordion :multiple="true" class="pg-options-accordion">
@@ -485,6 +550,12 @@ const onSeedFocus = (e: FocusEvent) => {
 }
 
 .pg-options-group {
+  /* A help paragraph between the group title and its cards (e.g. the tags
+     filter intro) needs its own spacing toward the card below. */
+  > .pg-help {
+    margin: 0 2px 10px;
+  }
+
   &-title {
     font-size: 11px;
     font-weight: 700;
@@ -523,13 +594,6 @@ const onSeedFocus = (e: FocusEvent) => {
 .pg-options-seed {
   flex: 1;
   min-width: 0;
-}
-
-.pg-options-seed-help {
-  margin: 8px 0 0;
-  font-size: 12px;
-  line-height: 1.5;
-  color: var(--ui-c-text-muted);
 }
 
 .pg-options-output {

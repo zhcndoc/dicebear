@@ -1,11 +1,11 @@
 ---
-title: Converter – 将 SVG 头像转换为 PNG、JPEG 等格式
+title: 转换器 – 将 SVG 头像转换为 PNG、JPEG 等格式
 description: >
   了解如何在你的项目中使用 DiceBear Converter 库，将 SVG
   转换为 PNG 或 JPEG。可在浏览器和 Node.js 中使用！
 ---
 
-# Converter
+# 转换器
 
 有时你需要的头像格式不是 SVG。为此我们创建了一个名为 `@dicebear/converter` 的包，它可以将头像转换为
 PNG、JPEG、WebP 和 AVIF。
@@ -403,3 +403,22 @@ const options: Options = {
 const result: Result = toPng(svg, options);
 const buffer: ArrayBuffer = await result.toArrayBuffer();
 ```
+
+## 使用 resvg 自行渲染
+
+`toPng` 和其他转换函数会为你处理此问题。如果你直接驱动
+[resvg](https://github.com/yisibl/resvg-js)，请先对 SVG
+运行 `normalizeMaskType`：
+
+```js
+import { normalizeMaskType } from '@dicebear/converter';
+
+const svg = normalizeMaskType(avatar.toString());
+```
+
+resvg 只将 `mask-type` 作为表示属性读取，不会从 `style`
+声明中读取。Figma 会写入该声明，因此官方头像样式所携带的蒙版会被
+resvg 当作默认的 `luminance` 处理，并将其渲染为完全隐藏。`normalizeMaskType`
+会将该值同步到属性上。如果没有需要修复的内容，则会原样返回你的输入。当蒙版确实需要修复时，
+该函数会从解析后的树重新生成 SVG，因此引号样式等格式细节可能会发生变化，但渲染出的图像保持不变。
+浏览器会同时支持这两种形式，因此这只会在你进行光栅化时产生影响。
