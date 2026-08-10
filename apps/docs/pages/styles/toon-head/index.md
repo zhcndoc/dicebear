@@ -1,8 +1,8 @@
 ---
-title: ToonHead – Avatar Style
+title: ToonHead – 头像风格
 description: >
-  使用 DiceBear 头像库创建 ToonHead 头像。通过我们的免费头像 API 或 JavaScript 头像库生成独特的
-  个人资料图片。
+  使用 DiceBear 头像库创建 ToonHead 头像。通过我们的免费头像 API 或 JavaScript 头像库生成独特的个人资料图片。
+outline: [2, 3]
 ---
 
 <script setup lang="ts">
@@ -13,7 +13,7 @@ import StyleUsage from "@theme/components/styles/StyleUsage.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
-# Toon Head
+# 卡通头像
 
 Toon Head 是一种插画风格的矢量头像样式，呈现半身角色肖像，
 具有自然的人体比例、多样的肤色、发型和面部毛发。

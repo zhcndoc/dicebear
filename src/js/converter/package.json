@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/converter",
-  "version": "10.4.0",
+  "version": "10.5.0",
   "description": "SVG Converter for DiceBear",
   "keywords": [
     "dicebear"
@@ -13,6 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/dicebear/dicebear.git"
   },
+  "funding": "https://www.dicebear.com/support/",
   "license": "MIT",
   "author": "Florian Körner <contact@florian-koerner.com>",
   "type": "module",
@@ -46,6 +47,7 @@
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.13",
     "del-cli": "^7.0.0",
+    "jsdom": "^29.1.1",
     "typescript": "^5.9.3"
   },
   "engines": {

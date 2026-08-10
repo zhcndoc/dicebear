@@ -1,6 +1,7 @@
 /// Builds a descriptor of every option a given style accepts.
 library;
 
+import 'options.dart';
 import 'style.dart';
 import 'utils/deep_copy.dart';
 
@@ -79,6 +80,7 @@ class OptionsDescriptor {
     // keeps the first position, like the JS object semantics.
     for (final name in [..._style.colors.keys, 'background']) {
       final contrastTo = _style.colors[name]?.contrastTo();
+      final notEqualTo = _style.colors[name]?.notEqualTo() ?? const <String>[];
 
       result['${name}Color'] = {
         'type': 'color',
@@ -86,6 +88,7 @@ class OptionsDescriptor {
         // The JS truthy spread: an empty contrastTo is treated as unset.
         if (contrastTo != null && contrastTo.isNotEmpty)
           'contrastTo': contrastTo,
+        if (notEqualTo.isNotEmpty) 'notEqualTo': List<String>.of(notEqualTo),
       };
       result['${name}ColorFill'] = {
         'type': 'enum',
@@ -94,6 +97,10 @@ class OptionsDescriptor {
       };
       result['${name}ColorFillStops'] = {'type': 'range', 'min': 2};
       result['${name}ColorAngle'] = _rotateRange;
+      result['${name}ColorOrder'] = {
+        'type': 'enum',
+        'values': [colorOrderRandom, colorOrderFixed],
+      };
     }
 
     // Only advertise the `tags` filter when the style actually carries tags.

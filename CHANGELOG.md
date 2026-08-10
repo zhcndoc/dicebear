@@ -8,6 +8,112 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
+- **Core:** Color fields in `OptionsDescriptor` now carry `notEqualTo`, the list
+  of color groups a group must differ from, next to the existing `contrastTo`,
+  in all six core implementations (JavaScript, PHP, Python, Rust, Go, and Dart).
+  Tooling that picks colors itself needs both constraints, because one explicit
+  color per group leaves the renderer nothing to sort or filter. The descriptor
+  parity fixtures and the guide on accessing all available options cover the new
+  property.
+
+### Fixed
+
+- **Editor:** Shuffle drew every color on its own and ignored the `contrastTo`
+  and `notEqualTo` constraints from the style definition. In `thumbs` that gave
+  the shape the background color in about one of five shuffles, where it then
+  vanished, and picked the worse of black and white for eyes and mouth about
+  half the time. `clay`, `critters`, `micah`, `voxel-art`, and `voxel-bot` were
+  affected too. Shuffle now resolves colors in dependency order and applies the
+  same constraints as the renderer.
+
+## [10.5.0] - 2026-08-09
+
+### Added
+
+- **Core:** New per-color option `*ColorOrder` with the values `random` and
+  `fixed`, in all six core implementations (JavaScript, PHP, Python, Rust, Go,
+  and Dart). `random` is the previous behavior: the PRNG shuffles the colors
+  before use. With `fixed`, colors passed via `*Color` keep exactly the given
+  order; gradient fills apply them as stops from first to last, solid fills
+  always use the first color, and the number of gradient stops defaults to the
+  number of given colors. Without user-supplied colors, `fixed` only skips the
+  shuffle and uses the style's palette in sorted order; `contrastTo` and
+  `notEqualTo` constraints still apply, so referenced color groups can keep the
+  result seed-dependent. Existing avatars are unaffected, since `random` stays
+  the default. Requested in discussion
+  [#549](https://github.com/orgs/dicebear/discussions/549) for building
+  gradients with a fixed color sequence, such as flag colors. `@dicebear/schema`
+  1.4.0 validates the option, and two new parity fixture cases per style pin its
+  behavior across the ports. The core options guide and the implementation
+  specification cover the details.
+- **Docs:** Style pages for `voxel-art` and `voxel-bot`, the two styles new in
+  `@dicebear/styles` 10.4.0. The animated-avatars page now fills its style count
+  from the definitions at build time, through the same token mechanism the
+  overall count already uses; the hardcoded number it replaces had gone stale
+  at 15.
+- **Editor:** The eight character styles the editor was missing: `clay`,
+  `critters`, `moods`, `pixelbot`, `sprouts`, `thumbs`, `voxel-art`, and
+  `voxel-bot`. Its style list now matches the docs' Characters category exactly,
+  and the new option labels are translated into English, German, and Portuguese.
+  The animation option stays hidden in the editor, since its export writes
+  static files; an avatar without an explicit `animationVariant` never animates,
+  because every animated variant carries weight 0.
+
+### Changed
+
+- **Core (JavaScript):** The schema validators are now generated with
+  [`@exodus/schemasafe`](https://github.com/ExodusMovement/schemasafe) instead
+  of Ajv. The published package still has no runtime dependencies, and the
+  validator code shrinks from 164 KB to 114 KB minified, so browser bundles of
+  `@dicebear/core` shrink by the same amount. Both compilers accept and reject
+  the same inputs: every published style definition and a set of deliberately
+  broken samples produced identical verdicts. Error messages change, however.
+  schemasafe reports JSON pointers without prose, so the message is now derived
+  from the failing keyword (`/size is smaller than allowed`), and every
+  `ValidationErrorDetail` carries two new optional fields, `schemaPath` and
+  `keyword`, that name the schema rule behind a failure. When an object violates
+  a named property and a pattern property at the same time, the error list only
+  reports the first group; the verdict is not affected.
+- **CLI:** Removed the unused `ajv` dependency, which makes a CLI install about
+  2.7 MB smaller.
+- **Converter:** The browser build no longer bundles an XML parser. Setting the
+  render size and mirroring `mask-type` declarations now run on the native
+  `DOMParser` and `XMLSerializer`, which every browser ships. The XML dependency
+  stack (fast-xml-parser and friends) made up nine tenths of the browser bundle;
+  it stays in the Node build, where no native XML machinery exists. A browser
+  bundle of `@dicebear/converter` shrinks from 26 kB to 1.4 kB gzipped. Two
+  edges change with the parser: a malformed SVG now fails with a clear error
+  instead of a parser-specific one, and when `normalizeMaskType` rewrites a
+  document in the browser, empty elements come back self-closing. Both helpers
+  are covered by new jsdom-based tests.
+- **Styles:** Bumped `@dicebear/styles` to `10.4.0` for the CLI, the docs, and
+  the editor. The release adds `voxel-art` and `voxel-bot`, which take the
+  collection from 50 to 52 styles. Both ship the opt-in `animation` component,
+  so 18 of the 52 styles can now animate.
+
+### Deprecated
+
+- **Core:** The sorted fallback order that `*ColorOrder: 'fixed'` applies when
+  no `*Color` option is set. In DiceBear 10, this case deduplicates and
+  code-point sorts the style palette, so palettes keep their canonical order and
+  only the shuffle is skipped. DiceBear 11 will use the palette in its
+  definition order instead, the same verbatim rule that already applies to
+  user-supplied colors. That removes the user-colors/palette distinction from
+  the resolvers and makes `fixed` mean the same thing for both sources. The sort
+  site in each of the six ports carries a matching deprecation comment.
+
+### Fixed
+
+- **Docs:** The bundle size estimator now reports what a bundler actually ships:
+  one minified bundle per package, gzipped as a whole. It previously gzipped
+  every published file on its own without minification, which showed
+  `@dicebear/core` at 58 kB instead of 26 kB and `@dicebear/converter` at 8 kB
+  instead of 26 kB, since the converter's browser build pulls its XML
+  dependencies into the bundle. The converter hint also claimed PDF output; the
+  package converts to PNG, JPEG, WebP, and AVIF.
+
 ## [10.4.0] - 2026-08-01
 
 ### Changed
@@ -350,7 +456,8 @@ See the
 - **BREAKING:** Individual style packages (e.g. `@dicebear/initials`) have been
   removed in favor of `@dicebear/styles`.
 
-[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.4.0...HEAD
+[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.5.0...HEAD
+[10.5.0]: https://github.com/dicebear/dicebear/compare/v10.4.0...v10.5.0
 [10.4.0]: https://github.com/dicebear/dicebear/compare/v10.4.0-rc.2...v10.4.0
 [10.4.0-rc.2]:
   https://github.com/dicebear/dicebear/compare/v10.4.0-rc.1...v10.4.0-rc.2

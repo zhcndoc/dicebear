@@ -2,6 +2,12 @@ package style
 
 import "sort"
 
+// The two values of the per-color ${name}ColorOrder option.
+const (
+	ColorOrderRandom = "random"
+	ColorOrderFixed  = "fixed"
+)
+
 // OptionsDescriptor builds a descriptor of every option a given style accepts.
 // Tooling such as the editor uses the result to render form controls and
 // validation hints without having to introspect the style itself.
@@ -62,14 +68,20 @@ func (d *OptionsDescriptor) ToJSON() map[string]any {
 
 	for _, name := range colorNames {
 		field := map[string]any{"type": "color", "list": true}
-		if cd, ok := d.style.colors[name]; ok && cd.ContrastTo != "" {
-			field["contrastTo"] = cd.ContrastTo
+		if cd, ok := d.style.colors[name]; ok {
+			if cd.ContrastTo != "" {
+				field["contrastTo"] = cd.ContrastTo
+			}
+			if len(cd.NotEqualTo) > 0 {
+				field["notEqualTo"] = append([]string(nil), cd.NotEqualTo...)
+			}
 		}
 
 		result[name+"Color"] = field
 		result[name+"ColorFill"] = map[string]any{"type": "enum", "values": []string{"solid", "linear", "radial"}, "list": true}
 		result[name+"ColorFillStops"] = map[string]any{"type": "range", "min": 2}
 		result[name+"ColorAngle"] = rotateRangeField()
+		result[name+"ColorOrder"] = map[string]any{"type": "enum", "values": []string{ColorOrderRandom, ColorOrderFixed}}
 	}
 
 	// Only advertise the tags filter when the style actually carries tags. The

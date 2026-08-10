@@ -53,6 +53,11 @@ const fullStyle = new Style({
     skin: { values: ['#ff0000', '#00ff00'] },
     hair: { values: ['#000000'] },
     text: { values: ['#ffffff', '#000000'], contrastTo: 'background' },
+    outline: {
+      values: ['#111111', '#eeeeee'],
+      contrastTo: 'skin',
+      notEqualTo: ['skin'],
+    },
   },
 });
 
@@ -102,6 +107,7 @@ describe('OptionsDescriptor', () => {
       assert.deepEqual(schema.backgroundColorFill, { type: 'enum', values: ['solid', 'linear', 'radial'], list: true });
       assert.deepEqual(schema.backgroundColorFillStops, { type: 'range', min: 2 });
       assert.deepEqual(schema.backgroundColorAngle, { type: 'range', min: -360, max: 360 });
+      assert.deepEqual(schema.backgroundColorOrder, { type: 'enum', values: ['random', 'fixed'] });
     });
   });
 
@@ -157,6 +163,7 @@ describe('OptionsDescriptor', () => {
       assert.deepEqual(schema.skinColor, { type: 'color', list: true });
       assert.deepEqual(schema.hairColor, { type: 'color', list: true });
       assert.deepEqual(schema.skinColorFill, { type: 'enum', values: ['solid', 'linear', 'radial'], list: true });
+      assert.deepEqual(schema.skinColorOrder, { type: 'enum', values: ['random', 'fixed'] });
     });
 
     it('should expose contrastTo on color fields when set', () => {
@@ -168,6 +175,18 @@ describe('OptionsDescriptor', () => {
         contrastTo: 'background',
       });
       assert.ok(!('contrastTo' in schema.skinColor));
+    });
+
+    it('should expose notEqualTo on color fields when set', () => {
+      const schema = new OptionsDescriptor(fullStyle).toJSON();
+
+      assert.deepEqual(schema.outlineColor, {
+        type: 'color',
+        list: true,
+        contrastTo: 'skin',
+        notEqualTo: ['skin'],
+      });
+      assert.ok(!('notEqualTo' in schema.skinColor));
     });
   });
 

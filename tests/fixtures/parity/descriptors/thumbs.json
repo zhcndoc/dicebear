@@ -161,10 +161,20 @@
     "min": -360,
     "max": 360
   },
+  "backgroundColorOrder": {
+    "type": "enum",
+    "values": [
+      "random",
+      "fixed"
+    ]
+  },
   "eyesColor": {
     "type": "color",
     "list": true,
-    "contrastTo": "shape"
+    "contrastTo": "shape",
+    "notEqualTo": [
+      "shape"
+    ]
   },
   "eyesColorFill": {
     "type": "enum",
@@ -184,10 +194,20 @@
     "min": -360,
     "max": 360
   },
+  "eyesColorOrder": {
+    "type": "enum",
+    "values": [
+      "random",
+      "fixed"
+    ]
+  },
   "mouthColor": {
     "type": "color",
     "list": true,
-    "contrastTo": "shape"
+    "contrastTo": "shape",
+    "notEqualTo": [
+      "shape"
+    ]
   },
   "mouthColorFill": {
     "type": "enum",
@@ -207,9 +227,19 @@
     "min": -360,
     "max": 360
   },
+  "mouthColorOrder": {
+    "type": "enum",
+    "values": [
+      "random",
+      "fixed"
+    ]
+  },
   "shapeColor": {
     "type": "color",
-    "list": true
+    "list": true,
+    "notEqualTo": [
+      "background"
+    ]
   },
   "shapeColorFill": {
     "type": "enum",
@@ -228,6 +258,13 @@
     "type": "range",
     "min": -360,
     "max": 360
+  },
+  "shapeColorOrder": {
+    "type": "enum",
+    "values": [
+      "random",
+      "fixed"
+    ]
   },
   "tags": {
     "type": "enum",

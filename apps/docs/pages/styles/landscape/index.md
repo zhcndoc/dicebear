@@ -1,8 +1,8 @@
 ---
-title: Landscape – 头像风格
+title: 风景 – 头像风格
 description: >
-  使用 DiceBear 头像库创建 Landscape 头像。通过我们的免费头像 API 或
-  JavaScript 头像库生成独特的个人资料图片。
+  使用 DiceBear 头像库创建风景头像。通过我们的免费头像 API 或 JavaScript 头像库生成独特的个人资料图片。
+outline: [2, 3]
 ---
 
 <script setup lang="ts">
@@ -13,9 +13,9 @@ import StyleUsage from "@theme/components/styles/StyleUsage.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
-# Landscape
+# 风景
 
-Landscape 是一种风景矢量头像风格，以柔和的日光色调将波浪状的山脊
+风景是一种风景矢量头像风格，以柔和的日光色调将波浪状的山脊
 层叠在太阳下方。生成宁静的 SVG 个人资料图标，在充满人脸的界面中
 脱颖而出。
 

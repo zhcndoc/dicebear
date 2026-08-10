@@ -5,6 +5,7 @@ from __future__ import annotations
 import copy
 from typing import Any
 
+from .options import COLOR_ORDER_FIXED, COLOR_ORDER_RANDOM
 from .style import Style
 
 _ROTATE_RANGE: dict[str, Any] = {"type": "range", "min": -360, "max": 360}
@@ -79,9 +80,13 @@ class OptionsDescriptor:
         for name in color_names:
             color_field: dict[str, Any] = {"type": "color", "list": True}
             contrast_to = colors[name].contrast_to() if name in colors else None
+            not_equal_to = colors[name].not_equal_to() if name in colors else []
 
             if contrast_to is not None:
                 color_field["contrastTo"] = contrast_to
+
+            if not_equal_to:
+                color_field["notEqualTo"] = list(not_equal_to)
 
             result[f"{name}Color"] = color_field
             result[f"{name}ColorFill"] = {
@@ -91,6 +96,10 @@ class OptionsDescriptor:
             }
             result[f"{name}ColorFillStops"] = {"type": "range", "min": 2}
             result[f"{name}ColorAngle"] = dict(_ROTATE_RANGE)
+            result[f"{name}ColorOrder"] = {
+                "type": "enum",
+                "values": [COLOR_ORDER_RANDOM, COLOR_ORDER_FIXED],
+            }
 
         # Only advertise the ``tags`` filter when the style actually carries
         # tags. The values are the sorted union of every tag across the style's

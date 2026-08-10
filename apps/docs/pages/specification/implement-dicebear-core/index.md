@@ -9,10 +9,10 @@ description: >
 
 本指南说明如何在任何编程语言中实现 DiceBear Core。
 正确的实现会为相同的种子和样式定义生成与
-[JavaScript](https://github.com/dicebear/dicebear/tree/10.x/src/js/core),
-[PHP](https://github.com/dicebear/dicebear/tree/10.x/src/php/core),
-[Python](https://github.com/dicebear/dicebear/tree/10.x/src/python/core),
-[Rust](https://github.com/dicebear/dicebear/tree/10.x/src/rust/core),
+[JavaScript](https://github.com/dicebear/dicebear/tree/10.x/src/js/core)、
+[PHP](https://github.com/dicebear/dicebear/tree/10.x/src/php/core)、
+[Python](https://github.com/dicebear/dicebear/tree/10.x/src/python/core)、
+[Rust](https://github.com/dicebear/dicebear/tree/10.x/src/rust/core)、
 [Go](https://github.com/dicebear/dicebear/tree/10.x/src/go/core) 和
 [Dart](https://github.com/dicebear/dicebear/tree/10.x/src/dart/core) 参考
 实现**字节完全一致**的 SVG。
@@ -271,20 +271,20 @@ function shuffle(seed, key, items):
 
 ### 核心选项
 
-| Option            | PRNG key       | Resolution                                                                 |
+| 选项              | PRNG key       | 解析结果                                                                  |
 | ----------------- | -------------- | -------------------------------------------------------------------------- |
-| `seed`            | —              | 字面字符串；如果未提供，默认为 `''`。不缓存。            |
-| `size`            | —              | 字面数字；默认未设置（渲染器省略 `width`/`height`）。       |
-| `idRandomization` | —              | 布尔值；默认 `false`。使用宿主 RNG，而不是 DiceBear PRNG。        |
-| `title`           | —              | 字面字符串；默认未设置（省略 `<title>`，使用 `aria-hidden`）。   |
-| `flip`            | `flip`         | 从 `['none', 'horizontal', 'vertical', 'both']` 中 `pick`，默认 `'none'` |
-| `rotate`          | `rotate`       | 范围内的 `float`，默认 `0`                                            |
-| `scale`           | `scale`        | 范围内的 `float`，默认 `1`                                            |
-| `borderRadius`    | `borderRadius` | 范围内的 `float`，默认 `0`                                            |
-| `translateX`      | `translateX`   | 范围内的 `float`，默认 `0`                                            |
-| `translateY`      | `translateY`   | 范围内的 `float`，默认 `0`                                            |
-| `fontFamily`      | `fontFamily`   | 从数组中 `pick`，默认 `'system-ui'`                                   |
-| `fontWeight`      | `fontWeight`   | 从数组中 `pick`，默认 `400`                                           |
+| `seed`            | —              | 字面字符串；如果未提供，默认为 `''`。不缓存。                             |
+| `size`            | —              | 字面数字；默认未设置（渲染器省略 `width`/`height`）。                     |
+| `idRandomization` | —              | 布尔值；默认 `false`。使用宿主 RNG，而不是 DiceBear PRNG。                |
+| `title`           | —              | 字面字符串；默认未设置（省略 `<title>`，使用 `aria-hidden`）。            |
+| `flip`             | `flip`         | 从 `['none', 'horizontal', 'vertical', 'both']` 中 `pick`，默认 `'none'` |
+| `rotate`          | `rotate`       | 范围内的 `float`，默认 `0`                                                 |
+| `scale`           | `scale`        | 范围内的 `float`，默认 `1`                                                 |
+| `borderRadius`    | `borderRadius` | 范围内的 `float`，默认 `0`                                                 |
+| `translateX`      | `translateX`   | 范围内的 `float`，默认 `0`                                                 |
+| `translateY`      | `translateY`   | 范围内的 `float`，默认 `0`                                                 |
+| `fontFamily`      | `fontFamily`   | 从数组中 `pick`，默认 `'system-ui'`                                        |
+| `fontWeight`      | `fontWeight`   | 从数组中 `pick`，默认 `400`                                                |
 
 没有 PRNG key 的选项会直接从用户输入中读取。其余选项会在给定 key 下从用户提供的范围/列表中采样，
 并在未提供时回退到列出的默认值。
@@ -307,10 +307,10 @@ function shuffle(seed, key, items):
 
 对于每个组件（例如 `eyes`），用户可以提供恰好两个选项：
 
-| Option            | PRNG key          | Resolution                                                                                                     |
-| ----------------- | ----------------- | -------------------------------------------------------------------------------------------------------------- |
-| `eyesProbability` | `eyesProbability` | `bool` with likelihood from the user option, falling back to the component's `probability` (or `100` if unset) |
-| `eyesVariant`     | `eyesVariant`     | `weightedPick` over a weighted map (see below)                                                                 |
+| 选项               | PRNG key          | 解析结果                                                                                                       |
+| ------------------ | ----------------- | -------------------------------------------------------------------------------------------------------------- |
+| `eyesProbability`  | `eyesProbability` | 根据用户选项中的概率执行 `bool`，未提供时回退到组件的 `probability`（如果未设置则为 `100`）                 |
+| `eyesVariant`      | `eyesVariant`     | 在加权映射上执行 `weightedPick`（见下文）                                                                      |
 
 如果概率检查失败，则该组件不会被渲染，且 `variant`
 返回 `undefined`。
@@ -327,12 +327,12 @@ function shuffle(seed, key, items):
 `rotate`/`translate`/`scale` 范围采样。它们会出现在内省用的 `resolvedOptions` 快照中的 `${name}Rotate` /
 `${name}TranslateX` / `${name}TranslateY` / `${name}Scale` 下，但它们不是面向用户的 `StyleOptions<D>` 类型的一部分，也不支持将它们回传给新的 `Avatar`。
 
-| Value      | PRNG key         | Sampling                                          |
-| ---------- | ---------------- | ------------------------------------------------- |
-| rotate     | `eyesRotate`     | 来自 `component.rotate` 的 `float`，默认 `0`      |
+| 值         | PRNG key         | 采样                                          |
+| ---------- | ---------------- | --------------------------------------------- |
+| rotate     | `eyesRotate`     | 来自 `component.rotate` 的 `float`，默认 `0`  |
 | translateX | `eyesTranslateX` | 来自 `component.translate.x` 的 `float`，默认 `0` |
 | translateY | `eyesTranslateY` | 来自 `component.translate.y` 的 `float`，默认 `0` |
-| scale      | `eyesScale`      | 来自 `component.scale` 的 `float`，默认 `1`       |
+| scale      | `eyesScale`      | 来自 `component.scale` 的 `float`，默认 `1`   |
 
 平移值是 **组件自身** `width` 和 `height` 的百分比（不是 avatar 画布）；将其乘以组件尺寸即可得到偏移量。像所有输出数字一样，它随后会经过
 [`formatNumber`](#number-formatting) 处理（将其限制到小数点后 5 位）。旋转和缩放的变换中心 `(cx, cy)` 是组件自身的中心：
@@ -358,39 +358,53 @@ transform="translate(tx, ty) rotate(angle, cx, cy) translate(cx, cy) scale(s) tr
 
 ### 颜色选项
 
-对于定义中声明的每个颜色组（**再加上**一个隐式的
-`background` 组），用户可以提供四个选项：
+对于定义中声明的每个颜色组（**以及**隐式的
+`background` 组），用户可以提供五个选项：
 
-| Option                  | Type                                     | PRNG key                | Notes                                                                             |
-| ----------------------- | ---------------------------------------- | ----------------------- | --------------------------------------------------------------------------------- |
-| `${name}Color`          | hex string or list                       | `${name}Color`          | 候选颜色（覆盖定义中的调色板）；通过 `Color.toHex` 归一化 |
-| `${name}ColorFill`      | enum `solid` / `linear` / `radial`       | `${name}ColorFill`      | 对列表进行 `pick`，默认 `'solid'`                                             |
-| `${name}ColorFillStops` | integer ≥ 2, or `[min, max]` of same     | `${name}ColorFillStops` | `integer` 采样，默认 `2`；当 fill 为 `solid` 时忽略                       |
-| `${name}ColorAngle`     | number in `[-360, 360]`, or `[min, max]` | `${name}ColorAngle`     | `float` 采样，默认 `0`                                                       |
+| 选项                    | 类型                                     | PRNG key                | 说明                                                                                |
+| ----------------------- | ---------------------------------------- | ----------------------- | ----------------------------------------------------------------------------------- |
+| `${name}Color`          | 十六进制字符串或列表                   | `${name}Color`          | 候选颜色（覆盖定义调色板）；通过 `Color.toHex` 规范化                              |
+| `${name}ColorFill`      | 枚举 `solid` / `linear` / `radial`       | `${name}ColorFill`      | 在列表上执行 `pick`，默认 `'solid'`                                                 |
+| `${name}ColorFillStops` | ≥ 2 的整数，或由相同类型组成的 `[min, max]` | `${name}ColorFillStops` | 执行 `integer` 采样，默认 `2`；当填充为 `solid` 时忽略                         |
+| `${name}ColorAngle`     | `[-360, 360]` 中的数字，或 `[min, max]` | `${name}ColorAngle`     | 执行 `float` 采样，默认 `0`                                                        |
+| `${name}ColorOrder`     | 枚举 `random` / `fixed`                  | 无                      | 单个值，不执行 PRNG 抽取；默认 `'random'`                                           |
+
+解析器级别的 `colorOrder` 访问器返回用户值或 `'random'`。
+与 `colorFill` 不同，它不会被记忆到已解析选项快照中：它不会执行 PRNG pick，因此对于现有输入，快照保持不变。
 
 每个组的解析规则：
 
-1. 从用户选项（`${name}Color`）中获取候选颜色，或者回退到样式定义的调色板。
-2. 将每个候选值归一化为小写 hex（6 或 8 位，带前导 `#`）。
-   3-/4- 位简写会展开为 6/8 位。
-3. 确定 stop 数量：如果 fill 为 `solid` 则为 `1`，否则采样
-   `${name}ColorFillStops`（PRNG `integer`，默认 `2`）。
+1. 从用户选项（`${name}Color`）中获取候选颜色，或回退到
+   样式定义的调色板。记住所使用的来源：`'fixed'`
+   会以不同于定义调色板的方式处理用户提供的候选项（“逐字”）。
+2. 将每个候选值规范化为小写十六进制（6 位或 8 位，带前导 `#`）。
+   3 位/4 位简写会扩展为 6 位/8 位。
+3. 确定色标数量：如果填充为 `solid`，则为 `1`；否则采样
+   `${name}ColorFillStops`（PRNG `integer`）。当该选项未设置时，
+   回退值为 `2`；但在逐字情况下（用户提供候选项且为 `'fixed'`），
+   则使用候选项数量，并在下面的 `notEqualTo` 过滤之前计算。
 4. 应用样式定义中的约束：
-   - **`contrastTo`**：按相对于引用颜色的 WCAG 2.1 对比度
-     （降序）对候选项排序。引用色通过递归调用颜色解析器来解析，因此必须检测并拒绝循环。
-   - **`notEqualTo`**：从每个候选颜色以及引用组中所有已经选中的颜色中去掉 alpha 通道，然后删除匹配项。如果过滤会使候选列表为空，则回退到未过滤列表：颜色约束是尽力而为，不是硬性要求。
-5. 如果没有 `contrastTo` 约束，就打乱候选项顺序。
-6. 截取到 stop 数量。
+   - **`contrastTo`**：根据相对于所引用颜色的 WCAG 2.1 对比度比例，
+     按降序排列候选项。通过递归调用颜色解析器来解析引用颜色，因此必须检测并拒绝循环。
+     在逐字情况下跳过：以用户顺序为准。
+   - **`notEqualTo`**：从每个候选项以及所引用组中已经选取的每个颜色中移除 alpha 通道，
+     然后删除匹配项。如果过滤会使候选列表为空，则回退到未过滤的列表：
+     颜色约束是尽力而为的，而不是强制约束。无论 `${name}ColorOrder` 的值是什么，都会应用。
+5. 排列候选项。如果定义声明了 `contrastTo`，则保留当前顺序，即使由于引用解析为空而跳过了排序本身。
+   否则执行 shuffle，除非 `${name}ColorOrder` 为 `'fixed'`：对于逐字候选项，完全按照给定顺序保留（包括重复项）；
+   对于定义调色板，则去重（保留首次出现），并按 UTF-16 码元排序
+   （这是 `shuffle` 在抽取前应用的相同规范化过程，只是不执行 shuffle）。
+6. 截取至色标数量。
 
-对于在样式定义中没有颜色条目的组（隐式的
-`background` 组最常见），会完全跳过约束处理，只对用户提供的候选项进行洗牌。
+样式定义中未声明颜色条目的组（隐式的
+`background` 组是最常见的情况）会完全跳过约束处理，并按照第 5 步所述方式排列用户提供的候选项。
 
 #### WCAG 2.1 对比度
 
 对比度排序最容易在不同移植版本之间产生细微的 parity 漂移。线性化截断值或亮度系数的微小差异，会改变某些调色板上的排序。定义公式如下：
 
 ```
-function linearize(channel: uint8) -> float:
+function linearize(channel: uint8): float:
     s = channel / 255
     if s <= 0.04045:
         return s / 12.92

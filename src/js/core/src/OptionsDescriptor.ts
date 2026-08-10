@@ -1,4 +1,5 @@
 import type { Style } from './Style.js';
+import { COLOR_ORDER_FIXED, COLOR_ORDER_RANDOM } from './StyleOptions.js';
 
 interface StringField {
   readonly type: 'string';
@@ -31,6 +32,7 @@ interface ColorField {
   readonly type: 'color';
   readonly list?: true;
   readonly contrastTo?: string;
+  readonly notEqualTo?: readonly string[];
 }
 
 interface RangeField {
@@ -122,12 +124,17 @@ export class OptionsDescriptor {
     }
 
     for (const name of [...this.#style.colors().keys(), 'background']) {
-      const contrastTo = this.#style.colors().get(name)?.contrastTo();
+      const color = this.#style.colors().get(name);
+      const contrastTo = color?.contrastTo();
+      const notEqualTo = color?.notEqualTo() ?? [];
 
       result[`${name}Color`] = {
         type: 'color',
         list: true,
         ...(contrastTo ? { contrastTo } : {}),
+        ...(notEqualTo.length > 0
+          ? { notEqualTo: Array.from(notEqualTo) }
+          : {}),
       };
       result[`${name}ColorFill`] = {
         type: 'enum',
@@ -136,6 +143,10 @@ export class OptionsDescriptor {
       };
       result[`${name}ColorFillStops`] = { type: 'range', min: 2 };
       result[`${name}ColorAngle`] = OptionsDescriptor.#rotateRange;
+      result[`${name}ColorOrder`] = {
+        type: 'enum',
+        values: [COLOR_ORDER_RANDOM, COLOR_ORDER_FIXED],
+      };
     }
 
     // Only advertise the `tags` filter when the style actually carries tags.

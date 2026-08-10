@@ -1,8 +1,9 @@
 ---
 title: Identicon – SVG Identicon API
 description: >
-  使用 DiceBear 生成确定性的 Identicon 头像。DiceBear 是一个免费的开源
-  SVG Identicon API 和头像库，可用于用户个人资料图片。
+  使用 DiceBear 生成确定性的 Identicon 头像。DiceBear 是一个免费、开源的
+  SVG Identicon API 和头像库，适用于用户个人资料图片。
+outline: [2, 3]
 ---
 
 <script setup lang="ts">

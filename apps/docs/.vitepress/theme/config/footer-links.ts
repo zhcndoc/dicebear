@@ -7,12 +7,22 @@ export interface FooterLink {
 }
 
 export const productLinks: FooterLink[] = [
-  { label: '为什么选择 DiceBear？', href: '/why-dicebear/' },
-  { label: '动态头像', href: '/animated-avatars/' },
-  { label: '游乐场', href: '/playground/' },
-  { label: '全部风格', href: '/styles/' },
-  { label: '工具', href: '/tools/' },
-  { label: '编辑器', href: 'https://editor.dicebear.com', external: true },
+  { label: 'Why DiceBear?', href: '/why-dicebear/' },
+  { label: 'Animated Avatars', href: '/animated-avatars/' },
+  { label: 'All Styles', href: '/styles/' },
+];
+
+// Mirrors the tool list on /tools/ (see theme/components/tools/ToolList.vue).
+export const toolLinks: FooterLink[] = [
+  { label: 'Playground', href: '/playground/' },
+  { label: 'WCAG Contrast Picker', href: '/tools/contrast/' },
+  { label: 'Bundle Size Estimator', href: '/tools/bundle-size/' },
+  { label: 'Editor', href: 'https://editor.dicebear.com', external: true },
+  {
+    label: 'Figma Plugin',
+    href: 'https://www.figma.com/community/plugin/1005765655729342787',
+    external: true,
+  },
 ];
 
 export const resourceLinks: FooterLink[] = [
@@ -20,7 +30,8 @@ export const resourceLinks: FooterLink[] = [
   { label: 'JS 库', href: '/how-to-use/js-library/' },
   { label: 'HTTP API', href: '/how-to-use/http-api/' },
   { label: 'CLI', href: '/how-to-use/cli/' },
-  { label: '统计数据', href: '/stats/' },
+  { label: 'Statistics', href: '/stats/' },
+  { label: 'Support DiceBear', href: '/support/' },
 ];
 
 // Older major versions keep their docs on a subdomain of their own. This list

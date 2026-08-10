@@ -95,9 +95,14 @@ class OptionsDescriptor
         foreach ($colorNames as $name) {
             $colorField = ['type' => 'color', 'list' => true];
             $contrastTo = isset($colors[$name]) ? $colors[$name]->contrastTo() : null;
+            $notEqualTo = isset($colors[$name]) ? $colors[$name]->notEqualTo() : [];
 
             if ($contrastTo !== null) {
                 $colorField['contrastTo'] = $contrastTo;
+            }
+
+            if ($notEqualTo !== []) {
+                $colorField['notEqualTo'] = $notEqualTo;
             }
 
             $result["{$name}Color"] = $colorField;
@@ -108,6 +113,10 @@ class OptionsDescriptor
             ];
             $result["{$name}ColorFillStops"] = ['type' => 'range', 'min' => 2];
             $result["{$name}ColorAngle"] = self::$rotateRange;
+            $result["{$name}ColorOrder"] = [
+                'type' => 'enum',
+                'values' => [Options::COLOR_ORDER_RANDOM, Options::COLOR_ORDER_FIXED],
+            ];
         }
 
         // Only advertise the `tags` filter when the style actually carries tags.

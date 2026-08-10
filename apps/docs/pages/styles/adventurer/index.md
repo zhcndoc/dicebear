@@ -1,8 +1,8 @@
 ---
 title: Adventurer – 头像风格
 description: >
-  使用 DiceBear 头像库创建 Adventurer 头像。通过我们的免费头像 API 或 JavaScript 头像库生成独特的
-  个人资料图片。
+  使用 DiceBear 头像库创建 Adventurer 头像。通过我们的免费头像 API 或 JavaScript 头像库生成独特的个人资料图片。
+outline: [2, 3]
 ---
 
 <script setup lang="ts">
@@ -27,7 +27,7 @@ Adventurer 是一种插画风格的矢量头像，具有富有表现力的卡通
 
 <StyleUsage styleName="adventurer" />
 
-## Options
+## 选项
 
 <StyleOptions styleName="adventurer" />
 

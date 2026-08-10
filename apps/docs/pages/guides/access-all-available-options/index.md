@@ -88,18 +88,24 @@ print(jsonEncode(descriptor.toJson()));
 `toJSON()` 方法返回一个从选项名称到字段描述符的映射。每个
 描述符都有一个 `type`，以及根据类型不同而附加的属性：
 
-| 类型      | 属性                           | 示例选项                 |
-| --------- | ------------------------------ | ------------------------ |
-| `string`  | `list?`                        | `seed`, `fontFamily`     |
-| `number`  | `min?`, `max?`, `list?`        | `fontWeight`             |
-| `boolean` |                                | `idRandomization`        |
-| `enum`    | `values`, `list?`, `weighted?` | `flip`, `*Variant`       |
-| `color`   | `list?`, `contrastTo?`         | `*Color`                 |
-| `range`   | `min?`, `max?`                 | `rotate`, `borderRadius` |
+| 类型      | 属性                                  | 示例选项           |
+| --------- | ------------------------------------- | ------------------ |
+| `string`  | `list?`                               | `seed`、`fontFamily`     |
+| `number`  | `min?`、`max?`、`list?`               | `fontWeight`             |
+| `boolean` |                                       | `idRandomization`        |
+| `enum`    | `values`、`list?`、`weighted?`        | `flip`、`*Variant`       |
+| `color`   | `list?`、`contrastTo?`、`notEqualTo?` | `*Color`                 |
+| `range`   | `min?`、`max?`                        | `rotate`、`borderRadius` |
 
 - `list` 表示该选项也接受值数组。
-- `weighted`（在枚举字段上）表示该选项还接受一个用于 PRNG 选择的 `Record<string, number>` 权重映射。
-- `contrastTo`（在颜色字段上）指定渲染器要与之形成对比的颜色组，因此 UI 可以标记该组的选择是由对比驱动而非随机驱动。仅当样式定义在该组上声明了 `contrastTo` 约束时才会设置会设置。
+- 枚举字段上的 `weighted` 表示该选项还接受一个
+  `Record<string, number>` 权重映射，用于 PRNG 选择。
+- 颜色字段上的 `contrastTo` 指定渲染器将要与之进行对比的颜色组，因此 UI
+  可以标记该组的选择是由对比度驱动的，而不是随机选择的。仅当样式定义在该组上声明了
+  `contrastTo` 约束时才会设置。
+- 颜色字段上的 `notEqualTo` 列出该组必须与之不同的颜色组。自行选择颜色的 UI
+  必须应用相同的规则，因为每组只有一个明确颜色时，渲染器无法进行过滤。仅当样式定义在该组上声明了
+  `notEqualTo` 约束时才会设置。
 
 组件别名（在定义中通过 `extends` 声明）不会将它们自己的 `${alias}Variant` / `${alias}Probability` 条目贡献到描述符中。
 它们共享其源组件的用户选项。

@@ -40,6 +40,11 @@ class OptionsDescriptorTest extends TestCase
                 'skin' => ['values' => ['#ff0000', '#00ff00']],
                 'hair' => ['values' => ['#000000']],
                 'text' => ['values' => ['#ffffff', '#000000'], 'contrastTo' => 'background'],
+                'outline' => [
+                    'values' => ['#111111', '#eeeeee'],
+                    'contrastTo' => 'skin',
+                    'notEqualTo' => ['skin'],
+                ],
             ],
         ]);
     }
@@ -71,6 +76,7 @@ class OptionsDescriptorTest extends TestCase
         $this->assertSame(['type' => 'enum', 'values' => ['solid', 'linear', 'radial'], 'list' => true], $schema['backgroundColorFill']);
         $this->assertSame(['type' => 'range', 'min' => 2], $schema['backgroundColorFillStops']);
         $this->assertSame(['type' => 'range', 'min' => -360, 'max' => 360], $schema['backgroundColorAngle']);
+        $this->assertSame(['type' => 'enum', 'values' => ['random', 'fixed']], $schema['backgroundColorOrder']);
     }
 
     // component options
@@ -121,6 +127,7 @@ class OptionsDescriptorTest extends TestCase
         $this->assertSame(['type' => 'color', 'list' => true], $schema['skinColor']);
         $this->assertSame(['type' => 'color', 'list' => true], $schema['hairColor']);
         $this->assertSame(['type' => 'enum', 'values' => ['solid', 'linear', 'radial'], 'list' => true], $schema['skinColorFill']);
+        $this->assertSame(['type' => 'enum', 'values' => ['random', 'fixed']], $schema['skinColorOrder']);
     }
 
     public function testExposesContrastToOnColorFields(): void
@@ -133,6 +140,19 @@ class OptionsDescriptorTest extends TestCase
             'contrastTo' => 'background',
         ], $schema['textColor']);
         $this->assertArrayNotHasKey('contrastTo', $schema['skinColor']);
+    }
+
+    public function testExposesNotEqualToOnColorFields(): void
+    {
+        $schema = (new OptionsDescriptor(self::fullStyle()))->toJSON();
+
+        $this->assertSame([
+            'type' => 'color',
+            'list' => true,
+            'contrastTo' => 'skin',
+            'notEqualTo' => ['skin'],
+        ], $schema['outlineColor']);
+        $this->assertArrayNotHasKey('notEqualTo', $schema['skinColor']);
     }
 
     // caching

@@ -37,12 +37,13 @@ description: >
 这些选项适用于每种样式，即使其定义中没有声明
 `background` 颜色组。
 
-| 选项                      | 类型                              | 默认值    | 描述                                                               |
-| ------------------------- | --------------------------------- | --------- | ------------------------------------------------------------------ |
-| `backgroundColor`         | `string \| string[]`              | _未设置_  | 以十六进制表示的背景颜色（可省略 `#`，范围从 `#RGB` 到 `#RRGGBBAA`） |
-| `backgroundColorFill`     | `'solid' \| 'linear' \| 'radial'` | `'solid'` | 背景填充类型（接受值数组以进行随机化）                             |
-| `backgroundColorFillStops` | `integer \| [min, max]`           | `2`       | 渐变停止点数量（最少为 2）；填充为 `solid` 时忽略                 |
-| `backgroundColorAngle`    | `number \| [min, max]`            | `0`       | 以度为单位的渐变角度（−360 至 360）                               |
+| 选项                       | 类型                              | 默认值     | 描述                                                               |
+| -------------------------- | --------------------------------- | ---------- | ------------------------------------------------------------------ |
+| `backgroundColor`          | `string \| string[]`              | _unset_    | 以十六进制表示的背景颜色（可省略 `#`，范围为 `#RGB` 至 `#RRGGBBAA`） |
+| `backgroundColorFill`      | `'solid' \| 'linear' \| 'radial'` | `'solid'`  | 背景填充类型（接受值数组以进行随机化）                              |
+| `backgroundColorFillStops` | `integer \| [min, max]`           | `2`        | 渐变断点数量（最少为 2）；填充为 `solid` 时忽略                       |
+| `backgroundColorAngle`     | `number \| [min, max]`            | `0`        | 以度为单位的渐变角度（−360 至 360）                                  |
+| `backgroundColorOrder`     | `'random' \| 'fixed'`             | `'random'` | 按给定顺序使用颜色（`fixed`），而不是将其打乱                        |
 
 ## 动态组件选项
 
@@ -66,10 +67,13 @@ description: >
 
 | 模式                    | 类型                              | 描述                                                               |
 | ----------------------- | --------------------------------- | ------------------------------------------------------------------ |
-| `{color}Color`          | `string \| string[]`              | 使用十六进制值覆盖调色板（`#` 可选）                               |
-| `{color}ColorFill`      | `'solid' \| 'linear' \| 'radial'` | 填充类型（接受值数组以进行随机化）                                 |
-| `{color}ColorFillStops` | `integer \| [min, max]`           | 渐变色标数量（最少为 2）；当填充为 `solid` 时忽略                  |
-| `{color}ColorAngle`     | `number \| [min, max]`            | 渐变角度，单位为度（−360 至 360）                                  |
+| `{color}Color`          | `string \| string[]`              | 使用十六进制值（可省略 `#`）覆盖调色板                |
+| `{color}ColorFill`      | `'solid' \| 'linear' \| 'radial'` | 填充类型（接受值数组以进行随机化）                |
+| `{color}ColorFillStops` | `integer \| [min, max]`           | 渐变色标数量（最少为 2）；当填充为 `solid` 时忽略 |
+| `{color}ColorAngle`     | `number \| [min, max]`            | 以度为单位的渐变角度（−360 至 360）                            |
+| `{color}ColorOrder`     | `'random' \| 'fixed'`             | 按给定顺序使用颜色（`fixed`），而不是打乱颜色顺序  |
+
+使用 `{color}ColorOrder: 'fixed'` 时，通过 `{color}Color` 传入的颜色会严格保持给定的顺序：渐变填充会将它们从第一个到最后一个应用为色标，纯色填充始终使用第一个颜色，渐变色标数量默认为给定颜色的数量。不使用 `{color}Color` 时，`fixed` 只会跳过打乱步骤；样式的调色板会去重，并按排序后的顺序使用。样式定义中的约束（`contrastTo`、`notEqualTo`）仍然适用，因此结果仍可能通过所引用的颜色组依赖种子。
 
 ## 变体标签
 

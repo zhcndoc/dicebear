@@ -1,8 +1,8 @@
 ---
 title: Initial Face – 头像风格
 description: >
-  使用 DiceBear 头像库创建 Initial Face 头像。使用我们免费的头像 API 或 JavaScript 头像库生成独特的
-  个人资料图片。
+  使用 DiceBear 头像库创建 Initial Face 头像。通过我们的免费头像 API 或 JavaScript 头像库生成独特的个人资料图片。
+outline: [2, 3]
 ---
 
 <script setup lang="ts">
