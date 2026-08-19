@@ -20,7 +20,10 @@ const pagesDir = fileURLToPath(new URL('../pages/styles', import.meta.url));
 const IMPORT =
   'import StylePresets from "@theme/components/styles/StylePresets.vue";';
 
-const SECTION = '## Presets';
+const SECTIONS = [
+  { heading: '## Presets', optionsHeading: '## Options' },
+  { heading: '## 预设', optionsHeading: '## 选项' },
+];
 
 function galleryPage(styleName: string) {
   const title = capitalCase(styleName);
@@ -54,11 +57,12 @@ avatars it still leaves you.
 
 /**
  * Adds the import and the teaser section to a style page. The section goes
- * above `## Options`, which every style page has, so the reader meets the
- * ready-made looks before the full list of knobs.
+ * above the localized options heading, so the reader meets the ready-made
+ * looks before the full list of knobs.
  */
 function withSection(source: string, styleName: string) {
   let next = source;
+  const mount = `<StylePresets styleName="${styleName}" :limit="5" />`;
 
   if (!next.includes(IMPORT)) {
     const marker = 'import StyleOptions from';
@@ -71,18 +75,18 @@ function withSection(source: string, styleName: string) {
     next = next.slice(0, at) + IMPORT + '\n' + next.slice(at);
   }
 
-  if (!next.includes(SECTION)) {
-    const marker = '## Options';
-    const at = next.indexOf(marker);
+  if (!next.includes(mount)) {
+    const section = SECTIONS.find(({ optionsHeading }) =>
+      next.includes(optionsHeading),
+    );
 
-    if (at === -1) {
-      throw new Error('no "## Options" heading to anchor to');
+    if (!section) {
+      throw new Error('no localized options heading to anchor to');
     }
 
+    const at = next.indexOf(section.optionsHeading);
     next =
-      next.slice(0, at) +
-      `${SECTION}\n\n<StylePresets styleName="${styleName}" :limit="5" />\n\n` +
-      next.slice(at);
+      next.slice(0, at) + `${section.heading}\n\n${mount}\n\n` + next.slice(at);
   }
 
   return next;
