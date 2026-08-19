@@ -11,6 +11,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -25,6 +26,10 @@ Clay 是一种柔和的矢量头像风格，由圆润的块状形体组成，看
 ## 用法
 
 <StyleUsage styleName="clay" />
+
+## 预设
+
+<StylePresets styleName="clay" :limit="5" />
 
 ## 选项
 

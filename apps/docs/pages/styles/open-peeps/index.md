@@ -10,6 +10,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -26,6 +27,10 @@ Open Peeps 是一种手绘矢量头像风格，呈现多样的半身角色，
 ## 用法
 
 <StyleUsage styleName="open-peeps" />
+
+## 预设
+
+<StylePresets styleName="open-peeps" :limit="5" />
 
 ## 选项
 

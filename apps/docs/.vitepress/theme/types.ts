@@ -43,6 +43,12 @@ export type ThemeOptions = {
   avatarUniqueCounts: Record<string, AvatarUniqueCount>;
   avatarStyleSizes: AvatarStyleSizeBundle;
   githubStars: Record<string, string>;
+  /** Routes that have a Markdown mirror next to their HTML, see llms.ts. */
+  llmsRoutes: readonly string[];
+  /** Major version of the release train, e.g. `10`, see config/versions.ts. */
+  majorVersion: string;
+  /** Full text of the repo's MIT LICENSE, see config/softwareLicense.ts. */
+  softwareLicense: string;
 } & DefaultTheme.Config;
 
 export type CustomStyleEntry = {

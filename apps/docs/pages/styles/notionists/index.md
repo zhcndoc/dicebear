@@ -10,6 +10,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -25,7 +26,11 @@ Notionists 是一种手绘黑线矢量头像风格，呈现半身人物形象，
 
 <StyleUsage styleName="notionists" />
 
-## 选项
+## Presets
+
+<StylePresets styleName="notionists" :limit="5" />
+
+## Options
 
 <StyleOptions styleName="notionists" />
 

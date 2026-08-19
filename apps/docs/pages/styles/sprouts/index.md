@@ -10,6 +10,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -24,6 +25,10 @@ Sprouts 是一种可爱的盆栽植物矢量头像样式，植物带有笑脸，
 ## 用法
 
 <StyleUsage styleName="sprouts" />
+
+## 预设
+
+<StylePresets styleName="sprouts" :limit="5" />
 
 ## 选项
 

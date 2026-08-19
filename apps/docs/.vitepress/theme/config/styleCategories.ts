@@ -33,6 +33,7 @@ const styleCategories: Record<string, StyleCategory> = {
   critters: 'Characters',
   croodles: 'Characters',
   'croodles-neutral': 'Characters',
+  cutouts: 'Characters',
   disco: 'Minimalist',
   dylan: 'Characters',
   'fun-emoji': 'Characters',
@@ -43,6 +44,7 @@ const styleCategories: Record<string, StyleCategory> = {
   'initial-face': 'Minimalist',
   initials: 'Minimalist',
   landscape: 'Scenes',
+  'line-face': 'Characters',
   loops: 'Minimalist',
   lorelei: 'Characters',
   'lorelei-neutral': 'Characters',
@@ -52,6 +54,7 @@ const styleCategories: Record<string, StyleCategory> = {
   notionists: 'Characters',
   'notionists-neutral': 'Characters',
   'open-peeps': 'Characters',
+  patchwork: 'Minimalist',
   personas: 'Characters',
   'pixel-art': 'Characters',
   'pixel-art-neutral': 'Characters',
@@ -104,7 +107,14 @@ export function findUncategorizedStyles(styleNames: string[]): string[] {
   return styleNames.filter((name) => !(name in styleCategories));
 }
 
-export function normalizeLicense(license: string): string {
+/**
+ * The buckets normalizeLicense sorts license names into. The licenses page
+ * types its sections against this union, so adding a bucket fails the build
+ * there instead of silently dropping styles from the page.
+ */
+export type LicenseBucket = 'CC BY 4.0' | 'CC0 1.0' | 'MIT' | 'Other';
+
+export function normalizeLicense(license: string): LicenseBucket {
   if (license.includes('CC BY 4.0')) {
     return 'CC BY 4.0';
   }

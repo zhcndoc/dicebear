@@ -1,5 +1,5 @@
 ---
-title: Identicon – SVG Identicon API
+title: Identicon——SVG Identicon API
 description: >
   使用 DiceBear 生成确定性的 Identicon 头像。DiceBear 是一个免费、开源的
   SVG Identicon API 和头像库，适用于用户个人资料图片。
@@ -11,6 +11,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -31,6 +32,10 @@ Identicon 是根据用户名、电子邮件或用户 ID 等值生成的小型图
 ## 用法
 
 <StyleUsage styleName="identicon" />
+
+## 预设
+
+<StylePresets styleName="identicon" :limit="5" />
 
 ## 选项
 

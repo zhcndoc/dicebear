@@ -10,6 +10,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -25,7 +26,11 @@ Waves 是一种抽象的矢量头像样式，以单一颜色的不同深浅叠�
 
 <StyleUsage styleName="waves" />
 
-## 选项
+## Presets
+
+<StylePresets styleName="waves" :limit="5" />
+
+## Options
 
 <StyleOptions styleName="waves" />
 

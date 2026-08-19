@@ -10,6 +10,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -26,6 +27,10 @@ Personas 是一种扁平设计的矢量头像风格，采用半身人物形象�
 ## 用法
 
 <StyleUsage styleName="personas" />
+
+## 预设
+
+<StylePresets styleName="personas" :limit="5" />
 
 ## 选项
 

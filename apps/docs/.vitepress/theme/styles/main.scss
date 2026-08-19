@@ -58,6 +58,51 @@
   color: var(--ui-c-text-muted);
 }
 
+/* ----------------------------------------------------------------
+ * Eyebrow label: small mono all-caps field label used inside cards
+ * (style page URLs/Source rows, popularity tiles).
+ * ---------------------------------------------------------------- */
+.ui-eyebrow {
+  font-family: var(--vp-font-family-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vp-c-text-3);
+}
+
+/* ----------------------------------------------------------------
+ * Ghost copy button: the quiet 28px icon button wrapped around
+ * UiCopyButton in card rows (style page URLs, licenses page).
+ * Consumers add their own reveal/spacing on top.
+ * ---------------------------------------------------------------- */
+.ui-copy-button {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--vp-radius-chrome);
+  color: var(--vp-c-text-3);
+  cursor: pointer;
+  transition:
+    opacity var(--duration-fast),
+    color var(--duration-fast),
+    border-color var(--duration-fast);
+}
+
+.ui-copy-button:hover {
+  color: var(--vp-c-text-1);
+  border-color: var(--vp-c-divider);
+}
+
+.ui-copy-button:focus-visible {
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: 1px;
+}
+
 .pg-help:first-child {
   margin-top: 0;
 }
@@ -242,6 +287,7 @@ h6,
     'critters',
     'croodles',
     'croodles-neutral',
+    'cutouts',
     'disco',
     'dylan',
     'fun-emoji',
@@ -252,6 +298,7 @@ h6,
     'initial-face',
     'initials',
     'landscape',
+    'line-face',
     'loops',
     'lorelei',
     'lorelei-neutral',
@@ -261,6 +308,7 @@ h6,
     'notionists',
     'notionists-neutral',
     'open-peeps',
+    'patchwork',
     'personas',
     'pixel-art',
     'pixel-art-neutral',
@@ -481,4 +529,21 @@ img[src^='https://api.dicebear.com/']:not(.next, .prev) {
     #000 35%,
     transparent 100%
   );
+}
+
+/* ----------------------------------------------------------------
+ * Screen-reader-only text. Keeps a page's h1 in the document
+ * outline on tool pages (playground, styles overview) that show
+ * no visible heading.
+ * ---------------------------------------------------------------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }

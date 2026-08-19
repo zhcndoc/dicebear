@@ -10,6 +10,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -27,6 +28,10 @@ Toon Head 是一种插画风格的矢量头像样式，呈现半身角色肖像�
 ## 用法
 
 <StyleUsage styleName="toon-head" />
+
+## 预设
+
+<StylePresets styleName="toon-head" :limit="5" />
 
 ## 选项
 

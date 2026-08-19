@@ -10,6 +10,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -24,6 +25,10 @@ Miniavs 是一种扁平设计的矢量头像风格，采用粗壮的半身角色
 ## 用法
 
 <StyleUsage styleName="miniavs" />
+
+## 预设
+
+<StylePresets styleName="miniavs" :limit="5" />
 
 ## 选项
 

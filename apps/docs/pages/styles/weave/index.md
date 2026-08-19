@@ -10,6 +10,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -24,6 +25,10 @@ Weave 是一种抽象的矢量头像风格，将半透明的柔和色条纹交�
 ## 用法
 
 <StyleUsage styleName="weave" />
+
+## 预设
+
+<StylePresets styleName="weave" :limit="5" />
 
 ## 选项
 

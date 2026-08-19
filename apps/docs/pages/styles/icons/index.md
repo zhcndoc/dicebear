@@ -1,5 +1,5 @@
 ---
-title: 图标 – 头像风格
+title: 图标 — 头像风格
 description: >
   使用 DiceBear 头像库创建 Icons 头像。通过我们免费的头像 API 或 JavaScript
   头像库生成独特的个人资料图片。
@@ -11,14 +11,13 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # 图标
 
-Icons 是一种简洁的矢量头像风格，会在带有色调的背景上放置一个 Bootstrap Icons
-图形。生成可缩放的个人资料图标，非常适合
-仪表盘、管理面板和企业工具，在这些场景中，人物面孔会显得不太合适。
+Icons 是一种简洁的矢量头像风格，会在带有色调的背景上放置一个 Bootstrap Icons 图形。生成可缩放的个人资料图标，非常适合仪表盘、管理面板和企业工具，在这些场景中，人物面孔会显得不太合适。
 
 <StylePreview styleName="icons" />
 
@@ -27,6 +26,10 @@ Icons 是一种简洁的矢量头像风格，会在带有色调的背景上放�
 ## 用法
 
 <StyleUsage styleName="icons" />
+
+## 预设
+
+<StylePresets styleName="icons" :limit="5" />
 
 ## 选项
 

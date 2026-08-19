@@ -10,6 +10,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -25,6 +26,10 @@ Squircles 是一种抽象的矢量头像样式，将圆角方形嵌套成柔和�
 ## 用法
 
 <StyleUsage styleName="squircles" />
+
+## 预设
+
+<StylePresets styleName="squircles" :limit="5" />
 
 ## 选项
 

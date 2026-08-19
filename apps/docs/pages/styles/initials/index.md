@@ -11,6 +11,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -25,6 +26,10 @@ import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 ## 使用方法
 
 <StyleUsage styleName="initials" />
+
+## 预设
+
+<StylePresets styleName="initials" :limit="5" />
 
 ## 选项
 

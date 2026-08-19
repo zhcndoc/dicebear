@@ -11,6 +11,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -26,6 +27,10 @@ Notionists Neutral 是 Notionists 风格的简化变体，仅使用松散的黑�
 ## 用法
 
 <StyleUsage styleName="notionists-neutral" />
+
+## 预设
+
+<StylePresets styleName="notionists-neutral" :limit="5" />
 
 ## 选项
 

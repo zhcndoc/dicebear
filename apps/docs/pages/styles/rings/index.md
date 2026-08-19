@@ -11,6 +11,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -25,6 +26,10 @@ Rings 是一种几何抽象矢量头像风格，它将分段的同心圆环和�
 ## 用法
 
 <StyleUsage styleName="rings" />
+
+## 预设
+
+<StylePresets styleName="rings" :limit="5" />
 
 ## 选项
 

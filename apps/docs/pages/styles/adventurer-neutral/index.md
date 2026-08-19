@@ -11,6 +11,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -27,6 +28,10 @@ Adventurer Neutral 是 Adventurer 风格的简化变体，仅在纯色背景上�
 ## 用法
 
 <StyleUsage styleName="adventurer-neutral" />
+
+## 预设
+
+<StylePresets styleName="adventurer-neutral" :limit="5" />
 
 ## 选项
 

@@ -11,6 +11,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -27,6 +28,10 @@ Avataaars Neutral 是 Avataaars 风格的简化变体，仅在纯色方形背景
 ## 用法
 
 <StyleUsage styleName="avataaars-neutral" />
+
+## 预设
+
+<StylePresets styleName="avataaars-neutral" :limit="5" />
 
 ## 选项
 

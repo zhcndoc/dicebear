@@ -10,6 +10,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -24,6 +25,10 @@ Thumbs 是一种俏皮的矢量头像风格，由圆润、拇指形状的角色�
 ## 用法
 
 <StyleUsage styleName="thumbs" />
+
+## 预设
+
+<StylePresets styleName="thumbs" :limit="5" />
 
 ## 选项
 

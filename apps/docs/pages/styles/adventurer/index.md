@@ -10,14 +10,13 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
 # Adventurer
 
-Adventurer 是一种插画风格的矢量头像，具有富有表现力的卡通面孔、
-粗线条、多样的发型，以及可自定义的细节，如眼镜、
-耳环和眉毛。可为游戏、社区和社交应用生成友好的个人资料图标。
+Adventurer 是一种插画风格的矢量头像，具有富有表现力的卡通面孔、粗线条、多样的发型，以及可自定义的细节，如眼镜、耳环和眉毛。可为游戏、社区和社交应用生成友好的个人资料图标。
 
 <StylePreview styleName="adventurer" />
 
@@ -26,6 +25,10 @@ Adventurer 是一种插画风格的矢量头像，具有富有表现力的卡通
 ## 用法
 
 <StyleUsage styleName="adventurer" />
+
+## 预设
+
+<StylePresets styleName="adventurer" :limit="5" />
 
 ## 选项
 

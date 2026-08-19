@@ -11,6 +11,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -28,6 +29,10 @@ Micah 是一种平面设计风格的矢量头像，呈现半身肖像，具有�
 ## 用法
 
 <StyleUsage styleName="micah" />
+
+## 预设
+
+<StylePresets styleName="micah" :limit="5" />
 
 ## 选项
 

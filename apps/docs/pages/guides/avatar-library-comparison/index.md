@@ -7,22 +7,12 @@ aside: false
 ---
 
 <script setup>
-import { useData } from 'vitepress';
 import DocsComparisonTable from '@theme/components/docs/DocsComparisonTable.vue';
-
-const { theme } = useData();
 </script>
 
 # 头像库比较
 
-DiceBear 是一个开源头像库，提供
-[{{ theme.styleCount }} 种样式](/styles/)、一个
-[免费的 HTTP API](/how-to-use/http-api/) 以及支持六种语言的库。每种
-样式都有[丰富的选项](/guides/access-all-available-options/)：你可以重新
-为头像配色、替换单独的特征、控制背景，并调整每种变体出现的可能性，因此
-即使来自同一种样式，两个头像也可能看起来完全不同。本页面将 DiceBear
-与开发者最常拿来比较的头像库进行对比，帮助你为项目选择合适的方案。
-它们各有所长，最佳选择取决于你的技术栈以及你想要的外观。
+DiceBear 是一个开源头像库，提供 [%STYLE_COUNT% 种样式](/styles/)、一个[免费的 HTTP API](/how-to-use/http-api/)以及支持六种语言的库。每种样式都有[丰富的选项](/guides/access-all-available-options/)：你可以重新着色头像、替换单个特征、控制背景，并调整每种变体出现的可能性，因此同一样式生成的两个头像可能看起来完全不同。本页面将它与开发者最常拿来比较的头像库进行对比，帮助你为项目选择合适的方案。它们各有所长，最佳选择取决于你的技术栈以及你想要的外观。
 
 <DocsComparisonTable />
 

@@ -8,6 +8,24 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [10.6.1] - 2026-08-18
+
+### Fixed
+
+- **Core (all languages):** Avatars no longer carry empty wrapper elements. An
+  optional component that came up empty left its wrapper behind, and in
+  `notionists` that wrapper sits inside a mask. A masked group without content
+  has no bounding box, and AndroidSVG takes the mask size from that box, so the
+  whole file fails to render. Gallery apps on Android showed such avatars as
+  corrupted while browsers drew them fine. Every file reported as broken has
+  such a wrapper, and the working ones from the same download do not. A wrapper
+  is now left out when nothing inside it renders, unless it carries an id that
+  something may point at. `bottts-neutral`, `clay`, `critters`, `notionists`,
+  and `squircles` were affected, `bottts-neutral` in about half of all seeds.
+  The rendered image does not change.
+
+## [10.6.0] - 2026-08-16
+
 ### Added
 
 - **Core:** Color fields in `OptionsDescriptor` now carry `notEqualTo`, the list
@@ -17,6 +35,16 @@ and this project adheres to
   color per group leaves the renderer nothing to sort or filter. The descriptor
   parity fixtures and the guide on accessing all available options cover the new
   property.
+
+### Changed
+
+- **Styles:** Bumped `@dicebear/styles` to `10.5.0` for the CLI, the docs, and
+  the editor. The release adds `cutouts`, `line-face` and `patchwork`, which
+  take the collection from 52 to 55 styles, and exposes the dark color nine
+  existing styles draw with as a color group: `inkColor` on seven of them,
+  `outlineColor` on `lorelei`, and `strokeColor` on `toon-head`. The CLI was
+  still on `^10.4.0`, a range that never matched the prerelease, so it had been
+  shipping 52 definitions while the docs and the editor were already on 55.
 
 ### Fixed
 
@@ -456,7 +484,9 @@ See the
 - **BREAKING:** Individual style packages (e.g. `@dicebear/initials`) have been
   removed in favor of `@dicebear/styles`.
 
-[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.5.0...HEAD
+[Unreleased]: https://github.com/dicebear/dicebear/compare/v10.6.1...HEAD
+[10.6.1]: https://github.com/dicebear/dicebear/compare/v10.6.0...v10.6.1
+[10.6.0]: https://github.com/dicebear/dicebear/compare/v10.5.0...v10.6.0
 [10.5.0]: https://github.com/dicebear/dicebear/compare/v10.4.0...v10.5.0
 [10.4.0]: https://github.com/dicebear/dicebear/compare/v10.4.0-rc.2...v10.4.0
 [10.4.0-rc.2]:

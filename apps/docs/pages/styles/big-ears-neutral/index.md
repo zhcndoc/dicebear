@@ -11,6 +11,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -26,6 +27,10 @@ Big Ears Neutral 是 Big Ears 风格的简化变体，仅在纯色方形背景�
 ## 用法
 
 <StyleUsage styleName="big-ears-neutral" />
+
+## 预设
+
+<StylePresets styleName="big-ears-neutral" :limit="5" />
 
 ## 选项
 

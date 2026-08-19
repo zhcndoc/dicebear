@@ -10,6 +10,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -25,7 +26,11 @@ Bottts 是一种机器人主题的矢量头像风格，模块化机器人头部�
 
 <StyleUsage styleName="bottts" />
 
-## 选项
+## Presets
+
+<StylePresets styleName="bottts" :limit="5" />
+
+## Options
 
 <StyleOptions styleName="bottts" />
 

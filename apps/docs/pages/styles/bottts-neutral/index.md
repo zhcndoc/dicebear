@@ -11,6 +11,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -26,6 +27,10 @@ Bottts Neutral 是 Bottts 样式的简化变体，只在纯色方块上显示机
 ## 用法
 
 <StyleUsage styleName="bottts-neutral" />
+
+## 预设
+
+<StylePresets styleName="bottts-neutral" :limit="5" />
 
 ## 选项
 

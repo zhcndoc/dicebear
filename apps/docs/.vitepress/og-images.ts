@@ -39,7 +39,11 @@ import avatarStyles, { definitionsDir } from './config/avatarStyles.ts';
 import { getOgTileSeeds } from './theme/config/previewRowSeeds.ts';
 import { escapeHtml } from './theme/utils/escape.ts';
 import { formatLicenseName } from './theme/utils/format.ts';
-import { attributionKind, isPublicDomain } from './theme/utils/license.ts';
+import {
+  attributionKind,
+  attributionPrefix,
+  isPublicDomain,
+} from './theme/utils/license.ts';
 
 const require = createRequire(import.meta.url);
 
@@ -83,7 +87,7 @@ const RULE_Y = CREDIT_BASELINE - 40;
 
 /**
  * What shows through a transparent avatar. No avatar is ever given a
- * `backgroundColor`: 35 of the 52 styles declare their own `colors.background`
+ * `backgroundColor`: 38 of the 55 styles declare their own `colors.background`
  * palette (every `-neutral` variant, every v10 addition except glyphs, and a
  * handful of older ones), and overriding it would replace a color the artist
  * chose. The other 17 render transparent and sit on this.
@@ -255,9 +259,7 @@ function creditFor(styleName: string): string | undefined {
     return `${sourceName} by ${creator} · ${license}`;
   }
 
-  const prefix = kind === 'port' ? 'Based on' : 'Remix of';
-
-  return `${prefix} ${sourceName} by ${creator} · ${license}`;
+  return `${attributionPrefix(kind)} ${sourceName} by ${creator} · ${license}`;
 }
 
 /**
@@ -275,7 +277,7 @@ async function renderTile(styleName: string, seed: string): Promise<string> {
  * Renders the five tiles a style's card carries.
  *
  * Which seeds those are is decided ahead of time by
- * scripts/generate-preview-seeds.mjs, which searches each style's palette for a
+ * scripts/generate-preview-seeds.ts, which searches each style's palette for a
  * row whose tiles stay distinct in both artwork and color. Picking here instead
  * meant filtering candidates on a fingerprint with color stripped, which let
  * five differently drawn robots through in five shades of the same gold.
@@ -286,7 +288,7 @@ async function renderTiles(styleName: string): Promise<string[]> {
   if (seeds.length !== TILE_COUNT) {
     throw new Error(
       `Style "${styleName}" has ${seeds.length} social card seeds, expected ${TILE_COUNT}. ` +
-        'OG_TILES in scripts/generate-preview-seeds.mjs and TILE_COUNT here have to agree.',
+        'OG_TILES in scripts/generate-preview-seeds.ts and TILE_COUNT here have to agree.',
     );
   }
 

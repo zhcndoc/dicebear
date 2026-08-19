@@ -10,6 +10,7 @@ import StylePreview from "@theme/components/styles/StylePreview.vue";
 import StyleInfo from "@theme/components/styles/StyleInfo.vue";
 import StyleDescription from "@theme/components/styles/StyleDescription.vue";
 import StyleUsage from "@theme/components/styles/StyleUsage.vue";
+import StylePresets from "@theme/components/styles/StylePresets.vue";
 import StyleOptions from "@theme/components/styles/StyleOptions.vue";
 </script>
 
@@ -24,6 +25,10 @@ Lorelei Neutral 是 Lorelei 风格的精简变体，仅用细腻的墨线绘制�
 ## 用法
 
 <StyleUsage styleName="lorelei-neutral" />
+
+## 预设
+
+<StylePresets styleName="lorelei-neutral" :limit="5" />
 
 ## 选项
 
